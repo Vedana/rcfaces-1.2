@@ -77,40 +77,31 @@ public class InitRenderer extends AbstractHtmlRenderer {
     private static final String REQUEST_DOMAIN_VALUE = "$requestDomain";
 
     private static final String DISABLE_IE_IMAGE_BAR_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".DISABLE_IE_IMAGE_BAR";
+            .getPackagePrefix() + ".DISABLE_IE_IMAGE_BAR";
 
     private static final String DISABLE_CONTEXT_MENU_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".DISABLE_CONTEXT_MENU";
+            .getPackagePrefix() + ".DISABLE_CONTEXT_MENU";
 
     private static final String JSP_DISABLE_CACHE_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".JSP_DISABLE_CACHE";
+            .getPackagePrefix() + ".JSP_DISABLE_CACHE";
 
     private static final String USER_AGENT_VARY_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".USER_AGENT_VARY";
+            .getPackagePrefix() + ".USER_AGENT_VARY";
 
     private static final String CLIENT_VALIDATION_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".CLIENT_VALIDATION";
+            .getPackagePrefix() + ".CLIENT_VALIDATION";
 
     private static final String DISABLED_COOKIES_PAGE_URL_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".DISABLED_COOKIES_PAGE_URL";
+            .getPackagePrefix() + ".DISABLED_COOKIES_PAGE_URL";
 
     private static final String DISABLED_SCRIPT_PAGE_URL_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".DISABLED_SCRIPT_PAGE_URL";
+            .getPackagePrefix() + ".DISABLED_SCRIPT_PAGE_URL";
 
     private static final String FAVORITE_IMAGE_URL_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".FAVORITE_IMAGE_URL";
+            .getPackagePrefix() + ".FAVORITE_IMAGE_URL";
 
     private static final String WAI_ROLES_NS_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".WAI_ROLES_NS";
+            .getPackagePrefix() + ".WAI_ROLES_NS";
 
     private static final String BASE_PARAMETER = Constants.getPackagePrefix()
             + ".BASE";
@@ -121,22 +112,18 @@ public class InitRenderer extends AbstractHtmlRenderer {
     private static final String MULTI_WINDOW_CLASSLOADER_FILENAME = "f_multiWindowClassLoader.js";
 
     public static final String MULTI_WINDOW_CLASSLOADER = Constants
-            .getPackagePrefix()
-            + ".client.MULTI_WINDOW_CLASSLOADER";
+            .getPackagePrefix() + ".client.MULTI_WINDOW_CLASSLOADER";
 
     private static final String NONE_IMAGE_URL = "none";
 
     private static final String INVALID_BROWSER_PAGE_URL_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".INVALID_BROWSER_PAGE_URL";
+            .getPackagePrefix() + ".INVALID_BROWSER_PAGE_URL";
 
     public static final Object META_CONTENT_TYPE_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".META_CONTENT_TYPE_PARAMETER";
+            .getPackagePrefix() + ".META_CONTENT_TYPE_PARAMETER";
 
     public static final Object CLIENT_MESSAGE_ID_FILTER_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".CLIENT_MESSAGE_ID_FILTER";
+            .getPackagePrefix() + ".CLIENT_MESSAGE_ID_FILTER";
 
     private static final String APPLICATION_PARAMETERS_PROPERTY = "org.rcfaces.renderkit.html.internal.taglib.InitializeTag.APPLICATION_PARAMETERS";
 
@@ -298,8 +285,8 @@ public class InitRenderer extends AbstractHtmlRenderer {
 
             if (base.startsWith(IContentPath.CONTEXT_KEYWORD)) {
                 StringAppender sa = new StringAppender(facesContext
-                        .getExternalContext().getRequestContextPath(), base
-                        .length());
+                        .getExternalContext().getRequestContextPath(),
+                        base.length());
 
                 if (base.length() >= 8) {
                     sa.append(base.substring(8));
@@ -319,8 +306,8 @@ public class InitRenderer extends AbstractHtmlRenderer {
                         .getExternalContext().getRequest();
                 String scheme = request.getScheme();
                 if (scheme != null) {
-                    sa.append(scheme).append("://").append(
-                            request.getServerName());
+                    sa.append(scheme).append("://")
+                            .append(request.getServerName());
 
                     int port = request.getServerPort();
                     if (port == 80 && "http".equals(scheme)) {
@@ -444,7 +431,8 @@ public class InitRenderer extends AbstractHtmlRenderer {
                 htmlWriter.writeCharSet(cssCharset);
             }
 
-            IClientBrowser clientBrowser = ClientBrowserFactory.Get().get(facesContext);
+            IClientBrowser clientBrowser = ClientBrowserFactory.Get().get(
+                    facesContext);
 
             String styleSheetURI = htmlProcessContext.getStyleSheetURI(
                     cssConfig.getStyleSheetFileName(clientBrowser), true);
@@ -462,8 +450,8 @@ public class InitRenderer extends AbstractHtmlRenderer {
         if (title != null) {
             writeTitle(htmlWriter, title);
 
-            facesContext.getExternalContext().getRequestMap().put(
-                    TITLE_PROPERTY, title);
+            facesContext.getExternalContext().getRequestMap()
+                    .put(TITLE_PROPERTY, title);
         }
 
         HtmlRenderContext.setMetaDataInitialized(facesContext);
@@ -516,15 +504,40 @@ public class InitRenderer extends AbstractHtmlRenderer {
                         host = requestURI.substring(idx, idx3);
                     }
 
-                    int idx4 = host.lastIndexOf('.');
-                    if (idx4 > 0) {
-                        int idx5 = host.lastIndexOf('.', idx4 - 1);
-                        if (idx5 > 0) {
-                            domain = host.substring(idx5 + 1);
-                        } else {
-                            domain = host;
+                    StringTokenizer st = new StringTokenizer(host, ".");
+                    int segmentsCount = st.countTokens();
+                    String[] segments = new String[segmentsCount];
+                    boolean allDigit = (segmentsCount == 4);
+                    for (int i = 0; i < segmentsCount; i++) {
+                        String token = st.nextToken();
+                        segments[segmentsCount - 1 - i] = token;
+
+                        if (allDigit) {
+                            for (int j = 0; j < token.length(); j++) {
+                                if (Character.isDigit(token.charAt(j))) {
+                                    continue;
+                                }
+
+                                allDigit = false;
+                                break;
+                            }
                         }
                     }
+
+                    if (allDigit) {
+                        // C'est une addresse IP !
+                        // On ne touche pas au HOST
+                        domain = host;
+
+                    } else if (segments.length > 2) {
+                        // On réduit le scope du domaine, on ne prend que les 2
+                        // derniers
+                        domain = segments[1] + "." + segments[0];
+
+                    } else {
+                        domain = host;
+                    }
+
                 }
             }
         }
@@ -537,8 +550,8 @@ public class InitRenderer extends AbstractHtmlRenderer {
             jsWriter = openScriptTag(htmlWriter);
         }
 
-        jsWriter.write("try{document.domain=").writeString(domain).writeln(
-                "}catch(x){window._rcfacesDomainEx=x}");
+        jsWriter.write("try{document.domain=").writeString(domain)
+                .writeln("}catch(x){window._rcfacesDomainEx=x}");
 
         return jsWriter;
     }
@@ -634,10 +647,9 @@ public class InitRenderer extends AbstractHtmlRenderer {
             }
 
         } catch (Throwable th) {
-            LOG
-                    .debug(
-                            "Too late to specify Vary (User-Agent) into HttpResponse !",
-                            th);
+            LOG.debug(
+                    "Too late to specify Vary (User-Agent) into HttpResponse !",
+                    th);
         }
 
         writer.startElement(IHtmlWriter.META);
@@ -859,15 +871,12 @@ public class InitRenderer extends AbstractHtmlRenderer {
         String cameliaClassLoader = jsWriter.getJavaScriptRenderContext()
                 .convertSymbol("f_classLoader", "_rcfacesClassLoader");
 
-        jsWriter
-                .write(
-                        "var cl=(function(v){try{return (v.opener && v.opener!=v && arguments.callee(v.opener)) || v.")
+        jsWriter.write(
+                "var cl=(function(v){try{return (v.opener && v.opener!=v && arguments.callee(v.opener)) || v.")
                 .write(cameliaClassLoader)
-                .write(
-                        "}catch(x){}})(window) || (function(v){try{return (v.parent && v.parent!=v && arguments.callee(v.parent)) || v.")
+                .write("}catch(x){}})(window) || (function(v){try{return (v.parent && v.parent!=v && arguments.callee(v.parent)) || v.")
                 .write(cameliaClassLoader)
-                .write(
-                        "}catch(x){}})(window)  || (function(v){try{return v.top.")
+                .write("}catch(x){}})(window)  || (function(v){try{return v.top.")
                 .write(cameliaClassLoader).write("}catch(x){}})(window);");
 
         jsWriter.write("if(cl&&cl.");
@@ -1123,8 +1132,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
                 }
 
                 if (htmlProcessContext.useMetaContentScriptType()) {
-                    LOG
-                            .info("UseMetaContentScriptType is enabled for context.");
+                    LOG.info("UseMetaContentScriptType is enabled for context.");
                 }
 
                 if (htmlProcessContext.useMetaContentStyleType()) {
@@ -1345,8 +1353,8 @@ public class InitRenderer extends AbstractHtmlRenderer {
                         + "'.");
             }
 
-            write("var ").write(varId).write("=").writeString(string).writeln(
-                    ";");
+            write("var ").write(varId).write("=").writeString(string)
+                    .writeln(";");
 
             return varId;
         }

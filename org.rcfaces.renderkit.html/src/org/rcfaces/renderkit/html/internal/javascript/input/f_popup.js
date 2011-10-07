@@ -102,6 +102,8 @@ var __statics = {
 	Initializer: function() {
 		if (f_popup.Ie_enablePopup()) {
 			var popup=f_popup._Ie_PreparePopup(document);
+			
+			// BUG IE: S'il y a une restriction de domain en JS (Erreur d'accés)
 			popup.document._rootPopup=true;
 		}
 	},
@@ -1288,7 +1290,7 @@ var __statics = {
 	GetComponent: function() {
 		return f_popup.Component;
 	}
-}
+};
 
 var __prototype = {
 	
@@ -1300,7 +1302,7 @@ var __prototype = {
 	f_popup: function(mode) {
 		this._mode=mode;
 	}
-}
+};
 
 new f_class("f_popup", {
 	statics: __statics
