@@ -268,6 +268,11 @@ var f_core = {
 	 * @field private static Number
 	 */
 	_RequestKey: 0,
+		
+	/**
+	 * @field private static Array
+	 */
+	_ResizeHandlers: undefined,
 	
 	/**
 	 * Throws a message if the expression is true.
@@ -831,8 +836,8 @@ var f_core = {
 				capture.screen /* window ? */), "f_core.AddEventListener: Invalid capture parameter ("+capture+")");
 
 		f_core.Debug(f_core, "AddEventListener: entering with component='"+component+"' name='"+name+"' fct=<not printed> capture='"+capture+"'");
-	 	if (f_core.IsInternetExplorer() && !f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_9)) {
-	 		
+
+		if (f_core.IsInternetExplorer() && (!f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_9) || !component.addEventListener)) {	 		
 	 		if (component.nodeType==f_core.DOCUMENT_NODE) {
 	 			switch (name) {
 	 			case "focus":
@@ -907,7 +912,7 @@ var f_core = {
 
 		f_core.Debug(f_core, "RemoveEventListener: component='"+component+"' name='"+name+"' fct=<not printed> capture='"+capture+"'");
 
-	 	if (f_core.IsInternetExplorer()) {
+		if (f_core.IsInternetExplorer() && (!f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_9) || !component.removeEventListener)) {	 		
 		    if (capture) {
 		 		if (capture.nodeType==f_core.DOCUMENT_NODE) {
 		 			capture = capture.body;
@@ -1218,6 +1223,12 @@ var f_core = {
 			try {				
 				f_core.RemoveEventListener(win, "load", f_core._OnInit);
 				f_core.RemoveEventListener(win, "unload", f_core._OnExit);
+				
+				if (f_core._ResizeHandlers) {
+					f_core.RemoveEventListener(win, "resize", f_core._OnResizeEvent);					
+					f_core._ResizeHandlers=undefined;
+				}
+				
 				f_core._DesinstallModalWindow();
 				
 				if (f_core.IsInternetExplorer()) {
@@ -4356,28 +4367,56 @@ var f_core = {
 		return "inline";
 	},
 	/**
+	 * @method private static
+	 * @context window:win
+	 */
+	_OnResizeEvent: function() {
+		var win=this;
+
+		if (win._rcfacesExiting) {
+			return;
+		}
+
+		var handlers=f_core._ResizeHandlers;
+		if (!handlers) {
+			f_core.Debug(f_core, "Ignore processing of resize event, no handlers.");
+			return;
+		}
+
+		f_core.Debug(f_core, "Start processing of resize event ... ("+(handlers.length/2)+" calls)");
+
+		for(var i=0;i<handlers.length;) {
+			var component=handlers[i++];
+			var func = handlers[i++];
+			
+			try {
+				func.call(component);
+				
+			} catch (x) {
+				f_core.Error(f_core, "Call of resize event on '"+component+"' thows an exception", x);
+			}			
+		}
+		
+		f_core.Debug(f_core, "End of processing of resize event");
+	},
+	/**
 	 * @method hidden static
 	 * @param HTMLElement component
 	 * @param Function listener
 	 * @return Boolean
 	 */
 	AddResizeEventListener: function(component, listener) {
-		if (f_core.IsInternetExplorer()) {
-			component.onresize=listener;
-			return true;
+		
+		var handlers=f_core._ResizeHandlers;
+		if (!handlers) {
+			handlers = [];
+			f_core._ResizeHandlers=handlers;
+	
+			f_core.AddEventListener(window, "resize", f_core._OnResizeEvent);
 		}
 
-		if (f_core.IsGecko()) {
-			listener._mainResizeCallback=function() {
-				return listener.call(component);
-			};
-		
-			window.addEventListener("resize", listener._mainResizeCallback, false);
-			
-			return true;
-		}
-		
-		return false;
+		handlers.push(component, listener);
+		return true;
 	},
 	/**
 	 * @method hidden static
@@ -4386,15 +4425,17 @@ var f_core = {
 	 * @return Boolean Returns <code>true</code> if success.
 	 */
 	RemoveResizeEventListener: function(component, listener) {
-		if (f_core.IsInternetExplorer()) {
-			component.onresize=null;
-			return true;
+		var handlers=f_core._ResizeHandlers;
+		if (!handlers) {
+			return;
 		}
-
-		if (f_core.IsGecko()) {
-			window.removeEventListener("resize", listener._mainResizeCallback, false);
+		
+		for(var i=0; i<handlers.length;i+=2) {
+			if (handlers[i]!=component || handlers[i+1]!=listener) {
+				continue;
+			}
 			
-			listener._mainResizeCallback=undefined;
+			handlers.splice(i, 2);
 			return true;
 		}
 		
