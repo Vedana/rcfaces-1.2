@@ -144,11 +144,16 @@
 	text-decoration: underline;
 }
 
-.f_menu_item_text {
+.f_menu_item_text,
+.f_menu_item_text_empty {
 	vertical-align: middle;
 	height: 18px;
 	padding-left: 2px;
 	cursor: pointer;
+}
+
+.f_menu_item_text_empty {
+	font-style: italic;
 }
 
 .f_menu_item_disabled .f_menu_item_text, 

@@ -655,8 +655,17 @@ var __members = {
 			
 			f_core.AppendChild(uiItem, image);
 			
+			
 			var div=doc.createElement("label");
-			div.className="f_menu_item_text";
+			
+			var classname = "f_menu_item_text";
+			var value = this.f_getItemValue(item);
+			
+			if (value === fa_criteriaManager.DEFAULT_NULL_VALUE) {
+				classname +="_empty";
+			}
+			div.className=classname;
+			
 			div.id = this.fa_getMenuScopeName(parentItem)+"::label";
 			
 			var accessKey=item._accessKey;
