@@ -29,7 +29,7 @@ var __statics = {
  		redirect[f_event.KEYDOWN]=true;
  		redirect[f_event.KEYUP]=true;
 	}
-}
+};
  
 var __members = {
 
@@ -344,7 +344,7 @@ var __members = {
 			value=String(value);
 
 		} else if (typeof(value)!="string") {
-			f_core.Error(f_input, "f_setValue: Invalid value: "+value + " (typeof=" + typeof(value) +")");
+			f_core.Info(f_input, "f_setValue: Invalid value: "+value + " (typeof=" + typeof(value) +")");
 			return false;
 		}
 
