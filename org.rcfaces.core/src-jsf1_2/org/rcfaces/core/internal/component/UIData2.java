@@ -111,8 +111,8 @@ public class UIData2 extends UIData0 {
         }
 
         if (true) {
-            super.iterate(context, phaseId);
-            return;
+          //  super.iterate(context, phaseId);
+          //  return;
         }
 
         iterateModeFirst = 0;
