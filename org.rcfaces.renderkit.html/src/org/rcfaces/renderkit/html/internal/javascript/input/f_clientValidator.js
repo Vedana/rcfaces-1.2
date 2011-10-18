@@ -1553,6 +1553,7 @@ var __members = {
 	},
 	/**
 	 * @method public final
+	 * @param Object value
 	 */
 	f_setConvertedValue: function(value) {		
 		var converter=this._converter;
