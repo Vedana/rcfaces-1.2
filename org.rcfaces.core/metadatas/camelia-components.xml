@@ -83,7 +83,7 @@
 			</code>
 		</method>		
 
-		<method id="getLocalValue" returnType="Object">
+		<method id="getLocalValue" returnType="java.lang.Object">
 			<code>
 				Object value=super.getLocalValue();
 				
@@ -95,9 +95,9 @@
 			</code>
 		</method>
 
-		<method id="getConvertedValue" modifier="protected" final="false" returnType="Object">
+		<method id="getConvertedValue" modifier="protected" final="false" returnType="java.lang.Object">
 			<parameter type="javax.faces.context.FacesContext" name="context" />
-			<parameter type="Object" name="submittedValue" />
+			<parameter type="java.lang.Object" name="submittedValue" />
 			
 			<code>				
 				if (NULL_VALUE.equals(submittedValue)) {
@@ -108,7 +108,7 @@
 			</code>
 		</method>
 
-		<method id="getSubmittedExternalValue" returnType="Object">
+		<method id="getSubmittedExternalValue" returnType="java.lang.Object">
 			<code>
 				Object value=super.getSubmittedValue();
 				
@@ -121,7 +121,7 @@
 		</method>
 
 		<method id="setSubmittedExternalValue">
-			<parameter type="Object" name="submittedValue" />
+			<parameter type="java.lang.Object" name="submittedValue" />
 			<code>
 				if (submittedValue==null) {
 					submittedValue=NULL_VALUE;
@@ -143,7 +143,7 @@
 			</code>
 		</method>
 
-		<method id="getValue" returnType="Object">
+		<method id="getValue" returnType="java.lang.Object">
 			<code>
 				Object value=super.getValue();
 				
@@ -162,7 +162,7 @@
 		<method id="getCachedValue"/>
 		<method id="clearCachedValue"/>
 
-		<field id="cachedValue" type="Object" value="null"/>
+		<field id="cachedValue" type="java.lang.Object" value="null"/>
 		-->
 				
 		<method id="getDataModelValue" returnType="javax.faces.model.DataModel">
@@ -194,19 +194,19 @@
 		<method id="getDataModel(javax.faces.context.FacesContext)" />
 		<method id="getDataModelValue()" />
 
-		<method id="getValue" returnType="Object">
+		<method id="getValue" returnType="java.lang.Object">
 			<code>
 				return getValue(null);
 			</code>
 		</method>
-		<method id="getValue" returnType="Object">
+		<method id="getValue" returnType="java.lang.Object">
 			<parameter type="javax.faces.context.FacesContext" name="context" />
 			<code>
 				return engine.getValue(Properties.VALUE, context);
 			</code>
 		</method>
 		<method id="setValue">
-			<parameter type="Object" name="value" />
+			<parameter type="java.lang.Object" name="value" />
 			<code>
 				dataModel=null;
 				engine.setValue(Properties.VALUE, value);
@@ -590,7 +590,7 @@
 
 <!-- Check/uncheck -->
 		<method id="check" returnType="void">
-			<parameter type="Object" name="value" />
+			<parameter type="java.lang.Object" name="value" />
 			<import>org.rcfaces.core.internal.tools.CheckTools</import>
 			<code>
 				CheckTools.check(null, this, value);
@@ -604,7 +604,7 @@
 		</method>
 		<method id="uncheck" returnType="void">
 			<import>org.rcfaces.core.internal.tools.CheckTools</import>
-			<parameter type="Object" name="value" />
+			<parameter type="java.lang.Object" name="value" />
 			<code>
 				CheckTools.uncheck(null, this, value);
 			</code>
@@ -741,12 +741,12 @@
 		<action id="action" type="selection" default="true" />
 
 <!-- 
-		<method id="getValue" returnType="Object">
+		<method id="getValue" returnType="java.lang.Object">
 			<code>
 				return getValue(null);
 			</code>
 		</method>
-		<method id="getValue" returnType="Object">
+		<method id="getValue" returnType="java.lang.Object">
 			<parameter type="javax.faces.context.FacesContext" name="context" />
 			<code>
 				return engine.getValue(Properties.VALUE, context);
@@ -981,24 +981,24 @@
 
 		<method id="getVisibleState(javax.faces.context.FacesContext)" />
 
-		<method id="getLocalValue" returnType="Object">
+		<method id="getLocalValue" returnType="java.lang.Object">
 			<code>
 				return engine.getLocalValue(Properties.VALUE);
 			</code>
 		</method>
-		<method id="getValue" returnType="Object">
+		<method id="getValue" returnType="java.lang.Object">
 			<code>
 				return getValue(null);
 			</code>
 		</method>
-		<method id="getValue" returnType="Object">
+		<method id="getValue" returnType="java.lang.Object">
 			<parameter type="javax.faces.context.FacesContext" name="context" />
 			<code>
 				return engine.getValue(Properties.VALUE, context);
 			</code>
 		</method>
 		<method id="setValue">
-			<parameter type="Object" name="value" />
+			<parameter type="java.lang.Object" name="value" />
 			<code>
 				engine.setValue(Properties.VALUE, value);
 			</code>
@@ -1069,24 +1069,24 @@
 
 		<method id="getVisibleState(javax.faces.context.FacesContext)" />
 
-		<method id="getLocalValue" returnType="Object">
+		<method id="getLocalValue" returnType="java.lang.Object">
 			<code>
 				return engine.getLocalValue(Properties.VALUE);
 			</code>
 		</method>
-		<method id="getValue" returnType="Object">
+		<method id="getValue" returnType="java.lang.Object">
 			<code>
 				return getValue(null);
 			</code>
 		</method>
-		<method id="getValue" returnType="Object">
+		<method id="getValue" returnType="java.lang.Object">
 			<parameter type="javax.faces.context.FacesContext" name="context" />
 			<code>
 				return engine.getValue(Properties.VALUE, context);
 			</code>
 		</method>
 		<method id="setValue">
-			<parameter type="Object" name="value" />
+			<parameter type="java.lang.Object" name="value" />
 			<code>
 				engine.setValue(Properties.VALUE, value);
 			</code>
@@ -1152,7 +1152,7 @@
 		<attribute id="rowDropEffects" type="int" />
 		<method id="setRowDropEffects(String)" />
 
-		<attribute id="selectedCriteriaColumns" type="Object" />
+		<attribute id="selectedCriteriaColumns" type="java.lang.Object" />
 
 		<capability id="ISelectionEventCapability" />
 		<capability id="ISelectableCapability" />
@@ -1250,19 +1250,19 @@
 				return SelectionTools.getCount(getSelectedValues());
 			</code>
 		</method>
-		<method id="getFirstSelectedValue" returnType="Object">
+		<method id="getFirstSelectedValue" returnType="java.lang.Object">
 			<import>org.rcfaces.core.internal.tools.SelectionTools</import>
 			<code>
 				return SelectionTools.getFirst(getSelectedValues(), getValue());
 			</code>
 		</method>
-		<method id="listSelectedValues" returnType="Object[]">
+		<method id="listSelectedValues" returnType="java.lang.Object[]">
 			<import>org.rcfaces.core.internal.tools.SelectionTools</import>
 			<code>
 				return SelectionTools.listValues(getSelectedValues(), getValue());
 			</code>
 		</method>
-		<method id="getSelectedValues" returnType="Object">
+		<method id="getSelectedValues" returnType="java.lang.Object">
 			<parameter type="javax.faces.context.FacesContext" name="facesContext" />
 			<import>org.rcfaces.core.internal.tools.SelectionTools</import>
 			<code><![CDATA[			
@@ -1274,7 +1274,7 @@
 			]]></code>
 		</method>
 		<method id="setSelectedValues">
-			<parameter type="Object" name="selectedValues" />		
+			<parameter type="java.lang.Object" name="selectedValues" />		
 			<code><![CDATA[
 				if (engine.isPropertySetted(Properties.SELECTED_VALUES)==false) {
 					if (SelectionTools.setAdaptedValues(getValue(), selectedValues)) {
@@ -1296,20 +1296,20 @@
 				return CheckTools.getCount(getCheckedValues());
 			</code>
 		</method>
-		<method id="getFirstCheckedValue" returnType="Object">
+		<method id="getFirstCheckedValue" returnType="java.lang.Object">
 			<import>org.rcfaces.core.internal.tools.CheckTools</import>
 			<code>
 				return CheckTools.getFirst(getCheckedValues(), getValue());
 			</code>
 		</method>
-		<method id="listCheckedValues" returnType="Object[]">
+		<method id="listCheckedValues" returnType="java.lang.Object[]">
 			<import>org.rcfaces.core.internal.tools.CheckTools</import>
 			<code>
 				return CheckTools.listValues(getCheckedValues(), getValue());
 			</code>
 		</method>
 
-		<method id="getCheckedValues" returnType="Object">
+		<method id="getCheckedValues" returnType="java.lang.Object">
 			<parameter type="javax.faces.context.FacesContext" name="facesContext" />
 			<code><![CDATA[
 				if (engine.isPropertySetted(Properties.CHECKED_VALUES)) {
@@ -1320,7 +1320,7 @@
 			]]></code>
 		</method>
 		<method id="setCheckedValues">
-			<parameter type="Object" name="checkedValues" />		
+			<parameter type="java.lang.Object" name="checkedValues" />		
 			<code><![CDATA[
 				if (engine.isPropertySetted(Properties.CHECKED_VALUES)==false) {
 					if (CheckTools.setAdaptedValues(getValue(), checkedValues)) {
@@ -1343,19 +1343,19 @@
 				return AdditionalInformationTools.getCount(getAdditionalInformationValues());
 			</code>
 		</method>
-		<method id="getFirstAdditionalInformationValue" returnType="Object">
+		<method id="getFirstAdditionalInformationValue" returnType="java.lang.Object">
 			<import>org.rcfaces.core.internal.tools.AdditionalInformationTools</import>
 			<code>
 				return AdditionalInformationTools.getFirst(getAdditionalInformationValues(), null);
 			</code>
 		</method>
-		<method id="getAdditionalInformationValues" returnType="Object">
+		<method id="getAdditionalInformationValues" returnType="java.lang.Object">
 			<parameter type="javax.faces.context.FacesContext" name="facesContext" />
 			<code>
 				return engine.getValue(Properties.ADDITIONAL_INFORMATION_VALUES, facesContext);
 			</code>
 		</method>
-		<method id="listAdditionalInformationValues" returnType="Object[]">
+		<method id="listAdditionalInformationValues" returnType="java.lang.Object[]">
 			<import>org.rcfaces.core.internal.tools.AdditionalInformationTools</import>
 			<code>
 				return AdditionalInformationTools.listValues(getAdditionalInformationValues(), getValue());
@@ -1476,7 +1476,7 @@
 		
 <!-- Selection/deselection -->
 		<method id="select" returnType="void">
-			<parameter type="Object" name="rowValue" />
+			<parameter type="java.lang.Object" name="rowValue" />
 			<import>org.rcfaces.core.internal.tools.SelectionTools</import>
 			<import>org.rcfaces.core.internal.tools.CollectionTools</import>
 			<code>
@@ -1515,7 +1515,7 @@
 
 		<method id="deselect" returnType="void">
 			<import>org.rcfaces.core.internal.tools.SelectionTools</import>
-			<parameter type="Object" name="rowValue" />
+			<parameter type="java.lang.Object" name="rowValue" />
 			<code>
 				SelectionTools.deselect(null, this, rowValue);
 			</code>
@@ -1551,7 +1551,7 @@
 
 <!-- Check/uncheck -->
 		<method id="check" returnType="void">
-			<parameter type="Object" name="rowValue" />
+			<parameter type="java.lang.Object" name="rowValue" />
 			<import>org.rcfaces.core.internal.tools.CheckTools</import>
 			<import>org.rcfaces.core.internal.tools.CollectionTools</import>
 			<code>
@@ -1589,7 +1589,7 @@
 
 		<method id="uncheck" returnType="void">
 			<import>org.rcfaces.core.internal.tools.CheckTools</import>
-			<parameter type="Object" name="rowValue" />
+			<parameter type="java.lang.Object" name="rowValue" />
 			<code>
 				CheckTools.uncheck(null, this, rowValue);
 			</code>
@@ -1625,7 +1625,7 @@
 <!-- Show/Hide additional informations -->
 		<method id="showAdditionalInformation" returnType="void">
 			<import>org.rcfaces.core.internal.tools.CollectionTools</import>
-			<parameter type="Object" name="rowValue" />
+			<parameter type="java.lang.Object" name="rowValue" />
 			<code>
 				AdditionalInformationTools.show(null, this, rowValue);
 			</code>
@@ -1649,7 +1649,7 @@
 			</code>
 		</method>
 		<method id="hideAdditionalInformation" returnType="void">
-			<parameter type="Object" name="rowValue" />
+			<parameter type="java.lang.Object" name="rowValue" />
 			<code>
 				AdditionalInformationTools.hide(null, this, rowValue);
 			</code>
@@ -1674,7 +1674,7 @@
 		
 <!-- Cursor value -->
 
-		<method id="getCursorValue" returnType="Object">
+		<method id="getCursorValue" returnType="java.lang.Object">
 			<parameter type="javax.faces.context.FacesContext" name="facesContext" />
 			<import>org.rcfaces.core.internal.tools.ComponentTools</import>
 			<code>
@@ -1786,19 +1786,19 @@
 				return SelectionTools.getCount(getSelectedValues());
 			</code>
 		</method>
-		<method id="getFirstSelectedValue" returnType="Object">
+		<method id="getFirstSelectedValue" returnType="java.lang.Object">
 			<import>org.rcfaces.core.internal.tools.SelectionTools</import>
 			<code>
 				return SelectionTools.getFirst(getSelectedValues(), getValue());
 			</code>
 		</method>
-		<method id="listSelectedValues" returnType="Object[]">
+		<method id="listSelectedValues" returnType="java.lang.Object[]">
 			<import>org.rcfaces.core.internal.tools.SelectionTools</import>
 			<code>
 				return SelectionTools.listValues(getSelectedValues(), getValue());
 			</code>
 		</method>
-		<method id="getSelectedValues" returnType="Object">
+		<method id="getSelectedValues" returnType="java.lang.Object">
 			<parameter type="javax.faces.context.FacesContext" name="facesContext" />
 			<import>org.rcfaces.core.internal.tools.SelectionTools</import>
 			<code><![CDATA[			
@@ -1810,7 +1810,7 @@
 			]]></code>
 		</method>
 		<method id="setSelectedValues">
-			<parameter type="Object" name="selectedValues" />		
+			<parameter type="java.lang.Object" name="selectedValues" />		
 			<code><![CDATA[
 				if (engine.isPropertySetted(Properties.SELECTED_VALUES)==false) {
 					if (SelectionTools.setAdaptedValues(getValue(), selectedValues)) {
@@ -1833,19 +1833,19 @@
 				return AdditionalInformationTools.getCount(getAdditionalInformationValues());
 			</code>
 		</method>
-		<method id="getFirstAdditionalInformationValue" returnType="Object">
+		<method id="getFirstAdditionalInformationValue" returnType="java.lang.Object">
 			<import>org.rcfaces.core.internal.tools.AdditionalInformationTools</import>
 			<code>
 				return AdditionalInformationTools.getFirst(getAdditionalInformationValues(), null);
 			</code>
 		</method>
-		<method id="getAdditionalInformationValues" returnType="Object">
+		<method id="getAdditionalInformationValues" returnType="java.lang.Object">
 			<parameter type="javax.faces.context.FacesContext" name="facesContext" />
 			<code>
 				return engine.getValue(Properties.ADDITIONAL_INFORMATION_VALUES, facesContext);
 			</code>
 		</method>
-		<method id="listAdditionalInformationValues" returnType="Object[]">
+		<method id="listAdditionalInformationValues" returnType="java.lang.Object[]">
 			<import>org.rcfaces.core.internal.tools.AdditionalInformationTools</import>
 			<code>
 				return AdditionalInformationTools.listValues(getAdditionalInformationValues(), getValue());
@@ -1934,7 +1934,7 @@
 <!-- Selection/deselection -->
 		<method id="select" returnType="void">
 			<import>org.rcfaces.core.internal.tools.SelectionTools</import>
-			<parameter type="Object" name="rowValue" />
+			<parameter type="java.lang.Object" name="rowValue" />
 			<code>
 				SelectionTools.select(null, this, rowValue);
 			</code>
@@ -1965,7 +1965,7 @@
 		</method>
 
 		<method id="deselect" returnType="void">
-			<parameter type="Object" name="rowValue" />
+			<parameter type="java.lang.Object" name="rowValue" />
 			<code>
 				SelectionTools.deselect(null, this, rowValue);
 			</code>
@@ -1998,7 +1998,7 @@
 
 <!-- Show/Hide additional informations -->
 		<method id="showAdditionalInformation" returnType="void">
-			<parameter type="Object" name="rowValue" />
+			<parameter type="java.lang.Object" name="rowValue" />
 			<code>
 				AdditionalInformationTools.show(null, this, rowValue);
 			</code>
@@ -2021,7 +2021,7 @@
 			</code>
 		</method>
 		<method id="hideAdditionalInformation" returnType="void">
-			<parameter type="Object" name="rowValue" />
+			<parameter type="java.lang.Object" name="rowValue" />
 			<code>
 				AdditionalInformationTools.hide(null, this, rowValue);
 			</code>
@@ -2111,19 +2111,19 @@
 				return AdditionalInformationTools.getCount(getAdditionalInformationValues());
 			</code>
 		</method>
-		<method id="getFirstAdditionalInformationValue" returnType="Object">
+		<method id="getFirstAdditionalInformationValue" returnType="java.lang.Object">
 			<import>org.rcfaces.core.internal.tools.AdditionalInformationTools</import>
 			<code>
 				return AdditionalInformationTools.getFirst(getAdditionalInformationValues(), null);
 			</code>
 		</method>
-		<method id="getAdditionalInformationValues" returnType="Object">
+		<method id="getAdditionalInformationValues" returnType="java.lang.Object">
 			<parameter type="javax.faces.context.FacesContext" name="facesContext" />
 			<code>
 				return engine.getValue(Properties.ADDITIONAL_INFORMATION_VALUES, facesContext);
 			</code>
 		</method>
-		<method id="listAdditionalInformationValues" returnType="Object[]">
+		<method id="listAdditionalInformationValues" returnType="java.lang.Object[]">
 			<import>org.rcfaces.core.internal.tools.AdditionalInformationTools</import>
 			<code>
 				return AdditionalInformationTools.listValues(getAdditionalInformationValues(), getValue());
@@ -2211,7 +2211,7 @@
 
 <!-- Show/Hide additional informations -->
 		<method id="showAdditionalInformation" returnType="void">
-			<parameter type="Object" name="rowValue" />
+			<parameter type="java.lang.Object" name="rowValue" />
 			<code>
 				AdditionalInformationTools.show(null, this, rowValue);
 			</code>
@@ -2234,7 +2234,7 @@
 			</code>
 		</method>
 		<method id="hideAdditionalInformation" returnType="void">
-			<parameter type="Object" name="rowValue" />
+			<parameter type="java.lang.Object" name="rowValue" />
 			<code>
 				AdditionalInformationTools.hide(null, this, rowValue);
 			</code>
@@ -3063,7 +3063,7 @@ Dans le cas d'un mode period !
 
 <!-- Check/uncheck -->
 		<method id="check" returnType="void">
-			<parameter type="Object" name="value" />
+			<parameter type="java.lang.Object" name="value" />
 			<import>org.rcfaces.core.internal.tools.CheckTools</import>
 			<code>
 				CheckTools.check(null, this, value);
@@ -3077,7 +3077,7 @@ Dans le cas d'un mode period !
 		</method>
 		<method id="uncheck" returnType="void">
 			<import>org.rcfaces.core.internal.tools.CheckTools</import>
-			<parameter type="Object" name="value" />
+			<parameter type="java.lang.Object" name="value" />
 			<code>
 				CheckTools.uncheck(null, this, value);
 			</code>
@@ -3146,7 +3146,7 @@ Dans le cas d'un mode period !
 		<attribute id="fractionStep" type="java.lang.String" />
 
 		<method id="setValue" returnType="void">
-			<parameter type="Object" name="value" />
+			<parameter type="java.lang.Object" name="value" />
 			<import>javax.faces.context.FacesContext</import>
 			<import>org.rcfaces.core.internal.converter.LiteralNumberConverter</import>
 			<code>
@@ -3925,7 +3925,7 @@ Dans le cas d'un mode period !
 		
 <!-- Selection/deselection -->
 		<method id="select" returnType="void">
-			<parameter type="Object" name="rowValue" />
+			<parameter type="java.lang.Object" name="rowValue" />
 			<import>org.rcfaces.core.internal.tools.SelectionTools</import>
 			<code>
 				SelectionTools.select(null, this, rowValue);
@@ -3940,7 +3940,7 @@ Dans le cas d'un mode period !
 
 		<method id="deselect" returnType="void">
 			<import>org.rcfaces.core.internal.tools.SelectionTools</import>
-			<parameter type="Object" name="rowValue" />
+			<parameter type="java.lang.Object" name="rowValue" />
 			<code>
 				SelectionTools.deselect(null, this, rowValue);
 			</code>
@@ -3954,7 +3954,7 @@ Dans le cas d'un mode period !
 
 <!-- Check/uncheck -->
 		<method id="check" returnType="void">
-			<parameter type="Object" name="rowValue" />
+			<parameter type="java.lang.Object" name="rowValue" />
 			<import>org.rcfaces.core.internal.tools.CheckTools</import>
 			<code>
 				CheckTools.check(null, this, rowValue);
@@ -3969,7 +3969,7 @@ Dans le cas d'un mode period !
 
 		<method id="uncheck" returnType="void">
 			<import>org.rcfaces.core.internal.tools.CheckTools</import>
-			<parameter type="Object" name="rowValue" />
+			<parameter type="java.lang.Object" name="rowValue" />
 			<code>
 				CheckTools.uncheck(null, this, rowValue);
 			</code>
@@ -4008,7 +4008,7 @@ Dans le cas d'un mode period !
 		</method>
 		<method id="setExpanded" returnType="void">
 			<parameter type="javax.faces.context.FacesContext" name="context" />
-			<parameter type="Object" name="value" />
+			<parameter type="java.lang.Object" name="value" />
 			<parameter type="boolean" name="expanded" />
 			<import>org.rcfaces.core.internal.tools.TreeTools</import>
 			<code>
@@ -4016,21 +4016,21 @@ Dans le cas d'un mode period !
 			</code>
 		</method>
 		<method id="expand" returnType="void">
-			<parameter type="Object" name="value" />
+			<parameter type="java.lang.Object" name="value" />
 			<import>org.rcfaces.core.internal.tools.ExpansionTools</import>
 			<code>
 				ExpansionTools.expand(null, this, value);
 			</code>
 		</method>
 		<method id="collapse" returnType="void">
-			<parameter type="Object" name="value" />
+			<parameter type="java.lang.Object" name="value" />
 			<import>org.rcfaces.core.internal.tools.ExpansionTools</import>
 			<code>
 				ExpansionTools.collapse(null, this, value);
 			</code>
 		</method>
 		<method id="setExpanded" returnType="void">
-			<parameter type="Object" name="value" />
+			<parameter type="java.lang.Object" name="value" />
 			<parameter type="boolean" name="expanded" />
 			<import>org.rcfaces.core.internal.tools.TreeTools</import>
 			<code>
@@ -4039,7 +4039,7 @@ Dans le cas d'un mode period !
 		</method>
 		<method id="isExpanded" returnType="boolean">
 			<parameter type="javax.faces.context.FacesContext" name="context" />
-			<parameter type="Object" name="value" />
+			<parameter type="java.lang.Object" name="value" />
 			<import>org.rcfaces.core.internal.tools.TreeTools</import>
 			<code>
 				return TreeTools.isExpanded(context, this, value);
@@ -4047,7 +4047,7 @@ Dans le cas d'un mode period !
 		</method>
 		
 <!--  Cursor  -->		
-		<method id="getCursorValue" returnType="Object">
+		<method id="getCursorValue" returnType="java.lang.Object">
 			<parameter type="javax.faces.context.FacesContext" name="facesContext" />
 			<import>org.rcfaces.core.internal.tools.ComponentTools</import>
 			<code>
@@ -4060,7 +4060,7 @@ Dans le cas d'un mode period !
 				return cursorValue;				
 			</code>
 		</method>
-		<method id="getSelectedValues" returnType="Object">
+		<method id="getSelectedValues" returnType="java.lang.Object">
 			<parameter type="javax.faces.context.FacesContext" name="facesContext" />
 			<import>org.rcfaces.core.internal.tools.SelectionTools</import>
 			<code><![CDATA[			
@@ -4074,7 +4074,7 @@ Dans le cas d'un mode period !
 			]]></code>
 		</method>
 		<method id="setSelectedValues">
-			<parameter type="Object" name="selectedValues" />		
+			<parameter type="java.lang.Object" name="selectedValues" />		
 			<code><![CDATA[
 				if (engine.isPropertySetted(Properties.SELECTED_VALUES)==false) {
 					if (SelectionTools.setAdaptedValues(getValue(), selectedValues)) {
@@ -4091,7 +4091,7 @@ Dans le cas d'un mode period !
 				engine.setValue(Properties.SELECTED_VALUES, selectedValues);
 			]]></code>
 		</method>
-		<method id="getCheckedValues" returnType="Object">
+		<method id="getCheckedValues" returnType="java.lang.Object">
 			<parameter type="javax.faces.context.FacesContext" name="facesContext" />
 			<code><![CDATA[
 				if (engine.isPropertySetted(Properties.CHECKED_VALUES)) {
@@ -4104,7 +4104,7 @@ Dans le cas d'un mode period !
 			]]></code>
 		</method>
 		<method id="setCheckedValues">
-			<parameter type="Object" name="checkedValues" />		
+			<parameter type="java.lang.Object" name="checkedValues" />		
 			<code><![CDATA[
 				if (engine.isPropertySetted(Properties.CHECKED_VALUES)==false) {
 					if (CheckTools.setAdaptedValues(getValue(), checkedValues)) {
@@ -4121,7 +4121,7 @@ Dans le cas d'un mode period !
 				engine.setValue(Properties.CHECKED_VALUES, checkedValues);
 			]]></code>
 		</method>
-		<method id="getExpandedValues" returnType="Object">
+		<method id="getExpandedValues" returnType="java.lang.Object">
 			<parameter type="javax.faces.context.FacesContext" name="facesContext" />
 			<import>org.rcfaces.core.internal.tools.ExpansionTools</import>
 			<code><![CDATA[
@@ -4135,7 +4135,7 @@ Dans le cas d'un mode period !
 			]]></code>
 		</method>
 		<method id="setExpandedValues">
-			<parameter type="Object" name="expandedValues" />
+			<parameter type="java.lang.Object" name="expandedValues" />
 			<code><![CDATA[
 				if (engine.isPropertySetted(Properties.EXPANDED_VALUES)==false) {
 					if (ExpansionTools.setAdaptedValues(getValue(), expandedValues)) {
@@ -4368,25 +4368,25 @@ Dans le cas d'un mode period !
 		<method id="getConverter()"/>
 
 
-		<method id="getLocalValue" returnType="Object">
+		<method id="getLocalValue" returnType="java.lang.Object">
 			<code>
 				return engine.getLocalValue(Properties.VALUE);
 			</code>
 		</method>
 
-		<method id="getValue" returnType="Object">
+		<method id="getValue" returnType="java.lang.Object">
 			<code>
 				return getValue(null);
 			</code>
 		</method>
-		<method id="getValue" returnType="Object">
+		<method id="getValue" returnType="java.lang.Object">
 			<parameter type="javax.faces.context.FacesContext" name="context" />
 			<code>
 				return engine.getValue(Properties.VALUE, context);
 			</code>
 		</method>
 		<method id="setValue">
-			<parameter type="Object" name="value" />
+			<parameter type="java.lang.Object" name="value" />
 			<code>
 				engine.setValue(Properties.VALUE, value);
 			</code>
@@ -4434,13 +4434,13 @@ Dans le cas d'un mode period !
 			</code>			
 		</method>
 		
-		<method id="getValue" returnType="Object">
+		<method id="getValue" returnType="java.lang.Object">
 			<code>
 			return getValue(null);
 			</code>			
 		</method>
 		
-		<method id="getValue" returnType="Object">
+		<method id="getValue" returnType="java.lang.Object">
 			<import>org.rcfaces.core.internal.tools.SelectItemsIteratorTools</import>
 			<parameter type="javax.faces.context.FacesContext" name="context" />
 			<code>
@@ -4578,7 +4578,7 @@ Dans le cas d'un mode period !
 			
 	<!-- Selection/deselection -->
 		<method id="select" returnType="void">
-			<parameter type="Object" name="rowValue" />
+			<parameter type="java.lang.Object" name="rowValue" />
 			<import>org.rcfaces.core.internal.tools.SelectionTools</import>
 			<import>org.rcfaces.core.internal.tools.CollectionTools</import>
 			<code>
@@ -4595,7 +4595,7 @@ Dans le cas d'un mode period !
 
 		<method id="deselect" returnType="void">
 			<import>org.rcfaces.core.internal.tools.SelectionTools</import>
-			<parameter type="Object" name="rowValue" />
+			<parameter type="java.lang.Object" name="rowValue" />
 			<code>
 				SelectionTools.deselect(null, this, rowValue);
 			</code>
@@ -4613,13 +4613,13 @@ Dans le cas d'un mode period !
 				return SelectionTools.getCount(getSelectedValues());
 			</code>
 		</method>
-		<method id="getFirstSelectedValue" returnType="Object">
+		<method id="getFirstSelectedValue" returnType="java.lang.Object">
 			<import>org.rcfaces.core.internal.tools.SelectionTools</import>
 			<code>
 				return SelectionTools.getFirst(getSelectedValues(), null);
 			</code>
 		</method>
-		<method id="listSelectedValues" returnType="Object[]">
+		<method id="listSelectedValues" returnType="java.lang.Object[]">
 			<import>org.rcfaces.core.internal.tools.SelectionTools</import>
 			<code>
 				return SelectionTools.listValues(getSelectedValues(), null);
