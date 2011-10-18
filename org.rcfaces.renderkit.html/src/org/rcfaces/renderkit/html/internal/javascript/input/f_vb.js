@@ -1467,15 +1467,19 @@ var __statics = {
 		// parameter name="date.pivot" value="90"
 
 		f_getAsObject : function(validator, text) {
+			var win=validator.f_getClass().f_getClassLoader().f_getWindow();
+			
 			var object = validator.f_getObject();
-			if (object instanceof Date) {
+			
+			if (object instanceof win.Date) {
 				return object;
 			}
 
 			return null;
 		},
 		f_getAsString : function(validator, object) {
-			if (!(object instanceof Date)) {
+			var win=validator.f_getClass().f_getClassLoader().f_getWindow();
+			if (!(object instanceof win.Date)) {
 				return undefined;
 			}
 
