@@ -47,9 +47,9 @@ import org.rcfaces.core.internal.webapp.ExtendedHttpServlet;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
+import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
-import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 
 /**
  * 

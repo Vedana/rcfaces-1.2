@@ -122,6 +122,10 @@ f_classLoader.prototype.f_processViewStates = function(htmlNode) {
 		
 		// pas connu, il existe déjà un autre input, on le cherche :
 		for(var j=0;j<inputs.length;j++) {
+			if (i==j) {
+				continue;
+			}
+			
 			var input2 = inputs[j];
 			if (!input2._viewState) {
 				continue;

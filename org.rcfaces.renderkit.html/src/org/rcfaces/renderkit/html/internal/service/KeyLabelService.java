@@ -37,10 +37,10 @@ import org.rcfaces.core.item.IStyleClassItem;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
+import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
-import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.renderer.KeyLabelRenderer;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
 

@@ -30,8 +30,8 @@ import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.renderkit.html.internal.HtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.HtmlRequestContext;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
-import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
+import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.renderer.AbstractGridRenderer;
 
 /**
@@ -162,6 +162,8 @@ public class AdditionalInformationService extends AbstractHtmlService {
                             (IGridComponent) component, gridRenderer, rowValue,
                             rowIndex);
 
+					saveView(facesContext);
+
                 } finally {
                     if (printWriter != null) {
                         printWriter.close();
@@ -240,7 +242,7 @@ public class AdditionalInformationService extends AbstractHtmlService {
         }
 
         if (dgc instanceof UIData2) {
-      //      ((UIData2) dgc).addDecodedIndexes(Integer.parseInt(rowIndex), 1);
+            ((UIData2) dgc).addDecodedIndexes(Integer.parseInt(rowIndex), 1);
 
             ((UIComponent) dgc).processDecodes(facesContext);
         }

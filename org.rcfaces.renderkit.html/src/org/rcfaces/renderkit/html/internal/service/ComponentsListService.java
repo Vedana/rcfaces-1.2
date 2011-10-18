@@ -37,9 +37,9 @@ import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
+import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
-import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.renderer.ComponentsListRenderer;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
 

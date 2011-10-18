@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.zip.GZIPOutputStream;
 
 import javax.faces.FacesException;
-import javax.faces.application.StateManager;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
@@ -279,15 +278,6 @@ public class PartialRenderingService extends AbstractHtmlService {
 
             printWriter.write(cw.toCharArray());
         }
-    }
-
-    private void saveView(FacesContext facesContext) throws IOException {
-        StateManager stateManager = facesContext.getApplication()
-                .getStateManager();
-
-        Object state = stateManager.saveView(facesContext);
-
-        stateManager.writeState(facesContext, state);
     }
 
     public void setupComponent(IComponentRenderContext componentRenderContext) {

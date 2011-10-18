@@ -15,7 +15,6 @@ import java.util.StringTokenizer;
 import java.util.zip.GZIPOutputStream;
 
 import javax.faces.FacesException;
-import javax.faces.application.StateManager;
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
@@ -44,8 +43,8 @@ import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
 import org.rcfaces.renderkit.html.internal.HtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
-import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
+import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.renderer.ComponentsGridRenderer;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
 
@@ -388,15 +387,6 @@ public class ComponentsGridService extends AbstractHtmlService {
 
 			printWriter.write(cw.toCharArray());
 		}
-	}
-
-	private void saveView(FacesContext facesContext) throws IOException {
-		StateManager stateManager = facesContext.getApplication()
-				.getStateManager();
-
-		Object state = stateManager.saveView(facesContext);
-
-		stateManager.writeState(facesContext, state);
 	}
 
 	public void setupComponent(IComponentRenderContext componentRenderContext) {

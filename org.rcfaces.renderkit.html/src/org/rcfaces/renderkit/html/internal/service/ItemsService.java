@@ -32,10 +32,10 @@ import org.rcfaces.core.lang.ApplicationException;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
+import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.IFilteredItemsRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
-import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
 
 /**

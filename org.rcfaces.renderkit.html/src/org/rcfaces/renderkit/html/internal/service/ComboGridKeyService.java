@@ -28,11 +28,11 @@ import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
+import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
-import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
-import org.rcfaces.renderkit.html.internal.renderer.KeyEntryRenderer;
 import org.rcfaces.renderkit.html.internal.renderer.DataGridRenderer.DataGridRenderContext;
+import org.rcfaces.renderkit.html.internal.renderer.KeyEntryRenderer;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
 
 public class ComboGridKeyService extends AbstractHtmlService {

@@ -5,9 +5,13 @@ package org.rcfaces.renderkit.html.internal.service;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Writer;
 
 import javax.faces.FacesException;
+import javax.faces.application.StateManager;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
@@ -174,5 +178,101 @@ public abstract class AbstractHtmlService extends AbstractService {
         ((HttpServletResponse) response).setHeader(CAMELIA_RESPONSE_HEADER,
                 version);
     }
+	protected void saveView(FacesContext facesContext) throws IOException {
+
+		ResponseWriter responseWriter = facesContext.getResponseWriter();
+		if (responseWriter == null) {
+
+			facesContext.setResponseWriter(new ResponseWriter() {
+
+				@Override
+				public void write(char[] cbuf, int off, int len)
+						throws IOException {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void close() throws IOException {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void writeURIAttribute(String arg0, Object arg1,
+						String arg2) throws IOException {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void writeText(char[] arg0, int arg1, int arg2)
+						throws IOException {
+				}
+
+				@Override
+				public void writeText(Object arg0, String arg1)
+						throws IOException {
+				}
+
+				@Override
+				public void writeComment(Object arg0) throws IOException {
+				}
+
+				@Override
+				public void writeAttribute(String arg0, Object arg1, String arg2)
+						throws IOException {
+				}
+
+				@Override
+				public void startElement(String arg0, UIComponent arg1)
+						throws IOException {
+				}
+
+				@Override
+				public void startDocument() throws IOException {
+				}
+
+				@Override
+				public String getContentType() {
+					return null;
+				}
+
+				@Override
+				public String getCharacterEncoding() {
+					return null;
+				}
+
+				@Override
+				public void flush() throws IOException {
+				}
+
+				@Override
+				public void endElement(String arg0) throws IOException {
+				}
+
+				@Override
+				public void endDocument() throws IOException {
+				}
+
+				@Override
+				public ResponseWriter cloneWithWriter(Writer arg0) {
+					return this;
+				}
+			});
+		}
+
+		StateManager stateManager = facesContext.getApplication()
+				.getStateManager();
+
+		Object state = stateManager.saveView(facesContext);
+
+		stateManager.writeState(facesContext, state);
+
+		if (responseWriter != null) {
+			facesContext.setResponseWriter(responseWriter);
+		}
+	}
+
 
 }
