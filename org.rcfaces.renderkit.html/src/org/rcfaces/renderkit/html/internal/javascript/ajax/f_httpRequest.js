@@ -595,9 +595,13 @@ var __members = {
 	 * listener enregistré pour la gestion des évènements de la requête
 	 *
 	 * @method private
-	 * @return Boolean
+	 * @return void
 	 */
 	_onReadyStateChange: function() {
+		if (window._rcfacesExiting) {
+			return;
+		}
+
 		var req = this._request;
 		if (!req) {
 			f_core.Info(f_httpRequest, "_onReadyStateChange: Request has been canceled !");
