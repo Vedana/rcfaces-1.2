@@ -367,7 +367,13 @@ public class ComponentsGridService extends AbstractHtmlService {
 
 			jsWriter.writeMethodCall("f_updateNewPage").writeln(");");
 
-			saveView(facesContext);
+			String viewStateId = saveViewAndReturnStateId(facesContext);
+
+			if (viewStateId != null) {
+				jsWriter.writeCall("f_classLoader", "ChangeJsfViewId")
+						.write(varId).write(',').writeString(viewStateId)
+						.write(')');
+			}
 
 		} finally {
 

@@ -162,7 +162,7 @@ public class AdditionalInformationService extends AbstractHtmlService {
                             (IGridComponent) component, gridRenderer, rowValue,
                             rowIndex);
 
-					saveView(facesContext);
+					saveView(facesContext, null);
 
                 } finally {
                     if (printWriter != null) {

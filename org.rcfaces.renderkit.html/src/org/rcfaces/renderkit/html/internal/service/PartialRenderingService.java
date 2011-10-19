@@ -258,7 +258,7 @@ public class PartialRenderingService extends AbstractHtmlService {
 
             jsWriter.writeMethodCall("f_updateNewPage").writeln(");");
 */
-            saveView(facesContext);
+            saveView(facesContext, null);
 
         } finally {
 

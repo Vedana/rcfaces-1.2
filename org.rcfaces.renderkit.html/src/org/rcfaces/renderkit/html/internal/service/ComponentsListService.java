@@ -48,300 +48,308 @@ import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
  * @version $Revision$ $Date$
  */
 public class ComponentsListService extends AbstractHtmlService {
-    private static final String REVISION = "$Revision$";
-
-    private static final String SERVICE_ID = Constants.getPackagePrefix()
-            + ".ComponentsList";
-
-    private static final Log LOG = LogFactory
-            .getLog(ComponentsListService.class);
-
-    private static final int DEFAULT_BUFFER_SIZE = 4096;
-
-    private static final int INITIAL_SIZE = 8000;
-
-    private static final String RENDER_CONTEXT_STATE = "camelia.cls.renderContext";
-
-    private static final String COMPONENTS_LIST_SERVICE_VERSION = "1.0.0";
-
-    public ComponentsListService() {
-    }
-
-    public static ComponentsListService getInstance(FacesContext facesContext) {
-
-        IServicesRegistry serviceRegistry = RcfacesContext.getInstance(
-                facesContext).getServicesRegistry();
-        if (serviceRegistry == null) {
-            // Designer mode
-            return null;
-        }
-
-        return (ComponentsListService) serviceRegistry.getService(facesContext,
-                RenderKitFactory.HTML_BASIC_RENDER_KIT, SERVICE_ID);
-    }
-
-    public void service(FacesContext facesContext, String commandId) {
-        Map parameters = facesContext.getExternalContext()
-                .getRequestParameterMap();
-
-        String componentsListId = (String) parameters.get("componentsListId");
-        if (componentsListId == null) {
-            sendJsError(facesContext, null, INVALID_PARAMETER_SERVICE_ERROR,
-                    "Can not find 'componentsListId' parameter.", null);
-            return;
-        }
-
-        UIViewRoot viewRoot = facesContext.getViewRoot();
-        if (viewRoot.getChildCount() == 0) {
-            sendJsError(facesContext, componentsListId,
-                    SESSION_EXPIRED_SERVICE_ERROR, "No view !", null);
-            return;
-        }
-
-        String index_s = (String) parameters.get("index");
-        if (index_s == null) {
-            sendJsError(facesContext, componentsListId,
-                    INVALID_PARAMETER_SERVICE_ERROR,
-                    "Can not find 'index' parameter.", null);
-            return;
-        }
-
-        String filterExpression = (String) parameters.get("filterExpression");
-
-        int rowIndex = Integer.parseInt(index_s);
-
-        ILocalizedComponent localizedComponent = HtmlTools.localizeComponent(
-                facesContext, componentsListId);
-        if (localizedComponent == null) {
-            // Cas special: la session a du expir�e ....
-
-            sendJsError(facesContext, componentsListId,
-                    INVALID_PARAMETER_SERVICE_ERROR,
-                    "Can not find componentsListComponent (id='"
-                            + componentsListId + "').", null);
-
-            return;
-        }
-
-        UIComponent component = localizedComponent.getComponent();
-
-        try {
-
-            if ((component instanceof ComponentsListComponent) == false) {
-                sendJsError(facesContext, componentsListId,
-                        INVALID_PARAMETER_SERVICE_ERROR,
-                        "Invalid componentsListComponent (id='"
-                                + componentsListId + "').", null);
-                return;
-            }
+	private static final String REVISION = "$Revision$";
+
+	private static final String SERVICE_ID = Constants.getPackagePrefix()
+			+ ".ComponentsList";
+
+	private static final Log LOG = LogFactory
+			.getLog(ComponentsListService.class);
+
+	private static final int DEFAULT_BUFFER_SIZE = 4096;
+
+	private static final int INITIAL_SIZE = 8000;
+
+	private static final String RENDER_CONTEXT_STATE = "camelia.cls.renderContext";
+
+	private static final String COMPONENTS_LIST_SERVICE_VERSION = "1.0.0";
+
+	public ComponentsListService() {
+	}
+
+	public static ComponentsListService getInstance(FacesContext facesContext) {
+
+		IServicesRegistry serviceRegistry = RcfacesContext.getInstance(
+				facesContext).getServicesRegistry();
+		if (serviceRegistry == null) {
+			// Designer mode
+			return null;
+		}
+
+		return (ComponentsListService) serviceRegistry.getService(facesContext,
+				RenderKitFactory.HTML_BASIC_RENDER_KIT, SERVICE_ID);
+	}
+
+	public void service(FacesContext facesContext, String commandId) {
+		Map parameters = facesContext.getExternalContext()
+				.getRequestParameterMap();
+
+		String componentsListId = (String) parameters.get("componentsListId");
+		if (componentsListId == null) {
+			sendJsError(facesContext, null, INVALID_PARAMETER_SERVICE_ERROR,
+					"Can not find 'componentsListId' parameter.", null);
+			return;
+		}
+
+		UIViewRoot viewRoot = facesContext.getViewRoot();
+		if (viewRoot.getChildCount() == 0) {
+			sendJsError(facesContext, componentsListId,
+					SESSION_EXPIRED_SERVICE_ERROR, "No view !", null);
+			return;
+		}
+
+		String index_s = (String) parameters.get("index");
+		if (index_s == null) {
+			sendJsError(facesContext, componentsListId,
+					INVALID_PARAMETER_SERVICE_ERROR,
+					"Can not find 'index' parameter.", null);
+			return;
+		}
+
+		String filterExpression = (String) parameters.get("filterExpression");
+
+		int rowIndex = Integer.parseInt(index_s);
+
+		ILocalizedComponent localizedComponent = HtmlTools.localizeComponent(
+				facesContext, componentsListId);
+		if (localizedComponent == null) {
+			// Cas special: la session a du expir�e ....
+
+			sendJsError(facesContext, componentsListId,
+					INVALID_PARAMETER_SERVICE_ERROR,
+					"Can not find componentsListComponent (id='"
+							+ componentsListId + "').", null);
+
+			return;
+		}
+
+		UIComponent component = localizedComponent.getComponent();
+
+		try {
+
+			if ((component instanceof ComponentsListComponent) == false) {
+				sendJsError(facesContext, componentsListId,
+						INVALID_PARAMETER_SERVICE_ERROR,
+						"Invalid componentsListComponent (id='"
+								+ componentsListId + "').", null);
+				return;
+			}
 
-            ComponentsListComponent dgc = (ComponentsListComponent) component;
+			ComponentsListComponent dgc = (ComponentsListComponent) component;
 
-            ISortedComponent sortedComponents[] = null;
+			ISortedComponent sortedComponents[] = null;
 
-            /*
-             * String sortIndex_s = (String) parameters.get("sortIndex"); if
-             * (sortIndex_s != null) { DataColumnComponent columns[] =
-             * dgc.listColumns().toArray();
-             * 
-             * String sortOrder_s = (String) parameters.get("sortOrder");
-             * 
-             * StringTokenizer st1 = new StringTokenizer(sortIndex_s, ",");
-             * StringTokenizer st2 = null; if (sortOrder_s != null) { st2 = new
-             * StringTokenizer(sortOrder_s, ","); }
-             * 
-             * sortedComponents = new ISortedComponent[st1.countTokens()];
-             * 
-             * for (int i = 0; st1.hasMoreTokens(); i++) { String tok1 =
-             * st1.nextToken(); String tok2 = null; if (st2 != null) { tok2 =
-             * st2.nextToken(); }
-             * 
-             * int idx = Integer.parseInt(tok1); boolean order =
-             * "true".equalsIgnoreCase(tok2);
-             * 
-             * sortedComponents[i] = new DefaultSortedComponent(columns[idx],
-             * idx, order); } }
-             */
-
-            ComponentsListRenderer dgr = getDataListRenderer(facesContext, dgc);
-            if (dgr == null) {
-                sendJsError(facesContext, componentsListId,
-                        INVALID_PARAMETER_SERVICE_ERROR,
-                        "Can not find componentsListRenderer. (dataListId='"
-                                + componentsListId + "')", null);
-                return;
-            }
+			/*
+			 * String sortIndex_s = (String) parameters.get("sortIndex"); if
+			 * (sortIndex_s != null) { DataColumnComponent columns[] =
+			 * dgc.listColumns().toArray();
+			 * 
+			 * String sortOrder_s = (String) parameters.get("sortOrder");
+			 * 
+			 * StringTokenizer st1 = new StringTokenizer(sortIndex_s, ",");
+			 * StringTokenizer st2 = null; if (sortOrder_s != null) { st2 = new
+			 * StringTokenizer(sortOrder_s, ","); }
+			 * 
+			 * sortedComponents = new ISortedComponent[st1.countTokens()];
+			 * 
+			 * for (int i = 0; st1.hasMoreTokens(); i++) { String tok1 =
+			 * st1.nextToken(); String tok2 = null; if (st2 != null) { tok2 =
+			 * st2.nextToken(); }
+			 * 
+			 * int idx = Integer.parseInt(tok1); boolean order =
+			 * "true".equalsIgnoreCase(tok2);
+			 * 
+			 * sortedComponents[i] = new DefaultSortedComponent(columns[idx],
+			 * idx, order); } }
+			 */
+
+			ComponentsListRenderer dgr = getDataListRenderer(facesContext, dgc);
+			if (dgr == null) {
+				sendJsError(facesContext, componentsListId,
+						INVALID_PARAMETER_SERVICE_ERROR,
+						"Can not find componentsListRenderer. (dataListId='"
+								+ componentsListId + "')", null);
+				return;
+			}
 
-            ServletResponse response = (ServletResponse) facesContext
-                    .getExternalContext().getResponse();
+			ServletResponse response = (ServletResponse) facesContext
+					.getExternalContext().getResponse();
 
-            setNoCache(response);
-            response.setContentType(IHtmlRenderContext.JAVASCRIPT_TYPE
-                    + "; charset=" + RESPONSE_CHARSET);
-            setCameliaResponse(response, COMPONENTS_LIST_SERVICE_VERSION);
+			setNoCache(response);
+			response.setContentType(IHtmlRenderContext.JAVASCRIPT_TYPE
+					+ "; charset=" + RESPONSE_CHARSET);
+			setCameliaResponse(response, COMPONENTS_LIST_SERVICE_VERSION);
 
-            boolean useGzip = canUseGzip(facesContext);
+			boolean useGzip = canUseGzip(facesContext);
 
-            PrintWriter printWriter = null;
-            try {
+			PrintWriter printWriter = null;
+			try {
 
-                if (useGzip == false) {
-                    printWriter = response.getWriter();
+				if (useGzip == false) {
+					printWriter = response.getWriter();
 
-                } else {
-                    ConfiguredHttpServlet
-                            .setGzipContentEncoding((HttpServletResponse) response, true);
+				} else {
+					ConfiguredHttpServlet.setGzipContentEncoding(
+							(HttpServletResponse) response, true);
 
-                    OutputStream outputStream = response.getOutputStream();
+					OutputStream outputStream = response.getOutputStream();
 
-                    GZIPOutputStream gzipOutputStream = new GZIPOutputStream(
-                            outputStream, DEFAULT_BUFFER_SIZE);
+					GZIPOutputStream gzipOutputStream = new GZIPOutputStream(
+							outputStream, DEFAULT_BUFFER_SIZE);
 
-                    Writer writer = new OutputStreamWriter(gzipOutputStream,
-                            RESPONSE_CHARSET);
+					Writer writer = new OutputStreamWriter(gzipOutputStream,
+							RESPONSE_CHARSET);
 
-                    printWriter = new PrintWriter(writer, false);
-                }
+					printWriter = new PrintWriter(writer, false);
+				}
 
-                writeJs(facesContext, printWriter, dgc, componentsListId, dgr,
-                        rowIndex, sortedComponents, filterExpression);
+				writeJs(facesContext, printWriter, dgc, componentsListId, dgr,
+						rowIndex, sortedComponents, filterExpression);
 
-            } catch (IOException ex) {
+			} catch (IOException ex) {
 
-                throw new FacesException("Can not write componentsList rows !",
-                        ex);
+				throw new FacesException("Can not write componentsList rows !",
+						ex);
 
-            } catch (RuntimeException ex) {
-                LOG.error("Catch runtime exception !", ex);
+			} catch (RuntimeException ex) {
+				LOG.error("Catch runtime exception !", ex);
 
-                throw ex;
+				throw ex;
 
-            } finally {
-                if (printWriter != null) {
-                    printWriter.close();
-                }
-            }
+			} finally {
+				if (printWriter != null) {
+					printWriter.close();
+				}
+			}
 
-        } finally {
-            localizedComponent.end();
-        }
+		} finally {
+			localizedComponent.end();
+		}
 
-        facesContext.responseComplete();
-    }
+		facesContext.responseComplete();
+	}
 
-    private ComponentsListRenderer getDataListRenderer(
-            FacesContext facesContext, ComponentsListComponent component) {
+	private ComponentsListRenderer getDataListRenderer(
+			FacesContext facesContext, ComponentsListComponent component) {
 
-        Renderer renderer = getRenderer(facesContext, component);
+		Renderer renderer = getRenderer(facesContext, component);
 
-        if ((renderer instanceof ComponentsListRenderer) == false) {
-            return null;
-        }
+		if ((renderer instanceof ComponentsListRenderer) == false) {
+			return null;
+		}
 
-        return (ComponentsListRenderer) renderer;
-    }
+		return (ComponentsListRenderer) renderer;
+	}
 
-    private void writeJs(FacesContext facesContext, PrintWriter printWriter,
-            ComponentsListComponent dgc, String componentClientId,
-            ComponentsListRenderer dgr, int rowIndex,
-            ISortedComponent sortedComponents[], String filterExpression)
-            throws IOException {
+	private void writeJs(FacesContext facesContext, PrintWriter printWriter,
+			ComponentsListComponent dgc, String componentClientId,
+			ComponentsListRenderer dgr, int rowIndex,
+			ISortedComponent sortedComponents[], String filterExpression)
+			throws IOException {
 
-        ComponentsListRenderer.ListContext listContext = dgr
-                .createListContext(facesContext, dgc, rowIndex,
-                        sortedComponents, filterExpression);
+		ComponentsListRenderer.ListContext listContext = dgr
+				.createListContext(facesContext, dgc, rowIndex,
+						sortedComponents, filterExpression);
 
-        CharArrayWriter cw = null;
-        PrintWriter pw = printWriter;
-        if (LOG.isTraceEnabled()) {
-            cw = new CharArrayWriter(2000);
-            pw = new PrintWriter(cw);
-        }
+		CharArrayWriter cw = null;
+		PrintWriter pw = printWriter;
+		if (LOG.isTraceEnabled()) {
+			cw = new CharArrayWriter(2000);
+			pw = new PrintWriter(cw);
+		}
 
-        Object states[] = (Object[]) dgc.getAttributes().get(
-                RENDER_CONTEXT_STATE);
-        String contentType = (String) states[1];
+		Object states[] = (Object[]) dgc.getAttributes().get(
+				RENDER_CONTEXT_STATE);
+		String contentType = (String) states[1];
 
-        IJavaScriptWriter jsWriter = new JavaScriptResponseWriter(facesContext,
-                pw, RESPONSE_CHARSET, dgc, componentClientId);
+		IJavaScriptWriter jsWriter = new JavaScriptResponseWriter(facesContext,
+				pw, RESPONSE_CHARSET, dgc, componentClientId);
 
-        String varId = jsWriter.getComponentVarName();
+		String varId = jsWriter.getComponentVarName();
 
-        jsWriter.write("var ").write(varId).write('=').writeCall("f_core",
-                "GetElementByClientId").writeString(componentClientId).writeln(
-                ", document);");
+		jsWriter.write("var ").write(varId).write('=')
+				.writeCall("f_core", "GetElementByClientId")
+				.writeString(componentClientId).writeln(", document);");
 
-        jsWriter.writeMethodCall("f_startNewPage").writeInt(rowIndex).writeln(
-                ");");
+		jsWriter.writeMethodCall("f_startNewPage").writeInt(rowIndex)
+				.writeln(");");
 
-        ResponseWriter oldWriter = facesContext.getResponseWriter();
-        ResponseStream oldStream = facesContext.getResponseStream();
+		ResponseWriter oldWriter = facesContext.getResponseWriter();
+		ResponseStream oldStream = facesContext.getResponseStream();
 
-        try {
-            CharArrayWriter myWriter = new CharArrayWriter(INITIAL_SIZE);
+		try {
+			CharArrayWriter myWriter = new CharArrayWriter(INITIAL_SIZE);
 
-            ResponseWriter newWriter = facesContext.getRenderKit()
-                    .createResponseWriter(myWriter, contentType,
-                            RESPONSE_CHARSET);
+			ResponseWriter newWriter = facesContext.getRenderKit()
+					.createResponseWriter(myWriter, contentType,
+							RESPONSE_CHARSET);
 
-            facesContext.setResponseWriter(newWriter);
+			facesContext.setResponseWriter(newWriter);
 
-            IRenderContext renderContext = HtmlRenderContext
-                    .restoreRenderContext(facesContext, states[0], true);
+			IRenderContext renderContext = HtmlRenderContext
+					.restoreRenderContext(facesContext, states[0], true);
 
-            renderContext.pushComponent(dgc, componentClientId);
+			renderContext.pushComponent(dgc, componentClientId);
 
-            IComponentWriter writer = renderContext.getComponentWriter();
+			IComponentWriter writer = renderContext.getComponentWriter();
 
-            // IComponentTreeRenderProcessor
-            // componentTreeRenderProcessor=ComponentTreeRenderProcessorFactory.get(facesContext)
+			// IComponentTreeRenderProcessor
+			// componentTreeRenderProcessor=ComponentTreeRenderProcessorFactory.get(facesContext)
 
-            dgr.encodeChildren(writer, listContext);
+			dgr.encodeChildren(writer, listContext);
 
-            newWriter.flush();
+			newWriter.flush();
 
-            String buffer = myWriter.toString();
+			String buffer = myWriter.toString();
 
-            int rowCount = 10;
+			int rowCount = 10;
 
-            jsWriter.writeMethodCall("f_updateNewPage").writeInt(rowCount)
-                    .write(',').writeString(buffer).writeln(");");
+			jsWriter.writeMethodCall("f_updateNewPage").writeInt(rowCount)
+					.write(',').writeString(buffer).writeln(");");
 
-        } finally {
-            if (oldWriter != null) {
-                facesContext.setResponseWriter(oldWriter);
-            }
+			String viewStateId = saveViewAndReturnStateId(facesContext);
 
-            if (oldStream != null) {
-                facesContext.setResponseStream(oldStream);
-            }
-        }
+			if (viewStateId != null) {
+				jsWriter.writeCall("f_classLoader", "ChangeJsfViewId")
+						.write(varId).write(',').writeString(viewStateId)
+						.write(')');
+			}
 
-        if (LOG.isTraceEnabled()) {
-            pw.flush();
+		} finally {
+			if (oldWriter != null) {
+				facesContext.setResponseWriter(oldWriter);
+			}
 
-            LOG.trace(cw.toString());
+			if (oldStream != null) {
+				facesContext.setResponseStream(oldStream);
+			}
+		}
 
-            printWriter.write(cw.toCharArray());
-        }
-    }
+		if (LOG.isTraceEnabled()) {
+			pw.flush();
 
-    public void setupComponent(IComponentRenderContext componentRenderContext) {
-        UIComponent dataListComponent = componentRenderContext.getComponent();
+			LOG.trace(cw.toString());
 
-        IHtmlRenderContext htmlRenderContext = (IHtmlRenderContext) componentRenderContext
-                .getRenderContext();
+			printWriter.write(cw.toCharArray());
+		}
+	}
 
-        FacesContext facesContext = htmlRenderContext.getFacesContext();
+	public void setupComponent(IComponentRenderContext componentRenderContext) {
+		UIComponent dataListComponent = componentRenderContext.getComponent();
 
-        Object state = htmlRenderContext.saveState(facesContext);
+		IHtmlRenderContext htmlRenderContext = (IHtmlRenderContext) componentRenderContext
+				.getRenderContext();
 
-        if (state != null) {
-            String contentType = facesContext.getResponseWriter()
-                    .getContentType();
+		FacesContext facesContext = htmlRenderContext.getFacesContext();
 
-            dataListComponent.getAttributes().put(RENDER_CONTEXT_STATE,
-                    new Object[] { state, contentType });
-        }
-    }
+		Object state = htmlRenderContext.saveState(facesContext);
+
+		if (state != null) {
+			String contentType = facesContext.getResponseWriter()
+					.getContentType();
+
+			dataListComponent.getAttributes().put(RENDER_CONTEXT_STATE,
+					new Object[] { state, contentType });
+		}
+	}
 }

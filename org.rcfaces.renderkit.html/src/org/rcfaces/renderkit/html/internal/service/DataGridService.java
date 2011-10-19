@@ -172,8 +172,8 @@ public class DataGridService extends AbstractHtmlService {
 
 			ISelectedCriteria[] criteriaConfigs = null;
 			String criteria_s = (String) parameters.get("criteria");
-			criteriaConfigs = CriteriaTools.computeCriteriaConfigs(facesContext, dgc,
-					criteria_s);
+			criteriaConfigs = CriteriaTools.computeCriteriaConfigs(
+					facesContext, dgc, criteria_s);
 
 			DataGridRenderer dgr = getDataGridRenderer(facesContext, dgc);
 			if (dgr == null) {
@@ -220,8 +220,6 @@ public class DataGridService extends AbstractHtmlService {
 						filterExpression, unknownRowCount, showAdditional,
 						hideAdditional, criteriaConfigs);
 
-				saveView(facesContext);
-
 			} catch (IOException ex) {
 				throw new FacesException(
 						"Can not write dataGrid javascript rows !", ex);
@@ -243,8 +241,6 @@ public class DataGridService extends AbstractHtmlService {
 
 		facesContext.responseComplete();
 	}
-
-	
 
 	private DataGridRenderer getDataGridRenderer(FacesContext facesContext,
 			DataGridComponent component) {
@@ -341,6 +337,16 @@ public class DataGridService extends AbstractHtmlService {
 
 		jsWriter.writeMethodCall("f_updateNewPage").writeln(");");
 
+		if (hasAdditionalInformations(dgc)) {
+
+			String viewStateId = saveViewAndReturnStateId(facesContext);
+			if (viewStateId != null) {
+				jsWriter.writeCall("f_classLoader", "ChangeJsfViewId")
+						.write(varId).write(',').writeString(viewStateId)
+						.write(')');
+			}
+		}
+
 		if (LOG.isTraceEnabled()) {
 			pw.flush();
 
@@ -348,5 +354,14 @@ public class DataGridService extends AbstractHtmlService {
 
 			printWriter.write(cw.toCharArray());
 		}
+	}
+
+	private boolean hasAdditionalInformations(DataGridComponent dgc) {
+		int count = dgc.listAdditionalInformations().count();
+
+		if (count > 0) {
+			return true;
+		}
+		return false;
 	}
 }

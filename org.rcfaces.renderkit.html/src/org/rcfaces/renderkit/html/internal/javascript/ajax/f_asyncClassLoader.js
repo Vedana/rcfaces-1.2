@@ -78,18 +78,25 @@ f_classLoader.prototype.f_loadContent = function(component, htmlNode, content, p
 		// le innerHTML peut être asynchrone !
 		
 		window.setTimeout(function() {
-			var asyncClassLoader=self;
-			self=null;
+			if (window._rcfacesExiting) {
+ 				return false;
+ 			}
+
+			try {
+				var asyncClassLoader=self;
+				self=null;
+				
+				asyncClassLoader.f_processViewStates(htmlNode);
 			
-			asyncClassLoader.f_processViewStates(htmlNode);
-		
-			if (processScripts!==false) {
-				asyncClassLoader.f_processScripts(component, htmlNode, scripts);
+				if (processScripts!==false) {
+					asyncClassLoader.f_processScripts(component, htmlNode, scripts);
+				}
+			} catch (x) {
+				f_core.Error("f_asyncClassLoader", "f_loadContent.timeout: process script exceptions", x);
 			}
 		}, 10);
 	}
 };
-
 
 /**
  * @method hidden
@@ -99,7 +106,8 @@ f_classLoader.prototype.f_loadContent = function(component, htmlNode, content, p
 f_classLoader.prototype.f_processViewStates = function(htmlNode) {
 	
 	var toRemove = null;
-
+	var newViewState = null;
+	
 	var inputs = htmlNode.ownerDocument.getElementsByName("javax.faces.ViewState");
 	for(var i=0;i<inputs.length;i++) {
 		var input=inputs[i];
@@ -138,7 +146,7 @@ f_classLoader.prototype.f_processViewStates = function(htmlNode) {
 			
 			// C'est le notre !
 			main=input2;
-			continue;
+			break;
 		}
 		
 		if (!main) {
@@ -146,11 +154,11 @@ f_classLoader.prototype.f_processViewStates = function(htmlNode) {
 			continue;
 		}
 		
+		newViewState = input.value;
+		
 		if (!toRemove) {
 			toRemove = new Array;
 		}
-		
-		main.value = input.value; // On remplace la valeur par la nouvelle !
 		toRemove.push(input);
 	}
 	
@@ -159,6 +167,10 @@ f_classLoader.prototype.f_processViewStates = function(htmlNode) {
 			var node=toRemove[i];
 			
 			node.parentNode.removeChild(node);
+		}
+		
+		for(var j=0;j<inputs.length;j++) {
+			inputs[j].value=newViewState;
 		}
 	}
 };
@@ -630,5 +642,21 @@ f_classLoader.prototype._asyncSystemLoadBundle=function(bundleName) {
 	}
 	
 	f_core.AppendChild(document.body, script);
-}
+};
 
+
+/**
+ * @method hidden static
+ * @param HTMLElement htmlNode
+ * @param String newViewState
+ * @return void
+ */
+f_classLoader.ChangeJsfViewId = function(htmlNode, newViewState) {
+	var inputs = htmlNode.ownerDocument.getElementsByName("javax.faces.ViewState");
+
+	for(var i=0;i<inputs.length;i++) {
+		var input=inputs[i];
+	
+		input.value=newViewState;
+	}
+};
