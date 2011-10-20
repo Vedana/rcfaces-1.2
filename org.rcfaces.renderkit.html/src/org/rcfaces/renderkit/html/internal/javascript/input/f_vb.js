@@ -1478,7 +1478,7 @@ var __statics = {
 		},
 		f_getAsString : function(validator, object) {
 			
-			if (!(object instanceof win.Date)) {
+			if (!(object instanceof Date)) {
 				return undefined;
 			}
 
