@@ -79,7 +79,7 @@ var __members = {
 
 };
 
-new f_aspect("f_tooltipManager", {
+new f_class("f_tooltipManager", {
 	extend : f_object,
 	statics : __statics,
 	members : __members
