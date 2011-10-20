@@ -75,7 +75,7 @@ var __members = {
 	f_finalize : function() {
 
 		this.f_super(arguments);
-	},
+	}
 
 };
 
