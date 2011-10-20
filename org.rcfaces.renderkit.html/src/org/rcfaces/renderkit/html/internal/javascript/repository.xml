@@ -287,7 +287,14 @@
 			<class name="fa_autoOpen">
 				<required-class name="f_aspect" />
 			</class>
-		</file>		
+		</file>	
+		
+		<file name="aspect/fa_tooltipContainer.js">
+			<class name="fa_tooltipContainer">
+				<required-class name="f_aspect" />
+			</class>
+		</file>	
+		
 		
 	</module>
 	
@@ -358,6 +365,21 @@
 				<required-class name="f_component" />
 			</class>
 		</file>
+		
+		<file name="ui/f_tooltip.js">
+			<class name="f_tooltip">
+				<required-class name="f_component" />
+					<required-class name="f_tooltipManager"/>
+			</class>
+		</file>
+		
+		<file name="ui/f_tooltipManager.js">
+			<class name="f_tooltipManager">
+				<required-class name="f_object" />
+			</class>
+		</file>	
+		
+		
 		<file name="ui/f_styledText.js">
 			<class name="f_styledText">
 				<required-class name="f_text" />

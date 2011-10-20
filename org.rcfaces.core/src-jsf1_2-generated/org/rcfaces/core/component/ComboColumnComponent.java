@@ -24,6 +24,7 @@ import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import org.rcfaces.core.component.capability.ICellImageCapability;
 import org.rcfaces.core.component.capability.IOrderCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import java.lang.Object;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.capability.ISortComparatorCapability;
 import java.lang.String;

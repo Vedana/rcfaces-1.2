@@ -4,6 +4,7 @@ import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
 import org.rcfaces.core.component.AbstractConverterCommandComponent;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.internal.component.Properties;
+import java.lang.Object;
 import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
 import org.apache.commons.logging.LogFactory;

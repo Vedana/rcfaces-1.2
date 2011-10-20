@@ -113,13 +113,12 @@ public class SuggestTextEntryRenderer extends TextEntryRenderer implements
 					IOrderedIterator orderedIterator = (IOrderedIterator) getAdapter(
 							IOrderedIterator.class, itemsValue);
 
-                if (orderedIterator != null) {
-                	orderedResult = orderedIterator.isOrdered();
-                }
-            	break;
-                
+	                if (orderedIterator != null) {
+	                	orderedResult = orderedIterator.isOrdered();
+	                }
+	            	break;
+				}
             }
-        }
 		}
             
         if (orderedResult == false) {

@@ -26,6 +26,7 @@ import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.tools.CheckTools;
 import org.rcfaces.core.component.capability.IScrollableCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import java.lang.Object;
 import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.capability.IDraggableCapability;

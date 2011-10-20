@@ -21,6 +21,7 @@ import org.rcfaces.core.internal.capability.IAdditionalInformationRangeComponent
 import org.rcfaces.core.component.capability.IAdditionalInformationEventCapability;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.core.internal.tools.AdditionalInformationTools;
+import java.lang.Object;
 import org.rcfaces.core.component.iterator.IAdditionalInformationIterator;
 import org.rcfaces.core.internal.tools.OrderTools;
 import org.rcfaces.core.component.KeyEntryComponent;

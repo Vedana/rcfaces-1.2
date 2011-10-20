@@ -13,6 +13,7 @@ import org.rcfaces.core.component.capability.IInitEventCapability;
 import org.rcfaces.core.internal.converter.OrderConverter;
 import org.rcfaces.core.internal.tools.CriteriaTools;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import java.lang.Object;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 import org.rcfaces.core.internal.capability.ICriteriaContainer;
 import org.rcfaces.core.component.capability.IAlignmentCapability;

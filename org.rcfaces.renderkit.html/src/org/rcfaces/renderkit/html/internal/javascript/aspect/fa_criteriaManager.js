@@ -2,8 +2,8 @@
  * Aspect Criteria Manager
  *
  * @aspect public abstract fa_criteriaManager 
- * @author jbmeslin@vedana.com
- * @version 
+ * @author jbmeslin@vedana.com (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
  
 var __members = {

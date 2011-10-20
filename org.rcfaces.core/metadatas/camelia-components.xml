@@ -4665,6 +4665,27 @@ Dans le cas d'un mode period !
 		<attribute id="logicalFilter" type="java.lang.String"/>
 		<attribute id="itemValue" type="java.lang.Object"/>
 	</component>
+	
+	<component id="tooltip" extends="abstractBasic">
+		<implements id="org.rcfaces.core.internal.capability.IAsyncRenderComponent" />
+
+		<capability id="IBackgroundImageCapability" />
+		<capability id="IBorderCapability" />
+		
+		<capability id="IInitEventCapability" />
+		<capability id="ILoadEventCapability" />
+		
+		<capability id="IAsyncRenderModeCapability" />
+		<capability id="IVariableScopeCapability" />		
+		
+		<capability id="ILookAndFeelCapability" />
+		<capability id="IStyleClassCapability" />
+
+		<method id="setAsyncRenderMode(String)" />		
+
+		
+		<attribute id="tooltipId" type="java.lang.String" />
+	</component>
 
 <!--
 	<component id="imagesBar" extends="">

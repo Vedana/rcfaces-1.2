@@ -22,6 +22,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.tools.GridTools;
 import javax.faces.component.NamingContainer;
 import javax.faces.model.DataModel;
+import java.lang.Object;
 import java.util.HashSet;
 import java.util.Arrays;
 

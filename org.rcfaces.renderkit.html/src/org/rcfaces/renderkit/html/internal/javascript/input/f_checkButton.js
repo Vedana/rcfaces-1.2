@@ -21,7 +21,7 @@ var __statics = {
 	 */
 	_TEXT_ID_SUFFIX: "::text"
 	
-}
+};
 
 var __members = {
 	f_finalize: function() {

@@ -465,7 +465,7 @@ A string specifying the message to display when there is no row to display.
 		</attribute>
 		<attribute>
 			<attribute-name>selectedCriteriaColumns</attribute-name>
-			<attribute-class>Object</attribute-class>
+			<attribute-class>java.lang.Object</attribute-class>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -3415,6 +3415,10 @@ TODO
 	<component>
 		<component-type>org.rcfaces.core.criteriaItemFiller</component-type>
 		<component-class>org.rcfaces.core.component.CriteriaItemFillerComponent</component-class>
+	</component>
+	<component>
+		<component-type>org.rcfaces.core.tooltip</component-type>
+		<component-class>org.rcfaces.core.component.TooltipComponent</component-class>
 	</component>
 	<component>
 		<component-type>javax.faces.HtmlOutputText</component-type>

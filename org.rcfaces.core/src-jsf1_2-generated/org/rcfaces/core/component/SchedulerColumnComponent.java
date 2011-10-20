@@ -12,6 +12,7 @@ import org.rcfaces.core.internal.component.CameliaValueColumnComponent;
 import org.rcfaces.core.component.capability.IInitEventCapability;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import java.lang.Object;
 import java.lang.String;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 import org.rcfaces.core.component.capability.IHeightCapability;
