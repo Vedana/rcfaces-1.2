@@ -186,6 +186,8 @@ var __members = {
 			while (tbody.hasChildNodes()) {
 				tbody.removeChild(tbody.lastChild);
 			}			
+			
+			this.f_getClass().f_getClassLoader().f_completeGarbageObjects();
 		}
 
 		var url=f_env.GetViewURI();

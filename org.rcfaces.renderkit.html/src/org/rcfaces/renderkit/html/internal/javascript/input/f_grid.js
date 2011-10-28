@@ -5914,6 +5914,8 @@ var __members = {
 				while (additionalRow.hasChildNodes()) {
 					additionalRow.removeChild(additionalRow.lastChild);
 				}
+				
+				this.f_getClass().f_getClassLoader().f_completeGarbageObjects();
 			}
 		}
 

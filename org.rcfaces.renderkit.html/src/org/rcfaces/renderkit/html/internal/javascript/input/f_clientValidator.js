@@ -654,6 +654,8 @@ var __members = {
 		this.f_installValidator();
 	},
 	f_finalize: function() {
+		f_core.RemoveCheckListener(this._component, this);	
+
 		this._input = undefined;
 		this._component = undefined;
 		this._parameters = undefined; // Map<string, any>

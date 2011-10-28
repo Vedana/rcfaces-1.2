@@ -89,7 +89,9 @@ var __members = {
 
 				f_classLoader.SerializeInputsIntoParam(params, tbody, true);
 			
-				var serializedForm=this.f_getClass().f_getClassLoader().f_garbageObjects(true, tbody);
+				var classLoader=this.f_getClass().f_getClassLoader();
+				
+				var serializedForm=classLoader.f_garbageObjects(true, tbody);
 				f_core.Debug(f_componentsGrid, "f_callServer: serializedForm="+serializedForm);
 				if (serializedForm) {
 					params[f_core.SERIALIZED_DATA]=serializedForm;
@@ -98,6 +100,8 @@ var __members = {
 				while (tbody.hasChildNodes()) {
 					tbody.removeChild(tbody.lastChild);
 				}
+				
+				classLoader.f_completeGarbageObjects();
 				
 				params.serializedFirst=this._first;
 				params.serializedRows=this._rows;
@@ -738,7 +742,8 @@ var __members = {
 			ret++;
 		}
 
-		this.f_getClass().f_getClassLoader().f_garbageObjects(false, tbody);
+		var classLoader=this.f_getClass().f_getClassLoader();
+		classLoader.f_garbageObjects(false, tbody);
 		
 		while (tbody.hasChildNodes()) {
 			var row=tbody.lastChild;
@@ -746,6 +751,8 @@ var __members = {
 			rowsPool.f_removeElement(row);
 			tbody.removeChild(row);
 		}
+		
+		classLoader.f_completeGarbageObjects();
 
 		this.f_performPagedComponentInitialized();
 
@@ -786,6 +793,8 @@ var __members = {
 				this._cursor=undefined;
 			}
 			
+			this.f_getClass().f_getClassLoader().f_garbageObjects(false, row);
+
 			tbody.removeChild(row);
 			rowsPool.f_removeElement(row);
 		
@@ -802,8 +811,6 @@ var __members = {
 		if (ret<1) {
 			return 0;
 		}
-
-		this.f_getClass().f_getClassLoader().f_garbageObjects(false, tbody);
 
 		this.f_performPagedComponentInitialized();
 

@@ -15,7 +15,7 @@ var __statics = {
 	 * @field private static final String
 	 */
 	_TEXT_MENU_ID: "#text"
-}
+};
 
 var __members = {
 /*
@@ -308,8 +308,7 @@ var __members = {
 	 * @return Number
 	 */
 	f_getMaxTextLength: f_class.ABSTRACT
-	
-}
+};
 
 new f_class("f_abstractEntry", {
 	extend: f_input,

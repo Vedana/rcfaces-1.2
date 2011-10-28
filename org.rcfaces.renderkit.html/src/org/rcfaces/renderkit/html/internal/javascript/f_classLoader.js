@@ -1786,6 +1786,14 @@ f_classLoader.prototype = {
 	
 	/**
 	 * @method hidden
+	 * @return void
+	 */
+	f_completeGarbageObjects: function() {
+		f_core.GarbageListenerReferences();
+	},
+	
+	/**
+	 * @method hidden
 	 * @param f_bundle bundle
 	 * @return void
 	 */

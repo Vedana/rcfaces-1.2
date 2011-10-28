@@ -783,6 +783,8 @@ var __members = {
 		if (ret<1) {
 			return 0;
 		}
+		
+		this.f_getClass().f_getClassLoader().f_completeGarbageObjects();
 
 		this.f_performPagedComponentInitialized();
 

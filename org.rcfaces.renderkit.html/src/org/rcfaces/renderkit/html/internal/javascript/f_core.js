@@ -2390,11 +2390,22 @@ var f_core = {
 		var cfs=undefined;
 		var ces=undefined;
 		
+		var doc=form.ownerDocument;
+		
 		// var messageContext=f_messageContext.Get(form); // Pas utilisé !
 		
 		for(var i=0;i<checkListeners.length;) {
-			var component= checkListeners[i++];
+			var componentId= checkListeners[i++];
 			var checkListener=checkListeners[i++];
+			
+			var component=doc.getElementById(componentId);
+			if (!component) {
+				i-=2;
+				
+				checkListeners.splice(i, 2);
+				
+				continue;
+			}			
 			
 			if (checkListener) {
 				var checkPre=checkListener.f_performCheckPre;
@@ -2519,9 +2530,21 @@ var f_core = {
 			return true;
 		}
 		
+		var doc=form.ownerDocument;
+		
 		var ret=true;
-		for(var i=0;i<resetListeners.length && ret;i++) {
-			var resetListener=resetListeners[i];
+		for(var i=0;i<resetListeners.length && ret;) {
+			var componentId=resetListeners[i++];
+			var resetListener=resetListeners[i++];
+			
+			var component=doc.getElementById(componentId);
+			if (!component) {
+				i-=2;
+				
+				resetListeners.splice(i, 2);
+				
+				continue;
+			}
 			
 			if (resetListener.call(form, event)===false) {
 				ret=false;
@@ -2551,11 +2574,11 @@ var f_core = {
 		}
 		
 		if (first) {
-			checkListeners.unshift(component, listener);
+			checkListeners.unshift(component.id, listener);
 			return;
 		}
 		
-		checkListeners.push(component, listener);
+		checkListeners.push(component.id, listener);
 	},
 	/**
 	 * @method hidden static hidden
@@ -2571,7 +2594,13 @@ var f_core = {
 			return false;
 		}
 		
-		return checkListeners.f_removeElement(listener);
+		var idx=checkListeners.indexOf(component.id);
+		if (idx<0) {
+			return false;
+		}
+		
+		checkListeners.splice(idx, 2);
+		return true;
 	},
 	/**
 	 * @method hidden static hidden
@@ -2589,7 +2618,7 @@ var f_core = {
 			form._resetListeners=resetListeners;
 		}
 		
-		resetListeners.f_addElement(callback);
+		resetListeners.f_addElement(component.id, callback);
 	},
 	/**
 	 * @method public static hidden
@@ -2606,7 +2635,71 @@ var f_core = {
 			return false;
 		}	
 		
-		return resetListeners.f_removeElement(callback);
+		
+		var idx=resetListeners.indexOf(component.id);
+		if (idx<0) {
+			return false;
+		}
+		
+		resetListeners.splice(idx, 2);
+		return true;
+	},
+	/**
+	 * @method hidden static
+	 * @return void
+	 */
+	GarbageListenerReferences: function() {
+		var forms=document.forms;
+		for(var i=0;i<forms.length;i++) {
+			var form=forms[i];
+		
+			f_core._GarbageFormReferences(form);
+		}
+	},
+	
+	/**
+	 * @method private static
+	 * @param HTMLFormElement form
+	 * @return void
+	 */
+	_GarbageFormReferences: function(form) {
+		
+		var doc=form.ownerDocument;
+		
+		var checkCount=0;
+		var resetCount=0;
+		
+		var checkListeners=form._checkListeners;
+		if (checkListeners) {
+			for(var j=0;j<checkListeners.length;) {
+				var componentId=checkListeners[j];
+				
+				if (doc.getElementById(componentId)) {
+					j+=2;
+					continue;
+				}
+				
+				checkListeners.splice(j, 2);			
+				checkCount++;
+			}
+		}
+		
+		var resetListeners=form._resetListeners;
+		if (resetListeners) {
+			for(var j=0;j<resetListeners.length;) {
+				var componentId=resetListeners[j];
+				
+				if (doc.getElementById(componentId)) {
+					j+=2;
+					continue;
+				}
+				
+				resetListeners.splice(j, 2);			
+				resetCount++;
+			}
+		}
+		
+		f_core.Debug(f_core, "_GarbageFormReferences("+form.id+"): garbaged-checks="+checkCount+" garbaged-resets="+resetCount);
 	},
 	/**
 	 * @method public static
