@@ -219,9 +219,9 @@ var __members={
 			if (idx>0) {
 				id=id.substring(0, idx);
 				var component = f_core.GetElementByClientId(id);
-				if(typeof (component.f_getFocusHandler) == "function"  ) {
+				if (component && typeof (component.f_getFocusHandler) == "function") {
 					var focusHandler = component.f_getFocusHandler();
-					if(focusHandler) {
+					if (focusHandler) {
 						id = focusHandler.id; 
 					}
 				}
