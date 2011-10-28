@@ -969,7 +969,8 @@ f_classLoader.prototype = {
 						
 			var component=document.getElementById(componentId);
 			if (!component) {
-				f_core.Error(f_classLoader,"f_verifyOnMessage["+i+"/"+ids.length+"]: Can not find component '"+componentId+"'.");
+				// On peut avoir changer de page de componentsGrid / additionnalInformations
+				f_core.Info(f_classLoader,"f_verifyOnMessage["+i+"/"+ids.length+"]: Can not find component '"+componentId+"'.");
 				continue;
 			}
 			
