@@ -8,6 +8,7 @@ import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.internal.renderkit.IAsyncRenderer;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
@@ -54,7 +55,8 @@ public class TooltipRenderer extends AbstractCssRenderer implements
 
 		int asyncRender = IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE;
 
-		boolean hidden = Boolean.FALSE.equals(tooltipComponent.getVisibleState());
+		boolean hidden = Boolean.FALSE.equals(tooltipComponent
+				.getVisibleState());
 
 		if (hidden) {
 			if (htmlRenderContext.isAsyncRenderEnable()) {
@@ -64,7 +66,6 @@ public class TooltipRenderer extends AbstractCssRenderer implements
 				if (asyncRender != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
 					htmlWriter.writeAttribute("v:asyncRender", true);
 
-				
 					htmlRenderContext.pushInteractiveRenderComponent(
 							htmlWriter, null);
 				}
@@ -72,6 +73,7 @@ public class TooltipRenderer extends AbstractCssRenderer implements
 		}
 
 		setAsyncRenderer(htmlWriter, tooltipComponent, asyncRender);
+		// htmlWriter.enableJavaScript();
 	}
 
 	protected void encodeEnd(IComponentWriter writer) throws WriterException {
@@ -86,25 +88,31 @@ public class TooltipRenderer extends AbstractCssRenderer implements
 
 	protected void encodeJavaScript(IJavaScriptWriter jsWriter)
 			throws WriterException {
-		super.encodeJavaScript(jsWriter);
+		// super.encodeJavaScript(jsWriter);
 
+		jsWriter.setIgnoreComponentInitialization();
 
-		jsWriter.writeCall("f_tooltipManager", "Get")
-				.writeln(");");
+		jsWriter.writeCall("f_tooltipManager", "Get").writeln(");");
 
 	}
-	
+
 	public void addRequiredJavaScriptClassNames(IHtmlWriter writer,
-            IJavaScriptRenderContext javaScriptRenderContext) {
-        super.addRequiredJavaScriptClassNames(writer, javaScriptRenderContext);
+			IJavaScriptRenderContext javaScriptRenderContext) {
+		super.addRequiredJavaScriptClassNames(writer, javaScriptRenderContext);
 
-
-            javaScriptRenderContext.appendRequiredClass(JavaScriptClasses.TOOLTIP,
-                    "f_tooltipManager");
-    }
+		javaScriptRenderContext.appendRequiredClass(JavaScriptClasses.TOOLTIP,
+				"f_tooltipManager");
+	}
 
 	protected String getJavaScriptClassName() {
 		return JavaScriptClasses.TOOLTIP;
 	}
 
+	public static void render(IHtmlWriter htmlWriter, TooltipComponent component)
+			throws WriterException {
+		FacesContext facesContext = htmlWriter.getHtmlComponentRenderContext()
+				.getFacesContext();
+
+		ComponentTools.encodeRecursive(facesContext, component);
+	}
 }

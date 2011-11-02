@@ -3,18 +3,26 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
+import java.util.List;
+
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.PhaseId;
 
 import org.rcfaces.core.component.ButtonComponent;
+import org.rcfaces.core.component.TooltipComponent;
+import org.rcfaces.core.component.iterator.ITooltipIterator;
 import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.event.SelectionEvent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.renderkit.IComponentData;
+import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
+import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.tools.TooltipTools;
+import org.rcfaces.core.internal.util.ComponentIterators;
 import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.AbstractInputRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -31,8 +39,14 @@ public class ButtonRenderer extends AbstractInputRenderer {
 
     protected void encodeComponent(IHtmlWriter htmlWriter)
             throws WriterException {
-        ButtonComponent button = (ButtonComponent) htmlWriter
-                .getComponentRenderContext().getComponent();
+    	
+    	IComponentRenderContext componentContext = htmlWriter
+                   .getComponentRenderContext();
+    	
+        ButtonComponent button = (ButtonComponent) componentContext.getComponent();
+
+        FacesContext facesContext = componentContext.getFacesContext();
+        
 
         htmlWriter.startElement(IHtmlWriter.INPUT);
 
@@ -41,7 +55,29 @@ public class ButtonRenderer extends AbstractInputRenderer {
         writeCssAttributes(htmlWriter);
         writeInputAttributes(htmlWriter);
         writeTextDirection(htmlWriter, button);
-
+        
+        
+        ITooltipIterator tooltips = TooltipTools.listTooltipss((UIComponent) button);
+        String tooltipId =  button.getTooltipId(facesContext);
+        if (tooltipId != null) {
+	
+			IRenderContext renderContext = componentContext
+					.getRenderContext();
+	
+			String forId = renderContext.computeBrotherComponentClientId(
+					button, button.getTooltipId(facesContext));
+        
+    	} else {
+        	if (tooltips.count() > 0) {
+        		TooltipComponent tooltipComponent = (TooltipComponent) tooltips.next();
+        		tooltipId = tooltipComponent.getId();
+        	}
+        }
+        
+        if(tooltipId != null) {
+        	 htmlWriter.writeAttribute("v:tooltipId",tooltipId);
+        }
+        
         String txt = button.getText(htmlWriter.getComponentRenderContext()
                 .getFacesContext());
         if (txt != null) {
@@ -55,6 +91,16 @@ public class ButtonRenderer extends AbstractInputRenderer {
         htmlWriter.addSubFocusableComponent(htmlWriter
                 .getComponentRenderContext().getComponentClientId());
     }
+    
+//    public static IColumnIterator listColumns(IGridComponent component,
+//            Class filter) {
+//        List list = ComponentIterators.list((UIComponent) component, filter);
+//        if (list.isEmpty()) {
+//            return EMPTY_COLUMNS_ITERATOR;
+//        }
+//
+//        return new ColumnListIterator(list);
+//    }
 
     protected boolean isNameEqualsId() {
         return true;

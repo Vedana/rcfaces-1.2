@@ -176,6 +176,10 @@ A boolean value indicating wether the vertical scroll is shown.
 ]]></description>
 		<component-type>org.rcfaces.core.button</component-type>
 		<component-class>org.rcfaces.core.component.ButtonComponent</component-class>
+		<attribute>
+			<attribute-name>tooltipId</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
 	</component>
 	<component>
 		<description><![CDATA[
@@ -2241,6 +2245,10 @@ A string specifying a converter id or a binding to a converter object. This conv
 			<attribute-name>orderedItems</attribute-name>
 			<attribute-class>boolean</attribute-class>
 		</attribute>
+		<attribute>
+			<attribute-name>showPopupForOneResult</attribute-name>
+			<attribute-class>boolean</attribute-class>
+		</attribute>
 	</component>
 	<component>
 		<description><![CDATA[
@@ -3419,6 +3427,10 @@ TODO
 	<component>
 		<component-type>org.rcfaces.core.tooltip</component-type>
 		<component-class>org.rcfaces.core.component.TooltipComponent</component-class>
+	</component>
+	<component>
+		<component-type>org.rcfaces.core.tooltipManager</component-type>
+		<component-class>org.rcfaces.core.component.TooltipManagerComponent</component-class>
 	</component>
 	<component>
 		<component-type>javax.faces.HtmlOutputText</component-type>

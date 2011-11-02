@@ -24,6 +24,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.AdditionalInformationComponent;
 import org.rcfaces.core.component.DataGridComponent;
+import org.rcfaces.core.component.TooltipComponent;
 import org.rcfaces.core.component.capability.IAdditionalInformationValuesCapability;
 import org.rcfaces.core.component.capability.ICellImageCapability;
 import org.rcfaces.core.component.capability.ICellStyleClassCapability;
@@ -1203,6 +1204,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
 			if (rowIndex >= 0) {
 				objectLiteralWriter.writeSymbol("_rowIndex").writeInt(rowIndex);
 			}
+			
+			
 
 			objectLiteralWriter.end();
 		}
@@ -1361,7 +1364,19 @@ public class DataGridRenderer extends AbstractGridRenderer {
 			if (rowIndex >= 0) {
 				objectLiteralWriter.writeSymbol("_rowIndex").writeInt(rowIndex);
 			}
-
+			
+			if(tableContext.hasTooltips() ){//temporaire
+				Map<String, TooltipComponent> tooltips = tableContext.listTooltips();
+				TooltipComponent tooltipComponent = tooltips.get("#row");
+				
+					 encodeTooltip(jsWriter, tooltipComponent);
+					 
+					 objectLiteralWriter.writeSymbol(
+								"_tooltip").writeString(tooltipComponent.getId());
+				
+				
+			}
+			
 			if (tableContext.hasAdditionalInformations()) {
 				AdditionalInformationComponent additionalInformationComponents[] = tableContext
 						.listAdditionalInformations();

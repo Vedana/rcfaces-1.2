@@ -58,10 +58,10 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 	private ValueExpression top;
 	private ValueExpression initListeners;
 	private ValueExpression hiddenMode;
-	private ValueExpression rows;
 	private ValueExpression var;
-	private ValueExpression margins;
 	private ValueExpression first;
+	private ValueExpression margins;
+	private ValueExpression rows;
 	private ValueExpression value;
 	public void setHelpMessage(ValueExpression helpMessage) {
 		this.helpMessage = helpMessage;
@@ -223,20 +223,20 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 		this.hiddenMode = hiddenMode;
 	}
 
-	public void setRows(ValueExpression rows) {
-		this.rows = rows;
-	}
-
 	public void setVar(ValueExpression var) {
 		this.var = var;
+	}
+
+	public void setFirst(ValueExpression first) {
+		this.first = first;
 	}
 
 	public void setMargins(ValueExpression margins) {
 		this.margins = margins;
 	}
 
-	public void setFirst(ValueExpression first) {
-		this.first = first;
+	public void setRows(ValueExpression rows) {
+		this.rows = rows;
 	}
 
 	public final void setValue(ValueExpression value) {
@@ -273,10 +273,10 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 			LOG.debug("  right='"+right+"'");
 			LOG.debug("  top='"+top+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
-			LOG.debug("  rows='"+rows+"'");
 			LOG.debug("  var='"+var+"'");
-			LOG.debug("  margins='"+margins+"'");
 			LOG.debug("  first='"+first+"'");
+			LOG.debug("  margins='"+margins+"'");
+			LOG.debug("  rows='"+rows+"'");
 		}
 		if ((uiComponent instanceof AbstractGridComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -590,21 +590,21 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (rows != null) {
-			if (rows.isLiteralText()==false) {
-				component.setValueExpression(Properties.ROWS, rows);
-
-			} else {
-				component.setRows(getInt(rows.getExpressionString()));
-			}
-		}
-
 		if (var != null) {
 			if (var.isLiteralText()==false) {
 				component.setValueExpression(Properties.VAR, var);
 
 			} else {
 				component.setVar(var.getExpressionString());
+			}
+		}
+
+		if (first != null) {
+			if (first.isLiteralText()==false) {
+				component.setValueExpression(Properties.FIRST, first);
+
+			} else {
+				component.setFirst(getInt(first.getExpressionString()));
 			}
 		}
 
@@ -615,12 +615,12 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 				component.setMargins(margins.getExpressionString());
 		}
 
-		if (first != null) {
-			if (first.isLiteralText()==false) {
-				component.setValueExpression(Properties.FIRST, first);
+		if (rows != null) {
+			if (rows.isLiteralText()==false) {
+				component.setValueExpression(Properties.ROWS, rows);
 
 			} else {
-				component.setFirst(getInt(first.getExpressionString()));
+				component.setRows(getInt(rows.getExpressionString()));
 			}
 		}
 
@@ -675,10 +675,10 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 		top = null;
 		initListeners = null;
 		hiddenMode = null;
-		rows = null;
 		var = null;
-		margins = null;
 		first = null;
+		margins = null;
+		rows = null;
 		value = null;
 
 		super.release();

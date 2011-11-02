@@ -739,7 +739,9 @@
 		<capability id="IFocusStyleClassCapability" />
 
 		<action id="action" type="selection" default="true" />
-
+		
+		<attribute id="tooltipId" type="java.lang.String" />
+		
 <!-- 
 		<method id="getValue" returnType="java.lang.Object">
 			<code>
@@ -3268,6 +3270,7 @@ Dans le cas d'un mode period !
 		<attribute id="suggestionConverter" type="javax.faces.convert.Converter" />
 		<attribute id="moreResultsMessage" type="java.lang.String" />
 		<attribute id="orderedItems" type="boolean" default="true" />
+		<attribute id="showPopupForOneResult" type="boolean" />
 	
 		<method id="setSuggestionConverter(String)" />
 		<method id="setSuggestionConverter(String,javax.faces.context.FacesContext)" />
@@ -4681,10 +4684,15 @@ Dans le cas d'un mode period !
 		<capability id="ILookAndFeelCapability" />
 		<capability id="IStyleClassCapability" />
 
+	
 		<method id="setAsyncRenderMode(String)" />		
 
 		
 		<attribute id="tooltipId" type="java.lang.String" />
+	</component>
+	
+	<component id="tooltipManager" extends="cameliaBase">
+		<attribute id="delay" type="int" default="-1"/>
 	</component>
 
 <!--

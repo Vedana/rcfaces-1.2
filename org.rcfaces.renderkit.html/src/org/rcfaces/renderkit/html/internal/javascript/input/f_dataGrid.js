@@ -435,7 +435,7 @@ var __members = {
 			row.tabIndex=-1; // Pas sous FF car le TR devient focusable
 		}
 		
-		if (this._selectable || this._checkable) {
+		if (this._selectable || this._checkable || this._additionalInformations) {
 			row.onmousedown=f_grid.RowMouseDown;
 			row.onmouseup=f_grid.RowMouseUp;
 			row.onclick=f_core.CancelJsEventHandler;
@@ -726,6 +726,11 @@ var __members = {
 				this.f_showAdditionalContent(row);
 			}
 		}
+		
+		if (properties._tooltip) { // temporaire
+			row._tooltipId = properties._tooltip;
+		}
+		
 		
 		this.fa_updateElementStyle(row, false);
 		

@@ -6,7 +6,7 @@
  * 
  * @class public abstract f_grid extends f_component, fa_disabled, fa_immediate,
  *        fa_pagedComponent, fa_subMenu, fa_commands, fa_selectionManager<String[]>,
- *        fa_scrollPositions, fa_additionalInformationManager, fa_droppable, fa_draggable, fa_autoScroll, fa_aria
+ *        fa_scrollPositions, fa_additionalInformationManager, fa_droppable, fa_draggable, fa_autoScroll, fa_aria, fa_tooltipContainer
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -5579,6 +5579,28 @@ var __members = {
 			this.f_hideAdditionalContent(row, animated);
 		}
 	},
+	
+	/**
+	 * @method protected
+	 * @param Object
+	 *            row
+	 * @param Boolean
+	 *            additional
+	 * @param Boolean
+	 *            animated
+	 * @return void
+	 */
+	fa_setTooltipVisible : function(tooltip, show, animated) {
+		
+		if (show) {
+			this.f_showTooltip(tooltip, animated);
+
+		} else {
+			//this.f_hideAdditionalContent(row, animated);
+		}
+	},
+	
+	
 	/**
 	 * @method protected
 	 * @param Object
@@ -5857,6 +5879,237 @@ var __members = {
 		}
 
 		request.f_doFormRequest(params);
+	},
+	
+	/**
+	 * @method protected
+	 * @param HTMLTableRowElement
+	 *            row
+	 * @param Boolean animated
+	 *            animated
+	 * @return void
+	 */
+	f_showTooltip : function(tooltip, forElement ,animated, parent) {
+
+		
+		var row =  tooltip._elementContainer;
+		var tooltipId = row._tooltipId;
+		
+		if (tooltipId === false) {
+			return;
+		}
+		
+		var component = tooltip;
+		
+
+		var url = f_env.GetViewURI();
+		var request = new f_httpRequest(component, url, f_httpRequest.TEXT_HTML_MIME_TYPE);
+		var self = this;
+		
+		
+		if (!parent) {
+			if (typeof(component.fa_getInteractiveParent)=="function") {
+				parent=component.fa_getInteractiveParent();
+			}
+			
+			if (!parent) {
+				parent=component;
+			}
+		}
+		
+//		if (!component.style.height || component.offsetHeight<f_waiting.HEIGHT) {
+//			component._removeStyleHeight=true;
+//			component.style.height=f_waiting.HEIGHT+"px";
+//		}
+
+		request.f_setListener( {
+					onInit : function(request) {
+						var waiting=component._intWaiting;
+			 			if (!waiting) {	
+			 				waiting=f_waiting.Create(parent);
+			 				component._intWaiting=waiting;
+			 			}
+			 			
+			 			waiting.f_setText(f_waiting.GetLoadingMessage());
+			 			waiting.f_show();
+					},
+					/**
+					 * @method public
+					 */
+					onError : function(request, status, text) {
+
+						component._intLoading=false;		
+						
+			 			var waiting=component._intWaiting;
+						if (waiting) {
+							waiting.f_hide();
+						}
+						
+
+						f_core.Info(f_grid, "f_showTooltip.onError: Bad status: " + status);
+
+						self.f_performErrorEvent(request, f_error.HTTP_ERROR,
+								text);
+					},
+					/**
+					 * @method public
+					 */
+					onProgress : function(request, content, length, contentType) {
+						var waiting=component._intWaiting;
+						if (waiting) {
+							waiting.f_setText(f_waiting.GetReceivingMessage());
+						}	 		
+					},
+					/**
+					 * @method public
+					 */
+					onLoad : function(request, content, contentType) {
+						
+						if (component._removeStyleHeight) {
+							component._removeStyleHeight=null;
+							if (component.style.height==f_waiting.HEIGHT+"px") {
+								component.style.height="auto";
+							}
+						}
+						var waiting=component._intWaiting;
+						try {
+							if (request.f_getStatus()!=f_httpRequest.OK_STATUS) {
+								component.f_performErrorEvent(request, f_error.INVALID_RESPONSE_ASYNC_RENDER_ERROR, "Bad http response status ! ("+request.f_getStatusText()+")");
+								return;
+							}
+
+							var cameliaServiceVersion=request.f_getResponseHeader(f_httpRequest.CAMELIA_RESPONSE_HEADER);
+							if (!cameliaServiceVersion) {
+								component.f_performErrorEvent(request, f_error.INVALID_SERVICE_RESPONSE_ERROR, "Not a service response !");
+								return;					
+							}
+							
+							var ret=request.f_getResponse();
+							//	alert("Ret="+ret);
+
+							var responseContentType=request.f_getResponseContentType().toLowerCase();
+							if (responseContentType.indexOf(f_error.APPLICATION_ERROR_MIME_TYPE)>=0) {
+								var code=f_error.ComputeApplicationErrorCode(request);
+						
+						 		component.f_performErrorEvent(request, code, content);
+								return;
+							}
+						
+							
+							if (responseContentType.indexOf(f_httpRequest.TEXT_HTML_MIME_TYPE)>=0) {
+								if (waiting) {
+									waiting.f_hide();
+									waiting.f_close();
+									waiting=null;
+								}
+								
+								try {
+									component.f_getClass().f_getClassLoader().f_loadContent(component, component, ret);
+									component.f_setVisible(true);
+									
+								} catch (x) {
+						 			component.f_performAsyncErrorEvent(x, f_error.RESPONSE_EVALUATION_ASYNC_RENDER_ERROR, "Evaluation exception");
+								}
+								return;
+							}
+							
+						 	component.f_performAsyncErrorEvent(request, f_error.RESPONSE_TYPE_ASYNC_RENDER_ERROR, "Unsupported content type: "+responseContentType);
+							
+						} finally {				
+							component._intLoading=false;
+
+							if (waiting) {
+								waiting.f_hide();
+							}
+						}
+			 		}			
+
+//						var ret = undefined;
+//
+//						if (request.f_getStatus() != f_httpRequest.OK_STATUS) {
+//							self.f_performErrorEvent(request,
+//									f_error.INVALID_RESPONSE_SERVICE_ERROR,
+//									"Bad http response status ! ("
+//											+ request.f_getStatusText() + ")");
+//							ret = false;
+//
+//						} else {
+//							var responseContentType = request
+//									.f_getResponseContentType().toLowerCase();
+//							if (responseContentType
+//									.indexOf(f_error.APPLICATION_ERROR_MIME_TYPE) >= 0) {
+//								var code = f_error
+//										.ComputeApplicationErrorCode(request);
+//
+//								self
+//										.f_performErrorEvent(request, code,
+//												content);
+//								ret = false;
+//
+//							} else if (responseContentType
+//									.indexOf(f_httpRequest.TEXT_HTML_MIME_TYPE) < 0) {
+//								self.f_performErrorEvent(request,
+//										f_error.RESPONSE_TYPE_SERVICE_ERROR,
+//										"Unsupported content type: "
+//												+ responseContentType);
+//
+//								ret = false;
+//							}
+//						}
+//
+//						if (ret === undefined) {
+//							ret = request.f_getResponse();
+//						}
+//
+//						try {
+//							row._tooltipContent = ret;
+//
+//							if (ret === false) {
+//								self.f_hideAdditionalContent(row, animated);
+//
+//							} else {
+//
+//								this.f_getClass().f_getClassLoader().f_loadContent(self, additionalRow , ret);
+//							}
+//
+//						} catch (x) {
+//							self.f_performErrorEvent(x,
+//									f_error.RESPONSE_EVALUATION_SERVICE_ERROR,
+//									"Evaluation exception");
+//						}
+//					}
+				});
+
+		// alert("Params="+params);
+
+		request.f_setRequestHeader("X-Camelia", "grid.tooltip");
+
+		var params = {
+			gridId : this.id,
+			rowValue : row._index,
+			rowIndex : row._rowIndex
+		};
+
+		if (this._paged) {
+			// On synchronise 1 SEULE ligne, on envoi pas les indexes !
+
+			var serializedState = this.f_getClass().f_getClassLoader()
+					.f_getSerializedState();
+			f_core.Debug(f_dataGrid, "f_callServer: serializedState="
+					+ serializedState);
+			if (!serializedState) {
+				serializedState = ""; // Il faut informer le service que nous
+										// sommes en mode paginé !
+			}
+
+			params[f_core.SERIALIZED_DATA] = serializedState;
+
+			f_classLoader.SerializeInputsIntoParam(params, this, false);
+		}
+		
+
+		request.f_doFormRequest(params);
+		
 	},
 	/**
 	 * @method protected
@@ -6531,13 +6784,16 @@ var __members = {
 			this._targetDragAndDropEngine.f_updateMousePosition();
 		}
 	}
+	
+
+	
 };
 
 new f_class("f_grid", {
 	extend : f_component,
 	aspects : [ fa_disabled, fa_pagedComponent, fa_subMenu, fa_commands,
 			fa_selectionManager, fa_scrollPositions, fa_immediate,
-			fa_additionalInformationManager, fa_droppable, fa_draggable, fa_autoScroll, fa_autoOpen, fa_aria ],
+			fa_additionalInformationManager, fa_droppable, fa_draggable, fa_autoScroll, fa_autoOpen, fa_aria, fa_tooltipContainer ],
 	statics : __statics,
 	members : __members
 });

@@ -61,7 +61,7 @@ public class ButtonComponent extends AbstractCommandComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractCommandComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"focusStyleClass","selectionListener","text","readOnly","alternateText","textDirection"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"focusStyleClass","selectionListener","tooltipId","text","readOnly","alternateText","textDirection"}));
 	}
 
 	public ButtonComponent() {
@@ -198,6 +198,26 @@ public class ButtonComponent extends AbstractCommandComponent implements
 
 	public void setFocusStyleClass(java.lang.String focusStyleClass) {
 		engine.setProperty(Properties.FOCUS_STYLE_CLASS, focusStyleClass);
+	}
+
+	public String getTooltipId() {
+		return getTooltipId(null);
+	}
+
+	public String getTooltipId(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.TOOLTIP_ID, facesContext);
+	}
+
+	public void setTooltipId(String tooltipId) {
+		engine.setProperty(Properties.TOOLTIP_ID, tooltipId);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "tooltipId" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isTooltipIdSetted() {
+		return engine.isPropertySetted(Properties.TOOLTIP_ID);
 	}
 
 	protected Set getCameliaFields() {

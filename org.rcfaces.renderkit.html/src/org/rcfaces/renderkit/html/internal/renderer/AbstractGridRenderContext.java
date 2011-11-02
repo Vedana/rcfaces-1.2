@@ -5,7 +5,9 @@ package org.rcfaces.renderkit.html.internal.renderer;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.faces.FacesException;
@@ -18,6 +20,7 @@ import javax.faces.model.DataModel;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.AdditionalInformationComponent;
+import org.rcfaces.core.component.TooltipComponent;
 import org.rcfaces.core.component.capability.IAdditionalInformationCardinalityCapability;
 import org.rcfaces.core.component.capability.IAlertLoadingMessageCapability;
 import org.rcfaces.core.component.capability.IAlignmentCapability;
@@ -54,6 +57,7 @@ import org.rcfaces.core.component.capability.IWidthCapability;
 import org.rcfaces.core.component.capability.IWidthRangeCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.iterator.IColumnIterator;
+import org.rcfaces.core.component.iterator.ITooltipIterator;
 import org.rcfaces.core.internal.capability.IAdditionalInformationComponent;
 import org.rcfaces.core.internal.capability.ICellImageSettings;
 import org.rcfaces.core.internal.capability.ICellStyleClassSettings;
@@ -72,6 +76,7 @@ import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.tools.CriteriaTools;
+import org.rcfaces.core.internal.tools.TooltipTools;
 import org.rcfaces.core.lang.FilterPropertiesMap;
 import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.core.model.IFilterProperties;
@@ -230,6 +235,9 @@ public abstract class AbstractGridRenderContext {
 	private boolean wheelSelection = true;
 
 	private String alertLoadingMessage = null;
+	
+	private Map<String, TooltipComponent> gridTooltips; // #head, #body, #row + (v:tooltipId) + #cell
+	private String[] columnTooltipIds; // #cell
 
 	private AbstractGridRenderContext(IProcessContext processContext,
 			IScriptRenderContext scriptRenderContext,
@@ -341,6 +349,19 @@ public abstract class AbstractGridRenderContext {
 				}
 			}
 		}
+			
+		
+		// temporaire avant création de la capability tooltip2
+		ITooltipIterator tooltipIterator = TooltipTools.listTooltipss((UIComponent) gridComponent);
+		gridTooltips = new HashMap<String, TooltipComponent>();
+		for (;tooltipIterator.hasNext();) {
+			TooltipComponent tooltipComponent = tooltipIterator.next();
+			gridTooltips.put(tooltipComponent.getTooltipId(processContext.getFacesContext()), tooltipComponent);
+			
+		}
+		
+		
+		
 
 		if (gridComponent instanceof IAdditionalInformationComponent) {
 			additionalInformations = ((IAdditionalInformationComponent) gridComponent)
@@ -1161,6 +1182,15 @@ public abstract class AbstractGridRenderContext {
 	public boolean hasAdditionalInformations() {
 		return additionalInformations != null
 				&& additionalInformations.length > 0;
+	}
+	
+	public final Map<String, TooltipComponent> listTooltips() {
+		return gridTooltips;
+	}
+
+	public boolean hasTooltips() {
+		return gridTooltips != null
+				&& gridTooltips.size() > 0;
 	}
 
 	public int getAdditionalInformationCardinality() {

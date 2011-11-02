@@ -24,6 +24,7 @@ public class ButtonTag extends AbstractCommandTag implements Tag {
 	private ValueExpression readOnly;
 	private ValueExpression alternateText;
 	private ValueExpression focusStyleClass;
+	private ValueExpression tooltipId;
 	private ValueExpression actionListeners;
 	private ValueExpression action;
 	public String getComponentType() {
@@ -54,6 +55,10 @@ public class ButtonTag extends AbstractCommandTag implements Tag {
 		this.focusStyleClass = focusStyleClass;
 	}
 
+	public void setTooltipId(ValueExpression tooltipId) {
+		this.tooltipId = tooltipId;
+	}
+
 	public final void setAction(ValueExpression action) {
 		this.action=action;
 	}
@@ -72,6 +77,7 @@ public class ButtonTag extends AbstractCommandTag implements Tag {
 			LOG.debug("  readOnly='"+readOnly+"'");
 			LOG.debug("  alternateText='"+alternateText+"'");
 			LOG.debug("  focusStyleClass='"+focusStyleClass+"'");
+			LOG.debug("  tooltipId='"+tooltipId+"'");
 			LOG.debug("  action='"+action+"'");
 			LOG.debug("  actionListeners='"+actionListeners+"'");
 		}
@@ -136,6 +142,15 @@ public class ButtonTag extends AbstractCommandTag implements Tag {
 			}
 		}
 
+		if (tooltipId != null) {
+			if (tooltipId.isLiteralText()==false) {
+				component.setValueExpression(Properties.TOOLTIP_ID, tooltipId);
+
+			} else {
+				component.setTooltipId(tooltipId.getExpressionString());
+			}
+		}
+
 		if (action != null) {
 			ListenersTools1_2.parseAction(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, action);
 		}
@@ -152,6 +167,7 @@ public class ButtonTag extends AbstractCommandTag implements Tag {
 		readOnly = null;
 		alternateText = null;
 		focusStyleClass = null;
+		tooltipId = null;
 		action = null;
 		actionListeners = null;
 

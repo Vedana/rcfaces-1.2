@@ -766,6 +766,14 @@
 		</component>
 	</tag>
 	<tag>
+		<tag-name>tooltipManager</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.tooltipManager</component-type>
+			<renderer-type>org.rcfaces.core.tooltipManager</renderer-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
 		<tag-name>convertByte</tag-name>
 		<converter>
 			<converter-id>org.rcfaces.Byte</converter-id>

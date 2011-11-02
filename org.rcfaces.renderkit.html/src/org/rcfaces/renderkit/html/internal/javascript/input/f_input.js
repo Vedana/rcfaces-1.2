@@ -5,7 +5,7 @@
 /**
  * f_input class.
  *
- * @class f_input extends f_component, fa_message, fa_tabIndex, fa_focusStyleClass
+ * @class f_input extends f_component, fa_message, fa_tabIndex, fa_focusStyleClass, fa_tooltipContainer
  * @author Olivier Oeuillot (latest modification by $Author$) & Joel Merlin
  * @version $Revision$ $Date$
  */
@@ -48,6 +48,11 @@ var __members = {
 		} else {
 			this.f_initializeOnFocus();
 		}			
+		
+		var tooltipId = f_core.GetAttribute(this, "v:tooltipId");
+		if (tooltipId) {
+			this._tooltipId = tooltipId;
+		}
 		
 		if (f_core.IsDebugEnabled(f_input)) {
 			var input=this.f_getInput();
@@ -497,12 +502,34 @@ var __members = {
 		}
 		
 		this.f_super(arguments, type, target);
-	}
+	},
+	
+	
+	/**
+	 * @method protected
+	 * @param Object
+	 *            row
+	 * @param Boolean
+	 *            additional
+	 * @param Boolean
+	 *            animated
+	 * @return void
+	 */
+	fa_setTooltipVisible : function(tooltip, show, animated) {
+		
+		if (show) {
+			tooltip.f_setVisible(true, true);
+
+		} else {
+			//this.f_hideAdditionalContent(row, animated);
+		}
+	}	
+	
 }
 
 new f_class("f_input", {
 	extend: f_component, 
-	aspects: [ fa_message, fa_focusStyleClass, fa_tabIndex],
+	aspects: [ fa_message, fa_focusStyleClass, fa_tabIndex, fa_tooltipContainer],
 	members: __members,
 	statics: __statics
 });

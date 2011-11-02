@@ -1169,26 +1169,6 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
 
-	public int getRows() {
-		return getRows(null);
-	}
-
-	public int getRows(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.ROWS, 0, facesContext);
-	}
-
-	public void setRows(int rows) {
-		engine.setProperty(Properties.ROWS, rows);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "rows" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public boolean isRowsSetted() {
-		return engine.isPropertySetted(Properties.ROWS);
-	}
-
 	public String getVar() {
 		return getVar(null);
 	}
@@ -1228,6 +1208,26 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 	 */
 	public boolean isFirstSetted() {
 		return engine.isPropertySetted(Properties.FIRST);
+	}
+
+	public int getRows() {
+		return getRows(null);
+	}
+
+	public int getRows(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.ROWS, 0, facesContext);
+	}
+
+	public void setRows(int rows) {
+		engine.setProperty(Properties.ROWS, rows);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "rows" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isRowsSetted() {
+		return engine.isPropertySetted(Properties.ROWS);
 	}
 
 	protected Set getCameliaFields() {

@@ -169,6 +169,8 @@ public final class JavaScriptClasses {
     public static final String TOOL_FOLDER = "f_toolFolder";
     
     public static final String TOOLTIP = "f_tooltip";
+    
+    public static final String TOOLTIP_MANAGER = "f_tooltipManager";
 
     public static final String TREE = "f_tree";
 
