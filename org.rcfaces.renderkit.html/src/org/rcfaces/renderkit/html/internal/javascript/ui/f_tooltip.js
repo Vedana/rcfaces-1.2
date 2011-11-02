@@ -33,7 +33,7 @@ var __members = {
 	 */
 	fa_getInteractiveParent: function() {
 		return this; //div tooltip
-	},
+	}
 
 };
 
