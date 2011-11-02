@@ -84,6 +84,13 @@ public class SuggestTextEntryRenderer extends TextEntryRenderer implements
             htmlWriter.writeAttribute("v:forceProposal", true);
         }
 
+        
+        boolean showPopupForOneResult = suggestTextEntryComponent
+                .isShowPopupForOneResult(facesContext);
+        if (showPopupForOneResult) {
+            htmlWriter.writeAttribute("v:showPopupForOneResult", true);
+        }
+
         Object suggestionValue = suggestTextEntryComponent
                 .getSuggestionValue(facesContext);
         if (suggestionValue != null) {

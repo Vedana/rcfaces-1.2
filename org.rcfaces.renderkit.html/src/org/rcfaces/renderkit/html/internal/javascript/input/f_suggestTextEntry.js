@@ -30,7 +30,7 @@ var __statics = {
 	 * @field private static final String
 	 */
 	_SUGGESTION_MENU_ID: "#suggestion"
-}
+};
 
 var __members = {
 	f_suggestTextEntry: function() {
@@ -53,6 +53,8 @@ var __members = {
 		if (this._forceProposal && this._suggestionMinChars<1) {
 			this._suggestionMinChars=1;
 		}
+		
+		this._showPopupForOneResult=f_core.GetBooleanAttribute(this, "v:showPopupForOneResult", false);
 		
 		// Permet d'optimiser les propositions !
 		this._orderedResult=f_core.GetBooleanAttribute(this, "v:orderedResult", true);
@@ -616,7 +618,7 @@ var __members = {
 			this.f_showProposal(rs[0]._label, rs[0]._value, rs[0], null);
 		}
 		
-		if (rs.length>1) {	
+		if (rs.length> 1 || (this._showPopupForOneResult && rs.length > 0)) {	
 			this._showPopup(undefined, undefined, text);
 		}
 	},
