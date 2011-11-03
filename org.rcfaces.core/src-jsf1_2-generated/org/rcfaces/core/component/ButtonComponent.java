@@ -6,13 +6,16 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.AbstractCommandComponent;
 import org.rcfaces.core.component.capability.IAlternateTextCapability;
 import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
+import org.rcfaces.core.component.iterator.ITooltipIterator;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.internal.capability.ITooltipComponent;
 import javax.el.ValueExpression;
 import java.util.HashSet;
 import org.apache.commons.logging.Log;
 import java.util.Set;
 import java.util.Arrays;
+import org.rcfaces.core.internal.tools.TooltipTools;
 import org.rcfaces.core.component.capability.ITextCapability;
 
 /**
@@ -53,7 +56,8 @@ public class ButtonComponent extends AbstractCommandComponent implements
 	ISelectionEventCapability,
 	IReadOnlyCapability,
 	IAlternateTextCapability,
-	IFocusStyleClassCapability {
+	IFocusStyleClassCapability,
+	ITooltipComponent {
 
 	private static final Log LOG = LogFactory.getLog(ButtonComponent.class);
 
@@ -71,6 +75,13 @@ public class ButtonComponent extends AbstractCommandComponent implements
 	public ButtonComponent(String componentId) {
 		this();
 		setId(componentId);
+	}
+
+	public ITooltipIterator listTooltips() {
+
+
+				return TooltipTools.listTooltips(this);
+			
 	}
 
 	public java.lang.String getText() {

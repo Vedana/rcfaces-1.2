@@ -46,6 +46,7 @@ import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.capability.IPreferencesSettings;
 import org.rcfaces.core.internal.capability.ICheckRangeComponent;
 import org.rcfaces.core.component.capability.IDropCompleteEventCapability;
+import org.rcfaces.core.internal.capability.ITooltipComponent;
 import org.rcfaces.core.component.capability.IDisabledCapability;
 import org.rcfaces.core.component.capability.IFilterCapability;
 import java.util.Arrays;
@@ -65,6 +66,7 @@ import org.rcfaces.core.internal.tools.GridTools;
 import org.rcfaces.core.component.capability.IDragAndDropEffects;
 import org.rcfaces.core.component.capability.ICheckableCapability;
 import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
+import org.rcfaces.core.component.iterator.ITooltipIterator;
 import org.rcfaces.core.component.capability.IRowStyleClassCapability;
 import org.rcfaces.core.internal.converter.SelectionCardinalityConverter;
 import org.rcfaces.core.internal.tools.SortTools;
@@ -75,6 +77,7 @@ import java.util.Set;
 import org.rcfaces.core.component.iterator.IDataColumnIterator;
 import org.rcfaces.core.internal.capability.IDroppableGridComponent;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
+import org.rcfaces.core.internal.tools.TooltipTools;
 import org.rcfaces.core.component.capability.IAdditionalInformationEventCapability;
 import org.rcfaces.core.component.DataColumnComponent;
 import org.rcfaces.core.component.iterator.IAdditionalInformationIterator;
@@ -218,6 +221,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 	ISelectionRangeComponent,
 	ICheckRangeComponent,
 	ISortedComponentsCapability,
+	ITooltipComponent,
 	ICriteriaManagerCapability,
 	IAdditionalInformationRangeComponent,
 	IDraggableGridComponent {
@@ -335,6 +339,13 @@ public class DataGridComponent extends AbstractDataComponent implements
 
 
 				return GridTools.listColumns(this, org.rcfaces.core.component.DataColumnComponent.class);
+			
+	}
+
+	public ITooltipIterator listTooltips() {
+
+
+				return TooltipTools.listTooltips(this);
 			
 	}
 

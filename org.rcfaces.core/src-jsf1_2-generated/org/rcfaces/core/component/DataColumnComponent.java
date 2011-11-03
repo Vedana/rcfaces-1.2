@@ -19,10 +19,11 @@ import org.rcfaces.core.internal.capability.ICriteriaContainer;
 import org.rcfaces.core.component.capability.IAlignmentCapability;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.internal.capability.ICriteriaConfiguration;
+import org.rcfaces.core.internal.capability.ITooltipComponent;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import java.util.Arrays;
-import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
 import org.rcfaces.core.internal.capability.ICellImageSettings;
 import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
@@ -32,11 +33,13 @@ import org.rcfaces.core.component.capability.IMenuPopupIdCapability;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IImageSizeCapability;
 import org.rcfaces.core.component.capability.IResizableCapability;
+import org.rcfaces.core.component.iterator.ITooltipIterator;
 import org.rcfaces.core.internal.capability.ICellStyleClassSettings;
 import org.apache.commons.logging.Log;
 import java.util.Set;
 import org.rcfaces.core.component.capability.IAutoFilterCapability;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
+import org.rcfaces.core.internal.tools.TooltipTools;
 import org.rcfaces.core.component.capability.IOrderCapability;
 import org.rcfaces.core.component.capability.ICellImageCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
@@ -86,6 +89,7 @@ public class DataColumnComponent extends CameliaValueColumnComponent implements
 	ICellStyleClassSettings,
 	ICriteriaContainer,
 	ICellToolTipTextSettings,
+	ITooltipComponent,
 	ICellImageSettings {
 
 	private static final Log LOG = LogFactory.getLog(DataColumnComponent.class);
@@ -175,6 +179,13 @@ public class DataColumnComponent extends CameliaValueColumnComponent implements
 			
 			return Boolean.valueOf(isVisible(facesContext));
 		
+	}
+
+	public ITooltipIterator listTooltips() {
+
+
+				return TooltipTools.listTooltips(this);
+			
 	}
 
 	public Object getValue(FacesContext context) {
