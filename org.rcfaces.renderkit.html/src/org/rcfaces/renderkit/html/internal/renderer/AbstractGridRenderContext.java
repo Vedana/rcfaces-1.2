@@ -65,6 +65,7 @@ import org.rcfaces.core.internal.capability.ICellToolTipTextSettings;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
 import org.rcfaces.core.internal.capability.ISortedComponentsCapability;
+import org.rcfaces.core.internal.capability.ITooltipComponent;
 import org.rcfaces.core.internal.component.IImageAccessors;
 import org.rcfaces.core.internal.component.IStatesImageAccessors;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
@@ -352,15 +353,16 @@ public abstract class AbstractGridRenderContext {
 			
 		
 		// temporaire avant création de la capability tooltip2
-		ITooltipIterator tooltipIterator = TooltipTools.listTooltipss((UIComponent) gridComponent);
-		gridTooltips = new HashMap<String, TooltipComponent>();
-		for (;tooltipIterator.hasNext();) {
-			TooltipComponent tooltipComponent = tooltipIterator.next();
-			gridTooltips.put(tooltipComponent.getTooltipId(processContext.getFacesContext()), tooltipComponent);
-			
+		
+		if(gridComponent instanceof ITooltipComponent) {
+			ITooltipIterator tooltipIterator = ((ITooltipComponent) gridComponent).listTooltips();
+			gridTooltips = new HashMap<String, TooltipComponent>();
+			for (;tooltipIterator.hasNext();) {
+				TooltipComponent tooltipComponent = tooltipIterator.next();
+				gridTooltips.put(tooltipComponent.getTooltipId(processContext.getFacesContext()), tooltipComponent);
+				
+			}
 		}
-		
-		
 		
 
 		if (gridComponent instanceof IAdditionalInformationComponent) {
@@ -646,7 +648,12 @@ public abstract class AbstractGridRenderContext {
 					hasCellToolTipText = true;
 				}
 			}
-
+			
+			if(column instanceof ITooltipComponent) {
+				ITooltipIterator tooltipIterator = ((ITooltipComponent) column).listTooltips();
+				
+			}
+			
 			if (column instanceof ICellToolTipTextCapability) {
 				String ctt = ((ICellToolTipTextCapability) column)
 						.getCellDefaultToolTipText();

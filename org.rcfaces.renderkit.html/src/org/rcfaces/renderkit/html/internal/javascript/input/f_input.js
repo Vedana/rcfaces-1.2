@@ -523,9 +523,10 @@ var __members = {
 		} else {
 			//this.f_hideAdditionalContent(row, animated);
 		}
-	}	
+	}
 	
-}
+	
+};
 
 new f_class("f_input", {
 	extend: f_component, 

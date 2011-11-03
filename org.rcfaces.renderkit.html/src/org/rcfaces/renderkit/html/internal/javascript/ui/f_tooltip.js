@@ -18,7 +18,7 @@ var __members = {
 		
 		if (visible) {
 			this.style.left = this._x + 5 + "px";
-			this.style.top =  tooltip._elementContainer.offsetTop + tooltip._elementContainer.offsetHeight +"px";
+			this.style.top =  this._elementContainer.offsetTop + this._elementContainer.offsetHeight +"px";
 		} else {
 			//this.style.visibility = "hidden";
 			this.style.top =  "-5000px";
@@ -26,6 +26,13 @@ var __members = {
 		}
 	},
 
+	
+	/**
+	 * @method protected
+	 */
+	f_performErrorEvent: function(param, messageCode, message) {
+		return f_error.PerformErrorEvent(this, messageCode, message, param);
+	},
 	
 	/**
 	 * @method hidden

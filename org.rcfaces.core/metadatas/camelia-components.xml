@@ -731,6 +731,8 @@
 	</component>
 
 	<component id="button" extends="abstractCommand">
+		<implements id="org.rcfaces.core.internal.capability.ITooltipComponent" />
+		
 		<capability id="ITextCapability" />
 		<capability id="ITextDirectionCapability" />
 		<capability id="ISelectionEventCapability" />
@@ -742,6 +744,12 @@
 		
 		<attribute id="tooltipId" type="java.lang.String" />
 		
+		<method id="listTooltips" returnType="org.rcfaces.core.component.iterator.ITooltipIterator">
+			<import>org.rcfaces.core.internal.tools.TooltipTools</import>
+			<code>
+				return TooltipTools.listTooltips(this);
+			</code>
+		</method>		
 <!-- 
 		<method id="getValue" returnType="java.lang.Object">
 			<code>
@@ -943,6 +951,7 @@
 		<implements id="org.rcfaces.core.internal.capability.ICellToolTipTextSettings" />
 		<implements id="org.rcfaces.core.internal.capability.IImageAccessorsCapability" />
 		<implements id="org.rcfaces.core.internal.capability.ICriteriaContainer" importMethods="false" />
+		<implements id="org.rcfaces.core.internal.capability.ITooltipComponent" importMethods="false" />
 		
 		<capability id="IVisibilityCapability" />
 		<capability id="IHiddenModeCapability" />
@@ -982,6 +991,13 @@
 		<method id="getConverter()"/>
 
 		<method id="getVisibleState(javax.faces.context.FacesContext)" />
+		
+		<method id="listTooltips" returnType="org.rcfaces.core.component.iterator.ITooltipIterator">
+			<import>org.rcfaces.core.internal.tools.TooltipTools</import>
+			<code>
+				return TooltipTools.listTooltips(this);
+			</code>
+		</method>
 
 		<method id="getLocalValue" returnType="java.lang.Object">
 			<code>
@@ -1122,6 +1138,7 @@
 		<implements id="org.rcfaces.core.internal.capability.ISelectionRangeComponent" importMethods="false" />
 		<implements id="org.rcfaces.core.internal.capability.ICheckRangeComponent" importMethods="false" />
 		<implements id="org.rcfaces.core.internal.capability.IAdditionalInformationRangeComponent" importMethods="false" />
+		<implements id="org.rcfaces.core.internal.capability.ITooltipComponent" importMethods="false" />
 
 		<implements id="org.rcfaces.core.component.capability.ISortedChildrenCapability" properties="sortedChildren"/>
 		<implements id="org.rcfaces.core.internal.capability.ISortedComponentsCapability" importMethods="false" />
@@ -1223,6 +1240,13 @@
 			<import>org.rcfaces.core.internal.tools.GridTools</import>
 			<code>
 				return GridTools.listColumns(this, org.rcfaces.core.component.DataColumnComponent.class);
+			</code>
+		</method>
+		
+		<method id="listTooltips" returnType="org.rcfaces.core.component.iterator.ITooltipIterator">
+			<import>org.rcfaces.core.internal.tools.TooltipTools</import>
+			<code>
+				return TooltipTools.listTooltips(this);
 			</code>
 		</method>
 	
@@ -1708,6 +1732,7 @@
 		<implements id="org.rcfaces.core.component.capability.IOrderedChildrenCapability" properties="orderedChildren" />
 		<implements id="org.rcfaces.core.internal.capability.ISelectionRangeComponent" importMethods="false" />
 		<implements id="org.rcfaces.core.internal.capability.IAdditionalInformationRangeComponent" importMethods="false" />
+		
 		<implements id="org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability" importMethods="false" />
 
 		<implements id="org.rcfaces.core.internal.capability.ISortedComponentsCapability" importMethods="false" />

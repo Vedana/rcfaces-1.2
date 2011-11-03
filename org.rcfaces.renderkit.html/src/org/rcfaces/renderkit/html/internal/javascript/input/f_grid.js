@@ -5889,10 +5889,11 @@ var __members = {
 	 *            animated
 	 * @return void
 	 */
-	f_showTooltip : function(tooltip, forElement ,animated, parent) {
+	f_showTooltip : function(tooltip, animated, parent) {
 
 		
 		var row =  tooltip._elementContainer;
+		
 		var tooltipId = row._tooltipId;
 		
 		if (tooltipId === false) {
@@ -6022,68 +6023,16 @@ var __members = {
 								waiting.f_hide();
 							}
 						}
-			 		}			
-
-//						var ret = undefined;
-//
-//						if (request.f_getStatus() != f_httpRequest.OK_STATUS) {
-//							self.f_performErrorEvent(request,
-//									f_error.INVALID_RESPONSE_SERVICE_ERROR,
-//									"Bad http response status ! ("
-//											+ request.f_getStatusText() + ")");
-//							ret = false;
-//
-//						} else {
-//							var responseContentType = request
-//									.f_getResponseContentType().toLowerCase();
-//							if (responseContentType
-//									.indexOf(f_error.APPLICATION_ERROR_MIME_TYPE) >= 0) {
-//								var code = f_error
-//										.ComputeApplicationErrorCode(request);
-//
-//								self
-//										.f_performErrorEvent(request, code,
-//												content);
-//								ret = false;
-//
-//							} else if (responseContentType
-//									.indexOf(f_httpRequest.TEXT_HTML_MIME_TYPE) < 0) {
-//								self.f_performErrorEvent(request,
-//										f_error.RESPONSE_TYPE_SERVICE_ERROR,
-//										"Unsupported content type: "
-//												+ responseContentType);
-//
-//								ret = false;
-//							}
-//						}
-//
-//						if (ret === undefined) {
-//							ret = request.f_getResponse();
-//						}
-//
-//						try {
-//							row._tooltipContent = ret;
-//
-//							if (ret === false) {
-//								self.f_hideAdditionalContent(row, animated);
-//
-//							} else {
-//
-//								this.f_getClass().f_getClassLoader().f_loadContent(self, additionalRow , ret);
-//							}
-//
-//						} catch (x) {
-//							self.f_performErrorEvent(x,
-//									f_error.RESPONSE_EVALUATION_SERVICE_ERROR,
-//									"Evaluation exception");
-//						}
-//					}
+					}
 				});
 
-		// alert("Params="+params);
 
 		request.f_setRequestHeader("X-Camelia", "grid.tooltip");
 
+		if(row._rowIndex === undefined ||  row._rowIndex < 0 || row._rowIndex.length < 1) {
+			return;// a revoir
+		}
+		
 		var params = {
 			gridId : this.id,
 			rowValue : row._index,

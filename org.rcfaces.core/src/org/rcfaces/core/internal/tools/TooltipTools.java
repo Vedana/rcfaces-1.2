@@ -24,7 +24,7 @@ public class TooltipTools extends CollectionTools {
 	private static final Log LOG = LogFactory.getLog(TooltipTools.class);
 	
 	
-	public static ITooltipIterator listTooltipss (UIComponent component) {
+	public static ITooltipIterator listTooltips (UIComponent component) {
 		List list = ComponentIterators.list(component,
 				TooltipComponent.class);
 		if (list.isEmpty()) {

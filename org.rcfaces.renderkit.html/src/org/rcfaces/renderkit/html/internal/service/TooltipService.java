@@ -241,6 +241,7 @@ public class TooltipService extends AbstractHtmlService {
         }
 
         if (dgc instanceof UIData2) {
+        	System.out.println(rowIndex);
             ((UIData2) dgc).addDecodedIndexes(Integer.parseInt(rowIndex), 1);
 
             ((UIComponent) dgc).processDecodes(facesContext);

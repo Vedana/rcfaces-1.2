@@ -15,6 +15,7 @@ import org.rcfaces.core.component.TooltipComponent;
 import org.rcfaces.core.component.iterator.ITooltipIterator;
 import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.event.SelectionEvent;
+import org.rcfaces.core.internal.capability.ITooltipComponent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
@@ -57,26 +58,29 @@ public class ButtonRenderer extends AbstractInputRenderer {
         writeTextDirection(htmlWriter, button);
         
         
-        ITooltipIterator tooltips = TooltipTools.listTooltipss((UIComponent) button);
-        String tooltipId =  button.getTooltipId(facesContext);
-        if (tooltipId != null) {
-	
-			IRenderContext renderContext = componentContext
-					.getRenderContext();
-	
-			String forId = renderContext.computeBrotherComponentClientId(
-					button, button.getTooltipId(facesContext));
         
-    	} else {
-        	if (tooltips.count() > 0) {
-        		TooltipComponent tooltipComponent = (TooltipComponent) tooltips.next();
-        		tooltipId = tooltipComponent.getId();
-        	}
-        }
-        
-        if(tooltipId != null) {
-        	 htmlWriter.writeAttribute("v:tooltipId",tooltipId);
-        }
+        if (button instanceof ITooltipComponent) {
+	        ITooltipIterator tooltips = ((ITooltipComponent) button).listTooltips();
+	        String tooltipId =  button.getTooltipId(facesContext);
+	        if (tooltipId != null) {
+		
+				IRenderContext renderContext = componentContext
+						.getRenderContext();
+		
+				String forId = renderContext.computeBrotherComponentClientId(
+						button, button.getTooltipId(facesContext));
+	        
+	    	} else {
+	        	if (tooltips.count() > 0) {
+	        		TooltipComponent tooltipComponent = (TooltipComponent) tooltips.next();
+	        		tooltipId = tooltipComponent.getId();
+	        	}
+	        }
+	        
+	        if(tooltipId != null) {
+	        	 htmlWriter.writeAttribute("v:tooltipId",tooltipId);
+	        }
+	        }
         
         String txt = button.getText(htmlWriter.getComponentRenderContext()
                 .getFacesContext());

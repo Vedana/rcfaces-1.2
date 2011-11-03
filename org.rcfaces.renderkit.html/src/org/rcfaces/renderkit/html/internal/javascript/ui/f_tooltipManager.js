@@ -58,12 +58,16 @@ var __statics = {
 			}
 
 			if (tooltip) {
-				f_tooltipManager._timer = setTimeout(function() {
 
+				f_tooltipManager._Current = tooltip._elementContainer;
+				f_tooltipManager._timer = setTimeout(function() {
+					
+					if(!tooltip) {
+						return;
+					}
+					
 					tooltip._x = +evt.layerX;
 					tooltipContainer.fa_setTooltipVisible(tooltip, true, true);
-
-					f_tooltipManager._Current = tooltip._elementContainer;
 
 					f_core.Debug(f_tooltipManager, "Show toolTipcontainer="
 							+ tooltipContainer.id + " tooltip" + tooltip.id);
@@ -114,10 +118,7 @@ var __statics = {
 					// if (instance._isTooltipChild(element, tooltipId)) {
 					// return false;
 					// }
-					// if (elementId.indexOf(tooltipId) > 0) {
-					// return false;
-					// }
-					
+										
 					tooltipContainer = instance._getTooltipContainerForElement(element);
 					
 					if (tooltipContainer) {
@@ -213,6 +214,9 @@ var __members = {
 	_getElementAtPosition : function(evt) {
 
 		var eventPos = f_core.GetJsEventPosition(evt);
+		if (!eventPos) {
+			return undefined;
+		}
 		var de = f_core.SearchComponentByAbsolutePosition(eventPos.x,
 				eventPos.y);
 		var element = (de.length) ? de[de.length - 1] : null;
