@@ -509,7 +509,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 		}
 	}
 
-	public void renderAdditionalInformation(
+	
+	public boolean isDataModelRowAvailable (
 			IHtmlRenderContext htmlRenderContext, Writer writer,
 			IGridComponent gridComponent, String responseCharacterEncoding,
 			String rowValue2, String rowIndex) throws WriterException {
@@ -574,8 +575,27 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 		}
 
 		gridComponent.setRowIndex(translatedRowIndex);
+		return gridComponent.isRowAvailable();
+	}
+
+	
+	
+	public void renderAdditionalInformation(
+			IHtmlRenderContext htmlRenderContext, Writer writer,
+			IGridComponent gridComponent, String responseCharacterEncoding,
+			String rowValue2, String rowIndex) throws WriterException {
+		
+		IHtmlWriter htmlWriter = (IHtmlWriter) htmlRenderContext
+				.getComponentWriter();
+
+		// On prepare le DataModel !
+		AbstractGridRenderContext tableContext = getGridRenderContext(htmlWriter
+				.getHtmlComponentRenderContext());
+
+		
 		try {
-			if (gridComponent.isRowAvailable() == false) {
+			if (isDataModelRowAvailable(htmlRenderContext, writer, gridComponent,
+                responseCharacterEncoding, rowValue2, rowIndex) == false) {
 				return;
 			}
 
@@ -590,7 +610,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 				if (add.isRendered() == false) {
 					continue;
 				}
-
+				
 				additionalInformationComponent = add;
 				break;
 			}
@@ -612,7 +632,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 	}
 	
 	
-	//idem C/C
+	
 	public void renderTooltip(
 			IHtmlRenderContext htmlRenderContext, Writer writer,
 			IGridComponent gridComponent, String responseCharacterEncoding,
@@ -624,68 +644,15 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 		// On prepare le DataModel !
 		AbstractGridRenderContext tableContext = getGridRenderContext(htmlWriter
 				.getHtmlComponentRenderContext());
-		DataModel dataModel = tableContext.getDataModel();
-
-		IComponentRefModel componentRefModel = (IComponentRefModel) getAdapter(
-				IComponentRefModel.class, dataModel);
-
-		if (componentRefModel != null) {
-			componentRefModel.setComponent((UIComponent) gridComponent);
-		}
-
-		IFilterProperties filtersMap = tableContext.getFiltersMap();
-		IFiltredModel filtredDataModel = (IFiltredModel) getAdapter(
-				IFiltredModel.class, dataModel);
-
-		if (filtersMap != null) {
-			if (filtredDataModel != null) {
-				filtredDataModel.setFilter(filtersMap);
-			} else {
-				dataModel = FilteredDataModel.filter(dataModel, filtersMap);
-			}
-
-		} else if (filtredDataModel != null) {
-			filtredDataModel.setFilter(FilterExpressionTools.EMPTY);
-		}
-
-		int translatedRowIndex = Integer.parseInt(rowIndex);
-
-		ISortedComponent sortedComponents[] = tableContext
-				.listSortedComponents();
-		ISortedDataModel sortedDataModel = (ISortedDataModel)
-
-		getAdapter(ISortedDataModel.class, dataModel, sortedComponents);
-		if (sortedComponents != null && sortedComponents.length > 0) {
-			if (sortedDataModel != null) {
-				sortedDataModel.setSortParameters((UIComponent) gridComponent,
-						sortedComponents);
-			} else {
-				// Il faut faire le tri à la main !
-
-				int sortTranslations[] = GridServerSort
-						.computeSortedTranslation(
-								htmlRenderContext.getFacesContext(),
-								gridComponent, dataModel, sortedComponents);
-
-				if (sortTranslations != null) {
-					translatedRowIndex = sortTranslations[translatedRowIndex];
-				}
-			}
-		} else if (sortedDataModel != null) {
-			// Reset des parametres de tri !
-			sortedDataModel
-					.setSortParameters((UIComponent) gridComponent, null);
-		}
-
-		gridComponent.setRowIndex(translatedRowIndex);
 		try {
-			if (gridComponent.isRowAvailable() == false) {
-				return;
-			}
+			if (isDataModelRowAvailable(htmlRenderContext, writer, gridComponent,
+	                responseCharacterEncoding, rowValue2, rowIndex) == false) {
+					return;
+				}
 
 			 Map<String, TooltipComponent> tooltips= tableContext
 					.listTooltips();
-
+			 
 			TooltipComponent tooltipComponent = null;
 
 			//for (int i = 0; i < tooltips.size(); i++) {
@@ -702,8 +669,6 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 			encodeTooltip(htmlRenderContext.getFacesContext(),
 					writer, gridComponent, tooltipComponent,
 					responseCharacterEncoding);
-			
-			
 			
 
 		} finally {

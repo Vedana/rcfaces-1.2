@@ -509,7 +509,17 @@ public abstract class AbstractGridRenderContext {
 
 			String dw = null;
 			int idw = -1;
-
+			
+			if(column instanceof ITooltipComponent) {
+				ITooltipIterator tooltipIterator = ((ITooltipComponent) column).listTooltips();
+				//gridTooltips = new HashMap<String, TooltipComponent>();
+				for (;tooltipIterator.hasNext();) {
+					TooltipComponent tooltipComponent = tooltipIterator.next();
+					gridTooltips.put(tooltipComponent.getTooltipId(processContext.getFacesContext()), tooltipComponent);
+					
+				}
+			}
+			
 			if (column instanceof IWidthCapability) {
 				dw = ((IWidthCapability) column).getWidth();
 			}
@@ -651,8 +661,10 @@ public abstract class AbstractGridRenderContext {
 			
 			if(column instanceof ITooltipComponent) {
 				ITooltipIterator tooltipIterator = ((ITooltipComponent) column).listTooltips();
-				
+				//TODO
 			}
+			
+			//cell
 			
 			if (column instanceof ICellToolTipTextCapability) {
 				String ctt = ((ICellToolTipTextCapability) column)

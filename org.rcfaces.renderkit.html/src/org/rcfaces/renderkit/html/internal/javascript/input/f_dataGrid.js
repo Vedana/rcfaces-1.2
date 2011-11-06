@@ -1557,6 +1557,11 @@ var __members = {
 			var toolTipText=properties._toolTipText;
 			if (toolTipText) {
 				td.title=toolTipText;				
+			} else {
+				var tooltipId = properties._tooltipId;  
+				if(tooltipId) {
+					td._cellTooltipId = tooltipId;
+				}
 			}
 			
 			var imageURL=properties._imageURL;

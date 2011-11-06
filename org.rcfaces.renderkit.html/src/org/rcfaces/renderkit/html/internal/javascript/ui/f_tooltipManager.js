@@ -30,57 +30,13 @@ var __statics = {
 	 * @context event:evt
 	 */
 	_ElementOver : function(evt) {
+		
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
-
-		try {
-			var instance = f_tooltipManager._Instance;
-
-			var current = f_tooltipManager._Current;
-			if (current) {
-				if (!f_tooltipManager._ElementOut(evt)) {
-					return;
-				}
-			}
-
-			var element = instance._getElementAtPosition(evt);
-			var tooltipContainer = instance
-					._getTooltipContainerForElement(element);
-
-			if (!tooltipContainer) {
-				f_tooltipManager._Current = undefined;
-				return;
-			}
-
-			if (tooltipContainer.fa_getTooltipForElement) {
-				tooltip = tooltipContainer.fa_getTooltipForElement(element);
-			}
-
-			if (tooltip) {
-
-				f_tooltipManager._Current = tooltip._elementContainer;
-				f_tooltipManager._timer = setTimeout(function() {
-					
-					if(!tooltip) {
-						return;
-					}
-					
-					tooltip._x = +evt.layerX;
-					tooltipContainer.fa_setTooltipVisible(tooltip, true, true);
-
-					f_core.Debug(f_tooltipManager, "Show toolTipcontainer="
-							+ tooltipContainer.id + " tooltip" + tooltip.id);
-
-				}, f_tooltipManager._DELAY);
-
-			}
-
-			return;
-
-		} catch (x) {
-			f_core.Error(f_tooltipManager, "_ElementMove: exception", x);
-		}
+		
+		var instance = f_tooltipManager.Get();
+		instance._elementOver(evt);
 
 	},
 
@@ -96,51 +52,8 @@ var __statics = {
 			evt = f_core.GetJsEvent(this);
 		}
 
-		try {
-
-			if (!f_tooltipManager._Current) {
-				return;
-			}
-
-			if (f_tooltipManager._timer) {
-				clearTimeout(f_tooltipManager._timer);
-			}
-
-			var instance = f_tooltipManager._Instance;
-
-			var current = f_tooltipManager._Current;
-
-			if (current) {
-				var element = instance._getElementAtPosition(evt);
-				var tooltipContainer = undefined;
-				
-				if (element) {
-					// if (instance._isTooltipChild(element, tooltipId)) {
-					// return false;
-					// }
-										
-					tooltipContainer = instance._getTooltipContainerForElement(element);
-					
-					if (tooltipContainer) {
-						if (current === element) {
-							return false;
-						}
-					} else {
-						tooltipContainer = instance._getTooltipContainerForElement(current);
-					}
-				}
-				
-				var tooltip = tooltipContainer.fa_getTooltipForElement(current);
-				tooltip.f_setVisible(false);
-
-				f_core.Debug(f_tooltipManager, "Hide component = "
-						+ current.id + "tooltip = " + tooltip.id);
-				f_tooltipManager._Current = undefined;
-			}
-
-		} catch (x) {
-			f_core.Error(f_tooltipManager, "_ElementOut: exception", x);
-		}
+		var instance = f_tooltipManager.Get();
+		instance._elementOut(evt);
 
 		return;
 
@@ -203,6 +116,119 @@ var __members = {
 	f_finalize : function() {
 
 		this.f_super(arguments);
+	},
+	
+	/**
+	 * @method private static
+	 * @param Event
+	 *            evt
+	 * @return Boolean
+	 * @context event:evt
+	 */
+	_elementOver : function(evt) {
+		try {
+
+			var current = f_tooltipManager._Current;
+			if (current) {
+				if (!f_tooltipManager._elementOut(evt)) {
+					return;
+				}
+			}
+
+			var element = this._getElementAtPosition(evt);
+			var tooltipContainer = this._getTooltipContainerForElement(element);
+
+			if (!tooltipContainer) {
+				f_tooltipManager._Current = undefined;
+				return;
+			}
+
+			if (tooltipContainer.fa_getTooltipForElement) {
+				tooltip = tooltipContainer.fa_getTooltipForElement(element);
+			}
+
+			if (tooltip) {
+
+				f_tooltipManager._Current = tooltip._elementContainer;
+				f_tooltipManager._timer = setTimeout(function() {
+					
+					if(!tooltip) {
+						return;
+					}
+					
+					tooltip._x = +evt.layerX;
+					tooltipContainer.fa_setTooltipVisible(tooltip, true, true);
+
+					f_core.Debug(f_tooltipManager, "Show toolTipcontainer="
+							+ tooltipContainer.id + " tooltip" + tooltip.id);
+
+				}, f_tooltipManager._DELAY);
+
+			}
+
+			return;
+
+		} catch (x) {
+			f_core.Error(f_tooltipManager, "_ElementMove: exception", x);
+		}
+
+	},
+	
+	/**
+	 * @method private static
+	 * @param Event
+	 *            evt
+	 * @return Boolean
+	 * @context event:evt
+	 */
+	_elementOut : function(evt) {
+		
+		try {
+
+			if (!f_tooltipManager._Current) {
+				return;
+			}
+
+			if (f_tooltipManager._timer) {
+				clearTimeout(f_tooltipManager._timer);
+			}
+
+			var current = f_tooltipManager._Current;
+
+			if (current) {
+				var element = this._getElementAtPosition(evt);
+				var tooltipContainer = undefined;
+				
+				if (element) {
+					// if (this._isTooltipChild(element, tooltipId)) {
+					// return false;
+					// }
+										
+					tooltipContainer = this._getTooltipContainerForElement(element);
+					
+					if (tooltipContainer) {
+						if (current === element) {
+							return false;
+						}
+					} else {
+						tooltipContainer = this._getTooltipContainerForElement(current);
+					}
+				}
+				
+				var tooltip = tooltipContainer.fa_getTooltipForElement(current);
+				tooltip.f_setVisible(false);
+
+				f_core.Debug(f_tooltipManager, "Hide component = "
+						+ current.id + "tooltip = " + tooltip.id);
+				f_tooltipManager._Current = undefined;
+			}
+
+		} catch (x) {
+			f_core.Error(f_tooltipManager, "_ElementOut: exception", x);
+		}
+
+		return;
+
 	},
 
 	/**

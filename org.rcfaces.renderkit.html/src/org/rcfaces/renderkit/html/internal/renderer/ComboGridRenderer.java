@@ -474,7 +474,7 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
 
 		if (componentRenderContext.containsAttribute(INPUT_ERRORED_PROPERTY)) {
 			sa.append(' ').append(getMainStyleClassName())
-					.append("_input_errored");
+					.append("_input_error");
 
 		} else if ((formattedValue == null || formattedValue.length() == 0)) {
 			emptyMessage = comboGridComponent.getEmptyMessage(facesContext);

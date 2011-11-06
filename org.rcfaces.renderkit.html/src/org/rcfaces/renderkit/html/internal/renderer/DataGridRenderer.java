@@ -1365,16 +1365,12 @@ public class DataGridRenderer extends AbstractGridRenderer {
 				objectLiteralWriter.writeSymbol("_rowIndex").writeInt(rowIndex);
 			}
 			
-			if(tableContext.hasTooltips() ){//temporaire
+			if(tableContext.hasTooltips() ){
 				Map<String, TooltipComponent> tooltips = tableContext.listTooltips();
+			 
 				TooltipComponent tooltipComponent = tooltips.get("#row");
-				
-					 encodeTooltip(jsWriter, tooltipComponent);
-					 
-					 objectLiteralWriter.writeSymbol(
-								"_tooltip").writeString(tooltipComponent.getId());
-				
-				
+				encodeTooltip(jsWriter, tooltipComponent);
+				objectLiteralWriter.writeSymbol("_tooltip").writeString(tooltipComponent.getId());
 			}
 			
 			if (tableContext.hasAdditionalInformations()) {
@@ -1547,7 +1543,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
 				if (toolTipText != null) {
 					objWriter.writeSymbol("_toolTipText").write(toolTipText);
 				}
-
+				//#cell
+				
 				objWriter.end();
 			}
 

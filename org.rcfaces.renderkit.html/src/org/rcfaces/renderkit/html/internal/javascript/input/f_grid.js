@@ -5891,22 +5891,27 @@ var __members = {
 	 */
 	f_showTooltip : function(tooltip, animated, parent) {
 
+		var elementContainer = tooltip._elementContainer;
+		var tooltipId = undefined;
+		var row = undefined;
 		
-		var row =  tooltip._elementContainer;
-		
-		var tooltipId = row._tooltipId;
+		if (elementContainer._cellTooltipId) {
+			tooltipId = elementContainer._cellTooltipId;
+			row = elementContainer.parentNode;
+		} else {
+			row = elementContainer;
+			tooltipId = row._tooltipId
+		}
 		
 		if (tooltipId === false) {
 			return;
 		}
 		
 		var component = tooltip;
-		
 
 		var url = f_env.GetViewURI();
 		var request = new f_httpRequest(component, url, f_httpRequest.TEXT_HTML_MIME_TYPE);
 		var self = this;
-		
 		
 		if (!parent) {
 			if (typeof(component.fa_getInteractiveParent)=="function") {
@@ -5917,11 +5922,6 @@ var __members = {
 				parent=component;
 			}
 		}
-		
-//		if (!component.style.height || component.offsetHeight<f_waiting.HEIGHT) {
-//			component._removeStyleHeight=true;
-//			component.style.height=f_waiting.HEIGHT+"px";
-//		}
 
 		request.f_setListener( {
 					onInit : function(request) {
@@ -6036,7 +6036,8 @@ var __members = {
 		var params = {
 			gridId : this.id,
 			rowValue : row._index,
-			rowIndex : row._rowIndex
+			rowIndex : row._rowIndex,
+			colIndex : elementContainer
 		};
 
 		if (this._paged) {
