@@ -23,6 +23,7 @@ public class ImageTag extends AbstractOutputTag implements Tag {
 	private ValueExpression imageWidth;
 	private ValueExpression alternateText;
 	private ValueExpression filterProperties;
+	private ValueExpression toolTipId;
 	public String getComponentType() {
 		return ImageComponent.COMPONENT_TYPE;
 	}
@@ -47,6 +48,10 @@ public class ImageTag extends AbstractOutputTag implements Tag {
 		this.filterProperties = filterProperties;
 	}
 
+	public void setToolTipId(ValueExpression toolTipId) {
+		this.toolTipId = toolTipId;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (ImageComponent.COMPONENT_TYPE==getComponentType()) {
@@ -57,6 +62,7 @@ public class ImageTag extends AbstractOutputTag implements Tag {
 			LOG.debug("  imageWidth='"+imageWidth+"'");
 			LOG.debug("  alternateText='"+alternateText+"'");
 			LOG.debug("  filterProperties='"+filterProperties+"'");
+			LOG.debug("  toolTipId='"+toolTipId+"'");
 		}
 		if ((uiComponent instanceof ImageComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -114,6 +120,15 @@ public class ImageTag extends AbstractOutputTag implements Tag {
 				component.setFilterProperties(filterProperties.getExpressionString());
 			}
 		}
+
+		if (toolTipId != null) {
+			if (toolTipId.isLiteralText()==false) {
+				component.setValueExpression(Properties.TOOL_TIP_ID, toolTipId);
+
+			} else {
+				component.setToolTipId(toolTipId.getExpressionString());
+			}
+		}
 	}
 
 	public void release() {
@@ -122,6 +137,7 @@ public class ImageTag extends AbstractOutputTag implements Tag {
 		imageWidth = null;
 		alternateText = null;
 		filterProperties = null;
+		toolTipId = null;
 
 		super.release();
 	}

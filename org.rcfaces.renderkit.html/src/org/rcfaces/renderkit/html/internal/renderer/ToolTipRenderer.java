@@ -2,8 +2,7 @@ package org.rcfaces.renderkit.html.internal.renderer;
 
 import javax.faces.context.FacesContext;
 
-import org.rcfaces.core.component.BoxComponent;
-import org.rcfaces.core.component.TooltipComponent;
+import org.rcfaces.core.component.ToolTipComponent;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.internal.renderkit.IAsyncRenderer;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
@@ -23,7 +22,7 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  * @version $Revision$ $Date$
  * 
  */
-public class TooltipRenderer extends AbstractCssRenderer implements
+public class ToolTipRenderer extends AbstractCssRenderer implements
 		IAsyncRenderer {
 
 	public void encodeBegin(IComponentWriter writer) throws WriterException {
@@ -50,7 +49,7 @@ public class TooltipRenderer extends AbstractCssRenderer implements
 
 		FacesContext facesContext = componentRenderContext.getFacesContext();
 
-		TooltipComponent tooltipComponent = (TooltipComponent) componentRenderContext
+		ToolTipComponent tooltipComponent = (ToolTipComponent) componentRenderContext
 				.getComponent();
 
 		int asyncRender = IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE;
@@ -78,7 +77,7 @@ public class TooltipRenderer extends AbstractCssRenderer implements
 
 	protected void encodeEnd(IComponentWriter writer) throws WriterException {
 		IHtmlWriter htmlWriter = (IHtmlWriter) writer;
-		TooltipComponent tooltipComponent = (TooltipComponent) htmlWriter
+		ToolTipComponent tooltipComponent = (ToolTipComponent) htmlWriter
 				.getComponentRenderContext().getComponent();
 
 		htmlWriter.endElement(IHtmlWriter.DIV);
@@ -92,7 +91,7 @@ public class TooltipRenderer extends AbstractCssRenderer implements
 
 		jsWriter.setIgnoreComponentInitialization();
 
-		jsWriter.writeCall("f_tooltipManager", "Get").writeln(");");
+		jsWriter.writeCall("f_toolTipManager", "Get").writeln(");");
 
 	}
 
@@ -101,14 +100,14 @@ public class TooltipRenderer extends AbstractCssRenderer implements
 		super.addRequiredJavaScriptClassNames(writer, javaScriptRenderContext);
 
 		javaScriptRenderContext.appendRequiredClass(JavaScriptClasses.TOOLTIP,
-				"f_tooltipManager");
+				"f_toolTipManager");
 	}
 
 	protected String getJavaScriptClassName() {
 		return JavaScriptClasses.TOOLTIP;
 	}
 
-	public static void render(IHtmlWriter htmlWriter, TooltipComponent component)
+	public static void render(IHtmlWriter htmlWriter, ToolTipComponent component)
 			throws WriterException {
 		FacesContext facesContext = htmlWriter.getHtmlComponentRenderContext()
 				.getFacesContext();

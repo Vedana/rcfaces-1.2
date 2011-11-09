@@ -2,12 +2,12 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.component.capability.ICriteriaManagerCapability;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.tools.ToolTipTools;
 import org.rcfaces.core.component.capability.IUserEventCapability;
 import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.capability.ICellToolTipTextSettings;
 import org.rcfaces.core.component.capability.ICellStyleClassCapability;
-import org.rcfaces.core.component.capability.IToolTipCapability;
 import org.rcfaces.core.internal.component.CameliaValueColumnComponent;
 import org.rcfaces.core.component.capability.IInitEventCapability;
 import org.rcfaces.core.internal.converter.OrderConverter;
@@ -18,8 +18,9 @@ import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapabilit
 import org.rcfaces.core.internal.capability.ICriteriaContainer;
 import org.rcfaces.core.component.capability.IAlignmentCapability;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
+import org.rcfaces.core.internal.capability.IToolTipComponent;
 import org.rcfaces.core.internal.capability.ICriteriaConfiguration;
-import org.rcfaces.core.internal.capability.ITooltipComponent;
+import org.rcfaces.core.component.capability.IToolTipTextCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import java.util.Arrays;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
@@ -33,13 +34,12 @@ import org.rcfaces.core.component.capability.IMenuPopupIdCapability;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IImageSizeCapability;
 import org.rcfaces.core.component.capability.IResizableCapability;
-import org.rcfaces.core.component.iterator.ITooltipIterator;
+import org.rcfaces.core.component.iterator.IToolTipIterator;
 import org.rcfaces.core.internal.capability.ICellStyleClassSettings;
 import org.apache.commons.logging.Log;
 import java.util.Set;
 import org.rcfaces.core.component.capability.IAutoFilterCapability;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
-import org.rcfaces.core.internal.tools.TooltipTools;
 import org.rcfaces.core.component.capability.IOrderCapability;
 import org.rcfaces.core.component.capability.ICellImageCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
@@ -63,7 +63,7 @@ public class DataColumnComponent extends CameliaValueColumnComponent implements
 	IHiddenModeCapability,
 	ITextCapability,
 	ITextDirectionCapability,
-	IToolTipCapability,
+	IToolTipTextCapability,
 	IAlignmentCapability,
 	IForegroundBackgroundColorCapability,
 	ISortEventCapability,
@@ -84,12 +84,12 @@ public class DataColumnComponent extends CameliaValueColumnComponent implements
 	IDoubleClickEventCapability,
 	IUserEventCapability,
 	IInitEventCapability,
+	IToolTipComponent,
 	IImageAccessorsCapability,
 	ValueHolder,
 	ICellStyleClassSettings,
 	ICriteriaContainer,
 	ICellToolTipTextSettings,
-	ITooltipComponent,
 	ICellImageSettings {
 
 	private static final Log LOG = LogFactory.getLog(DataColumnComponent.class);
@@ -152,6 +152,13 @@ public class DataColumnComponent extends CameliaValueColumnComponent implements
 		
 	}
 
+	public IToolTipIterator listToolTips() {
+
+
+			return ToolTipTools.listToolTips(this);
+		
+	}
+
 	public void setConverter(String converterId) {
 
 
@@ -179,13 +186,6 @@ public class DataColumnComponent extends CameliaValueColumnComponent implements
 			
 			return Boolean.valueOf(isVisible(facesContext));
 		
-	}
-
-	public ITooltipIterator listTooltips() {
-
-
-				return TooltipTools.listTooltips(this);
-			
 	}
 
 	public Object getValue(FacesContext context) {

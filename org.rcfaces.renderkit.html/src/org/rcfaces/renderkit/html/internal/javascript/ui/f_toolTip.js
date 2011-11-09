@@ -1,11 +1,16 @@
 /**
- * @class f_tooltip extends f_component, fa_asyncRender
+ * @class f_toolTip extends f_component, fa_asyncRender
  * @author jbmeslin@vedana.com
  * @version $Revision$ $Date$
  */
+
 var __members = {
 
-		
+	f_finalize: function() {
+		this._elementContainer=undefined; // HTMLElement
+
+		this.f_super(arguments);
+	},
 	/**
 	 * @method public
 	 * @param Boolean visible
@@ -40,11 +45,34 @@ var __members = {
 	 */
 	fa_getInteractiveParent: function() {
 		return this; //div tooltip
+	},
+	
+	/**
+	 * @method hidden 
+	 * @param HTMLElement elementContainer
+	 * @return void
+	 */
+	f_setElementContainer: function(elementContainer) {
+		this._elementContainer=elementContainer;
+	},
+	/**
+	 * @method hidden 
+	 * @return HTMLElement
+	 */
+	f_getElementContainer: function() {
+		return this._elementContainer;
+	},
+	/**
+	 * @method hidden
+	 * @return void
+	 */
+	f_clear: function() {
+		this._elementContainer=undefined;
 	}
 
 };
 
-new f_class("f_tooltip", {
+new f_class("f_toolTip", {
 	extend : f_component,
 	aspects: [ fa_asyncRender ],
 	members : __members

@@ -9,22 +9,22 @@ import org.apache.commons.logging.LogFactory;
 import java.util.Arrays;
 import java.util.Set;
 
-public class TooltipManagerComponent extends CameliaBaseComponent {
+public class ToolTipManagerComponent extends CameliaBaseComponent {
 
-	private static final Log LOG = LogFactory.getLog(TooltipManagerComponent.class);
+	private static final Log LOG = LogFactory.getLog(ToolTipManagerComponent.class);
 
-	public static final String COMPONENT_TYPE="org.rcfaces.core.tooltipManager";
+	public static final String COMPONENT_TYPE="org.rcfaces.core.toolTipManager";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
 		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"delay"}));
 	}
 
-	public TooltipManagerComponent() {
+	public ToolTipManagerComponent() {
 		setRendererType(COMPONENT_TYPE);
 	}
 
-	public TooltipManagerComponent(String componentId) {
+	public ToolTipManagerComponent(String componentId) {
 		this();
 		setId(componentId);
 	}

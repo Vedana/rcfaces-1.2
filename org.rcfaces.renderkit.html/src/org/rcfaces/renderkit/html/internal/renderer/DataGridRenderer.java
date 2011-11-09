@@ -24,7 +24,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.AdditionalInformationComponent;
 import org.rcfaces.core.component.DataGridComponent;
-import org.rcfaces.core.component.TooltipComponent;
+import org.rcfaces.core.component.ToolTipComponent;
 import org.rcfaces.core.component.capability.IAdditionalInformationValuesCapability;
 import org.rcfaces.core.component.capability.ICellImageCapability;
 import org.rcfaces.core.component.capability.ICellStyleClassCapability;
@@ -731,7 +731,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
 			}
 			int criteriaRowCountFirst = 0;
 			if (selectedCriteria != null) {
-				
+
 				// On repositionne le FIRST !
 				int targetFirst = rowIndex;
 				rowIndex = 0;
@@ -758,9 +758,10 @@ public class DataGridRenderer extends AbstractGridRenderer {
 						varContext.put(rowIndexVar, new Integer(i));
 					}
 
-					rowIndex ++;
-					
-					if (acceptCriteria(facesContext, gridComponent, selectedCriteria) == false) {
+					rowIndex++;
+
+					if (acceptCriteria(facesContext, gridComponent,
+							selectedCriteria) == false) {
 						continue;
 					}
 
@@ -768,7 +769,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
 					criteriaRowCountFirst++;
 				}
 			}
-			
+
 			int criteriaRowCount = 0;
 			for (int i = 0;; i++) {
 				if (searchEnd == false) {
@@ -791,7 +792,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
 					if (sortTranslations != null) {
 						if (rowIndex >= sortTranslations.length) {
 							if (selectedCriteria != null) {
-								fullCriteriaRowCount = criteriaRowCountFirst+criteriaRowCount;
+								fullCriteriaRowCount = criteriaRowCountFirst
+										+ criteriaRowCount;
 							}
 							break;
 						}
@@ -835,7 +837,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
 					} else {
 						if (rowIndex >= sortTranslations.length) {
 							if (selectedCriteria != null) {
-								fullCriteriaRowCount = criteriaRowCountFirst+criteriaRowCount;
+								fullCriteriaRowCount = criteriaRowCountFirst
+										+ criteriaRowCount;
 							}
 							break;
 						}
@@ -889,7 +892,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
 				if (available == false) {
 					count = rowIndex;
-					fullCriteriaRowCount = criteriaRowCountFirst+criteriaRowCount;
+					fullCriteriaRowCount = criteriaRowCountFirst
+							+ criteriaRowCount;
 					break;
 				}
 
@@ -981,11 +985,13 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
 				rowIndex++;
 			}
-			
-			if(selectedCriteria != null) {
-				if (gridComponent instanceof ICriteriaCountCapability){
-					if ( ((ICriteriaCountCapability) gridComponent).isFullCriteriaCount() ) {
-						fullCriteriaRowCount = criteriaRowCount+criteriaRowCountFirst;
+
+			if (selectedCriteria != null) {
+				if (gridComponent instanceof ICriteriaCountCapability) {
+					if (((ICriteriaCountCapability) gridComponent)
+							.isFullCriteriaCount()) {
+						fullCriteriaRowCount = criteriaRowCount
+								+ criteriaRowCountFirst;
 						for (int i = rowIndex;; i++) {
 
 							int translatedRowIndex = i;
@@ -1009,15 +1015,16 @@ public class DataGridRenderer extends AbstractGridRenderer {
 								varContext.put(rowIndexVar, new Integer(i));
 							}
 
-							if (acceptCriteria(facesContext, gridComponent, selectedCriteria) == false) {
+							if (acceptCriteria(facesContext, gridComponent,
+									selectedCriteria) == false) {
 								continue;
 							}
 							fullCriteriaRowCount++;
 						}
 					}
-				}				
+				}
 			}
-			
+
 		} finally {
 			gridComponent.setRowIndex(-1);
 
@@ -1038,8 +1045,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
 		// * en mode liste, le dataModel ne pouvait pas encore donner le nombre
 		// de rows
 
-		if (selectedCriteria != null && rows > 0 ) {
-			
+		if (selectedCriteria != null && rows > 0) {
+
 			encodeJsRowCount(jsWriter, tableContext, fullCriteriaRowCount);
 
 		} else if ((unknownRowCount && firstRowCount >= 0)) {
@@ -1073,8 +1080,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
 			ICriteriaConfiguration config = selectedCriteria.getConfig();
 
-			Object dataValue = CriteriaTools.getDataValue(
-					facesContext, gridComponent, config);
+			Object dataValue = CriteriaTools.getDataValue(facesContext,
+					gridComponent, config);
 
 			if (dataValue == null) {
 				continue;
@@ -1204,8 +1211,6 @@ public class DataGridRenderer extends AbstractGridRenderer {
 			if (rowIndex >= 0) {
 				objectLiteralWriter.writeSymbol("_rowIndex").writeInt(rowIndex);
 			}
-			
-			
 
 			objectLiteralWriter.end();
 		}
@@ -1364,15 +1369,17 @@ public class DataGridRenderer extends AbstractGridRenderer {
 			if (rowIndex >= 0) {
 				objectLiteralWriter.writeSymbol("_rowIndex").writeInt(rowIndex);
 			}
-			
-			if(tableContext.hasTooltips() ){
-				Map<String, TooltipComponent> tooltips = tableContext.listTooltips();
-			 
-				TooltipComponent tooltipComponent = tooltips.get("#row");
-				encodeTooltip(jsWriter, tooltipComponent);
-				objectLiteralWriter.writeSymbol("_tooltip").writeString(tooltipComponent.getId());
+
+			if (tableContext.hasTooltips()) {
+				Map<String, ToolTipComponent> tooltips = tableContext
+						.listToolTips();
+
+				ToolTipComponent tooltipComponent = tooltips.get("#row");
+				encodeToolTip(jsWriter, tooltipComponent);
+				objectLiteralWriter.writeSymbol("_tooltip").writeString(
+						tooltipComponent.getId());
 			}
-			
+
 			if (tableContext.hasAdditionalInformations()) {
 				AdditionalInformationComponent additionalInformationComponents[] = tableContext
 						.listAdditionalInformations();
@@ -1543,8 +1550,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
 				if (toolTipText != null) {
 					objWriter.writeSymbol("_toolTipText").write(toolTipText);
 				}
-				//#cell
-				
+				// #cell
+
 				objWriter.end();
 			}
 
@@ -1893,54 +1900,58 @@ public class DataGridRenderer extends AbstractGridRenderer {
 						cursorValueObject));
 			}
 		}
-		
-		if(gridComponent instanceof ICriteriaManagerCapability){
-			
+
+		if (gridComponent instanceof ICriteriaManagerCapability) {
+
 			ICriteriaManagerCapability manager = (ICriteriaManagerCapability) gridComponent;
-			ICriteriaContainer[] oldSelectedContainers = manager.listSelectedCriteriaContainers();
-			
-			 Set<ICriteriaContainer> oldContainerSet = new HashSet<ICriteriaContainer>();
-			 if(oldSelectedContainers != null && oldSelectedContainers.length > 0) {
-				 oldContainerSet.addAll(Arrays.asList(oldSelectedContainers));
-			 }
-			 String crit = componentData.getStringProperty("selectedCriteriaColumns");
-			 if(crit != null) {
-				
+			ICriteriaContainer[] oldSelectedContainers = manager
+					.listSelectedCriteriaContainers();
+
+			Set<ICriteriaContainer> oldContainerSet = new HashSet<ICriteriaContainer>();
+			if (oldSelectedContainers != null
+					&& oldSelectedContainers.length > 0) {
+				oldContainerSet.addAll(Arrays.asList(oldSelectedContainers));
+			}
+			String crit = componentData
+					.getStringProperty("selectedCriteriaColumns");
+			if (crit != null) {
+
 				ISelectedCriteria[] selectedCriteria = null;
-				String criteria_s = componentData.getStringProperty("criteriaValues");
+				String criteria_s = componentData
+						.getStringProperty("criteriaValues");
 				if (criteria_s != null) {
 					selectedCriteria = CriteriaTools.computeCriteriaConfigs(
 							facesContext, (IGridComponent) component,
 							criteria_s);
 				}
-				
-				ICriteriaContainer[] newSelectedCriteria =  new ICriteriaContainer[selectedCriteria.length];
+
+				ICriteriaContainer[] newSelectedCriteria = new ICriteriaContainer[selectedCriteria.length];
 				for (int i = 0; i < selectedCriteria.length; i++) {
 					ISelectedCriteria iSelectedCriteria = selectedCriteria[i];
-					
+
 					Set<Object> values = iSelectedCriteria.listSelectedValues();
 					SelectionTools.setSelectionValues(facesContext,
-							 iSelectedCriteria.getConfig(),
-							values);
-					
-					ICriteriaContainer criteriaContainer = iSelectedCriteria.getConfig().getCriteriaContainer(); 
+							iSelectedCriteria.getConfig(), values);
+
+					ICriteriaContainer criteriaContainer = iSelectedCriteria
+							.getConfig().getCriteriaContainer();
 					newSelectedCriteria[i] = criteriaContainer;
 					oldContainerSet.remove(criteriaContainer);
 				}
-								
+
 				component.queueEvent(new PropertyChangeEvent(component,
-							Properties.SELECTED_CRITERIA_COLUMNS, oldSelectedContainers,
-							newSelectedCriteria)); 
-				 
+						Properties.SELECTED_CRITERIA_COLUMNS,
+						oldSelectedContainers, newSelectedCriteria));
+
 				manager.setSelectedCriteriaContainers(newSelectedCriteria);
-				
+
 				for (ICriteriaContainer criteriaContainer : oldContainerSet) {
 					SelectionTools.setSelectionValues(facesContext,
 							criteriaContainer.getCriteriaConfiguration(),
 							Collections.emptySet());
 				}
-				
-			 }
+
+			}
 		}
 
 		super.decode(context, component, componentData);

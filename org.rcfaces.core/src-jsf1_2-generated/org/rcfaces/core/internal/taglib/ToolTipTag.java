@@ -1,22 +1,22 @@
 package org.rcfaces.core.internal.taglib;
 
+import org.rcfaces.core.component.ToolTipComponent;
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
 import javax.faces.component.UIViewRoot;
 import org.apache.commons.logging.Log;
-import org.rcfaces.core.component.TooltipComponent;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.tools.ListenersTools1_2;
 import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.faces.context.FacesContext;
 
-public class TooltipTag extends AbstractBasicTag implements Tag {
+public class ToolTipTag extends AbstractBasicTag implements Tag {
 
 
-	private static final Log LOG=LogFactory.getLog(TooltipTag.class);
+	private static final Log LOG=LogFactory.getLog(ToolTipTag.class);
 
 	private ValueExpression backgroundImageHorizontalPosition;
 	private ValueExpression backgroundImageHorizontalRepeat;
@@ -30,9 +30,9 @@ public class TooltipTag extends AbstractBasicTag implements Tag {
 	private ValueExpression scopeSaveValue;
 	private ValueExpression scopeValue;
 	private ValueExpression scopeVar;
-	private ValueExpression tooltipId;
+	private ValueExpression toolTipId;
 	public String getComponentType() {
-		return TooltipComponent.COMPONENT_TYPE;
+		return ToolTipComponent.COMPONENT_TYPE;
 	}
 
 	public void setBackgroundImageHorizontalPosition(ValueExpression backgroundImageHorizontalPosition) {
@@ -83,13 +83,13 @@ public class TooltipTag extends AbstractBasicTag implements Tag {
 		this.scopeVar = scopeVar;
 	}
 
-	public void setTooltipId(ValueExpression tooltipId) {
-		this.tooltipId = tooltipId;
+	public void setToolTipId(ValueExpression toolTipId) {
+		this.toolTipId = toolTipId;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
-			if (TooltipComponent.COMPONENT_TYPE==getComponentType()) {
+			if (ToolTipComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
 			LOG.debug("  backgroundImageHorizontalPosition='"+backgroundImageHorizontalPosition+"'");
@@ -102,18 +102,18 @@ public class TooltipTag extends AbstractBasicTag implements Tag {
 			LOG.debug("  scopeSaveValue='"+scopeSaveValue+"'");
 			LOG.debug("  scopeValue='"+scopeValue+"'");
 			LOG.debug("  scopeVar='"+scopeVar+"'");
-			LOG.debug("  tooltipId='"+tooltipId+"'");
+			LOG.debug("  toolTipId='"+toolTipId+"'");
 		}
-		if ((uiComponent instanceof TooltipComponent)==false) {
+		if ((uiComponent instanceof ToolTipComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
-			throw new IllegalStateException("Component specified by tag is not instanceof of 'TooltipComponent'.");
+			throw new IllegalStateException("Component specified by tag is not instanceof of 'ToolTipComponent'.");
 		}
 
 		super.setProperties(uiComponent);
 
-		TooltipComponent component = (TooltipComponent) uiComponent;
+		ToolTipComponent component = (ToolTipComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
 
 		if (backgroundImageHorizontalPosition != null) {
@@ -214,12 +214,12 @@ public class TooltipTag extends AbstractBasicTag implements Tag {
 			}
 		}
 
-		if (tooltipId != null) {
-			if (tooltipId.isLiteralText()==false) {
-				component.setValueExpression(Properties.TOOLTIP_ID, tooltipId);
+		if (toolTipId != null) {
+			if (toolTipId.isLiteralText()==false) {
+				component.setValueExpression(Properties.TOOL_TIP_ID, toolTipId);
 
 			} else {
-				component.setTooltipId(tooltipId.getExpressionString());
+				component.setToolTipId(toolTipId.getExpressionString());
 			}
 		}
 	}
@@ -237,7 +237,7 @@ public class TooltipTag extends AbstractBasicTag implements Tag {
 		scopeSaveValue = null;
 		scopeValue = null;
 		scopeVar = null;
-		tooltipId = null;
+		toolTipId = null;
 
 		super.release();
 	}

@@ -6,19 +6,20 @@
 
 /**
  *
- * @class f_tooltip
+ * @class f_toolTip
  *
  * @author jbmeslin@vedana.com (latest modification by $Author$)
  * @version $Revision$ $Date$ 
  */
  
 
-.f_tooltip {
-		position:absolute;
+.f_toolTip {
+	position: absolute;
+	display: none;
 }
 
 
-.f_tooltip {
+.f_toolTip {
 	border: 1px solid #767676;
 	background: white url("dnd/bg-grey.gif") repeat-x bottom left;
 	padding: 2px 4px;

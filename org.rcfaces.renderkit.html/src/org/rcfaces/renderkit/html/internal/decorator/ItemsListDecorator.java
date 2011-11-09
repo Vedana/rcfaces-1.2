@@ -44,7 +44,7 @@ import org.rcfaces.core.component.capability.IStatesImageCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.capability.ITextPositionCapability;
-import org.rcfaces.core.component.capability.IToolTipCapability;
+import org.rcfaces.core.component.capability.IToolTipTextCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.event.SelectionEvent;
 import org.rcfaces.core.internal.renderkit.IComponentData;
@@ -603,8 +603,8 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
 
         String description = selectItem.getDescription();
         if (description != null
-                && (itemComponent instanceof IToolTipCapability)) {
-            ((IToolTipCapability) itemComponent).setToolTipText(description);
+                && (itemComponent instanceof IToolTipTextCapability)) {
+            ((IToolTipTextCapability) itemComponent).setToolTipText(description);
         }
 
         boolean disabled = selectItem.isDisabled();

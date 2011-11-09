@@ -24,7 +24,7 @@ var __statics = {
 		backgroundMode: f_shell.GREYED_BACKGROUND_MODE
 	}
 	
-}
+};
 
 var __members = {
 
@@ -317,7 +317,7 @@ var __members = {
 	toString: function() {
 		return "[f_viewDialog viewURL='"+this._viewURL+"']";
 	}
-}
+};
 
 new f_class("f_viewDialog", {
 	extend: f_dialog,

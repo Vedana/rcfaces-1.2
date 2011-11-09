@@ -1,10 +1,10 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IToolTipCapability;
 import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
 import org.apache.commons.logging.Log;
 import java.util.HashSet;
+import org.rcfaces.core.component.capability.IToolTipTextCapability;
 import java.lang.String;
 import org.apache.commons.logging.LogFactory;
 import java.util.Arrays;
@@ -12,7 +12,7 @@ import java.util.Set;
 import org.rcfaces.core.component.AbstractItemComponent;
 
 public class SelectItemComponent extends AbstractItemComponent implements 
-	IToolTipCapability {
+	IToolTipTextCapability {
 
 	private static final Log LOG = LogFactory.getLog(SelectItemComponent.class);
 

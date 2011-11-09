@@ -731,7 +731,7 @@
 	</component>
 
 	<component id="button" extends="abstractCommand">
-		<implements id="org.rcfaces.core.internal.capability.ITooltipComponent" />
+		<implements id="org.rcfaces.core.internal.capability.IToolTipComponent" />
 		
 		<capability id="ITextCapability" />
 		<capability id="ITextDirectionCapability" />
@@ -739,18 +739,11 @@
 		<capability id="IReadOnlyCapability" />
 		<capability id="IAlternateTextCapability" />
 		<capability id="IFocusStyleClassCapability" />
+		<capability id="IToolTipIdCapability" />
 
 		<action id="action" type="selection" default="true" />
-		
-		<attribute id="tooltipId" type="java.lang.String" />
-		
-		<method id="listTooltips" returnType="org.rcfaces.core.component.iterator.ITooltipIterator">
-			<import>org.rcfaces.core.internal.tools.TooltipTools</import>
-			<code>
-				return TooltipTools.listTooltips(this);
-			</code>
-		</method>		
-<!-- 
+	
+	<!-- 
 		<method id="getValue" returnType="java.lang.Object">
 			<code>
 				return getValue(null);
@@ -914,7 +907,7 @@
 		<capability id="IHiddenModeCapability" />
 		<capability id="ITextCapability" />
 		<capability id="ITextDirectionCapability" />
-		<capability id="IToolTipCapability" />
+		<capability id="IToolTipTextCapability" />
 		<capability id="IAlignmentCapability" />
 		<capability id="IForegroundBackgroundColorCapability" />
 		<capability id="ISortEventCapability" />
@@ -951,13 +944,13 @@
 		<implements id="org.rcfaces.core.internal.capability.ICellToolTipTextSettings" />
 		<implements id="org.rcfaces.core.internal.capability.IImageAccessorsCapability" />
 		<implements id="org.rcfaces.core.internal.capability.ICriteriaContainer" importMethods="false" />
-		<implements id="org.rcfaces.core.internal.capability.ITooltipComponent" importMethods="false" />
+		<implements id="org.rcfaces.core.internal.capability.IToolTipComponent" />
 		
 		<capability id="IVisibilityCapability" />
 		<capability id="IHiddenModeCapability" />
 		<capability id="ITextCapability" />
 		<capability id="ITextDirectionCapability" />
-		<capability id="IToolTipCapability" />
+		<capability id="IToolTipTextCapability" />
 		<capability id="IAlignmentCapability" />
 		<capability id="IForegroundBackgroundColorCapability" />
 		<capability id="ISortEventCapability" />
@@ -991,14 +984,7 @@
 		<method id="getConverter()"/>
 
 		<method id="getVisibleState(javax.faces.context.FacesContext)" />
-		
-		<method id="listTooltips" returnType="org.rcfaces.core.component.iterator.ITooltipIterator">
-			<import>org.rcfaces.core.internal.tools.TooltipTools</import>
-			<code>
-				return TooltipTools.listTooltips(this);
-			</code>
-		</method>
-
+	
 		<method id="getLocalValue" returnType="java.lang.Object">
 			<code>
 				return engine.getLocalValue(Properties.VALUE);
@@ -1053,7 +1039,7 @@
 		<capability id="IHiddenModeCapability" />
 		<capability id="ITextCapability" />
 		<capability id="ITextDirectionCapability" />
-		<capability id="IToolTipCapability" />
+		<capability id="IToolTipTextCapability" />
 		<capability id="IAlignmentCapability" />
 		<capability id="IForegroundBackgroundColorCapability" />
 		<capability id="ISortEventCapability" />
@@ -1138,7 +1124,7 @@
 		<implements id="org.rcfaces.core.internal.capability.ISelectionRangeComponent" importMethods="false" />
 		<implements id="org.rcfaces.core.internal.capability.ICheckRangeComponent" importMethods="false" />
 		<implements id="org.rcfaces.core.internal.capability.IAdditionalInformationRangeComponent" importMethods="false" />
-		<implements id="org.rcfaces.core.internal.capability.ITooltipComponent" importMethods="false" />
+		<implements id="org.rcfaces.core.internal.capability.IToolTipComponent"/>
 
 		<implements id="org.rcfaces.core.component.capability.ISortedChildrenCapability" properties="sortedChildren"/>
 		<implements id="org.rcfaces.core.internal.capability.ISortedComponentsCapability" importMethods="false" />
@@ -1240,13 +1226,6 @@
 			<import>org.rcfaces.core.internal.tools.GridTools</import>
 			<code>
 				return GridTools.listColumns(this, org.rcfaces.core.component.DataColumnComponent.class);
-			</code>
-		</method>
-		
-		<method id="listTooltips" returnType="org.rcfaces.core.component.iterator.ITooltipIterator">
-			<import>org.rcfaces.core.internal.tools.TooltipTools</import>
-			<code>
-				return TooltipTools.listTooltips(this);
 			</code>
 		</method>
 	
@@ -2656,7 +2635,7 @@ Dans le cas d'un mode period !
 	</component>
 
 	<component id="selectItem" extends="abstractItem" render="false">
-		<capability id="IToolTipCapability" />
+		<capability id="IToolTipTextCapability" />
 
 		<binding-alias id="toolTipText" target="itemDescription" />
 		<method id="setToolTip" returnType="void">
@@ -2773,11 +2752,15 @@ Dans le cas d'un mode period !
 
 	<component id="image" extends="abstractOutput">
 		<implements id="org.rcfaces.core.internal.capability.IImageAccessorsCapability" />
+		<implements id="org.rcfaces.core.internal.capability.IToolTipComponent" />
+
 		<capability id="IImageCapability" />
 		<capability id="IImageSizeCapability" />
 		<capability id="IAlternateTextCapability" />
 	
 		<capability id="IFilterCapability"/>
+		
+		<capability id="IToolTipIdCapability" />
 						
 		<method id="getImageAccessors" returnType="org.rcfaces.core.component.familly.IContentAccessors">
 			<import>org.rcfaces.core.internal.tools.ImageAccessorTools</import>
@@ -4373,7 +4356,7 @@ Dans le cas d'un mode period !
 		
 		<capability id="ITextCapability" />
 		<capability id="ITextDirectionCapability" />
-		<capability id="IToolTipCapability" />
+		<capability id="IToolTipTextCapability" />
 		<capability id="IAlignmentCapability" />
 		<capability id="IForegroundBackgroundColorCapability" />
 		<capability id="IStyleClassCapability" />
@@ -4694,7 +4677,7 @@ Dans le cas d'un mode period !
 		<attribute id="itemValue" type="java.lang.Object"/>
 	</component>
 	
-	<component id="tooltip" extends="abstractBasic">
+	<component id="toolTip" extends="abstractBasic">
 		<implements id="org.rcfaces.core.internal.capability.IAsyncRenderComponent" />
 
 		<capability id="IBackgroundImageCapability" />
@@ -4711,12 +4694,11 @@ Dans le cas d'un mode period !
 
 	
 		<method id="setAsyncRenderMode(String)" />		
-
 		
-		<attribute id="tooltipId" type="java.lang.String" />
+		<attribute id="toolTipId" type="java.lang.String" />
 	</component>
 	
-	<component id="tooltipManager" extends="cameliaBase">
+	<component id="toolTipManager" extends="cameliaBase">
 		<attribute id="delay" type="int" default="-1"/>
 	</component>
 

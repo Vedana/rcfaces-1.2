@@ -5,7 +5,6 @@ import org.rcfaces.core.component.capability.IUserEventCapability;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IWidthCapability;
 import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.capability.IToolTipCapability;
 import org.apache.commons.logging.Log;
 import java.util.Set;
 import org.rcfaces.core.internal.component.CameliaValueColumnComponent;
@@ -22,6 +21,7 @@ import org.rcfaces.core.component.capability.IAlignmentCapability;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import javax.el.ValueExpression;
 import java.util.HashSet;
+import org.rcfaces.core.component.capability.IToolTipTextCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import java.util.Arrays;
 import org.rcfaces.core.component.capability.ITextCapability;
@@ -30,7 +30,7 @@ import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
 public class SchedulerColumnComponent extends CameliaValueColumnComponent implements 
 	ITextCapability,
 	ITextDirectionCapability,
-	IToolTipCapability,
+	IToolTipTextCapability,
 	IAlignmentCapability,
 	IForegroundBackgroundColorCapability,
 	IStyleClassCapability,

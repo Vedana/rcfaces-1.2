@@ -1,21 +1,22 @@
 package org.rcfaces.core.component;
 
+import org.rcfaces.core.component.capability.IToolTipIdCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.tools.ToolTipTools;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.AbstractCommandComponent;
 import org.rcfaces.core.component.capability.IAlternateTextCapability;
 import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
-import org.rcfaces.core.component.iterator.ITooltipIterator;
+import org.rcfaces.core.component.iterator.IToolTipIterator;
+import org.rcfaces.core.internal.capability.IToolTipComponent;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.internal.capability.ITooltipComponent;
 import javax.el.ValueExpression;
 import java.util.HashSet;
 import org.apache.commons.logging.Log;
 import java.util.Set;
 import java.util.Arrays;
-import org.rcfaces.core.internal.tools.TooltipTools;
 import org.rcfaces.core.component.capability.ITextCapability;
 
 /**
@@ -57,7 +58,8 @@ public class ButtonComponent extends AbstractCommandComponent implements
 	IReadOnlyCapability,
 	IAlternateTextCapability,
 	IFocusStyleClassCapability,
-	ITooltipComponent {
+	IToolTipIdCapability,
+	IToolTipComponent {
 
 	private static final Log LOG = LogFactory.getLog(ButtonComponent.class);
 
@@ -65,7 +67,7 @@ public class ButtonComponent extends AbstractCommandComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractCommandComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"focusStyleClass","selectionListener","tooltipId","text","readOnly","alternateText","textDirection"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"focusStyleClass","selectionListener","text","readOnly","alternateText","toolTipId","textDirection"}));
 	}
 
 	public ButtonComponent() {
@@ -77,11 +79,11 @@ public class ButtonComponent extends AbstractCommandComponent implements
 		setId(componentId);
 	}
 
-	public ITooltipIterator listTooltips() {
+	public IToolTipIterator listToolTips() {
 
 
-				return TooltipTools.listTooltips(this);
-			
+			return ToolTipTools.listToolTips(this);
+		
 	}
 
 	public java.lang.String getText() {
@@ -211,24 +213,27 @@ public class ButtonComponent extends AbstractCommandComponent implements
 		engine.setProperty(Properties.FOCUS_STYLE_CLASS, focusStyleClass);
 	}
 
-	public String getTooltipId() {
-		return getTooltipId(null);
-	}
-
-	public String getTooltipId(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.TOOLTIP_ID, facesContext);
-	}
-
-	public void setTooltipId(String tooltipId) {
-		engine.setProperty(Properties.TOOLTIP_ID, tooltipId);
+	public java.lang.String getToolTipId() {
+		return getToolTipId(null);
 	}
 
 	/**
-	 * Returns <code>true</code> if the attribute "tooltipId" is set.
+	 * See {@link #getToolTipId() getToolTipId()} for more details
+	 */
+	public java.lang.String getToolTipId(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.TOOL_TIP_ID, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "toolTipId" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public boolean isTooltipIdSetted() {
-		return engine.isPropertySetted(Properties.TOOLTIP_ID);
+	public final boolean isToolTipIdSetted() {
+		return engine.isPropertySetted(Properties.TOOL_TIP_ID);
+	}
+
+	public void setToolTipId(java.lang.String toolTipId) {
+		engine.setProperty(Properties.TOOL_TIP_ID, toolTipId);
 	}
 
 	protected Set getCameliaFields() {

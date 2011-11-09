@@ -1,41 +1,49 @@
 /**
  * Aspect Tooltip Container
  *
- * @aspect public abstract fa_tooltipContainer 
+ * @aspect public abstract fa_toolTipContainer 
  * @author jbmeslin@vedana.com (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
  
 var __members = {
+	
+	/**
+	 * @method hidden
+	 * @param HTMLElement element
+	 * @return f_toolTip
+	 */
+	fa_getTooltipForElement: function(element) {
+		var parent= element;
 		
-		
-		
-		fa_getTooltipForElement: function(element){
-			var parent= element;
-			while (parent){
-				var tooltipId = parent._tooltipId;
-				if(tooltipId) {
-					var component =  this.f_findComponent(tooltipId);
-					if (!component){
-						
-						component =f_core.CreateElement(parent, "div", {
-							className: "f_tooltip"			
-						});
-						
-						component.setAttribute("v:class", "f_tooltip");
-						component = f_tooltip.f_getClassLoader().f_init(component, false, false);
-					}
-					component._elementContainer = parent;
-					return component;
-				}
-				parent = parent.parentNode;
+		for (;parent;parent = parent.parentNode){
+			var tooltipClientId = parent._tooltipId;
+			if (!tooltipClientId) {
+				continue;
 			}
 			
-			return undefined;
+			var tooltipComponent =  this.f_findComponent(tooltipClientId);
+			if (!tooltipComponent){
+				
+				tooltipComponent = f_core.CreateElement(parent, "div", {
+					className: "f_toolTip"			
+				});
+				
+				tooltipComponent.setAttribute("v:class", "f_toolTip");
+
+				tooltipComponent = this.f_getClass().f_getClassLoader().f_init(component, true, true);
+			}
+			
+			tooltipComponent.f_setElementContainer(parent);
+			
+			return tooltipComponent;
 		}
+		
+		return null;
+	}
 
 };
 
-new f_aspect("fa_tooltipContainer", {
+new f_aspect("fa_toolTipContainer", {
 	members: __members
 });

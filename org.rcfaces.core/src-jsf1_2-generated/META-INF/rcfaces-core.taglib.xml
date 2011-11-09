@@ -758,18 +758,18 @@
 		</component>
 	</tag>
 	<tag>
-		<tag-name>tooltip</tag-name>
+		<tag-name>toolTip</tag-name>
 		<component>
-			<component-type>org.rcfaces.core.tooltip</component-type>
-			<renderer-type>org.rcfaces.core.tooltip</renderer-type>
+			<component-type>org.rcfaces.core.toolTip</component-type>
+			<renderer-type>org.rcfaces.core.toolTip</renderer-type>
 			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
 		</component>
 	</tag>
 	<tag>
-		<tag-name>tooltipManager</tag-name>
+		<tag-name>toolTipManager</tag-name>
 		<component>
-			<component-type>org.rcfaces.core.tooltipManager</component-type>
-			<renderer-type>org.rcfaces.core.tooltipManager</renderer-type>
+			<component-type>org.rcfaces.core.toolTipManager</component-type>
+			<renderer-type>org.rcfaces.core.toolTipManager</renderer-type>
 			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
 		</component>
 	</tag>

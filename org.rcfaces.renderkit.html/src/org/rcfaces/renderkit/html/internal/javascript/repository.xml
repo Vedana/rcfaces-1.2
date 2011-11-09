@@ -366,16 +366,16 @@
 			</class>
 		</file>
 		
-		<file name="ui/f_tooltip.js">
-			<class name="f_tooltip">
+		<file name="ui/f_toolTip.js">
+			<class name="f_toolTip">
 				<required-class name="f_component" />
-				<required-class name="f_tooltipManager"/>
+				<required-class name="f_toolTipManager"/>
 				<required-class name="fa_asyncRender"/>
 			</class>
 		</file>
 		
-		<file name="ui/f_tooltipManager.js">
-			<class name="f_tooltipManager">
+		<file name="ui/f_toolTipManager.js">
+			<class name="f_toolTipManager">
 				<required-class name="f_object" />
 			</class>
 		</file>	

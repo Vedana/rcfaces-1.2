@@ -20,7 +20,7 @@ import javax.faces.model.DataModel;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.AdditionalInformationComponent;
-import org.rcfaces.core.component.TooltipComponent;
+import org.rcfaces.core.component.ToolTipComponent;
 import org.rcfaces.core.component.capability.IAdditionalInformationCardinalityCapability;
 import org.rcfaces.core.component.capability.IAlertLoadingMessageCapability;
 import org.rcfaces.core.component.capability.IAlignmentCapability;
@@ -57,7 +57,7 @@ import org.rcfaces.core.component.capability.IWidthCapability;
 import org.rcfaces.core.component.capability.IWidthRangeCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.iterator.IColumnIterator;
-import org.rcfaces.core.component.iterator.ITooltipIterator;
+import org.rcfaces.core.component.iterator.IToolTipIterator;
 import org.rcfaces.core.internal.capability.IAdditionalInformationComponent;
 import org.rcfaces.core.internal.capability.ICellImageSettings;
 import org.rcfaces.core.internal.capability.ICellStyleClassSettings;
@@ -65,7 +65,7 @@ import org.rcfaces.core.internal.capability.ICellToolTipTextSettings;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
 import org.rcfaces.core.internal.capability.ISortedComponentsCapability;
-import org.rcfaces.core.internal.capability.ITooltipComponent;
+import org.rcfaces.core.internal.capability.IToolTipComponent;
 import org.rcfaces.core.internal.component.IImageAccessors;
 import org.rcfaces.core.internal.component.IStatesImageAccessors;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
@@ -77,7 +77,6 @@ import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.tools.CriteriaTools;
-import org.rcfaces.core.internal.tools.TooltipTools;
 import org.rcfaces.core.lang.FilterPropertiesMap;
 import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.core.model.IFilterProperties;
@@ -236,8 +235,9 @@ public abstract class AbstractGridRenderContext {
 	private boolean wheelSelection = true;
 
 	private String alertLoadingMessage = null;
-	
-	private Map<String, TooltipComponent> gridTooltips; // #head, #body, #row + (v:tooltipId) + #cell
+
+	private Map<String, ToolTipComponent> gridToolTips; // #head, #body, #row +
+														// (v:tooltipId) + #cell
 	private String[] columnTooltipIds; // #cell
 
 	private AbstractGridRenderContext(IProcessContext processContext,
@@ -350,20 +350,22 @@ public abstract class AbstractGridRenderContext {
 				}
 			}
 		}
-			
-		
+
 		// temporaire avant création de la capability tooltip2
-		
-		if(gridComponent instanceof ITooltipComponent) {
-			ITooltipIterator tooltipIterator = ((ITooltipComponent) gridComponent).listTooltips();
-			gridTooltips = new HashMap<String, TooltipComponent>();
-			for (;tooltipIterator.hasNext();) {
-				TooltipComponent tooltipComponent = tooltipIterator.next();
-				gridTooltips.put(tooltipComponent.getTooltipId(processContext.getFacesContext()), tooltipComponent);
-				
+
+		if (gridComponent instanceof IToolTipComponent) {
+			IToolTipIterator tooltipIterator = ((IToolTipComponent) gridComponent)
+					.listToolTips();
+
+			gridToolTips = new HashMap<String, ToolTipComponent>();
+			for (; tooltipIterator.hasNext();) {
+				ToolTipComponent tooltipComponent = tooltipIterator.next();
+
+				gridToolTips.put(tooltipComponent.getToolTipId(processContext
+						.getFacesContext()), tooltipComponent);
+
 			}
 		}
-		
 
 		if (gridComponent instanceof IAdditionalInformationComponent) {
 			additionalInformations = ((IAdditionalInformationComponent) gridComponent)
@@ -509,17 +511,20 @@ public abstract class AbstractGridRenderContext {
 
 			String dw = null;
 			int idw = -1;
-			
-			if(column instanceof ITooltipComponent) {
-				ITooltipIterator tooltipIterator = ((ITooltipComponent) column).listTooltips();
-				//gridTooltips = new HashMap<String, TooltipComponent>();
-				for (;tooltipIterator.hasNext();) {
-					TooltipComponent tooltipComponent = tooltipIterator.next();
-					gridTooltips.put(tooltipComponent.getTooltipId(processContext.getFacesContext()), tooltipComponent);
-					
+
+			if (column instanceof IToolTipComponent) {
+				IToolTipIterator tooltipIterator = ((IToolTipComponent) column)
+						.listToolTips();
+				// gridTooltips = new HashMap<String, TooltipComponent>();
+				for (; tooltipIterator.hasNext();) {
+					ToolTipComponent tooltipComponent = tooltipIterator.next();
+					gridToolTips.put(tooltipComponent
+							.getToolTipId(processContext.getFacesContext()),
+							tooltipComponent);
+
 				}
 			}
-			
+
 			if (column instanceof IWidthCapability) {
 				dw = ((IWidthCapability) column).getWidth();
 			}
@@ -658,14 +663,15 @@ public abstract class AbstractGridRenderContext {
 					hasCellToolTipText = true;
 				}
 			}
-			
-			if(column instanceof ITooltipComponent) {
-				ITooltipIterator tooltipIterator = ((ITooltipComponent) column).listTooltips();
-				//TODO
+
+			if (column instanceof IToolTipComponent) {
+				IToolTipIterator tooltipIterator = ((IToolTipComponent) column)
+						.listToolTips();
+				// TODO
 			}
-			
-			//cell
-			
+
+			// cell
+
 			if (column instanceof ICellToolTipTextCapability) {
 				String ctt = ((ICellToolTipTextCapability) column)
 						.getCellDefaultToolTipText();
@@ -1202,14 +1208,13 @@ public abstract class AbstractGridRenderContext {
 		return additionalInformations != null
 				&& additionalInformations.length > 0;
 	}
-	
-	public final Map<String, TooltipComponent> listTooltips() {
-		return gridTooltips;
+
+	public final Map<String, ToolTipComponent> listToolTips() {
+		return gridToolTips;
 	}
 
 	public boolean hasTooltips() {
-		return gridTooltips != null
-				&& gridTooltips.size() > 0;
+		return gridToolTips != null && gridToolTips.size() > 0;
 	}
 
 	public int getAdditionalInformationCardinality() {

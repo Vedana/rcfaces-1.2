@@ -3,14 +3,14 @@
  */
 package org.rcfaces.core.internal.capability;
 
-import org.rcfaces.core.component.iterator.ITooltipIterator;
+import org.rcfaces.core.component.iterator.IToolTipIterator;
 
 /**
  * 
  * @author jbmeslin@vedana.com (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public interface ITooltipComponent {
+public interface IToolTipComponent {
 
-    ITooltipIterator listTooltips();
+    IToolTipIterator listToolTips();
 }

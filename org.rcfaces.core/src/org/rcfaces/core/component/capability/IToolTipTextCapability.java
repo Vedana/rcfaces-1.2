@@ -10,7 +10,7 @@ package org.rcfaces.core.component.capability;
  * @version $Revision$ $Date$
  * @author Olivier Oeuillot (latest modification by $Author$)
  */
-public interface IToolTipCapability {
+public interface IToolTipTextCapability {
 
     /**
      * Returns the receiver's tool tip text, or <code>null</code> if it has

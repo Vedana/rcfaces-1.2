@@ -658,7 +658,14 @@ var __members = {
 	 * @return HTMLElement
 	 */
 	f_getParent: function() {
-		return this.parentNode;
+		var parent = this.parentNode;
+		if (!parent) {
+			return parent;
+		}		
+		
+		var parentComponent = this.f_getClass().f_getClassLoader().f_init(parent, true, true);
+		
+		return parentComponent;
 	},
 	/**
 	 *

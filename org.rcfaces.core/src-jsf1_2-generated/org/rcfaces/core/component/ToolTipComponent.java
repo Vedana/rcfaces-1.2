@@ -20,7 +20,7 @@ import java.util.Arrays;
 import org.rcfaces.core.internal.capability.IVariableScopeCapability;
 import org.rcfaces.core.component.capability.IInitEventCapability;
 
-public class TooltipComponent extends AbstractBasicComponent implements 
+public class ToolTipComponent extends AbstractBasicComponent implements 
 	IBackgroundImageCapability,
 	IBorderCapability,
 	IInitEventCapability,
@@ -31,20 +31,20 @@ public class TooltipComponent extends AbstractBasicComponent implements
 	IStyleClassCapability,
 	IAsyncRenderComponent {
 
-	private static final Log LOG = LogFactory.getLog(TooltipComponent.class);
+	private static final Log LOG = LogFactory.getLog(ToolTipComponent.class);
 
-	public static final String COMPONENT_TYPE="org.rcfaces.core.tooltip";
+	public static final String COMPONENT_TYPE="org.rcfaces.core.toolTip";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractBasicComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"lookId","tooltipId","backgroundImageVerticalRepeat","styleClass","backgroundImageVerticalPosition","backgroundImageHorizontalRepeat","backgroundImageHorizontalPosition","loadListener","asyncRenderMode","initListener","scopeSaveValue","scopeVar","scopeValue","backgroundImageURL","border"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"lookId","backgroundImageVerticalRepeat","styleClass","backgroundImageVerticalPosition","backgroundImageHorizontalRepeat","toolTipId","backgroundImageHorizontalPosition","loadListener","asyncRenderMode","initListener","scopeSaveValue","scopeVar","scopeValue","backgroundImageURL","border"}));
 	}
 
-	public TooltipComponent() {
+	public ToolTipComponent() {
 		setRendererType(COMPONENT_TYPE);
 	}
 
-	public TooltipComponent(String componentId) {
+	public ToolTipComponent(String componentId) {
 		this();
 		setId(componentId);
 	}
@@ -310,24 +310,24 @@ public class TooltipComponent extends AbstractBasicComponent implements
 		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
 	}
 
-	public String getTooltipId() {
-		return getTooltipId(null);
+	public String getToolTipId() {
+		return getToolTipId(null);
 	}
 
-	public String getTooltipId(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.TOOLTIP_ID, facesContext);
+	public String getToolTipId(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.TOOL_TIP_ID, facesContext);
 	}
 
-	public void setTooltipId(String tooltipId) {
-		engine.setProperty(Properties.TOOLTIP_ID, tooltipId);
+	public void setToolTipId(String toolTipId) {
+		engine.setProperty(Properties.TOOL_TIP_ID, toolTipId);
 	}
 
 	/**
-	 * Returns <code>true</code> if the attribute "tooltipId" is set.
+	 * Returns <code>true</code> if the attribute "toolTipId" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public boolean isTooltipIdSetted() {
-		return engine.isPropertySetted(Properties.TOOLTIP_ID);
+	public boolean isToolTipIdSetted() {
+		return engine.isPropertySetted(Properties.TOOL_TIP_ID);
 	}
 
 	protected Set getCameliaFields() {

@@ -1386,15 +1386,39 @@ var f_core = {
 	},
 	/**
 	 * @method static hidden
+	 * @param HTMLElement source
 	 * @return f_component
 	 */
-	GetParentComponent: function(comp) {
-		for(comp=comp.f_getParent();comp;comp=comp.parentNode) {
-			if (!f_class.IsObjectInitialized(comp)) {
-				continue;
+	GetParentComponent: function(source) {
+		
+		var comp=source;
+		var classLoader;
+		
+		for(;comp;) {
+
+			if (comp.f_getParent) {
+				return comp.f_getParent();
 			}
 			
-			return comp;
+			comp=comp.parentNode;
+			if (!comp || comp.nodeType!=f_core.ELEMENT_NODE) {
+				return null;
+			}
+			
+			if (f_class.IsObjectInitialized(comp)) {
+				return comp;
+			}
+
+			if (!classLoader) {
+				var win=f_core.GetWindow(source);
+				classLoader=f_classLoader.Get(win);
+			}
+			
+			var newComp = classLoader.f_init(comp, true, true);
+			
+			if (newComp && f_class.IsObjectInitialized(newComp)) {
+				return newComp;
+			}
 		}
 		
 		return null;
@@ -3276,7 +3300,7 @@ var f_core = {
 	 * @param Number x
 	 * @param Number y
 	 * @param optional component
-	 * @return HTMLElement 
+	 * @return Array 
 	 */
 	SearchComponentByAbsolutePosition: function(x, y, component) {
 		f_core.Assert(typeof(x)=="number", "f_core.SearchComponentByAbsolutePosition: Invalid x parameter '"+x+"'.");

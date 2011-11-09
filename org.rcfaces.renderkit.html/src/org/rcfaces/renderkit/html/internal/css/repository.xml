@@ -66,7 +66,7 @@
 		<file name="f_toolBar.css" />
 		<file name="f_textEditor.css" />
 		<file name="f_tree.css" />
-		<file name="f_tooltip.css" />
+		<file name="f_toolTip.css" />
 		<file name="f_waiting.css" />
 		<file name="f_messageDialog.css" />
 		<file name="f_viewDialog.css" />

@@ -176,10 +176,6 @@ A boolean value indicating wether the vertical scroll is shown.
 ]]></description>
 		<component-type>org.rcfaces.core.button</component-type>
 		<component-class>org.rcfaces.core.component.ButtonComponent</component-class>
-		<attribute>
-			<attribute-name>tooltipId</attribute-name>
-			<attribute-class>java.lang.String</attribute-class>
-		</attribute>
 	</component>
 	<component>
 		<description><![CDATA[
@@ -3425,12 +3421,12 @@ TODO
 		<component-class>org.rcfaces.core.component.CriteriaItemFillerComponent</component-class>
 	</component>
 	<component>
-		<component-type>org.rcfaces.core.tooltip</component-type>
-		<component-class>org.rcfaces.core.component.TooltipComponent</component-class>
+		<component-type>org.rcfaces.core.toolTip</component-type>
+		<component-class>org.rcfaces.core.component.ToolTipComponent</component-class>
 	</component>
 	<component>
-		<component-type>org.rcfaces.core.tooltipManager</component-type>
-		<component-class>org.rcfaces.core.component.TooltipManagerComponent</component-class>
+		<component-type>org.rcfaces.core.toolTipManager</component-type>
+		<component-class>org.rcfaces.core.component.ToolTipManagerComponent</component-class>
 	</component>
 	<component>
 		<component-type>javax.faces.HtmlOutputText</component-type>

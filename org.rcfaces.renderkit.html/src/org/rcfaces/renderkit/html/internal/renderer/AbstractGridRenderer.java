@@ -29,7 +29,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.AdditionalInformationComponent;
 import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.MenuComponent;
-import org.rcfaces.core.component.TooltipComponent;
+import org.rcfaces.core.component.ToolTipComponent;
 import org.rcfaces.core.component.capability.IAdditionalInformationCardinalityCapability;
 import org.rcfaces.core.component.capability.IAlignmentCapability;
 import org.rcfaces.core.component.capability.IAutoFilterCapability;
@@ -55,7 +55,7 @@ import org.rcfaces.core.component.capability.ISortedChildrenCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.component.capability.ITabIndexCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.capability.IToolTipCapability;
+import org.rcfaces.core.component.capability.IToolTipTextCapability;
 import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
 import org.rcfaces.core.component.capability.IWidthCapability;
 import org.rcfaces.core.component.capability.IWidthRangeCapability;
@@ -284,28 +284,27 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 				}
 			}
 		}
-			
+
 		if (gridRenderContext.hasTooltips()) {
-		IHtmlRenderContext htmlRenderContext = writer
-				.getHtmlComponentRenderContext().getHtmlRenderContext();
-		Object state = htmlRenderContext.saveState(htmlRenderContext
-				.getFacesContext());
+			IHtmlRenderContext htmlRenderContext = writer
+					.getHtmlComponentRenderContext().getHtmlRenderContext();
+			Object state = htmlRenderContext.saveState(htmlRenderContext
+					.getFacesContext());
 
-		if (state != null) {
-			String contentType = htmlRenderContext.getFacesContext()
-					.getResponseWriter().getContentType();
+			if (state != null) {
+				String contentType = htmlRenderContext.getFacesContext()
+						.getResponseWriter().getContentType();
 
-			((UIComponent) dataGridComponent).getAttributes().put(
-					TOOLTIPS_RENDER_CONTEXT_STATE,
-					new Object[] { state, contentType });
+				((UIComponent) dataGridComponent).getAttributes().put(
+						TOOLTIPS_RENDER_CONTEXT_STATE,
+						new Object[] { state, contentType });
+			}
 		}
-		}
-		
+
 		if (gridRenderContext.hasAdditionalInformations()) {
 			ajax = true;
 			javaScriptRenderContext.appendRequiredClass(JavaScriptClasses.GRID,
 					"additional");
-			
 
 			if (needAdditionalInformationContextState()) {
 				IHtmlRenderContext htmlRenderContext = writer
@@ -376,9 +375,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 		return (Object[]) ((UIComponent) component).getAttributes().get(
 				ADDITIONAL_INFORMATIONS_RENDER_CONTEXT_STATE);
 	}
-	
-	public Object[] getTooltipsRenderContextState(
-			IGridComponent component) {
+
+	public Object[] getTooltipsRenderContextState(IGridComponent component) {
 		return (Object[]) ((UIComponent) component).getAttributes().get(
 				TOOLTIPS_RENDER_CONTEXT_STATE);
 	}
@@ -402,14 +400,13 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
 		return writer.toString();
 	}
-	
-	protected String encodeTooltip(IJavaScriptWriter jsWriter,
-			TooltipComponent tooltipComponent)
-			throws WriterException {
+
+	protected String encodeToolTip(IJavaScriptWriter jsWriter,
+			ToolTipComponent tooltipComponent) throws WriterException {
 
 		CharArrayWriter writer = new CharArrayWriter(8000);
 
-		encodeTooltip(jsWriter.getFacesContext(), writer,
+		encodeToolTip(jsWriter.getFacesContext(), writer,
 				(IGridComponent) jsWriter.getComponentRenderContext()
 						.getComponent(), tooltipComponent,
 				jsWriter.getResponseCharacterEncoding());
@@ -466,10 +463,10 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 			}
 		}
 	}
-	//peut surment ne pas recopier se code
-	protected void encodeTooltip(FacesContext facesContext,
-			Writer writer, IGridComponent component,
-			TooltipComponent tooltipComponent,
+
+	// peut surment ne pas recopier se code
+	protected void encodeToolTip(FacesContext facesContext, Writer writer,
+			IGridComponent component, ToolTipComponent tooltipComponent,
 			String responseCharacterEncoding) throws WriterException {
 
 		ResponseWriter oldResponseWriter = facesContext.getResponseWriter();
@@ -509,8 +506,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 		}
 	}
 
-	
-	public boolean isDataModelRowAvailable (
+	public boolean isDataModelRowAvailable(
 			IHtmlRenderContext htmlRenderContext, Writer writer,
 			IGridComponent gridComponent, String responseCharacterEncoding,
 			String rowValue2, String rowIndex) throws WriterException {
@@ -578,13 +574,11 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 		return gridComponent.isRowAvailable();
 	}
 
-	
-	
 	public void renderAdditionalInformation(
 			IHtmlRenderContext htmlRenderContext, Writer writer,
 			IGridComponent gridComponent, String responseCharacterEncoding,
 			String rowValue2, String rowIndex) throws WriterException {
-		
+
 		IHtmlWriter htmlWriter = (IHtmlWriter) htmlRenderContext
 				.getComponentWriter();
 
@@ -592,10 +586,10 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 		AbstractGridRenderContext tableContext = getGridRenderContext(htmlWriter
 				.getHtmlComponentRenderContext());
 
-		
 		try {
-			if (isDataModelRowAvailable(htmlRenderContext, writer, gridComponent,
-                responseCharacterEncoding, rowValue2, rowIndex) == false) {
+			if (isDataModelRowAvailable(htmlRenderContext, writer,
+					gridComponent, responseCharacterEncoding, rowValue2,
+					rowIndex) == false) {
 				return;
 			}
 
@@ -610,7 +604,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 				if (add.isRendered() == false) {
 					continue;
 				}
-				
+
 				additionalInformationComponent = add;
 				break;
 			}
@@ -622,21 +616,16 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 			encodeAdditionalInformation(htmlRenderContext.getFacesContext(),
 					writer, gridComponent, additionalInformationComponent,
 					responseCharacterEncoding);
-			
-			
-			
 
 		} finally {
 			gridComponent.setRowIndex(-1);
 		}
 	}
-	
-	
-	
-	public void renderTooltip(
-			IHtmlRenderContext htmlRenderContext, Writer writer,
-			IGridComponent gridComponent, String responseCharacterEncoding,
-			String rowValue2, String rowIndex) throws WriterException {
+
+	public void renderTooltip(IHtmlRenderContext htmlRenderContext,
+			Writer writer, IGridComponent gridComponent,
+			String responseCharacterEncoding, String rowValue2, String rowIndex)
+			throws WriterException {
 
 		IHtmlWriter htmlWriter = (IHtmlWriter) htmlRenderContext
 				.getComponentWriter();
@@ -645,31 +634,28 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 		AbstractGridRenderContext tableContext = getGridRenderContext(htmlWriter
 				.getHtmlComponentRenderContext());
 		try {
-			if (isDataModelRowAvailable(htmlRenderContext, writer, gridComponent,
-	                responseCharacterEncoding, rowValue2, rowIndex) == false) {
-					return;
-				}
+			if (isDataModelRowAvailable(htmlRenderContext, writer,
+					gridComponent, responseCharacterEncoding, rowValue2,
+					rowIndex) == false) {
+				return;
+			}
 
-			 Map<String, TooltipComponent> tooltips= tableContext
-					.listTooltips();
-			 
-			TooltipComponent tooltipComponent = null;
+			Map<String, ToolTipComponent> tooltips = tableContext
+					.listToolTips();
 
-			//for (int i = 0; i < tooltips.size(); i++) {
-			TooltipComponent add = tooltips.get("#row");
+			ToolTipComponent tooltipComponent = null;
 
+			// for (int i = 0; i < tooltips.size(); i++) {
+			ToolTipComponent add = tooltips.get("#row");
 
 			tooltipComponent = add;
-			
 
 			if (tooltipComponent == null) {
 				return;
 			}
 
-			encodeTooltip(htmlRenderContext.getFacesContext(),
-					writer, gridComponent, tooltipComponent,
-					responseCharacterEncoding);
-			
+			encodeToolTip(htmlRenderContext.getFacesContext(), writer,
+					gridComponent, tooltipComponent, responseCharacterEncoding);
 
 		} finally {
 			gridComponent.setRowIndex(-1);
@@ -1092,9 +1078,10 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 				.getHtmlComponentRenderContext());
 
 		encodeBodyEnd((IHtmlWriter) writer, tableContext);
-		
-		if (tableContext.hasTooltips()){
-			TooltipRenderer.render((IHtmlWriter) writer, tableContext.listTooltips().get("#row"));
+
+		if (tableContext.hasTooltips()) {
+			ToolTipRenderer.render((IHtmlWriter) writer, tableContext
+					.listToolTips().get("#row"));
 		}
 
 		super.encodeEnd(writer);
@@ -1664,8 +1651,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 		}
 		htmlWriter.writeAlign(halign);
 
-		if (column instanceof IToolTipCapability) {
-			String toolTip = ((IToolTipCapability) column).getToolTipText();
+		if (column instanceof IToolTipTextCapability) {
+			String toolTip = ((IToolTipTextCapability) column).getToolTipText();
 
 			if (toolTip != null) {
 				toolTip = ParamUtils.formatMessage(column, toolTip);
@@ -2083,8 +2070,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 						objectWriter.writeSymbol("_text").writeString(text);
 					}
 				}
-				if (columnComponent instanceof IToolTipCapability) {
-					String toolTip = ((IToolTipCapability) columnComponent)
+				if (columnComponent instanceof IToolTipTextCapability) {
+					String toolTip = ((IToolTipTextCapability) columnComponent)
 							.getToolTipText();
 					if (toolTip != null) {
 						objectWriter.writeSymbol("_toolTip").writeString(

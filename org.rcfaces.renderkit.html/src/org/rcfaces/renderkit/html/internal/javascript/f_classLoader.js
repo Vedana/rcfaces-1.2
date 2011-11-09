@@ -1303,6 +1303,11 @@ f_classLoader.prototype = {
 			return obj;
 		}
 		
+		if (obj.nodeType!=f_core.ELEMENT_NODE) {
+			f_core.Debug(f_classLoader, "f_init: Invalid type of object '"+obj.nodeType+"'.");
+			return null;
+		}
+		
 		f_core.Debug(f_classLoader, "f_init: Initialize object '"+obj+"' (id='"+obj.id+"') ignore='"+ignoreNotFound+"'  typeof(obj)='"+typeof(obj)+"'");
 			
 		var claz = f_core.GetAttribute(obj, "v:class");
@@ -2196,7 +2201,7 @@ f_classLoader.SerializeInputsIntoForm=function(form) {
 			break;
 		}
 	}		
-}
+};
 
 
 
@@ -2204,11 +2209,11 @@ f_classLoader.SerializeInputsIntoForm=function(form) {
  * @method public static
  * @param Window win
  * @return f_classLoader
- * @context window:window
+ * @context window:win
  */
 f_classLoader.Get=function(win) {
 	return win._rcfacesClassLoader;
-}
+};
 
 /**
  * @method public static
@@ -2216,7 +2221,7 @@ f_classLoader.Get=function(win) {
  */
 f_classLoader.f_getName=function() {
 	return "f_classLoader";
-}
+};
 
 f_classLoader._kernelClass=true;
 
