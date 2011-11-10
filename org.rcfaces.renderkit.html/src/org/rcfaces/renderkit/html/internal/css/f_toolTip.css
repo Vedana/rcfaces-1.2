@@ -16,10 +16,12 @@
 .f_toolTip {
 	position: absolute;
 	display: none;
-}
 
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 
-.f_toolTip {
+	user-select: none;
+	
 	border: 1px solid #767676;
 	background: white url("dnd/bg-grey.gif") repeat-x bottom left;
 	padding: 2px 4px;

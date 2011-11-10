@@ -1139,7 +1139,7 @@ var __statics = {
 			offsetY=absPos.y;
 		}
 		
-switch(positionInfos.position) {
+		switch(positionInfos.position) {
 		
 		case f_popup.BOTTOM_COMPONENT:
 		case f_popup.BOTTOM_LEFT_COMPONENT:
@@ -1218,6 +1218,7 @@ switch(positionInfos.position) {
 		if(popup.offsetHeight > bh - scrollPosition.y){
 			positions.y=0;
 			positions.x=0;
+			
 		}else if (popup.offsetHeight+positions.y+absPos.y>bh) {
 			if (component) {
 				var aeAbs = f_core.GetAbsolutePosition(component);

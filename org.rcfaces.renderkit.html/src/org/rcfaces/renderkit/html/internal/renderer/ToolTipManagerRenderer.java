@@ -37,12 +37,17 @@ public class ToolTipManagerRenderer extends AbstractJavaScriptRenderer {
 			ToolTipManagerComponent tooltipManagerComponent = (ToolTipManagerComponent) componentRenderContext
 					.getComponent();
 
-			int delay = tooltipManagerComponent.getDelay(componentRenderContext
-					.getFacesContext());
-
-			if (delay < 0) {
+			int delay = tooltipManagerComponent
+					.getShowDelayMs(componentRenderContext.getFacesContext());
+			if (delay >= 0) {
 				htmlWriter.writeAttribute("v:delay", delay);
+			}
 
+			int thresold = tooltipManagerComponent
+					.getNeighbourThresholdMs(componentRenderContext
+							.getFacesContext());
+			if (thresold >= 0) {
+				htmlWriter.writeAttribute("v:neighbourThreshold", thresold);
 			}
 
 			htmlWriter.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
@@ -74,17 +79,25 @@ public class ToolTipManagerRenderer extends AbstractJavaScriptRenderer {
 
 		jsWriter.setIgnoreComponentInitialization();
 
-		jsWriter.writeCall(getJavaScriptClassName(), "Get");
+		String varName = jsWriter.getComponentVarName();
 
-		int delay = tooltipManagerComponent.getDelay(componentRenderContext
-				.getFacesContext());
+		jsWriter.write(varName).write('=')
+				.writeCall(getJavaScriptClassName(), "Get").writeln(");");
 
+		int delay = tooltipManagerComponent
+				.getShowDelayMs(componentRenderContext.getFacesContext());
 		if (delay >= 0) {
-			jsWriter.writeInt(delay);
+			jsWriter.writeMethodCall("f_setShowDelayMs").writeInt(delay)
+					.writeln(");");
 		}
 
-		jsWriter.writeln(");");
-
+		int thresold = tooltipManagerComponent
+				.getNeighbourThresholdMs(componentRenderContext
+						.getFacesContext());
+		if (thresold >= 0) {
+			jsWriter.writeMethodCall("f_setNeighbourThresholdMs")
+					.writeInt(thresold).writeln(");");
+		}
 	}
 
 	protected String getJavaScriptClassName() {

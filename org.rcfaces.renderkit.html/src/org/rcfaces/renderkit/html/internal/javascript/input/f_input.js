@@ -49,11 +49,6 @@ var __members = {
 			this.f_initializeOnFocus();
 		}			
 		
-		var tooltipId = f_core.GetAttribute(this, "v:tooltipId");
-		if (tooltipId) {
-			this._tooltipId = tooltipId;
-		}
-		
 		if (f_core.IsDebugEnabled(f_input)) {
 			var input=this.f_getInput();
 			
@@ -515,13 +510,13 @@ var __members = {
 	 *            animated
 	 * @return void
 	 */
-	fa_setTooltipVisible : function(tooltip, show, animated) {
+	fa_setTooltipVisible : function(tooltip, show, animated, jsEvent) {
 		
 		if (show) {
-			tooltip.f_setVisible(true, true);
+			tooltip.f_show(jsEvent, f_toolTip.BOTTOM_COMPONENT, this);
 
 		} else {
-			//this.f_hideAdditionalContent(row, animated);
+			tooltip.f_hide();
 		}
 	}
 	

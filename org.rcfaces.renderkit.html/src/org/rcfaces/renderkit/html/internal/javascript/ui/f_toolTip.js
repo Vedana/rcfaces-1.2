@@ -4,33 +4,87 @@
  * @version $Revision$ $Date$
  */
 
+var __statics = {
+
+		/**
+	 * @field hidden static final Number
+	 */
+	MOUSE_POSITION:0, 
+
+	/**
+	 * @field hidden static final Number
+	 */
+	MIDDLE_COMPONENT: 1,
+
+	/**
+	 * @field hidden static final Number
+	 */
+	BOTTOM_COMPONENT: 2,
+
+	/**
+	 * @field hidden static final Number
+	 */
+	LEFT_COMPONENT: 4,
+
+	/**
+	 * @field hidden static final Number
+	 */
+	BOTTOM_LEFT_COMPONENT: 8,
+
+	/**
+	 * @field hidden static final Number
+	 */
+	RIGHT_COMPONENT: 16,
+	/**
+	 * @field hidden static final Number
+	 */
+	BOTTOM_RIGHT_COMPONENT: 32,
+		
+
+	/**
+	 * @field private static final Number
+	 */	
+	_DEFAULT_POSITION: 2
+	
+};
+
 var __members = {
 
+	/**
+	 * @field private HTMLElement
+	 */
+	_elementContainer: undefined,
+
+	/**
+	 * @field private HTMLElement
+	 */
+	_elementItem: undefined,
+
+	/**
+	 * @field private String
+	 */
+	_popupPosition: undefined,
+	
+	f_toolTip: function() {
+		this.f_super(arguments);
+
+		if (this.parentNode.tagName.toLowerCase()!="body") {
+			var body=this.ownerDocument.body;
+
+			this.parentNode.removeChild(this);
+			body.appendChild(this);
+		}
+		
+		this._visible=false;
+	},
+		
 	f_finalize: function() {
 		this._elementContainer=undefined; // HTMLElement
+		this._elementItem=undefined; // HTMLElement
+		// this._popupPosition=undefined; // String
 
 		this.f_super(arguments);
 	},
-	/**
-	 * @method public
-	 * @param Boolean visible
-	 * @param Boolean aSync
-	 * @return void
-	 */
-	f_setVisible : function(visible, aSync) {
-		
-		this.f_super(arguments, visible);
-		
-		if (visible) {
-			this.style.left = this._x + 5 + "px";
-			this.style.top =  this._elementContainer.offsetTop + this._elementContainer.offsetHeight +"px";
-		} else {
-			//this.style.visibility = "hidden";
-			this.style.top =  "-5000px";
-			this.style.left = "-5000px";
-		}
-	},
-
 	
 	/**
 	 * @method protected
@@ -49,11 +103,15 @@ var __members = {
 	
 	/**
 	 * @method hidden 
-	 * @param HTMLElement elementContainer
+	 * @param HTMLElement component
+	 * @param HTMLElement elementItem 
+	 * @param String popupPosition
 	 * @return void
 	 */
-	f_setElementContainer: function(elementContainer) {
-		this._elementContainer=elementContainer;
+	f_setElementContainer: function(component, elementItem, popupPosition) {
+		this._elementContainer=component;
+		this._elementItem=elementItem;
+		this._popupPosition = popupPosition;
 	},
 	/**
 	 * @method hidden 
@@ -68,6 +126,166 @@ var __members = {
 	 */
 	f_clear: function() {
 		this._elementContainer=undefined;
+		this._elementItem=undefined;
+		this._popupPosition = undefined;
+	},
+	/**
+	 * @method public
+	 * @param optional Event jsEvent
+	 * @param optional String defaultPosition
+	 * @param optional Element refPosition
+	 * @return void
+	 */
+	f_show: function(jsEvent, defaultPosition, refPosition) {
+		
+		var ref=null;
+		var position = f_core.GetNumberAttribute(this, "v:position", undefined);
+		if (position===undefined) {
+			ref=(this._elementItem)?this._elementItem:this._elementContainer;
+		}
+		
+		if (position===undefined && defaultPosition!==undefined) {
+			position=defaultPosition;
+			ref=refPosition;
+		}
+		
+		if (position<0 || position===undefined) {
+			position=f_toolTip._DEFAULT_POSITION;
+			ref=this._elementContainer;
+		}
+		
+		this._computePosition(ref, f_toolTip.BOTTOM_LEFT_COMPONENT, jsEvent, this, {});
+		
+		this.f_setVisible(true);
+	},
+	/**
+	 * @method public
+	 * @return void
+	 */
+	f_hide: function() {
+		this.f_setVisible(false);
+	},
+	
+	/**
+	 * @method private
+	 * @return void
+	 */
+	_computePosition: function(component, position, jsEvent, popup, positionInfos) {
+		var offsetX=0;
+		var offsetY=0;
+		var offsetWidth;
+		
+		if (component) {
+			var absPos=f_core.GetAbsolutePosition(component);
+			offsetX=absPos.x;
+			offsetY=absPos.y;
+		}
+		
+		switch(position) {
+		
+		case f_toolTip.BOTTOM_COMPONENT:
+		case f_toolTip.BOTTOM_LEFT_COMPONENT:
+			offsetY+=component.offsetHeight;
+			break;
+					
+		case f_toolTip.BOTTOM_RIGHT_COMPONENT:
+			offsetY+=component.offsetHeight;
+			
+		case f_toolTip.RIGHT_COMPONENT:
+			offsetX+=component.offsetWidth;
+			break;
+
+		case f_toolTip.MIDDLE_COMPONENT:
+			offsetX+=component.offsetWidth/2;
+			offsetY+=component.offsetHeight/2;
+			break;
+			
+		case f_toolTip.MOUSE_POSITION:
+			
+			// Calcule la position de la souris 
+			var eventPos=f_core.GetJsEventPosition(jsEvent);
+			var cursorPos=f_core.GetAbsolutePosition(popup);
+			
+			offsetX=eventPos.x-cursorPos.x;
+			offsetY=eventPos.y-cursorPos.y;
+
+			f_core.Debug(f_popup, "Gecko_openPopup: (mouse position) X="+offsetX+" Y="+offsetY+" eventX="+eventPos.x+" eventY="+eventPos.y+" cursorPosX="+cursorPos.x+" cursorPosY="+cursorPos.y);
+			
+			break;
+		}
+		
+		if (component) {
+			f_core.Debug(f_popup, "Gecko_openPopup: X="+offsetX+" Y="+offsetY+" cx="+component.offsetLeft+" cy="+component.offsetTop+" cw="+component.offsetWidth+" ch="+component.offsetHeight);
+		}
+		
+		if (positionInfos.deltaX) {
+			offsetX+=positionInfos.deltaX;
+		}
+		
+		if (positionInfos.deltaY) {
+			offsetY+=positionInfos.deltaY;
+		}
+		
+		if (positionInfos.deltaWidth) {
+			offsetWidth+=positionInfos.deltaWidth;
+		}
+		
+		if (positionInfos.deltaHeight) {
+			offsetHeight+=positionInfos.deltaHeight;
+		}
+				
+		offsetX+=2; // Border par défaut !
+		
+		var positions={ x: offsetX, y: offsetY };
+		
+		var viewSize=f_core.GetViewSize(null, popup.ownerDocument);
+		
+		var bw=viewSize.width;
+		var bh=viewSize.height;
+		var scrollPosition=f_core.GetScrollOffsets(popup.ownerDocument);
+		bw+=scrollPosition.x;
+		bh+=scrollPosition.y;
+
+		var absPos=(popup.offsetParent)?f_core.GetAbsolutePosition(popup.offsetParent):{x: 0, y: 0};
+
+		var pWidth=popup.offsetWidth;
+		if (!pWidth) {
+			pWidth=parseInt(popup.style.width);
+		}
+
+		var pHeight=popup.offsetHeight;
+		if (!pHeight) {
+			pHeight=parseInt(popup.style.height);
+		}
+
+		f_core.Debug(f_core, "Gecko_openPopup: bw="+bw+" bh="+bh+" absPos.x="+absPos.x+" absPos.y="+absPos.y+" positions.x="+positions.x+" positions.y="+positions.y+" popupWidth="+pWidth+" popupHeight="+pHeight);
+		
+		if (pWidth+positions.x+absPos.x>bw) {
+			positions.x=bw-pWidth-absPos.x;
+
+			f_core.Debug(f_core, "Gecko_openPopup: change x position to "+positions.x);
+		}
+
+		if (pHeight > bh - scrollPosition.y){
+			positions.y=0;
+			positions.x=0;
+			
+		} else if (pHeight+positions.y+absPos.y>bh) {
+			if (component) {
+				var aeAbs = f_core.GetAbsolutePosition(component);
+				positions.y=aeAbs.y-pHeight;
+
+			} else {
+				positions.y=bh-pHeight-absPos.y;
+			}
+			
+			f_core.Debug(f_core, "Gecko_openPopup: change y position to "+positions.y);
+		} 
+
+		var popupStyle=popup.style;
+
+		popupStyle.left=positions.x+"px";
+		popupStyle.top=positions.y+"px";
 	}
 
 };
@@ -75,5 +293,6 @@ var __members = {
 new f_class("f_toolTip", {
 	extend : f_component,
 	aspects: [ fa_asyncRender ],
-	members : __members
+	members : __members,
+	statics: __statics
 });

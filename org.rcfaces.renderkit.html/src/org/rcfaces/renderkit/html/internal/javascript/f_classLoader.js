@@ -974,7 +974,7 @@ f_classLoader.prototype = {
 				continue;
 			}
 			
-			if (f_class.IsObjectInitialized(component)) {
+			if (f_classLoader.IsObjectInitialized(component)) {
 				f_core.Info(f_classLoader,"_initializeIds["+i+"/"+ids.length+"]: Already initialized '"+componentId+"'.");
 				continue;
 			}
@@ -1110,7 +1110,7 @@ f_classLoader.prototype = {
 				component=component.ownerDocument.getElementById(mainId)
 			}
 			
-			if (f_class.IsObjectInitialized(component)) {
+			if (f_classLoader.IsObjectInitialized(component)) {
 				return true;
 			}
 			
@@ -1202,7 +1202,7 @@ f_classLoader.prototype = {
 				component=component.ownerDocument.getElementById(mainId)
 			}
 			
-			if (f_class.IsObjectInitialized(component)) {
+			if (f_classLoader.IsObjectInitialized(component)) {
 				return true;
 			}
 			
@@ -2203,6 +2203,51 @@ f_classLoader.SerializeInputsIntoForm=function(form) {
 	}		
 };
 
+/**
+ * @field hidden static final Number
+ */
+f_classLoader.UNKNOWN_STATE = 0;
+
+/**
+ * @field hidden static final Number
+ */
+f_classLoader.LAZY_STATE = 1;
+
+/**
+ * @field hidden static final Number
+ */
+f_classLoader.INITIALIZED_STATE = 2;
+
+/**
+ * @method hidden static final
+ * @param Object object
+ * @return Number  (0=Unknown 1=Not initialized  2=Initialized)
+ */
+f_classLoader.GetObjectState=function(object) {
+	if (object._kclass) {
+		return f_classLoader.INITIALIZED_STATE;
+	}
+	
+	if (object.nodeType==f_core.ELEMENT_NODE) {
+		var claz = f_core.GetAttribute(object, "v:class");
+		if (claz) {
+			return f_classLoader.LAZY_STATE;
+		}
+	}
+
+	return f_classLoader.UNKNOWN_STATE;
+};
+
+/**
+ * @method hidden static final 
+ * @param Object object
+ * @return Boolean
+ */
+f_classLoader.IsObjectInitialized=function(object) {
+	f_core.Assert(object && typeof(object)=="object", "f_class.IsObjectInitialized: Object is invalid ("+object+")");
+
+	return !!object._kclass;
+};
 
 
 /**

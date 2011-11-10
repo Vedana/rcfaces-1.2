@@ -1137,7 +1137,7 @@ var __members = {
 			 * @method public
 			 */
 	 		onProgress: function(request, content, length, contentType) {
-				if (waitingObject && f_class.IsObjectInitialized(waitingObject)) {
+				if (waitingObject && f_classLoader.IsObjectInitialized(waitingObject)) {
 	 				waitingObject.f_setText(f_waiting.GetReceivingMessage());
 				}	 			
 	 		},
@@ -1145,7 +1145,7 @@ var __members = {
 			 * @method public
 			 */
 	 		onLoad: function(request, content, contentType) {
-				if (!f_class.IsObjectInitialized(dataGrid)) {
+				if (!f_classLoader.IsObjectInitialized(dataGrid)) {
 					return;
 				}
 			
@@ -1993,7 +1993,7 @@ var __members = {
 				 * @method public
 				 */
 		 		onLoad: function(request, content, contentType) {
-					if (!f_class.IsObjectInitialized(dataGrid)) {
+					if (!f_classLoader.IsObjectInitialized(dataGrid)) {
 						return;
 					}
 				

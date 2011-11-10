@@ -5590,10 +5590,10 @@ var __members = {
 	 *            animated
 	 * @return void
 	 */
-	fa_setTooltipVisible : function(tooltip, show, animated) {
+	fa_setToolTipVisible : function(tooltip, show, animated, jsEvent) {
 		
 		if (show) {
-			this.f_showTooltip(tooltip, animated);
+			this.f_showToolTip(tooltip, animated);
 
 		} else {
 			//this.f_hideAdditionalContent(row, animated);

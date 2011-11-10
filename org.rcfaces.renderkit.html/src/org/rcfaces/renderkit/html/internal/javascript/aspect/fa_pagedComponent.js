@@ -43,7 +43,7 @@ var __statics = {
 
 		var dp=pager.ownerDocument.getElementById(componentId);
 		// Le dataGrid n'existe pas forcement lors de son enregistrement !		
-		if (dp && f_class.IsObjectInitialized(dp)) {
+		if (dp && f_classLoader.IsObjectInitialized(dp)) {
 
 			f_core.Debug(fa_pagedComponent, "RegisterPager: Register fa_pager ("+pager.id+"/"+pager+") to component '"+componentId+"': Initialize now ! ");
 			try {		

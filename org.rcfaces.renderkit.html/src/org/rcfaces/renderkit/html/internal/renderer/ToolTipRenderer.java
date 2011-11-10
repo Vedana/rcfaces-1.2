@@ -52,6 +52,11 @@ public class ToolTipRenderer extends AbstractCssRenderer implements
 		ToolTipComponent tooltipComponent = (ToolTipComponent) componentRenderContext
 				.getComponent();
 
+		String position = tooltipComponent.getPosition(facesContext);
+		if (position != null && position.length() > 0) {
+			htmlWriter.writeAttribute("v:position", position);
+		}
+
 		int asyncRender = IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE;
 
 		boolean hidden = Boolean.FALSE.equals(tooltipComponent

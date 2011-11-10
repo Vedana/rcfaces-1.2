@@ -127,7 +127,7 @@ var __members = {
 	 */
 	f_updateLastFlatBorder: function() {
 		var lastFlat=fa_borderType._LastFlatBorder;
-		if (lastFlat && f_class.IsObjectInitialized(lastFlat)) {
+		if (lastFlat && f_classLoader.IsObjectInitialized(lastFlat)) {
 			if (lastFlat==this) {
 				return;
 			}

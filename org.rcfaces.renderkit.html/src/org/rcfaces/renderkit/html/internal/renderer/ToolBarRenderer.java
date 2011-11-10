@@ -30,8 +30,6 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  * @version $Revision$ $Date$
  */
 public class ToolBarRenderer extends AbstractCssRenderer {
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory.getLog(ToolBarRenderer.class);
 
     public static final int DEFAULT_TOOL_ITEM_SEPARATOR_WIDTH = 2;

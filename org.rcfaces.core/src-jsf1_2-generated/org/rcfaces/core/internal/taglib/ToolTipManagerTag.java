@@ -18,13 +18,18 @@ public class ToolTipManagerTag extends CameliaTag implements Tag {
 
 	private static final Log LOG=LogFactory.getLog(ToolTipManagerTag.class);
 
-	private ValueExpression delay;
+	private ValueExpression showDelayMs;
+	private ValueExpression neighbourThresholdMs;
 	public String getComponentType() {
 		return ToolTipManagerComponent.COMPONENT_TYPE;
 	}
 
-	public void setDelay(ValueExpression delay) {
-		this.delay = delay;
+	public void setShowDelayMs(ValueExpression showDelayMs) {
+		this.showDelayMs = showDelayMs;
+	}
+
+	public void setNeighbourThresholdMs(ValueExpression neighbourThresholdMs) {
+		this.neighbourThresholdMs = neighbourThresholdMs;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
@@ -32,7 +37,8 @@ public class ToolTipManagerTag extends CameliaTag implements Tag {
 			if (ToolTipManagerComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
-			LOG.debug("  delay='"+delay+"'");
+			LOG.debug("  showDelayMs='"+showDelayMs+"'");
+			LOG.debug("  neighbourThresholdMs='"+neighbourThresholdMs+"'");
 		}
 		if ((uiComponent instanceof ToolTipManagerComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -46,18 +52,28 @@ public class ToolTipManagerTag extends CameliaTag implements Tag {
 		ToolTipManagerComponent component = (ToolTipManagerComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
 
-		if (delay != null) {
-			if (delay.isLiteralText()==false) {
-				component.setValueExpression(Properties.DELAY, delay);
+		if (showDelayMs != null) {
+			if (showDelayMs.isLiteralText()==false) {
+				component.setValueExpression(Properties.SHOW_DELAY_MS, showDelayMs);
 
 			} else {
-				component.setDelay(getInt(delay.getExpressionString()));
+				component.setShowDelayMs(getInt(showDelayMs.getExpressionString()));
+			}
+		}
+
+		if (neighbourThresholdMs != null) {
+			if (neighbourThresholdMs.isLiteralText()==false) {
+				component.setValueExpression(Properties.NEIGHBOUR_THRESHOLD_MS, neighbourThresholdMs);
+
+			} else {
+				component.setNeighbourThresholdMs(getInt(neighbourThresholdMs.getExpressionString()));
 			}
 		}
 	}
 
 	public void release() {
-		delay = null;
+		showDelayMs = null;
+		neighbourThresholdMs = null;
 
 		super.release();
 	}

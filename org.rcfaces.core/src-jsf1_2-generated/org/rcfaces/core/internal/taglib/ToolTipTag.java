@@ -31,6 +31,7 @@ public class ToolTipTag extends AbstractBasicTag implements Tag {
 	private ValueExpression scopeValue;
 	private ValueExpression scopeVar;
 	private ValueExpression toolTipId;
+	private ValueExpression position;
 	public String getComponentType() {
 		return ToolTipComponent.COMPONENT_TYPE;
 	}
@@ -87,6 +88,10 @@ public class ToolTipTag extends AbstractBasicTag implements Tag {
 		this.toolTipId = toolTipId;
 	}
 
+	public void setPosition(ValueExpression position) {
+		this.position = position;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (ToolTipComponent.COMPONENT_TYPE==getComponentType()) {
@@ -103,6 +108,7 @@ public class ToolTipTag extends AbstractBasicTag implements Tag {
 			LOG.debug("  scopeValue='"+scopeValue+"'");
 			LOG.debug("  scopeVar='"+scopeVar+"'");
 			LOG.debug("  toolTipId='"+toolTipId+"'");
+			LOG.debug("  position='"+position+"'");
 		}
 		if ((uiComponent instanceof ToolTipComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -222,6 +228,15 @@ public class ToolTipTag extends AbstractBasicTag implements Tag {
 				component.setToolTipId(toolTipId.getExpressionString());
 			}
 		}
+
+		if (position != null) {
+			if (position.isLiteralText()==false) {
+				component.setValueExpression(Properties.POSITION, position);
+
+			} else {
+				component.setPosition(position.getExpressionString());
+			}
+		}
 	}
 
 	public void release() {
@@ -238,6 +253,7 @@ public class ToolTipTag extends AbstractBasicTag implements Tag {
 		scopeValue = null;
 		scopeVar = null;
 		toolTipId = null;
+		position = null;
 
 		super.release();
 	}

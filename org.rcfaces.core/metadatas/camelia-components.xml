@@ -4696,10 +4696,13 @@ Dans le cas d'un mode period !
 		<method id="setAsyncRenderMode(String)" />		
 		
 		<attribute id="toolTipId" type="java.lang.String" />
+
+		<attribute id="position" type="java.lang.String" />
 	</component>
 	
 	<component id="toolTipManager" extends="cameliaBase">
-		<attribute id="delay" type="int" default="-1"/>
+		<attribute id="showDelayMs" type="int" default="-1"/>
+		<attribute id="neighbourThresholdMs" type="int" default="-1" />
 	</component>
 
 <!--

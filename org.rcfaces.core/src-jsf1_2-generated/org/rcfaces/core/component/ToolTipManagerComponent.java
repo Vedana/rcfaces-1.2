@@ -17,7 +17,7 @@ public class ToolTipManagerComponent extends CameliaBaseComponent {
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"delay"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"showDelayMs","neighbourThresholdMs"}));
 	}
 
 	public ToolTipManagerComponent() {
@@ -29,24 +29,44 @@ public class ToolTipManagerComponent extends CameliaBaseComponent {
 		setId(componentId);
 	}
 
-	public int getDelay() {
-		return getDelay(null);
+	public int getShowDelayMs() {
+		return getShowDelayMs(null);
 	}
 
-	public int getDelay(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.DELAY, -1, facesContext);
+	public int getShowDelayMs(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.SHOW_DELAY_MS, -1, facesContext);
 	}
 
-	public void setDelay(int delay) {
-		engine.setProperty(Properties.DELAY, delay);
+	public void setShowDelayMs(int showDelayMs) {
+		engine.setProperty(Properties.SHOW_DELAY_MS, showDelayMs);
 	}
 
 	/**
-	 * Returns <code>true</code> if the attribute "delay" is set.
+	 * Returns <code>true</code> if the attribute "showDelayMs" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public boolean isDelaySetted() {
-		return engine.isPropertySetted(Properties.DELAY);
+	public boolean isShowDelayMsSetted() {
+		return engine.isPropertySetted(Properties.SHOW_DELAY_MS);
+	}
+
+	public int getNeighbourThresholdMs() {
+		return getNeighbourThresholdMs(null);
+	}
+
+	public int getNeighbourThresholdMs(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.NEIGHBOUR_THRESHOLD_MS, -1, facesContext);
+	}
+
+	public void setNeighbourThresholdMs(int neighbourThresholdMs) {
+		engine.setProperty(Properties.NEIGHBOUR_THRESHOLD_MS, neighbourThresholdMs);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "neighbourThresholdMs" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isNeighbourThresholdMsSetted() {
+		return engine.isPropertySetted(Properties.NEIGHBOUR_THRESHOLD_MS);
 	}
 
 	protected Set getCameliaFields() {

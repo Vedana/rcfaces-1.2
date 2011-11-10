@@ -1392,7 +1392,6 @@ var f_core = {
 	GetParentComponent: function(source) {
 		
 		var comp=source;
-		var classLoader;
 		
 		for(;comp;) {
 
@@ -1401,24 +1400,33 @@ var f_core = {
 			}
 			
 			comp=comp.parentNode;
-			if (!comp || comp.nodeType!=f_core.ELEMENT_NODE) {
-				return null;
+			if (!comp) {
+				break;
 			}
 			
-			if (f_class.IsObjectInitialized(comp)) {
-				return comp;
+			if (comp.nodeType==f_core.TEXT_NODE) {
+				continue;
 			}
 
-			if (!classLoader) {
-				var win=f_core.GetWindow(source);
-				classLoader=f_classLoader.Get(win);
+			if (comp.nodeType!=f_core.ELEMENT_NODE) {
+				break;
 			}
 			
-			var newComp = classLoader.f_init(comp, true, true);
+			var state= f_classLoader.GetObjectState(comp);
 			
-			if (newComp && f_class.IsObjectInitialized(newComp)) {
-				return newComp;
+			if (state==f_classLoader.UNKNOWN_STATE) { // Unknown
+				continue;
 			}
+			if (state==f_classLoader.INITIALIZED_STATE) { // Already initialized
+				return comp;
+			}
+			
+			// We must initialize it !
+
+			var win=f_core.GetWindow(source);
+			var classLoader=f_classLoader.Get(win);
+			
+			return classLoader.f_init(comp, true, true);
 		}
 		
 		return null;
@@ -3041,7 +3049,7 @@ var f_core = {
 			obj=fa_namingContainer.SearchElementById(doc, id);
 		}
 		
-		if (obj && f_class.IsObjectInitialized(obj)) {
+		if (obj && f_classLoader.IsObjectInitialized(obj)) {
 			return obj;
 		}
 		

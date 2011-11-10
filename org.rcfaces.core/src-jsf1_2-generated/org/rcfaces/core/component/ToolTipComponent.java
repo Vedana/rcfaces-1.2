@@ -37,7 +37,7 @@ public class ToolTipComponent extends AbstractBasicComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractBasicComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"lookId","backgroundImageVerticalRepeat","styleClass","backgroundImageVerticalPosition","backgroundImageHorizontalRepeat","toolTipId","backgroundImageHorizontalPosition","loadListener","asyncRenderMode","initListener","scopeSaveValue","scopeVar","scopeValue","backgroundImageURL","border"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"position","lookId","backgroundImageVerticalRepeat","styleClass","backgroundImageVerticalPosition","backgroundImageHorizontalRepeat","toolTipId","backgroundImageHorizontalPosition","loadListener","asyncRenderMode","initListener","scopeSaveValue","scopeVar","scopeValue","backgroundImageURL","border"}));
 	}
 
 	public ToolTipComponent() {
@@ -328,6 +328,26 @@ public class ToolTipComponent extends AbstractBasicComponent implements
 	 */
 	public boolean isToolTipIdSetted() {
 		return engine.isPropertySetted(Properties.TOOL_TIP_ID);
+	}
+
+	public String getPosition() {
+		return getPosition(null);
+	}
+
+	public String getPosition(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.POSITION, facesContext);
+	}
+
+	public void setPosition(String position) {
+		engine.setProperty(Properties.POSITION, position);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "position" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isPositionSetted() {
+		return engine.isPropertySetted(Properties.POSITION);
 	}
 
 	protected Set getCameliaFields() {
