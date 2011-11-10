@@ -5,7 +5,7 @@
 /**
  * f_input class.
  *
- * @class f_input extends f_component, fa_message, fa_tabIndex, fa_focusStyleClass, fa_tooltipContainer
+ * @class f_input extends f_component, fa_message, fa_tabIndex, fa_focusStyleClass, fa_toolTipContainer
  * @author Olivier Oeuillot (latest modification by $Author$) & Joel Merlin
  * @version $Revision$ $Date$
  */
@@ -530,7 +530,7 @@ var __members = {
 
 new f_class("f_input", {
 	extend: f_component, 
-	aspects: [ fa_message, fa_focusStyleClass, fa_tabIndex, fa_tooltipContainer],
+	aspects: [ fa_message, fa_focusStyleClass, fa_tabIndex, fa_toolTipContainer],
 	members: __members,
 	statics: __statics
 });

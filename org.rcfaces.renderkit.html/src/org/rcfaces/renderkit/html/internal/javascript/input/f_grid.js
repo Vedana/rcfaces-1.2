@@ -6,7 +6,7 @@
  * 
  * @class public abstract f_grid extends f_component, fa_disabled, fa_immediate,
  *        fa_pagedComponent, fa_subMenu, fa_commands, fa_selectionManager<String[]>,
- *        fa_scrollPositions, fa_additionalInformationManager, fa_droppable, fa_draggable, fa_autoScroll, fa_aria, fa_tooltipContainer
+ *        fa_scrollPositions, fa_additionalInformationManager, fa_droppable, fa_draggable, fa_autoScroll, fa_aria, fa_toolTipContainer
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -977,6 +977,8 @@ var __statics = {
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
+		
+		f_core.Debug(f_grid, "_Title_onMouseDown: perform event "+evt);
 
 		if (dataGrid.f_getEventLocked(evt)) {
 			return false;
@@ -1002,6 +1004,8 @@ var __statics = {
 		if (!dataGrid._columnCanBeSorted || !column._method) {
 			return f_core.CancelJsEvent(evt);
 		}
+		
+		f_core.Debug(f_grid, "_Title_onMouseDown: select column='"+column+"'");
 
 		dataGrid._columnSelected = column;
 		dataGrid._updateTitleStyle(column);
@@ -1227,20 +1231,29 @@ var __statics = {
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
+		
+		f_core.Debug(f_grid, "_Title_onClick: perform event "+evt);
 
 		if (dataGrid.f_getEventLocked(evt, false)) {
+			f_core.Debug(f_grid, "_Title_onClick: getEventLocked returns FALSE");
 			return false;
 		}
 
 		if (dataGrid.f_isDisabled()) {
+			f_core.Debug(f_grid, "_Title_onClick: Datagrid is disabled, stop it");
 			return f_core.CancelJsEvent(evt);
 		}
 
 		if (column.f_fireEvent(f_event.SELECTION, evt, null, null, dataGrid) === false) {
+
+			f_core.Debug(f_grid, "_Title_onClick: event Selection returns false");
+
 			return f_core.CancelJsEvent(evt);// On bloque le FOCUS !
 		}
 
 		var append = (evt.shiftKey);
+
+		f_core.Debug(f_grid, "_Title_onClick: call set column sort append="+append);
 
 		dataGrid.f_setColumnSort(column, undefined, append);
 
@@ -1259,6 +1272,8 @@ var __statics = {
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
+		
+		f_core.Debug(f_grid, "_Title_onMouseUp: perform event "+evt);
 
 		if (dataGrid.f_getEventLocked(evt, false)) {
 			return false;
@@ -1273,27 +1288,10 @@ var __statics = {
 			return f_core.CancelJsEvent(evt);
 		}
 
-		dataGrid._columnSelected = undefined;
+		
+		f_core.Debug(f_grid, "_Title_onMouseUp: deselect old column='"+dataGrid._columnSelected+"'");
 
-		return;
-		/*
-		 * if (oldColumn!=column) { if (oldColumn) {
-		 * dataGrid._updateTitleStyle(oldColumn); }
-		 * 
-		 * return f_core.CancelJsEvent(evt); // On bloque le FOCUS ! //return
-		 * true; }
-		 * 
-		 * if (column.f_fireEvent(f_event.SELECTION, evt, null, null,
-		 * dataGrid)===false) { return f_core.CancelJsEvent(evt);// On bloque le
-		 * FOCUS ! }
-		 * 
-		 * var append=(evt.shiftKey);
-		 * 
-		 * dataGrid.f_setColumnSort(column, undefined, append);
-		 * 
-		 * return f_core.CancelJsEvent(evt);// On bloque le FOCUS ! //return
-		 * true;
-		 */
+		dataGrid._columnSelected = undefined;
 	},
 	/**
 	 * @method private static
@@ -4394,6 +4392,8 @@ var __members = {
 	 */
 	f_setColumnSort : function(col, ascending, append, col2, ascending2) {
 		// var args=[false];
+		
+		f_core.Debug(f_grid, "f_setColumnSort: append="+append+" col1="+col+" asc1="+ascending+" col2="+col2+" asc2="+ascending2);
 
 		if (!col._method) {
 			return;
@@ -6743,7 +6743,7 @@ new f_class("f_grid", {
 	extend : f_component,
 	aspects : [ fa_disabled, fa_pagedComponent, fa_subMenu, fa_commands,
 			fa_selectionManager, fa_scrollPositions, fa_immediate,
-			fa_additionalInformationManager, fa_droppable, fa_draggable, fa_autoScroll, fa_autoOpen, fa_aria, fa_tooltipContainer ],
+			fa_additionalInformationManager, fa_droppable, fa_draggable, fa_autoScroll, fa_autoOpen, fa_aria, fa_toolTipContainer ],
 	statics : __statics,
 	members : __members
 });
