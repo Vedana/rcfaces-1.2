@@ -5583,20 +5583,32 @@ var __members = {
 	/**
 	 * @method protected
 	 * @param Object
-	 *            row
+	 *            tooltip
 	 * @param Boolean
-	 *            additional
+	 *            sow
 	 * @param Boolean
 	 *            animated
 	 * @return void
 	 */
-	fa_setToolTipVisible : function(tooltip, show, animated, jsEvent) {
+	fa_setToolTipVisible : function(tooltip, show, jsEvent) {
 		
 		if (show) {
-			this.f_showToolTip(tooltip, animated);
+			var item = tooltip.f_getElementItem();
+			
+			switch(item.tagName.toUpperCase()) {
+			case "TR":
+			case "TD":
+				this.f_showToolTip(tooltip, jsEvent, f_toolTip.BOTTOM_COMPONENT);
+				break;
+				
+			default:
+				tooltip.f_show(tooltip.f_getStateId(), jsEvent, f_toolTip.BOTTOM_COMPONENT);
+				break;
+			}
 
+			
 		} else {
-			//this.f_hideAdditionalContent(row, animated);
+			tooltip.f_hide(tooltip.f_getStateId());
 		}
 	},
 	
@@ -5883,46 +5895,48 @@ var __members = {
 	
 	/**
 	 * @method protected
-	 * @param HTMLTableRowElement
-	 *            row
-	 * @param Boolean animated
-	 *            animated
 	 * @return void
 	 */
-	f_showTooltip : function(tooltip, animated, parent) {
+	f_showToolTip: function(tooltip, jsEvent, toolTipPosition) {
 
-		var elementContainer = tooltip._elementContainer;
-		var tooltipId = undefined;
-		var row = undefined;
-		
-		if (elementContainer._cellTooltipId) {
-			tooltipId = elementContainer._cellTooltipId;
-			row = elementContainer.parentNode;
-		} else {
-			row = elementContainer;
-			tooltipId = row._tooltipId
-		}
-		
-		if (tooltipId === false) {
+		var tooltipId = tooltip.f_getId();
+		if (!tooltipId) {
 			return;
 		}
+
+		var elementItem = tooltip.f_getElementItem();
+
+		var row = null;
+		var colId=null;
+		
+		switch(elementItem.tagName.toUpperCase()) {
+		case "TR":
+			row=elementItem;
+			if (!tooltipId) {
+				tooltipId="#row";
+			}
+			break;
+			
+		case "TD":
+			row=elementItem.parentNode;
+			colId=this.f_computeColumnIdByElement(elementItem);
+			if (!tooltipId) {
+				tooltipId="#cell";
+			}
+			break;
+		}		
 		
 		var component = tooltip;
+		var parent = tooltip;
 
 		var url = f_env.GetViewURI();
 		var request = new f_httpRequest(component, url, f_httpRequest.TEXT_HTML_MIME_TYPE);
 		var self = this;
-		
-		if (!parent) {
-			if (typeof(component.fa_getInteractiveParent)=="function") {
-				parent=component.fa_getInteractiveParent();
-			}
-			
-			if (!parent) {
-				parent=component;
-			}
-		}
 
+		var toolTipStateId = tooltip.f_getStateId();
+		tooltip.f_cleanContent();
+		component._intWaiting=undefined;
+		
 		request.f_setListener( {
 					onInit : function(request) {
 						var waiting=component._intWaiting;
@@ -5933,11 +5947,17 @@ var __members = {
 			 			
 			 			waiting.f_setText(f_waiting.GetLoadingMessage());
 			 			waiting.f_show();
+						
+						component.f_show(toolTipStateId, jsEvent, toolTipPosition);
 					},
 					/**
 					 * @method public
 					 */
 					onError : function(request, status, text) {
+						if (tooltip.f_getStateId()!=toolTipStateId) {
+							// Reset du tooltip !
+							return;
+						}
 
 						component._intLoading=false;		
 						
@@ -5946,8 +5966,9 @@ var __members = {
 							waiting.f_hide();
 						}
 						
+						component.f_show(toolTipStateId);
 
-						f_core.Info(f_grid, "f_showTooltip.onError: Bad status: " + status);
+						f_core.Info(f_grid, "f_showToolTip.onError: Bad status: " + status);
 
 						self.f_performErrorEvent(request, f_error.HTTP_ERROR,
 								text);
@@ -5956,6 +5977,11 @@ var __members = {
 					 * @method public
 					 */
 					onProgress : function(request, content, length, contentType) {
+						if (tooltip.f_getStateId()!=toolTipStateId) {
+							// Reset du tooltip !
+							return;
+						}
+
 						var waiting=component._intWaiting;
 						if (waiting) {
 							waiting.f_setText(f_waiting.GetReceivingMessage());
@@ -5965,6 +5991,11 @@ var __members = {
 					 * @method public
 					 */
 					onLoad : function(request, content, contentType) {
+						
+						if (tooltip.f_getStateId()!=toolTipStateId) {
+							// Reset du tooltip !
+							return;
+						}
 						
 						if (component._removeStyleHeight) {
 							component._removeStyleHeight=null;
@@ -6006,7 +6037,6 @@ var __members = {
 								
 								try {
 									component.f_getClass().f_getClassLoader().f_loadContent(component, component, ret);
-									component.f_setVisible(true);
 									
 								} catch (x) {
 						 			component.f_performAsyncErrorEvent(x, f_error.RESPONSE_EVALUATION_ASYNC_RENDER_ERROR, "Evaluation exception");
@@ -6027,9 +6057,9 @@ var __members = {
 				});
 
 
-		request.f_setRequestHeader("X-Camelia", "grid.tooltip");
+		request.f_setRequestHeader("X-Camelia", "grid.toolTip");
 
-		if(row._rowIndex === undefined ||  row._rowIndex < 0 || row._rowIndex.length < 1) {
+		if (row._rowIndex === undefined || row._rowIndex < 0) {
 			return;// a revoir
 		}
 		
@@ -6037,8 +6067,11 @@ var __members = {
 			gridId : this.id,
 			rowValue : row._index,
 			rowIndex : row._rowIndex,
-			colIndex : elementContainer
+			toolTipId : tooltipId
 		};
+		if (colId) {
+			params.colId=colId;
+		}
 
 		if (this._paged) {
 			// On synchronise 1 SEULE ligne, on envoi pas les indexes !
@@ -6253,6 +6286,19 @@ var __members = {
 
 		var jsEvent = event.f_getJsEvent();
 		var target = jsEvent.target ? jsEvent.target : jsEvent.srcElement;
+		
+		return this.f_computeColumnIdByElement(target);
+	},
+	
+	/**
+	 * @method public
+	 * @param HTMLElement target
+	 * @return String Identifier of column or <code>null</code> if not found.
+	 */
+	f_computeColumnIdByElement : function(target) {
+		f_core.Assert(target && target.nodeType==f_core.ELEMENT_NODE,
+				"f_grid.f_computeColumnIdByElement: Invalid target parameter '"
+						+ target + "'.");
 
 		var lastCell;
 
@@ -6311,7 +6357,8 @@ var __members = {
 
 					break;
 				}
-				return null;
+				
+				break;
 			}
 		}
 
@@ -6734,8 +6781,6 @@ var __members = {
 			this._targetDragAndDropEngine.f_updateMousePosition();
 		}
 	}
-	
-
 	
 };
 

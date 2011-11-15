@@ -51,6 +51,7 @@ import org.rcfaces.core.component.capability.ISortComparatorCapability;
 import org.rcfaces.core.component.capability.ISortEventCapability;
 import org.rcfaces.core.component.capability.ISortManagerCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
+import org.rcfaces.core.component.capability.IToolTipIdCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.component.capability.IWheelSelectionCapability;
 import org.rcfaces.core.component.capability.IWidthCapability;
@@ -208,6 +209,8 @@ public abstract class AbstractGridRenderContext {
 
 	private String rowStyleClasses[];
 
+	private String defaultCellToolTipIds[];
+
 	protected int gridWidth;
 
 	protected int gridHeight;
@@ -237,7 +240,7 @@ public abstract class AbstractGridRenderContext {
 	private String alertLoadingMessage = null;
 
 	private Map<String, ToolTipComponent> gridToolTips; // #head, #body, #row +
-														// (v:tooltipId) + #cell
+														// (v:toolTipId) + #cell
 	private String[] columnTooltipIds; // #cell
 
 	private AbstractGridRenderContext(IProcessContext processContext,
@@ -357,12 +360,19 @@ public abstract class AbstractGridRenderContext {
 			IToolTipIterator tooltipIterator = ((IToolTipComponent) gridComponent)
 					.listToolTips();
 
+			FacesContext facesContext = processContext.getFacesContext();
+
 			gridToolTips = new HashMap<String, ToolTipComponent>();
 			for (; tooltipIterator.hasNext();) {
 				ToolTipComponent tooltipComponent = tooltipIterator.next();
 
-				gridToolTips.put(tooltipComponent.getToolTipId(processContext
-						.getFacesContext()), tooltipComponent);
+				String tooltipId = tooltipComponent.getToolTipId(facesContext);
+				if (tooltipId != null) {
+					gridToolTips.put(tooltipId, tooltipComponent);
+				}
+
+				tooltipId = tooltipComponent.getClientId(facesContext);
+				gridToolTips.put(tooltipId, tooltipComponent);
 
 			}
 		}
@@ -456,6 +466,8 @@ public abstract class AbstractGridRenderContext {
 		columnIds = new String[columns.length];
 		columnWidths = new String[columns.length];
 		columnWidthsInPixel = new int[columns.length];
+		defaultCellToolTipIds = new String[columns.length];
+		columnTooltipIds = new String[columns.length];
 
 		FacesContext facesContext = processContext.getFacesContext();
 
@@ -512,18 +524,44 @@ public abstract class AbstractGridRenderContext {
 			String dw = null;
 			int idw = -1;
 
+			String tooltipId = null;
+
 			if (column instanceof IToolTipComponent) {
 				IToolTipIterator tooltipIterator = ((IToolTipComponent) column)
 						.listToolTips();
-				// gridTooltips = new HashMap<String, TooltipComponent>();
-				for (; tooltipIterator.hasNext();) {
-					ToolTipComponent tooltipComponent = tooltipIterator.next();
-					gridToolTips.put(tooltipComponent
-							.getToolTipId(processContext.getFacesContext()),
-							tooltipComponent);
 
+				if (tooltipIterator.count() > 0) {
+
+					for (; tooltipIterator.hasNext();) {
+						ToolTipComponent tooltipComponent = tooltipIterator
+								.next();
+
+						String tid = tooltipComponent
+								.getToolTipId(facesContext);
+						if (tid != null) {
+							gridToolTips.put(tid, tooltipComponent);
+						}
+
+						tid = tooltipComponent.getClientId(facesContext);
+						gridToolTips.put(tid, tooltipComponent);
+						if (tooltipId == null) {
+							tooltipId = tid;
+						}
+					}
 				}
 			}
+			if (column instanceof IToolTipIdCapability) {
+				String tid = ((IToolTipIdCapability) column).getToolTipId();
+				if (tid != null) {
+					if (tid.startsWith("#") == false) {
+						// TODO RESOLUTION BROTHER tooltipId = tid;
+
+					}
+					tooltipId = tid;
+				}
+			}
+
+			columnTooltipIds[i] = tooltipId;
 
 			if (column instanceof IWidthCapability) {
 				dw = ((IWidthCapability) column).getWidth();
@@ -1258,6 +1296,10 @@ public abstract class AbstractGridRenderContext {
 
 	public String getAlertLoadingMessage() {
 		return alertLoadingMessage;
+	}
+
+	public String[] getDefaultCellToolTipIds() {
+		return columnTooltipIds;
 	}
 
 }

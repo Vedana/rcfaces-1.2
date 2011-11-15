@@ -488,7 +488,7 @@ public abstract class AbstractJavaScriptRenderer extends
 		}
 
 		if (tooltipClientId != null) {
-			htmlWriter.writeAttribute("v:tooltipId", tooltipClientId);
+			htmlWriter.writeAttribute("v:toolTipId", tooltipClientId);
 		}
 	}
 }

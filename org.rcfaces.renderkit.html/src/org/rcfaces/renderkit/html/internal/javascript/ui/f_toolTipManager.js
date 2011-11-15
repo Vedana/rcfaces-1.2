@@ -36,7 +36,7 @@ var __statics = {
 			evt = f_core.GetJsEvent(this);
 		}
 		
-		f_core.Debug(f_toolTipManager, "_ElementOver: event="+evt);
+	//	f_core.Debug(f_toolTipManager, "_ElementOver: event="+evt+" target="+evt.target);
 		
 		var instance = f_toolTipManager.Get();
 
@@ -60,7 +60,7 @@ var __statics = {
 			evt = f_core.GetJsEvent(this);
 		}
 		
-		f_core.Debug(f_toolTipManager, "_ElementOver: event="+evt);
+	//	f_core.Debug(f_toolTipManager, "_ElementOut: event="+evt+" target="+evt.target);
 
 		var instance = f_toolTipManager.Get();
 		
@@ -83,12 +83,12 @@ var __statics = {
 			evt = f_core.GetJsEvent(this);
 		}
 		
-		f_core.Debug(f_toolTipManager, "_HideToolTip: event="+evt);
+	//	f_core.Debug(f_toolTipManager, "_HideToolTip: event="+evt+" target="+evt.target);
 
 		var instance = f_toolTipManager.Get();
 		
 		try {
-			return instance._hideTooltipEvent(evt);
+			return instance._hideToolTipEvent(evt);
 
 		} catch (x) {
 			f_core.Error(f_toolTipManager, "_HideToolTip: exception", x);
@@ -180,9 +180,14 @@ var __members = {
 				f_toolTipManager._HideToolTip, document.body);
 		
 		// Focus
-		
 		f_core.AddEventListener(document.body, "focus",
 				f_toolTipManager._HideToolTip, document.body);
+
+		// Clavier
+		f_core.AddEventListener(document.body, "mousedown",
+				f_toolTipManager._HideToolTip, document.body);
+		
+		//f_core.AddEventListener(window, "mouseout", f_toolTipManager._HideToolTip, window);
 	},
 
 	f_finalize : function() {
@@ -205,13 +210,29 @@ var __members = {
 	 */
 	_elementOver : function(evt) {
 
-		var element = this._getElementAtPosition(evt);
+		var element = evt.target || this._getElementAtPosition(evt);
 		var tooltipContainer = this._getToolTipContainerForElement(element);
+		
+		var tooltipInfos = null;		
+		if (tooltipContainer) {
+			tooltipInfos=tooltipContainer.fa_getToolTipForElement(element);
+		}
+		
+		if (f_core.IsDebugEnabled(f_toolTipManager)) {
+			f_core.Debug(f_toolTipManager, "_elementOver: over="+tooltipContainer+" element="+element.id);
+			if (tooltipInfos) {
+				f_core.Debug(f_toolTipManager, "_elementOver: item="+tooltipInfos.item.id+" container="+tooltipInfos.container.id);
+			}
+		}
 
 		var currentTooltip = this._currentTooltip;
 		
-		if (tooltipContainer==currentTooltip) {
+		if (currentTooltip && tooltipInfos && 
+				tooltipInfos.container==currentTooltip.f_getElementContainer() &&
+				tooltipInfos.item==currentTooltip.f_getElementItem()) {
+			
 			// Le même tooltip que celui qui est déjà affiché !
+			f_core.Debug(f_toolTipManager, "_elementOver: Same TOOLTIP");
 			return true;
 		}
 		
@@ -229,18 +250,21 @@ var __members = {
 			this._currentTooltip = undefined;
 		}
 		
-		if (!tooltipContainer) {
+		if (!tooltipInfos) {
 			// Pas de container de tooltip, rien à faire			
 			return true;
 		}
 
-		var tooltip = tooltipContainer.fa_getToolTipForElement(element);
+		var tooltip = tooltipInfos.tooltip;
 		if (!tooltip) {
+			// Pas de tooltip trouvé
 			return true;
 		}
 		
-		var self=this;
+		tooltip.f_initialize(tooltipContainer, tooltipInfos.item);
 		this._currentTooltip = tooltip;
+		
+		var self=this;
 		
 		if (this._showDelayMs==0) {
 			this.f_showToolTip(tooltip, evt);
@@ -273,7 +297,7 @@ var __members = {
 	 * @return void
 	 */
 	f_showToolTip: function(tooltip, jsEvent) {
-		if(!tooltip) {
+		if (!tooltip) {
 			return;
 		}
 		
@@ -282,7 +306,7 @@ var __members = {
 			return;
 		}
 		
-		tooltipContainer.fa_setTooltipVisible(tooltip, true, true, jsEvent);
+		tooltipContainer.fa_setToolTipVisible(tooltip, true, jsEvent);
 
 		f_core.Debug(f_toolTipManager, "f_showToolTip: tooltipContainer="
 				+ tooltipContainer.id + " tooltip=" + tooltip.id);
@@ -304,9 +328,13 @@ var __members = {
 			return;
 		}
 		
+		if (!tooltip.f_isVisible()) {
+			return;
+		}
+		
 		this._lastToolTipClose=new Date().getTime();
 		
-		tooltipContainer.fa_setTooltipVisible(tooltip, false, true, jsEvent);
+		tooltipContainer.fa_setToolTipVisible(tooltip, false, jsEvent);
 
 		f_core.Debug(f_toolTipManager, "f_hideToolTip: tooltipContainer="
 				+ tooltipContainer.id + " tooltip=" + tooltip.id);

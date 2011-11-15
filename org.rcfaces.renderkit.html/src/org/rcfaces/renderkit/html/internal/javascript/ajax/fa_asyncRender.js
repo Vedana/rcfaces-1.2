@@ -19,6 +19,20 @@ var __members = {
 		this._intWaiting=undefined; // f_waiting
 //		this._asyncDecoded=undefined; // boolean
 	},
+	/**
+	 * @method hidden
+	 * @return Boolean
+	 */
+	f_isInteractiveRenderer: function() {
+		return this._interactive;
+	},
+	/**
+	 * @method hidden
+	 * @return void
+	 */
+	f_resetInteractiveRenderer: function() {
+		this._interactive=true;
+	},
 	f_updateVisibility: {
 		after: function(visible) {
 			if (visible) {
@@ -49,6 +63,7 @@ var __members = {
  				return;
  			}
  			component._callAsyncRender(parent);
+ 			component=null;
 		}, 12);		
 		
 		return false;
@@ -63,6 +78,7 @@ var __members = {
 		if (window._rcfacesExiting) {
 			return;
 		}
+		
 		var component = this;
 		var url=f_env.GetViewURI();
 		var request=new f_httpRequest(component, url, f_httpRequest.TEXT_HTML_MIME_TYPE);
@@ -237,7 +253,7 @@ var __members = {
 	 * @return HTMLElement
 	 */
 	fa_getInteractiveParent: f_class.ABSTRACT
-}
+};
 
 new f_aspect("fa_asyncRender", {
 	members: __members

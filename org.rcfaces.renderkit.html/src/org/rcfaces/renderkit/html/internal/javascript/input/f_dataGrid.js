@@ -691,7 +691,10 @@ var __members = {
 
 						f_core.AppendChild(ctrlContainer, cellImage);
 					}
-
+					if (col._toolTipId) {
+						td._toolTipId=col._toolTipId;
+					}
+					
 					var labelComponent=doc.createElement("label");
 					row._label=labelComponent;
 					if (!cellText) {
@@ -727,8 +730,8 @@ var __members = {
 			}
 		}
 		
-		if (properties._tooltip) { // temporaire
-			row._tooltipId = properties._tooltip;
+		if (properties._toolTip) { // temporaire
+			row._toolTipId = properties._toolTip;
 		}
 		
 		
@@ -1556,11 +1559,15 @@ var __members = {
 			
 			var toolTipText=properties._toolTipText;
 			if (toolTipText) {
-				td.title=toolTipText;				
+				td.title=toolTipText;
+				
 			} else {
-				var tooltipId = properties._tooltipId;  
-				if(tooltipId) {
-					td._cellTooltipId = tooltipId;
+				var toolTipId = properties._toolTipId;  
+				if (!toolTipId) {
+					toolTipId = col._toolTipId;
+				}
+				if (toolTipId) {
+					td._toolTipId = toolTipId;
 				}
 			}
 			

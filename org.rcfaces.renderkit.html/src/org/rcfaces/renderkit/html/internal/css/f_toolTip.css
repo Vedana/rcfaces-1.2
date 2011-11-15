@@ -30,6 +30,7 @@
 	-moz-border-radius: 3px;
 	
 	opacity: 0.85;
+    
 	-ms-filter: "alpha(opacity=85)"; /* IE 8 */
     filter : alpha(opacity=85); /* IE < 8 */
 }

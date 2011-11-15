@@ -6,10 +6,10 @@
 
 var __statics = {
 
-		/**
+	/**
 	 * @field hidden static final Number
 	 */
-	MOUSE_POSITION:0, 
+	MOUSE_POSITION: 0,
 
 	/**
 	 * @field hidden static final Number
@@ -39,13 +39,12 @@ var __statics = {
 	 * @field hidden static final Number
 	 */
 	BOTTOM_RIGHT_COMPONENT: 32,
-		
 
 	/**
 	 * @field private static final Number
-	 */	
+	 */
 	_DEFAULT_POSITION: 2
-	
+
 };
 
 var __members = {
@@ -64,57 +63,87 @@ var __members = {
 	 * @field private String
 	 */
 	_popupPosition: undefined,
-	
+
+	/**
+	 * @field private Number
+	 */
+	_stateId: 0,
+
+	/**
+	 * @field private String
+	 */
+	_toolTipId: undefined,
+
 	f_toolTip: function() {
 		this.f_super(arguments);
 
-		if (this.parentNode.tagName.toLowerCase()!="body") {
-			var body=this.ownerDocument.body;
+		if (this.parentNode.tagName.toLowerCase() != "body") {
+			var body = this.ownerDocument.body;
 
 			this.parentNode.removeChild(this);
 			body.appendChild(this);
 		}
-		
-		this._visible=false;
+
+		this._visible = false;
 	},
-		
+
 	f_finalize: function() {
-		this._elementContainer=undefined; // HTMLElement
-		this._elementItem=undefined; // HTMLElement
+		this._elementContainer = undefined; // HTMLElement
+		this._elementItem = undefined; // HTMLElement
 		// this._popupPosition=undefined; // String
+		// this._toolTipId=undefined; // String
 
 		this.f_super(arguments);
 	},
-	
+
 	/**
 	 * @method protected
 	 */
 	f_performErrorEvent: function(param, messageCode, message) {
 		return f_error.PerformErrorEvent(this, messageCode, message, param);
 	},
-	
+
 	/**
 	 * @method hidden
 	 * @return HTMLElement
 	 */
 	fa_getInteractiveParent: function() {
-		return this; //div tooltip
+		return this; // div tooltip
 	},
-	
+
 	/**
-	 * @method hidden 
-	 * @param HTMLElement component
-	 * @param HTMLElement elementItem 
-	 * @param String popupPosition
-	 * @return void
+	 * @method public
+	 * @return String
 	 */
-	f_setElementContainer: function(component, elementItem, popupPosition) {
-		this._elementContainer=component;
-		this._elementItem=elementItem;
+	f_getToolTipId: function() {
+		if (this._toolTipId === undefined) {
+			this._toolTipId = f_core.GetAttribute(this, "v:toolTipId", null);
+		}
+
+		return this._toolTipId;
+	},
+
+	/**
+	 * @method hidden
+	 * @param HTMLElement
+	 *            component Main component
+	 * @param HTMLElement
+	 *            elementItem Sub component or main component
+	 * @param String
+	 *            Default tooltip position
+	 * @return Number
+	 */
+	f_initialize: function(component, elementItem, popupPosition) {
+		this._elementContainer = component;
+		this._elementItem = elementItem;
 		this._popupPosition = popupPosition;
+
+		this._stateId++;
+
+		return this._stateId;
 	},
 	/**
-	 * @method hidden 
+	 * @method hidden
 	 * @return HTMLElement
 	 */
 	f_getElementContainer: function() {
@@ -122,177 +151,268 @@ var __members = {
 	},
 	/**
 	 * @method hidden
+	 * @return Number
+	 */
+	f_getStateId: function() {
+		if (!this._elementContainer) {
+			return -1;
+		}
+		return this._stateId;
+	},
+	/**
+	 * @method hidden
+	 * @return HTMLElement
+	 */
+	f_getElementItem: function() {
+		return this._elementItem;
+	},
+	/**
+	 * @method hidden
 	 * @return void
 	 */
 	f_clear: function() {
-		this._elementContainer=undefined;
-		this._elementItem=undefined;
+		this._elementContainer = undefined;
+		this._elementItem = undefined;
 		this._popupPosition = undefined;
 	},
 	/**
 	 * @method public
-	 * @param optional Event jsEvent
-	 * @param optional String defaultPosition
-	 * @param optional Element refPosition
-	 * @return void
+	 * @param optional
+	 *            Event jsEvent
+	 * @param optional
+	 *            String defaultPosition
+	 * @param optional
+	 *            Element refPosition
+	 * @return Boolean
 	 */
-	f_show: function(jsEvent, defaultPosition, refPosition) {
-		
-		var ref=null;
+	f_show: function(stateId, jsEvent, defaultPosition, refPosition) {
+
+		if (stateId != this._stateId) {
+			return false;
+		}
+
+		var ref = null;
 		var position = f_core.GetNumberAttribute(this, "v:position", undefined);
-		if (position===undefined) {
-			ref=(this._elementItem)?this._elementItem:this._elementContainer;
+		if (position === undefined) {
+			ref = (this._elementItem) ? this._elementItem
+					: this._elementContainer;
 		}
-		
-		if (position===undefined && defaultPosition!==undefined) {
-			position=defaultPosition;
-			ref=refPosition;
+
+		if (position === undefined && defaultPosition !== undefined) {
+			position = defaultPosition;
+			ref = refPosition;
 		}
-		
-		if (position<0 || position===undefined) {
-			position=f_toolTip._DEFAULT_POSITION;
-			ref=this._elementContainer;
+
+		if (position < 0 || position === undefined) {
+			position = f_toolTip._DEFAULT_POSITION;
 		}
-		
-		this._computePosition(ref, f_toolTip.BOTTOM_LEFT_COMPONENT, jsEvent, this, {});
-		
+
+		if (!ref || ref.nodeType != f_core.ELEMENT_NODE) {
+			if (this._elementItem) {
+				ref = this._elementItem;
+			}
+
+			if (!ref || ref.nodeType != f_core.ELEMENT_NODE) {
+				ref = this._elementContainer;
+			}
+		}
+
+		if (!ref) {
+			f_core.Assert(ref, "f_toolTip.f_show: No ref component ?");
+			return false;
+		}
+
+		this._computePosition(ref, f_toolTip.BOTTOM_LEFT_COMPONENT, jsEvent,
+				this, {});
+
 		this.f_setVisible(true);
+
+		return true;
 	},
 	/**
 	 * @method public
+	 * @param Number
+	 *            stateId
 	 * @return void
 	 */
-	f_hide: function() {
+	f_hide: function(stateId) {
+
+		if (stateId != this._stateId) {
+			return false;
+		}
+
 		this.f_setVisible(false);
+
+		return true;
 	},
-	
+
 	/**
 	 * @method private
 	 * @return void
 	 */
-	_computePosition: function(component, position, jsEvent, popup, positionInfos) {
-		var offsetX=0;
-		var offsetY=0;
+	_computePosition: function(component, position, jsEvent, popup,
+			positionInfos) {
+		f_core.Assert(component,
+				"f_toolTip._computePosition: Invalid component parameter '"
+						+ component + "'.");
+		f_core.Assert(position,
+				"f_toolTip._computePosition: Invalid position parameter '"
+						+ position + "'.");
+
+		var offsetX = 0;
+		var offsetY = 0;
 		var offsetWidth;
-		
+
 		if (component) {
-			var absPos=f_core.GetAbsolutePosition(component);
-			offsetX=absPos.x;
-			offsetY=absPos.y;
+			var absPos = f_core.GetAbsolutePosition(component);
+			offsetX = absPos.x;
+			offsetY = absPos.y;
 		}
-		
-		switch(position) {
-		
+
+		switch (position) {
+
 		case f_toolTip.BOTTOM_COMPONENT:
 		case f_toolTip.BOTTOM_LEFT_COMPONENT:
-			offsetY+=component.offsetHeight;
+			offsetY += component.offsetHeight;
 			break;
-					
+
 		case f_toolTip.BOTTOM_RIGHT_COMPONENT:
-			offsetY+=component.offsetHeight;
-			
+			offsetY += component.offsetHeight;
+
 		case f_toolTip.RIGHT_COMPONENT:
-			offsetX+=component.offsetWidth;
+			offsetX += component.offsetWidth;
 			break;
 
 		case f_toolTip.MIDDLE_COMPONENT:
-			offsetX+=component.offsetWidth/2;
-			offsetY+=component.offsetHeight/2;
+			offsetX += component.offsetWidth / 2;
+			offsetY += component.offsetHeight / 2;
 			break;
-			
+
 		case f_toolTip.MOUSE_POSITION:
-			
-			// Calcule la position de la souris 
-			var eventPos=f_core.GetJsEventPosition(jsEvent);
-			var cursorPos=f_core.GetAbsolutePosition(popup);
-			
-			offsetX=eventPos.x-cursorPos.x;
-			offsetY=eventPos.y-cursorPos.y;
 
-			f_core.Debug(f_popup, "Gecko_openPopup: (mouse position) X="+offsetX+" Y="+offsetY+" eventX="+eventPos.x+" eventY="+eventPos.y+" cursorPosX="+cursorPos.x+" cursorPosY="+cursorPos.y);
-			
+			// Calcule la position de la souris
+			var eventPos = f_core.GetJsEventPosition(jsEvent);
+			var cursorPos = f_core.GetAbsolutePosition(popup);
+
+			offsetX = eventPos.x - cursorPos.x;
+			offsetY = eventPos.y - cursorPos.y;
+
+			f_core.Debug(f_popup, "Gecko_openPopup: (mouse position) X="
+					+ offsetX + " Y=" + offsetY + " eventX=" + eventPos.x
+					+ " eventY=" + eventPos.y + " cursorPosX=" + cursorPos.x
+					+ " cursorPosY=" + cursorPos.y);
+
 			break;
 		}
-		
+
 		if (component) {
-			f_core.Debug(f_popup, "Gecko_openPopup: X="+offsetX+" Y="+offsetY+" cx="+component.offsetLeft+" cy="+component.offsetTop+" cw="+component.offsetWidth+" ch="+component.offsetHeight);
+			f_core.Debug(f_popup, "Gecko_openPopup: X=" + offsetX + " Y="
+					+ offsetY + " cx=" + component.offsetLeft + " cy="
+					+ component.offsetTop + " cw=" + component.offsetWidth
+					+ " ch=" + component.offsetHeight);
 		}
-		
+
 		if (positionInfos.deltaX) {
-			offsetX+=positionInfos.deltaX;
+			offsetX += positionInfos.deltaX;
 		}
-		
+
 		if (positionInfos.deltaY) {
-			offsetY+=positionInfos.deltaY;
+			offsetY += positionInfos.deltaY;
 		}
-		
+
 		if (positionInfos.deltaWidth) {
-			offsetWidth+=positionInfos.deltaWidth;
+			offsetWidth += positionInfos.deltaWidth;
 		}
-		
+
 		if (positionInfos.deltaHeight) {
-			offsetHeight+=positionInfos.deltaHeight;
+			offsetHeight += positionInfos.deltaHeight;
 		}
-				
-		offsetX+=2; // Border par défaut !
-		
-		var positions={ x: offsetX, y: offsetY };
-		
-		var viewSize=f_core.GetViewSize(null, popup.ownerDocument);
-		
-		var bw=viewSize.width;
-		var bh=viewSize.height;
-		var scrollPosition=f_core.GetScrollOffsets(popup.ownerDocument);
-		bw+=scrollPosition.x;
-		bh+=scrollPosition.y;
 
-		var absPos=(popup.offsetParent)?f_core.GetAbsolutePosition(popup.offsetParent):{x: 0, y: 0};
+		offsetX += 2; // Border par défaut !
 
-		var pWidth=popup.offsetWidth;
+		var positions = {
+			x: offsetX,
+			y: offsetY
+		};
+
+		var viewSize = f_core.GetViewSize(null, popup.ownerDocument);
+
+		var bw = viewSize.width;
+		var bh = viewSize.height;
+		var scrollPosition = f_core.GetScrollOffsets(popup.ownerDocument);
+		bw += scrollPosition.x;
+		bh += scrollPosition.y;
+
+		var absPos = (popup.offsetParent) ? f_core
+				.GetAbsolutePosition(popup.offsetParent) : {
+			x: 0,
+			y: 0
+		};
+
+		var pWidth = popup.offsetWidth;
 		if (!pWidth) {
-			pWidth=parseInt(popup.style.width);
+			pWidth = parseInt(popup.style.width);
 		}
 
-		var pHeight=popup.offsetHeight;
+		var pHeight = popup.offsetHeight;
 		if (!pHeight) {
-			pHeight=parseInt(popup.style.height);
+			pHeight = parseInt(popup.style.height);
 		}
 
-		f_core.Debug(f_core, "Gecko_openPopup: bw="+bw+" bh="+bh+" absPos.x="+absPos.x+" absPos.y="+absPos.y+" positions.x="+positions.x+" positions.y="+positions.y+" popupWidth="+pWidth+" popupHeight="+pHeight);
-		
-		if (pWidth+positions.x+absPos.x>bw) {
-			positions.x=bw-pWidth-absPos.x;
+		f_core.Debug(f_core, "Gecko_openPopup: bw=" + bw + " bh=" + bh
+				+ " absPos.x=" + absPos.x + " absPos.y=" + absPos.y
+				+ " positions.x=" + positions.x + " positions.y=" + positions.y
+				+ " popupWidth=" + pWidth + " popupHeight=" + pHeight);
 
-			f_core.Debug(f_core, "Gecko_openPopup: change x position to "+positions.x);
+		if (pWidth + positions.x + absPos.x > bw) {
+			positions.x = bw - pWidth - absPos.x;
+
+			f_core.Debug(f_core, "Gecko_openPopup: change x position to "
+					+ positions.x);
 		}
 
-		if (pHeight > bh - scrollPosition.y){
-			positions.y=0;
-			positions.x=0;
-			
-		} else if (pHeight+positions.y+absPos.y>bh) {
+		if (pHeight > bh - scrollPosition.y) {
+			positions.y = 0;
+			positions.x = 0;
+
+		} else if (pHeight + positions.y + absPos.y > bh) {
 			if (component) {
 				var aeAbs = f_core.GetAbsolutePosition(component);
-				positions.y=aeAbs.y-pHeight;
+				positions.y = aeAbs.y - pHeight;
 
 			} else {
-				positions.y=bh-pHeight-absPos.y;
+				positions.y = bh - pHeight - absPos.y;
 			}
-			
-			f_core.Debug(f_core, "Gecko_openPopup: change y position to "+positions.y);
-		} 
 
-		var popupStyle=popup.style;
+			f_core.Debug(f_core, "Gecko_openPopup: change y position to "
+					+ positions.y);
+		}
 
-		popupStyle.left=positions.x+"px";
-		popupStyle.top=positions.y+"px";
+		var popupStyle = popup.style;
+
+		popupStyle.left = positions.x + "px";
+		popupStyle.top = positions.y + "px";
+	},
+	f_updateVisibility: function(visible) {
+		this.f_super(arguments, visible);
+
+		/*
+		 * var style=this.style; if (visible) { style.opacity="0.85"; } else {
+		 * style.opacity="0"; }
+		 */
+	},
+	f_cleanContent: function() {
+		for (; this.firstChild;) {
+			this.removeChild(this.firstChild);
+		}
+
 	}
 
 };
 
 new f_class("f_toolTip", {
-	extend : f_component,
+	extend: f_component,
 	aspects: [ fa_asyncRender ],
-	members : __members,
+	members: __members,
 	statics: __statics
 });

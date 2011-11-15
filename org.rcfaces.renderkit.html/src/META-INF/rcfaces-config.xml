@@ -52,9 +52,9 @@
 				<command id="grid.additionalInformation" />
 			</service>
 			
-			<service id="org.rcfaces.renderkit.html.ToolTipsGrid"
-				class="org.rcfaces.renderkit.html.internal.service.TooltipService">
-				<command id="grid.tooltip" />
+			<service id="org.rcfaces.renderkit.html.ToolTipGrid"
+				class="org.rcfaces.renderkit.html.internal.service.ToolTipService">
+				<command id="grid.toolTip" />
 			</service>
 
 			<service id="org.rcfaces.renderkit.html.PopupGrid"

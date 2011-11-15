@@ -1396,10 +1396,12 @@ var f_core = {
 		for(;comp;) {
 
 			if (comp.f_getParent) {
-				return comp.f_getParent();
+				comp = comp.f_getParent();
+
+			} else {			
+				comp=comp.parentNode;
 			}
 			
-			comp=comp.parentNode;
 			if (!comp) {
 				break;
 			}

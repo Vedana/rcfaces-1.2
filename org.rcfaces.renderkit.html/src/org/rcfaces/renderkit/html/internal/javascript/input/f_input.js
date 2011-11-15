@@ -506,17 +506,15 @@ var __members = {
 	 *            row
 	 * @param Boolean
 	 *            additional
-	 * @param Boolean
-	 *            animated
 	 * @return void
 	 */
-	fa_setTooltipVisible : function(tooltip, show, animated, jsEvent) {
+	fa_setToolTipVisible : function(tooltip, show, jsEvent) {
 		
 		if (show) {
-			tooltip.f_show(jsEvent, f_toolTip.BOTTOM_COMPONENT, this);
+			tooltip.f_show(tooltip.f_getStateId(), jsEvent, f_toolTip.BOTTOM_COMPONENT);
 
 		} else {
-			tooltip.f_hide();
+			tooltip.f_hide(tooltip.f_getStateId());
 		}
 	}
 	

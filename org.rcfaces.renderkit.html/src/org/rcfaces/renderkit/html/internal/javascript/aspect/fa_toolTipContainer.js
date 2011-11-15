@@ -11,20 +11,20 @@ var __members = {
 	/**
 	 * @field private String
 	 */
-	_tooltipId: undefined,
+	_toolTipId: undefined,
 		
 	/**
 	 * @method public
 	 * @return String
 	 */
 	f_getTooltipId: function() {
-		if (this._tooltipId!==undefined) {
-			return this._tooltipId;
+		if (this._toolTipId!==undefined) {
+			return this._toolTipId;
 		}
 
-	  	this._tooltipId=f_core.GetAttribute(this, "v:tooltipId", null);
+	  	this._toolTipId=f_core.GetAttribute(this, "v:toolTipId", null);
 
-	  	return this._tooltipId;
+	  	return this._toolTipId;
 	},
 		
 	/**
@@ -36,18 +36,26 @@ var __members = {
 		var parent= element;
 		
 		for (;parent;parent = parent.parentNode){
-			var tooltipClientId;
+			if (parent.nodeType==f_core.TEXT_NODE) {
+				continue;
+			}
+
+			if (parent.nodeType!=f_core.ELEMENT_NODE) {
+				break;
+			}
 			
+			var tooltipClientId;			
+
 			if (parent.f_getTooltipId) {
 				tooltipClientId=parent.f_getTooltipId();
 			}
 			
 			if (!tooltipClientId) {			
-				tooltipClientId = f_core.GetAttribute(parent, "v:tooltipId");
+				tooltipClientId = f_core.GetAttribute(parent, "v:toolTipId");
 			}
 			
 			if (!tooltipClientId) {			
-				tooltipClientId = parent._tooltipId;
+				tooltipClientId = parent._toolTipId;
 			}
 			
 			if (!tooltipClientId) {
@@ -67,9 +75,11 @@ var __members = {
 				tooltipComponent = this.f_getClass().f_getClassLoader().f_init(tooltipComponent, true, true);
 			}
 			
-			tooltipComponent.f_setElementContainer(this, parent);
-			
-			return tooltipComponent;
+			return {
+				tooltip: tooltipComponent,
+				item: parent,
+				container: this
+			};
 		}
 		
 		return null;

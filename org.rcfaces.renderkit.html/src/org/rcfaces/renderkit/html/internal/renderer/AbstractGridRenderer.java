@@ -624,8 +624,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
 	public void renderTooltip(IHtmlRenderContext htmlRenderContext,
 			Writer writer, IGridComponent gridComponent,
-			String responseCharacterEncoding, String rowValue2, String rowIndex)
-			throws WriterException {
+			String responseCharacterEncoding, String rowValue2,
+			String rowIndex, String tooltipId) throws WriterException {
 
 		IHtmlWriter htmlWriter = (IHtmlWriter) htmlRenderContext
 				.getComponentWriter();
@@ -643,12 +643,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 			Map<String, ToolTipComponent> tooltips = tableContext
 					.listToolTips();
 
-			ToolTipComponent tooltipComponent = null;
-
-			// for (int i = 0; i < tooltips.size(); i++) {
-			ToolTipComponent add = tooltips.get("#row");
-
-			tooltipComponent = add;
+			ToolTipComponent tooltipComponent = tooltips.get(tooltipId);
 
 			if (tooltipComponent == null) {
 				return;
@@ -1080,8 +1075,11 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 		encodeBodyEnd((IHtmlWriter) writer, tableContext);
 
 		if (tableContext.hasTooltips()) {
-			ToolTipRenderer.render((IHtmlWriter) writer, tableContext
-					.listToolTips().get("#row"));
+
+			for (ToolTipComponent tooltip : tableContext.listToolTips()
+					.values()) {
+				ToolTipRenderer.render((IHtmlWriter) writer, tooltip);
+			}
 		}
 
 		super.encodeEnd(writer);
@@ -1880,6 +1878,9 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 					defaultCellHorizontalAligments, null);
 		}
 
+		String[] defaultCellToolTipIds = gridRenderContext
+				.getDefaultCellToolTipIds();
+
 		UIColumn columns[] = gridRenderContext.listColumns();
 
 		int autoFilterIndex = 0;
@@ -1983,10 +1984,22 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 				}
 			}
 
+			boolean hasToolTip = false;
+
 			if (defaultCellToolTipTexts != null) {
 				String tooltip = defaultCellToolTipTexts[i];
 				if (tooltip != null) {
-					objectWriter.writeSymbol("_cellToolTipText").write(tooltip);
+					objectWriter.writeSymbol("_cellToolTipText").writeString(
+							tooltip);
+					hasToolTip = true;
+				}
+			}
+
+			if (hasToolTip == false && defaultCellToolTipIds != null) {
+				String tooltip = defaultCellToolTipIds[i];
+				if (tooltip != null) {
+					objectWriter.writeSymbol("_toolTipId").writeString(tooltip);
+					hasToolTip = true;
 				}
 			}
 

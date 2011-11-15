@@ -1376,8 +1376,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
 				ToolTipComponent tooltipComponent = tooltips.get("#row");
 				encodeToolTip(jsWriter, tooltipComponent);
-				objectLiteralWriter.writeSymbol("_tooltip").writeString(
-						tooltipComponent.getId());
+				objectLiteralWriter.writeSymbol("_toolTip").writeString(
+						tooltipComponent.getClientId(facesContext));
 			}
 
 			if (tableContext.hasAdditionalInformations()) {

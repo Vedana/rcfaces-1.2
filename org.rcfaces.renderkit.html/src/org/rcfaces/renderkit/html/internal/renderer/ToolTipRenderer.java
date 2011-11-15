@@ -57,22 +57,22 @@ public class ToolTipRenderer extends AbstractCssRenderer implements
 			htmlWriter.writeAttribute("v:position", position);
 		}
 
+		String toolTipId = tooltipComponent.getToolTipId(facesContext);
+		if (toolTipId != null && toolTipId.length() > 0) {
+			htmlWriter.writeAttribute("v:toolTipId", toolTipId);
+		}
+
 		int asyncRender = IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE;
 
-		boolean hidden = Boolean.FALSE.equals(tooltipComponent
-				.getVisibleState());
+		if (htmlRenderContext.isAsyncRenderEnable()) {
+			asyncRender = htmlRenderContext
+					.getAsyncRenderMode(tooltipComponent);
 
-		if (hidden) {
-			if (htmlRenderContext.isAsyncRenderEnable()) {
-				asyncRender = htmlRenderContext
-						.getAsyncRenderMode(tooltipComponent);
+			if (asyncRender != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
+				htmlWriter.writeAttribute("v:asyncRender", true);
 
-				if (asyncRender != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
-					htmlWriter.writeAttribute("v:asyncRender", true);
-
-					htmlRenderContext.pushInteractiveRenderComponent(
-							htmlWriter, null);
-				}
+				htmlRenderContext.pushInteractiveRenderComponent(htmlWriter,
+						null);
 			}
 		}
 
