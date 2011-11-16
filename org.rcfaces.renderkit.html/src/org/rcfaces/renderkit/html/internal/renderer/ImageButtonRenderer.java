@@ -29,150 +29,150 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
  * @version $Revision$ $Date$
  */
 public class ImageButtonRenderer extends AbstractCssRenderer {
-    private static final String REVISION = "$Revision$";
+	private static final String REVISION = "$Revision$";
 
-    public static final String IMAGE_BUTTON_WRITER = "camelia.writer.ImageButton";
+	public static final String IMAGE_BUTTON_WRITER = "camelia.writer.ImageButton";
 
-    private static final String INTERNAL_VALUE_ATTRIBUTE = "camelia.internalValue";
+	private static final String INTERNAL_VALUE_ATTRIBUTE = "camelia.internalValue";
 
-    protected String getJavaScriptClassName() {
-        return JavaScriptClasses.IMAGE_BUTTON;
-    }
-    
-    protected boolean hasComponenDecoratorSupport() {
-        return true;
-    }
+	protected String getJavaScriptClassName() {
+		return JavaScriptClasses.IMAGE_BUTTON;
+	}
 
-    protected void encodeEnd(IComponentWriter writer) throws WriterException {
-        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
+	protected boolean hasComponenDecoratorSupport() {
+		return true;
+	}
 
-        if (hasComponenDecoratorSupport() == false) {
-            encodeComponent(htmlWriter);
-        }
+	protected void encodeEnd(IComponentWriter writer) throws WriterException {
+		IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        // Il faut activer le Javascript
-        // car l'attribut SELECTED doit être envoyé a chaque requete du client
-        // vers le serveur !
-        // TODO ((IHtmlWriter) writer).getJavaScriptEnableMode().enableOnInit();
+		if (hasComponenDecoratorSupport() == false) {
+			encodeComponent(htmlWriter);
+		}
 
-        IHtmlComponentRenderContext componentRenderContext = htmlWriter
-                .getHtmlComponentRenderContext();
-        if (componentRenderContext.getHtmlRenderContext()
-                .getJavaScriptRenderContext().isCollectorMode()) {
-            if (htmlWriter.getJavaScriptEnableMode().isOnInitEnabled() == false) {
+		// Il faut activer le Javascript
+		// car l'attribut SELECTED doit être envoyé a chaque requete du client
+		// vers le serveur !
+		// TODO ((IHtmlWriter) writer).getJavaScriptEnableMode().enableOnInit();
 
-                String value = (String) componentRenderContext
-                        .getAttribute(INTERNAL_VALUE_ATTRIBUTE);
+		IHtmlComponentRenderContext componentRenderContext = htmlWriter
+				.getHtmlComponentRenderContext();
+		if (componentRenderContext.getHtmlRenderContext()
+				.getJavaScriptRenderContext().isCollectorMode()) {
+			if (htmlWriter.getJavaScriptEnableMode().isOnInitEnabled() == false) {
 
-                if (value != null) {
-                    htmlWriter.startElement(IHtmlWriter.INPUT);
-                    htmlWriter.writeType(IHtmlWriter.HIDDEN_INPUT_TYPE);
-                    htmlWriter.writeAutoComplete(IHtmlWriter.AUTOCOMPLETE_OFF);
+				String value = (String) componentRenderContext
+						.getAttribute(INTERNAL_VALUE_ATTRIBUTE);
 
-                    String name = componentRenderContext.getComponentClientId()
-                            + "::value";
-                    htmlWriter.writeName(name);
+				if (value != null) {
+					htmlWriter.startElement(IHtmlWriter.INPUT);
+					htmlWriter.writeType(IHtmlWriter.HIDDEN_INPUT_TYPE);
+					htmlWriter.writeAutoComplete(IHtmlWriter.AUTOCOMPLETE_OFF);
 
-                    htmlWriter.writeValue(value);
+					String name = componentRenderContext.getComponentClientId()
+							+ "::value";
+					htmlWriter.writeName(name);
 
-                    htmlWriter.endElement(IHtmlWriter.INPUT);
-                }
-            }
-        }
+					htmlWriter.writeValue(value);
 
-        super.encodeEnd(writer);
-    }
+					htmlWriter.endElement(IHtmlWriter.INPUT);
+				}
+			}
+		}
 
-    protected void encodeComponent(IHtmlWriter writer) throws WriterException {
-        throw new WriterException("Render is not implemented !", null, writer
-                .getComponentRenderContext().getComponent());
-    }
+		super.encodeEnd(writer);
+	}
 
-    protected IComponentDecorator createComponentDecorator(
-            FacesContext facesContext, UIComponent component) {
+	protected void encodeComponent(IHtmlWriter writer) throws WriterException {
+		throw new WriterException("Render is not implemented !", null, writer
+				.getComponentRenderContext().getComponent());
+	}
 
-        return new ImageButtonDecorator((IImageButtonFamilly) component);
-    }
+	protected IComponentDecorator createComponentDecorator(
+			FacesContext facesContext, UIComponent component) {
 
-    protected String getActionEventName(INameSpace nameSpace) {
-        return nameSpace.getSelectionEventName();
-    }
+		return new ImageButtonDecorator((IImageButtonFamilly) component);
+	}
 
-    protected void decode(IRequestContext context, UIComponent component,
-            IComponentData componentData) {
-        super.decode(context, component, componentData);
+	protected String getActionEventName(INameSpace nameSpace) {
+		return nameSpace.getSelectionEventName();
+	}
 
-        if (component instanceof ITextCapability) {
-            ITextCapability textCapability = (ITextCapability) component;
-            String text = componentData.getStringProperty("text");
-            if (text != null) {
-                String old = textCapability.getText();
-                if (text.equals(old) == false) {
-                    textCapability.setText(text);
+	protected void decode(IRequestContext context, UIComponent component,
+			IComponentData componentData) {
+		super.decode(context, component, componentData);
 
-                    component.queueEvent(new PropertyChangeEvent(component,
-                            Properties.TEXT, old, text));
-                }
-            }
-        }
-    }
+		if (component instanceof ITextCapability) {
+			ITextCapability textCapability = (ITextCapability) component;
+			String text = componentData.getStringProperty("text");
+			if (text != null) {
+				String old = textCapability.getText();
+				if (text.equals(old) == false) {
+					textCapability.setText(text);
 
-    protected String getWAIRole() {
-        return IAccessibilityRoles.PRESENTATION;
-    }
+					component.queueEvent(new PropertyChangeEvent(component,
+							Properties.TEXT, old, text));
+				}
+			}
+		}
+	}
 
-    protected IHtmlWriter writeUserInputAttributes(IHtmlWriter writer, UIComponent component) throws WriterException {
-    	return writer;
-    }
-    
-    /**
-     * 
-     * @author Olivier Oeuillot (latest modification by $Author$)
-     * @version $Revision$ $Date$
-     */
-    protected class ImageButtonDecorator extends
-            AbstractImageButtonFamillyDecorator {
-        private static final String REVISION = "$Revision$";
+	protected String getWAIRole() {
+		return IAccessibilityRoles.PRESENTATION;
+	}
 
-        public ImageButtonDecorator(IImageButtonFamilly imageButtonFamilly) {
-            super(imageButtonFamilly);
-        }
+	protected IHtmlWriter writeUserInputAttributes(IHtmlWriter writer,
+			UIComponent component) throws WriterException {
+		return writer;
+	}
 
-        protected String getMainStyleClassName() {
-            return ImageButtonRenderer.this.getMainStyleClassName();
-        }
+	/**
+	 * 
+	 * @author Olivier Oeuillot (latest modification by $Author$)
+	 * @version $Revision$ $Date$
+	 */
+	protected class ImageButtonDecorator extends
+			AbstractImageButtonFamillyDecorator {
+		private static final String REVISION = "$Revision$";
 
-        protected void writeAttributes(ICssStyleClasses cssStyleClasses)
-                throws WriterException {
+		public ImageButtonDecorator(IImageButtonFamilly imageButtonFamilly) {
+			super(imageButtonFamilly);
+		}
 
-            writeHtmlAttributes(writer);
-            writeJavaScriptAttributes(writer);
-            writeCssAttributes(writer, cssStyleClasses, ~CSS_FONT_MASK);
+		protected String getMainStyleClassName() {
+			return ImageButtonRenderer.this.getMainStyleClassName();
+		}
 
-            FacesContext facesContext = writer.getComponentRenderContext()
-                    .getFacesContext();
-            encodeAttributes(facesContext);
-        }
+		protected void writeAttributes(ICssStyleClasses cssStyleClasses)
+				throws WriterException {
 
-        protected void encodeAttributes(FacesContext facesContext)
-                throws WriterException {
-            String value = getInputValue(false);
-            if (value != null) {
-                writer.writeAttribute("v:value", value);
+			writeHtmlAttributes(writer);
+			writeJavaScriptAttributes(writer);
+			writeCssAttributes(writer, cssStyleClasses, ~CSS_FONT_MASK);
+			writeFirstTooltipClientId(writer);
 
-                writer.getComponentRenderContext().setAttribute(
-                        INTERNAL_VALUE_ATTRIBUTE, value);
-            }
+			FacesContext facesContext = writer.getComponentRenderContext()
+					.getFacesContext();
+			encodeAttributes(facesContext);
+		}
 
-            if (imageButtonFamilly.isDisabled(facesContext)) {
-                writer.writeAttribute("v:disabled", true);
-            }
-            
-            
+		protected void encodeAttributes(FacesContext facesContext)
+				throws WriterException {
+			String value = getInputValue(false);
+			if (value != null) {
+				writer.writeAttribute("v:value", value);
 
-            if (imageButtonFamilly.isReadOnly(facesContext)) {
-                writer.writeAttribute("v:readOnly", true);
-            }
-        }
-    }
+				writer.getComponentRenderContext().setAttribute(
+						INTERNAL_VALUE_ATTRIBUTE, value);
+			}
+
+			if (imageButtonFamilly.isDisabled(facesContext)) {
+				writer.writeAttribute("v:disabled", true);
+			}
+
+			if (imageButtonFamilly.isReadOnly(facesContext)) {
+				writer.writeAttribute("v:readOnly", true);
+			}
+		}
+	}
 }

@@ -5895,19 +5895,43 @@ var __members = {
 	
 	/**
 	 * @method protected
+	 * @param f_toolTip tooltip
+	 * @param optional Event jsEvent
+	 * @param optional Number toolTipPosition
 	 * @return void
 	 */
 	f_showToolTip: function(tooltip, jsEvent, toolTipPosition) {
+		f_core.Debug(f_grid, "f_showToolTip: show tooltip '"+tooltip.id+"'");
+		var toolTipManager = f_toolTipManager.Get();
 
+		var self=this;
+		toolTipManager.f_appendCommand(function() {
+			f_core.Debug(f_grid, "f_showToolTip: show tooltip '"+tooltip.id+"' COMMAND START");
+
+			if (self._loadToolTip(tooltip, jsEvent, toolTipPosition)!==false) {
+				return;
+			}		
+			
+			toolTipManager.f_processNextCommand();
+		});
+	},
+	
+	/**
+	 * @method private
+	 * @param f_toolTip tooltip
+	 * @param optional Event jsEvent
+	 * @param optional Number toolTipPosition
+	 * @return Boolean
+	 */
+	_loadToolTip: function(tooltip, jsEvent, toolTipPosition) {
 		var tooltipId = tooltip.f_getId();
 		if (!tooltipId) {
-			return;
+			return false;
 		}
-
+		
 		var elementItem = tooltip.f_getElementItem();
 
 		var row = null;
-		var colId=null;
 		
 		switch(elementItem.tagName.toUpperCase()) {
 		case "TR":
@@ -5919,12 +5943,15 @@ var __members = {
 			
 		case "TD":
 			row=elementItem.parentNode;
-			colId=this.f_computeColumnIdByElement(elementItem);
 			if (!tooltipId) {
 				tooltipId="#cell";
 			}
 			break;
 		}		
+
+		if (row._rowIndex === undefined || row._rowIndex < 0) {
+			return false;// a revoir
+		}
 		
 		var component = tooltip;
 		var parent = tooltip;
@@ -5933,9 +5960,20 @@ var __members = {
 		var request = new f_httpRequest(component, url, f_httpRequest.TEXT_HTML_MIME_TYPE);
 		var self = this;
 
+		var toolTipManager = f_toolTipManager.Get();
+		
 		var toolTipStateId = tooltip.f_getStateId();
+		
+		var oldWaiting=component._intWaiting;
+		if (oldWaiting) {
+			component._intWaiting=undefined;
+			
+			f_classLoader.Destroy(oldWaiting);
+		}
+
+		tooltip.f_setInteractiveRenderer(false); // Le contenu est géré par NOTRE appel ajax !
 		tooltip.f_cleanContent();
-		component._intWaiting=undefined;
+
 		
 		request.f_setListener( {
 					onInit : function(request) {
@@ -5953,7 +5991,11 @@ var __members = {
 					/**
 					 * @method public
 					 */
-					onError : function(request, status, text) {
+					onError : function(request, status, text) {						
+						if (toolTipManager.f_processNextCommand()) {
+							return;
+						}
+						
 						if (tooltip.f_getStateId()!=toolTipStateId) {
 							// Reset du tooltip !
 							return;
@@ -5991,6 +6033,9 @@ var __members = {
 					 * @method public
 					 */
 					onLoad : function(request, content, contentType) {
+						if (toolTipManager.f_processNextCommand()) {
+							return;
+						}
 						
 						if (tooltip.f_getStateId()!=toolTipStateId) {
 							// Reset du tooltip !
@@ -6058,10 +6103,6 @@ var __members = {
 
 
 		request.f_setRequestHeader("X-Camelia", "grid.toolTip");
-
-		if (row._rowIndex === undefined || row._rowIndex < 0) {
-			return;// a revoir
-		}
 		
 		var params = {
 			gridId : this.id,
@@ -6069,9 +6110,6 @@ var __members = {
 			rowIndex : row._rowIndex,
 			toolTipId : tooltipId
 		};
-		if (colId) {
-			params.colId=colId;
-		}
 
 		if (this._paged) {
 			// On synchronise 1 SEULE ligne, on envoi pas les indexes !
@@ -6090,9 +6128,9 @@ var __members = {
 			f_classLoader.SerializeInputsIntoParam(params, this, false);
 		}
 		
-
 		request.f_doFormRequest(params);
 		
+		return true;
 	},
 	/**
 	 * @method protected

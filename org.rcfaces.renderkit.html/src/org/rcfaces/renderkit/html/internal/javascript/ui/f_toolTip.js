@@ -62,7 +62,7 @@ var __members = {
 	/**
 	 * @field private String
 	 */
-	_popupPosition: undefined,
+	_toolTipPosition: undefined,
 
 	/**
 	 * @field private Number
@@ -90,7 +90,7 @@ var __members = {
 	f_finalize: function() {
 		this._elementContainer = undefined; // HTMLElement
 		this._elementItem = undefined; // HTMLElement
-		// this._popupPosition=undefined; // String
+		// this._toolTipPosition=undefined; // String
 		// this._toolTipId=undefined; // String
 
 		this.f_super(arguments);
@@ -133,10 +133,10 @@ var __members = {
 	 *            Default tooltip position
 	 * @return Number
 	 */
-	f_initialize: function(component, elementItem, popupPosition) {
+	f_initialize: function(component, elementItem, toolTipPosition) {
 		this._elementContainer = component;
 		this._elementItem = elementItem;
-		this._popupPosition = popupPosition;
+		this._toolTipPosition = toolTipPosition;
 
 		this._stateId++;
 
@@ -173,7 +173,7 @@ var __members = {
 	f_clear: function() {
 		this._elementContainer = undefined;
 		this._elementItem = undefined;
-		this._popupPosition = undefined;
+		this._toolTipPosition = undefined;
 	},
 	/**
 	 * @method public
@@ -297,7 +297,7 @@ var __members = {
 			offsetX = eventPos.x - cursorPos.x;
 			offsetY = eventPos.y - cursorPos.y;
 
-			f_core.Debug(f_popup, "Gecko_openPopup: (mouse position) X="
+			f_core.Debug(f_toolTip, "_computePosition: (mouse position) X="
 					+ offsetX + " Y=" + offsetY + " eventX=" + eventPos.x
 					+ " eventY=" + eventPos.y + " cursorPosX=" + cursorPos.x
 					+ " cursorPosY=" + cursorPos.y);
@@ -305,8 +305,8 @@ var __members = {
 			break;
 		}
 
-		if (component) {
-			f_core.Debug(f_popup, "Gecko_openPopup: X=" + offsetX + " Y="
+		if (f_core.IsDebugEnabled(f_toolTip) && component) {
+			f_core.Debug(f_toolTip, "_computePosition: X=" + offsetX + " Y="
 					+ offsetY + " cx=" + component.offsetLeft + " cy="
 					+ component.offsetTop + " cw=" + component.offsetWidth
 					+ " ch=" + component.offsetHeight);
@@ -359,7 +359,7 @@ var __members = {
 			pHeight = parseInt(popup.style.height);
 		}
 
-		f_core.Debug(f_core, "Gecko_openPopup: bw=" + bw + " bh=" + bh
+		f_core.Debug(f_toolTip, "_computePosition: bw=" + bw + " bh=" + bh
 				+ " absPos.x=" + absPos.x + " absPos.y=" + absPos.y
 				+ " positions.x=" + positions.x + " positions.y=" + positions.y
 				+ " popupWidth=" + pWidth + " popupHeight=" + pHeight);
@@ -367,7 +367,7 @@ var __members = {
 		if (pWidth + positions.x + absPos.x > bw) {
 			positions.x = bw - pWidth - absPos.x;
 
-			f_core.Debug(f_core, "Gecko_openPopup: change x position to "
+			f_core.Debug(f_toolTip, "_computePosition: change x position to "
 					+ positions.x);
 		}
 
@@ -384,7 +384,7 @@ var __members = {
 				positions.y = bh - pHeight - absPos.y;
 			}
 
-			f_core.Debug(f_core, "Gecko_openPopup: change y position to "
+			f_core.Debug(f_toolTip, "_computePosition: change y position to "
 					+ positions.y);
 		}
 

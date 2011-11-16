@@ -5,7 +5,7 @@
 /**
  * f_imageButton class
  *
- * @class f_imageButton extends f_component, fa_readOnly, fa_disabled, fa_tabIndex, fa_borderType, fa_images, fa_immediate, fa_value, fa_aria
+ * @class f_imageButton extends f_component, fa_readOnly, fa_disabled, fa_tabIndex, fa_borderType, fa_images, fa_immediate, fa_value, fa_aria, fa_basicToolTipContainer
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */ 
@@ -41,7 +41,7 @@ var __statics = {
 	 * @field private static final String
 	 */	  
 	_LINK_ID_SUFFIX: "::a"
-}
+};
  
 var __members = {
 
@@ -671,11 +671,11 @@ var __members = {
 		
 		return imageElement.src;
 	}
-}
+};
 
 new f_class("f_imageButton", {
 	extend: f_component, 
-	aspects: [ fa_readOnly, fa_disabled, fa_tabIndex, fa_borderType, fa_images, fa_immediate, fa_value, fa_aria ],
+	aspects: [ fa_readOnly, fa_disabled, fa_tabIndex, fa_borderType, fa_images, fa_immediate, fa_value, fa_aria, fa_basicToolTipContainer ],
 	statics: __statics,
 	members: __members
 });

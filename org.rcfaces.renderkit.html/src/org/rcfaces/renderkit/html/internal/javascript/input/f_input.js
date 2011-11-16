@@ -5,7 +5,7 @@
 /**
  * f_input class.
  *
- * @class f_input extends f_component, fa_message, fa_tabIndex, fa_focusStyleClass, fa_toolTipContainer
+ * @class f_input extends f_component, fa_message, fa_tabIndex, fa_focusStyleClass, fa_basicToolTipContainer
  * @author Olivier Oeuillot (latest modification by $Author$) & Joel Merlin
  * @version $Revision$ $Date$
  */
@@ -497,33 +497,12 @@ var __members = {
 		}
 		
 		this.f_super(arguments, type, target);
-	},
-	
-	
-	/**
-	 * @method protected
-	 * @param Object
-	 *            row
-	 * @param Boolean
-	 *            additional
-	 * @return void
-	 */
-	fa_setToolTipVisible : function(tooltip, show, jsEvent) {
-		
-		if (show) {
-			tooltip.f_show(tooltip.f_getStateId(), jsEvent, f_toolTip.BOTTOM_COMPONENT);
-
-		} else {
-			tooltip.f_hide(tooltip.f_getStateId());
-		}
-	}
-	
-	
+	}	
 };
 
 new f_class("f_input", {
 	extend: f_component, 
-	aspects: [ fa_message, fa_focusStyleClass, fa_tabIndex, fa_toolTipContainer],
+	aspects: [ fa_message, fa_focusStyleClass, fa_tabIndex, fa_basicToolTipContainer],
 	members: __members,
 	statics: __statics
 });

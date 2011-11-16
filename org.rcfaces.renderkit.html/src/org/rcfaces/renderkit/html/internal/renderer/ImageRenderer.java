@@ -26,104 +26,105 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  * @version $Revision$ $Date$
  */
 public class ImageRenderer extends AbstractCssRenderer {
-    private static final String REVISION = "$Revision$";
+	private static final String REVISION = "$Revision$";
 
-    private static final String FILTRED_CONTENT_PROPERTY = "camelia.image.filtredContent";
+	private static final String FILTRED_CONTENT_PROPERTY = "camelia.image.filtredContent";
 
-    protected void encodeEnd(IComponentWriter writer) throws WriterException {
+	protected void encodeEnd(IComponentWriter writer) throws WriterException {
 
-        IHtmlComponentRenderContext componentRenderContext = (IHtmlComponentRenderContext) writer
-                .getComponentRenderContext();
-        FacesContext facesContext = componentRenderContext.getFacesContext();
+		IHtmlComponentRenderContext componentRenderContext = (IHtmlComponentRenderContext) writer
+				.getComponentRenderContext();
+		FacesContext facesContext = componentRenderContext.getFacesContext();
 
-        ImageComponent image = (ImageComponent) componentRenderContext
-                .getComponent();
+		ImageComponent image = (ImageComponent) componentRenderContext
+				.getComponent();
 
-        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
+		IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.startElement(IHtmlWriter.IMG);
-        writeHtmlAttributes(htmlWriter);
-        writeJavaScriptAttributes(htmlWriter);
-        writeCssAttributes(htmlWriter);
+		htmlWriter.startElement(IHtmlWriter.IMG);
+		writeHtmlAttributes(htmlWriter);
+		writeJavaScriptAttributes(htmlWriter);
+		writeCssAttributes(htmlWriter);
+		writeFirstTooltipClientId(htmlWriter);
 
-        GeneratedImageInformation generatedImageInformation = null;
-        IImageAccessors imageAccessors = (IImageAccessors) image
-                .getImageAccessors(facesContext);
-        String url = null;
-        IContentAccessor contentAccessor = imageAccessors.getImageAccessor();
-        if (contentAccessor != null) {
-            generatedImageInformation = new GeneratedImageInformation();
+		GeneratedImageInformation generatedImageInformation = null;
+		IImageAccessors imageAccessors = (IImageAccessors) image
+				.getImageAccessors(facesContext);
+		String url = null;
+		IContentAccessor contentAccessor = imageAccessors.getImageAccessor();
+		if (contentAccessor != null) {
+			generatedImageInformation = new GeneratedImageInformation();
 
-            BasicGenerationResourceInformation generationInformation = new BasicGenerationResourceInformation(
-                    componentRenderContext);
+			BasicGenerationResourceInformation generationInformation = new BasicGenerationResourceInformation(
+					componentRenderContext);
 
-            IFilterProperties filterProperties = image.getFilterProperties();
-            generationInformation.setFilterProperties(filterProperties);
+			IFilterProperties filterProperties = image.getFilterProperties();
+			generationInformation.setFilterProperties(filterProperties);
 
-            url = contentAccessor.resolveURL(facesContext,
-                    generatedImageInformation, generationInformation);
+			url = contentAccessor.resolveURL(facesContext,
+					generatedImageInformation, generationInformation);
 
-            if (generatedImageInformation.isFiltredModel()) {
-                componentRenderContext.setAttribute(FILTRED_CONTENT_PROPERTY,
-                        Boolean.TRUE);
+			if (generatedImageInformation.isFiltredModel()) {
+				componentRenderContext.setAttribute(FILTRED_CONTENT_PROPERTY,
+						Boolean.TRUE);
 
-                htmlWriter.writeAttribute("v:filtred", true);
+				htmlWriter.writeAttribute("v:filtred", true);
 
-                if (filterProperties != null
-                        && filterProperties.isEmpty() == false) {
-                    String filterExpression = HtmlTools.encodeFilterExpression(
-                            filterProperties, componentRenderContext
-                                    .getRenderContext().getProcessContext(),
-                            componentRenderContext.getComponent());
-                    htmlWriter.writeAttribute("v:filterExpression",
-                            filterExpression);
-                }
-            }
-        }
+				if (filterProperties != null
+						&& filterProperties.isEmpty() == false) {
+					String filterExpression = HtmlTools.encodeFilterExpression(
+							filterProperties, componentRenderContext
+									.getRenderContext().getProcessContext(),
+							componentRenderContext.getComponent());
+					htmlWriter.writeAttribute("v:filterExpression",
+							filterExpression);
+				}
+			}
+		}
 
-        if (url == null) {
-            url = componentRenderContext.getHtmlRenderContext()
-                    .getHtmlProcessContext().getStyleSheetURI(BLANK_IMAGE_URL,
-                            true);
+		if (url == null) {
+			url = componentRenderContext.getHtmlRenderContext()
+					.getHtmlProcessContext()
+					.getStyleSheetURI(BLANK_IMAGE_URL, true);
 
-            htmlWriter.writeAttribute("v:blank", true);
-        }
-        htmlWriter.writeSrc(url);
+			htmlWriter.writeAttribute("v:blank", true);
+		}
+		htmlWriter.writeSrc(url);
 
-        int imageWidth = image.getImageWidth(facesContext);
-        int imageHeight = image.getImageHeight(facesContext);
+		int imageWidth = image.getImageWidth(facesContext);
+		int imageHeight = image.getImageHeight(facesContext);
 
-        if (imageWidth < 0 && imageHeight < 0) {
-            imageWidth = generatedImageInformation.getImageWidth();
-            imageHeight = generatedImageInformation.getImageHeight();
-        }
+		if (imageWidth < 0 && imageHeight < 0) {
+			imageWidth = generatedImageInformation.getImageWidth();
+			imageHeight = generatedImageInformation.getImageHeight();
+		}
 
-        if (imageWidth > 0) {
-            htmlWriter.writeWidth(imageWidth);
-        }
-        if (imageHeight > 0) {
-            htmlWriter.writeHeight(imageHeight);
-        }
+		if (imageWidth > 0) {
+			htmlWriter.writeWidth(imageWidth);
+		}
+		if (imageHeight > 0) {
+			htmlWriter.writeHeight(imageHeight);
+		}
 
-        htmlWriter.endElement(IHtmlWriter.IMG);
+		htmlWriter.endElement(IHtmlWriter.IMG);
 
-        super.encodeEnd(htmlWriter);
-    }
+		super.encodeEnd(htmlWriter);
+	}
 
-    protected String getJavaScriptClassName() {
-        return JavaScriptClasses.IMAGE;
-    }
+	protected String getJavaScriptClassName() {
+		return JavaScriptClasses.IMAGE;
+	}
 
-    public void addRequiredJavaScriptClassNames(IHtmlWriter htmlWriter,
-            IJavaScriptRenderContext javaScriptRenderContext) {
-        super.addRequiredJavaScriptClassNames(htmlWriter,
-                javaScriptRenderContext);
+	public void addRequiredJavaScriptClassNames(IHtmlWriter htmlWriter,
+			IJavaScriptRenderContext javaScriptRenderContext) {
+		super.addRequiredJavaScriptClassNames(htmlWriter,
+				javaScriptRenderContext);
 
-        if (htmlWriter.getComponentRenderContext().containsAttribute(
-                FILTRED_CONTENT_PROPERTY)) {
+		if (htmlWriter.getComponentRenderContext().containsAttribute(
+				FILTRED_CONTENT_PROPERTY)) {
 
-            javaScriptRenderContext.appendRequiredClass(
-                    JavaScriptClasses.FILTRED_COMPONENT, "filter");
-        }
-    }
+			javaScriptRenderContext.appendRequiredClass(
+					JavaScriptClasses.FILTRED_COMPONENT, "filter");
+		}
+	}
 }

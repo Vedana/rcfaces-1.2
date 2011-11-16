@@ -30,7 +30,7 @@ var __members = {
 	/**
 	 * @method hidden
 	 * @param HTMLElement element
-	 * @return f_toolTip
+	 * @return Object
 	 */
 	fa_getToolTipForElement: function(element) {
 		var parent= element;
@@ -61,22 +61,9 @@ var __members = {
 			if (!tooltipClientId) {
 				continue;
 			}
-			
-			var tooltipComponent = f_core.GetElementByClientId(tooltipClientId);
 				
-			if (!tooltipComponent){
-				tooltipComponent = f_core.CreateElement(this.ownerDocument.body, "div", {
-					className: "f_toolTip",			
-					id: tooltipClientId
-				});
-				
-				tooltipComponent.setAttribute("v:class", "f_toolTip");
-
-				tooltipComponent = this.f_getClass().f_getClassLoader().f_init(tooltipComponent, true, true);
-			}
-			
 			return {
-				tooltip: tooltipComponent,
+				toolTipClientId: tooltipClientId,
 				item: parent,
 				container: this
 			};

@@ -530,26 +530,22 @@ public abstract class AbstractGridRenderContext {
 				IToolTipIterator tooltipIterator = ((IToolTipComponent) column)
 						.listToolTips();
 
-				if (tooltipIterator.count() > 0) {
+				for (; tooltipIterator.hasNext();) {
+					ToolTipComponent tooltipComponent = tooltipIterator.next();
 
-					for (; tooltipIterator.hasNext();) {
-						ToolTipComponent tooltipComponent = tooltipIterator
-								.next();
-
-						String tid = tooltipComponent
-								.getToolTipId(facesContext);
-						if (tid != null) {
-							gridToolTips.put(tid, tooltipComponent);
-						}
-
-						tid = tooltipComponent.getClientId(facesContext);
+					String tid = tooltipComponent.getToolTipId(facesContext);
+					if (tid != null) {
 						gridToolTips.put(tid, tooltipComponent);
-						if (tooltipId == null) {
-							tooltipId = tid;
-						}
+					}
+
+					tid = tooltipComponent.getClientId(facesContext);
+					gridToolTips.put(tid, tooltipComponent);
+					if (tooltipId == null) {
+						tooltipId = tid;
 					}
 				}
 			}
+			
 			if (column instanceof IToolTipIdCapability) {
 				String tid = ((IToolTipIdCapability) column).getToolTipId();
 				if (tid != null) {

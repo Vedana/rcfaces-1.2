@@ -59,6 +59,8 @@ public abstract class AbstractJavaScriptRenderer extends
 
 	private static final boolean ENCODE_EVENT_ATTRIBUTE_ON_COLLECTOR_MODE = true;
 
+	private static final String CONTAINS_TOOLTIP_PROPERTY = "org.rcfaces.renderkit.CONTAINS_TOOLTIP";
+
 	/*
 	 * protected void setInitializeByName(IComponentRenderContext renderContext)
 	 * { renderContext.setAttribute(INIT_BY_NAME, Boolean.TRUE); }
@@ -411,6 +413,17 @@ public abstract class AbstractJavaScriptRenderer extends
 		if (className != null) {
 			javaScriptRenderContext.appendRequiredClass(className, null);
 		}
+
+		if (writer.getComponentRenderContext().containsAttribute(
+				CONTAINS_TOOLTIP_PROPERTY)) {
+			javaScriptRenderContext.appendRequiredClass(
+					JavaScriptClasses.COMPONENT, "toolTip");
+
+		}
+	}
+
+	protected void markContainsTooltip(IComponentRenderContext renderContext) {
+		renderContext.setAttribute(CONTAINS_TOOLTIP_PROPERTY, Boolean.TRUE);
 	}
 
 	public String getResourceBundleValue(IHtmlWriter htmlWriter, String key) {
@@ -489,6 +502,8 @@ public abstract class AbstractJavaScriptRenderer extends
 
 		if (tooltipClientId != null) {
 			htmlWriter.writeAttribute("v:toolTipId", tooltipClientId);
+
+			markContainsTooltip(htmlWriter.getComponentRenderContext());
 		}
 	}
 }

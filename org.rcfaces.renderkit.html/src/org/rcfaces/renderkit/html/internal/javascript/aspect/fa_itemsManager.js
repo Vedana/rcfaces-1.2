@@ -45,7 +45,7 @@ var __members = {
 	 * @method protected abstract
 	 */
 	fa_updateElementStyle: f_class.ABSTRACT
-}
+};
 
 new f_aspect("fa_itemsManager", {
 	extend: [ fa_cardinality ],

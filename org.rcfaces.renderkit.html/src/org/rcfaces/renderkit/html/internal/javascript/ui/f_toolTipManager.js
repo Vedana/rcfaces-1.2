@@ -1,7 +1,7 @@
 /**
  * Class Tooltip Manager
  * 
- * @class public f_toolTipManager extends f_object
+ * @class public f_toolTipManager extends f_object, fa_commands
  * @author jbmeslin@vedana.com (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -11,7 +11,7 @@ var __statics = {
 	/**
 	 * @field private static f_toolTipManager
 	 */
-	_Instance : undefined,
+	_Instance: undefined,
 
 	/**
 	 * @field private final static Number
@@ -30,14 +30,15 @@ var __statics = {
 	 * @return Boolean
 	 * @context event:evt
 	 */
-	_ElementOver : function(evt) {
-		
+	_ElementOver: function(evt) {
+
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
-		
-	//	f_core.Debug(f_toolTipManager, "_ElementOver: event="+evt+" target="+evt.target);
-		
+
+		// f_core.Debug(f_toolTipManager, "_ElementOver: event="+evt+"
+		// target="+evt.target);
+
 		var instance = f_toolTipManager.Get();
 
 		try {
@@ -55,15 +56,16 @@ var __statics = {
 	 * @return Boolean
 	 * @context event:evt
 	 */
-	_ElementOut : function(evt) {
+	_ElementOut: function(evt) {
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
-		
-	//	f_core.Debug(f_toolTipManager, "_ElementOut: event="+evt+" target="+evt.target);
+
+		// f_core.Debug(f_toolTipManager, "_ElementOut: event="+evt+"
+		// target="+evt.target);
 
 		var instance = f_toolTipManager.Get();
-		
+
 		try {
 			return instance._elementOut(evt);
 
@@ -82,11 +84,12 @@ var __statics = {
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
-		
-	//	f_core.Debug(f_toolTipManager, "_HideToolTip: event="+evt+" target="+evt.target);
+
+		// f_core.Debug(f_toolTipManager, "_HideToolTip: event="+evt+"
+		// target="+evt.target);
 
 		var instance = f_toolTipManager.Get();
-		
+
 		try {
 			return instance._hideToolTipEvent(evt);
 
@@ -99,7 +102,7 @@ var __statics = {
 	 * @method public static
 	 * @return f_toolTipManager
 	 */
-	Get : function() {
+	Get: function() {
 		var instance = f_toolTipManager._Instance;
 		if (!instance) {
 			instance = f_toolTipManager.f_newInstance();
@@ -113,14 +116,14 @@ var __statics = {
 	 * @method protected static
 	 * @return void
 	 */
-	Finalizer : function() {
+	Finalizer: function() {
 		f_toolTipManager._Instance = undefined; // f_toolTipManager
 	}
 
 };
 
 var __members = {
-		
+
 	/**
 	 * @field f_toolTip
 	 */
@@ -135,50 +138,50 @@ var __members = {
 	 * @field Number
 	 */
 	_showDelayMs: undefined,
-	
+
 	/**
 	 * @field Number
 	 */
 	_neighbourThresholdMs: undefined,
-	
+
 	/**
 	 * @field Number
 	 */
 	_lastToolTipClose: undefined,
-	
 
-	f_toolTipManager : function() {
+	f_toolTipManager: function() {
 		this.f_super(arguments);
 
 		var delay = undefined;
-		var neighbourThresholdMs=undefined;
+		var neighbourThresholdMs = undefined;
 
 		if (this.nodeType == f_core.ELEMENT_NODE) {
 			delay = f_core.GetNumberAttribute(this, "v:delay", -1);
-			neighbourThresholdMs = f_core.GetNumberAttribute(this, "v:neighbourThreshold", -1);
+			neighbourThresholdMs = f_core.GetNumberAttribute(this,
+					"v:neighbourThreshold", -1);
 		}
 
-		if (delay<0 || delay===undefined) {
-			delay=f_toolTipManager._DEFAULT_DELAY_MS;
+		if (delay < 0 || delay === undefined) {
+			delay = f_toolTipManager._DEFAULT_DELAY_MS;
 		}
-		if (neighbourThresholdMs<0 || neighbourThresholdMs===undefined) {
-			neighbourThresholdMs=f_toolTipManager._DEFAULT_NEIGHBOUR_THRESHOLD_MS;
+		if (neighbourThresholdMs < 0 || neighbourThresholdMs === undefined) {
+			neighbourThresholdMs = f_toolTipManager._DEFAULT_NEIGHBOUR_THRESHOLD_MS;
 		}
-				
-		this._showDelayMs=delay;
-		this._neighbourThresholdMs=neighbourThresholdMs;
-			
+
+		this._showDelayMs = delay;
+		this._neighbourThresholdMs = neighbourThresholdMs;
+
 		f_core.AddEventListener(document.body, "mouseover",
 				f_toolTipManager._ElementOver, document.body);
-		
+
 		f_core.AddEventListener(document.body, "mouseout",
 				f_toolTipManager._ElementOut, document.body);
 
 		// Touches
-		
+
 		f_core.AddEventListener(document.body, "keydown",
 				f_toolTipManager._HideToolTip, document.body);
-		
+
 		// Focus
 		f_core.AddEventListener(document.body, "focus",
 				f_toolTipManager._HideToolTip, document.body);
@@ -186,170 +189,212 @@ var __members = {
 		// Clavier
 		f_core.AddEventListener(document.body, "mousedown",
 				f_toolTipManager._HideToolTip, document.body);
-		
-		//f_core.AddEventListener(window, "mouseout", f_toolTipManager._HideToolTip, window);
+
+		// f_core.AddEventListener(window, "mouseout",
+		// f_toolTipManager._HideToolTip, window);
 	},
 
-	f_finalize : function() {
-		this._currentTooltip= undefined;
-		
-		var timerId=this._timerId;
+	f_finalize: function() {
+		this._currentTooltip = undefined;
+
+		var timerId = this._timerId;
 		if (timerId) {
 			this._timerId = undefined;
-			
+
 			clearTimeout(timerId);
 		}
-		
+
 		this.f_super(arguments);
 	},
-	
-	/**
-	 * @method private static
-	 * @param Event evt
-	 * @return Boolean
-	 */
-	_elementOver : function(evt) {
 
-		var element = evt.target || this._getElementAtPosition(evt);
-		var tooltipContainer = this._getToolTipContainerForElement(element);
-		
-		var tooltipInfos = null;		
-		if (tooltipContainer) {
-			tooltipInfos=tooltipContainer.fa_getToolTipForElement(element);
-		}
-		
-		if (f_core.IsDebugEnabled(f_toolTipManager)) {
-			f_core.Debug(f_toolTipManager, "_elementOver: over="+tooltipContainer+" element="+element.id);
-			if (tooltipInfos) {
-				f_core.Debug(f_toolTipManager, "_elementOver: item="+tooltipInfos.item.id+" container="+tooltipInfos.container.id);
-			}
-		}
-
-		var currentTooltip = this._currentTooltip;
-		
-		if (currentTooltip && tooltipInfos && 
-				tooltipInfos.container==currentTooltip.f_getElementContainer() &&
-				tooltipInfos.item==currentTooltip.f_getElementItem()) {
-			
-			// Le même tooltip que celui qui est déjà affiché !
-			f_core.Debug(f_toolTipManager, "_elementOver: Same TOOLTIP");
-			return true;
-		}
-		
-		var timerId=this._timerId;
-		if (timerId) {
-			this._timerId=undefined;
-			
-			window.clearTimeout(timerId);			
-		}
-		
-		if (currentTooltip) {
-			this.f_hideToolTip(currentTooltip);
-			currentTooltip.f_clear();
-			
-			this._currentTooltip = undefined;
-		}
-		
-		if (!tooltipInfos) {
-			// Pas de container de tooltip, rien à faire			
-			return true;
-		}
-
-		var tooltip = tooltipInfos.tooltip;
-		if (!tooltip) {
-			// Pas de tooltip trouvé
-			return true;
-		}
-		
-		tooltip.f_initialize(tooltipContainer, tooltipInfos.item);
-		this._currentTooltip = tooltip;
-		
-		var self=this;
-		
-		if (this._showDelayMs==0) {
-			this.f_showToolTip(tooltip, evt);
-			return true;
-		}
-		
-		if (this._neighbourThresholdMs>=0 && this._lastToolTipClose>0) {
-			var now=new Date().getTime();
-			
-			if (now<this._lastToolTipClose+this._neighbourThresholdMs) {
-				this.f_showToolTip(tooltip, evt);
-				return true;				
-			}
-		}
-		
-		this._timerId = window.setTimeout(function() {
-			self.f_showToolTip(tooltip, evt);
-			self=undefined;
-			tooltip=undefined;
-			
-		}, this._showDelayMs);
-		
-		return true;
-	},
-	
-	/**
-	 * @method protected
-	 * @param f_toolTip tooltip
-	 * @param optional Event jsEvent
-	 * @return void
-	 */
-	f_showToolTip: function(tooltip, jsEvent) {
-		if (!tooltip) {
-			return;
-		}
-		
-		var tooltipContainer = tooltip.f_getElementContainer();
-		if (!tooltipContainer) {
-			return;
-		}
-		
-		tooltipContainer.fa_setToolTipVisible(tooltip, true, jsEvent);
-
-		f_core.Debug(f_toolTipManager, "f_showToolTip: tooltipContainer="
-				+ tooltipContainer.id + " tooltip=" + tooltip.id);
-	},
-	
-	/**
-	 * @method protected
-	 * @param f_toolTip tooltip
-	 * @param optional Event jsEvent
-	 * @return void
-	 */
-	f_hideToolTip: function(tooltip, jsEvent) {
-		if (!tooltip) {
-			return;
-		}
-		
-		var tooltipContainer = tooltip.f_getElementContainer();
-		if (!tooltipContainer) {
-			return;
-		}
-		
-		if (!tooltip.f_isVisible()) {
-			return;
-		}
-		
-		this._lastToolTipClose=new Date().getTime();
-		
-		tooltipContainer.fa_setToolTipVisible(tooltip, false, jsEvent);
-
-		f_core.Debug(f_toolTipManager, "f_hideToolTip: tooltipContainer="
-				+ tooltipContainer.id + " tooltip=" + tooltip.id);
-		
-	},
-	
 	/**
 	 * @method private static
 	 * @param Event
 	 *            evt
 	 * @return Boolean
 	 */
-	_elementOut : function(evt) {
+	_elementOver: function(evt) {
+
+		var element = evt.target || this._getElementAtPosition(evt);
+		var tooltipContainer = this._getToolTipContainerForElement(element);
+
+		var tooltipInfos = null;
+		if (tooltipContainer) {
+			tooltipInfos = tooltipContainer.fa_getToolTipForElement(element);
+		}
+
+		if (f_core.IsDebugEnabled(f_toolTipManager)) {
+			f_core.Debug(f_toolTipManager, "_elementOver: over="
+					+ tooltipContainer + " element=" + element.id);
+			if (tooltipInfos) {
+				f_core.Debug(f_toolTipManager, "_elementOver: item="
+						+ tooltipInfos.item.id + " container="
+						+ tooltipInfos.container.id);
+			}
+		}
+
+		var currentTooltip = this._currentTooltip;
+
+		if (currentTooltip
+				&& tooltipInfos
+				&& tooltipInfos.container == currentTooltip
+						.f_getElementContainer()
+				&& tooltipInfos.item == currentTooltip.f_getElementItem()) {
+
+			// Le même tooltip que celui qui est déjà affiché !
+			f_core.Debug(f_toolTipManager, "_elementOver: Same TOOLTIP");
+			return true;
+		}
+
+		var timerId = this._timerId;
+		if (timerId) {
+			this._timerId = undefined;
+
+			window.clearTimeout(timerId);
+		}
+
+		if (currentTooltip) {
+			this.f_hideToolTip(currentTooltip);
+			currentTooltip.f_clear();
+
+			this._currentTooltip = undefined;
+		}
+
+		if (!tooltipInfos) {
+			// Pas de container de tooltip, rien à faire
+			return true;
+		}
+
+		var tooltip = this.f_getToolTipByClientId(tooltipInfos.toolTipClientId,
+				tooltipInfos.container.ownerDocument);
+		if (!tooltip) {
+			// Pas de tooltip trouvé
+			return true;
+		}
+
+		tooltip.f_initialize(tooltipContainer, tooltipInfos.item);
+		this._currentTooltip = tooltip;
+
+		var self = this;
+
+		if (this._showDelayMs == 0) {
+			f_core.Debug(f_toolTipManager, "_elementOver: No delay show tooltip "+tooltip.id);
+			this.f_showToolTip(tooltip, evt);
+			return true;
+		}
+
+		if (this._neighbourThresholdMs >= 0 && this._lastToolTipClose > 0) {
+			var now = new Date().getTime();
+
+			if (now < this._lastToolTipClose + this._neighbourThresholdMs) {
+				f_core.Debug(f_toolTipManager, "_elementOver: Neighbour show tooltip "+tooltip.id);
+				this.f_showToolTip(tooltip, evt);
+				return true;
+			}
+		}
+
+		this._timerId = window.setTimeout(function() {
+			f_core.Debug(f_toolTipManager, "_elementOver: Time out show tooltip "+tooltip.id);
+			
+			self.f_showToolTip(tooltip, evt);
+			self = undefined;
+			tooltip = undefined;
+
+		}, this._showDelayMs);
+
+		return true;
 	},
-	
+	/**
+	 * @method protected
+	 * @param String
+	 *            tooltipClientId
+	 * @return f_toolTip
+	 */
+	f_getToolTipByClientId: function(tooltipClientId, doc) {
+
+		var tooltipComponent = f_core.GetElementByClientId(tooltipClientId);
+
+		if (tooltipComponent) {
+			return tooltipComponent;
+		}
+
+		tooltipComponent = f_core.CreateElement(doc.body, "div", {
+			className: "f_toolTip",
+			id: tooltipClientId
+		});
+
+		tooltipComponent.setAttribute("v:class", "f_toolTip");
+
+		tooltipComponent = this.f_getClass().f_getClassLoader().f_init(
+				tooltipComponent, true, true);
+
+		return tooltipComponent;
+	},
+
+	/**
+	 * @method protected
+	 * @param f_toolTip
+	 *            tooltip
+	 * @param optional
+	 *            Event jsEvent
+	 * @return void
+	 */
+	f_showToolTip: function(tooltip, jsEvent) {
+		if (!tooltip) {
+			return;
+		}
+
+		var tooltipContainer = tooltip.f_getElementContainer();
+		if (!tooltipContainer) {
+			return;
+		}
+
+		tooltipContainer.fa_setToolTipVisible(tooltip, true, jsEvent);
+
+		f_core.Debug(f_toolTipManager, "f_showToolTip: tooltipContainer="
+				+ tooltipContainer.id + " tooltipItem="+tooltip.f_getElementItem().id+" tooltip=" + tooltip.id);
+	},
+
+	/**
+	 * @method protected
+	 * @param f_toolTip
+	 *            tooltip
+	 * @param optional
+	 *            Event jsEvent
+	 * @return void
+	 */
+	f_hideToolTip: function(tooltip, jsEvent) {
+		if (!tooltip) {
+			return;
+		}
+
+		var tooltipContainer = tooltip.f_getElementContainer();
+		if (!tooltipContainer) {
+			return;
+		}
+
+		if (!tooltip.f_isVisible()) {
+			return;
+		}
+
+		this._lastToolTipClose = new Date().getTime();
+
+		tooltipContainer.fa_setToolTipVisible(tooltip, false, jsEvent);
+
+		f_core.Debug(f_toolTipManager, "f_hideToolTip: tooltipContainer="
+				+ tooltipContainer.id + " tooltip=" + tooltip.id);
+
+	},
+
+	/**
+	 * @method private static
+	 * @param Event
+	 *            evt
+	 * @return Boolean
+	 */
+	_elementOut: function(evt) {
+	},
+
 	/**
 	 * @method private static
 	 * @param Event
@@ -358,13 +403,13 @@ var __members = {
 	 */
 	_hideToolTipEvent: function(evt) {
 		var currentTooltip = this._currentTooltip;
-		
+
 		if (!currentTooltip) {
 			return;
 		}
 
 		this._currentTooltip = undefined;
-		
+
 		this.f_hideToolTip(currentTooltip);
 		currentTooltip.f_clear();
 	},
@@ -375,7 +420,7 @@ var __members = {
 	 *            evt
 	 * @return Element element
 	 */
-	_getElementAtPosition : function(evt) {
+	_getElementAtPosition: function(evt) {
 
 		var eventPos = f_core.GetJsEventPosition(evt);
 		if (!eventPos) {
@@ -398,76 +443,80 @@ var __members = {
 	 *            element
 	 * @return Any container
 	 */
-	_getToolTipContainerForElement : function(source) {
-	
+	_getToolTipContainerForElement: function(source) {
+
 		var parentTooltip = null;
-		
-		var comp=source;
-		for (; comp ; comp=comp.parentNode) {
-			
-			if (comp.nodeType==f_core.TEXT_NODE) {
+
+		var comp = source;
+		for (; comp; comp = comp.parentNode) {
+
+			if (comp.nodeType == f_core.TEXT_NODE) {
 				continue;
 			}
 
-			if (comp.nodeType!=f_core.ELEMENT_NODE) {
+			if (comp.nodeType != f_core.ELEMENT_NODE) {
 				break;
 			}
-			
-			if (comp.alt || comp.title) {
+
+			if (comp.title) { // et le ALT ??? 
 				// Risque d'afficher un tooltip ... on laisse tomber TOUT !
 				return false;
 			}
-			
+
 			var state = f_classLoader.GetObjectState(comp);
 
-			if (state==f_classLoader.UNKNOWN_STATE) {
+			if (state == f_classLoader.UNKNOWN_STATE) {
 				continue;
 			}
-			
+
 			if (state == f_classLoader.LAZY_STATE) {
 				var classLoader = this.f_getClass().f_getClassLoader();
-				
+
 				classLoader.f_init(comp, true, true);
 			}
-			
+
 			if (comp.fa_getToolTipForElement && !parentTooltip) {
-				// Il faut rechercher jusqu'à la racine pour rechercher un ALT ou un TITLE
-				parentTooltip=comp;
+				// Il faut rechercher jusqu'à la racine pour rechercher un ALT
+				// ou un TITLE
+				parentTooltip = comp;
 			}
 		}
-		
+
 		return parentTooltip;
 	},
-	
+
 	/**
 	 * @method public
-	 * @param Number showDelayMs
+	 * @param Number
+	 *            showDelayMs
 	 * @return void
 	 */
 	f_setShowDelayMs: function(showDelayMs) {
-		if (!showDelayMs || showDelayMs<0) {
+		if (!showDelayMs || showDelayMs < 0) {
 			showDelayMs = f_toolTipManager._DEFAULT_DELAY;
 		}
-		
-		this._showDelayMs=showDelayMs;
+
+		this._showDelayMs = showDelayMs;
 	},
-	
+
 	/**
 	 * @method public
-	 * @param Number neighbourThresholdMs
+	 * @param Number
+	 *            neighbourThresholdMs
 	 * @return void
 	 */
 	f_setNeighbourThresholdMs: function(neighbourThresholdMs) {
-		if (!neighbourThresholdMs || neighbourThresholdMs<0) {
+		if (!neighbourThresholdMs || neighbourThresholdMs < 0) {
 			neighbourThresholdMs = f_toolTipManager._DEFAULT_DELAY;
 		}
-		
-		this._neighbourThresholdMs=neighbourThresholdMs;
+
+		this._neighbourThresholdMs = neighbourThresholdMs;
 	}
 };
 
 new f_class("f_toolTipManager", {
-	extend : f_object,
-	statics : __statics,
-	members : __members
+	extend: f_object,
+	aspects: [ fa_commands ],
+	statics: __statics,
+	members: __members
 });

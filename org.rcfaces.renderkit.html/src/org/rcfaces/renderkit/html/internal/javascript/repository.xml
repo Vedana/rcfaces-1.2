@@ -295,6 +295,12 @@
 			</class>
 		</file>	
 		
+		<file name="aspect/fa_basicToolTipContainer.js">
+			<class name="fa_basicToolTipContainer">
+				<required-class name="fa_toolTipContainer" />
+			</class>
+		</file>	
+		
 		
 	</module>
 	
@@ -325,6 +331,8 @@
 				<required-class name="fa_serializable" />
 				<required-class name="fa_clientData" />
 				<required-class name="fa_namingContainer" />
+
+				<required-class id="toolTip" name="f_toolTipManager" />				
 			</class>
 		</file>
 		<file name="input/f_accelerator.js">
@@ -366,20 +374,6 @@
 			</class>
 		</file>
 		
-		<file name="ui/f_toolTip.js">
-			<class name="f_toolTip">
-				<required-class name="f_component" />
-				<required-class name="f_toolTipManager"/>
-				<required-class name="fa_asyncRender"/>
-			</class>
-		</file>
-		
-		<file name="ui/f_toolTipManager.js">
-			<class name="f_toolTipManager">
-				<required-class name="f_object" />
-			</class>
-		</file>	
-		
 		
 		<file name="ui/f_styledText.js">
 			<class name="f_styledText">
@@ -392,9 +386,8 @@
 				<required-class name="fa_focusStyleClass" />
 				<required-class name="fa_message" />
 				<required-class name="fa_tabIndex"/>
-				<required-class name="fa_toolTipContainer"/>
-				
-
+				<required-class name="fa_basicToolTipContainer"/>
+	
 				<required-style name="f_input.css" />
 			</class>
 		</file>
@@ -492,6 +485,7 @@
 				<required-class name="fa_value" />
 				<required-class name="fa_tabIndex" />
 				<required-class name="fa_aria" />
+				<required-class name="fa_basicToolTipContainer"/>				
 
 				<required-style name="f_imageButton.css" />
 			</class>
@@ -525,6 +519,24 @@
 				<required-class name="f_imageButton" />
 
 				<required-style name="f_imageSubmitButton.css" />
+			</class>
+		</file>
+	</module>
+	
+	<module id="tooltip">		
+		
+		<file name="ui/f_toolTipManager.js">
+			<class name="f_toolTipManager">
+				<required-class name="f_object" />
+				<required-class name="fa_commands" />
+			</class>
+		</file>	
+
+		<file name="ui/f_toolTip.js">
+			<class name="f_toolTip">
+				<required-class name="f_component" />
+				<required-class name="f_toolTipManager"/>
+				<required-class name="fa_asyncRender"/>
 			</class>
 		</file>
 	</module>
@@ -866,6 +878,7 @@
 		<file name="ui/f_image.js">
 			<class name="f_image">
 				<required-class name="f_filtredComponent" />
+				<required-class name="fa_basicToolTipContainer"/>
 
 				<required-style name="f_image.css" />
 			</class>
@@ -1211,7 +1224,7 @@
 				<required-class name="fa_autoOpen" />
 				<required-class name="fa_immediate" />
 				<required-class name="fa_aria" />
-				<required-class name="fa_toolTipContainer" />
+
 				<required-class id="menu" name="f_menu" />
 				
 				<required-class id="ajax" name="f_httpRequest" />
@@ -1221,6 +1234,9 @@
 				<required-class id="additional" name="f_additionalInformation" />
 			
 				<required-class id="dnd" name="f_dragAndDropEngine" />
+
+				<required-class name="fa_toolTipContainer" />				
+				<required-class id="toolTip" name="f_toolTipManager" />				
 
 				<required-style name="f_grid.css" />
 			</class>

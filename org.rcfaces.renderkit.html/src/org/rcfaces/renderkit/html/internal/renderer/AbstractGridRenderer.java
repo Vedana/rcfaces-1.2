@@ -299,6 +299,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 						TOOLTIPS_RENDER_CONTEXT_STATE,
 						new Object[] { state, contentType });
 			}
+			
+			javaScriptRenderContext.appendRequiredClass(JavaScriptClasses.GRID, "toolTip");
 		}
 
 		if (gridRenderContext.hasAdditionalInformations()) {

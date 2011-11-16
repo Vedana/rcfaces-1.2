@@ -52,7 +52,7 @@ var __members = {
 		
 		return s+"]";
 	}
-}
+};
 
 new f_class("f_object",  {
 	members: __members

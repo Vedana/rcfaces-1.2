@@ -65,7 +65,7 @@ var __statics = {
 	 * @field hidden static final String
 	 */
 	 CAMELIA_RESPONSE_HEADER: "X-Camelia-Service"
-} 
+};
 
 var __members = {
 
@@ -240,7 +240,7 @@ var __members = {
 	 * @return void
 	 */
 	f_cancelRequest: function() {
-		f_core.Debug(f_httpRequest, "f_cancelRequest: Cancel request");
+		f_core.Debug(f_httpRequest, "f_cancelRequest: Clean or cancel request");
 
 		var request=this._request;
 		if (request) {

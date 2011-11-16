@@ -26,113 +26,114 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
  * @version $Revision$ $Date$
  */
 public class HyperLinkRenderer extends AbstractCssRenderer {
-    private static final String REVISION = "$Revision$";
+	private static final String REVISION = "$Revision$";
 
-    public void encodeEnd(IComponentWriter writer) throws WriterException {
-        FacesContext facesContext = writer.getComponentRenderContext()
-                .getFacesContext();
+	public void encodeEnd(IComponentWriter writer) throws WriterException {
+		FacesContext facesContext = writer.getComponentRenderContext()
+				.getFacesContext();
 
-        HyperLinkComponent component = (HyperLinkComponent) writer
-                .getComponentRenderContext().getComponent();
+		HyperLinkComponent component = (HyperLinkComponent) writer
+				.getComponentRenderContext().getComponent();
 
-        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
+		IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        boolean disabled = component.isDisabled(facesContext);
-        boolean readOnly = component.isReadOnly(facesContext);
-        if (disabled) {
-            getCssStyleClasses(htmlWriter).addSuffix("_disabled");
+		boolean disabled = component.isDisabled(facesContext);
+		boolean readOnly = component.isReadOnly(facesContext);
+		if (disabled) {
+			getCssStyleClasses(htmlWriter).addSuffix("_disabled");
 
-        } else if (readOnly) {
-            getCssStyleClasses(htmlWriter).addSuffix("_readOnly");
-        }
+		} else if (readOnly) {
+			getCssStyleClasses(htmlWriter).addSuffix("_readOnly");
+		}
 
-        htmlWriter.startElement(IHtmlWriter.A);
-        writeHtmlAttributes(htmlWriter);
-        writeJavaScriptAttributes(htmlWriter);
-        writeCssAttributes(htmlWriter);
-        if (disabled) {
-            htmlWriter.writeDisabled();
-        }
+		htmlWriter.startElement(IHtmlWriter.A);
+		writeHtmlAttributes(htmlWriter);
+		writeJavaScriptAttributes(htmlWriter);
+		writeCssAttributes(htmlWriter);
+		if (disabled) {
+			htmlWriter.writeDisabled();
+		}
+		writeFirstTooltipClientId(htmlWriter);
 
-        // Il faut le laisser pour le lazy FOCUS
-        htmlWriter.writeHRef(IHtmlWriter.JAVASCRIPT_VOID);
+		// Il faut le laisser pour le lazy FOCUS
+		htmlWriter.writeHRef(IHtmlWriter.JAVASCRIPT_VOID);
 
-        Object value = getValue(component);
-        if (value != null) {
-            String convertedValue = convertValue(facesContext, component, value);
+		Object value = getValue(component);
+		if (value != null) {
+			String convertedValue = convertValue(facesContext, component, value);
 
-            if (convertedValue != null) {
-                htmlWriter.writeAttribute("v:value", convertedValue);
-            }
-        }
+			if (convertedValue != null) {
+				htmlWriter.writeAttribute("v:value", convertedValue);
+			}
+		}
 
-        String text = component.getText(facesContext);
-        if (text != null) {
-            if (text != null) {
-                text = ParamUtils.formatMessage(component, text);
-            }
-            htmlWriter.writeText(text);
-        }
+		String text = component.getText(facesContext);
+		if (text != null) {
+			if (text != null) {
+				text = ParamUtils.formatMessage(component, text);
+			}
+			htmlWriter.writeText(text);
+		}
 
-        htmlWriter.endElement(IHtmlWriter.A);
+		htmlWriter.endElement(IHtmlWriter.A);
 
-        htmlWriter.addSubFocusableComponent(htmlWriter
-                .getComponentRenderContext().getComponentClientId());
-        htmlWriter.getJavaScriptEnableMode().enableOnFocus();
+		htmlWriter.addSubFocusableComponent(htmlWriter
+				.getComponentRenderContext().getComponentClientId());
+		htmlWriter.getJavaScriptEnableMode().enableOnFocus();
 
-        super.encodeEnd(writer);
-    }
+		super.encodeEnd(writer);
+	}
 
 	/*
-     * (non-Javadoc)
-     * 
-     * @seeorg.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#
-     * getJavaScriptClassName()
-     */
-    protected String getJavaScriptClassName() {
-        return JavaScriptClasses.HYPER_LINK;
-    }
+	 * (non-Javadoc)
+	 * 
+	 * @seeorg.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#
+	 * getJavaScriptClassName()
+	 */
+	protected String getJavaScriptClassName() {
+		return JavaScriptClasses.HYPER_LINK;
+	}
 
-    protected String getActionEventName(INameSpace nameSpace) {
-        return nameSpace.getSelectionEventName();
-    }
-   
-    protected boolean useHtmlAccessKeyAttribute() {
-    	return true;
-    }
+	protected String getActionEventName(INameSpace nameSpace) {
+		return nameSpace.getSelectionEventName();
+	}
 
-    protected void decode(IRequestContext context, UIComponent component,
-            IComponentData componentData) {
-        super.decode(context, component, componentData);
+	protected boolean useHtmlAccessKeyAttribute() {
+		return true;
+	}
 
-        FacesContext facesContext = context.getFacesContext();
+	protected void decode(IRequestContext context, UIComponent component,
+			IComponentData componentData) {
+		super.decode(context, component, componentData);
 
-        HyperLinkComponent hyperlinkComponent = (HyperLinkComponent) component;
+		FacesContext facesContext = context.getFacesContext();
 
-        String text = componentData.getStringProperty("text");
-        if (text != null) {
-            String old = hyperlinkComponent.getText(facesContext);
-            if (text.equals(old) == false) {
-                hyperlinkComponent.setText(text);
+		HyperLinkComponent hyperlinkComponent = (HyperLinkComponent) component;
 
-                component.queueEvent(new PropertyChangeEvent(component,
-                        Properties.TEXT, old, text));
-            }
-        }
+		String text = componentData.getStringProperty("text");
+		if (text != null) {
+			String old = hyperlinkComponent.getText(facesContext);
+			if (text.equals(old) == false) {
+				hyperlinkComponent.setText(text);
 
-        Object value = componentData.getProperty("value");
-        if (value != null) {
-            value = getConvertedValue(facesContext, hyperlinkComponent, value);
+				component.queueEvent(new PropertyChangeEvent(component,
+						Properties.TEXT, old, text));
+			}
+		}
 
-            if (value != null) {
-                Object old = hyperlinkComponent.getValue();
-                if (value.equals(old) == false) {
-                    hyperlinkComponent.setValue(value);
+		Object value = componentData.getProperty("value");
+		if (value != null) {
+			value = getConvertedValue(facesContext, hyperlinkComponent, value);
 
-                    hyperlinkComponent.queueEvent(new PropertyChangeEvent(
-                            hyperlinkComponent, Properties.VALUE, old, value));
-                }
-            }
-        }
-    }
+			if (value != null) {
+				Object old = hyperlinkComponent.getValue();
+				if (value.equals(old) == false) {
+					hyperlinkComponent.setValue(value);
+
+					hyperlinkComponent.queueEvent(new PropertyChangeEvent(
+							hyperlinkComponent, Properties.VALUE, old, value));
+				}
+			}
+		}
+	}
 }

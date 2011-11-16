@@ -11,7 +11,9 @@
  */
 var __members = {
 	fa_asyncRender: function() {
-		this._interactive=f_core.GetBooleanAttribute(this, "v:asyncRender");
+		if (this.nodeType==f_core.ELEMENT_NODE) {
+			this._interactive=f_core.GetBooleanAttribute(this, "v:asyncRender");
+		}
 	},
 	f_finalize: function() {
 //		this._interactive=undefined; // boolean
@@ -30,8 +32,8 @@ var __members = {
 	 * @method hidden
 	 * @return void
 	 */
-	f_resetInteractiveRenderer: function() {
-		this._interactive=true;
+	f_setInteractiveRenderer: function(state) {
+		this._interactive=state;
 	},
 	f_updateVisibility: {
 		after: function(visible) {
