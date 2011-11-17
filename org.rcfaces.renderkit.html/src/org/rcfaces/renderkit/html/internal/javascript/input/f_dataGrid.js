@@ -730,10 +730,9 @@ var __members = {
 			}
 		}
 		
-		if (properties._toolTip) { // temporaire
-			row._toolTipId = properties._toolTip;
+		if (properties._toolTipId) {
+			row._toolTipId = properties._toolTipId;
 		}
-		
 		
 		this.fa_updateElementStyle(row, false);
 		

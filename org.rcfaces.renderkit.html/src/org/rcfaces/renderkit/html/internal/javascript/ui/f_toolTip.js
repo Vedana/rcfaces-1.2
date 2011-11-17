@@ -401,7 +401,24 @@ var __members = {
 		 * style.opacity="0"; }
 		 */
 	},
+	
 	f_cleanContent: function() {
+		this.f_asyncDestroyWaiting();
+		
+		var gs=[ false ];
+		var children=this.childNodes;
+		for(var i=0;i<children.length;i++) {
+			var child=children[i];
+			if (child.nodeType==f_core.ELEMENT_NODE) {
+				gs.push(child);
+			}
+		}
+		
+		if (gs.length>1) {
+			var classLoader=this.f_getClass().f_getClassLoader();
+			classLoader.f_garbageObjects.apply(classLoader, gs);
+		}
+	
 		for (; this.firstChild;) {
 			this.removeChild(this.firstChild);
 		}

@@ -6,7 +6,8 @@
  * 
  * @class public abstract f_grid extends f_component, fa_disabled, fa_immediate,
  *        fa_pagedComponent, fa_subMenu, fa_commands, fa_selectionManager<String[]>,
- *        fa_scrollPositions, fa_additionalInformationManager, fa_droppable, fa_draggable, fa_autoScroll, fa_aria, fa_toolTipContainer
+ *        fa_scrollPositions, fa_additionalInformationManager, fa_droppable,
+ *        fa_draggable, fa_autoScroll, fa_aria, fa_toolTipContainer
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -16,132 +17,132 @@ var __statics = {
 	/**
 	 * @field hidden static final String
 	 */
-	_EMPTY_DATA_MESSAGE_ID_SUFFIX : "::emptyDataMessage",
+	_EMPTY_DATA_MESSAGE_ID_SUFFIX: "::emptyDataMessage",
 
 	/**
 	 * @field hidden static final String
 	 */
-	_DATA_BODY_SCROLL_ID_SUFFIX : "::dataBody_scroll",
+	_DATA_BODY_SCROLL_ID_SUFFIX: "::dataBody_scroll",
 
 	/**
 	 * @field hidden static final String
 	 */
-	_DATA_TITLE_SCROLL_ID_SUFFIX : "::dataTitle_scroll",
+	_DATA_TITLE_SCROLL_ID_SUFFIX: "::dataTitle_scroll",
 
 	/**
 	 * @field hidden static final String
 	 */
-	_DATA_TABLE_ID_SUFFIX : "::dataTable",
+	_DATA_TABLE_ID_SUFFIX: "::dataTable",
 
 	/**
 	 * @field hidden static final String
 	 */
-	_FIXED_HEADER_ID_SUFFIX : "::fixedHeader",
+	_FIXED_HEADER_ID_SUFFIX: "::fixedHeader",
 
 	/**
 	 * @field private static final String
 	 */
-	_DEFAULT_ALIGNMENT : "left",
+	_DEFAULT_ALIGNMENT: "left",
 
 	/**
 	 * @field private static final String[]
 	 */
-	_DEFAULT_ROW_STYLE_CLASSES : [ "f_grid_row_odd", "f_grid_row_even" ],
+	_DEFAULT_ROW_STYLE_CLASSES: [ "f_grid_row_odd", "f_grid_row_even" ],
 
 	/**
 	 * @field protected static final Number
 	 */
-	IMAGE_WIDTH : 16,
+	IMAGE_WIDTH: 16,
 
 	/**
 	 * @field protected static final Number
 	 */
-	IMAGE_HEIGHT : 16,
+	IMAGE_HEIGHT: 16,
 
 	/**
 	 * @field private static final Number
 	 */
-	_CURSOR_WIDTH : 8,
+	_CURSOR_WIDTH: 8,
 
 	/**
 	 * @field private static final Number
 	 */
-	_COLUMN_MIN_WIDTH : 4,
+	_COLUMN_MIN_WIDTH: 4,
 
 	/**
 	 * @field private static final Number
 	 */
-	_COLUMN_MAX_WIDTH : 640,
+	_COLUMN_MAX_WIDTH: 640,
 
 	/**
 	 * @field private static final Number
 	 */
-	_DRAG_TIMER : 25,
+	_DRAG_TIMER: 25,
 
 	/**
 	 * @field private static final Number
 	 */
-	_DRAG_DELTA : 5,
+	_DRAG_DELTA: 5,
 
 	/**
 	 * @field protected static final Boolean
 	 */
-	USE_BACKGROUND_IMAGE : false,
+	USE_BACKGROUND_IMAGE: false,
 
 	/**
 	 * @field private static final String
 	 */
-	_ROW_MENU_ID : "#row",
+	_ROW_MENU_ID: "#row",
 
 	/**
 	 * @field private static final String
 	 */
-	_BODY_MENU_ID : "#body",
+	_BODY_MENU_ID: "#body",
 
 	/**
 	 * @field private static final String
 	 */
-	_HEAD_MENU_ID : "#head",
+	_HEAD_MENU_ID: "#head",
 
 	/**
 	 * @field private static final Number
 	 */
-	_TEXT_RIGHT_PADDING : 4,
+	_TEXT_RIGHT_PADDING: 4,
 
 	/**
 	 * @field private static final Number
 	 */
-	_TEXT_LEFT_PADDING : 4,
+	_TEXT_LEFT_PADDING: 4,
 
 	/**
 	 * @field private static final Number
 	 */
-	_SORT_PADDING : 18,
+	_SORT_PADDING: 18,
 
 	/**
 	 * @field protected static final Number
 	 */
-	FULL_WAITING : 0,
+	FULL_WAITING: 0,
 
 	/**
 	 * @field protected static final Number
 	 */
-	END_WAITING : 1,
+	END_WAITING: 1,
 
 	/**
 	 * @field protected static final Number
 	 */
-	ROWS_WAITING : 2,
+	ROWS_WAITING: 2,
 
 	/**
 	 * @field private static
 	 */
-	_DragOldCursor : undefined,
+	_DragOldCursor: undefined,
 
 	/**
 	 * @field private static
 	 */
-	_DragColumn : undefined,
+	_DragColumn: undefined,
 
 	/**
 	 * @method protected static
@@ -150,7 +151,7 @@ var __statics = {
 	 * @return Boolean
 	 * @context object:dataGrid
 	 */
-	RowMouseOver : function(evt) {
+	RowMouseOver: function(evt) {
 		var dataGrid = this._dataGrid;
 
 		if (!evt) {
@@ -188,7 +189,7 @@ var __statics = {
 	 * @return Boolean
 	 * @context object:dataGrid
 	 */
-	RowMouseOut : function(evt) {
+	RowMouseOut: function(evt) {
 		var dataGrid = this._dataGrid;
 
 		if (!evt) {
@@ -215,7 +216,7 @@ var __statics = {
 	 * @return Boolean
 	 * @context object:dataGrid
 	 */
-	GetRowFromEvent : function(eventObject, evt) {
+	GetRowFromEvent: function(eventObject, evt) {
 		var dataGrid = eventObject._dataGrid;
 
 		var target;
@@ -259,7 +260,7 @@ var __statics = {
 	 * @return Boolean
 	 * @context object:dataGrid
 	 */
-	RowMouseDown : function(evt) {
+	RowMouseDown: function(evt) {
 		var dataGrid = this._dataGrid;
 
 		f_core.Debug(f_grid, "RowMouseDown: mouse down on row of '" + dataGrid
@@ -286,7 +287,8 @@ var __statics = {
 
 			var selection = fa_selectionManager.ComputeMouseSelection(evt);
 
-			dataGrid.f_moveCursor(this, true, evt, selection, fa_selectionManager.BEGIN_PHASE);
+			dataGrid.f_moveCursor(this, true, evt, selection,
+					fa_selectionManager.BEGIN_PHASE);
 
 			// On deplace le cursor avant de donner le focus !
 			dataGrid.f_forceFocus();
@@ -294,11 +296,11 @@ var __statics = {
 			if (sub && this._selected) {
 				var menu = dataGrid.f_getSubMenuById(f_grid._ROW_MENU_ID);
 				if (menu) {
-					if(menu.f_closeAllpopups) {
+					if (menu.f_closeAllpopups) {
 						menu.f_closeAllpopups();
 					}
 				}
-				
+
 			} else if (dataGrid._dragAndDropEngine) {
 				dataGrid._dragRow(evt);
 			}
@@ -309,7 +311,7 @@ var __statics = {
 					+ dataGrid + "' EXITED");
 		}
 	},
-	
+
 	/**
 	 * @method protected static
 	 * @param Event
@@ -317,7 +319,7 @@ var __statics = {
 	 * @return Boolean
 	 * @context object:dataGrid
 	 */
-	RowMouseUp : function(evt) {
+	RowMouseUp: function(evt) {
 		var dataGrid = this._dataGrid;
 
 		f_core.Debug(f_grid, "RowMouseUp: mouse up on row of '" + dataGrid
@@ -344,22 +346,23 @@ var __statics = {
 
 			var selection = fa_selectionManager.ComputeMouseSelection(evt);
 
-			dataGrid.f_moveCursor(this, true, evt, selection, fa_selectionManager.END_PHASE);
+			dataGrid.f_moveCursor(this, true, evt, selection,
+					fa_selectionManager.END_PHASE);
 
 			if (sub && this._selected) {
 				var menu = dataGrid.f_getSubMenuById(f_grid._ROW_MENU_ID);
 				if (menu) {
 					menu.f_open(evt, {
-						position : f_popup.MOUSE_POSITION
+						position: f_popup.MOUSE_POSITION
 					});
-				}				
-			} 
-			
+				}
+			}
+
 			return f_core.CancelJsEvent(evt);
-			
+
 		} finally {
-			f_core.Debug(f_grid, "RowMouseUp: mouse up on row of '"
-					+ dataGrid + "' EXITED");
+			f_core.Debug(f_grid, "RowMouseUp: mouse up on row of '" + dataGrid
+					+ "' EXITED");
 		}
 	},
 	/**
@@ -369,7 +372,7 @@ var __statics = {
 	 * @return Boolean
 	 * @context event:evt
 	 */
-	VerifyTarget : function(evt) {
+	VerifyTarget: function(evt) {
 		if (this._dataGrid || this._row) {
 			return true;
 		}
@@ -440,7 +443,7 @@ var __statics = {
 	 * @return Boolean
 	 * @context object:dataGrid
 	 */
-	FiltredCancelJsEventHandler : function(evt) {
+	FiltredCancelJsEventHandler: function(evt) {
 		var dataGrid = this._dataGrid;
 
 		if (!evt) {
@@ -451,6 +454,9 @@ var __statics = {
 			return true;
 		}
 
+		f_core.Debug(f_grid, "FiltredCancelJsEventHandler: Cancel event type='"
+				+ evt.type + "' event='" + evt + "'.");
+
 		return f_core.CancelJsEventHandler(evt);
 	},
 	/**
@@ -460,7 +466,7 @@ var __statics = {
 	 * @return Boolean
 	 * @context object:dataGrid
 	 */
-	RowMouseDblClick : function(evt) {
+	RowMouseDblClick: function(evt) {
 		var dataGrid = this._dataGrid;
 
 		if (!evt) {
@@ -492,7 +498,7 @@ var __statics = {
 	 * @return Boolean
 	 * @context object:dataGrid
 	 */
-	_BodyMouseDown : function(evt) {
+	_BodyMouseDown: function(evt) {
 		var dataGrid = this._dataGrid;
 
 		if (!evt) {
@@ -528,7 +534,7 @@ var __statics = {
 		var menu = dataGrid.f_getSubMenuById(menuId);
 		if (menu) {
 			menu.f_open(evt, {
-				position : f_popup.MOUSE_POSITION
+				position: f_popup.MOUSE_POSITION
 			});
 		}
 
@@ -538,10 +544,11 @@ var __statics = {
 	 * @method protected static
 	 * @param HTMLTableElement
 	 *            element
-	 * @param optional Boolean assertIfNotFound
+	 * @param optional
+	 *            Boolean assertIfNotFound
 	 * @return HTMLTableRowElement
 	 */
-	GetFirstRow : function(element, assertIfNotFound) {
+	GetFirstRow: function(element, assertIfNotFound) {
 		f_core.Assert(element && element.tagName.toLowerCase() == "table",
 				"f_grid.GetFistRow: Invalid table parameter (" + element + ")");
 
@@ -571,7 +578,7 @@ var __statics = {
 	 *            element
 	 * @return HTMLTableRowElement
 	 */
-	ListRows : function(element) {
+	ListRows: function(element) {
 		f_core.Assert(element && element.tagName.toLowerCase() == "table",
 				"f_grid.ListRows: Invalid table parameter (" + element + ")");
 
@@ -607,7 +614,7 @@ var __statics = {
 	 * @return Boolean
 	 * @context object:dataGrid
 	 */
-	_Link_onfocus : function(evt) {
+	_Link_onfocus: function(evt) {
 		var dataGrid = this._dataGrid;
 		try {
 			if (dataGrid._ignoreFocus) {
@@ -686,7 +693,7 @@ var __statics = {
 	 * @return Boolean
 	 * @context object:dataGrid
 	 */
-	_Link_onblur : function(evt) {
+	_Link_onblur: function(evt) {
 		var dataGrid = this._dataGrid;
 
 		try {
@@ -730,7 +737,7 @@ var __statics = {
 	 * @return Boolean
 	 * @context object:dataGrid
 	 */
-	_Link_onkeypress : function(evt) {
+	_Link_onkeypress: function(evt) {
 		var dataGrid = this._dataGrid;
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
@@ -766,7 +773,7 @@ var __statics = {
 	 * @return Boolean
 	 * @context object:dataGrid
 	 */
-	_Link_onkeydown : function(evt) {
+	_Link_onkeydown: function(evt) {
 		var dataGrid = this._dataGrid;
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
@@ -800,7 +807,7 @@ var __statics = {
 	 * @return Boolean
 	 * @context object:dataGrid
 	 */
-	_Link_onkeyup : function(evt) {
+	_Link_onkeyup: function(evt) {
 		var dataGrid = this._dataGrid;
 
 		if (!evt) {
@@ -832,7 +839,7 @@ var __statics = {
 	 * @return Boolean
 	 * @context object:dataGrid
 	 */
-	_Link_onmousewheel : function(evt) {
+	_Link_onmousewheel: function(evt) {
 		var dataGrid = this._dataGrid;
 
 		if (!evt) {
@@ -848,10 +855,10 @@ var __statics = {
 			return true;
 		}
 
-		if (f_core.GetBooleanAttribute(dataGrid, "v:wheelSelection", true)==false) {
+		if (f_core.GetBooleanAttribute(dataGrid, "v:wheelSelection", true) == false) {
 			return true;
 		}
-		
+
 		var wheel = evt.wheelDelta;
 
 		if (f_core.IsGecko()) {
@@ -874,7 +881,7 @@ var __statics = {
 	 * @return Boolean
 	 * @context object:dataGrid
 	 */
-	_Title_onMouseOver : function(evt) {
+	_Title_onMouseOver: function(evt) {
 		var column = this._column;
 		if (!column) {
 			return false;
@@ -922,7 +929,7 @@ var __statics = {
 	 * @return Boolean
 	 * @context object:dataGrid
 	 */
-	_Title_onMouseOut : function(evt) {
+	_Title_onMouseOut: function(evt) {
 		var column = this._column;
 		if (!column) {
 			return false;
@@ -965,7 +972,7 @@ var __statics = {
 	 * @return Boolean
 	 * @context object:dataGrid
 	 */
-	_Title_onMouseDown : function(evt) {
+	_Title_onMouseDown: function(evt) {
 
 		var column = this._column;
 		if (!column) {
@@ -977,8 +984,8 @@ var __statics = {
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
-		
-		f_core.Debug(f_grid, "_Title_onMouseDown: perform event "+evt);
+
+		f_core.Debug(f_grid, "_Title_onMouseDown: perform event " + evt);
 
 		if (dataGrid.f_getEventLocked(evt)) {
 			return false;
@@ -994,7 +1001,7 @@ var __statics = {
 
 			if (menu) {
 				menu.f_open(evt, {
-					position : f_popup.MOUSE_POSITION
+					position: f_popup.MOUSE_POSITION
 				});
 			}
 			return f_core.CancelJsEvent(evt);
@@ -1004,8 +1011,9 @@ var __statics = {
 		if (!dataGrid._columnCanBeSorted || !column._method) {
 			return f_core.CancelJsEvent(evt);
 		}
-		
-		f_core.Debug(f_grid, "_Title_onMouseDown: select column='"+column+"'");
+
+		f_core.Debug(f_grid, "_Title_onMouseDown: select column='" + column
+				+ "'");
 
 		dataGrid._columnSelected = column;
 		dataGrid._updateTitleStyle(column);
@@ -1019,7 +1027,7 @@ var __statics = {
 	 * @return Boolean
 	 * @context object:column
 	 */
-	_Title_onKeyDown : function(evt) {
+	_Title_onKeyDown: function(evt) {
 		var column = this._column;
 		var dataGrid = column._dataGrid;
 		if (!evt) {
@@ -1143,7 +1151,7 @@ var __statics = {
 	 * @return Boolean
 	 * @context object:column
 	 */
-	_Title_onFocus : function(evt) {
+	_Title_onFocus: function(evt) {
 		var column = this._column;
 		var dataGrid = column._dataGrid;
 		if (!evt) {
@@ -1161,8 +1169,8 @@ var __statics = {
 
 			window.setTimeout(function() {
 				if (window._rcfacesExiting) {
-	 				return false;
-	 			}
+					return false;
+				}
 
 				var scrollTitleLeft = _dataGrid._scrollTitle.scrollLeft;
 
@@ -1199,7 +1207,7 @@ var __statics = {
 	 * @return Boolean
 	 * @context object:column
 	 */
-	_Title_onBlur : function(evt) {
+	_Title_onBlur: function(evt) {
 		var column = this._column;
 		var dataGrid = column._dataGrid;
 		if (!evt) {
@@ -1225,35 +1233,40 @@ var __statics = {
 	 * @return Boolean
 	 * @context object:column
 	 */
-	_Title_onClick : function(evt) {
+	_Title_onClick: function(evt) {
 		var column = this._column;
 		var dataGrid = column._dataGrid;
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
-		
-		f_core.Debug(f_grid, "_Title_onClick: perform event "+evt);
+
+		f_core.Debug(f_grid, "_Title_onClick: perform event " + evt);
 
 		if (dataGrid.f_getEventLocked(evt, false)) {
-			f_core.Debug(f_grid, "_Title_onClick: getEventLocked returns FALSE");
+			f_core
+					.Debug(f_grid,
+							"_Title_onClick: getEventLocked returns FALSE");
 			return false;
 		}
 
 		if (dataGrid.f_isDisabled()) {
-			f_core.Debug(f_grid, "_Title_onClick: Datagrid is disabled, stop it");
+			f_core.Debug(f_grid,
+					"_Title_onClick: Datagrid is disabled, stop it");
 			return f_core.CancelJsEvent(evt);
 		}
 
 		if (column.f_fireEvent(f_event.SELECTION, evt, null, null, dataGrid) === false) {
 
-			f_core.Debug(f_grid, "_Title_onClick: event Selection returns false");
+			f_core.Debug(f_grid,
+					"_Title_onClick: event Selection returns false");
 
 			return f_core.CancelJsEvent(evt);// On bloque le FOCUS !
 		}
 
 		var append = (evt.shiftKey);
 
-		f_core.Debug(f_grid, "_Title_onClick: call set column sort append="+append);
+		f_core.Debug(f_grid, "_Title_onClick: call set column sort append="
+				+ append);
 
 		dataGrid.f_setColumnSort(column, undefined, append);
 
@@ -1266,14 +1279,14 @@ var __statics = {
 	 * @return Boolean
 	 * @context object:column
 	 */
-	_Title_onMouseUp : function(evt) {
+	_Title_onMouseUp: function(evt) {
 		var column = this._column;
 		var dataGrid = column._dataGrid;
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
-		
-		f_core.Debug(f_grid, "_Title_onMouseUp: perform event "+evt);
+
+		f_core.Debug(f_grid, "_Title_onMouseUp: perform event " + evt);
 
 		if (dataGrid.f_getEventLocked(evt, false)) {
 			return false;
@@ -1288,8 +1301,8 @@ var __statics = {
 			return f_core.CancelJsEvent(evt);
 		}
 
-		
-		f_core.Debug(f_grid, "_Title_onMouseUp: deselect old column='"+dataGrid._columnSelected+"'");
+		f_core.Debug(f_grid, "_Title_onMouseUp: deselect old column='"
+				+ dataGrid._columnSelected + "'");
 
 		dataGrid._columnSelected = undefined;
 	},
@@ -1300,7 +1313,7 @@ var __statics = {
 	 * @return Boolean
 	 * @context object:dataGrid
 	 */
-	_OnScroll : function(evt) {
+	_OnScroll: function(evt) {
 		var dataGrid = this._dataGrid;
 
 		if (!evt) {
@@ -1327,7 +1340,7 @@ var __statics = {
 	 * @return Boolean
 	 * @context object:dataGrid
 	 */
-	GotFocus : function(evt) {
+	GotFocus: function(evt) {
 		var dataGrid = this._dataGrid;
 		var row = this._row;
 
@@ -1358,7 +1371,7 @@ var __statics = {
 	 * @return Boolean
 	 * @context object:dataGrid
 	 */
-	_TitleCursorMouseDown : function(evt) {
+	_TitleCursorMouseDown: function(evt) {
 		var column = this._column;
 		var dataGrid = column._dataGrid;
 
@@ -1380,7 +1393,7 @@ var __statics = {
 		f_core.CancelJsEvent(evt);
 
 		var eventPos = f_core.GetJsEventPosition(evt, doc);
-		dataGrid._dragEventPos=eventPos;
+		dataGrid._dragEventPos = eventPos;
 		var cursorPos = f_core.GetAbsolutePosition(this);
 		dataGrid._dragDeltaX = eventPos.x - cursorPos.x
 				+ dataGrid._scrollTitle.scrollLeft;
@@ -1406,32 +1419,32 @@ var __statics = {
 	 * @return Boolean
 	 * @context event:evt
 	 */
-	_TitleCursorDragMove : function(evt) {
+	_TitleCursorDragMove: function(evt) {
 		try {
 			var column = f_grid._DragColumn;
 			if (!column) {
 				return false;
 			}
-	
+
 			var dataGrid = column._dataGrid;
 			if (!evt) {
 				evt = f_core.GetJsEvent(this);
 			}
-	
+
 			var doc = dataGrid.ownerDocument;
-	
+
 			var eventPos = f_core.GetJsEventPosition(evt, doc);
 			var cursorPos = f_core.GetAbsolutePosition(column._cursor);
-	
-			var dw = eventPos.x - cursorPos.x + dataGrid._scrollTitle.scrollLeft
-					- dataGrid._dragDeltaX;
-	
+
+			var dw = eventPos.x - cursorPos.x
+					+ dataGrid._scrollTitle.scrollLeft - dataGrid._dragDeltaX;
+
 			f_grid._DragCursorMove(dataGrid, column, dw);
-			
+
 		} catch (x) {
 			f_core.Error(f_grid, "_TitleCursorDragMove: exception", x);
 		}
-		
+
 		return f_core.CancelJsEvent(evt);
 	},
 	/**
@@ -1439,7 +1452,7 @@ var __statics = {
 	 * @return void
 	 * @context window:this
 	 */
-	_DragMoveTimer : function() {
+	_DragMoveTimer: function() {
 		if (window._rcfacesExiting) {
 			return;
 		}
@@ -1449,26 +1462,27 @@ var __statics = {
 			if (!column) {
 				return;
 			}
-	
+
 			var dataGrid = column._dataGrid;
-	
-			var dw=0;
-			if (dataGrid._dragDeltaX>0) {
-				dw=-f_grid._DRAG_DELTA;
+
+			var dw = 0;
+			if (dataGrid._dragDeltaX > 0) {
+				dw = -f_grid._DRAG_DELTA;
 			} else {
-				//dw=f_grid._DRAG_DELTA;
+				// dw=f_grid._DRAG_DELTA;
 			}
-	
-			f_core.Debug(f_grid, "_DragMoveTimer dw='"+dw+"'");
-			
+
+			f_core.Debug(f_grid, "_DragMoveTimer dw='" + dw + "'");
+
 			if (dw) {
 				f_grid._DragCursorMove(dataGrid, column, dw);
-				
-				var cursorPos = f_core.GetAbsolutePosition(f_grid._DragColumn._cursor);
+
+				var cursorPos = f_core
+						.GetAbsolutePosition(f_grid._DragColumn._cursor);
 				dataGrid._dragDeltaX = dataGrid._dragEventPos.x - cursorPos.x
 						+ dataGrid._scrollTitle.scrollLeft;
 			}
-			
+
 		} catch (x) {
 			f_core.Error(f_grid, "_DragMoveTimer: exception", x);
 		}
@@ -1477,7 +1491,7 @@ var __statics = {
 	 * @method private static
 	 * @return Number
 	 */
-	_DragCursorMove : function(dataGrid, column, dw) {
+	_DragCursorMove: function(dataGrid, column, dw) {
 
 		var doc = dataGrid.ownerDocument;
 
@@ -1488,92 +1502,94 @@ var __statics = {
 
 		var w = column._col.offsetWidth + dw;
 
-		f_core.Debug(f_grid, "_DragCursorMove: dw="+dw+" w="+w+" columnOffsetWidth="+column._col.offsetWidth);
-		
+		f_core.Debug(f_grid, "_DragCursorMove: dw=" + dw + " w=" + w
+				+ " columnOffsetWidth=" + column._col.offsetWidth);
+
 		// document.title="W="+w+"/"+dw;
-	
+
 		if (w < column._minWidth) {
 			w = column._minWidth;
 		}
 		if (w > column._maxWidth) {
 			w = column._maxWidth;
 		}
-	
+
 		dw = w - column._col.offsetWidth;
-	
+
 		if (dw == 0) {
 			return 0;
 		}
-	
+
 		var tcol = column._tcol;
 		var col = column._col;
 		var head = column._head;
 		var tableOffsetWidth = dataGrid._table.offsetWidth;
-	
+
 		var twidth = 0;
 		if (column._ascendingOrder !== undefined) {
 			twidth -= dataGrid._sortPadding;
 		}
-	
+
 		if (false && f_core.IsInternetExplorer()) {
 			// AVANT !
 			if (tableOffsetWidth) {
 				dataGrid._table.style.width = (tableOffsetWidth + dw) + "px";
 			}
-	
+
 			col.style.width = w + "px";
 			head.style.width = w + "px";
-	
+
 			var bw = w - f_grid._TEXT_RIGHT_PADDING - f_grid._TEXT_LEFT_PADDING;
 			if (bw < 0) {
 				bw = 0;
 			}
 			column._box.style.width = bw + "px";
-	
+
 			var lw = bw + twidth;
 			if (lw < 0) {
 				lw = 0;
 			}
 			column._label.style.width = lw + "px";
-	
+
 		} else {
 			if (tcol) {
 				// tcol.style.width=w+"px";
 			}
-	
+
 			var cellMargin = 0;
-	
+
 			col.style.width = w + "px"; // Colonne Des données ...
-			
-			var w1=w - cellMargin;
-			head.style.width = ((w1>0)?w1:0) + "px";
-			
-			var w2=w - f_grid._TEXT_RIGHT_PADDING - f_grid._TEXT_LEFT_PADDING;
-			column._box.style.width = ((w2>0)?w2:0) + "px";
-			
-			var w3=w - f_grid._TEXT_RIGHT_PADDING - f_grid._TEXT_LEFT_PADDING + twidth;
-			column._label.style.width = ((w3>0)?w3:0) + "px";
-	
+
+			var w1 = w - cellMargin;
+			head.style.width = ((w1 > 0) ? w1 : 0) + "px";
+
+			var w2 = w - f_grid._TEXT_RIGHT_PADDING - f_grid._TEXT_LEFT_PADDING;
+			column._box.style.width = ((w2 > 0) ? w2 : 0) + "px";
+
+			var w3 = w - f_grid._TEXT_RIGHT_PADDING - f_grid._TEXT_LEFT_PADDING
+					+ twidth;
+			column._label.style.width = ((w3 > 0) ? w3 : 0) + "px";
+
 			var totalCols = 0;
 			var columns = dataGrid._columns;
 			for ( var i = 0; i < columns.length; i++) {
 				var cl = columns[i];
-	
+
 				if (!cl._visibility) {
 					continue;
 				}
-	
-				f_core.Assert(cl._col, "f_grid._DragCursorMove: Invalid column '"
-						+ cl + "'.");
-	
+
+				f_core.Assert(cl._col,
+						"f_grid._DragCursorMove: Invalid column '" + cl + "'.");
+
 				totalCols += parseInt(cl._col.style.width, 10);
 			}
-	
+
 			dataGrid._table.style.width = (totalCols) + "px";
 		}
-	
-		var scrollTitle=dataGrid._scrollTitle;
-		var scrollBody=dataGrid._scrollBody;
+
+		var scrollTitle = dataGrid._scrollTitle;
+		var scrollBody = dataGrid._scrollBody;
 
 		if (scrollTitle) {
 			var scrollTitleLeft = scrollTitle.scrollLeft;
@@ -1583,14 +1599,20 @@ var __statics = {
 				scrollTitle.scrollLeft = scrollBodyLeft;
 			}
 		}
-		
-		f_core.Debug(f_grid, "_DragCursorMove: scrollLeft="+scrollBody.scrollLeft+" clientWidth="+scrollBody.clientWidth+" scrollWidth="+scrollBody.scrollWidth+" offsetWidth="+scrollBody.offsetWidth);
-		
-		if (scrollBody.scrollLeft>0 && scrollBody.scrollWidth==scrollBody.clientWidth+scrollBody.scrollLeft) {
+
+		f_core.Debug(f_grid, "_DragCursorMove: scrollLeft="
+				+ scrollBody.scrollLeft + " clientWidth="
+				+ scrollBody.clientWidth + " scrollWidth="
+				+ scrollBody.scrollWidth + " offsetWidth="
+				+ scrollBody.offsetWidth);
+
+		if (scrollBody.scrollLeft > 0
+				&& scrollBody.scrollWidth == scrollBody.clientWidth
+						+ scrollBody.scrollLeft) {
 			dataGrid._dragTimerId = f_core.GetWindow(doc).setTimeout(
 					f_grid._DragMoveTimer, f_grid._DRAG_TIMER);
 		}
-		
+
 		return dw;
 	},
 	/**
@@ -1601,46 +1623,46 @@ var __statics = {
 	 * @context object:dataGrid
 	 * @context event:evt
 	 */
-	_TitleCursorDragStop : function(evt) {
+	_TitleCursorDragStop: function(evt) {
 		try {
 			var column = f_grid._DragColumn;
 			if (!column) {
-					// Cela peut survenir si les stops sont enchainés ....
+				// Cela peut survenir si les stops sont enchainés ....
 				return false;
 			}
-		
+
 			var dataGrid = column._dataGrid;
-			
+
 			var doc = dataGrid.ownerDocument;
-			
+
 			if (dataGrid._dragTimerId) {
 				f_core.GetWindow(doc).clearTimeout(dataGrid._dragTimerId);
 				dataGrid._dragTimerId = undefined;
 			}
-			
-			f_core.RemoveEventListener(doc, "mousemove", f_grid._TitleCursorDragMove,
-					dataGrid);
-			f_core.RemoveEventListener(doc, "mouseup", f_grid._TitleCursorDragStop,
-					dataGrid);
-			
+
+			f_core.RemoveEventListener(doc, "mousemove",
+					f_grid._TitleCursorDragMove, dataGrid);
+			f_core.RemoveEventListener(doc, "mouseup",
+					f_grid._TitleCursorDragStop, dataGrid);
+
 			doc.body.style.cursor = f_grid._DragOldCursor;
 			f_grid._DragOldCursor = undefined;
-			
+
 			var ths = dataGrid._title.getElementsByTagName("th");
 			for ( var i = 0; i < ths.length; i++) {
 				ths[i].style.cursor = ths[i].oldCursorStyle;
 				ths[i].oldCursorStyle = undefined;
 			}
-			
+
 			column._restoreClass = undefined;
-			
+
 			f_grid._DragColumn = undefined;
 			dataGrid._dragDeltaX = undefined;
-			
+
 		} catch (x) {
 			f_core.Error(f_grid, "_TitleCursorDragStop: exception", x);
 		}
-		
+
 		return true;
 	},
 	/**
@@ -1650,25 +1672,25 @@ var __statics = {
 	 * @return Boolean
 	 * @context object:dataGrid
 	 */
-	_SortIndication_onmouseover : function(evt) {
+	_SortIndication_onmouseover: function(evt) {
 		var dataGrid = this._dataGrid;
-		
+
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
-		
+
 		if (dataGrid.f_getEventLocked(evt, false)) {
 			return false;
 		}
-		
+
 		if (this._over) {
 			return true;
 		}
-		
+
 		this._over = true;
-		
+
 		dataGrid._updateSortManager();
-		
+
 		return true;
 	},
 	/**
@@ -1678,22 +1700,22 @@ var __statics = {
 	 * @return Boolean
 	 * @context object:dataGrid
 	 */
-	_SortIndication_onmouseout : function(evt) {
+	_SortIndication_onmouseout: function(evt) {
 		var dataGrid = this._dataGrid;
-		
+
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
-		
+
 		if (!this._over && !this._selected) {
 			return true;
 		}
-		
+
 		this._over = undefined;
 		this._selected = undefined;
-		
+
 		dataGrid._updateSortManager();
-		
+
 		return true;
 	},
 	/**
@@ -1703,21 +1725,21 @@ var __statics = {
 	 * @return Boolean
 	 * @context object:dataGrid
 	 */
-	_SortIndication_onmousedown : function(evt) {
+	_SortIndication_onmousedown: function(evt) {
 		var dataGrid = this._dataGrid;
-		
+
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
-		
+
 		if (this._selected) {
 			return true;
 		}
-		
+
 		this._selected = true;
-		
+
 		dataGrid._updateSortManager();
-		
+
 		return true;
 	},
 	/**
@@ -1727,26 +1749,26 @@ var __statics = {
 	 * @return Boolean
 	 * @context object:dataGrid
 	 */
-	_SortIndication_onmouseup : function(evt) {
+	_SortIndication_onmouseup: function(evt) {
 		var dataGrid = this._dataGrid;
-		
+
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
-		
+
 		if (!this._selected) {
 			return true;
 		}
-		
+
 		this._selected = undefined;
-		
+
 		dataGrid._updateSortManager();
-		
+
 		dataGrid.f_showSortManager(evt);
-		
+
 		return true;
 	},
-	
+
 	/**
 	 * @method hidden static
 	 * @param String
@@ -1755,7 +1777,7 @@ var __statics = {
 	 *            text2
 	 * @return Number
 	 */
-	Sort_Server : function(text1, text2) {
+	Sort_Server: function(text1, text2) {
 		// Pas d'implementation, car la fonction est filtrée avant !
 		return 0;
 	},
@@ -1767,16 +1789,16 @@ var __statics = {
 	 *            callback
 	 * @return void
 	 */
-	RegisterSortManager : function(name, callback) {
+	RegisterSortManager: function(name, callback) {
 		var sortManagers = f_grid._SortManagers;
 		if (!sortManagers) {
 			sortManagers = new Object;
 			f_grid._SortManagers = sortManagers;
 		}
-	
+
 		sortManagers[name] = callback;
 	},
-	Finalizer : function() {
+	Finalizer: function() {
 		f_grid._SortManagers = undefined;
 	},
 	/**
@@ -1785,28 +1807,29 @@ var __statics = {
 	 *            table
 	 * @return HTMLTableColElement[]
 	 */
-	_ListCols : function(table) {
+	_ListCols: function(table) {
 		var l = new Array;
 		for ( var node = table.firstChild; node; node = node.nextSibling) {
 			if (node.tagName.toLowerCase() != "col") {
 				break;
 			}
-	
+
 			l.push(node);
 		}
-	
+
 		return l;
 	},
-	
+
 	/**
-	 *Return the current ComponetGrid
-	 *
-	 *@method public static 
-	 *@param f_component component
-	 *@return f_grid
+	 * Return the current ComponetGrid
+	 * 
+	 * @method public static
+	 * @param f_component
+	 *            component
+	 * @return f_grid
 	 */
 	GetGridFromComponent: function(component) {
-		while (!component._dataGrid && component){
+		while (!component._dataGrid && component) {
 			component = component.parentNode;
 		}
 		return component._dataGrid;
@@ -1817,23 +1840,23 @@ var __members = {
 	/**
 	 * @field private Number
 	 */
-	_additionalInformationCount : 0,
+	_additionalInformationCount: 0,
 
 	/**
 	 * Active la recherche par les touches
 	 * 
 	 * @field protected Boolean
 	 */
-	_keyRowSearch : undefined,
+	_keyRowSearch: undefined,
 
 	/**
 	 * Spécifie l'index de la colonne quand il faut rechercher un token
 	 * 
 	 * @field protected Number
 	 */
-	_keySearchColumnIndex : undefined,
+	_keySearchColumnIndex: undefined,
 
-	f_grid : function() {
+	f_grid: function() {
 		this.f_super(arguments);
 
 		this._rowsPool = new Array;
@@ -1874,15 +1897,14 @@ var __members = {
 			this._rowStyleClasses = this.f_getDefaultRowStyleClasses();
 		}
 
-		
 		if (this.f_isDraggable()) {
-			this._dragAndDropEngine= f_dragAndDropEngine.Create(this);
+			this._dragAndDropEngine = f_dragAndDropEngine.Create(this);
 		}
 
 		if (this.f_isDroppable()) {
-			this._bodyDroppable=f_core.GetBooleanAttribute(this, "v:bodyDroppable", false);
+			this._bodyDroppable = f_core.GetBooleanAttribute(this,
+					"v:bodyDroppable", false);
 		}
-		
 
 		this._sortPadding = f_core.GetNumberAttribute(this, "v:sortPadding",
 				f_grid._SORT_PADDING);
@@ -2028,7 +2050,7 @@ var __members = {
 
 		this.f_insertEventListenerFirst(f_event.KEYDOWN, this._performKeyDown);
 	},
-	f_finalize : function() {
+	f_finalize: function() {
 
 		if (f_grid._DragColumn) {
 			f_grid._TitleCursorDragStop();
@@ -2059,9 +2081,9 @@ var __members = {
 			sortIndicator.onmouseup = null;
 		}
 
-		this._dragAndDropEngine=undefined;
-		this._targetDragAndDropEngine=undefined;
-		
+		this._dragAndDropEngine = undefined;
+		this._targetDragAndDropEngine = undefined;
+
 		// this._bodyDroppable=undefined; Boolean
 		// this._sortPadding=undefined; // Number
 		// this._serializedIndexes=undefined; // number[]
@@ -2226,13 +2248,13 @@ var __members = {
 		// this._initSort=undefined; // Boolean
 		// this._resizable=undefined; // Boolean
 		// this._sortIndexes = undefined; // String
-		
+
 		this.f_super(arguments);
 	},
-	f_getFocusableElement : function() {
+	f_getFocusableElement: function() {
 		return this._cfocus;
 	},
-	f_setDomEvent : function(type, target) {
+	f_setDomEvent: function(type, target) {
 		switch (type) {
 		case f_event.DBLCLICK:
 		case f_event.SELECTION:
@@ -2246,7 +2268,7 @@ var __members = {
 
 		this.f_super(arguments, type, target);
 	},
-	f_clearDomEvent : function(type, target) {
+	f_clearDomEvent: function(type, target) {
 		switch (type) {
 		case f_event.DBLCLICK:
 		case f_event.SELECTION:
@@ -2263,11 +2285,12 @@ var __members = {
 	/**
 	 * @method protected
 	 */
-	f_getEventLocked : function(evt, showAlert) {
+	f_getEventLocked: function(evt, showAlert) {
 		if (this._loading) {
 			if (showAlert !== false) {
 				if (this._showLoadingAlert === undefined) {
-					var alertLoadingMessage = f_core.GetAttribute(this, "v:alertLoadingMessage");
+					var alertLoadingMessage = f_core.GetAttribute(this,
+							"v:alertLoadingMessage");
 					if (alertLoadingMessage === undefined) {
 						this._showLoadingAlert = true;
 					} else if (alertLoadingMessage == "") {
@@ -2277,14 +2300,16 @@ var __members = {
 						this._alertLoadingMessage = alertLoadingMessage;
 					}
 				}
-				
+
 				if (this._showLoadingAlert !== false) {
 					if (this._alertLoadingMessage === undefined) {
 						var resourceBundle = f_resourceBundle.Get(f_grid);
-						this._alertLoadingMessage = "f_grid: " + resourceBundle.f_get("EVENT_LOCKED");
+						this._alertLoadingMessage = "f_grid: "
+								+ resourceBundle.f_get("EVENT_LOCKED");
 					}
-					f_core.Debug(f_grid,
-							"f_getEventLocked: popup error dialog, loading ...");
+					f_core
+							.Debug(f_grid,
+									"f_getEventLocked: popup error dialog, loading ...");
 
 					alert(this._alertLoadingMessage);
 				}
@@ -2294,17 +2319,17 @@ var __members = {
 
 		return this.f_super(arguments, evt, showAlert);
 	},
-	f_getMainStyleClass : function() {
+	f_getMainStyleClass: function() {
 		return "f_grid";
 	},
 	/**
 	 * @method protected
 	 * @return String[]
 	 */
-	f_getDefaultRowStyleClasses : function() {
+	f_getDefaultRowStyleClasses: function() {
 		return f_grid._DEFAULT_ROW_STYLE_CLASSES;
 	},
-	f_serialize : function() {
+	f_serialize: function() {
 
 		if (this._resizable && this._titleLayout) {
 			var columns = this._columns;
@@ -2347,9 +2372,9 @@ var __members = {
 		}
 
 		this.f_setProperty(f_prop.CURSOR, cursorValue);
-		
+
 		if (this._sortIndexes !== undefined) {
-			this.f_setProperty(f_prop.SORT_INDEX, this._sortIndexes);	
+			this.f_setProperty(f_prop.SORT_INDEX, this._sortIndexes);
 		}
 
 		this.f_super(arguments);
@@ -2362,7 +2387,7 @@ var __members = {
 	 *            rows
 	 * @return Number[]
 	 */
-	f_addSerializedIndexes : function(nStart, nLength) {
+	f_addSerializedIndexes: function(nStart, nLength) {
 
 		var serializedIndexes = this.f_listSerializedIndexes();
 
@@ -2423,14 +2448,14 @@ var __members = {
 	 * @method protected
 	 * @return void
 	 */
-	f_clearSerializedIndexes : function() {
+	f_clearSerializedIndexes: function() {
 		this._serializedIndexes = undefined;
 	},
 	/**
 	 * @method protected
 	 * @return Array
 	 */
-	f_listSerializedIndexes : function() {
+	f_listSerializedIndexes: function() {
 
 		var serializedIndexes = this._serializedIndexes;
 		if (!serializedIndexes) {
@@ -2441,7 +2466,7 @@ var __members = {
 		return serializedIndexes;
 	},
 
-	f_update : function() {
+	f_update: function() {
 		var rowCount = this._rowCount;
 
 		if (this._rows > 0 && !this._paged) {
@@ -2507,15 +2532,14 @@ var __members = {
 
 		/*
 		 * if (!this.f_isVisible()) {
-		 * this.f_getClass().f_getClassLoader().f_addVisibleComponentListener(this);
-		 *  }
+		 * this.f_getClass().f_getClassLoader().f_addVisibleComponentListener(this); }
 		 */
 	},
 	/**
 	 * @method protected
 	 * @return void
 	 */
-	f_documentComplete : function() {
+	f_documentComplete: function() {
 		this.f_super(arguments);
 
 		// this._documentComplete=true;
@@ -2529,7 +2553,7 @@ var __members = {
 	/**
 	 * @method hidden
 	 */
-	f_performComponentVisible : function() {
+	f_performComponentVisible: function() {
 		f_core.Debug(f_grid, "f_performComponentVisible: rows=" + this._rows
 				+ " paged=" + this._paged + " rowCount=" + this._rowCount);
 
@@ -2552,7 +2576,7 @@ var __members = {
 	/**
 	 * @method protected
 	 */
-	f_removePagedWait : function() {
+	f_removePagedWait: function() {
 		f_core.Assert(this._waitingMode == f_grid.END_WAITING,
 				"f_grid.f_removePagedWait: Invalid waiting mode !");
 
@@ -2574,7 +2598,7 @@ var __members = {
 	/**
 	 * @method protected
 	 */
-	f_addWaitingRows : function() {
+	f_addWaitingRows: function() {
 		f_core.Debug(f_grid, "f_addWaitingRows: rowCount=" + this._rowCount
 				+ " rows=" + this._rows);
 
@@ -2624,7 +2648,7 @@ var __members = {
 	/**
 	 * @method private
 	 */
-	f_addPagedWait : function() {
+	f_addPagedWait: function() {
 		f_core.Assert(this._waitingMode == f_grid.END_WAITING,
 				"f_grid.f_addPagedWait: Invalid waiting mode !");
 
@@ -2677,7 +2701,7 @@ var __members = {
 	/**
 	 * @method private
 	 */
-	_performPagedLoading : function(evt, cursorIndex) {
+	_performPagedLoading: function(evt, cursorIndex) {
 		this._waitingLoading = true;
 
 		this.f_appendCommand(function(dataGrid) {
@@ -2690,7 +2714,7 @@ var __members = {
 	/**
 	 * @method private
 	 */
-	_performRowsLoading : function(evt, endIndex) {
+	_performRowsLoading: function(evt, endIndex) {
 		this._waitingLoading = true;
 
 		var index = this._endRowIndex;
@@ -2745,7 +2769,7 @@ var __members = {
 	 * @method public
 	 * @return f_gridColumn[] An array of column object.
 	 */
-	f_getColumns : function() {
+	f_getColumns: function() {
 		return f_core.PushArguments(null, this._columns);
 	},
 	/**
@@ -2756,7 +2780,7 @@ var __members = {
 	 *            column The column object
 	 * @return String The name of the column.
 	 */
-	f_getColumnName : function(column) {
+	f_getColumnName: function(column) {
 		var labelComponent = column._label;
 
 		if (!labelComponent) {
@@ -2773,7 +2797,7 @@ var __members = {
 	 *            column The column object
 	 * @return String The Id of the column.
 	 */
-	f_getColumnId : function(column) {
+	f_getColumnId: function(column) {
 		var idComponent = column.f_getId();
 
 		if (idComponent) {
@@ -2789,14 +2813,14 @@ var __members = {
 	 * @return Number Ascending:1 Descending:-1 not-sorted:0
 	 * @deprecated Use column.f_getColumnOrderState()
 	 */
-	f_getColumnOrderState : function(column) {
+	f_getColumnOrderState: function(column) {
 		return column.f_getColumnOrderState();
 	},
 	/**
 	 * @method hidden
 	 * @return void
 	 */
-	f_setColumns2 : function() {
+	f_setColumns2: function() {
 		var columns = new Array;
 		this._columns = columns;
 
@@ -2878,7 +2902,7 @@ var __members = {
 	 * @method private
 	 * @return void
 	 */
-	_installSorter : function(column, method) {
+	_installSorter: function(column, method) {
 		f_core.Assert(column,
 				"f_grid._installSorter: Invalid column parameter '" + column
 						+ "'.");
@@ -2910,17 +2934,17 @@ var __members = {
 	 *            row
 	 * @return Boolean
 	 */
-	f_isRowSelected : function(row) {
+	f_isRowSelected: function(row) {
 		return !!row._selected;
 	},
 	/**
 	 * @method protected
 	 */
-	fa_updateElementStyle : function(row, updateCells) {
+	fa_updateElementStyle: function(row, updateCells) {
 		var suffix = "";
 		if (this.f_isDisabled()) {
 			suffix = "_disabled"; // +"_disabled"; // La classe par du
-									// .f_grid_disabled
+			// .f_grid_disabled
 
 			if (row._selected) {
 				suffix += "_selected";
@@ -2932,15 +2956,19 @@ var __members = {
 			suffix = "_selected";
 			if (this._focus) {
 				suffix += "_focus";
-				if (this._serviceGridId){
-					var dataGridPopup = f_core.GetElementByClientId(this._serviceGridId);
-					if (dataGridPopup._ariaInput){
-						fa_aria.SetElementAriaActiveDescendant(dataGridPopup._ariaInput, row.id);
-					}else {
-						fa_aria.SetElementAriaActiveDescendant(this._scrollBody, row.id);
+				if (this._serviceGridId) {
+					var dataGridPopup = f_core
+							.GetElementByClientId(this._serviceGridId);
+					if (dataGridPopup._ariaInput) {
+						fa_aria.SetElementAriaActiveDescendant(
+								dataGridPopup._ariaInput, row.id);
+					} else {
+						fa_aria.SetElementAriaActiveDescendant(
+								this._scrollBody, row.id);
 					}
-				}else {
-					fa_aria.SetElementAriaActiveDescendant(this._scrollBody, row.id);
+				} else {
+					fa_aria.SetElementAriaActiveDescendant(this._scrollBody,
+							row.id);
 				}
 			}
 
@@ -2967,7 +2995,7 @@ var __members = {
 			if (rowClassName) {
 				cl += " " + rowClassName + suffix;
 			}
-			
+
 		} else if (row._over) {
 			suffix += "_over";
 
@@ -3037,7 +3065,7 @@ var __members = {
 	/**
 	 * @method protected
 	 */
-	f_updateCellsStyle : function(row, firstOnly) {
+	f_updateCellsStyle: function(row, firstOnly) {
 		var td = row.firstChild;
 		for (; td && td.tagName.toLowerCase() != "td"; td = td.nextSibling)
 			;
@@ -3131,11 +3159,11 @@ var __members = {
 	/**
 	 * @method hidden
 	 */
-	f_setRowCount : function(rowCount) {
+	f_setRowCount: function(rowCount) {
 		this._rowCount = rowCount;
 		this._maxRows = rowCount;
 	},
-	fa_updateDisabled : function(disabled) {
+	fa_updateDisabled: function(disabled) {
 		if (!this.fa_componentUpdated) {
 			return;
 		}
@@ -3182,7 +3210,7 @@ var __members = {
 			}
 		}
 	},
-	f_filterEvent : function(type, jsEvent) {
+	f_filterEvent: function(type, jsEvent) {
 		if (!jsEvent
 				|| (type != f_event.SELECTION && type != f_event.MOUSEDOWN && type != f_event.MOUSEUP)) {
 			return undefined;
@@ -3206,7 +3234,7 @@ var __members = {
 	 *            rowIndex Row object.
 	 * @return String the key of the row.
 	 */
-	f_getRowValueAtIndex : function(rowIndex) {
+	f_getRowValueAtIndex: function(rowIndex) {
 		var row = this.f_getRow(rowIndex, true, true);
 		if (!row) {
 			return null;
@@ -3222,7 +3250,7 @@ var __members = {
 	 *            rowObject Row object.
 	 * @return String the key of the row.
 	 */
-	f_getRowValue : function(rowObject) {
+	f_getRowValue: function(rowObject) {
 		var row = this.f_getRow(rowObject, true);
 		if (!row) {
 			return null;
@@ -3240,7 +3268,7 @@ var __members = {
 	 *            Boolean throwError Throws error if row is not found.
 	 * @return Object row associated or <code>null</code>.
 	 */
-	f_getRowByValue : function(value, throwError) {
+	f_getRowByValue: function(value, throwError) {
 		f_core.Assert(value !== undefined && value !== null,
 				"f_grid.f_getRowByValue: Invalid value '" + value + "'.");
 
@@ -3297,7 +3325,7 @@ var __members = {
 	/**
 	 * @method protected
 	 */
-	f_getRow : function(rowIndex, throwError, indexByValue) {
+	f_getRow: function(rowIndex, throwError, indexByValue) {
 		if (!this._tbody) {
 			f_core.Debug(f_grid, "f_getRow: No body to get row #" + rowIndex);
 
@@ -3378,7 +3406,7 @@ var __members = {
 	 *            call)
 	 * @return Boolean Returns <code>false</code>.
 	 */
-	f_setFirst : function(index, cursorIndex, selection, ignoreInteractive) {
+	f_setFirst: function(index, cursorIndex, selection, ignoreInteractive) {
 		// var oldFirst=this._first;
 
 		this.f_setProperty(f_prop.FIRST, index);
@@ -3402,23 +3430,25 @@ var __members = {
 
 		return false;
 	},
-	
+
 	/**
 	 * Refresh the structure of the grid.
 	 * 
 	 * @method public
 	 * 
-	 * @param Boolean fullUpdate to force rowCount and pager update
+	 * @param Boolean
+	 *            fullUpdate to force rowCount and pager update
 	 * 
 	 * @return Boolean
 	 */
-	f_refreshContent : function(fullUpdate) {
+	f_refreshContent: function(fullUpdate) {
 		if (!this._interactive) {
 			return false;
 		}
-		
+
 		this.f_appendCommand(function(dataGrid) {
-			dataGrid.f_callServer(0, undefined, undefined, undefined, undefined, fullUpdate);
+			dataGrid.f_callServer(0, undefined, undefined, undefined,
+					undefined, fullUpdate);
 		});
 
 		return true;
@@ -3428,7 +3458,8 @@ var __members = {
 	 * 
 	 * @method public
 	 * 
-	 * @param optional Boolean fullUpdate to force rowCount and pager update
+	 * @param optional
+	 *            Boolean fullUpdate to force rowCount and pager update
 	 * 
 	 * @return void
 	 */
@@ -3448,16 +3479,16 @@ var __members = {
 	/**
 	 * @method protected
 	 */
-	f_performErrorEvent : function(param, messageCode, message) {
+	f_performErrorEvent: function(param, messageCode, message) {
 		return f_error.PerformErrorEvent(this, messageCode, message, param);
 	},
 	/**
 	 * @method hidden
 	 */
-	fa_cancelFilterRequest : function() {
+	fa_cancelFilterRequest: function() {
 		// Appeler par la génération du serveur !
 	},
-	_releaseColumns : function() {
+	_releaseColumns: function() {
 		var columns = this._columns;
 		for ( var i = 0; i < columns.length; i++) {
 			var column = columns[i];
@@ -3553,7 +3584,7 @@ var __members = {
 	 * @method protected
 	 * @return void
 	 */
-	f_releaseRows : function() {
+	f_releaseRows: function() {
 		f_core.Debug(f_grid, "f_releaseRows: release all rows");
 		this._cursor = undefined; // HTMLTableRowElement
 
@@ -3569,7 +3600,7 @@ var __members = {
 	 * @method protected
 	 * @return void
 	 */
-	f_releaseRow : function() {
+	f_releaseRow: function() {
 		for ( var i = 0; i < arguments.length; i++) {
 			var row = arguments[i];
 
@@ -3645,7 +3676,7 @@ var __members = {
 	 * @method protected
 	 * @return void
 	 */
-	f_releaseCells : function() {
+	f_releaseCells: function() {
 		var list = this._cellsPool;
 		if (!list || !list.length) {
 			return;
@@ -3674,7 +3705,7 @@ var __members = {
 	 *            evt
 	 * @return Boolean
 	 */
-	_performKeyDown : function(evt) {
+	_performKeyDown: function(evt) {
 		var jsEvent = evt.f_getJsEvent();
 
 		return this.f_performKeyDown(jsEvent);
@@ -3685,7 +3716,7 @@ var __members = {
 	 *            evt
 	 * @return Boolean
 	 */
-	f_performKeyDown : function(evt) {
+	f_performKeyDown: function(evt) {
 		var cancel = false;
 
 		var selection = fa_selectionManager.ComputeKeySelection(evt);
@@ -3800,7 +3831,7 @@ var __members = {
 	 *            selection
 	 * @return Boolean Success
 	 */
-	f_searchRowNode : function(code, evt, selection) {
+	f_searchRowNode: function(code, evt, selection) {
 		return false;
 	},
 	/**
@@ -3809,7 +3840,7 @@ var __members = {
 	 *            evt
 	 * @return void
 	 */
-	_openContextMenu : function(evt) {
+	_openContextMenu: function(evt) {
 		if (!this._cursor) {
 			return;
 		}
@@ -3817,14 +3848,14 @@ var __members = {
 		var menu = this.f_getSubMenuById(f_grid._ROW_MENU_ID);
 		if (menu) {
 			menu.f_open(evt, {
-				component : this._cursor,
-				position : f_popup.LEFT_COMPONENT,
-				deltaX : 4,
-				deltaY : 4
+				component: this._cursor,
+				position: f_popup.LEFT_COMPONENT,
+				deltaX: 4,
+				deltaY: 4
 			});
 		}
 	},
-	_updateCurrentSelection : function() {
+	_updateCurrentSelection: function() {
 		var cursorRow = this._cursor;
 
 		if (this._selectable) {
@@ -3847,7 +3878,7 @@ var __members = {
 	 * @method protected
 	 * @return void
 	 */
-	f_forceFocus : function() {
+	f_forceFocus: function() {
 		f_core.Debug(f_grid, "f_forceFocus: force focus=" + this._focus);
 
 		if (this._focus || this._ignoreFocus) {
@@ -3866,7 +3897,8 @@ var __members = {
 				cfocus.focus();
 			} else {
 				// pour *vraiment* donner les focus sous IE
-				// genere une exception sous FF : passer par une focntion anonyme ?
+				// genere une exception sous FF : passer par une focntion
+				// anonyme ?
 				window.setTimeout(cfocus.focus, 0);
 			}
 
@@ -3875,7 +3907,7 @@ var __members = {
 
 		this.focus();
 	},
-	f_setFocus : function() {
+	f_setFocus: function() {
 		f_core.Debug(f_grid, "f_setFocus: set focus=" + this._focus);
 
 		if (!f_core.ForceComponentVisibility(this)) {
@@ -3904,7 +3936,7 @@ var __members = {
 	 *            selection
 	 * @return void
 	 */
-	_nextCursorRow : function(evt, selection) {
+	_nextCursorRow: function(evt, selection) {
 		// var trs=this._rowsPool; // Attention trs EST DANS LE DESORDRE !
 
 		var tr = this._cursor;
@@ -3942,7 +3974,7 @@ var __members = {
 		var nextFirst = this._first + this._rows;
 
 		if (!this._paged) { // Rows est défini, mais nous ne sommes pas en mode
-							// page !
+			// page !
 			var waitingRow = this._waitingRow;
 			if (waitingRow) {
 				this._performPagedLoading(evt, nextFirst);
@@ -3969,7 +4001,7 @@ var __members = {
 
 		this.f_setFirst(nextFirst, nextFirst, selection);
 	},
-	_previousCursorRow : function(evt, selection) {
+	_previousCursorRow: function(evt, selection) {
 		// var trs=this._rowsPool;
 
 		var tr = this._cursor;
@@ -4016,7 +4048,7 @@ var __members = {
 
 		this.f_setFirst(nextFirst, nextPos, selection);
 	},
-	_nextPageRow : function(evt, selection) {
+	_nextPageRow: function(evt, selection) {
 		var trs = this._rowsPool;
 		if (!trs.length) {
 			return;
@@ -4174,7 +4206,7 @@ var __members = {
 			this.f_moveCursor(tr, true, evt, selection);
 		}
 	},
-	_previousPageRow : function(evt, selection) {
+	_previousPageRow: function(evt, selection) {
 		var trs = this._rowsPool;
 		if (!trs.length) {
 			return;
@@ -4279,7 +4311,7 @@ var __members = {
 	 *            selection
 	 * @return void
 	 */
-	_selectLastRow : function(evt, selection) {
+	_selectLastRow: function(evt, selection) {
 		var tr = this._tbody.lastChild;
 		for (; tr && !tr._dataGrid; tr = tr.previousSibling)
 			;
@@ -4318,7 +4350,7 @@ var __members = {
 	 *            selection
 	 * @return void
 	 */
-	_selectTopRow : function(evt, selection) {
+	_selectTopRow: function(evt, selection) {
 		var tr = this._tbody.firstChild;
 		for (; tr && !tr._dataGrid; tr = tr.nextSibling)
 			;
@@ -4346,7 +4378,7 @@ var __members = {
 	/**
 	 * @method hidden
 	 */
-	f_enableSorters : function(sortColumnIndex1, ascending1, sortColumnIndex2,
+	f_enableSorters: function(sortColumnIndex1, ascending1, sortColumnIndex2,
 			ascending2) {
 		var cols = this._columns;
 		var currentSorts = this._currentSorts;
@@ -4390,10 +4422,12 @@ var __members = {
 	 *            Boolean ascending2 Sort ascending2.
 	 * @return void
 	 */
-	f_setColumnSort : function(col, ascending, append, col2, ascending2) {
+	f_setColumnSort: function(col, ascending, append, col2, ascending2) {
 		// var args=[false];
-		
-		f_core.Debug(f_grid, "f_setColumnSort: append="+append+" col1="+col+" asc1="+ascending+" col2="+col2+" asc2="+ascending2);
+
+		f_core.Debug(f_grid, "f_setColumnSort: append=" + append + " col1="
+				+ col + " asc1=" + ascending + " col2=" + col2 + " asc2="
+				+ ascending2);
 
 		if (!col._method) {
 			return;
@@ -4417,7 +4451,7 @@ var __members = {
 				+ " ascending=" + ascending + " append=" + append);
 
 		if (this._rows > 0) { // Dans le cas d'un page par page, on revient en
-								// position 0
+			// position 0
 			this._first = 0;
 		}
 
@@ -4493,7 +4527,7 @@ var __members = {
 	 * @method public
 	 * @return f_gridColumn[]
 	 */
-	f_getSortedColumns : function() {
+	f_getSortedColumns: function() {
 		var currentSorts = this._currentSorts;
 		if (currentSorts && currentSorts.length) {
 
@@ -4515,7 +4549,7 @@ var __members = {
 	 * @method public
 	 * @return void
 	 */
-	f_clearSort : function() {
+	f_clearSort: function() {
 		var currentSorts = this._currentSorts;
 		if (!currentSorts) {
 			return;
@@ -4539,7 +4573,7 @@ var __members = {
 	/**
 	 * @method private
 	 */
-	_updateTitleStyle : function(column) {
+	_updateTitleStyle: function(column) {
 		f_core.Assert(column && column._head,
 				"f_grid._updateTitleStyle: Invalid column parameter (" + column
 						+ ")");
@@ -4652,7 +4686,7 @@ var __members = {
 	 *            Number swidth
 	 * @return void
 	 */
-	_updateTitleCellBody : function(column, swidth) {
+	_updateTitleCellBody: function(column, swidth) {
 
 		if (swidth === undefined) {
 			var cw = column._head.style.width;
@@ -4694,7 +4728,7 @@ var __members = {
 			label.style.width = sw;
 		}
 	},
-	fa_updateFilterProperties : function(filterProperties) {
+	fa_updateFilterProperties: function(filterProperties) {
 		if (!this._interactive) {
 			return false;
 		}
@@ -4716,14 +4750,14 @@ var __members = {
 	 * @method protected
 	 * @return HTMLElement
 	 */
-	fa_componentCaptureMenuEvent : function() {
+	fa_componentCaptureMenuEvent: function() {
 		return null;
 	},
 	/**
 	 * @method private
 	 * @return Boolean
 	 */
-	_verifyWaitingPosition : function(evt) {
+	_verifyWaitingPosition: function(evt) {
 		var scrollBody = this._scrollBody;
 
 		var waitingRow = this._waitingRow;
@@ -4756,11 +4790,11 @@ var __members = {
 						this._performRowsLoading(evt, i);
 
 					} else { // Pour eviter que l'on lance le download, on
-								// attend que ca se stabilise
+						// attend que ca se stabilise
 						this._waitingLoading = true;
 
 						i += Math.floor(this._rows / 2); // On prend une
-															// petite marge ...
+						// petite marge ...
 
 						var self = this;
 						f_core.GetWindow(dataGrid.ownerDocument).setTimeout(
@@ -4802,7 +4836,7 @@ var __members = {
 	 *            Boolean userSort
 	 * @return void
 	 */
-	_sortTable : function(userSort) {
+	_sortTable: function(userSort) {
 		this.f_updateSortBreadCrumbs();
 
 		var currentSorts = this._currentSorts;
@@ -4853,10 +4887,10 @@ var __members = {
 
 		// Gestion du scroll horizontal sur FF
 		var scrollLeft = this._scrollBody.scrollLeft;
-		
+
 		if (userSort
 				&& this.f_fireEvent(f_event.SORT, null, currentSorts) === false) {
-			
+
 			this.f_resetScrollLeft(scrollLeft);
 
 			return;
@@ -4867,11 +4901,12 @@ var __members = {
 			// Plusieurs pages !
 			// Il faut partir coté serveur !
 
-			f_core.Debug(f_grid, "_sortTable: SERVER:\nserial='" + this._sortIndexes
-					+ "'\nrowCount=" + this._rowCount + "\nrows=" + this._rows);
+			f_core.Debug(f_grid, "_sortTable: SERVER:\nserial='"
+					+ this._sortIndexes + "'\nrowCount=" + this._rowCount
+					+ "\nrows=" + this._rows);
 
 			this.f_setFirst(this._first);
-			
+
 			this.f_resetScrollLeft(scrollLeft);
 
 			return;
@@ -4884,24 +4919,24 @@ var __members = {
 
 		this.f_resetScrollLeft(scrollLeft);
 	},
-	
+
 	/**
-	 * reset the scrollLeft when a column is sorted
-	 * Firefox only
+	 * reset the scrollLeft when a column is sorted Firefox only
 	 * 
 	 * @method private
-	 * @param Number scrollLeft  
+	 * @param Number
+	 *            scrollLeft
 	 * @return void
 	 */
-	f_resetScrollLeft: function(scrollLeft){
+	f_resetScrollLeft: function(scrollLeft) {
 		if (scrollLeft == 0 || f_core.IsGecko() == false) {
 			return;
 		}
 		var _datagrid = this;
 		window.setTimeout(function() {
 			if (window._rcfacesExiting) {
- 				return;
- 			}
+				return;
+			}
 
 			if (scrollLeft != _datagrid._scrollBody.scrollLeft) {
 				_datagrid._scrollBody.scrollLeft = scrollLeft;
@@ -4915,21 +4950,22 @@ var __members = {
 	 * Return the value of the row which contains the specified component.
 	 * 
 	 * @method public
-	 * @param f_component component Component or HTMLElement 
+	 * @param f_component
+	 *            component Component or HTMLElement
 	 * @return Object Value of the row
 	 */
-	f_getRowValueFromCommponent: function(component){
-		while (component && typeof(component._rowIndex)!="number") {
+	f_getRowValueFromCommponent: function(component) {
+		while (component && typeof (component._rowIndex) != "number") {
 			component = component.parentNode;
 		}
-		
+
 		if (!component) {
 			return null;
 		}
-		
+
 		return component._index;
 	},
-	
+
 	/**
 	 * Select a row
 	 * 
@@ -4944,7 +4980,7 @@ var __members = {
 	 *            hidden Event jsEvent
 	 * @return Boolean Returns <code>true</code> if success.
 	 */
-	f_selectRow : function(rowValue, append, show, jsEvent) {
+	f_selectRow: function(rowValue, append, show, jsEvent) {
 		var row = this.f_getRowByValue(rowValue, true);
 
 		if (this.f_isRowSelected(row)) {
@@ -4967,7 +5003,7 @@ var __members = {
 	 *            hidden Event jsEvent
 	 * @return Boolean Returns <code>true</code> if success.
 	 */
-	f_deselectRow : function(rowValue, show, jsEvent) {
+	f_deselectRow: function(rowValue, show, jsEvent) {
 		var row = this.f_getRowByValue(rowValue, true);
 
 		if (!this.fa_isElementSelected(row)) {
@@ -4985,17 +5021,17 @@ var __members = {
 	 *            rowValue Value associated to the row, or a row object.
 	 * @return Boolean The checked state of the row
 	 */
-	f_isSelected : function(rowValue) {
+	f_isSelected: function(rowValue) {
 		var row = this.f_getRowByValue(rowValue, true);
 
 		return this._isElementValueSelected(row);
 	},
 
-	fa_getElementItem : function(row) {
+	fa_getElementItem: function(row) {
 		return row;
 	},
 
-	fa_getElementValue : function(row) {
+	fa_getElementValue: function(row) {
 		f_core.Assert(row && row.tagName.toLowerCase() == "tr",
 				"f_grid.fa_getElementValue: Invalid element parameter ! ("
 						+ row + ")");
@@ -5003,11 +5039,11 @@ var __members = {
 		return row._index;
 	},
 
-	fa_isElementDisabled : function(row) {
+	fa_isElementDisabled: function(row) {
 		return false;
 	},
 
-	fa_isElementSelected : function(row) {
+	fa_isElementSelected: function(row) {
 		f_core.Assert(row && row.tagName.toLowerCase() == "tr",
 				"f_grid.fa_isElementSelected: Invalid element parameter ! ("
 						+ row + ")");
@@ -5015,7 +5051,7 @@ var __members = {
 		return row._selected;
 	},
 
-	fa_setElementSelected : function(row, selected) {
+	fa_setElementSelected: function(row, selected) {
 		f_core.Assert(row && row.tagName.toLowerCase() == "tr",
 				"f_grid.fa_setElementSelected: Invalid element parameter ! ("
 						+ row + ")");
@@ -5023,7 +5059,7 @@ var __members = {
 		row._selected = selected;
 	},
 
-	fa_showElement : function(row) {
+	fa_showElement: function(row) {
 		f_core.Assert(row && row.tagName.toLowerCase() == "tr",
 				"f_grid.fa_showElement: Invalid element parameter ! (" + row
 						+ ")");
@@ -5054,40 +5090,41 @@ var __members = {
 		f_core.ShowComponent(row);
 	},
 
-	fa_listVisibleElements : function(ordered) {
+	fa_listVisibleElements: function(ordered) {
 		if (ordered) {
-			var body=this._table.tBodies[0];
-			f_core.Assert(body, "f_grid._sortTable: No body for data table of dataGrid !");
-			
-			var trs=new Array;
-			var childNodes=body.rows;
-			//var idx=0;
-			for(var i=0;i<childNodes.length;i++) {
-				var row=childNodes[i];
-				if (row._index===undefined) {
+			var body = this._table.tBodies[0];
+			f_core.Assert(body,
+					"f_grid._sortTable: No body for data table of dataGrid !");
+
+			var trs = new Array;
+			var childNodes = body.rows;
+			// var idx=0;
+			for ( var i = 0; i < childNodes.length; i++) {
+				var row = childNodes[i];
+				if (row._index === undefined) {
 					continue;
 				}
-				
+
 				trs.push(row);
 			}
 			return trs;
 		}
 		return this._rowsPool;
 	},
-	fa_getScrolledComponent : function() {
+	fa_getScrolledComponent: function() {
 		return this._scrollBody;
 	},
-	fa_getScrolledHorizontalTitle : function() {
+	fa_getScrolledHorizontalTitle: function() {
 		return this._scrollTitle;
 	},
-	fa_getScrolledVerticalTitle : function() {
+	fa_getScrolledVerticalTitle: function() {
 		return null;
 	},
 	/**
 	 * @method protected
 	 * @return void
 	 */
-	f_initializeTableLayout : function() {
+	f_initializeTableLayout: function() {
 		// var table = f_core.GetChildByCssClass(this, "f_grid_table");
 		var table = this.ownerDocument.getElementById(this.id
 				+ f_grid._DATA_TABLE_ID_SUFFIX);
@@ -5153,7 +5190,7 @@ var __members = {
 	/**
 	 * @method hidden
 	 */
-	f_updateColumnsLayout : function() {
+	f_updateColumnsLayout: function() {
 		if (this._columnsLayoutPerformed) {
 			return;
 		}
@@ -5245,8 +5282,8 @@ var __members = {
 
 			if (column._resizable) {
 				var cursor = f_core.CreateElement(box, "div", {
-					title : headCursorTitle,
-					className : "f_grid_colCursor"
+					title: headCursorTitle,
+					className: "f_grid_colCursor"
 				});
 				column._cursor = cursor;
 				cursor._column = column;
@@ -5265,7 +5302,7 @@ var __members = {
 	/**
 	 * @method protected
 	 */
-	f_updateTitle : function() {
+	f_updateTitle: function() {
 		if (!this._title) {
 			return;
 		}
@@ -5381,7 +5418,7 @@ var __members = {
 	 * @method protected
 	 * @return void
 	 */
-	f_updateScrollPosition : function() {
+	f_updateScrollPosition: function() {
 		var showValue = this._showValue;
 		if (showValue) {
 			this.f_showRow(showValue);
@@ -5395,7 +5432,7 @@ var __members = {
 	 * @method private
 	 * @return void
 	 */
-	_updateSortManager : function() {
+	_updateSortManager: function() {
 		var sortIndicator = this._sortIndicator;
 
 		var prefix = "";
@@ -5428,7 +5465,7 @@ var __members = {
 	 *            jsEvt
 	 * @return void
 	 */
-	f_showSortManager : function(jsEvt) {
+	f_showSortManager: function(jsEvt) {
 		f_core.Debug(f_grid, "f_showSortManager: Call sort manager !");
 
 		var sortManager = this._sortManager;
@@ -5470,7 +5507,7 @@ var __members = {
 	 * @return Boolean Return <code>true</code> if the row associated to the
 	 *         rowValue is found.
 	 */
-	f_showRow : function(rowValue) {
+	f_showRow: function(rowValue) {
 		var row = this.f_getRowByValue(rowValue, true);
 
 		f_core
@@ -5490,7 +5527,7 @@ var __members = {
 	 * @method public
 	 * @return Boolean
 	 */
-	f_hasElementAdditionalInformation : function(rowValue) {
+	f_hasElementAdditionalInformation: function(rowValue) {
 		if (!this._additionalInformations) {
 			return false;
 		}
@@ -5512,7 +5549,7 @@ var __members = {
 	 *            cursor
 	 * @return void
 	 */
-	_keyShowAdditionalInformation : function(evt, cursor) {
+	_keyShowAdditionalInformation: function(evt, cursor) {
 		if (this.fa_isAdditionalElementVisible(cursor)) {
 			return;
 		}
@@ -5531,7 +5568,7 @@ var __members = {
 	 *            cursor
 	 * @return void
 	 */
-	_keyHideAdditionalInformation : function(evt, cursor) {
+	_keyHideAdditionalInformation: function(evt, cursor) {
 		if (!this.fa_isAdditionalElementVisible(cursor)) {
 			return;
 		}
@@ -5544,7 +5581,7 @@ var __members = {
 	 *            row
 	 * @return Boolean
 	 */
-	fa_isAdditionalElementVisible : function(row) {
+	fa_isAdditionalElementVisible: function(row) {
 		f_core.Assert(row && row.tagName.toLowerCase() == "tr",
 				"f_grid.fa_isAdditionalElementVisible: Invalid element parameter ! ("
 						+ row + ")");
@@ -5561,7 +5598,7 @@ var __members = {
 	 *            animated
 	 * @return void
 	 */
-	fa_setAdditionalElementVisible : function(row, additional, animated) {
+	fa_setAdditionalElementVisible: function(row, additional, animated) {
 		f_core.Assert(row && row.tagName.toLowerCase() == "tr",
 				"f_grid.fa_setAdditionalElementVisible: Invalid element parameter ! ("
 						+ row + ")");
@@ -5579,7 +5616,7 @@ var __members = {
 			this.f_hideAdditionalContent(row, animated);
 		}
 	},
-	
+
 	/**
 	 * @method protected
 	 * @param Object
@@ -5590,36 +5627,37 @@ var __members = {
 	 *            animated
 	 * @return void
 	 */
-	fa_setToolTipVisible : function(tooltip, show, jsEvent) {
-		
+	fa_setToolTipVisible: function(tooltip, show, jsEvent) {
+
 		if (show) {
 			var item = tooltip.f_getElementItem();
-			
-			switch(item.tagName.toUpperCase()) {
+
+			switch (item.tagName.toUpperCase()) {
 			case "TR":
 			case "TD":
-				this.f_showToolTip(tooltip, jsEvent, f_toolTip.BOTTOM_COMPONENT);
+				this
+						.f_showToolTip(tooltip, jsEvent,
+								f_toolTip.BOTTOM_COMPONENT);
 				break;
-				
+
 			default:
-				tooltip.f_show(tooltip.f_getStateId(), jsEvent, f_toolTip.BOTTOM_COMPONENT);
+				tooltip.f_show(tooltip.f_getStateId(), jsEvent,
+						f_toolTip.BOTTOM_COMPONENT);
 				break;
 			}
 
-			
 		} else {
 			tooltip.f_hide(tooltip.f_getStateId());
 		}
 	},
-	
-	
+
 	/**
 	 * @method protected
 	 * @param Object
 	 *            row
 	 * @return Boolean
 	 */
-	f_hasAdditionalElement : function(row) {
+	f_hasAdditionalElement: function(row) {
 		f_core.Assert(row && row.tagName.toLowerCase() == "tr",
 				"f_grid.f_hasAdditionalElement: Invalid element parameter ! ("
 						+ row + ")");
@@ -5630,11 +5668,11 @@ var __members = {
 	 * @method protected
 	 * @param HTMLTableRowElement
 	 *            row
-	 * @param Boolean animated
-	 *            animated
+	 * @param Boolean
+	 *            animated animated
 	 * @return void
 	 */
-	f_showAdditionalContent : function(row, animated) {
+	f_showAdditionalContent: function(row, animated) {
 
 		var additionalRow = row._additionalRow;
 
@@ -5732,8 +5770,8 @@ var __members = {
 		var self = this;
 
 		request
-				.f_setListener( {
-					onInit : function(request) {
+				.f_setListener({
+					onInit: function(request) {
 						var waiting = additionalRow._waiting;
 						if (!waiting) {
 							waiting = f_waiting.Create(
@@ -5748,7 +5786,7 @@ var __members = {
 					/**
 					 * @method public
 					 */
-					onError : function(request, status, text) {
+					onError: function(request, status, text) {
 
 						var waiting = additionalRow._waiting;
 						if (waiting) {
@@ -5781,7 +5819,7 @@ var __members = {
 					/**
 					 * @method public
 					 */
-					onProgress : function(request, content, length, contentType) {
+					onProgress: function(request, content, length, contentType) {
 						var waiting = additionalRow._waiting;
 						if (waiting) {
 							waiting.f_setText(f_waiting.GetReceivingMessage());
@@ -5790,7 +5828,7 @@ var __members = {
 					/**
 					 * @method public
 					 */
-					onLoad : function(request, content, contentType) {
+					onLoad: function(request, content, contentType) {
 
 						var waiting = additionalRow._waiting;
 						if (waiting) {
@@ -5868,9 +5906,9 @@ var __members = {
 		request.f_setRequestHeader("X-Camelia", "grid.additionalInformation");
 
 		var params = {
-			gridId : this.id,
-			rowValue : row._index,
-			rowIndex : row._rowIndex
+			gridId: this.id,
+			rowValue: row._index,
+			rowIndex: row._rowIndex
 		};
 
 		if (this._paged) {
@@ -5882,7 +5920,7 @@ var __members = {
 					+ serializedState);
 			if (!serializedState) {
 				serializedState = ""; // Il faut informer le service que nous
-										// sommes en mode paginé !
+				// sommes en mode paginé !
 			}
 
 			params[f_core.SERIALIZED_DATA] = serializedState;
@@ -5892,35 +5930,45 @@ var __members = {
 
 		request.f_doFormRequest(params);
 	},
-	
+
 	/**
 	 * @method protected
-	 * @param f_toolTip tooltip
-	 * @param optional Event jsEvent
-	 * @param optional Number toolTipPosition
+	 * @param f_toolTip
+	 *            tooltip
+	 * @param optional
+	 *            Event jsEvent
+	 * @param optional
+	 *            Number toolTipPosition
 	 * @return void
 	 */
 	f_showToolTip: function(tooltip, jsEvent, toolTipPosition) {
-		f_core.Debug(f_grid, "f_showToolTip: show tooltip '"+tooltip.id+"'");
+		f_core
+				.Debug(f_grid, "f_showToolTip: show tooltip '" + tooltip.id
+						+ "'");
 		var toolTipManager = f_toolTipManager.Get();
 
-		var self=this;
-		toolTipManager.f_appendCommand(function() {
-			f_core.Debug(f_grid, "f_showToolTip: show tooltip '"+tooltip.id+"' COMMAND START");
+		var self = this;
+		toolTipManager
+				.f_appendCommand(function() {
+					f_core.Debug(f_grid, "f_showToolTip: show tooltip '"
+							+ tooltip.id + "' COMMAND START");
 
-			if (self._loadToolTip(tooltip, jsEvent, toolTipPosition)!==false) {
-				return;
-			}		
-			
-			toolTipManager.f_processNextCommand();
-		});
+					if (self._loadToolTip(tooltip, jsEvent, toolTipPosition) !== false) {
+						return;
+					}
+
+					toolTipManager.f_processNextCommand();
+				});
 	},
-	
+
 	/**
 	 * @method private
-	 * @param f_toolTip tooltip
-	 * @param optional Event jsEvent
-	 * @param optional Number toolTipPosition
+	 * @param f_toolTip
+	 *            tooltip
+	 * @param optional
+	 *            Event jsEvent
+	 * @param optional
+	 *            Number toolTipPosition
 	 * @return Boolean
 	 */
 	_loadToolTip: function(tooltip, jsEvent, toolTipPosition) {
@@ -5928,89 +5976,73 @@ var __members = {
 		if (!tooltipId) {
 			return false;
 		}
-		
+
 		var elementItem = tooltip.f_getElementItem();
 
 		var row = null;
-		
-		switch(elementItem.tagName.toUpperCase()) {
+
+		switch (elementItem.tagName.toUpperCase()) {
 		case "TR":
-			row=elementItem;
+			row = elementItem;
 			if (!tooltipId) {
-				tooltipId="#row";
+				tooltipId = "#row";
 			}
 			break;
-			
+
 		case "TD":
-			row=elementItem.parentNode;
+			row = elementItem.parentNode;
 			if (!tooltipId) {
-				tooltipId="#cell";
+				tooltipId = "#cell";
 			}
 			break;
-		}		
+		}
 
 		if (row._rowIndex === undefined || row._rowIndex < 0) {
 			return false;// a revoir
 		}
-		
+
 		var component = tooltip;
-		var parent = tooltip;
 
 		var url = f_env.GetViewURI();
-		var request = new f_httpRequest(component, url, f_httpRequest.TEXT_HTML_MIME_TYPE);
-		var self = this;
+		var request = new f_httpRequest(component, url,
+				f_httpRequest.TEXT_HTML_MIME_TYPE);
 
 		var toolTipManager = f_toolTipManager.Get();
-		
-		var toolTipStateId = tooltip.f_getStateId();
-		
-		var oldWaiting=component._intWaiting;
-		if (oldWaiting) {
-			component._intWaiting=undefined;
-			
-			f_classLoader.Destroy(oldWaiting);
-		}
 
-		tooltip.f_setInteractiveRenderer(false); // Le contenu est géré par NOTRE appel ajax !
+		var toolTipStateId = tooltip.f_getStateId();
+
+		tooltip.f_setInteractiveRenderer(false); // Le contenu est géré par
+		// NOTRE appel ajax !
 		tooltip.f_cleanContent();
 
-		
-		request.f_setListener( {
-					onInit : function(request) {
-						var waiting=component._intWaiting;
-			 			if (!waiting) {	
-			 				waiting=f_waiting.Create(parent);
-			 				component._intWaiting=waiting;
-			 			}
-			 			
-			 			waiting.f_setText(f_waiting.GetLoadingMessage());
-			 			waiting.f_show();
-						
-						component.f_show(toolTipStateId, jsEvent, toolTipPosition);
+		var self = this;
+		request
+				.f_setListener({
+					onInit: function(request) {
+						tooltip.f_asyncShowWaiting();
+
+						component.f_show(toolTipStateId, jsEvent,
+								toolTipPosition);
 					},
 					/**
 					 * @method public
 					 */
-					onError : function(request, status, text) {						
+					onError: function(request, status, text) {
+
 						if (toolTipManager.f_processNextCommand()) {
 							return;
 						}
-						
-						if (tooltip.f_getStateId()!=toolTipStateId) {
+
+						if (tooltip.f_getStateId() != toolTipStateId) {
 							// Reset du tooltip !
 							return;
 						}
+						tooltip.f_asyncHideWaiting(true);
 
-						component._intLoading=false;		
-						
-			 			var waiting=component._intWaiting;
-						if (waiting) {
-							waiting.f_hide();
-						}
-						
 						component.f_show(toolTipStateId);
 
-						f_core.Info(f_grid, "f_showToolTip.onError: Bad status: " + status);
+						f_core.Info(f_grid,
+								"f_showToolTip.onError: Bad status: " + status);
 
 						self.f_performErrorEvent(request, f_error.HTTP_ERROR,
 								text);
@@ -6018,97 +6050,111 @@ var __members = {
 					/**
 					 * @method public
 					 */
-					onProgress : function(request, content, length, contentType) {
-						if (tooltip.f_getStateId()!=toolTipStateId) {
+					onProgress: function(request, content, length, contentType) {
+						if (tooltip.f_getStateId() != toolTipStateId) {
 							// Reset du tooltip !
 							return;
 						}
 
-						var waiting=component._intWaiting;
-						if (waiting) {
-							waiting.f_setText(f_waiting.GetReceivingMessage());
-						}	 		
+						tooltip.f_asyncShowMessageWaiting(f_waiting.GetReceivingMessage());
 					},
 					/**
 					 * @method public
 					 */
-					onLoad : function(request, content, contentType) {
+					onLoad: function(request, content, contentType) {
 						if (toolTipManager.f_processNextCommand()) {
 							return;
 						}
-						
-						if (tooltip.f_getStateId()!=toolTipStateId) {
+
+						if (tooltip.f_getStateId() != toolTipStateId) {
 							// Reset du tooltip !
 							return;
 						}
-						
-						if (component._removeStyleHeight) {
-							component._removeStyleHeight=null;
-							if (component.style.height==f_waiting.HEIGHT+"px") {
-								component.style.height="auto";
-							}
-						}
-						var waiting=component._intWaiting;
+
 						try {
-							if (request.f_getStatus()!=f_httpRequest.OK_STATUS) {
-								component.f_performErrorEvent(request, f_error.INVALID_RESPONSE_ASYNC_RENDER_ERROR, "Bad http response status ! ("+request.f_getStatusText()+")");
+							tooltip.f_asyncHideWaiting(true);
+							tooltip.f_asyncDestroyWaiting();
+							
+							if (component._removeStyleHeight) {
+								component._removeStyleHeight = null;
+								if (component.style.height == f_waiting.HEIGHT
+										+ "px") {
+									component.style.height = "auto";
+								}
+							}
+
+							if (request.f_getStatus() != f_httpRequest.OK_STATUS) {
+								component
+										.f_performErrorEvent(
+												request,
+												f_error.INVALID_RESPONSE_ASYNC_RENDER_ERROR,
+												"Bad http response status ! ("
+														+ request
+																.f_getStatusText()
+														+ ")");
 								return;
 							}
 
-							var cameliaServiceVersion=request.f_getResponseHeader(f_httpRequest.CAMELIA_RESPONSE_HEADER);
+							var cameliaServiceVersion = request
+									.f_getResponseHeader(f_httpRequest.CAMELIA_RESPONSE_HEADER);
 							if (!cameliaServiceVersion) {
-								component.f_performErrorEvent(request, f_error.INVALID_SERVICE_RESPONSE_ERROR, "Not a service response !");
-								return;					
-							}
-							
-							var ret=request.f_getResponse();
-							//	alert("Ret="+ret);
-
-							var responseContentType=request.f_getResponseContentType().toLowerCase();
-							if (responseContentType.indexOf(f_error.APPLICATION_ERROR_MIME_TYPE)>=0) {
-								var code=f_error.ComputeApplicationErrorCode(request);
-						
-						 		component.f_performErrorEvent(request, code, content);
+								component.f_performErrorEvent(request,
+										f_error.INVALID_SERVICE_RESPONSE_ERROR,
+										"Not a service response !");
 								return;
 							}
-						
-							
-							if (responseContentType.indexOf(f_httpRequest.TEXT_HTML_MIME_TYPE)>=0) {
-								if (waiting) {
-									waiting.f_hide();
-									waiting.f_close();
-									waiting=null;
-								}
-								
+
+							var ret = request.f_getResponse();
+							// alert("Ret="+ret);
+
+							var responseContentType = request
+									.f_getResponseContentType().toLowerCase();
+							if (responseContentType
+									.indexOf(f_error.APPLICATION_ERROR_MIME_TYPE) >= 0) {
+								var code = f_error
+										.ComputeApplicationErrorCode(request);
+
+								component.f_performErrorEvent(request, code,
+										content);
+								return;
+							}
+
+							if (responseContentType
+									.indexOf(f_httpRequest.TEXT_HTML_MIME_TYPE) >= 0) {
+
 								try {
-									component.f_getClass().f_getClassLoader().f_loadContent(component, component, ret);
-									
+									component.f_getClass().f_getClassLoader()
+											.f_loadContent(component,
+													component, ret);
+
 								} catch (x) {
-						 			component.f_performAsyncErrorEvent(x, f_error.RESPONSE_EVALUATION_ASYNC_RENDER_ERROR, "Evaluation exception");
+									component
+											.f_performAsyncErrorEvent(
+													x,
+													f_error.RESPONSE_EVALUATION_ASYNC_RENDER_ERROR,
+													"Evaluation exception");
 								}
 								return;
 							}
-							
-						 	component.f_performAsyncErrorEvent(request, f_error.RESPONSE_TYPE_ASYNC_RENDER_ERROR, "Unsupported content type: "+responseContentType);
-							
-						} finally {				
-							component._intLoading=false;
 
-							if (waiting) {
-								waiting.f_hide();
-							}
+							component.f_performAsyncErrorEvent(request,
+									f_error.RESPONSE_TYPE_ASYNC_RENDER_ERROR,
+									"Unsupported content type: "
+											+ responseContentType);
+
+						} finally {
+				 			
 						}
 					}
 				});
 
-
 		request.f_setRequestHeader("X-Camelia", "grid.toolTip");
-		
+
 		var params = {
-			gridId : this.id,
-			rowValue : row._index,
-			rowIndex : row._rowIndex,
-			toolTipId : tooltipId
+			gridId: this.id,
+			rowValue: row._index,
+			rowIndex: row._rowIndex,
+			toolTipId: tooltipId
 		};
 
 		if (this._paged) {
@@ -6120,16 +6166,16 @@ var __members = {
 					+ serializedState);
 			if (!serializedState) {
 				serializedState = ""; // Il faut informer le service que nous
-										// sommes en mode paginé !
+				// sommes en mode paginé !
 			}
 
 			params[f_core.SERIALIZED_DATA] = serializedState;
 
 			f_classLoader.SerializeInputsIntoParam(params, this, false);
 		}
-		
+
 		request.f_doFormRequest(params);
-		
+
 		return true;
 	},
 	/**
@@ -6138,7 +6184,7 @@ var __members = {
 	 *            column Column object or index
 	 * @return void
 	 */
-	f_setFocusColumn : function(column) {
+	f_setFocusColumn: function(column) {
 		if (typeof (column) == "object") {
 			f_core.SetFocus(column._label);
 		}
@@ -6151,7 +6197,7 @@ var __members = {
 	 *            animated
 	 * @return void
 	 */
-	f_hideAdditionalContent : function(row, animated) {
+	f_hideAdditionalContent: function(row, animated) {
 
 		var additionalRow = row._additionalRow;
 
@@ -6188,7 +6234,7 @@ var __members = {
 				while (additionalRow.hasChildNodes()) {
 					additionalRow.removeChild(additionalRow.lastChild);
 				}
-				
+
 				this.f_getClass().f_getClassLoader().f_completeGarbageObjects();
 			}
 		}
@@ -6199,7 +6245,7 @@ var __members = {
 	 * @method protected
 	 * @return void
 	 */
-	f_updateSortBreadCrumbs : function() {
+	f_updateSortBreadCrumbs: function() {
 		var currentSorts = this._currentSorts;
 		if (!currentSorts) {
 			return;
@@ -6238,7 +6284,7 @@ var __members = {
 	 * @method hidden
 	 * @return void
 	 */
-	f_showEmptyDataMessage : function() {
+	f_showEmptyDataMessage: function() {
 		var label = this._emptyDataMessageLabel;
 		if (!label) {
 			return;
@@ -6246,7 +6292,7 @@ var __members = {
 
 		var scrollBody = this._scrollBody;
 		if (!scrollBody.offsetHeight) { // Le tableau s'est tassé, on affiche
-										// pas le message !
+			// pas le message !
 			return;
 		}
 
@@ -6271,7 +6317,7 @@ var __members = {
 	 * @method hidden
 	 * @return void
 	 */
-	f_hideEmptyDataMessage : function() {
+	f_hideEmptyDataMessage: function() {
 		if (!this._emptyDataMessageShown) {
 			return;
 		}
@@ -6290,7 +6336,7 @@ var __members = {
 	 *            message
 	 * @return void
 	 */
-	f_setEmptyDataMessage : function(message) {
+	f_setEmptyDataMessage: function(message) {
 		var label = this._emptyDataMessageLabel;
 		if (!label) {
 			return;
@@ -6302,7 +6348,7 @@ var __members = {
 	 * @method public
 	 * @return String
 	 */
-	f_getEmptyDataMessage : function() {
+	f_getEmptyDataMessage: function() {
 		var label = this._emptyDataMessageLabel;
 		if (!label) {
 			return null;
@@ -6317,24 +6363,25 @@ var __members = {
 	 *            event
 	 * @return String Identifier of column or <code>null</code> if not found.
 	 */
-	f_computeEventColumnId : function(event) {
+	f_computeEventColumnId: function(event) {
 		f_core.Assert(event instanceof f_event,
 				"f_grid.f_getEventColumnIndex: Invalid event parameter '"
 						+ event + "'.");
 
 		var jsEvent = event.f_getJsEvent();
 		var target = jsEvent.target ? jsEvent.target : jsEvent.srcElement;
-		
+
 		return this.f_computeColumnIdByElement(target);
 	},
-	
+
 	/**
 	 * @method public
-	 * @param HTMLElement target
+	 * @param HTMLElement
+	 *            target
 	 * @return String Identifier of column or <code>null</code> if not found.
 	 */
-	f_computeColumnIdByElement : function(target) {
-		f_core.Assert(target && target.nodeType==f_core.ELEMENT_NODE,
+	f_computeColumnIdByElement: function(target) {
+		f_core.Assert(target && target.nodeType == f_core.ELEMENT_NODE,
 				"f_grid.f_computeColumnIdByElement: Invalid target parameter '"
 						+ target + "'.");
 
@@ -6395,7 +6442,7 @@ var __members = {
 
 					break;
 				}
-				
+
 				break;
 			}
 		}
@@ -6409,7 +6456,7 @@ var __members = {
 	 *            rowValues List of values whose specified rows.
 	 * @return Number Number of removed rows.
 	 */
-	f_clearArray : function(rowValues) {
+	f_clearArray: function(rowValues) {
 		f_core.Assert(rowValues instanceof Array,
 				"f_grid.f_clearArray: Invalid values parameter '" + values
 						+ "'.");
@@ -6421,7 +6468,7 @@ var __members = {
 	 * @method public
 	 * @return Number Number of removed rows.
 	 */
-	f_clearAll : function() {
+	f_clearAll: function() {
 		var visibleElements = this.fa_listVisibleElements();
 		if (!visibleElements.length) {
 			return 0;
@@ -6433,7 +6480,7 @@ var __members = {
 	 * @method public
 	 * @return void
 	 */
-	f_expandAllAdditionalInformations : function() {
+	f_expandAllAdditionalInformations: function() {
 		var elements = this.fa_listVisibleElements();
 		var values = new Array();
 
@@ -6456,7 +6503,7 @@ var __members = {
 	 * @method public
 	 * @return void
 	 */
-	f_collapseAllAdditionalInformations : function() {
+	f_collapseAllAdditionalInformations: function() {
 		this.f_expandAdditionalInformations();
 	},
 	/**
@@ -6466,17 +6513,17 @@ var __members = {
 	 *            rowValue1 The value of the row to remove
 	 * @return Number Number of removed rows.
 	 */
-	f_clear : f_class.ABSTRACT,
+	f_clear: f_class.ABSTRACT,
 
 	/**
 	 * @method protected abstract
 	 */
-	f_callServer : f_class.ABSTRACT,
+	f_callServer: f_class.ABSTRACT,
 
 	/**
 	 * @method protected abstract
 	 */
-	f_sortClientSide : f_class.ABSTRACT,
+	f_sortClientSide: f_class.ABSTRACT,
 
 	/**
 	 * Set the width of the component
@@ -6487,28 +6534,28 @@ var __members = {
 	 *            width Width of the component.
 	 * @return void
 	 */
-	f_setWidth : function(width) {
+	f_setWidth: function(width) {
 		f_core.Assert(typeof (width) == "number",
 				"f_component.f_setWidth: w parameter must be a number ! ("
 						+ width + ")");
 
-		var difference = this.offsetWidth - width; 
+		var difference = this.offsetWidth - width;
 		this.style.width = width + "px";
 		this.f_setProperty(f_prop.WIDTH, width);
-		
+
 		var scrollTitle = this.ownerDocument.getElementById(this.id
 				+ f_grid._DATA_TITLE_SCROLL_ID_SUFFIX);
-		if(scrollTitle) {
+		if (scrollTitle) {
 			var otPixel = scrollTitle.offsetWidth - difference;
 			scrollTitle.style.width = otPixel + "px";
 		}
 		var scrollBody = this.ownerDocument.getElementById(this.id
 				+ f_grid._DATA_BODY_SCROLL_ID_SUFFIX);
-		if (scrollBody){
+		if (scrollBody) {
 			var obPixel = scrollBody.offsetWidth - difference;
 			scrollBody.style.width = obPixel + "px";
 		}
-		
+
 		this.f_updateTitle();
 	},
 
@@ -6522,311 +6569,323 @@ var __members = {
 	 *            height Height of the component.
 	 * @return void
 	 */
-	f_setHeight : function(height) {
-		f_core.Assert(typeof (height) == "number", "f_component.f_setHeight: h parameter must be a number ! ("+ height + ")");
+	f_setHeight: function(height) {
+		f_core.Assert(typeof (height) == "number",
+				"f_component.f_setHeight: h parameter must be a number ! ("
+						+ height + ")");
 
 		var oldHeight = this.offsetHeight;
 		var difference = oldHeight - height;
 		this.style.height = height + "px";
 		this.f_setProperty(f_prop.HEIGHT, height);
-		
-		var scrollBody = this.ownerDocument.getElementById(this.id+ f_grid._DATA_BODY_SCROLL_ID_SUFFIX);
-		if(scrollBody){
+
+		var scrollBody = this.ownerDocument.getElementById(this.id
+				+ f_grid._DATA_BODY_SCROLL_ID_SUFFIX);
+		if (scrollBody) {
 			var oldbody = scrollBody.offsetHeight;
 			height = oldbody - difference;
 			scrollBody.style.height = height + "px";
 		}
 	},
-	
+
 	/**
 	 * select all rows in the current page
+	 * 
 	 * @method public
 	 * @return void
 	 */
 	f_selectAllPage: function() {
-		
+
 		if (!this._selectable) {
 			return;
 		}
-		
+
 		var rows = this.fa_listVisibleElements();
-		if(rows.length) {
-			
-			var l=new Array;
-			
+		if (rows.length) {
+
+			var l = new Array;
+
 			for ( var i = 0; i < rows.length; i++) {
-				
+
 				var row = rows[i];
-				var elementValue=this.fa_getElementValue(row);
-				
+				var elementValue = this.fa_getElementValue(row);
+
 				if (!this.fa_isElementDisabled(row)) {
 					l.push(elementValue);
 				}
 			}
-			this._selectElementsRange(l, fa_selectionManager.RANGE_SELECTION, false, rows);
+			this._selectElementsRange(l, fa_selectionManager.RANGE_SELECTION,
+					false, rows);
 		}
 	},
-	
+
 	/**
 	 * unSelect all rows in the current page
+	 * 
 	 * @method public
 	 * @return void
 	 */
 	f_unselectAll: function() {
 		this.f_setSelection([]);
 	},
-/**
- * 
+	/**
+	 * 
 	 * @method private
-	 * @param Event jsEvent
+	 * @param Event
+	 *            jsEvent
 	 * @return Boolean
 	 */
 	_dragRow: function(jsEvent) {
-		var dnd=this._dragAndDropEngine;
+		var dnd = this._dragAndDropEngine;
 		if (!dnd) {
 			return false;
 		}
-		
-		var selection=new Object;
+
+		var selection = new Object;
 		selection._items = new Array;
 		selection._itemsValue = new Array;
 		var itemsDragTypes = new Array;
 		var currentSelection = this._currentSelection;
 		var lastEffects = undefined;
-		
+
 		for ( var i = 0; i < currentSelection.length; i++) {
-			
+
 			var row = currentSelection[i];
-			
-			var dragTypes=row._dragTypes;
-			if (dragTypes===undefined) {
-				dragTypes=this._dragTypes;
+
+			var dragTypes = row._dragTypes;
+			if (dragTypes === undefined) {
+				dragTypes = this._dragTypes;
 			}
-			
-			var dragEffects=row._dragEffects;
-			if (dragEffects===undefined) {
-				dragEffects=this._dragEffects;
+
+			var dragEffects = row._dragEffects;
+			if (dragEffects === undefined) {
+				dragEffects = this._dragEffects;
 			}
-			f_core.Debug(f_grid, "_dragRow: dragEffects=0x"+dragEffects+" dragTypes='"+dragTypes+"'");
-			
+			f_core.Debug(f_grid, "_dragRow: dragEffects=0x" + dragEffects
+					+ " dragTypes='" + dragTypes + "'");
+
 			if (!dragEffects || !dragTypes) {
 				return false;
 			}
-			
-			if(lastEffects){
+
+			if (lastEffects) {
 				lastEffects = dragEffects & lastEffects;
-			}else {
+			} else {
 				lastEffects = dragEffects;
 			}
-			
-			if(itemsDragTypes.length){
-				itemsDragTypes = f_dragAndDropEngine.ComputeTypes(dragTypes, itemsDragTypes);
-			}else {
+
+			if (itemsDragTypes.length) {
+				itemsDragTypes = f_dragAndDropEngine.ComputeTypes(dragTypes,
+						itemsDragTypes);
+			} else {
 				itemsDragTypes = dragTypes;
 			}
-			
+
 			selection._items[i] = row;
-			selection._itemsValue[i] = this.fa_getElementValue(row);; 
-		
+			selection._itemsValue[i] = this.fa_getElementValue(row);
+			;
+
 		}
-		
+
 		if (!lastEffects) {
 			return false;
 		}
 		if (!itemsDragTypes.length) {
 			return false;
 		}
-		
+
 		selection._dragEffects = lastEffects;
 		selection._dragTypes = itemsDragTypes;
 		selection._itemsElement = currentSelection;
-		var ret=dnd.f_start(jsEvent, selection);
-		
-		f_core.Debug(f_grid, "_dragRow: start returns '"+ret+"'");
-		
+		var ret = dnd.f_start(jsEvent, selection);
+
+		f_core.Debug(f_grid, "_dragRow: start returns '" + ret + "'");
+
 		return ret;
 	},
-	
+
 	/**
-	 * @method public 
+	 * @method public
 	 * @return Array
 	 */
-	f_getDragItems : function(selection) {
+	f_getDragItems: function(selection) {
 		return selection._items;
 	},
-	
+
 	/**
-	 * @method public 
+	 * @method public
 	 * @return Array
 	 */
-	f_getDragItemsValue : function(selection) {
+	f_getDragItemsValue: function(selection) {
 		return selection._itemsValue;
 	},
-	
+
 	/**
-	 * @method public 
+	 * @method public
 	 * @return Array
 	 */
-	f_getDragItemsElement : function(selection) {
+	f_getDragItemsElement: function(selection) {
 		return selection._itemsElement;
 	},
-	
+
 	/**
-	 * @method public 
+	 * @method public
 	 * @return Array
 	 */
-	f_getDragTypes : function(selection) {
+	f_getDragTypes: function(selection) {
 		return selection._dragTypes;
 	},
-	
+
 	/**
-	 * @method public 
+	 * @method public
 	 * @return Number
 	 */
-	f_getDragEffects : function(selection) {
+	f_getDragEffects: function(selection) {
 		return selection._dragEffects;
 	},
-	
-	
+
 	f_queryDropInfos: function(dragAndDropEngine, jsEvent, element) {
-		this._targetDragAndDropEngine=dragAndDropEngine;
-		
+		this._targetDragAndDropEngine = dragAndDropEngine;
+
 		if (this._scrollBody) {
 			this.fa_installAutoScroll();
 		}
 
-		var found=this._findRowByHTMLElement(element);
+		var found = this._findRowByHTMLElement(element);
 		if (!found) {
 			return null;
 		}
-		
-		var row=found._row;
-		var rowElement=found._rowElement;
-		
-		if (this._bodyDroppable!==true && row==this) {
+
+		var row = found._row;
+		var rowElement = found._rowElement;
+
+		if (this._bodyDroppable !== true && row == this) {
 			return null;
 		}
 
-		var dropTypes=row._dropTypes;
-		if (dropTypes===undefined) {
-			dropTypes=this._dropTypes;
+		var dropTypes = row._dropTypes;
+		if (dropTypes === undefined) {
+			dropTypes = this._dropTypes;
 		}
-		
-		var dropEffects=row._dropEffects;
-		if (dropEffects===undefined) {
-			dropEffects=this._dropEffects;
+
+		var dropEffects = row._dropEffects;
+		if (dropEffects === undefined) {
+			dropEffects = this._dropEffects;
 		}
-		
+
 		if (!dropTypes || !dropEffects) {
 			return null;
 		}
-		
-		var rowValue=this.fa_getElementValue(row);
-		
+
+		var rowValue = this.fa_getElementValue(row);
+
 		return {
 			item: row,
 			itemValue: rowValue,
 			targetItemElement: rowElement,
 			dropTypes: dropTypes,
-			dropEffects: dropEffects		
+			dropEffects: dropEffects
 		};
 	},
 	f_overDropInfos: function(dragAndDropEngine, infos) {
-		var row=infos.item;
-		
+		var row = infos.item;
+
 		row._dndOver = true;
-		this.fa_updateElementStyle(row);	
+		this.fa_updateElementStyle(row);
 	},
 	f_outDropInfos: function(dragAndDropEngine, infos) {
-		var row=infos.item;
-		
+		var row = infos.item;
+
 		row._dndOver = false;
-		this.fa_updateElementStyle(row);	
+		this.fa_updateElementStyle(row);
 	},
 	f_releaseDropInfos: function() {
-		this._targetDragAndDropEngine=undefined;
+		this._targetDragAndDropEngine = undefined;
 
 		this.fa_uninstallAutoScroll();
 	},
 	fa_getLastMousePosition: function() {
 		return this._targetDragAndDropEngine.f_getLastMousePosition();
 	},
-	
+
 	fa_getScrollableContainer: function() {
 		return this._scrollBody;
 	},
 	fa_findAutoOpenElement: function(htmlElement) {
 		// Recherche un additional !
-		
+
 		if (!this._additionalInformations) {
 			return null;
 		}
-		
-		var found=this._findRowByHTMLElement(htmlElement);
+
+		var found = this._findRowByHTMLElement(htmlElement);
 		if (!found) {
 			return null;
 		}
-		
-		var row=found._row;		
-		if (row==this || !this.f_hasAdditionalElement(row) || this.fa_isAdditionalElementVisible(row)) {
+
+		var row = found._row;
+		if (row == this || !this.f_hasAdditionalElement(row)
+				|| this.fa_isAdditionalElementVisible(row)) {
 			return null;
-		}		
-		
+		}
+
 		return row;
 	},
-	fa_performAutoOpenElement: function(row) {		
+	fa_performAutoOpenElement: function(row) {
 		this.fa_performElementAdditionalInformation(row, true);
 	},
 	fa_isSameAutoOpenElement: function(elt1, elt2) {
-		return elt1._rowIndex==elt2._rowIndex;
+		return elt1._rowIndex == elt2._rowIndex;
 	},
 	/**
 	 * @method private
-	 * @param HTMLElement element
+	 * @param HTMLElement
+	 *            element
 	 * @return Object
 	 */
 	_findRowByHTMLElement: function(element) {
-		var row=null;
-		var rowElement=null;
-			
-		for(;element;element=element.parentNode) {
+		var row = null;
+		var rowElement = null;
+
+		for (; element; element = element.parentNode) {
 			if (element._rows) {
 				// Racine de l'arbre
-				row=this;
-				rowElement=this;
+				row = this;
+				rowElement = this;
 				break;
 			}
-			
-			if (element._dataGrid==this && element._rowIndex!==undefined) {
-				row=element;
-				rowElement=element;
+
+			if (element._dataGrid == this && element._rowIndex !== undefined) {
+				row = element;
+				rowElement = element;
 				break;
 			}
 		}
-		
+
 		if (!row) {
 			return null;
 		}
-		
+
 		return {
 			_row: row,
 			_rowElement: rowElement
 		};
 	},
-	
+
 	fa_autoScrollPerformed: function() {
 		if (this._targetDragAndDropEngine) {
 			this._targetDragAndDropEngine.f_updateMousePosition();
 		}
 	}
-	
+
 };
 
 new f_class("f_grid", {
-	extend : f_component,
-	aspects : [ fa_disabled, fa_pagedComponent, fa_subMenu, fa_commands,
+	extend: f_component,
+	aspects: [ fa_disabled, fa_pagedComponent, fa_subMenu, fa_commands,
 			fa_selectionManager, fa_scrollPositions, fa_immediate,
-			fa_additionalInformationManager, fa_droppable, fa_draggable, fa_autoScroll, fa_autoOpen, fa_aria, fa_toolTipContainer ],
-	statics : __statics,
-	members : __members
+			fa_additionalInformationManager, fa_droppable, fa_draggable,
+			fa_autoScroll, fa_autoOpen, fa_aria, fa_toolTipContainer ],
+	statics: __statics,
+	members: __members
 });

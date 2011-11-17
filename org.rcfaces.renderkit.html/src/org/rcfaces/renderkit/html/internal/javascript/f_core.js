@@ -3664,8 +3664,11 @@ var f_core = {
 
 		} else {
 			evt.returnValue = false;	
-		}
-		
+		}		
+
+		f_core.Debug(f_core, "CancelJsEvent: Cancel event type='"
+				+ evt.type + "' event='" + evt + "'.");
+
 		return false;
 	},
 	/**

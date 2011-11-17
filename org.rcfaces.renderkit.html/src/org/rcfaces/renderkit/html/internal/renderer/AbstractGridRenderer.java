@@ -299,8 +299,9 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 						TOOLTIPS_RENDER_CONTEXT_STATE,
 						new Object[] { state, contentType });
 			}
-			
-			javaScriptRenderContext.appendRequiredClass(JavaScriptClasses.GRID, "toolTip");
+
+			javaScriptRenderContext.appendRequiredClass(JavaScriptClasses.GRID,
+					"toolTip");
 		}
 
 		if (gridRenderContext.hasAdditionalInformations()) {
@@ -1882,6 +1883,10 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
 		String[] defaultCellToolTipIds = gridRenderContext
 				.getDefaultCellToolTipIds();
+		if (defaultCellToolTipIds != null) {
+			defaultCellToolTipIds = allocateStrings(jsWriter,
+					defaultCellToolTipIds, null);
+		}
 
 		UIColumn columns[] = gridRenderContext.listColumns();
 
@@ -2000,7 +2005,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 			if (hasToolTip == false && defaultCellToolTipIds != null) {
 				String tooltip = defaultCellToolTipIds[i];
 				if (tooltip != null) {
-					objectWriter.writeSymbol("_toolTipId").writeString(tooltip);
+					objectWriter.writeSymbol("_toolTipId").write(tooltip);
 					hasToolTip = true;
 				}
 			}
