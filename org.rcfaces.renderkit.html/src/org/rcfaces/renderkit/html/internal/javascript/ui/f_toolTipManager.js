@@ -208,7 +208,7 @@ var __members = {
 	},
 
 	/**
-	 * @method private static
+	 * @method private
 	 * @param Event
 	 *            evt
 	 * @return Boolean
@@ -387,7 +387,7 @@ var __members = {
 	},
 
 	/**
-	 * @method private static
+	 * @method private
 	 * @param Event
 	 *            evt
 	 * @return Boolean
@@ -396,7 +396,7 @@ var __members = {
 	},
 
 	/**
-	 * @method private static
+	 * @method private
 	 * @param Event
 	 *            evt
 	 * @return Boolean
