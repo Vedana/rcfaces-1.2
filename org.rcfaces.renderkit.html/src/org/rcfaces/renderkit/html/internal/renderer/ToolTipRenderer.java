@@ -92,12 +92,16 @@ public class ToolTipRenderer extends AbstractCssRenderer implements
 
 	protected void encodeJavaScript(IJavaScriptWriter jsWriter)
 			throws WriterException {
-		// super.encodeJavaScript(jsWriter);
+		super.encodeJavaScript(jsWriter);
 
 		jsWriter.setIgnoreComponentInitialization();
 
 		jsWriter.writeCall("f_toolTipManager", "Get").writeln(");");
+	}
 
+	protected boolean sendCompleteComponent(
+			IHtmlComponentRenderContext htmlComponentContext) {
+		return false;
 	}
 
 	public void addRequiredJavaScriptClassNames(IHtmlWriter writer,
