@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
 
+import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
@@ -19,6 +20,7 @@ import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.HtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
+import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.renderer.AbstractGridRenderer;
 
 /**
@@ -42,7 +44,18 @@ public class ToolTipService extends AbtractGridService {
 			pw = new PrintWriter(cw);
 		}
 
+		ResponseWriter newWriter = facesContext.getRenderKit()
+				.createResponseWriter(printWriter, getResponseContentType(),
+						AbstractHtmlService.RESPONSE_CHARSET);
+
+		facesContext.setResponseWriter(newWriter);
+
 		Object states[] = dgr.getTooltipsRenderContextState(gridComponent);
+		if (states == null) {
+			throw new FacesException(
+					"Can not get render context state for tooltip of gridComponent='"
+							+ gridComponent + "'");
+		}
 
 		IHtmlRenderContext renderContext = HtmlRenderContext
 				.restoreRenderContext(facesContext, states[0], true);
@@ -50,7 +63,10 @@ public class ToolTipService extends AbtractGridService {
 		renderContext.pushComponent((UIComponent) gridComponent,
 				((UIComponent) gridComponent).getClientId(facesContext));
 
-		dgr.renderTooltip(renderContext, pw, gridComponent, RESPONSE_CHARSET,
+		IHtmlWriter htmlWriter = (IHtmlWriter) renderContext
+				.getComponentWriter();
+
+		dgr.renderTooltip(htmlWriter, gridComponent, RESPONSE_CHARSET,
 				rowValue, rowIndex, toolTipId);
 
 		if (LOG.isTraceEnabled()) {

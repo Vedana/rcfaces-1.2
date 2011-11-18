@@ -86,6 +86,7 @@ import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IEventData;
+import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.ISgmlWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
@@ -285,25 +286,6 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 			}
 		}
 
-		if (gridRenderContext.hasTooltips()) {
-			IHtmlRenderContext htmlRenderContext = writer
-					.getHtmlComponentRenderContext().getHtmlRenderContext();
-			Object state = htmlRenderContext.saveState(htmlRenderContext
-					.getFacesContext());
-
-			if (state != null) {
-				String contentType = htmlRenderContext.getFacesContext()
-						.getResponseWriter().getContentType();
-
-				((UIComponent) dataGridComponent).getAttributes().put(
-						TOOLTIPS_RENDER_CONTEXT_STATE,
-						new Object[] { state, contentType });
-			}
-
-			javaScriptRenderContext.appendRequiredClass(JavaScriptClasses.GRID,
-					"toolTip");
-		}
-
 		if (gridRenderContext.hasAdditionalInformations()) {
 			ajax = true;
 			javaScriptRenderContext.appendRequiredClass(JavaScriptClasses.GRID,
@@ -325,6 +307,26 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 							new Object[] { state, contentType });
 				}
 			}
+		}
+
+		if (gridRenderContext.hasTooltips()
+				&& getAdditionalInformationsRenderContextState(dataGridComponent) == null) {
+			IHtmlRenderContext htmlRenderContext = writer
+					.getHtmlComponentRenderContext().getHtmlRenderContext();
+			Object state = htmlRenderContext.saveState(htmlRenderContext
+					.getFacesContext());
+
+			if (state != null) {
+				String contentType = htmlRenderContext.getFacesContext()
+						.getResponseWriter().getContentType();
+
+				((UIComponent) dataGridComponent).getAttributes().put(
+						TOOLTIPS_RENDER_CONTEXT_STATE,
+						new Object[] { state, contentType });
+			}
+
+			javaScriptRenderContext.appendRequiredClass(JavaScriptClasses.GRID,
+					"toolTip");
 		}
 
 		if (ajax) {
@@ -380,8 +382,14 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 	}
 
 	public Object[] getTooltipsRenderContextState(IGridComponent component) {
-		return (Object[]) ((UIComponent) component).getAttributes().get(
-				TOOLTIPS_RENDER_CONTEXT_STATE);
+		Object[] state = (Object[]) ((UIComponent) component).getAttributes()
+				.get(TOOLTIPS_RENDER_CONTEXT_STATE);
+
+		if (state != null) {
+			return state;
+		}
+
+		return getAdditionalInformationsRenderContextState(component);
 	}
 
 	protected boolean needAdditionalInformationContextState() {
@@ -439,6 +447,11 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 			oldResponseStream = facesContext.getResponseStream();
 
 			Object states[] = getAdditionalInformationsRenderContextState(component);
+			if (states == null) {
+				throw new FacesException(
+						"Can not get render context state for additional informations of gridComponent='"
+								+ component + "'");
+			}
 
 			newResponseWriter = facesContext.getRenderKit()
 					.createResponseWriter(writer, (String) states[1],
@@ -474,13 +487,19 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
 		ResponseWriter oldResponseWriter = facesContext.getResponseWriter();
 		ResponseWriter newResponseWriter;
+
 		ResponseStream oldResponseStream = null;
 		if (oldResponseWriter == null) {
 			// Appel AJAX pour un TRI par exemple ... (ou changement de page)
 
 			oldResponseStream = facesContext.getResponseStream();
 
-			Object states[] = getAdditionalInformationsRenderContextState(component);
+			Object states[] = getTooltipsRenderContextState(component);
+			if (states == null) {
+				throw new FacesException(
+						"Can not get render context state for tooltip of gridComponent='"
+								+ component + "'");
+			}
 
 			newResponseWriter = facesContext.getRenderKit()
 					.createResponseWriter(writer, (String) states[1],
@@ -510,9 +529,9 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 	}
 
 	public boolean isDataModelRowAvailable(
-			IHtmlRenderContext htmlRenderContext, Writer writer,
-			IGridComponent gridComponent, String responseCharacterEncoding,
-			String rowValue2, String rowIndex) throws WriterException {
+			IHtmlRenderContext htmlRenderContext, IGridComponent gridComponent,
+			String responseCharacterEncoding, String rowValue2, String rowIndex)
+			throws WriterException {
 
 		IHtmlWriter htmlWriter = (IHtmlWriter) htmlRenderContext
 				.getComponentWriter();
@@ -590,9 +609,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 				.getHtmlComponentRenderContext());
 
 		try {
-			if (isDataModelRowAvailable(htmlRenderContext, writer,
-					gridComponent, responseCharacterEncoding, rowValue2,
-					rowIndex) == false) {
+			if (isDataModelRowAvailable(htmlRenderContext, gridComponent,
+					responseCharacterEncoding, rowValue2, rowIndex) == false) {
 				return;
 			}
 
@@ -625,34 +643,33 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 		}
 	}
 
-	public void renderTooltip(IHtmlRenderContext htmlRenderContext,
-			Writer writer, IGridComponent gridComponent,
-			String responseCharacterEncoding, String rowValue2,
-			String rowIndex, String tooltipId) throws WriterException {
+	public void renderTooltip(IHtmlWriter htmlWriter,
+			IGridComponent gridComponent, String responseCharacterEncoding,
+			String rowValue2, String rowIndex, String tooltipId)
+			throws WriterException {
 
-		IHtmlWriter htmlWriter = (IHtmlWriter) htmlRenderContext
-				.getComponentWriter();
+		IHtmlRenderContext htmlRenderContext = htmlWriter
+				.getHtmlComponentRenderContext().getHtmlRenderContext();
 
 		// On prepare le DataModel !
 		AbstractGridRenderContext tableContext = getGridRenderContext(htmlWriter
 				.getHtmlComponentRenderContext());
 		try {
-			if (isDataModelRowAvailable(htmlRenderContext, writer,
-					gridComponent, responseCharacterEncoding, rowValue2,
-					rowIndex) == false) {
+			if (isDataModelRowAvailable(htmlRenderContext, gridComponent,
+					responseCharacterEncoding, rowValue2, rowIndex) == false) {
 				return;
 			}
 
-			Map<String, ToolTipComponent> tooltips = tableContext
-					.listToolTips();
-
-			ToolTipComponent tooltipComponent = tooltips.get(tooltipId);
+			ToolTipComponent tooltipComponent = tableContext.findTooltip(
+					htmlWriter.getComponentRenderContext(), tooltipId);
 
 			if (tooltipComponent == null) {
 				return;
 			}
 
-			encodeToolTip(htmlRenderContext.getFacesContext(), writer,
+			FacesContext facesContext = htmlRenderContext.getFacesContext();
+
+			encodeToolTip(facesContext, facesContext.getResponseWriter(),
 					gridComponent, tooltipComponent, responseCharacterEncoding);
 
 		} finally {
@@ -912,6 +929,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 			}
 		}
 
+		writeToolTipId(htmlWriter, gridRenderContext, "#table");
+
 		writeGridComponentAttributes(htmlWriter, gridRenderContext,
 				gridComponent);
 
@@ -990,6 +1009,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 					htmlWriter.writeStyle().writeWidthPx(w);
 				}
 
+				writeToolTipId(htmlWriter, gridRenderContext, "#head");
+
 				encodeFixedHeader(htmlWriter, gridRenderContext, gridWidth,
 						true);
 				htmlWriter.endElement(IHtmlWriter.DIV);
@@ -1025,6 +1046,9 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 				if (w > 0) {
 					htmlWriter.writeStyle().writeWidthPx(w);
 				}
+
+				writeToolTipId(htmlWriter, gridRenderContext, "#head");
+
 				encodeFixedHeader(htmlWriter, gridRenderContext, gridWidth,
 						false);
 				htmlWriter.endElement(IHtmlWriter.DIV);
@@ -1035,6 +1059,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 		htmlWriter.writeId(getDataTableId(htmlWriter));
 		htmlWriter.writeClass(getDataTableClassName(htmlWriter,
 				gridRenderContext.isDisabled()));
+
+		writeToolTipId(htmlWriter, gridRenderContext, "#body");
 
 		// Pas de support CSS de border-spacing pour IE: on est oblig� de le
 		// cod� en HTML ...
@@ -1064,6 +1090,38 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 		htmlWriter.writeClass(getTitleTableBodyClassName(htmlWriter));
 
 		encodeBodyBegin(htmlWriter, gridRenderContext);
+	}
+
+	protected void writeToolTipId(IHtmlWriter htmlWriter,
+			AbstractGridRenderContext gridRenderContext, String tooltipName)
+			throws WriterException {
+
+		if (gridRenderContext.hasTooltips() == false) {
+			return;
+		}
+
+		ToolTipComponent tooltipComponent = gridRenderContext.findTooltip(
+				htmlWriter.getComponentRenderContext(), tooltipName);
+		if (tooltipComponent == null) {
+			return;
+		}
+
+		IRenderContext renderContext = htmlWriter.getComponentRenderContext()
+				.getRenderContext();
+
+		FacesContext facesContext = renderContext.getFacesContext();
+
+		String tooltipId = tooltipComponent.getClientId(facesContext);
+
+		/*
+		 * tooltipId = renderContext.computeBrotherComponentClientId(htmlWriter
+		 * .getComponentRenderContext().getComponent(), tooltipId);
+		 */
+		if (tooltipId == null) {
+			return;
+		}
+
+		htmlWriter.writeAttribute("v:toolTipId", tooltipId);
 	}
 
 	protected boolean serverTitleGeneration() {
@@ -2214,7 +2272,6 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 	}
 
 	private static final IBooleanStateCallback CELL_STYLE_CLASS = new IBooleanStateCallback() {
-		private static final String REVISION = "$Revision$";
 
 		public boolean test(AbstractGridRenderContext tableContext, int index) {
 			return tableContext.isCellStyleClass(index);
@@ -2222,7 +2279,6 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 	};
 
 	private static final IBooleanStateCallback CELL_TOOLTIP_TEXT = new IBooleanStateCallback() {
-		private static final String REVISION = "$Revision$";
 
 		public boolean test(AbstractGridRenderContext tableContext, int index) {
 			return tableContext.isCellToolTipText(index);

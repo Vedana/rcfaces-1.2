@@ -74,6 +74,7 @@ import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.listener.IScriptListener;
 import org.rcfaces.core.internal.listener.IServerActionListener;
+import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.tools.ComponentTools;
@@ -366,6 +367,10 @@ public abstract class AbstractGridRenderContext {
 			for (; tooltipIterator.hasNext();) {
 				ToolTipComponent tooltipComponent = tooltipIterator.next();
 
+				if (tooltipComponent.isRendered() == false) {
+					continue;
+				}
+
 				String tooltipId = tooltipComponent.getToolTipId(facesContext);
 				if (tooltipId != null) {
 					gridToolTips.put(tooltipId, tooltipComponent);
@@ -533,6 +538,10 @@ public abstract class AbstractGridRenderContext {
 				for (; tooltipIterator.hasNext();) {
 					ToolTipComponent tooltipComponent = tooltipIterator.next();
 
+					if (tooltipComponent.isRendered() == false) {
+						continue;
+					}
+
 					String tid = tooltipComponent.getToolTipId(facesContext);
 					if (tid != null) {
 						gridToolTips.put(tid, tooltipComponent);
@@ -545,12 +554,11 @@ public abstract class AbstractGridRenderContext {
 					}
 				}
 			}
-			
+
 			if (column instanceof IToolTipIdCapability) {
 				String tid = ((IToolTipIdCapability) column).getToolTipId();
 				if (tid != null) {
 					if (tid.startsWith("#") == false) {
-						// TODO RESOLUTION BROTHER tooltipId = tid;
 
 					}
 					tooltipId = tid;
@@ -1140,6 +1148,43 @@ public abstract class AbstractGridRenderContext {
 		sa.append(newMemberName);
 
 		return sa.toString();
+	}
+
+	public ToolTipComponent findTooltip(
+			IComponentRenderContext componentRenderContext, String name) {
+		if (name == null || name.length() < 1) {
+			return null;
+		}
+
+		ToolTipComponent toolTipComponent = listToolTips().get(name);
+		if (toolTipComponent != null) {
+			return toolTipComponent;
+		}
+
+		char start = name.charAt(0);
+
+		if (start == '#') {
+			return null;
+		}
+
+		if (start != ':') {
+			String newName = componentRenderContext.getRenderContext()
+					.computeBrotherComponentClientId(
+							componentRenderContext.getComponent(), name);
+			if (newName != null) {
+				name = newName;
+			}
+
+		}
+
+		UIComponent comp = componentRenderContext.getFacesContext()
+				.getViewRoot().findComponent(name);
+
+		if ((comp instanceof ToolTipComponent) == false) {
+			return null;
+		}
+
+		return (ToolTipComponent) comp;
 	}
 
 	public final boolean isCheckable() {

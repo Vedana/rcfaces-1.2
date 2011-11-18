@@ -36,6 +36,7 @@ import org.rcfaces.core.component.capability.ICriteriaCountCapability;
 import org.rcfaces.core.component.capability.ICriteriaManagerCapability;
 import org.rcfaces.core.component.capability.IDragAndDropEffects;
 import org.rcfaces.core.component.capability.IKeySearchColumnIdCapability;
+import org.rcfaces.core.component.capability.IRowToolTipIdCapability;
 import org.rcfaces.core.component.capability.ISelectedValuesCapability;
 import org.rcfaces.core.component.capability.IShowValueCapability;
 import org.rcfaces.core.component.capability.ISortEventCapability;
@@ -56,6 +57,7 @@ import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IEventData;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
+import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
@@ -1331,22 +1333,40 @@ public class DataGridRenderer extends AbstractGridRenderer {
 			String tooltipId = null;
 			String tooltipContent = null;
 
-			if (tableContext.hasTooltips()) {
-				Map<String, ToolTipComponent> tooltips = tableContext
-						.listToolTips();
+			if (dataGridComponent instanceof IRowToolTipIdCapability) {
+				tooltipId = ((IRowToolTipIdCapability) dataGridComponent)
+						.getRowToolTipId();
 
-				ToolTipComponent tooltipComponent = tooltips.get("#row");
+				if (tooltipId != null && tooltipId.length() > 0) {
+					IRenderContext renderContext = jsWriter
+							.getHtmlRenderContext();
+
+					tooltipId = renderContext.computeBrotherComponentClientId(
+							(UIComponent) dataGridComponent, tooltipId);
+				}
+			}
+
+			if (tooltipId == null && tableContext.hasTooltips()) {
+
+				ToolTipComponent tooltipComponent = tableContext.findTooltip(
+						jsWriter.getComponentRenderContext(), "#row");
 				if (tooltipComponent != null) {
 					if (tooltipComponent.getAsyncRenderMode(facesContext) == IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
-						tooltipContent = jsWriter.allocateString(encodeToolTip(
-								jsWriter, tooltipComponent));
+						tooltipContent = encodeToolTip(jsWriter,
+								tooltipComponent);
 						tooltipId = jsWriter.allocateString("##CONTENT");
 
 					} else {
-						tooltipId = jsWriter.allocateString(tooltipComponent
-								.getClientId(facesContext));
+						tooltipId = tooltipComponent.getClientId(facesContext);
 					}
 				}
+			}
+
+			if (tooltipId != null) {
+				tooltipId = jsWriter.allocateString(tooltipId);
+			}
+			if (tooltipContent != null) {
+				tooltipContent = jsWriter.allocateString(tooltipContent);
 			}
 
 			for (int i = 0; i < values.length; i++) {

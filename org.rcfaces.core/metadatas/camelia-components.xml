@@ -1140,6 +1140,7 @@
 		<capability id="IDropEventCapability" />
 		<capability id="IDropCompleteEventCapability" />
 		<capability id="IDroppableCapability" />
+		
 		<method id="setDragEffects(String)" />	
 		<method id="setDragTypes(String)" />
 		<method id="setDropEffects(String)" />
@@ -1200,6 +1201,8 @@
 		<capability id="IClientCheckFullStateCapability"/>
 
 		<capability id="IHeaderVisibilityCapability" default="true"/>
+
+		<capability id="IRowToolTipIdCapability" />
 
 		<capability id="org.rcfaces.core.lang.provider.ICursorProvider"/>
 
@@ -1748,6 +1751,7 @@
 		<capability id="IPreferencesSettings" />
 		<capability id="IPagedCapability" />
 
+		<capability id="IRowToolTipIdCapability" />
 
 		<capability id="IHeaderVisibilityCapability" default="true"/>
 
@@ -1756,7 +1760,7 @@
 		<attribute id="rowValue" type="java.lang.String" onlyValueBinding="true"/>
 		<attribute id="rowValueConverter" type="javax.faces.convert.Converter"/>
 		<attribute id="cellTextWrap" type="boolean" default="false"/>
-		
+	
 		<method id="getComponentValueType" returnType="org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType">
 			<import>org.rcfaces.core.internal.tools.GridTools</import>
 			<code>
