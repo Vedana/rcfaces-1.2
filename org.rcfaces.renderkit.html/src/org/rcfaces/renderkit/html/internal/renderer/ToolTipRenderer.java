@@ -19,6 +19,7 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 /**
  * 
  * @author jbmeslin@vedana.com
+ * @author olivier.oeuillot@vedana.com
  * @version $Revision$ $Date$
  * 
  */
@@ -77,7 +78,11 @@ public class ToolTipRenderer extends AbstractCssRenderer implements
 		}
 
 		setAsyncRenderer(htmlWriter, tooltipComponent, asyncRender);
-		// htmlWriter.enableJavaScript();
+
+		if (htmlRenderContext
+				.containsAttribute(ToolTipManagerRenderer.TOOLTIP_MANAGER_DEFINED_PROPERTY) == false) {
+			htmlWriter.enableJavaScript();
+		}
 	}
 
 	protected void encodeEnd(IComponentWriter writer) throws WriterException {
@@ -96,7 +101,18 @@ public class ToolTipRenderer extends AbstractCssRenderer implements
 
 		jsWriter.setIgnoreComponentInitialization();
 
-		jsWriter.writeCall("f_toolTipManager", "Get").writeln(");");
+		IHtmlRenderContext htmlRenderContext = jsWriter.getHtmlRenderContext();
+
+		if (htmlRenderContext
+				.containsAttribute(ToolTipManagerRenderer.TOOLTIP_MANAGER_DEFINED_PROPERTY) == false) {
+			// Nous sommes en LAZY
+
+			htmlRenderContext.setAttribute(
+					ToolTipManagerRenderer.TOOLTIP_MANAGER_DEFINED_PROPERTY,
+					Boolean.TRUE);
+			jsWriter.writeCall("f_toolTipManager", "Get").writeln(");");
+		}
+
 	}
 
 	protected boolean sendCompleteComponent(

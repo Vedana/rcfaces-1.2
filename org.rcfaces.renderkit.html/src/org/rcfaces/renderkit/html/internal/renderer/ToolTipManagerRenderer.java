@@ -19,6 +19,8 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  */
 public class ToolTipManagerRenderer extends AbstractJavaScriptRenderer {
 
+	static final String TOOLTIP_MANAGER_DEFINED_PROPERTY = "org.rcfaces.html.TOOLTIP_MANAGER";
+
 	protected void encodeEnd(IComponentWriter writer) throws WriterException {
 		IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
@@ -59,6 +61,13 @@ public class ToolTipManagerRenderer extends AbstractJavaScriptRenderer {
 		} else {
 			htmlWriter.enableJavaScript();
 		}
+
+		htmlWriter
+				.getHtmlComponentRenderContext()
+				.getRenderContext()
+				.setAttribute(
+						ToolTipManagerRenderer.TOOLTIP_MANAGER_DEFINED_PROPERTY,
+						Boolean.TRUE);
 
 		super.encodeEnd(htmlWriter);
 	}

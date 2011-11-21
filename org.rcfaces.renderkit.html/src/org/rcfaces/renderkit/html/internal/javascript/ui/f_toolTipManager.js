@@ -149,6 +149,11 @@ var __members = {
 	 */
 	_lastToolTipClose: undefined,
 
+	/**
+	 * @field Boolean
+	 */
+	_listenerInstalled: undefined,
+
 	f_toolTipManager: function() {
 		this.f_super(arguments);
 
@@ -166,6 +171,15 @@ var __members = {
 		}
 		if (neighbourThresholdMs < 0 || neighbourThresholdMs === undefined) {
 			neighbourThresholdMs = f_toolTipManager._DEFAULT_NEIGHBOUR_THRESHOLD_MS;
+		}
+
+		var mainToolTipManager = f_toolTipManager._Instance;		
+		if (mainToolTipManager) {
+			// Une instance existe déjà !
+			
+			mainToolTipManager._showDelayMs = delay;
+			mainToolTipManager._neighbourThresholdMs = neighbourThresholdMs;
+			return;
 		}
 
 		this._showDelayMs = delay;
@@ -192,6 +206,9 @@ var __members = {
 
 		// f_core.AddEventListener(window, "mouseout",
 		// f_toolTipManager._HideToolTip, window);
+
+		this._listenerInstalled=true;
+		
 	},
 
 	f_finalize: function() {
@@ -204,6 +221,29 @@ var __members = {
 			clearTimeout(timerId);
 		}
 
+		if (this._listenerInstalled) {
+			this._listenerInstalled=undefined; 
+			
+			f_core.RemoveEventListener(document.body, "mouseover",
+					f_toolTipManager._ElementOver, document.body);
+	
+			f_core.RemoveEventListener(document.body, "mouseout",
+					f_toolTipManager._ElementOut, document.body);
+	
+			// Touches
+	
+			f_core.RemoveEventListener(document.body, "keydown",
+					f_toolTipManager._HideToolTip, document.body);
+	
+			// Focus
+			f_core.RemoveEventListener(document.body, "focus",
+					f_toolTipManager._HideToolTip, document.body);
+	
+			// Clavier
+			f_core.RemoveEventListener(document.body, "mousedown",
+					f_toolTipManager._HideToolTip, document.body);
+		}
+		
 		this.f_super(arguments);
 	},
 
