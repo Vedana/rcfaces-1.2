@@ -225,6 +225,10 @@ var __members = {
 		this._computePosition(ref, f_toolTip.BOTTOM_LEFT_COMPONENT, jsEvent,
 				this, {});
 
+		if (this.f_isContentSpecified()) {
+			this._interactive=false;
+		}
+		
 		this.f_setVisible(true);
 
 		return true;
@@ -423,6 +427,39 @@ var __members = {
 			this.removeChild(this.firstChild);
 		}
 
+	},
+	/**
+	 * @method hidden
+	 * @param String content
+	 * @return void
+	 */
+	f_setContent: function(content) {
+		this.f_getClass().f_getClassLoader()
+				.f_loadContent(this,
+						this, content);
+	},
+	/**
+	 * @method protected
+	 * @param String content
+	 * @return void
+	 */
+	f_asyncSetContent: function(content) {
+		this.f_setContent(content);		
+	},
+	/**
+	 * @method hidden
+	 * @param Boolean state
+	 * @return void
+	 */
+	f_setContentSpecified: function(state) {
+		this._contentSpecified = !!state;
+	},
+	/**
+	 * @method hidden
+	 * @return Boolean
+	 */
+	f_isContentSpecified: function() {
+		return this._contentSpecified;
 	}
 
 };

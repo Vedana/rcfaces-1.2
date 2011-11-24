@@ -3,6 +3,7 @@
  * 
  * @class public f_toolTipManager extends f_object, fa_commands
  * @author jbmeslin@vedana.com (latest modification by $Author$)
+ * @author olivier.oeuillot@vedana.com
  * @version $Revision$ $Date$
  */
 
@@ -36,6 +37,10 @@ var __statics = {
 			evt = f_core.GetJsEvent(this);
 		}
 
+		if (window._rcfacesExiting) {
+			return;
+		}
+			
 		// f_core.Debug(f_toolTipManager, "_ElementOver: event="+evt+"
 		// target="+evt.target);
 
@@ -61,6 +66,10 @@ var __statics = {
 			evt = f_core.GetJsEvent(this);
 		}
 
+		if (window._rcfacesExiting) {
+			return;
+		}
+
 		// f_core.Debug(f_toolTipManager, "_ElementOut: event="+evt+"
 		// target="+evt.target);
 
@@ -83,6 +92,10 @@ var __statics = {
 	_HideToolTip: function(evt) {
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
+		}
+
+		if (window._rcfacesExiting) {
+			return;
 		}
 
 		// f_core.Debug(f_toolTipManager, "_HideToolTip: event="+evt+"
@@ -213,6 +226,7 @@ var __members = {
 
 	f_finalize: function() {
 		this._currentTooltip = undefined;
+		// this._listenerInstalled=undefined; // Boolean
 
 		var timerId = this._timerId;
 		if (timerId) {
@@ -306,6 +320,7 @@ var __members = {
 		}
 
 		var tooltip = this.f_getToolTipByClientId(tooltipInfos.toolTipClientId,
+				tooltipInfos.toolTipContent,
 				tooltipInfos.container.ownerDocument);
 		if (!tooltip) {
 			// Pas de tooltip trouvé
@@ -348,13 +363,22 @@ var __members = {
 	 * @method protected
 	 * @param String
 	 *            tooltipClientId
+	 * @param String tooltipContent
 	 * @return f_toolTip
 	 */
-	f_getToolTipByClientId: function(tooltipClientId, doc) {
+	f_getToolTipByClientId: function(tooltipClientId, tooltipContent, doc) {
 
+		if (tooltipContent) {
+			tooltipClientId="__dynamicToolTipContent";
+		}
+		
 		var tooltipComponent = f_core.GetElementByClientId(tooltipClientId);
 
 		if (tooltipComponent) {
+			if (tooltipContent) {
+				tooltipComponent.f_setContentSpecified(true);
+				tooltipComponent.f_setContent(tooltipContent);
+			}
 			return tooltipComponent;
 		}
 
@@ -368,6 +392,10 @@ var __members = {
 		tooltipComponent = this.f_getClass().f_getClassLoader().f_init(
 				tooltipComponent, true, true);
 
+		if (tooltipContent) {
+			tooltipComponent.f_setContentSpecified(true);
+			tooltipComponent.f_setContent(tooltipContent);
+		}
 		return tooltipComponent;
 	},
 

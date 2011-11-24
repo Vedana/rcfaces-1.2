@@ -985,9 +985,13 @@ var f_core = {
 				// Une des frames doit positionner 'event'
 				var frames=win.frames;
 				for(var i=0;i<frames.length;i++) {
-					if (frames[i].event) {
-						win=frames[i];
-						break;
+					try {
+						if (frames[i].event) {
+							win=frames[i];
+							break;
+						}
+					} catch (x) {
+						// Probleme de sécurité !
 					}
 				}
 			}

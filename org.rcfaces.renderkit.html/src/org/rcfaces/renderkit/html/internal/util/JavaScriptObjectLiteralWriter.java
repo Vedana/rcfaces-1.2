@@ -15,85 +15,86 @@ import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
  * @version $Revision$ $Date$
  */
 public class JavaScriptObjectLiteralWriter implements IObjectLiteralWriter {
-    private static final String REVISION = "$Revision$";
+	private static final String REVISION = "$Revision$";
 
-    private static final Log LOG = LogFactory
-            .getLog(JavaScriptObjectLiteralWriter.class);
+	private static final Log LOG = LogFactory
+			.getLog(JavaScriptObjectLiteralWriter.class);
 
-    private final IJavaScriptWriter parent;
+	private final IJavaScriptWriter parent;
 
-    private final boolean writeNullIfEmpty;
+	private final boolean writeNullIfEmpty;
 
-    private boolean firstProperty = true;
+	private boolean firstProperty = true;
 
-    public JavaScriptObjectLiteralWriter(IJavaScriptWriter parent,
-            boolean writeNullIfEmpty) {
-        this.parent = parent;
-        this.writeNullIfEmpty = writeNullIfEmpty;
-    }
+	public JavaScriptObjectLiteralWriter(IJavaScriptWriter parent,
+			boolean writeNullIfEmpty) {
+		this.parent = parent;
+		this.writeNullIfEmpty = writeNullIfEmpty;
+	}
 
-    public IJavaScriptWriter getParent() {
-        return parent;
-    }
+	public IJavaScriptWriter getParent() {
+		return parent;
+	}
 
-    public IJavaScriptWriter writeProperty(String propertyName)
-            throws WriterException {
+	public IJavaScriptWriter writeProperty(String propertyName)
+			throws WriterException {
 
-        if (firstProperty) {
-            firstProperty = false;
-            parent.write('{');
+		if (firstProperty) {
+			firstProperty = false;
+			parent.write('{');
 
-        } else {
-            parent.write(',');
-        }
+		} else {
+			parent.write(',');
+		}
 
-        boolean directWriter = true;
+		boolean directWriter = true;
 
-        if (propertyName.length() > 0) {
-            char chs[] = propertyName.toCharArray();
-            if (Character.isJavaIdentifierStart(chs[0]) == false) {
-                directWriter = false;
+		if (propertyName.length() > 0) {
+			char chs[] = propertyName.toCharArray();
+			if (Character.isJavaIdentifierStart(chs[0]) == false
+					&& Character.isDigit(chs[0]) == false) {
+				directWriter = false;
 
-            } else {
-                for (int i = 1; i < chs.length; i++) {
-                    if (Character.isJavaIdentifierPart(chs[i]) == false) {
-                        directWriter = false;
+			} else {
+				for (int i = 1; i < chs.length; i++) {
+					if (Character.isJavaIdentifierPart(chs[i]) == false) {
+						directWriter = false;
 
-                        break;
-                    }
-                }
-            }
-        }
+						break;
+					}
+				}
+			}
+		}
 
-        if (directWriter == false) {
-            parent.writeString(propertyName);
+		if (directWriter == false) {
+			parent.writeString(propertyName);
 
-        } else {
-            parent.write(propertyName);
-        }
+		} else {
+			parent.write(propertyName);
+		}
 
-        parent.write(':');
+		parent.write(':');
 
-        return parent;
-    }
+		return parent;
+	}
 
-    public IJavaScriptWriter writeSymbol(String symbol) throws WriterException {
+	public IJavaScriptWriter writeSymbol(String symbol) throws WriterException {
 
-        String convertedSymbol = parent.getJavaScriptRenderContext()
-                .convertSymbol(null, symbol);
+		String convertedSymbol = parent.getJavaScriptRenderContext()
+				.convertSymbol(null, symbol);
 
-        return writeProperty(convertedSymbol);
-    }
+		return writeProperty(convertedSymbol);
+	}
 
-    public IJavaScriptWriter end() throws WriterException {
-        if (firstProperty) {
-            if (writeNullIfEmpty == false) {
-                return parent.write("{}");
-            }
+	public IJavaScriptWriter end() throws WriterException {
+		if (firstProperty) {
+			if (writeNullIfEmpty == false) {
+				return parent.write("{}");
+			}
 
-            return parent.writeNull();
-        }
+			return parent.writeNull();
+		}
 
-        return parent.write('}');
-    }
+		return parent.write('}');
+	}
 }

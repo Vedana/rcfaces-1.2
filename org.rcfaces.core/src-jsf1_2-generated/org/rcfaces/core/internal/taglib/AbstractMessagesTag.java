@@ -50,10 +50,10 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 	private ValueExpression initListeners;
 	private ValueExpression propertyChangeListeners;
 	private ValueExpression hiddenMode;
-	private ValueExpression margins;
-	private ValueExpression globalOnly;
-	private ValueExpression showSummary;
 	private ValueExpression showDetail;
+	private ValueExpression showSummary;
+	private ValueExpression globalOnly;
+	private ValueExpression margins;
 	public void setMarginBottom(ValueExpression marginBottom) {
 		this.marginBottom = marginBottom;
 	}
@@ -182,20 +182,20 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 		this.hiddenMode = hiddenMode;
 	}
 
-	public void setMargins(ValueExpression margins) {
-		this.margins = margins;
-	}
-
-	public void setGlobalOnly(ValueExpression globalOnly) {
-		this.globalOnly = globalOnly;
+	public void setShowDetail(ValueExpression showDetail) {
+		this.showDetail = showDetail;
 	}
 
 	public void setShowSummary(ValueExpression showSummary) {
 		this.showSummary = showSummary;
 	}
 
-	public void setShowDetail(ValueExpression showDetail) {
-		this.showDetail = showDetail;
+	public void setGlobalOnly(ValueExpression globalOnly) {
+		this.globalOnly = globalOnly;
+	}
+
+	public void setMargins(ValueExpression margins) {
+		this.margins = margins;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
@@ -226,10 +226,10 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 			LOG.debug("  top='"+top+"'");
 			LOG.debug("  unlockedClientAttributeNames='"+unlockedClientAttributeNames+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
-			LOG.debug("  margins='"+margins+"'");
-			LOG.debug("  globalOnly='"+globalOnly+"'");
-			LOG.debug("  showSummary='"+showSummary+"'");
 			LOG.debug("  showDetail='"+showDetail+"'");
+			LOG.debug("  showSummary='"+showSummary+"'");
+			LOG.debug("  globalOnly='"+globalOnly+"'");
+			LOG.debug("  margins='"+margins+"'");
 		}
 		if ((uiComponent instanceof AbstractMessagesComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -501,19 +501,12 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (margins != null) {
-			if (margins.isLiteralText()==false) {
-				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
-			}
-				component.setMargins(margins.getExpressionString());
-		}
-
-		if (globalOnly != null) {
-			if (globalOnly.isLiteralText()==false) {
-				component.setValueExpression(Properties.GLOBAL_ONLY, globalOnly);
+		if (showDetail != null) {
+			if (showDetail.isLiteralText()==false) {
+				component.setValueExpression(Properties.SHOW_DETAIL, showDetail);
 
 			} else {
-				component.setGlobalOnly(getBool(globalOnly.getExpressionString()));
+				component.setShowDetail(getBool(showDetail.getExpressionString()));
 			}
 		}
 
@@ -526,13 +519,20 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (showDetail != null) {
-			if (showDetail.isLiteralText()==false) {
-				component.setValueExpression(Properties.SHOW_DETAIL, showDetail);
+		if (globalOnly != null) {
+			if (globalOnly.isLiteralText()==false) {
+				component.setValueExpression(Properties.GLOBAL_ONLY, globalOnly);
 
 			} else {
-				component.setShowDetail(getBool(showDetail.getExpressionString()));
+				component.setGlobalOnly(getBool(globalOnly.getExpressionString()));
 			}
+		}
+
+		if (margins != null) {
+			if (margins.isLiteralText()==false) {
+				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
+			}
+				component.setMargins(margins.getExpressionString());
 		}
 	}
 
@@ -569,10 +569,10 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 		initListeners = null;
 		propertyChangeListeners = null;
 		hiddenMode = null;
-		margins = null;
-		globalOnly = null;
-		showSummary = null;
 		showDetail = null;
+		showSummary = null;
+		globalOnly = null;
+		margins = null;
 
 		super.release();
 	}

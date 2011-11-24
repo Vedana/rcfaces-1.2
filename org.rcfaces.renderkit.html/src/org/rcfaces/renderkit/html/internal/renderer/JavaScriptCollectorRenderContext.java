@@ -542,9 +542,11 @@ public class JavaScriptCollectorRenderContext extends
 			}
 
 			if (logProfiling) {
-				jsWriter.writeCall("f_core", "Profile").writeln(
-						"null,\"javascriptCollector.raws(" + (raws.size())
-								+ ")\");");
+				jsWriter.writeCall("f_core", "Profile")
+						.writeNull()
+						.writeln(
+								",\"javascriptCollector.raws(" + (raws.size())
+										+ ")\");");
 			}
 
 			int idx = 1;
@@ -556,9 +558,11 @@ public class JavaScriptCollectorRenderContext extends
 				jsWriter.writeln(text);
 
 				if (logIntermediateProfiling) {
-					jsWriter.writeCall("f_core", "Profile").writeln(
-							"null,\"javascriptCollector.raws(" + idx + "/"
-									+ (raws.size()) + ")\");");
+					jsWriter.writeCall("f_core", "Profile")
+							.writeNull()
+							.writeln(
+									",\"javascriptCollector.raws(" + idx + "/"
+											+ (raws.size()) + ")\");");
 				}
 			}
 		}
@@ -566,9 +570,11 @@ public class JavaScriptCollectorRenderContext extends
 		if (components.isEmpty() == false) {
 
 			if (logProfiling) {
-				jsWriter.writeCall("f_core", "Profile").writeln(
-						"null,\"javascriptCollector.components("
-								+ (components.size()) + ")\");");
+				jsWriter.writeCall("f_core", "Profile")
+						.writeNull()
+						.writeln(
+								",\"javascriptCollector.components("
+										+ (components.size()) + ")\");");
 			}
 
 			List initializeIds = new ArrayList(16);
@@ -593,9 +599,11 @@ public class JavaScriptCollectorRenderContext extends
 								focusIds, hoverIds, messageIds, accessIds,
 								submitIds);
 
-						jsWriter.writeCall("f_core", "Profile").writeln(
-								"null,\"javascriptCollector.initIds(#"
-										+ (profilerId++) + ")\");");
+						jsWriter.writeCall("f_core", "Profile")
+								.writeNull()
+								.writeln(
+										",\"javascriptCollector.initIds(#"
+												+ (profilerId++) + ")\");");
 					}
 
 					continue;
@@ -611,9 +619,11 @@ public class JavaScriptCollectorRenderContext extends
 							submitIds);
 
 					if (logIntermediateProfiling) {
-						jsWriter.writeCall("f_core", "Profile").writeln(
-								"null,\"javascriptCollector.initIds(#"
-										+ (profilerId++) + ")\");");
+						jsWriter.writeCall("f_core", "Profile")
+								.writeNull()
+								.writeln(
+										",\"javascriptCollector.initIds(#"
+												+ (profilerId++) + ")\");");
 					}
 				}
 
@@ -637,9 +647,11 @@ public class JavaScriptCollectorRenderContext extends
 				jsWriter.writeln(buffer);
 
 				if (logIntermediateProfiling) {
-					jsWriter.writeCall("f_core", "Profile").writeln(
-							"null,\"javascriptCollector.buffer(#"
-									+ (profilerId++) + ")\");");
+					jsWriter.writeCall("f_core", "Profile")
+							.writeNull()
+							.writeln(
+									",\"javascriptCollector.buffer(#"
+											+ (profilerId++) + ")\");");
 				}
 			}
 
@@ -746,8 +758,8 @@ public class JavaScriptCollectorRenderContext extends
 				}
 
 				if (logProfiling) {
-					jsWriter.writeCall("f_core", "Profile").writeln(
-							"null,\"javascriptCollector.messages\");");
+					jsWriter.writeCall("f_core", "Profile").writeNull()
+							.writeln(",\"javascriptCollector.messages\");");
 				}
 
 				writeMessages(jsWriter);
@@ -903,10 +915,10 @@ public class JavaScriptCollectorRenderContext extends
 					others.add(componentId);
 					continue;
 				}
-				
+
 				continue;
 			}
-			
+
 			if (first) {
 				first = false;
 				jsWriter.writeCall(cameliaClassLoader, "f_onInit");

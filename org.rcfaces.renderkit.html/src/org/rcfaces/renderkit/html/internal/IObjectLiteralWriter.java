@@ -12,11 +12,11 @@ import org.rcfaces.core.internal.renderkit.WriterException;
  */
 public interface IObjectLiteralWriter {
 
-    IJavaScriptWriter getParent();
+	IJavaScriptWriter getParent();
 
-    IJavaScriptWriter writeProperty(String propertyName) throws WriterException;
+	IJavaScriptWriter writeProperty(String propertyName) throws WriterException;
 
-    IJavaScriptWriter writeSymbol(String symbol) throws WriterException;
+	IJavaScriptWriter writeSymbol(String symbol) throws WriterException;
 
-    IJavaScriptWriter end() throws WriterException;
+	IJavaScriptWriter end() throws WriterException;
 }

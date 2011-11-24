@@ -967,6 +967,8 @@
 		<capability id="ICellImageCapability" />
 		<capability id="ICellStyleClassCapability" />
 		<capability id="ICellToolTipTextCapability" />
+		<capability id="IToolTipIdCapability" />
+		<capability id="ITitleToolTipIdCapability" />
 		
 		<capability id="ISelectionEventCapability" />		
 		<capability id="IDoubleClickEventCapability" />

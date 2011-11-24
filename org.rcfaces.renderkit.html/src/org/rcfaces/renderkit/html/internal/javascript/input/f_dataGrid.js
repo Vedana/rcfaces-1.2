@@ -693,6 +693,7 @@ var __members = {
 					}
 					if (col._toolTipId) {
 						td._toolTipId=col._toolTipId;
+						td._toolTipContent=col._toolTipContent;
 					}
 					
 					var labelComponent=doc.createElement("label");
@@ -732,6 +733,7 @@ var __members = {
 		
 		if (properties._toolTipId) {
 			row._toolTipId = properties._toolTipId;
+			row._toolTipContent = properties._toolTipContent;
 		}
 		
 		this.fa_updateElementStyle(row, false);
@@ -1525,25 +1527,25 @@ var __members = {
 	 * @param Object... Properties of each row
 	 * @return void
 	 */
-	f_setCells2: function(row) {
+	f_setCells2: function(row, configs) {
 		var tds=row.getElementsByTagName("td");
 		var cols=this._columns;
 
 		var images=row._cellImages;
 
 		var callUpdate=false;
-		
 		var argIdx=0;
+		
 		for(var i=0;i<cols.length;i++) {
 			var col=cols[i];
 			if (!col._visibility) {
 				continue;
 			}
 			
-			var td=tds[argIdx];
-			var properties=arguments[argIdx+1];
-			if (!properties) {
-				argIdx++;
+			var td=tds[argIdx++];
+			
+			var properties=configs[i];
+			if (!properties) {	
 				continue;
 			}
 			
@@ -1562,11 +1564,16 @@ var __members = {
 				
 			} else {
 				var toolTipId = properties._toolTipId;  
+				var toolTipContent = properties._toolTipContent;
+				
 				if (!toolTipId) {
 					toolTipId = col._toolTipId;
+					toolTipContent = col._toolTipContent;
 				}
+				
 				if (toolTipId) {
 					td._toolTipId = toolTipId;
+					td._toolTipContent = toolTipContent;
 				}
 			}
 			
@@ -1598,8 +1605,6 @@ var __members = {
 				
 				callUpdate=true;
 			}
-				
-			argIdx++;
 		}
 		
 		if (callUpdate) {

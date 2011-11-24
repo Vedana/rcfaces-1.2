@@ -79,6 +79,8 @@ public class ToolTipRenderer extends AbstractCssRenderer implements
 
 		setAsyncRenderer(htmlWriter, tooltipComponent, asyncRender);
 
+		//htmlWriter.getJavaScriptEnableMode().enableOnInit();
+		
 		if (htmlRenderContext
 				.containsAttribute(ToolTipManagerRenderer.TOOLTIP_MANAGER_DEFINED_PROPERTY) == false) {
 			htmlWriter.enableJavaScript();

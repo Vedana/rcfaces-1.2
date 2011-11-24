@@ -45,6 +45,7 @@ var __members = {
 			}
 			
 			var tooltipClientId;			
+			var tooltipContent;
 
 			if (parent.f_getTooltipId) {
 				tooltipClientId=parent.f_getTooltipId();
@@ -56,6 +57,7 @@ var __members = {
 			
 			if (!tooltipClientId) {			
 				tooltipClientId = parent._toolTipId;
+				tooltipContent = parent._toolTipContent;
 			}
 			
 			if (!tooltipClientId) {
@@ -64,6 +66,7 @@ var __members = {
 				
 			return {
 				toolTipClientId: tooltipClientId,
+				toolTipContent: tooltipContent,
 				item: parent,
 				container: this
 			};

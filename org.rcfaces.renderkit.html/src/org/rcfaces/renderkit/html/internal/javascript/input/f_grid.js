@@ -2864,6 +2864,10 @@ var __members = {
 
 					column._resizable = (column._minWidth >= f_grid._COLUMN_MIN_WIDTH && column._maxWidth >= column._minWidth);
 				}
+				
+				if (column._titleToolTipId) {
+					
+				}
 
 			} else {
 				column = f_gridColumn.f_newInstance();
@@ -5247,6 +5251,11 @@ var __members = {
 
 			head._column = column;
 			column._head = head;
+			
+			if (column._titleToolTipId) {
+				head._toolTipId=column._titleToolTipId;
+				head._toolTipContent=column._titleToolTipContent;
+			}
 
 			var box = f_core.GetFirstElementByTagName(head, "div");
 			f_core
@@ -5632,19 +5641,23 @@ var __members = {
 		if (show) {
 			var item = tooltip.f_getElementItem();
 
-			switch (item.tagName.toUpperCase()) {
-			case "TR":
-			case "TD":
-				this
-						.f_showToolTip(tooltip, jsEvent,
-								f_toolTip.BOTTOM_COMPONENT);
-				break;
-
-			default:
-				tooltip.f_show(tooltip.f_getStateId(), jsEvent,
-						f_toolTip.BOTTOM_COMPONENT);
-				break;
+			if (!tooltip.f_isContentSpecified()) {
+				var tagName=item.tagName.toUpperCase();
+				
+				if (tagName=="TD" && item.parentNode._index!==undefined) {
+					this.f_showToolTip(tooltip, jsEvent,
+							f_toolTip.BOTTOM_COMPONENT);
+					return;
+				}
+				if (tagName=="TR" && item._index!=undefined) {
+					this.f_showToolTip(tooltip, jsEvent,
+							f_toolTip.BOTTOM_COMPONENT);
+					return;
+				}
 			}
+			
+			tooltip.f_show(tooltip.f_getStateId(), jsEvent,
+					f_toolTip.BOTTOM_COMPONENT);
 
 		} else {
 			tooltip.f_hide(tooltip.f_getStateId());
@@ -6123,9 +6136,7 @@ var __members = {
 									.indexOf(f_httpRequest.TEXT_HTML_MIME_TYPE) >= 0) {
 
 								try {
-									component.f_getClass().f_getClassLoader()
-											.f_loadContent(component,
-													component, ret);
+									tooltip.f_setContent(ret);
 
 								} catch (x) {
 									component
@@ -6683,8 +6694,6 @@ var __members = {
 
 			selection._items[i] = row;
 			selection._itemsValue[i] = this.fa_getElementValue(row);
-			;
-
 		}
 
 		if (!lastEffects) {

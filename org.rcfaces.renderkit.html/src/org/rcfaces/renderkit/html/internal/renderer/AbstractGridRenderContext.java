@@ -4,10 +4,11 @@
 package org.rcfaces.renderkit.html.internal.renderer;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.faces.FacesException;
@@ -51,7 +52,6 @@ import org.rcfaces.core.component.capability.ISortComparatorCapability;
 import org.rcfaces.core.component.capability.ISortEventCapability;
 import org.rcfaces.core.component.capability.ISortManagerCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
-import org.rcfaces.core.component.capability.IToolTipIdCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.component.capability.IWheelSelectionCapability;
 import org.rcfaces.core.component.capability.IWidthCapability;
@@ -240,10 +240,8 @@ public abstract class AbstractGridRenderContext {
 
 	private String alertLoadingMessage = null;
 
-	private Map<String, ToolTipComponent> gridToolTips; // #head, #body, #row +
-														// (v:toolTipId) + #cell
-	private String[] columnTooltipIds; // #cell
-
+	private Set<ToolTipComponent> gridToolTips; // #head, #body, #row +
+												// (v:toolTipId) + #cell
 	private AbstractGridRenderContext(IProcessContext processContext,
 			IScriptRenderContext scriptRenderContext,
 			IGridComponent gridComponent, ISortedComponent sortedComponents[],
@@ -358,28 +356,7 @@ public abstract class AbstractGridRenderContext {
 		// temporaire avant création de la capability tooltip2
 
 		if (gridComponent instanceof IToolTipComponent) {
-			IToolTipIterator tooltipIterator = ((IToolTipComponent) gridComponent)
-					.listToolTips();
-
-			FacesContext facesContext = processContext.getFacesContext();
-
-			gridToolTips = new HashMap<String, ToolTipComponent>();
-			for (; tooltipIterator.hasNext();) {
-				ToolTipComponent tooltipComponent = tooltipIterator.next();
-
-				if (tooltipComponent.isRendered() == false) {
-					continue;
-				}
-
-				String tooltipId = tooltipComponent.getToolTipId(facesContext);
-				if (tooltipId != null) {
-					gridToolTips.put(tooltipId, tooltipComponent);
-				}
-
-				tooltipId = tooltipComponent.getClientId(facesContext);
-				gridToolTips.put(tooltipId, tooltipComponent);
-
-			}
+			gridToolTips = new HashSet<ToolTipComponent>();
 		}
 
 		if (gridComponent instanceof IAdditionalInformationComponent) {
@@ -472,7 +449,6 @@ public abstract class AbstractGridRenderContext {
 		columnWidths = new String[columns.length];
 		columnWidthsInPixel = new int[columns.length];
 		defaultCellToolTipIds = new String[columns.length];
-		columnTooltipIds = new String[columns.length];
 
 		FacesContext facesContext = processContext.getFacesContext();
 
@@ -528,44 +504,6 @@ public abstract class AbstractGridRenderContext {
 
 			String dw = null;
 			int idw = -1;
-
-			String tooltipId = null;
-
-			if (column instanceof IToolTipComponent) {
-				IToolTipIterator tooltipIterator = ((IToolTipComponent) column)
-						.listToolTips();
-
-				for (; tooltipIterator.hasNext();) {
-					ToolTipComponent tooltipComponent = tooltipIterator.next();
-
-					if (tooltipComponent.isRendered() == false) {
-						continue;
-					}
-
-					String tid = tooltipComponent.getToolTipId(facesContext);
-					if (tid != null) {
-						gridToolTips.put(tid, tooltipComponent);
-					}
-
-					tid = tooltipComponent.getClientId(facesContext);
-					gridToolTips.put(tid, tooltipComponent);
-					if (tooltipId == null) {
-						tooltipId = tid;
-					}
-				}
-			}
-
-			if (column instanceof IToolTipIdCapability) {
-				String tid = ((IToolTipIdCapability) column).getToolTipId();
-				if (tid != null) {
-					if (tid.startsWith("#") == false) {
-
-					}
-					tooltipId = tid;
-				}
-			}
-
-			columnTooltipIds[i] = tooltipId;
 
 			if (column instanceof IWidthCapability) {
 				dw = ((IWidthCapability) column).getWidth();
@@ -1150,15 +1088,49 @@ public abstract class AbstractGridRenderContext {
 		return sa.toString();
 	}
 
-	public ToolTipComponent findTooltip(
-			IComponentRenderContext componentRenderContext, String name) {
-		if (name == null || name.length() < 1) {
-			return null;
+	public ToolTipComponent findTooltipByIdOrName(
+			IComponentRenderContext componentRenderContext, UIComponent ref,
+			String name, UIComponent nameContainerRef) {
+
+		FacesContext facesContext = componentRenderContext.getFacesContext();
+
+		if (ref instanceof IToolTipComponent) {
+			IToolTipIterator it = ((IToolTipComponent) ref).listToolTips();
+
+			for (; it.hasNext();) {
+				ToolTipComponent toolTipComponent = it.next();
+
+				if (toolTipComponent.isRendered() == false) {
+					continue;
+				}
+
+				String toolTipId = toolTipComponent.getToolTipId(facesContext);
+				if (name == null) {
+					if (toolTipId == null) {
+						registerTooltip(toolTipComponent);
+						return toolTipComponent;
+
+					}
+					continue;
+				}
+
+				if (name.equals(toolTipId)) {
+					registerTooltip(toolTipComponent);
+					return toolTipComponent;
+				}
+
+				String toolTipClientId = toolTipComponent
+						.getClientId(facesContext);
+				if (name.equals(toolTipClientId)) {
+
+					registerTooltip(toolTipComponent);
+					return toolTipComponent;
+				}
+			}
 		}
 
-		ToolTipComponent toolTipComponent = listToolTips().get(name);
-		if (toolTipComponent != null) {
-			return toolTipComponent;
+		if (name == null || name.length() < 1) {
+			return null;
 		}
 
 		char start = name.charAt(0);
@@ -1168,9 +1140,12 @@ public abstract class AbstractGridRenderContext {
 		}
 
 		if (start != ':') {
+			if (nameContainerRef == null) {
+				nameContainerRef = ref;
+			}
+
 			String newName = componentRenderContext.getRenderContext()
-					.computeBrotherComponentClientId(
-							componentRenderContext.getComponent(), name);
+					.computeBrotherComponentClientId(nameContainerRef, name);
 			if (newName != null) {
 				name = newName;
 			}
@@ -1181,10 +1156,20 @@ public abstract class AbstractGridRenderContext {
 				.getViewRoot().findComponent(name);
 
 		if ((comp instanceof ToolTipComponent) == false) {
+			if (LOG.isInfoEnabled()) {
+				LOG.info("Can not find tooltip associated to clientId '" + name
+						+ "'");
+			}
 			return null;
 		}
 
-		return (ToolTipComponent) comp;
+		ToolTipComponent toolTipComponent = (ToolTipComponent) comp;
+		if (toolTipComponent.isRendered() == false) {
+			return null;
+		}
+
+		registerTooltip(toolTipComponent);
+		return toolTipComponent;
 	}
 
 	public final boolean isCheckable() {
@@ -1288,12 +1273,8 @@ public abstract class AbstractGridRenderContext {
 				&& additionalInformations.length > 0;
 	}
 
-	public final Map<String, ToolTipComponent> listToolTips() {
+	public final Collection<ToolTipComponent> listToolTips() {
 		return gridToolTips;
-	}
-
-	public boolean hasTooltips() {
-		return gridToolTips != null && gridToolTips.size() > 0;
 	}
 
 	public int getAdditionalInformationCardinality() {
@@ -1339,8 +1320,13 @@ public abstract class AbstractGridRenderContext {
 		return alertLoadingMessage;
 	}
 
-	public String[] getDefaultCellToolTipIds() {
-		return columnTooltipIds;
+	public boolean hasTooltips() {
+		return gridToolTips != null && gridToolTips.isEmpty() == false;
+	}
+
+	public void registerTooltip(ToolTipComponent tooltipComponent) {
+		gridToolTips.add(tooltipComponent);
+
 	}
 
 }

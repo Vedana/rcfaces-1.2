@@ -165,9 +165,10 @@ var __members = {
 					if (responseContentType.indexOf(f_httpRequest.TEXT_HTML_MIME_TYPE)>=0) {
 						
 						try {
-							self.f_getClass().f_getClassLoader().f_loadContent(component, component, component.innerHTML+ret);
+							self._asyncSetContent(ret);
 							
 							self.fa_contentLoaded(ret, responseContentType, parent);
+							
 						} catch (x) {
 							self.f_performAsyncErrorEvent(x, f_error.RESPONSE_EVALUATION_ASYNC_RENDER_ERROR, "Evaluation exception");
 						}
@@ -213,6 +214,20 @@ var __members = {
 		}
 		
 		return parent;
+	},
+	/**
+	 * @method private
+	 * @param String content
+	 * @return void
+	 */
+	_asyncSetContent: function(content) {
+		if (this.f_asyncSetContent) {
+			return this.f_asyncSetContent(content);
+		}
+		
+		var component = this;
+		
+		this.f_getClass().f_getClassLoader().f_loadContent(component, component, component.innerHTML+content);		
 	},
 	/**
 	 * @method hidden
