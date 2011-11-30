@@ -9,12 +9,8 @@ import javax.faces.event.ActionEvent;
 import javax.faces.event.PhaseId;
 
 import org.rcfaces.core.component.ButtonComponent;
-import org.rcfaces.core.component.ToolTipComponent;
-import org.rcfaces.core.component.capability.IToolTipIdCapability;
-import org.rcfaces.core.component.iterator.IToolTipIterator;
 import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.event.SelectionEvent;
-import org.rcfaces.core.internal.capability.IToolTipComponent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
