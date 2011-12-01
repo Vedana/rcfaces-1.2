@@ -892,21 +892,28 @@ public class JavaScriptCollectorRenderContext extends
 				continue;
 			}
 
+			if (componentId.mode == 0) {
+				continue;
+			}
+
 			if ((componentId.mode & JavaScriptEnableModeImpl.ONINIT) == 0) {
 
-				if (componentId.mode > 0
-						&& (hasMessages == false || (componentId.mode & JavaScriptEnableModeImpl.ONMESSAGE) == 0)) {
+				// Si pas de messages
+				// ou s'il y a des messages et que le composant ne traite pas
+				// les messages ...
+				if (hasMessages == false
+						|| (componentId.mode & JavaScriptEnableModeImpl.ONMESSAGE) == 0) {
 
+					// On met dans others tous les autres composants qui doivent
+					// etre initialisés hors ONINIT
 					if (others == null) {
 						others = new ArrayList(initializeIds.size());
 					}
 					others.add(componentId);
 					continue;
 				}
-				
-				continue;
 			}
-			
+
 			if (first) {
 				first = false;
 				jsWriter.writeCall(cameliaClassLoader, "f_onInit");
