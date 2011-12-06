@@ -5,12 +5,16 @@ import javax.faces.model.DataModel;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.adapter.IAdapterManager;
 
+/**
+ * 
+ * @author Olivier Oeuillot
+ */
 public abstract class AdaptedDataModel extends DataModel implements IAdaptable {
 
-	@Override
-	public Object getAdapter(Class adapter, Object parameter) {
+	@SuppressWarnings("unchecked")
+	public <T> T getAdapter(Class<T> adapter, Object parameter) {
 		if (adapter.isAssignableFrom(getClass())) {
-			return this;
+			return (T) this;
 		}
 
 		IAdapterManager adapterManager = RcfacesContext.getCurrentInstance()

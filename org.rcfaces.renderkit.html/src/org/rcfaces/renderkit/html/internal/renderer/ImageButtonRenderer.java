@@ -148,6 +148,7 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
             writeHtmlAttributes(writer);
             writeJavaScriptAttributes(writer);
             writeCssAttributes(writer, cssStyleClasses, ~CSS_FONT_MASK);
+			writeFirstTooltipClientId(writer);
 
             FacesContext facesContext = writer.getComponentRenderContext()
                     .getFacesContext();

@@ -488,7 +488,7 @@ var __members = {
 			
 		}, f_waiting._STEP_MS);
 	}
-}
+};
 
 new f_class("f_waiting", {
 	extend: f_object,

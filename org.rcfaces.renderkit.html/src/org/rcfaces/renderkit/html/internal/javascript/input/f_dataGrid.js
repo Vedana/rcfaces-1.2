@@ -435,7 +435,7 @@ var __members = {
 			row.tabIndex=-1; // Pas sous FF car le TR devient focusable
 		}
 		
-		if (this._selectable || this._checkable) {
+		if (this._selectable || this._checkable || this._additionalInformations) {
 			row.onmousedown=f_grid.RowMouseDown;
 			row.onmouseup=f_grid.RowMouseUp;
 			row.onclick=f_core.CancelJsEventHandler;
@@ -691,7 +691,11 @@ var __members = {
 
 						f_core.AppendChild(ctrlContainer, cellImage);
 					}
-
+					if (col._toolTipId) {
+						td._toolTipId=col._toolTipId;
+						td._toolTipContent=col._toolTipContent;
+					}
+					
 					var labelComponent=doc.createElement("label");
 					row._label=labelComponent;
 					if (!cellText) {
@@ -725,6 +729,11 @@ var __members = {
 			if (this.fa_isAdditionalElementVisible(row)) {				
 				this.f_showAdditionalContent(row);
 			}
+		}
+		
+		if (properties._toolTipId) {
+			row._toolTipId = properties._toolTipId;
+			row._toolTipContent = properties._toolTipContent;
 		}
 		
 		this.fa_updateElementStyle(row, false);
@@ -783,6 +792,8 @@ var __members = {
 		if (ret<1) {
 			return 0;
 		}
+		
+		this.f_getClass().f_getClassLoader().f_completeGarbageObjects();
 
 		this.f_performPagedComponentInitialized();
 
@@ -1130,7 +1141,7 @@ var __members = {
 			 * @method public
 			 */
 	 		onProgress: function(request, content, length, contentType) {
-				if (waitingObject && f_class.IsObjectInitialized(waitingObject)) {
+				if (waitingObject && f_classLoader.IsObjectInitialized(waitingObject)) {
 	 				waitingObject.f_setText(f_waiting.GetReceivingMessage());
 				}	 			
 	 		},
@@ -1138,7 +1149,7 @@ var __members = {
 			 * @method public
 			 */
 	 		onLoad: function(request, content, contentType) {
-				if (!f_class.IsObjectInitialized(dataGrid)) {
+				if (!f_classLoader.IsObjectInitialized(dataGrid)) {
 					return;
 				}
 			
@@ -1516,25 +1527,25 @@ var __members = {
 	 * @param Object... Properties of each row
 	 * @return void
 	 */
-	f_setCells2: function(row) {
+	f_setCells2: function(row, configs) {
 		var tds=row.getElementsByTagName("td");
 		var cols=this._columns;
 
 		var images=row._cellImages;
 
 		var callUpdate=false;
-		
 		var argIdx=0;
+		
 		for(var i=0;i<cols.length;i++) {
 			var col=cols[i];
 			if (!col._visibility) {
 				continue;
 			}
 			
-			var td=tds[argIdx];
-			var properties=arguments[argIdx+1];
-			if (!properties) {
-				argIdx++;
+			var td=tds[argIdx++];
+			
+			var properties=configs[i];
+			if (!properties) {	
 				continue;
 			}
 			
@@ -1549,7 +1560,21 @@ var __members = {
 			
 			var toolTipText=properties._toolTipText;
 			if (toolTipText) {
-				td.title=toolTipText;				
+				td.title=toolTipText;
+				
+			} else {
+				var toolTipId = properties._toolTipId;  
+				var toolTipContent = properties._toolTipContent;
+				
+				if (!toolTipId) {
+					toolTipId = col._toolTipId;
+					toolTipContent = col._toolTipContent;
+				}
+				
+				if (toolTipId) {
+					td._toolTipId = toolTipId;
+					td._toolTipContent = toolTipContent;
+				}
 			}
 			
 			var imageURL=properties._imageURL;
@@ -1580,8 +1605,6 @@ var __members = {
 				
 				callUpdate=true;
 			}
-				
-			argIdx++;
 		}
 		
 		if (callUpdate) {
@@ -1770,9 +1793,7 @@ var __members = {
 
 		var columns=this._columns;
 
-		var colIndex=undefined;
-		
-		colIndex=this._keySearchColumnIndex;
+		var colIndex=this._keySearchColumnIndex;
 		
 		if (colIndex===undefined) {
 			var currentSorts=this._currentSorts;
@@ -1838,9 +1859,11 @@ var __members = {
 	 * @method public
 	 */
 	f_checkAllPage: function() {
+	
 		if (!this._checkable) {
 			return;
 		}
+		
 		var elts = this.fa_listVisibleElements();
 		for(var i=0;i<elts.length;i++) {
 			var element=elts[i];
@@ -1982,7 +2005,7 @@ var __members = {
 				 * @method public
 				 */
 		 		onLoad: function(request, content, contentType) {
-					if (!f_class.IsObjectInitialized(dataGrid)) {
+					if (!f_classLoader.IsObjectInitialized(dataGrid)) {
 						return;
 					}
 				
@@ -2022,10 +2045,7 @@ var __members = {
 								dataGrid.f_removePagedWait();
 							}
 						}
-						
-						//the scopeEval can throw an other ajax command
-						dataGrid._loading=undefined;
-						
+												
 						try {
 							f_core.WindowScopeEval(ret);
 							
@@ -2109,7 +2129,7 @@ var __members = {
 	_getColumn: function(columnId) {
 		if (typeof(columnId)=="object") {
 			return columnId;
-	}
+		}
 		
 		var column = null;
 		var columns = this._columns;

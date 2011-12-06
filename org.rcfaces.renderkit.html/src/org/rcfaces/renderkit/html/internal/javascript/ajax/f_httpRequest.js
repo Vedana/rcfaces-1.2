@@ -65,7 +65,7 @@ var __statics = {
 	 * @field hidden static final String
 	 */
 	 CAMELIA_RESPONSE_HEADER: "X-Camelia-Service"
-} 
+};
 
 var __members = {
 
@@ -240,7 +240,7 @@ var __members = {
 	 * @return void
 	 */
 	f_cancelRequest: function() {
-		f_core.Debug(f_httpRequest, "f_cancelRequest: Cancel request");
+		f_core.Debug(f_httpRequest, "f_cancelRequest: Clean or cancel request");
 
 		var request=this._request;
 		if (request) {
@@ -595,9 +595,13 @@ var __members = {
 	 * listener enregistré pour la gestion des évènements de la requête
 	 *
 	 * @method private
-	 * @return Boolean
+	 * @return void
 	 */
 	_onReadyStateChange: function() {
+		if (window._rcfacesExiting) {
+			return;
+		}
+
 		var req = this._request;
 		if (!req) {
 			f_core.Info(f_httpRequest, "_onReadyStateChange: Request has been canceled !");

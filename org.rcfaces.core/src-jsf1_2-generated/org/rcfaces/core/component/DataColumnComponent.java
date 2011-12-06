@@ -2,24 +2,27 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.component.capability.ICriteriaManagerCapability;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.tools.ToolTipTools;
 import org.rcfaces.core.component.capability.IUserEventCapability;
 import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.capability.ICellToolTipTextSettings;
 import org.rcfaces.core.component.capability.ICellStyleClassCapability;
-import org.rcfaces.core.component.capability.IToolTipCapability;
 import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.internal.component.CameliaValueColumnComponent;
 import org.rcfaces.core.component.capability.IInitEventCapability;
 import org.rcfaces.core.internal.converter.OrderConverter;
 import org.rcfaces.core.internal.tools.CriteriaTools;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import java.lang.Object;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.internal.capability.ICriteriaContainer;
 import org.rcfaces.core.component.capability.IAlignmentCapability;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
+import org.rcfaces.core.internal.capability.IToolTipComponent;
 import org.rcfaces.core.internal.capability.ICriteriaConfiguration;
+import org.rcfaces.core.component.capability.IToolTipTextCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import java.util.Arrays;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
@@ -28,6 +31,7 @@ import org.rcfaces.core.internal.capability.ICellImageSettings;
 import org.rcfaces.core.component.capability.IMenuCapability;
 import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
 import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.component.capability.IToolTipIdCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.component.capability.ICellToolTipTextCapability;
 import org.rcfaces.core.component.capability.IStatesImageCapability;
@@ -35,8 +39,10 @@ import org.rcfaces.core.component.capability.IMenuPopupIdCapability;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IImageSizeCapability;
 import org.rcfaces.core.component.capability.IResizableCapability;
+import org.rcfaces.core.component.iterator.IToolTipIterator;
 import org.rcfaces.core.internal.capability.ICellStyleClassSettings;
 import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.capability.ITitleToolTipIdCapability;
 import java.util.Set;
 import org.rcfaces.core.component.capability.IAutoFilterCapability;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
@@ -46,8 +52,8 @@ import org.rcfaces.core.component.familly.IContentAccessors;
 import java.lang.String;
 import org.rcfaces.core.component.capability.ISortComparatorCapability;
 import org.rcfaces.core.component.capability.IHiddenModeCapability;
-import org.rcfaces.core.internal.converter.AlignmentNormalizer;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import org.rcfaces.core.internal.converter.AlignmentNormalizer;
 import javax.faces.convert.Converter;
 import org.rcfaces.core.component.capability.ISortEventCapability;
 import javax.el.ValueExpression;
@@ -63,7 +69,7 @@ public class DataColumnComponent extends CameliaValueColumnComponent implements
 	IHiddenModeCapability,
 	ITextCapability,
 	ITextDirectionCapability,
-	IToolTipCapability,
+	IToolTipTextCapability,
 	IAlignmentCapability,
 	IForegroundBackgroundColorCapability,
 	ISortEventCapability,
@@ -81,10 +87,13 @@ public class DataColumnComponent extends CameliaValueColumnComponent implements
 	ICellImageCapability,
 	ICellStyleClassCapability,
 	ICellToolTipTextCapability,
+	IToolTipIdCapability,
+	ITitleToolTipIdCapability,
 	ISelectionEventCapability,
 	IDoubleClickEventCapability,
 	IUserEventCapability,
 	IInitEventCapability,
+	IToolTipComponent,
 	IImageAccessorsCapability,
 	ValueHolder,
 	ICellStyleClassSettings,
@@ -98,7 +107,7 @@ public class DataColumnComponent extends CameliaValueColumnComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaValueColumnComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disabledImageURL","alignment","defaultCellImageURL","menuPopupId","visible","backgroundColor","minWidth","sortComparator","autoFilter","cellStyleClass","cellImageURL","selectedImageURL","selectionListener","hiddenMode","value","defaultCellStyleClass","maxWidth","resizable","ascending","foregroundColor","imageHeight","text","cellToolTipText","userEventListener","styleClass","hoverImageURL","width","doubleClickListener","cellDefaultToolTipText","initListener","textDirection","verticalAlignment","sortListener","toolTipText","imageURL","imageWidth"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disabledImageURL","alignment","defaultCellImageURL","titleToolTipId","menuPopupId","visible","backgroundColor","minWidth","sortComparator","autoFilter","cellStyleClass","cellImageURL","selectedImageURL","selectionListener","hiddenMode","value","defaultCellStyleClass","maxWidth","resizable","ascending","foregroundColor","imageHeight","text","cellToolTipText","userEventListener","styleClass","hoverImageURL","width","doubleClickListener","toolTipId","cellDefaultToolTipText","initListener","textDirection","verticalAlignment","sortListener","toolTipText","imageURL","imageWidth"}));
 	}
 
 	public DataColumnComponent() {
@@ -149,6 +158,13 @@ public class DataColumnComponent extends CameliaValueColumnComponent implements
 
 
 			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
+		
+	}
+
+	public IToolTipIterator listToolTips() {
+
+
+			return ToolTipTools.listToolTips(this);
 		
 	}
 
@@ -954,6 +970,52 @@ public class DataColumnComponent extends CameliaValueColumnComponent implements
 
 	public void setCellToolTipText(java.lang.String cellToolTipText) {
 		engine.setProperty(Properties.CELL_TOOL_TIP_TEXT, cellToolTipText);
+	}
+
+	public java.lang.String getToolTipId() {
+		return getToolTipId(null);
+	}
+
+	/**
+	 * See {@link #getToolTipId() getToolTipId()} for more details
+	 */
+	public java.lang.String getToolTipId(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.TOOL_TIP_ID, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "toolTipId" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isToolTipIdSetted() {
+		return engine.isPropertySetted(Properties.TOOL_TIP_ID);
+	}
+
+	public void setToolTipId(java.lang.String toolTipId) {
+		engine.setProperty(Properties.TOOL_TIP_ID, toolTipId);
+	}
+
+	public java.lang.String getTitleToolTipId() {
+		return getTitleToolTipId(null);
+	}
+
+	/**
+	 * See {@link #getTitleToolTipId() getTitleToolTipId()} for more details
+	 */
+	public java.lang.String getTitleToolTipId(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.TITLE_TOOL_TIP_ID, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "titleToolTipId" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTitleToolTipIdSetted() {
+		return engine.isPropertySetted(Properties.TITLE_TOOL_TIP_ID);
+	}
+
+	public void setTitleToolTipId(java.lang.String titleToolTipId) {
+		engine.setProperty(Properties.TITLE_TOOL_TIP_ID, titleToolTipId);
 	}
 
 	public final void addSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {

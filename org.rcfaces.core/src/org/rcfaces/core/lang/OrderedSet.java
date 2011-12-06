@@ -18,190 +18,181 @@ import org.rcfaces.core.model.ICommitableObject;
  * @version $Revision$ $Date$
  */
 public class OrderedSet<T> extends AbstractSet<T> implements Cloneable,
-        Serializable, ICommitableObject {
-    private static final String REVISION = "$Revision$";
+		Serializable, ICommitableObject {
+	private static final long serialVersionUID = -8481215239333898818L;
 
-    private static final long serialVersionUID = -8481215239333898818L;
+	private List<T> order;
 
-    private List<T> order;
+	private boolean commited;
 
-    private boolean commited;
+	public OrderedSet() {
+		order = new ArrayList<T>();
+	}
 
-    public OrderedSet() {
-        order = new ArrayList<T>();
-    }
+	public OrderedSet(int size) {
+		order = new ArrayList<T>(size);
+	}
 
-    public OrderedSet(int size) {
-        order = new ArrayList<T>(size);
-    }
+	public OrderedSet(Collection<T> collection) {
+		this(collection.size());
 
-    public OrderedSet(Collection<T> collection) {
-        this(collection.size());
+		addAll(collection);
+	}
 
-        addAll(collection);
-    }
+	@Override
+	public Iterator<T> iterator() {
+		final Iterator<T> it = order.iterator();
 
-    @Override
-    public Iterator<T> iterator() {
-        final Iterator<T> it = order.iterator();
+		return new Iterator<T>() {
+			public boolean hasNext() {
+				return it.hasNext();
+			}
 
-        return new Iterator<T>() {
-            private static final String REVISION = "$Revision$";
+			public T next() {
+				return it.next();
+			}
 
-            @Override
-            public boolean hasNext() {
-                return it.hasNext();
-            }
+			public void remove() {
+				if (commited) {
+					throw new IllegalStateException("Already commited set.");
+				}
 
-            @Override
-            public T next() {
-                return it.next();
-            }
+				it.remove();
+			}
 
-            @Override
-            public void remove() {
-                if (commited) {
-                    throw new IllegalStateException("Already commited set.");
-                }
+		};
+	}
 
-                it.remove();
-            }
+	@Override
+	public boolean contains(Object o) {
+		return order.contains(o);
+	}
 
-        };
-    }
+	@Override
+	public boolean containsAll(Collection<?> c) {
+		return order.containsAll(c);
+	}
 
-    @Override
-    public boolean contains(Object o) {
-        return order.contains(o);
-    }
+	@Override
+	public boolean add(T o) {
+		if (commited) {
+			throw new IllegalStateException("Already commited set.");
+		}
 
-    @Override
-    public boolean containsAll(Collection< ? > c) {
-        return order.containsAll(c);
-    }
+		if (order.contains(o)) {
+			return false;
+		}
 
-    @Override
-    public boolean add(T o) {
-        if (commited) {
-            throw new IllegalStateException("Already commited set.");
-        }
+		return order.add(o);
+	}
 
-        if (order.contains(o)) {
-            return false;
-        }
+	@Override
+	public boolean remove(Object o) {
+		if (commited) {
+			throw new IllegalStateException("Already commited set.");
+		}
 
-        return order.add(o);
-    }
+		return order.remove(o);
+	}
 
-    @Override
-    public boolean remove(Object o) {
-        if (commited) {
-            throw new IllegalStateException("Already commited set.");
-        }
+	@Override
+	public boolean removeAll(Collection<?> c) {
+		if (commited) {
+			throw new IllegalStateException("Already commited set.");
+		}
 
-        return order.remove(o);
-    }
+		return order.removeAll(c);
+	}
 
-    @Override
-    public boolean removeAll(Collection< ? > c) {
-        if (commited) {
-            throw new IllegalStateException("Already commited set.");
-        }
+	@Override
+	public int size() {
+		return order.size();
+	}
 
-        return order.removeAll(c);
-    }
+	@Override
+	public void clear() {
+		if (commited) {
+			throw new IllegalStateException("Already commited set.");
+		}
 
-    @Override
-    public int size() {
-        return order.size();
-    }
+		order.clear();
+	}
 
-    @Override
-    public void clear() {
-        if (commited) {
-            throw new IllegalStateException("Already commited set.");
-        }
+	@Override
+	public Object[] toArray() {
+		return order.toArray();
+	}
 
-        order.clear();
-    }
+	@Override
+	public <U> U[] toArray(U[] a) {
+		return order.toArray(a);
+	}
 
-    @Override
-    public Object[] toArray() {
-        return order.toArray();
-    }
+	@Override
+	public int hashCode() {
+		return order.hashCode();
+	}
 
-    @Override
-    public <U> U[] toArray(U[] a) {
-        return order.toArray(a);
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
 
-    @Override
-    public int hashCode() {
-        return order.hashCode();
-    }
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
+		final OrderedSet<?> other = (OrderedSet<?>) obj;
+		if (order == null) {
+			if (other.order != null) {
+				return false;
+			}
 
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
+		} else if (!order.equals(other.order)) {
+			return false;
+		}
 
-        final OrderedSet< ? > other = (OrderedSet< ? >) obj;
-        if (order == null) {
-            if (other.order != null) {
-                return false;
-            }
+		return true;
+	}
 
-        } else if (!order.equals(other.order)) {
-            return false;
-        }
+	@Override
+	public boolean retainAll(Collection<?> c) {
+		if (commited) {
+			throw new IllegalStateException("Already commited set.");
+		}
 
-        return true;
-    }
+		return order.retainAll(c);
+	}
 
-    @Override
-    public boolean retainAll(Collection< ? > c) {
-        if (commited) {
-            throw new IllegalStateException("Already commited set.");
-        }
+	@Override
+	public String toString() {
+		return order.toString();
+	}
 
-        return order.retainAll(c);
-    }
+	@Override
+	public Object clone() {
+		try {
+			@SuppressWarnings("unchecked")
+			OrderedSet<T> newSet = (OrderedSet<T>) super.clone();
+			newSet.order = new ArrayList<T>(order);
 
-    @Override
-    public String toString() {
-        return order.toString();
-    }
+			return newSet;
 
-    @Override
-    public Object clone() {
-        try {
-            @SuppressWarnings("unchecked")
-            OrderedSet<T> newSet = (OrderedSet<T>) super.clone();
-            newSet.order = new ArrayList<T>(order);
+		} catch (CloneNotSupportedException ex) {
+			throw new RuntimeException(ex);
+		}
+	}
 
-            return newSet;
+	public void commit() {
+		if (order instanceof ArrayList) {
+			((ArrayList<T>) order).trimToSize();
+		}
+		this.commited = true;
+	}
 
-        } catch (CloneNotSupportedException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-    @Override
-    public void commit() {
-        if (order instanceof ArrayList) {
-            ((ArrayList<T>) order).trimToSize();
-        }
-        this.commited = true;
-    }
-
-    @Override
-    public boolean isCommited() {
-        return commited;
-    }
+	public boolean isCommited() {
+		return commited;
+	}
 
 }

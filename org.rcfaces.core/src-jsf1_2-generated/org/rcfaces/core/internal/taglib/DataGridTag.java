@@ -58,6 +58,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 	private ValueExpression clientSelectionFullState;
 	private ValueExpression clientCheckFullState;
 	private ValueExpression headerVisible;
+	private ValueExpression rowToolTipId;
 	private ValueExpression cursorValue;
 	private ValueExpression rowDragTypes;
 	private ValueExpression rowDragEffects;
@@ -236,6 +237,10 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		this.headerVisible = headerVisible;
 	}
 
+	public void setRowToolTipId(ValueExpression rowToolTipId) {
+		this.rowToolTipId = rowToolTipId;
+	}
+
 	public void setCursorValue(ValueExpression cursorValue) {
 		this.cursorValue = cursorValue;
 	}
@@ -329,6 +334,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			LOG.debug("  clientSelectionFullState='"+clientSelectionFullState+"'");
 			LOG.debug("  clientCheckFullState='"+clientCheckFullState+"'");
 			LOG.debug("  headerVisible='"+headerVisible+"'");
+			LOG.debug("  rowToolTipId='"+rowToolTipId+"'");
 			LOG.debug("  cursorValue='"+cursorValue+"'");
 			LOG.debug("  rowDragTypes='"+rowDragTypes+"'");
 			LOG.debug("  rowDragEffects='"+rowDragEffects+"'");
@@ -656,6 +662,15 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			}
 		}
 
+		if (rowToolTipId != null) {
+			if (rowToolTipId.isLiteralText()==false) {
+				component.setValueExpression(Properties.ROW_TOOL_TIP_ID, rowToolTipId);
+
+			} else {
+				component.setRowToolTipId(rowToolTipId.getExpressionString());
+			}
+		}
+
 		if (cursorValue != null) {
 			if (cursorValue.isLiteralText()==false) {
 				component.setValueExpression(Properties.CURSOR_VALUE, cursorValue);
@@ -810,6 +825,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		clientSelectionFullState = null;
 		clientCheckFullState = null;
 		headerVisible = null;
+		rowToolTipId = null;
 		cursorValue = null;
 		rowDragTypes = null;
 		rowDragEffects = null;

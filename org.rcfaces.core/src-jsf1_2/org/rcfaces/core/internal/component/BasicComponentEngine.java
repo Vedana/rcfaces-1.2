@@ -780,7 +780,12 @@ public class BasicComponentEngine extends AbstractComponentEngine {
 
         public IPropertiesManager copyOriginalState() {
             BasicDataAccessor copy = new BasicDataAccessor(name);
-            copy.propertiesManager = copy;
+			if (this.propertiesManager != this) {
+				copy.propertiesManager = this.propertiesManager
+						.copyOriginalState();
+			} else {
+				copy.propertiesManager = copy;
+			}
             copy.setCameliaFactory(factory);
             copy.originalPropertiesAccessor = originalPropertiesAccessor;
 

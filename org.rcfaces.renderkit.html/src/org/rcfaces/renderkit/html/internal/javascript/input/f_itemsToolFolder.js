@@ -138,7 +138,7 @@ var __members = {
 		var component=fa_namingContainer.FindComponent(this, id, false, f_itemsToolFolder._LAZY_INITIALIZATIONS);
 		f_core.Assert(component, "f_itemsToolFolder.f_appendToolItem2: Can not find component associated to id '"+id+"'.");
 		
-		var lazyMode=!f_class.IsObjectInitialized(component);
+		var lazyMode=!f_classLoader.IsObjectInitialized(component);
 		if (lazyMode ) {
 			var lazyClassLoader=this._lazyClassLoader;
 			if (!lazyClassLoader) {

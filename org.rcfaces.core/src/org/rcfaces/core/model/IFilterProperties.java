@@ -16,21 +16,21 @@ import org.rcfaces.core.internal.renderkit.IProperties;
  * @version $Revision$ $Date$
  */
 public interface IFilterProperties extends IProperties, Serializable,
-        StateHolder {
+		StateHolder {
 
-    Object put(String propertyName, Object value);
+	Object put(String propertyName, Object value);
 
-    Object remove(String propertyName);
+	Object remove(String propertyName);
 
-    String[] listNames();
+	String[] listNames();
 
-    void clear();
+	void clear();
 
-    boolean isEmpty();
+	boolean isEmpty();
 
-    int size();
+	int size();
 
-    void putAll(Map map);
+	void putAll(Map<String, Object> map);
 
-    Map toMap();
+	Map<String, Object> toMap();
 }

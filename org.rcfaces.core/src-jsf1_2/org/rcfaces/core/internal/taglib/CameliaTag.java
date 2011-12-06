@@ -39,6 +39,14 @@ public abstract class CameliaTag extends UIComponentELTag {
         return Boolean.valueOf(value);
     }
 
+    protected static final Integer getInteger(String value) {
+        if (value == null) {
+            return null;
+        }
+
+        return Integer.valueOf(value);
+    }
+    
     protected static final Number getNumber(String value) {
         if (value == null || value.length() == 0) {
             return null;
@@ -58,13 +66,6 @@ public abstract class CameliaTag extends UIComponentELTag {
         return new Long(l);
     }
 
-    protected static final Integer getInteger(String value) {
-        if (value == null) {
-            return null;
-        }
-
-        return Integer.valueOf(value);
-    }
 
     protected static final int getInt(String value) {
         return Integer.parseInt(value);

@@ -16,72 +16,68 @@ import javax.faces.model.SelectItem;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public abstract class AbstractFilteredList extends AbstractFilteredCollection
-        implements List {
-    private static final String REVISION = "$Revision$";
+public abstract class AbstractFilteredList<T> extends
+		AbstractFilteredCollection<T> implements List<T> {
 
-    public static final List EMPTY_LIST;
-    static {
-        EMPTY_LIST = new AbstractFilteredList(Collections.EMPTY_LIST) {
-            private static final String REVISION = "$Revision$";
+	public static final List EMPTY_LIST;
+	static {
+		EMPTY_LIST = new AbstractFilteredList(Collections.EMPTY_LIST) {
+			protected boolean accept(IFilterProperties filter, Object selectItem) {
+				return false;
+			}
+		};
+	}
 
-            protected boolean accept(IFilterProperties filter,
-                    SelectItem selectItem) {
-                return false;
-            }
-        };
-    }
+	public AbstractFilteredList() {
+		super(new ArrayList<T>());
+	}
 
-    public AbstractFilteredList() {
-        super(new ArrayList());
-    }
+	public AbstractFilteredList(List<T> list) {
+		super(list);
+	}
 
-    public AbstractFilteredList(List list) {
-        super(list);
-    }
+	public AbstractFilteredList(SelectItem selectItem[]) {
+		super(selectItem);
+	}
 
-    public AbstractFilteredList(SelectItem selectItem[]) {
-        super(selectItem);
-    }
+	public T get(int index) {
+		return ((List<T>) collection).get(index);
+	}
 
-    public Object get(int index) {
-        return ((List) collection).get(index);
-    }
+	public T remove(int index) {
+		return ((List<T>) collection).remove(index);
+	}
 
-    public Object remove(int index) {
-        return ((List) collection).remove(index);
-    }
+	public void add(int index, T element) {
+		((List<T>) collection).add(index, element);
+	}
 
-    public void add(int index, Object element) {
-        ((List) collection).add(index, element);
-    }
+	public int indexOf(Object o) {
+		return ((List<T>) collection).indexOf(o);
+	}
 
-    public int indexOf(Object o) {
-        return ((List) collection).indexOf(o);
-    }
+	public int lastIndexOf(Object o) {
+		return ((List<T>) collection).lastIndexOf(o);
+	}
 
-    public int lastIndexOf(Object o) {
-        return ((List) collection).lastIndexOf(o);
-    }
+	public boolean addAll(int index, Collection<? extends T> c) {
+		return ((List<T>) collection).addAll(index, c);
+	}
 
-    public boolean addAll(int index, Collection c) {
-        return ((List) collection).addAll(index, c);
-    }
+	public List<T> subList(int fromIndex, int toIndex) {
+		return ((List<T>) collection).subList(fromIndex, toIndex);
+	}
 
-    public List subList(int fromIndex, int toIndex) {
-        return ((List) collection).subList(fromIndex, toIndex);
-    }
+	public ListIterator<T> listIterator() {
+		return ((List<T>) collection).listIterator();
+	}
 
-    public ListIterator listIterator() {
-        return ((List) collection).listIterator();
-    }
+	public ListIterator<T> listIterator(int index) {
+		return ((List<T>) collection).listIterator(index);
+	}
 
-    public ListIterator listIterator(int index) {
-        return ((List) collection).listIterator(index);
-    }
-
-    public Object set(int index, Object element) {
-        return ((List) collection).set(index, element);
-    }
+	public T set(int index, T element) {
+		return ((List<T>) collection).set(index, element);
+	}
 
 }

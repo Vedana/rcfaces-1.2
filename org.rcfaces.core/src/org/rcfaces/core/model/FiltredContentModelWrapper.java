@@ -9,16 +9,14 @@ package org.rcfaces.core.model;
  * @version $Revision$ $Date$
  */
 public class FiltredContentModelWrapper extends ContentModelWrapper implements
-        IFiltredModel {
-    private static final String REVISION = "$Revision$";
+		IFiltredModel {
+	public void setFilter(IFilterProperties filter) {
+		IContentModel contentModel = getContentModel();
 
-    public void setFilter(IFilterProperties filter) {
-        IContentModel contentModel = getContentModel();
+		if ((contentModel instanceof IFiltredModel) == false) {
+			return;
+		}
 
-        if ((contentModel instanceof IFiltredModel) == false) {
-            return;
-        }
-
-        ((IFiltredModel) contentModel).setFilter(filter);
-    }
+		((IFiltredModel) contentModel).setFilter(filter);
+	}
 }

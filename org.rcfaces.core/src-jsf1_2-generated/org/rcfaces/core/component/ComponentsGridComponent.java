@@ -13,6 +13,7 @@ import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.IMenuComponent;
+import org.rcfaces.core.component.capability.IRowToolTipIdCapability;
 import org.rcfaces.core.component.capability.ISortedChildrenCapability;
 import org.rcfaces.core.internal.capability.IAdditionalInformationRangeComponent;
 import org.rcfaces.core.internal.tools.ComponentTools;
@@ -20,6 +21,7 @@ import org.rcfaces.core.component.capability.IScrollableCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.core.internal.tools.AdditionalInformationTools;
+import java.lang.Object;
 import org.rcfaces.core.internal.tools.OrderTools;
 import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.iterator.IColumnIterator;
@@ -131,6 +133,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	IScrollableCapability,
 	IPreferencesSettings,
 	IPagedCapability,
+	IRowToolTipIdCapability,
 	IHeaderVisibilityCapability,
 	IGridComponent,
 	IOrderedChildrenCapability,
@@ -146,7 +149,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headerVisible","selectionCardinality","clientAdditionalInformationFullState","cellTextWrap","emptyDataMessage","loadListener","selectionListener","paged","additionalInformationValues","showValue","additionalInformationListener","verticalScrollPosition","border","required","clientSelectionFullState","preferences","doubleClickListener","selectedValues","horizontalScrollPosition","rowStyleClass","rowCountVar","selectable","additionalInformationCardinality","rowValueConverter","rowIndexVar","rowValue"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headerVisible","selectionCardinality","clientAdditionalInformationFullState","cellTextWrap","emptyDataMessage","loadListener","selectionListener","paged","additionalInformationValues","showValue","additionalInformationListener","verticalScrollPosition","border","required","clientSelectionFullState","preferences","doubleClickListener","selectedValues","horizontalScrollPosition","rowStyleClass","rowCountVar","rowToolTipId","selectable","additionalInformationCardinality","rowValueConverter","rowIndexVar","rowValue"}));
 	}
 
 	public ComponentsGridComponent() {
@@ -936,6 +939,29 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 
 	public void setPaged(boolean paged) {
 		engine.setProperty(Properties.PAGED, paged);
+	}
+
+	public java.lang.String getRowToolTipId() {
+		return getRowToolTipId(null);
+	}
+
+	/**
+	 * See {@link #getRowToolTipId() getRowToolTipId()} for more details
+	 */
+	public java.lang.String getRowToolTipId(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ROW_TOOL_TIP_ID, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "rowToolTipId" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isRowToolTipIdSetted() {
+		return engine.isPropertySetted(Properties.ROW_TOOL_TIP_ID);
+	}
+
+	public void setRowToolTipId(java.lang.String rowToolTipId) {
+		engine.setProperty(Properties.ROW_TOOL_TIP_ID, rowToolTipId);
 	}
 
 	public boolean isHeaderVisible() {

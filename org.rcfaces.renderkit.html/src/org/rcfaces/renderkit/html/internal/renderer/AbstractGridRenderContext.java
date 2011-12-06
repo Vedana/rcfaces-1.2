@@ -4,8 +4,11 @@
 package org.rcfaces.renderkit.html.internal.renderer;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.faces.FacesException;
@@ -18,6 +21,7 @@ import javax.faces.model.DataModel;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.AdditionalInformationComponent;
+import org.rcfaces.core.component.ToolTipComponent;
 import org.rcfaces.core.component.capability.IAdditionalInformationCardinalityCapability;
 import org.rcfaces.core.component.capability.IAlertLoadingMessageCapability;
 import org.rcfaces.core.component.capability.IAlignmentCapability;
@@ -54,6 +58,7 @@ import org.rcfaces.core.component.capability.IWidthCapability;
 import org.rcfaces.core.component.capability.IWidthRangeCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.iterator.IColumnIterator;
+import org.rcfaces.core.component.iterator.IToolTipIterator;
 import org.rcfaces.core.internal.capability.IAdditionalInformationComponent;
 import org.rcfaces.core.internal.capability.ICellImageSettings;
 import org.rcfaces.core.internal.capability.ICellStyleClassSettings;
@@ -61,6 +66,7 @@ import org.rcfaces.core.internal.capability.ICellToolTipTextSettings;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
 import org.rcfaces.core.internal.capability.ISortedComponentsCapability;
+import org.rcfaces.core.internal.capability.IToolTipComponent;
 import org.rcfaces.core.internal.component.IImageAccessors;
 import org.rcfaces.core.internal.component.IStatesImageAccessors;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
@@ -68,6 +74,7 @@ import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.listener.IScriptListener;
 import org.rcfaces.core.internal.listener.IServerActionListener;
+import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.tools.ComponentTools;
@@ -202,6 +209,8 @@ public abstract class AbstractGridRenderContext {
 
     private String rowStyleClasses[];
 
+	private String defaultCellToolTipIds[];
+
     protected int gridWidth;
 
     protected int gridHeight;
@@ -229,6 +238,8 @@ public abstract class AbstractGridRenderContext {
     private boolean wheelSelection = true;
 
     private String alertLoadingMessage = null;
+
+	private Set<ToolTipComponent> gridToolTips; // #head, #body, #row +
 
     private AbstractGridRenderContext(IProcessContext processContext,
             IScriptRenderContext scriptRenderContext,
@@ -341,6 +352,12 @@ public abstract class AbstractGridRenderContext {
             }
         }
 
+		// temporaire avant création de la capability tooltip2
+
+		if (gridComponent instanceof IToolTipComponent) {
+			gridToolTips = new HashSet<ToolTipComponent>();
+		}
+
         if (gridComponent instanceof IAdditionalInformationComponent) {
             additionalInformations = ((IAdditionalInformationComponent) gridComponent)
                     .listAdditionalInformations().toArray();
@@ -430,6 +447,7 @@ public abstract class AbstractGridRenderContext {
         columnIds = new String[columns.length];
         columnWidths = new String[columns.length];
         columnWidthsInPixel = new int[columns.length];
+		defaultCellToolTipIds = new String[columns.length];
 
         FacesContext facesContext = processContext.getFacesContext();
 
@@ -624,6 +642,14 @@ public abstract class AbstractGridRenderContext {
                     hasCellToolTipText = true;
                 }
             }
+
+			if (column instanceof IToolTipComponent) {
+				IToolTipIterator tooltipIterator = ((IToolTipComponent) column)
+						.listToolTips();
+				// TODO
+			}
+
+			// cell
 
             if (column instanceof ICellToolTipTextCapability) {
                 String ctt = ((ICellToolTipTextCapability) column)
@@ -1061,6 +1087,90 @@ public abstract class AbstractGridRenderContext {
         return sa.toString();
     }
 
+	public ToolTipComponent findTooltipByIdOrName(
+			IComponentRenderContext componentRenderContext, UIComponent ref,
+			String name, UIComponent nameContainerRef) {
+
+		FacesContext facesContext = componentRenderContext.getFacesContext();
+
+		if (ref instanceof IToolTipComponent) {
+			IToolTipIterator it = ((IToolTipComponent) ref).listToolTips();
+
+			for (; it.hasNext();) {
+				ToolTipComponent toolTipComponent = it.next();
+
+				if (toolTipComponent.isRendered() == false) {
+					continue;
+				}
+
+				String toolTipId = toolTipComponent.getToolTipId(facesContext);
+				if (name == null) {
+					if (toolTipId == null) {
+						registerTooltip(toolTipComponent);
+						return toolTipComponent;
+
+					}
+					continue;
+				}
+
+				if (name.equals(toolTipId)) {
+					registerTooltip(toolTipComponent);
+					return toolTipComponent;
+				}
+
+				String toolTipClientId = toolTipComponent
+						.getClientId(facesContext);
+				if (name.equals(toolTipClientId)) {
+
+					registerTooltip(toolTipComponent);
+					return toolTipComponent;
+				}
+			}
+		}
+
+		if (name == null || name.length() < 1) {
+			return null;
+		}
+
+		char start = name.charAt(0);
+
+		if (start == '#') {
+			return null;
+		}
+
+		if (start != ':') {
+			if (nameContainerRef == null) {
+				nameContainerRef = ref;
+			}
+
+			String newName = componentRenderContext.getRenderContext()
+					.computeBrotherComponentClientId(nameContainerRef, name);
+			if (newName != null) {
+				name = newName;
+			}
+
+		}
+
+		UIComponent comp = componentRenderContext.getFacesContext()
+				.getViewRoot().findComponent(name);
+
+		if ((comp instanceof ToolTipComponent) == false) {
+			if (LOG.isInfoEnabled()) {
+				LOG.info("Can not find tooltip associated to clientId '" + name
+						+ "'");
+			}
+			return null;
+		}
+
+		ToolTipComponent toolTipComponent = (ToolTipComponent) comp;
+		if (toolTipComponent.isRendered() == false) {
+			return null;
+		}
+
+		registerTooltip(toolTipComponent);
+		return toolTipComponent;
+	}
+
     public final boolean isCheckable() {
         return checkable;
     }
@@ -1162,6 +1272,10 @@ public abstract class AbstractGridRenderContext {
                 && additionalInformations.length > 0;
     }
 
+	public final Collection<ToolTipComponent> listToolTips() {
+		return gridToolTips;
+	}
+
     public int getAdditionalInformationCardinality() {
         return additionalInformationCardinality;
     }
@@ -1204,5 +1318,14 @@ public abstract class AbstractGridRenderContext {
     public String getAlertLoadingMessage() {
         return alertLoadingMessage;
     }
+
+	public boolean hasTooltips() {
+		return gridToolTips != null && gridToolTips.isEmpty() == false;
+	}
+
+	public void registerTooltip(ToolTipComponent tooltipComponent) {
+		gridToolTips.add(tooltipComponent);
+
+	}
 
 }

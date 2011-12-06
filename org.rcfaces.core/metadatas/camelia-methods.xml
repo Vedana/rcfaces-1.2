@@ -1712,5 +1712,12 @@
 			setLayoutType(((Integer)LayoutManagerTypeConverter.SINGLETON.getAsObject(null, this, type)).intValue());
 		</code>
 	</method>
+
+	<method id="listToolTips" returnType="org.rcfaces.core.component.iterator.IToolTipIterator">
+		<import>org.rcfaces.core.internal.tools.ToolTipTools</import>
+		<code>
+			return ToolTipTools.listToolTips(this);
+		</code>
+	</method>
 </camelia-components>
 	

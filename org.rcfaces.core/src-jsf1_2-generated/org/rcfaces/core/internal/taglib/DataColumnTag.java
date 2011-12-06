@@ -49,6 +49,8 @@ public class DataColumnTag extends CameliaTag implements Tag {
 	private ValueExpression defaultCellStyleClass;
 	private ValueExpression cellDefaultToolTipText;
 	private ValueExpression cellToolTipText;
+	private ValueExpression toolTipId;
+	private ValueExpression titleToolTipId;
 	private ValueExpression selectionListeners;
 	private ValueExpression doubleClickListeners;
 	private ValueExpression userEventListeners;
@@ -184,6 +186,14 @@ public class DataColumnTag extends CameliaTag implements Tag {
 		this.cellToolTipText = cellToolTipText;
 	}
 
+	public void setToolTipId(ValueExpression toolTipId) {
+		this.toolTipId = toolTipId;
+	}
+
+	public void setTitleToolTipId(ValueExpression titleToolTipId) {
+		this.titleToolTipId = titleToolTipId;
+	}
+
 	public void setSelectionListener(ValueExpression selectionListeners) {
 		this.selectionListeners = selectionListeners;
 	}
@@ -243,6 +253,8 @@ public class DataColumnTag extends CameliaTag implements Tag {
 			LOG.debug("  defaultCellStyleClass='"+defaultCellStyleClass+"'");
 			LOG.debug("  cellDefaultToolTipText='"+cellDefaultToolTipText+"'");
 			LOG.debug("  cellToolTipText='"+cellToolTipText+"'");
+			LOG.debug("  toolTipId='"+toolTipId+"'");
+			LOG.debug("  titleToolTipId='"+titleToolTipId+"'");
 			LOG.debug("  value='"+value+"'");
 		}
 		if ((uiComponent instanceof DataColumnComponent)==false) {
@@ -527,6 +539,24 @@ public class DataColumnTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (toolTipId != null) {
+			if (toolTipId.isLiteralText()==false) {
+				component.setValueExpression(Properties.TOOL_TIP_ID, toolTipId);
+
+			} else {
+				component.setToolTipId(toolTipId.getExpressionString());
+			}
+		}
+
+		if (titleToolTipId != null) {
+			if (titleToolTipId.isLiteralText()==false) {
+				component.setValueExpression(Properties.TITLE_TOOL_TIP_ID, titleToolTipId);
+
+			} else {
+				component.setTitleToolTipId(titleToolTipId.getExpressionString());
+			}
+		}
+
 		if (selectionListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
 		}
@@ -592,6 +622,8 @@ public class DataColumnTag extends CameliaTag implements Tag {
 		defaultCellStyleClass = null;
 		cellDefaultToolTipText = null;
 		cellToolTipText = null;
+		toolTipId = null;
+		titleToolTipId = null;
 		selectionListeners = null;
 		doubleClickListeners = null;
 		userEventListeners = null;

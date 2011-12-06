@@ -38,6 +38,7 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 	private ValueExpression verticalScrollPosition;
 	private ValueExpression preferences;
 	private ValueExpression paged;
+	private ValueExpression rowToolTipId;
 	private ValueExpression headerVisible;
 	private ValueExpression rowCountVar;
 	private ValueExpression rowIndexVar;
@@ -128,6 +129,10 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 		this.paged = paged;
 	}
 
+	public void setRowToolTipId(ValueExpression rowToolTipId) {
+		this.rowToolTipId = rowToolTipId;
+	}
+
 	public void setHeaderVisible(ValueExpression headerVisible) {
 		this.headerVisible = headerVisible;
 	}
@@ -173,6 +178,7 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 			LOG.debug("  verticalScrollPosition='"+verticalScrollPosition+"'");
 			LOG.debug("  preferences='"+preferences+"'");
 			LOG.debug("  paged='"+paged+"'");
+			LOG.debug("  rowToolTipId='"+rowToolTipId+"'");
 			LOG.debug("  headerVisible='"+headerVisible+"'");
 			LOG.debug("  rowCountVar='"+rowCountVar+"'");
 			LOG.debug("  rowIndexVar='"+rowIndexVar+"'");
@@ -337,6 +343,15 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 			}
 		}
 
+		if (rowToolTipId != null) {
+			if (rowToolTipId.isLiteralText()==false) {
+				component.setValueExpression(Properties.ROW_TOOL_TIP_ID, rowToolTipId);
+
+			} else {
+				component.setRowToolTipId(rowToolTipId.getExpressionString());
+			}
+		}
+
 		if (headerVisible != null) {
 			if (headerVisible.isLiteralText()==false) {
 				component.setValueExpression(Properties.HEADER_VISIBLE, headerVisible);
@@ -409,6 +424,7 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 		verticalScrollPosition = null;
 		preferences = null;
 		paged = null;
+		rowToolTipId = null;
 		headerVisible = null;
 		rowCountVar = null;
 		rowIndexVar = null;

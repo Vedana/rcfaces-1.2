@@ -557,14 +557,6 @@ var __statics = {
 		}
 	},
 	/**
-	 * @method hidden static final 
-	 */
-	IsObjectInitialized: function(object) {
-		f_core.Assert(object && typeof(object)=="object", "f_class.IsObjectInitialized: Object is invalid ("+object+")");
-
-		return !!object._kclass;
-	},
-	/**
 	 * @method private static final 
 	 * @param f_classLoader classLoader
 	 * @param String name
@@ -720,7 +712,7 @@ var __statics = {
 	toString: function() {
 		return "[class "+this._name+"]";
 	}
-}
+};
 
 var __members = {
 	

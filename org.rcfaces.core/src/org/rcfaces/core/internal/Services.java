@@ -26,202 +26,197 @@ import org.xml.sax.SAXException;
  * @version $Revision$ $Date$
  */
 public class Services {
-    private static final String REVISION = "$Revision$";
 
-    private static final Log LOG = LogFactory.getLog(Services.class);
+	private static final Log LOG = LogFactory.getLog(Services.class);
 
-    private static final Services SINGLETON = new Services();
+	private static final Services SINGLETON = new Services();
 
-    private static final String RESOURCE_NAME = "META-INF/rcfaces-services.xml";
+	private static final String RESOURCE_NAME = "META-INF/rcfaces-services.xml";
 
-    private boolean servicesLoaded = false;
+	private boolean servicesLoaded = false;
 
-    private final Map services = new HashMap(32);
+	private final Map<String, Object> services = new HashMap<String, Object>(32);
 
-    public static Services get() {
-        return SINGLETON;
-    }
+	public static Services get() {
+		return SINGLETON;
+	}
 
-    private Services() {
-    }
+	private Services() {
+	}
 
-    public Object getService(String id) {
-        synchronized (services) {
-            if (servicesLoaded == false) {
-                servicesLoaded = true;
+	public Object getService(String id) {
+		synchronized (services) {
+			if (servicesLoaded == false) {
+				servicesLoaded = true;
 
-                loadServices();
-            }
-        }
+				loadServices();
+			}
+		}
 
-        Object service = services.get(id);
+		Object service = services.get(id);
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Service '" + id + "' => " + service);
-        }
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Service '" + id + "' => " + service);
+		}
 
-        return service;
-    }
+		return service;
+	}
 
-    private void loadServices() {
-        LOG.info("Load services ...");
+	private void loadServices() {
+		LOG.info("Load services ...");
 
-        ClassLoader threadClassLoader = Thread.currentThread()
-                .getContextClassLoader();
+		ClassLoader threadClassLoader = Thread.currentThread()
+				.getContextClassLoader();
 
-        ClassLoader classLoader = Services.class.getClassLoader();
+		ClassLoader classLoader = Services.class.getClassLoader();
 
-        if (threadClassLoader != null) {
-            loadServices(threadClassLoader);
-        }
+		if (threadClassLoader != null) {
+			loadServices(threadClassLoader);
+		}
 
-        if (classLoader != threadClassLoader) {
-            loadServices(classLoader);
-        }
+		if (classLoader != threadClassLoader) {
+			loadServices(classLoader);
+		}
 
-        LOG.info(services.size() + " service(s) loaded.");
-    }
+		LOG.info(services.size() + " service(s) loaded.");
+	}
 
-    private void loadServices(ClassLoader classLoader) {
-        LOG.info("Load services using '" + classLoader + "'");
+	private void loadServices(ClassLoader classLoader) {
+		LOG.info("Load services using '" + classLoader + "'");
 
-        Enumeration enumeration;
-        try {
-            enumeration = classLoader.getResources(RESOURCE_NAME);
+		Enumeration<URL> enumeration;
+		try {
+			enumeration = classLoader.getResources(RESOURCE_NAME);
 
-        } catch (IOException ex) {
-            LOG.error("Can not get Resources '" + RESOURCE_NAME + "'.", ex);
-            return;
-        }
+		} catch (IOException ex) {
+			LOG.error("Can not get Resources '" + RESOURCE_NAME + "'.", ex);
+			return;
+		}
 
-        for (; enumeration.hasMoreElements();) {
-            URL url = (URL) enumeration.nextElement();
+		for (; enumeration.hasMoreElements();) {
+			URL url = enumeration.nextElement();
 
-            loadService(classLoader, url);
-        }
-    }
+			loadService(classLoader, url);
+		}
+	}
 
-    private void loadService(final ClassLoader classLoader, URL url) {
-        LOG.info("Load service '" + url + "'");
+	private void loadService(final ClassLoader classLoader, URL url) {
+		LOG.info("Load service '" + url + "'");
 
-        Digester digester = new Digester();
-        digester.setUseContextClassLoader(true);
+		Digester digester = new Digester();
+		digester.setUseContextClassLoader(true);
 
-        digester.setEntityResolver(new EntityResolver() {
-            private static final String REVISION = "$Revision$";
+		digester.setEntityResolver(new EntityResolver() {
+			public InputSource resolveEntity(String string, String string1) {
+				return new InputSource(new CharArrayReader(new char[0]));
+			}
 
-            public InputSource resolveEntity(String string, String string1) {
-                return new InputSource(new CharArrayReader(new char[0]));
-            }
+		});
 
-        });
+		digester.addRule("rcfaces-services/service", new Rule() {
+			public void begin(String namespace, String name,
+					Attributes attributes) throws Exception {
 
-        digester.addRule("rcfaces-services/service", new Rule() {
-            private static final String REVISION = "$Revision$";
+				super.digester.push(new Service());
+			}
 
-            public void begin(String namespace, String name,
-                    Attributes attributes) throws Exception {
+			public void end(String namespace, String name) throws Exception {
+				Service service = (Service) super.digester.pop();
 
-                super.digester.push(new Service());
-            }
+				LOG.debug("Load service '" + service.getId() + "' className='"
+						+ service.getClassName() + "'");
 
-            public void end(String namespace, String name) throws Exception {
-                Service service = (Service) super.digester.pop();
+				if (service.getClassName() == null) {
+					return;
+				}
 
-                LOG.debug("Load service '" + service.getId() + "' className='"
-                        + service.getClassName() + "'");
+				Class clazz;
+				try {
+					clazz = classLoader.loadClass(service.getClassName());
 
-                if (service.getClassName() == null) {
-                    return;
-                }
+				} catch (Exception ex) {
+					LOG.error("Can not load class '" + service.getClassName()
+							+ "'.", ex);
+					return;
+				}
 
-                Class clazz;
-                try {
-                    clazz = classLoader.loadClass(service.getClassName());
+				Object serviceObject;
+				try {
+					serviceObject = clazz.newInstance();
 
-                } catch (Exception ex) {
-                    LOG.error("Can not load class '" + service.getClassName()
-                            + "'.", ex);
-                    return;
-                }
+				} catch (Exception ex) {
+					LOG.error("Can not instanciate class '" + clazz + "'.", ex);
+					return;
+				}
 
-                Object serviceObject;
-                try {
-                    serviceObject = clazz.newInstance();
+				services.put(service.getId(), serviceObject);
 
-                } catch (Exception ex) {
-                    LOG.error("Can not instanciate class '" + clazz + "'.", ex);
-                    return;
-                }
+				LOG.info("Service '" + service.getId() + "' loaded: "
+						+ serviceObject);
+			}
+		});
 
-                services.put(service.getId(), serviceObject);
+		digester.addBeanPropertySetter("rcfaces-services/service/service-id",
+				"id");
 
-                LOG.info("Service '" + service.getId() + "' loaded: "
-                        + serviceObject);
-            }
-        });
+		digester.addBeanPropertySetter(
+				"rcfaces-services/service/service-class", "className");
 
-        digester.addBeanPropertySetter("rcfaces-services/service/service-id",
-                "id");
+		InputStream ins;
+		try {
+			ins = url.openStream();
 
-        digester.addBeanPropertySetter(
-                "rcfaces-services/service/service-class", "className");
+		} catch (IOException ex) {
+			LOG.error("Can not open stream from '" + url + "'.", ex);
+			return;
+		}
 
-        InputStream ins;
-        try {
-            ins = url.openStream();
+		if (ins == null) {
+			LOG.info("Can not open stream from '" + url + "'.");
+			return;
+		}
 
-        } catch (IOException ex) {
-            LOG.error("Can not open stream from '" + url + "'.", ex);
-            return;
-        }
+		try {
+			try {
 
-        if (ins == null) {
-            LOG.info("Can not open stream from '" + url + "'.");
-            return;
-        }
+				digester.parse(ins);
 
-        try {
-            try {
+			} finally {
+				ins.close();
+			}
+		} catch (IOException ex) {
+			LOG.error("Can not load stream from '" + url + "'.", ex);
 
-                digester.parse(ins);
+		} catch (SAXException ex) {
+			LOG.error("Invalid XML resource '" + url + "'.", ex);
+		}
+	}
 
-            } finally {
-                ins.close();
-            }
-        } catch (IOException ex) {
-            LOG.error("Can not load stream from '" + url + "'.", ex);
+	/**
+	 * 
+	 * @author Olivier Oeuillot (latest modification by $Author$)
+	 * @version $Revision$ $Date$
+	 */
+	public static class Service {
+		private String id;
 
-        } catch (SAXException ex) {
-            LOG.error("Invalid XML resource '" + url + "'.", ex);
-        }
-    }
+		private String className;
 
-    /**
-     * 
-     * @author Olivier Oeuillot (latest modification by $Author$)
-     * @version $Revision$ $Date$
-     */
-    public static class Service {
-        private String id;
+		public final String getId() {
+			return id;
+		}
 
-        private String className;
+		public final void setId(String id) {
+			this.id = id;
+		}
 
-        public final String getId() {
-            return id;
-        }
+		public final String getClassName() {
+			return className;
+		}
 
-        public final void setId(String id) {
-            this.id = id;
-        }
+		public final void setClassName(String className) {
+			this.className = className;
+		}
 
-        public final String getClassName() {
-            return className;
-        }
-
-        public final void setClassName(String className) {
-            this.className = className;
-        }
-
-    }
+	}
 }

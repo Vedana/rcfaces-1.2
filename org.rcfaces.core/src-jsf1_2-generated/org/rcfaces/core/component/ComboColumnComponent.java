@@ -12,7 +12,6 @@ import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.capability.ICellStyleClassCapability;
 import org.rcfaces.core.internal.capability.ICellToolTipTextSettings;
-import org.rcfaces.core.component.capability.IToolTipCapability;
 import org.apache.commons.logging.Log;
 import org.rcfaces.core.internal.capability.ICellStyleClassSettings;
 import java.util.Set;
@@ -24,6 +23,7 @@ import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import org.rcfaces.core.component.capability.ICellImageCapability;
 import org.rcfaces.core.component.capability.IOrderCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import java.lang.Object;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.capability.ISortComparatorCapability;
 import java.lang.String;
@@ -37,6 +37,7 @@ import org.rcfaces.core.component.capability.IAlignmentCapability;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.ISortEventCapability;
 import java.util.HashSet;
+import org.rcfaces.core.component.capability.IToolTipTextCapability;
 import org.rcfaces.core.component.capability.IWidthRangeCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import java.util.Arrays;
@@ -51,7 +52,7 @@ public class ComboColumnComponent extends CameliaValueColumnComponent implements
 	IHiddenModeCapability,
 	ITextCapability,
 	ITextDirectionCapability,
-	IToolTipCapability,
+	IToolTipTextCapability,
 	IAlignmentCapability,
 	IForegroundBackgroundColorCapability,
 	ISortEventCapability,

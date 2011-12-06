@@ -29,7 +29,7 @@ var __statics = {
  		redirect[f_event.KEYDOWN]=true;
  		redirect[f_event.KEYUP]=true;
 	}
-}
+};
  
 var __members = {
 
@@ -348,7 +348,7 @@ var __members = {
 			value=String(value);
 
 		} else if (typeof(value)!="string") {
-			f_core.Error(f_input, "f_setValue: Invalid value: "+value + " (typeof=" + typeof(value) +")");
+			f_core.Info(f_input, "f_setValue: Invalid value: "+value + " (typeof=" + typeof(value) +")");
 			return false;
 		}
 
@@ -501,12 +501,12 @@ var __members = {
 		}
 		
 		this.f_super(arguments, type, target);
-	}
-}
+	}	
+};
 
 new f_class("f_input", {
 	extend: f_component, 
-	aspects: [ fa_message, fa_focusStyleClass, fa_tabIndex],
+	aspects: [ fa_message, fa_focusStyleClass, fa_tabIndex, fa_basicToolTipContainer],
 	members: __members,
 	statics: __statics
 });

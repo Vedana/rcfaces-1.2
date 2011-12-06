@@ -27,14 +27,18 @@ var __members = {
 			f_clientValidator.InstallValidator(this);
 		}
 	},
-	/*
 	f_finalize: function() {
 		// this._autoTab=undefined;  // boolean
 		// this._requiredInstalled=undefined; // boolean
+
+		var validator=this._validator;
+		if (validator) {
+			this._validator=undefined;
+			f_classLoader.Destroy(validator);
+		}
 		
 		this.f_super(arguments);
 	},
-	*/
 	f_update: function() {
 		
 		if (this.f_isAutoTab()) {

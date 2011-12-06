@@ -52,7 +52,8 @@ var __members = {
 	f_setValue: function(value) {
 		this.f_setSelected(!!value);
 	}
-}
+};
+
 new f_class("f_imageCheckButton", {
 	extend: f_imageButton, 
 	aspects: [fa_selected],

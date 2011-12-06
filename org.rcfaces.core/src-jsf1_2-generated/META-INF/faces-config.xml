@@ -465,7 +465,7 @@ A string specifying the message to display when there is no row to display.
 		</attribute>
 		<attribute>
 			<attribute-name>selectedCriteriaColumns</attribute-name>
-			<attribute-class>Object</attribute-class>
+			<attribute-class>java.lang.Object</attribute-class>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -2245,6 +2245,10 @@ A string specifying a converter id or a binding to a converter object. This conv
 			<attribute-name>orderedItems</attribute-name>
 			<attribute-class>boolean</attribute-class>
 		</attribute>
+		<attribute>
+			<attribute-name>showPopupForOneResult</attribute-name>
+			<attribute-class>boolean</attribute-class>
+		</attribute>
 	</component>
 	<component>
 		<description><![CDATA[
@@ -3419,6 +3423,14 @@ TODO
 	<component>
 		<component-type>org.rcfaces.core.criteriaItemFiller</component-type>
 		<component-class>org.rcfaces.core.component.CriteriaItemFillerComponent</component-class>
+	</component>
+	<component>
+		<component-type>org.rcfaces.core.toolTip</component-type>
+		<component-class>org.rcfaces.core.component.ToolTipComponent</component-class>
+	</component>
+	<component>
+		<component-type>org.rcfaces.core.toolTipManager</component-type>
+		<component-class>org.rcfaces.core.component.ToolTipManagerComponent</component-class>
 	</component>
 	<component>
 		<component-type>javax.faces.HtmlOutputText</component-type>

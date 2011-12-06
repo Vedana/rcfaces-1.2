@@ -18,7 +18,7 @@ import org.rcfaces.core.component.capability.IInputTypeCapability;
 import org.rcfaces.core.component.capability.IRadioGroupCapability;
 import org.rcfaces.core.component.capability.IServerDataCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
-import org.rcfaces.core.component.capability.IToolTipCapability;
+import org.rcfaces.core.component.capability.IToolTipTextCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 
 /**
@@ -140,8 +140,8 @@ public class BasicSelectItem extends SelectItem implements ISelectItem,
         }
 
         if (getDescription() == null
-                && (component instanceof IToolTipCapability)) {
-            setDescription(((IToolTipCapability) component).getToolTipText());
+                && (component instanceof IToolTipTextCapability)) {
+            setDescription(((IToolTipTextCapability) component).getToolTipText());
         }
 
         this.inputType = s;

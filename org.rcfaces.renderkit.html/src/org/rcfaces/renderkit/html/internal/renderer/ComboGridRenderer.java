@@ -28,9 +28,9 @@ import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.internal.util.ParamUtils;
-import org.rcfaces.core.model.ISelectedCriteria;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredModel;
+import org.rcfaces.core.model.ISelectedCriteria;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
@@ -79,18 +79,7 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
 
         AbstractGridRenderContext gridRenderContext = getGridRenderContext(componentRenderContext);
 
-        Map formatValues = new HashMap();
 
-        String valueFormat = comboGridComponent.getValueFormat(facesContext);
-        if (valueFormat != null) {
-            formatValues.put("valueFormat", valueFormat);
-        }
-
-        String valueFormatLabel = comboGridComponent
-                .getValueFormatLabel(facesContext);
-        if (valueFormatLabel != null) {
-            formatValues.put("valueFormatLabel", valueFormatLabel);
-        }
 
         Map formattedValues = null;
         String formattedValue = null;
@@ -103,6 +92,30 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
 
         String labelColumnId = comboGridComponent
                 .getLabelColumnId(facesContext);
+
+		Map formatValues = new HashMap();
+
+		String valueFormat = comboGridComponent.getValueFormat(facesContext);
+		if (valueFormat == null) {
+			if(labelColumnId != null) {
+				valueFormat = "{"+labelColumnId+"}";
+			}else {
+				valueFormat= "{"+valueColumnId+"}";
+			}
+		}
+		formatValues.put("valueFormat", valueFormat);
+		
+		String valueFormatLabel = comboGridComponent
+				.getValueFormatLabel(facesContext);
+		if (valueFormatLabel == null ){
+			if(labelColumnId != null) {
+				valueFormatLabel = "{"+labelColumnId+"}";
+			}else {
+				valueFormatLabel = "{"+valueColumnId+"}";
+			}
+		} 
+		formatValues.put("valueFormatLabel", valueFormatLabel);
+		
 
         if (selectedValue != null) {
             UIComponent converterComponent = getColumn(comboGridComponent,
@@ -121,8 +134,6 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
                             .get("valueFormat");
                     formattedValueLabel = (String) formattedValues
                             .get("valueFormatLabel");
-                } else if (labelColumnId != null) {
-
                 }
 
                 if (formattedValue == null) {
@@ -463,7 +474,7 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
 
         if (componentRenderContext.containsAttribute(INPUT_ERRORED_PROPERTY)) {
             sa.append(' ').append(getMainStyleClassName())
-                    .append("_input_errored");
+					.append("_input_error");
 
         } else if ((formattedValue == null || formattedValue.length() == 0)) {
             emptyMessage = comboGridComponent.getEmptyMessage(facesContext);

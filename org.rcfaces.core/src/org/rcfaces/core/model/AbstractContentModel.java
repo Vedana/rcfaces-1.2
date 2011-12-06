@@ -17,59 +17,59 @@ import org.rcfaces.core.lang.IContentFamily;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractContentModel implements IContentModel {
-    private static final String REVISION = "$Revision$";
 
-    private Object wrappedData;
+	private Object wrappedData;
 
-    private String contentEngineId;
+	private String contentEngineId;
 
-    public AbstractContentModel() {
-    }
+	public AbstractContentModel() {
+	}
 
-    public AbstractContentModel(Object wrappedData) {
-        this.wrappedData = wrappedData;
-    }
+	public AbstractContentModel(Object wrappedData) {
+		this.wrappedData = wrappedData;
+	}
 
-    public void setInformations(IGenerationResourceInformation generationInformation,
-            IGeneratedResourceInformation generatedInformation) {
-    }
+	public void setInformations(
+			IGenerationResourceInformation generationInformation,
+			IGeneratedResourceInformation generatedInformation) {
+	}
 
-    public Object getWrappedData() {
-        return wrappedData;
-    }
+	public Object getWrappedData() {
+		return wrappedData;
+	}
 
-    public void setWrappedData(Object wrappedData) {
-        this.wrappedData = wrappedData;
-    }
+	public void setWrappedData(Object wrappedData) {
+		this.wrappedData = wrappedData;
+	}
 
-    public String computeURL() {
-        return computeURL(this);
-    }
+	public String computeURL() {
+		return computeURL(this);
+	}
 
-    public static String computeURL(IContentModel contentModel) {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
+	public static String computeURL(IContentModel contentModel) {
+		FacesContext facesContext = FacesContext.getCurrentInstance();
 
-        IContentAccessor contentAccessor = ContentAccessorFactory
-                .createFromWebResource(facesContext, contentModel,
-                        IContentFamily.USER);
+		IContentAccessor contentAccessor = ContentAccessorFactory
+				.createFromWebResource(facesContext, contentModel,
+						IContentFamily.USER);
 
-        if (contentAccessor == null) {
-            return null;
-        }
+		if (contentAccessor == null) {
+			return null;
+		}
 
-        return contentAccessor.resolveURL(facesContext, null, null);
-    }
+		return contentAccessor.resolveURL(facesContext, null, null);
+	}
 
-    public String getContentEngineId() {
-        return contentEngineId;
-    }
+	public String getContentEngineId() {
+		return contentEngineId;
+	}
 
-    public void setContentEngineId(String contentEngineId) {
-        this.contentEngineId = contentEngineId;
-    }
+	public void setContentEngineId(String contentEngineId) {
+		this.contentEngineId = contentEngineId;
+	}
 
-    public boolean checkNotModified() {
-        return true;
-    }
+	public boolean checkNotModified() {
+		return true;
+	}
 
 }

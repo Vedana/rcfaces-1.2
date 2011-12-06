@@ -56,7 +56,7 @@ public class JavaScriptObjectLiteralWriter implements IObjectLiteralWriter {
 
             } else {
                 for (int i = 1; i < chs.length; i++) {
-                    if (Character.isJavaIdentifierPart(chs[i]) == false) {
+                    if (Character.isJavaIdentifierPart(chs[i]) == false && Character.isDigit(chs[0]) == false) {
                         directWriter = false;
 
                         break;

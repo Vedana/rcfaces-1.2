@@ -122,6 +122,7 @@ public class CheckButtonRenderer extends AbstractInputRenderer implements
 
         if (button.isDisabled() == false) {
             htmlWriter.writeTabIndex(idx);
+        	
         } else {
             htmlWriter.writeTabIndex(-1);
             htmlWriter.writeAttributeNS("tabIndex", idx);

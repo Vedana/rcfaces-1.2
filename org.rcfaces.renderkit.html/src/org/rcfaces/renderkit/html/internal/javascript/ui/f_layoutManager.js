@@ -143,7 +143,7 @@ var __members = {
 		}
 		this._installed=false;
 		
-// 		f_core.RemoveResizeEventListener(this, this.f_layoutAllComponents);				
+		f_core.RemoveResizeEventListener(this, this.f_layoutAllComponents);				
 	},
 	/**
 	 * @method public

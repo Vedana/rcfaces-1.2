@@ -255,7 +255,7 @@ var __members = {
 	fa_updateRequired: function() {
 		this.f_updateStyleClass();
 	}
-}
+};
 
 new f_class("f_radioButton", {
 	extend: f_checkButton,

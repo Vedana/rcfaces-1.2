@@ -29,39 +29,39 @@ public abstract class NodeTag extends CameliaTag implements Tag {
 	private ValueExpression itemDescription;
 	private ValueExpression itemDisabled;
 	private ValueExpression targetId;
-	public final void setAlternateText(ValueExpression alternateText) {
+	public void setAlternateText(ValueExpression alternateText) {
 		this.alternateText = alternateText;
 	}
 
-	public final void setAccessKey(ValueExpression accessKey) {
+	public void setAccessKey(ValueExpression accessKey) {
 		this.accessKey = accessKey;
 	}
 
-	public final void setTabIndex(ValueExpression tabIndex) {
+	public void setTabIndex(ValueExpression tabIndex) {
 		this.tabIndex = tabIndex;
 	}
 
-	public final void setRendered(ValueExpression rendered) {
+	public void setRendered(ValueExpression rendered) {
 		this.rendered = rendered;
 	}
 
-	public final void setSelectable(ValueExpression selectable) {
+	public void setSelectable(ValueExpression selectable) {
 		this.selectable = selectable;
 	}
 
-	public final void setItemValue(ValueExpression itemValue) {
+	public void setItemValue(ValueExpression itemValue) {
 		this.itemValue = itemValue;
 	}
 
-	public final void setItemLabel(ValueExpression itemLabel) {
+	public void setItemLabel(ValueExpression itemLabel) {
 		this.itemLabel = itemLabel;
 	}
 
-	public final void setItemDescription(ValueExpression itemDescription) {
+	public void setItemDescription(ValueExpression itemDescription) {
 		this.itemDescription = itemDescription;
 	}
 
-	public final void setItemDisabled(ValueExpression itemDisabled) {
+	public void setItemDisabled(ValueExpression itemDisabled) {
 		this.itemDisabled = itemDisabled;
 	}
 

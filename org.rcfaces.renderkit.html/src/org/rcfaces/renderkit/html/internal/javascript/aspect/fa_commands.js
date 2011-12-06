@@ -17,7 +17,7 @@ var __members = {
 	_loading: undefined,
 
 	/**
-	 * @field private function
+	 * @field private Function
 	 */
 	_nextCommand: undefined,
 
@@ -27,20 +27,22 @@ var __members = {
 	},
 	/**
 	 * @method protected
-	 * @param function callback
+	 * @param Function callback
 	 * @return void
 	 */
 	f_appendCommand: function(callBack) {
 		f_core.Assert(typeof(callBack)=="function", "fa_commands.f_appendCommand: Invalid callback parameter ("+callBack+")");
 		
-		if (!this._loading) {
+		var nextCommand = this._nextCommand;
+		
+		if (!nextCommand) {
 			f_core.Info(fa_commands, "f_appendCommand: Call immediatly the callback !");
 			callBack.call(this, this);
 			return;
 		}
 		
 		if (f_core.IsInfoEnabled(fa_commands)) {
-			if (this._nextCommand) {
+			if (nextCommand) {
 				f_core.Info(fa_commands, "f_appendCommand: Replace an other callback !");
 	
 			} else  {
@@ -83,7 +85,7 @@ var __members = {
 		f_core.Debug(fa_commands, "f_clearCommands: clear commands");
 		this._nextCommand=undefined;
 	}
-}
+};
 
 new f_aspect("fa_commands", {
 	members: __members

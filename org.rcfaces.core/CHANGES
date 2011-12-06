@@ -1,3 +1,18 @@
+GridTools:
+Ajout de la Classe GridTools et de la fonction HasSortedServerListener permettant de contrôler si un tableau doit être trier sur le serveur
+
+AbstractGridRendererContext:
+Correction de la colonne rendered=false qui �tait visible.  (visible=false fonctionnait par contre !)
+
+JavaScriptRenderContext:
+Correction de l'initialisation des composants <v:init>  (comme Accelerator)
+
+AcceleratorRenderer:
+Correction de la g�n�ration du parametrage des touches de l'accelerateur
+
+f_core:
+La fonction OpenWindow devient public 
+
 f_clientValidator:
 Pas de Gestion du maxTextLength dans le cas d'un replace au niveau du translator
 

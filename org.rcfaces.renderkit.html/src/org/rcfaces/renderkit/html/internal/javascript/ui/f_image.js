@@ -75,5 +75,6 @@ var __members = {
  
 new f_class("f_image", {
 	extend: f_filtredComponent, 
+	aspects: [ fa_basicToolTipContainer ],
 	members: __members
 });

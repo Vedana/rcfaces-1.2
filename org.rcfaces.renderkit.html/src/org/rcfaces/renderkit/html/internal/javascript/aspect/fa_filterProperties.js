@@ -150,7 +150,7 @@ var __members = {
 	 */
 	fa_updateFilterProperties: f_class.ABSTRACT
 			
-}
+};
 
 new f_aspect("fa_filterProperties", {
 	members: __members

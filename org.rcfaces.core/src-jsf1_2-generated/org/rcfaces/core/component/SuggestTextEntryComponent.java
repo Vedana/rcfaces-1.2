@@ -61,7 +61,7 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(TextEntryComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"filterProperties","suggestionListener","suggestionConverter","suggestionMinChars","menuListener","maxResultNumber","orderedItems","caseSensitive","suggestionDelayMs","suggestionValue","forceProposal","moreResultsMessage"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"filterProperties","maxResultNumber","menuListener","suggestionMinChars","caseSensitive","suggestionValue","forceProposal","showPopupForOneResult","suggestionListener","suggestionConverter","orderedItems","suggestionDelayMs","moreResultsMessage"}));
 	}
 
 	public SuggestTextEntryComponent() {
@@ -422,6 +422,26 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	 */
 	public boolean isOrderedItemsSetted() {
 		return engine.isPropertySetted(Properties.ORDERED_ITEMS);
+	}
+
+	public boolean isShowPopupForOneResult() {
+		return isShowPopupForOneResult(null);
+	}
+
+	public boolean isShowPopupForOneResult(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.SHOW_POPUP_FOR_ONE_RESULT, false, facesContext);
+	}
+
+	public void setShowPopupForOneResult(boolean showPopupForOneResult) {
+		engine.setProperty(Properties.SHOW_POPUP_FOR_ONE_RESULT, showPopupForOneResult);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "showPopupForOneResult" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isShowPopupForOneResultSetted() {
+		return engine.isPropertySetted(Properties.SHOW_POPUP_FOR_ONE_RESULT);
 	}
 
 	protected Set getCameliaFields() {

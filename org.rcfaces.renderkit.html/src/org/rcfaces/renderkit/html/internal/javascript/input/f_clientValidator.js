@@ -654,6 +654,8 @@ var __members = {
 		this.f_installValidator();
 	},
 	f_finalize: function() {
+		f_core.RemoveCheckListener(this._component, this);	
+
 		this._input = undefined;
 		this._component = undefined;
 		this._parameters = undefined; // Map<string, any>
@@ -881,7 +883,7 @@ var __members = {
 		}
 	
 		// On selectionne car IE remet le focus au début du champ sinon !
-		input.select();
+		//input.select();
 	},
 	/**
 	 * @method private
@@ -1553,6 +1555,7 @@ var __members = {
 	},
 	/**
 	 * @method public final
+	 * @param Object value
 	 */
 	f_setConvertedValue: function(value) {		
 		var converter=this._converter;

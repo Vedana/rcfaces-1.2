@@ -367,7 +367,13 @@ public class ComponentsGridService extends AbstractHtmlService {
 
             jsWriter.writeMethodCall("f_updateNewPage").writeln(");");
 
-            saveView(facesContext);
+			String viewStateId = saveViewAndReturnStateId(facesContext);
+
+			if (viewStateId != null) {
+				jsWriter.writeCall("f_classLoader", "ChangeJsfViewId")
+						.write(varId).write(',').writeString(viewStateId)
+						.write(')');
+			}
 
         } finally {
 
@@ -387,15 +393,6 @@ public class ComponentsGridService extends AbstractHtmlService {
 
             printWriter.write(cw.toCharArray());
         }
-    }
-
-    private void saveView(FacesContext facesContext) throws IOException {
-        StateManager stateManager = facesContext.getApplication()
-                .getStateManager();
-
-        Object state = stateManager.saveView(facesContext);
-
-        stateManager.writeState(facesContext, state);
     }
 
     public void setupComponent(IComponentRenderContext componentRenderContext) {

@@ -684,7 +684,7 @@ var __members = {
 
 new f_class("f_imageButton", {
 	extend: f_component, 
-	aspects: [ fa_readOnly, fa_disabled, fa_tabIndex, fa_borderType, fa_images, fa_immediate, fa_value, fa_aria ],
+	aspects: [ fa_readOnly, fa_disabled, fa_tabIndex, fa_borderType, fa_images, fa_immediate, fa_value, fa_aria, fa_basicToolTipContainer ],
 	statics: __statics,
 	members: __members
 });

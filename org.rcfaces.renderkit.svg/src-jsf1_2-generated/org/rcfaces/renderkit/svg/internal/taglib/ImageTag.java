@@ -37,55 +37,55 @@ public class ImageTag extends AbstractOutputTag implements Tag {
 		return ImageComponent.COMPONENT_TYPE;
 	}
 
-	public final void setImageURL(ValueExpression imageURL) {
+	public void setImageURL(ValueExpression imageURL) {
 		this.imageURL = imageURL;
 	}
 
-	public final void setImageHeight(ValueExpression imageHeight) {
+	public void setImageHeight(ValueExpression imageHeight) {
 		this.imageHeight = imageHeight;
 	}
 
-	public final void setImageWidth(ValueExpression imageWidth) {
+	public void setImageWidth(ValueExpression imageWidth) {
 		this.imageWidth = imageWidth;
 	}
 
-	public final void setAlternateText(ValueExpression alternateText) {
+	public void setAlternateText(ValueExpression alternateText) {
 		this.alternateText = alternateText;
 	}
 
-	public final void setFontBold(ValueExpression fontBold) {
+	public void setFontBold(ValueExpression fontBold) {
 		this.fontBold = fontBold;
 	}
 
-	public final void setFontItalic(ValueExpression fontItalic) {
+	public void setFontItalic(ValueExpression fontItalic) {
 		this.fontItalic = fontItalic;
 	}
 
-	public final void setFontName(ValueExpression fontName) {
+	public void setFontName(ValueExpression fontName) {
 		this.fontName = fontName;
 	}
 
-	public final void setFontSize(ValueExpression fontSize) {
+	public void setFontSize(ValueExpression fontSize) {
 		this.fontSize = fontSize;
 	}
 
-	public final void setFontUnderline(ValueExpression fontUnderline) {
+	public void setFontUnderline(ValueExpression fontUnderline) {
 		this.fontUnderline = fontUnderline;
 	}
 
-	public final void setFilterProperties(ValueExpression filterProperties) {
+	public void setFilterProperties(ValueExpression filterProperties) {
 		this.filterProperties = filterProperties;
 	}
 
-	public final void setPixelUnitToMillimeter(ValueExpression pixelUnitToMillimeter) {
+	public void setPixelUnitToMillimeter(ValueExpression pixelUnitToMillimeter) {
 		this.pixelUnitToMillimeter = pixelUnitToMillimeter;
 	}
 
-	public final void setCurveFlatness(ValueExpression curveFlatness) {
+	public void setCurveFlatness(ValueExpression curveFlatness) {
 		this.curveFlatness = curveFlatness;
 	}
 
-	public final void setDistanceTolerance(ValueExpression distanceTolerance) {
+	public void setDistanceTolerance(ValueExpression distanceTolerance) {
 		this.distanceTolerance = distanceTolerance;
 	}
 

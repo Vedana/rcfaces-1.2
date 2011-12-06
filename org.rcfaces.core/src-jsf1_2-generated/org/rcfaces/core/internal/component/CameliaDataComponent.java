@@ -517,7 +517,7 @@ public abstract class CameliaDataComponent extends org.rcfaces.core.internal.com
 
    public void queueEvent(FacesEvent e) {
 // Un keyPress doit pouvoir activer l'immediate !
-// Oui mais le code d'appel ne fait r�f�rence qu'a des ActionEvent
+// Oui mais le code d'appel ne fait rï¿½fï¿½rence qu'a des ActionEvent
 		if ((e instanceof ActionEvent) && e.getComponent()==this) {
 	   		if (this instanceof IImmediateCapability) {
 	   			IImmediateCapability immediateCapability=(IImmediateCapability)this;

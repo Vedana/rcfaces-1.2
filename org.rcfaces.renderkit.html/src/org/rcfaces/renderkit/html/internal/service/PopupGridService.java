@@ -195,8 +195,8 @@ public class PopupGridService extends AbstractHtmlService {
                     printWriter = response.getWriter();
 
                 } else {
-                    ConfiguredHttpServlet
-                            .setGzipContentEncoding((HttpServletResponse) response, true);
+					ConfiguredHttpServlet.setGzipContentEncoding(
+							(HttpServletResponse) response, true);
 
                     OutputStream outputStream = response.getOutputStream();
 

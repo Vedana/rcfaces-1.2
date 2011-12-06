@@ -34,6 +34,8 @@ public final class JavaScriptClasses {
     public static final String COMBO_EX = "f_comboEx";
 
     public static final String COMBO_GRID = "f_comboGrid";
+ 
+    public static final String COMPONENT = "f_component";
 
     public static final String COMPONENTS_LIST = "f_componentsList";
 
@@ -166,6 +168,10 @@ public final class JavaScriptClasses {
     public static final String TOOL_BAR = "f_toolBar";
 
     public static final String TOOL_FOLDER = "f_toolFolder";
+    
+    public static final String TOOLTIP = "f_toolTip";
+    
+    public static final String TOOLTIP_MANAGER = "f_toolTipManager";
 
     public static final String TREE = "f_tree";
 

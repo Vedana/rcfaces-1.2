@@ -85,6 +85,13 @@ public class SuggestTextEntryRenderer extends TextEntryRenderer implements
             htmlWriter.writeAttributeNS("forceProposal", true);
         }
 
+        
+        boolean showPopupForOneResult = suggestTextEntryComponent
+                .isShowPopupForOneResult(facesContext);
+        if (showPopupForOneResult) {
+            htmlWriter.writeAttributeNS("showPopupForOneResult", true);
+        }
+
         Object suggestionValue = suggestTextEntryComponent
                 .getSuggestionValue(facesContext);
         if (suggestionValue != null) {
@@ -232,6 +239,6 @@ public class SuggestTextEntryRenderer extends TextEntryRenderer implements
         nameSpaceProperties.addAttributes(null, new String[] {
                 "maxResultNumber", "suggestionDelayMs", "suggestionMinChars",
                 "caseSensitive", "forceProposal", "suggestionValue",
-                "moreResultsMessage", "orderedResult" });
+                "moreResultsMessage", "orderedResult", "showPopupForOneResult" });
     }
 }

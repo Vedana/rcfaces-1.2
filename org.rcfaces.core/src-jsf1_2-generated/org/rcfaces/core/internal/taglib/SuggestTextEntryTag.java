@@ -30,6 +30,7 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 	private ValueExpression suggestionConverter;
 	private ValueExpression moreResultsMessage;
 	private ValueExpression orderedItems;
+	private ValueExpression showPopupForOneResult;
 	public String getComponentType() {
 		return SuggestTextEntryComponent.COMPONENT_TYPE;
 	}
@@ -82,6 +83,10 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 		this.orderedItems = orderedItems;
 	}
 
+	public void setShowPopupForOneResult(ValueExpression showPopupForOneResult) {
+		this.showPopupForOneResult = showPopupForOneResult;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (SuggestTextEntryComponent.COMPONENT_TYPE==getComponentType()) {
@@ -97,6 +102,7 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 			LOG.debug("  suggestionConverter='"+suggestionConverter+"'");
 			LOG.debug("  moreResultsMessage='"+moreResultsMessage+"'");
 			LOG.debug("  orderedItems='"+orderedItems+"'");
+			LOG.debug("  showPopupForOneResult='"+showPopupForOneResult+"'");
 		}
 		if ((uiComponent instanceof SuggestTextEntryComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -207,6 +213,15 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 				component.setOrderedItems(getBool(orderedItems.getExpressionString()));
 			}
 		}
+
+		if (showPopupForOneResult != null) {
+			if (showPopupForOneResult.isLiteralText()==false) {
+				component.setValueExpression(Properties.SHOW_POPUP_FOR_ONE_RESULT, showPopupForOneResult);
+
+			} else {
+				component.setShowPopupForOneResult(getBool(showPopupForOneResult.getExpressionString()));
+			}
+		}
 	}
 
 	public void release() {
@@ -222,6 +237,7 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 		suggestionConverter = null;
 		moreResultsMessage = null;
 		orderedItems = null;
+		showPopupForOneResult = null;
 
 		super.release();
 	}

@@ -40,6 +40,7 @@ import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.component.capability.ITabIndexCapability;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.component.capability.IToolTipCapability;
+import org.rcfaces.core.component.capability.IToolTipTextCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.component.capability.IWAIRoleCapability;
 import org.rcfaces.core.event.PropertyChangeEvent;
@@ -119,8 +120,15 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
             IComponentDecorator componentDecorator) throws WriterException {
     }
 
+	@Deprecated
     protected final IHtmlWriter writeTitle(IHtmlWriter writer,
             IToolTipCapability element) throws WriterException {
+
+		return writeTitle(writer, (IToolTipTextCapability) element);
+	}
+
+	protected final IHtmlWriter writeTitle(IHtmlWriter writer,
+			IToolTipTextCapability element) throws WriterException {
         String title = element.getToolTipText();
 
         if (title == null) {
@@ -306,8 +314,8 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
         UIComponent component = writer.getComponentRenderContext()
                 .getComponent();
 
-        if (component instanceof IToolTipCapability) {
-            writeTitle(writer, (IToolTipCapability) component);
+		if (component instanceof IToolTipTextCapability) {
+			writeTitle(writer, (IToolTipTextCapability) component);
         }
 
         if (component instanceof IHelpCapability) {
@@ -496,10 +504,10 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
             }
         }
 
-        if (component instanceof IToolTipCapability) {
+		if (component instanceof IToolTipTextCapability) {
             String hp = componentData.getStringProperty("toolTip");
             if (hp != null) {
-                IToolTipCapability toolTipCapability = (IToolTipCapability) component;
+				IToolTipTextCapability toolTipCapability = (IToolTipTextCapability) component;
 
                 String old = toolTipCapability.getToolTipText();
 

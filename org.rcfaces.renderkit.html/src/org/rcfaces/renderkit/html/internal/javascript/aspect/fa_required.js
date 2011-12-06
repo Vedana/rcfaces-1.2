@@ -62,7 +62,7 @@ var __members = {
 	 * @return void
 	 */
 	fa_updateRequired: f_class.ABSTRACT
-}
+};
 
 new f_aspect("fa_required", {
 	members: __members

@@ -7,6 +7,7 @@ import org.rcfaces.core.internal.converter.DragDropEffectsConverter;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ISelectableCapability;
 import org.rcfaces.core.internal.capability.ISortedComponentsCapability;
+import org.rcfaces.core.internal.tools.ToolTipTools;
 import org.rcfaces.core.component.capability.ICriteriaCountCapability;
 import org.rcfaces.core.internal.tools.SelectionTools;
 import org.rcfaces.core.component.capability.IKeySearchColumnIdCapability;
@@ -20,6 +21,7 @@ import org.rcfaces.core.internal.capability.IDraggableGridComponent;
 import org.rcfaces.core.component.capability.IDragEventCapability;
 import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.capability.IRowToolTipIdCapability;
 import org.rcfaces.core.component.capability.ISortedChildrenCapability;
 import org.rcfaces.core.component.capability.IDroppableCapability;
 import org.rcfaces.core.internal.converter.CheckCardinalityConverter;
@@ -31,6 +33,7 @@ import org.rcfaces.core.component.capability.IScrollableCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.core.internal.tools.AdditionalInformationTools;
+import java.lang.Object;
 import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import org.rcfaces.core.internal.tools.OrderTools;
 import org.rcfaces.core.component.iterator.IColumnIterator;
@@ -43,6 +46,7 @@ import org.rcfaces.core.component.AbstractDataComponent;
 import org.rcfaces.core.component.capability.IShowValueCapability;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.capability.IPreferencesSettings;
+import org.rcfaces.core.internal.capability.IToolTipComponent;
 import org.rcfaces.core.internal.capability.ICheckRangeComponent;
 import org.rcfaces.core.component.capability.IDropCompleteEventCapability;
 import org.rcfaces.core.component.capability.IDisabledCapability;
@@ -65,6 +69,7 @@ import org.rcfaces.core.component.capability.IDragAndDropEffects;
 import org.rcfaces.core.component.capability.ICheckableCapability;
 import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
 import org.rcfaces.core.component.capability.IRowStyleClassCapability;
+import org.rcfaces.core.component.iterator.IToolTipIterator;
 import org.rcfaces.core.internal.converter.SelectionCardinalityConverter;
 import org.rcfaces.core.internal.tools.SortTools;
 import org.apache.commons.logging.Log;
@@ -208,7 +213,9 @@ public class DataGridComponent extends AbstractDataComponent implements
 	IClientSelectionFullStateCapability,
 	IClientCheckFullStateCapability,
 	IHeaderVisibilityCapability,
+	IRowToolTipIdCapability,
 	ICursorProvider,
+	IToolTipComponent,
 	IGridComponent,
 	IDroppableGridComponent,
 	IOrderedChildrenCapability,
@@ -227,7 +234,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"dragListener","rowDropEffects","dropListener","dropEffects","fullCriteriaCount","emptyDataMessage","loadListener","checkedValues","selectionListener","paged","additionalInformationListener","cursorValue","border","required","bodyDroppable","doubleClickListener","clientCheckFullState","rowLabelColumnId","horizontalScrollPosition","dropCompleteListener","rowCountVar","dropTypes","rowDragEffects","rowValueColumnId","selectedCriteriaColumns","additionalInformationCardinality","rowIndexVar","checkListener","headerVisible","droppable","selectionCardinality","dragTypes","rowDropTypes","clientAdditionalInformationFullState","checkCardinality","checkable","cellTextWrap","rowDragTypes","additionalInformationValues","showValue","verticalScrollPosition","clientSelectionFullState","preferences","filterProperties","dragEffects","selectedValues","rowStyleClass","keySearchColumnId","readOnly","selectable","draggable","disabled"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"dragListener","rowDropEffects","dropListener","dropEffects","fullCriteriaCount","emptyDataMessage","loadListener","checkedValues","selectionListener","paged","additionalInformationListener","cursorValue","border","required","bodyDroppable","doubleClickListener","clientCheckFullState","rowLabelColumnId","horizontalScrollPosition","rowCountVar","dropCompleteListener","rowToolTipId","dropTypes","rowDragEffects","rowValueColumnId","selectedCriteriaColumns","additionalInformationCardinality","rowIndexVar","checkListener","headerVisible","droppable","selectionCardinality","dragTypes","rowDropTypes","clientAdditionalInformationFullState","checkCardinality","checkable","cellTextWrap","rowDragTypes","additionalInformationValues","showValue","verticalScrollPosition","clientSelectionFullState","preferences","filterProperties","dragEffects","selectedValues","rowStyleClass","keySearchColumnId","readOnly","selectable","draggable","disabled"}));
 	}
 
 	public DataGridComponent() {
@@ -237,6 +244,13 @@ public class DataGridComponent extends AbstractDataComponent implements
 	public DataGridComponent(String componentId) {
 		this();
 		setId(componentId);
+	}
+
+	public IToolTipIterator listToolTips() {
+
+
+			return ToolTipTools.listToolTips(this);
+		
 	}
 
 	public UIComponent[] getSortedChildren() {
@@ -1661,6 +1675,29 @@ public class DataGridComponent extends AbstractDataComponent implements
 
 	public void setHeaderVisible(boolean headerVisible) {
 		engine.setProperty(Properties.HEADER_VISIBLE, headerVisible);
+	}
+
+	public java.lang.String getRowToolTipId() {
+		return getRowToolTipId(null);
+	}
+
+	/**
+	 * See {@link #getRowToolTipId() getRowToolTipId()} for more details
+	 */
+	public java.lang.String getRowToolTipId(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ROW_TOOL_TIP_ID, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "rowToolTipId" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isRowToolTipIdSetted() {
+		return engine.isPropertySetted(Properties.ROW_TOOL_TIP_ID);
+	}
+
+	public void setRowToolTipId(java.lang.String rowToolTipId) {
+		engine.setProperty(Properties.ROW_TOOL_TIP_ID, rowToolTipId);
 	}
 
 	public java.lang.Object getCursorValue() {

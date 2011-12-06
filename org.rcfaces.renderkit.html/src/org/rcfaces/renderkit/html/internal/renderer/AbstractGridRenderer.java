@@ -8,6 +8,7 @@ import java.io.CharArrayWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -29,8 +30,10 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.AdditionalInformationComponent;
 import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.MenuComponent;
+import org.rcfaces.core.component.ToolTipComponent;
 import org.rcfaces.core.component.capability.IAdditionalInformationCardinalityCapability;
 import org.rcfaces.core.component.capability.IAlignmentCapability;
+import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.component.capability.IAutoFilterCapability;
 import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.capability.ICardinality;
@@ -57,7 +60,8 @@ import org.rcfaces.core.component.capability.ISortedChildrenCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.component.capability.ITabIndexCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.capability.IToolTipCapability;
+import org.rcfaces.core.component.capability.ITitleToolTipIdCapability;
+import org.rcfaces.core.component.capability.IToolTipTextCapability;
 import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
 import org.rcfaces.core.component.capability.IWidthCapability;
 import org.rcfaces.core.component.capability.IWidthRangeCapability;
@@ -90,6 +94,7 @@ import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IEventData;
+import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.ISgmlWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
@@ -182,6 +187,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 	protected static final int GENERATE_CELL_WIDTH = 0x0008;
 
 	private static final String ADDITIONAL_INFORMATIONS_RENDER_CONTEXT_STATE = "org.rcfaces.html.AI_CONTEXT";
+
+	private static final String TOOLTIPS_RENDER_CONTEXT_STATE = "org.rcfaces.html.TT_CONTEXT";
 
 	private static final String DATA_BODY_SCROLL_ID_SUFFIX = ""
 			+ UINamingContainer.SEPARATOR_CHAR
@@ -312,6 +319,26 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 				}
 			}
 		}
+		
+		if (gridRenderContext.hasTooltips()
+				&& getAdditionalInformationsRenderContextState(dataGridComponent) == null) {
+			IHtmlRenderContext htmlRenderContext = writer
+					.getHtmlComponentRenderContext().getHtmlRenderContext();
+			Object state = htmlRenderContext.saveState(htmlRenderContext
+					.getFacesContext());
+
+			if (state != null) {
+				String contentType = htmlRenderContext.getFacesContext()
+						.getResponseWriter().getContentType();
+
+				((UIComponent) dataGridComponent).getAttributes().put(
+						TOOLTIPS_RENDER_CONTEXT_STATE,
+						new Object[] { state, contentType });
+			}
+
+			javaScriptRenderContext.appendRequiredClass(JavaScriptClasses.GRID,
+					"toolTip");
+		}
 
 		if (ajax) {
 			addAjaxRequiredClasses(javaScriptRenderContext);
@@ -369,6 +396,17 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 		return (Object[]) ((UIComponent) component).getAttributes().get(
 				ADDITIONAL_INFORMATIONS_RENDER_CONTEXT_STATE);
 	}
+	
+	public Object[] getTooltipsRenderContextState(IGridComponent component) {
+		Object[] state = (Object[]) ((UIComponent) component).getAttributes()
+				.get(TOOLTIPS_RENDER_CONTEXT_STATE);
+
+		if (state != null) {
+			return state;
+		}
+
+		return getAdditionalInformationsRenderContextState(component);
+	}
 
 	protected boolean needAdditionalInformationContextState() {
 		return false;
@@ -383,6 +421,21 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 		encodeAdditionalInformation(jsWriter.getFacesContext(), writer,
 				(IGridComponent) jsWriter.getComponentRenderContext()
 						.getComponent(), additionalInformationComponent,
+				jsWriter.getResponseCharacterEncoding());
+
+		writer.close();
+
+		return writer.toString();
+	}
+	
+	protected String encodeToolTip(IJavaScriptWriter jsWriter,
+			ToolTipComponent tooltipComponent) throws WriterException {
+
+		CharArrayWriter writer = new CharArrayWriter(8000);
+
+		encodeToolTip(jsWriter.getFacesContext(), writer,
+				(IGridComponent) jsWriter.getComponentRenderContext()
+						.getComponent(), tooltipComponent,
 				jsWriter.getResponseCharacterEncoding());
 
 		writer.close();
@@ -410,6 +463,11 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 			oldResponseStream = facesContext.getResponseStream();
 
 			Object states[] = getAdditionalInformationsRenderContextState(component);
+			if (states == null) {
+				throw new FacesException(
+						"Can not get render context state for additional informations of gridComponent='"
+								+ component + "'");
+			}
 
 			newResponseWriter = facesContext.getRenderKit()
 					.createResponseWriter(writer, (String) states[1],
@@ -437,11 +495,59 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 			}
 		}
 	}
+	
+	// peut surment ne pas recopier se code
+	protected void encodeToolTip(FacesContext facesContext, Writer writer,
+			IGridComponent component, ToolTipComponent tooltipComponent,
+			String responseCharacterEncoding) throws WriterException {
 
-	public void renderAdditionalInformation(
-			IHtmlRenderContext htmlRenderContext, Writer writer,
-			IGridComponent gridComponent, String responseCharacterEncoding,
-			String rowValue2, String rowIndex) throws WriterException {
+		ResponseWriter oldResponseWriter = facesContext.getResponseWriter();
+		ResponseWriter newResponseWriter;
+
+		ResponseStream oldResponseStream = null;
+		if (oldResponseWriter == null) {
+			// Appel AJAX pour un TRI par exemple ... (ou changement de page)
+
+			oldResponseStream = facesContext.getResponseStream();
+
+			Object states[] = getTooltipsRenderContextState(component);
+			if (states == null) {
+				throw new FacesException(
+						"Can not get render context state for tooltip of gridComponent='"
+								+ component + "'");
+			}
+
+			newResponseWriter = facesContext.getRenderKit()
+					.createResponseWriter(writer, (String) states[1],
+							responseCharacterEncoding);
+
+			HtmlRenderContext.restoreRenderContext(facesContext, states[0],
+					true);
+
+		} else {
+			newResponseWriter = oldResponseWriter.cloneWithWriter(writer);
+		}
+
+		facesContext.setResponseWriter(newResponseWriter);
+		try {
+			ComponentTools.encodeChildrenRecursive(facesContext,
+					tooltipComponent);
+
+		} finally {
+			if (oldResponseWriter != null) {
+				facesContext.setResponseWriter(oldResponseWriter);
+			}
+
+			if (oldResponseStream != null) {
+				facesContext.setResponseStream(oldResponseStream);
+			}
+		}
+	}
+
+	public boolean isDataModelRowAvailable(
+			IHtmlRenderContext htmlRenderContext, IGridComponent gridComponent,
+			String responseCharacterEncoding, String rowValue2, String rowIndex)
+			throws WriterException {
 
 		IHtmlWriter htmlWriter = (IHtmlWriter) htmlRenderContext
 				.getComponentWriter();
@@ -465,7 +571,6 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 		if (filtersMap != null) {
 			if (filtredDataModel != null) {
 				filtredDataModel.setFilter(filtersMap);
-
 			} else {
 				dataModel = FilteredDataModel.filter(dataModel, filtersMap);
 			}
@@ -489,9 +594,9 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 				// Il faut faire le tri à la main !
 
 				int sortTranslations[] = GridServerSort
-						.computeSortedTranslation(htmlRenderContext
-								.getFacesContext(), gridComponent, dataModel,
-								sortedComponents);
+						.computeSortedTranslation(
+								htmlRenderContext.getFacesContext(),
+								gridComponent, dataModel, sortedComponents);
 
 				if (sortTranslations != null) {
 					translatedRowIndex = sortTranslations[translatedRowIndex];
@@ -504,10 +609,27 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 		}
 
 		gridComponent.setRowIndex(translatedRowIndex);
+		return gridComponent.isRowAvailable();
+	}
+
+	public void renderAdditionalInformation(
+			IHtmlRenderContext htmlRenderContext, Writer writer,
+			IGridComponent gridComponent, String responseCharacterEncoding,
+			String rowValue2, String rowIndex) throws WriterException {
+
+		IHtmlWriter htmlWriter = (IHtmlWriter) htmlRenderContext
+				.getComponentWriter();
+
+		// On prepare le DataModel !
+		AbstractGridRenderContext tableContext = getGridRenderContext(htmlWriter
+				.getHtmlComponentRenderContext());
+
 		try {
-			if (gridComponent.isRowAvailable() == false) {
+			if (isDataModelRowAvailable(htmlRenderContext, gridComponent,
+					responseCharacterEncoding, rowValue2, rowIndex) == false) {
 				return;
 			}
+
 
 			AdditionalInformationComponent additionalInformationComponents[] = tableContext
 					.listAdditionalInformations();
@@ -532,6 +654,40 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 			encodeAdditionalInformation(htmlRenderContext.getFacesContext(),
 					writer, gridComponent, additionalInformationComponent,
 					responseCharacterEncoding);
+
+		} finally {
+			gridComponent.setRowIndex(-1);
+		}
+	}
+	
+	public void renderTooltip(IHtmlWriter htmlWriter,
+			IGridComponent gridComponent, String responseCharacterEncoding,
+			String rowValue2, String rowIndex, String tooltipId)
+			throws WriterException {
+
+		IHtmlRenderContext htmlRenderContext = htmlWriter
+				.getHtmlComponentRenderContext().getHtmlRenderContext();
+
+		// On prepare le DataModel !
+		AbstractGridRenderContext tableContext = getGridRenderContext(htmlWriter
+				.getHtmlComponentRenderContext());
+		try {
+			if (isDataModelRowAvailable(htmlRenderContext, gridComponent,
+					responseCharacterEncoding, rowValue2, rowIndex) == false) {
+				return;
+			}
+
+			FacesContext facesContext = htmlRenderContext.getFacesContext();
+
+			ToolTipComponent tooltipComponent = (ToolTipComponent) facesContext
+					.getViewRoot().findComponent(tooltipId);
+
+			if (tooltipComponent == null) {
+				return;
+			}
+
+			encodeToolTip(facesContext, facesContext.getResponseWriter(),
+					gridComponent, tooltipComponent, responseCharacterEncoding);
 
 		} finally {
 			gridComponent.setRowIndex(-1);
@@ -790,6 +946,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 			}
 		}
 
+		writeToolTipId(htmlWriter, gridRenderContext, "#table");
+
 		writeGridComponentAttributes(htmlWriter, gridRenderContext,
 				gridComponent);
 
@@ -868,6 +1026,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 					htmlWriter.writeStyle().writeWidthPx(w);
 				}
 
+				writeToolTipId(htmlWriter, gridRenderContext, "#head");
+
 				encodeFixedHeader(htmlWriter, gridRenderContext, gridWidth,
 						true);
 				htmlWriter.endElement(IHtmlWriter.DIV);
@@ -903,6 +1063,9 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 				if (w > 0) {
 					htmlWriter.writeStyle().writeWidthPx(w);
 				}
+
+				writeToolTipId(htmlWriter, gridRenderContext, "#head");
+
 				encodeFixedHeader(htmlWriter, gridRenderContext, gridWidth,
 						false);
 				htmlWriter.endElement(IHtmlWriter.DIV);
@@ -913,6 +1076,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 		htmlWriter.writeId(getDataTableId(htmlWriter));
 		htmlWriter.writeClass(getDataTableClassName(htmlWriter,
 				gridRenderContext.isDisabled()));
+
+		writeToolTipId(htmlWriter, gridRenderContext, "#body");
 
 		// Pas de support CSS de border-spacing pour IE: on est oblig� de le
 		// cod� en HTML ...
@@ -944,6 +1109,31 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 		encodeBodyBegin(htmlWriter, gridRenderContext);
 	}
 
+	protected void writeToolTipId(IHtmlWriter htmlWriter,
+			AbstractGridRenderContext gridRenderContext, String tooltipIdOrName)
+			throws WriterException {
+
+		IComponentRenderContext componentRenderContext = htmlWriter
+				.getComponentRenderContext();
+
+		ToolTipComponent tooltipComponent = gridRenderContext
+				.findTooltipByIdOrName(componentRenderContext,
+						componentRenderContext.getComponent(), tooltipIdOrName,
+						null);
+		if (tooltipComponent == null) {
+			return;
+		}
+
+		IRenderContext renderContext = componentRenderContext
+				.getRenderContext();
+
+		FacesContext facesContext = renderContext.getFacesContext();
+
+		String tooltipClientId = tooltipComponent.getClientId(facesContext);
+
+		htmlWriter.writeAttribute("v:toolTipId", tooltipClientId);
+	}
+
 	protected boolean serverTitleGeneration() {
 		return true;
 	}
@@ -956,6 +1146,16 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 		encodeBodyEnd((IHtmlWriter) writer, tableContext);
 
 		super.encodeEnd(writer);
+
+		if (tableContext.hasTooltips()) {
+			Collection<ToolTipComponent> toolTipComponents = tableContext
+					.listToolTips();
+
+			for (ToolTipComponent tooltip : toolTipComponents) {
+
+				ToolTipRenderer.render((IHtmlWriter) writer, tooltip);
+			}
+		}
 	}
 
 	protected void writeGridComponentAttributes(IHtmlWriter htmlWriter,
@@ -1523,8 +1723,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 		}
 		htmlWriter.writeAlign(halign);
 
-		if (column instanceof IToolTipCapability) {
-			String toolTip = ((IToolTipCapability) column).getToolTipText();
+		if (column instanceof IToolTipTextCapability) {
+			String toolTip = ((IToolTipTextCapability) column).getToolTipText();
 
 			if (toolTip != null) {
 				toolTip = ParamUtils.formatMessage(column, toolTip);
@@ -1759,6 +1959,79 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
 		UIColumn columns[] = gridRenderContext.listColumns();
 
+		String[] titleToolTipIds = null;
+		String[] titleToolTipContents = null;
+		for (int i = 0; i < columns.length; i++) {
+			UIColumn column = columns[i];
+
+			ToolTipComponent toolTipComponent = null;
+
+			if (column instanceof ITitleToolTipIdCapability) {
+				String tooltipClientId = ((ITitleToolTipIdCapability) column)
+						.getTitleToolTipId();
+
+				if (tooltipClientId != null && tooltipClientId.length() > 0) {
+					IRenderContext renderContext = jsWriter
+							.getHtmlRenderContext();
+
+					if (tooltipClientId.charAt(0) != ':') {
+						tooltipClientId = renderContext
+								.computeBrotherComponentClientId(jsWriter
+										.getComponentRenderContext()
+										.getComponent(), tooltipClientId);
+					}
+
+					if (tooltipClientId != null) {
+						UIComponent comp = renderContext.getFacesContext()
+								.getViewRoot().findComponent(tooltipClientId);
+						if (comp instanceof ToolTipComponent) {
+							toolTipComponent = (ToolTipComponent) comp;
+
+							gridRenderContext.registerTooltip(toolTipComponent);
+
+							if (toolTipComponent.isRendered() == false) {
+								toolTipComponent = null;
+							}
+						}
+					}
+				}
+			}
+
+			if (toolTipComponent == null) {
+				toolTipComponent = gridRenderContext.findTooltipByIdOrName(
+						jsWriter.getComponentRenderContext(), columns[i],
+						"#title", null);
+			}
+
+			if (toolTipComponent == null) {
+				continue;
+			}
+
+			String toolTipClientId = null;
+			String toolTipContent = null;
+			if (toolTipComponent.getAsyncRenderMode(facesContext) == IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
+				toolTipContent = encodeToolTip(jsWriter, toolTipComponent);
+				toolTipClientId = "##CONTENT";
+
+			} else {
+				toolTipClientId = toolTipComponent.getClientId(facesContext);
+			}
+
+			if (toolTipClientId != null) {
+				if (titleToolTipIds == null) {
+					titleToolTipIds = new String[columns.length];
+				}
+				titleToolTipIds[i] = jsWriter.allocateString(toolTipClientId);
+			}
+			if (toolTipContent != null) {
+				if (titleToolTipContents == null) {
+					titleToolTipContents = new String[columns.length];
+				}
+				titleToolTipContents[i] = jsWriter
+						.allocateString(toolTipContent);
+			}
+		}
+
 		int autoFilterIndex = 0;
 		jsWriter.writeMethodCall("f_setColumns2");
 		for (int i = 0; i < columns.length; i++) {
@@ -1871,13 +2144,31 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 				
 			}
 
+			boolean hasToolTip = false;
+
 			if (defaultCellToolTipTexts != null) {
 				String tooltip = defaultCellToolTipTexts[i];
 				if (tooltip != null) {
-					objectWriter.writeSymbol("_cellToolTipText").write(tooltip);
+					objectWriter.writeSymbol("_cellToolTipText").writeString(
+							tooltip);
+					hasToolTip = true;
 				}
 			}
 
+			if (hasToolTip == false && titleToolTipIds != null) {
+				String tooltip = titleToolTipIds[i];
+				if (tooltip != null) {
+					objectWriter.writeSymbol("_titleToolTipId").write(tooltip);
+					hasToolTip = true;
+
+					String tooltipContent = titleToolTipContents[i];
+					if (tooltipContent != null) {
+						objectWriter.writeSymbol("_titleToolTipContent").write(
+								tooltipContent);
+					}
+				}
+			}
+			
 			if (defaultCellHorizontalAligments != null) {
 				String halign = defaultCellHorizontalAligments[i];
 				if (halign != null) {
@@ -1958,8 +2249,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 						objectWriter.writeSymbol("_text").writeString(text);
 					}
 				}
-				if (columnComponent instanceof IToolTipCapability) {
-					String toolTip = ((IToolTipCapability) columnComponent)
+				if (columnComponent instanceof IToolTipTextCapability) {
+					String toolTip = ((IToolTipTextCapability) columnComponent)
 							.getToolTipText();
 					if (toolTip != null) {
 						objectWriter.writeSymbol("_toolTip").writeString(
@@ -2487,7 +2778,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 		
 		IColumnIterator columnIterator = gridComponent.listColumns();
 		for (; columnIterator.hasNext();) {
-			UIColumn column = (UIColumn) columnIterator.next();
+			UIColumn column = columnIterator.next();
 			if (column instanceof IMenuCapability) {
 				IMenuIterator menuIterator = ((IMenuCapability) column)
 						.listMenus();

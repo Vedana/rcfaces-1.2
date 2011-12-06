@@ -200,8 +200,8 @@ public class DataGridService extends AbstractHtmlService {
                     printWriter = response.getWriter();
 
                 } else {
-                    ConfiguredHttpServlet
-                            .setGzipContentEncoding((HttpServletResponse) response, true);
+					ConfiguredHttpServlet.setGzipContentEncoding(
+							(HttpServletResponse) response, true);
 
                     OutputStream outputStream = response.getOutputStream();
 
@@ -336,6 +336,16 @@ public class DataGridService extends AbstractHtmlService {
 
         jsWriter.writeMethodCall("f_updateNewPage").writeln(");");
 
+		if (hasAdditionalInformations(dgc)) {
+
+			String viewStateId = saveViewAndReturnStateId(facesContext);
+			if (viewStateId != null) {
+				jsWriter.writeCall("f_classLoader", "ChangeJsfViewId")
+						.write(varId).write(',').writeString(viewStateId)
+						.write(')');
+			}
+		}
+
         if (LOG.isTraceEnabled()) {
             pw.flush();
 
@@ -344,4 +354,13 @@ public class DataGridService extends AbstractHtmlService {
             printWriter.write(cw.toCharArray());
         }
     }
+
+	private boolean hasAdditionalInformations(DataGridComponent dgc) {
+		int count = dgc.listAdditionalInformations().count();
+
+		if (count > 0) {
+			return true;
+		}
+		return false;
+	}
 }

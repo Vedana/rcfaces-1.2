@@ -268,6 +268,11 @@ var f_core = {
 	 * @field private static Number
 	 */
 	_RequestKey: 0,
+	
+	/**
+	 * @field private static Number
+	 */
+	_AnoIdentifier: 0,
 		
 	/**
 	 * @field private static Array
@@ -1030,9 +1035,13 @@ var f_core = {
 				// Une des frames doit positionner 'event'
 				var frames=win.frames;
 				for(var i=0;i<frames.length;i++) {
-					if (frames[i].event) {
-						win=frames[i];
-						break;
+					try {
+						if (frames[i].event) {
+							win=frames[i];
+							break;
+						}
+					} catch (x) {
+						// Probleme de sécurité !
 					}
 				}
 			}
@@ -1437,15 +1446,49 @@ var f_core = {
 	},
 	/**
 	 * @method static hidden
+	 * @param HTMLElement source
 	 * @return f_component
 	 */
-	GetParentComponent: function(comp) {
-		for(comp=comp.f_getParent();comp;comp=comp.parentNode) {
-			if (!f_class.IsObjectInitialized(comp)) {
+	GetParentComponent: function(source) {
+		
+		var comp=source;
+		
+		for(;comp;) {
+
+			if (comp.f_getParent) {
+				comp = comp.f_getParent();
+
+			} else {			
+				comp=comp.parentNode;
+			}
+			
+			if (!comp) {
+				break;
+			}
+			
+			if (comp.nodeType==f_core.TEXT_NODE) {
 				continue;
 			}
 			
-			return comp;
+			if (comp.nodeType!=f_core.ELEMENT_NODE) {
+				break;
+			}
+			
+			var state= f_classLoader.GetObjectState(comp);
+			
+			if (state==f_classLoader.UNKNOWN_STATE) { // Unknown
+				continue;
+			}
+			if (state==f_classLoader.INITIALIZED_STATE) { // Already initialized
+				return comp;
+			}
+		
+			// We must initialize it !
+
+			var win=f_core.GetWindow(source);
+			var classLoader=f_classLoader.Get(win);
+			
+			return classLoader.f_init(comp, true, true);
 		}
 		
 		return null;
@@ -2441,11 +2484,22 @@ var f_core = {
 		var cfs=undefined;
 		var ces=undefined;
 		
+		var doc=form.ownerDocument;
+		
 		// var messageContext=f_messageContext.Get(form); // Pas utilisé !
 		
 		for(var i=0;i<checkListeners.length;) {
-			var component= checkListeners[i++];
+			var componentId= checkListeners[i++];
 			var checkListener=checkListeners[i++];
+			
+			var component=doc.getElementById(componentId);
+			if (!component) {
+				i-=2;
+				
+				checkListeners.splice(i, 2);
+				
+				continue;
+			}			
 			
 			if (checkListener) {
 				var checkPre=checkListener.f_performCheckPre;
@@ -2570,9 +2624,21 @@ var f_core = {
 			return true;
 		}
 		
+		var doc=form.ownerDocument;
+		
 		var ret=true;
-		for(var i=0;i<resetListeners.length && ret;i++) {
-			var resetListener=resetListeners[i];
+		for(var i=0;i<resetListeners.length && ret;) {
+			var componentId=resetListeners[i++];
+			var resetListener=resetListeners[i++];
+			
+			var component=doc.getElementById(componentId);
+			if (!component) {
+				i-=2;
+				
+				resetListeners.splice(i, 2);
+				
+				continue;
+			}
 			
 			if (resetListener.call(form, event)===false) {
 				ret=false;
@@ -2600,13 +2666,17 @@ var f_core = {
 			checkListeners=new Array;
 			form._checkListeners=checkListeners;
 		}
+
+		if (!component.id) {
+			component.id=f_core._AllocateAnoIdentifier();
+		}
 		
 		if (first) {
-			checkListeners.unshift(component, listener);
+			checkListeners.unshift(component.id, listener);
 			return;
 		}
 		
-		checkListeners.push(component, listener);
+		checkListeners.push(component.id, listener);
 	},
 	/**
 	 * @method hidden static hidden
@@ -2622,7 +2692,13 @@ var f_core = {
 			return false;
 		}
 		
-		return checkListeners.f_removeElement(listener);
+		var idx=checkListeners.indexOf(component.id);
+		if (idx<0) {
+			return false;
+		}
+		
+		checkListeners.splice(idx, 2);
+		return true;
 	},
 	/**
 	 * @method hidden static hidden
@@ -2640,7 +2716,11 @@ var f_core = {
 			form._resetListeners=resetListeners;
 		}
 		
-		resetListeners.f_addElement(callback);
+		if (!component.id) {
+			component.id=f_core._AllocateAnoIdentifier();
+		}
+		
+		resetListeners.f_addElement(component.id, callback);
 	},
 	/**
 	 * @method public static hidden
@@ -2656,8 +2736,75 @@ var f_core = {
 		if (!resetListeners) {
 			return false;
 		}	
+				
+		if (!component.id) {
+			return false;
+		}
 		
-		return resetListeners.f_removeElement(callback);
+		var idx=resetListeners.indexOf(component.id);
+		if (idx<0) {
+			return false;
+		}
+		
+		resetListeners.splice(idx, 2);
+		return true;
+	},
+	/**
+	 * @method hidden static
+	 * @return void
+	 */
+	GarbageListenerReferences: function() {
+		var forms=document.forms;
+		for(var i=0;i<forms.length;i++) {
+			var form=forms[i];
+		
+			f_core._GarbageFormReferences(form);
+		}
+	},
+	
+	/**
+	 * @method private static
+	 * @param HTMLFormElement form
+	 * @return void
+	 */
+	_GarbageFormReferences: function(form) {
+		
+		var doc=form.ownerDocument;
+		
+		var checkCount=0;
+		var resetCount=0;
+		
+		var checkListeners=form._checkListeners;
+		if (checkListeners) {
+			for(var j=0;j<checkListeners.length;) {
+				var componentId=checkListeners[j];
+				
+				if (doc.getElementById(componentId)) {
+					j+=2;
+					continue;
+				}
+				
+				checkListeners.splice(j, 2);			
+				checkCount++;
+			}
+		}
+		
+		var resetListeners=form._resetListeners;
+		if (resetListeners) {
+			for(var j=0;j<resetListeners.length;) {
+				var componentId=resetListeners[j];
+				
+				if (doc.getElementById(componentId)) {
+					j+=2;
+					continue;
+				}
+				
+				resetListeners.splice(j, 2);			
+				resetCount++;
+			}
+		}
+		
+		f_core.Debug(f_core, "_GarbageFormReferences("+form.id+"): garbaged-checks="+checkCount+" garbaged-resets="+resetCount);
 	},
 	/**
 	 * @method public static
@@ -2975,7 +3122,7 @@ var f_core = {
 			obj=fa_namingContainer.SearchElementById(doc, id);
 		}
 		
-		if (obj && f_class.IsObjectInitialized(obj)) {
+		if (obj && f_classLoader.IsObjectInitialized(obj)) {
 			return obj;
 		}
 		
@@ -3264,7 +3411,7 @@ var f_core = {
 	 * @param Number x
 	 * @param Number y
 	 * @param optional component
-	 * @return HTMLElement 
+	 * @return Array 
 	 */
 	SearchComponentByAbsolutePosition: function(x, y, component) {
 		f_core.Assert(typeof(x)=="number", "f_core.SearchComponentByAbsolutePosition: Invalid x parameter '"+x+"'.");
@@ -3707,6 +3854,9 @@ var f_core = {
 		}else {
 			evt.returnValue = false;	
 		}
+
+		f_core.Debug(f_core, "CancelJsEvent: Cancel event type='"
+				+ evt.type + "' event='" + evt + "'.");
 		
 		return false;
 	},
@@ -4376,6 +4526,7 @@ var f_core = {
 		if (win._rcfacesExiting) {
 			return;
 		}
+		var doc=win.document;
 
 		var handlers=f_core._ResizeHandlers;
 		if (!handlers) {
@@ -4385,9 +4536,17 @@ var f_core = {
 
 		f_core.Debug(f_core, "Start processing of resize event ... ("+(handlers.length/2)+" calls)");
 
-		for(var i=0;i<handlers.length;) {
-			var component=handlers[i++];
-			var func = handlers[i++];
+		for(var i=0;i<handlers.length;i+=2) {
+			var component = doc.getElementById(handlers[i]);
+			if (!component) {
+				handlers.splice(i, 2);
+
+				i-=2;
+				
+				continue;
+			}
+			
+			var func = handlers[i+1];
 			
 			try {
 				func.call(component);
@@ -4415,7 +4574,11 @@ var f_core = {
 			f_core.AddEventListener(window, "resize", f_core._OnResizeEvent);
 		}
 
-		handlers.push(component, listener);
+		if (!component.id) {
+			component.id=f_core._AllocateAnoIdentifier();
+		}
+		
+		handlers.push(component.id, listener);
 		return true;
 	},
 	/**
@@ -4431,7 +4594,7 @@ var f_core = {
 		}
 		
 		for(var i=0; i<handlers.length;i+=2) {
-			if (handlers[i]!=component || handlers[i+1]!=listener) {
+			if (handlers[i]!=component.id || handlers[i+1]!=listener) {
 				continue;
 			}
 			
@@ -4440,6 +4603,13 @@ var f_core = {
 		}
 		
 		return false;
+	},
+	/**
+	 * @method hidden static
+	 * @return String
+	 */
+	_AllocateAnoIdentifier: function() {
+		return "__rcfaces_ano_"+(f_core._AnoIdentifier++);
 	},
 	/**
 	 * @method hidden static

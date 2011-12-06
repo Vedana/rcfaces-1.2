@@ -13,6 +13,7 @@ import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.event.SelectionEvent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.renderkit.IComponentData;
+import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.util.ParamUtils;
@@ -31,8 +32,12 @@ public class ButtonRenderer extends AbstractInputRenderer {
 
     protected void encodeComponent(IHtmlWriter htmlWriter)
             throws WriterException {
-        ButtonComponent button = (ButtonComponent) htmlWriter
-                .getComponentRenderContext().getComponent();
+
+		IComponentRenderContext componentContext = htmlWriter
+				.getComponentRenderContext();
+
+		ButtonComponent button = (ButtonComponent) componentContext
+				.getComponent();
 
         htmlWriter.startElement(IHtmlWriter.INPUT);
 
@@ -41,6 +46,8 @@ public class ButtonRenderer extends AbstractInputRenderer {
         writeCssAttributes(htmlWriter);
         writeInputAttributes(htmlWriter);
         writeTextDirection(htmlWriter, button);
+
+		writeFirstTooltipClientId(htmlWriter);
 
         String txt = button.getText(htmlWriter.getComponentRenderContext()
                 .getFacesContext());

@@ -631,6 +631,16 @@ Base name of the resource bundle to be loaded.
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.core.toolTip</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ToolTipRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.core.toolTipManager</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ToolTipManagerRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.html.init</renderer-type>
 			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.InitRenderer</renderer-class>
 		</renderer>

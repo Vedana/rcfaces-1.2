@@ -961,7 +961,7 @@ f_classLoader.prototype = {
 		if (f_core.IsDebugEnabled(f_classLoader)) {
 			f_core.Debug(f_classLoader, "_initializeIds: ("+ids.length+" objects) ids="+ids.join());
 		}
-
+		
 		var documentComplete = this.f_isDocumentCompleted();
 
 		for(var i=0;i<ids.length;i++) {
@@ -969,11 +969,12 @@ f_classLoader.prototype = {
 						
 			var component=document.getElementById(componentId);
 			if (!component) {
-				f_core.Error(f_classLoader,"f_verifyOnMessage["+i+"/"+ids.length+"]: Can not find component '"+componentId+"'.");
+				// On peut avoir changer de page de componentsGrid / additionnalInformations
+				f_core.Info(f_classLoader,"f_verifyOnMessage["+i+"/"+ids.length+"]: Can not find component '"+componentId+"'.");
 				continue;
 			}
 			
-			if (f_class.IsObjectInitialized(component)) {
+			if (f_classLoader.IsObjectInitialized(component)) {
 				f_core.Info(f_classLoader,"_initializeIds["+i+"/"+ids.length+"]: Already initialized '"+componentId+"'.");
 				continue;
 			}
@@ -1109,7 +1110,7 @@ f_classLoader.prototype = {
 				component=component.ownerDocument.getElementById(mainId);
 			}
 			
-			if (f_class.IsObjectInitialized(component)) {
+			if (f_classLoader.IsObjectInitialized(component)) {
 				return true;
 			}
 			
@@ -1221,7 +1222,7 @@ f_classLoader.prototype = {
 				component=component.ownerDocument.getElementById(mainId)
 			}
 			
-			if (f_class.IsObjectInitialized(component)) {
+			if (f_classLoader.IsObjectInitialized(component)) {
 				return true;
 			}
 			
@@ -1320,6 +1321,11 @@ f_classLoader.prototype = {
 		if (obj._kclass) {
 			// Deja initialisé !
 			return obj;
+		}
+		
+		if (obj.nodeType!=f_core.ELEMENT_NODE) {
+			f_core.Debug(f_classLoader, "f_init: Invalid type of object '"+obj.nodeType+"'.");
+			return null;
 		}
 		
 		f_core.Debug(f_classLoader, "f_init: Initialize object '"+obj+"' (id='"+obj.id+"') ignore='"+ignoreNotFound+"'  typeof(obj)='"+typeof(obj)+"'");
@@ -1805,6 +1811,14 @@ f_classLoader.prototype = {
 	
 	/**
 	 * @method hidden
+	 * @return void
+	 */
+	f_completeGarbageObjects: function() {
+		f_core.GarbageListenerReferences();
+	},
+	
+	/**
+	 * @method hidden
 	 * @param f_bundle bundle
 	 * @return void
 	 */
@@ -2207,17 +2221,62 @@ f_classLoader.SerializeInputsIntoForm=function(form) {
 			break;
 		}
 	}		
-}
+};
 
+/**
+ * @field hidden static final Number
+ */
+f_classLoader.UNKNOWN_STATE = 0;
+
+/**
+ * @field hidden static final Number
+ */
+f_classLoader.LAZY_STATE = 1;
+
+/**
+ * @field hidden static final Number
+ */
+f_classLoader.INITIALIZED_STATE = 2;
+
+/**
+ * @method hidden static final
+ * @param Object object
+ * @return Number  (0=Unknown 1=Not initialized  2=Initialized)
+ */
+f_classLoader.GetObjectState=function(object) {
+	if (object._kclass) {
+		return f_classLoader.INITIALIZED_STATE;
+	}
+	
+	if (object.nodeType==f_core.ELEMENT_NODE) {
+		var claz = f_core.GetAttribute(object, "v:class");
+		if (claz) {
+			return f_classLoader.LAZY_STATE;
+		}
+	}
+
+	return f_classLoader.UNKNOWN_STATE;
+};
+
+/**
+ * @method hidden static final 
+ * @param Object object
+ * @return Boolean
+ */
+f_classLoader.IsObjectInitialized=function(object) {
+	f_core.Assert(object && typeof(object)=="object", "f_classLoader.IsObjectInitialized: Object is invalid ("+object+")");
+
+	return !!object._kclass;
+};
 /**
  * @method public static
  * @param Window win
  * @return f_classLoader
- * @context window:window
+ * @context window:win
  */
 f_classLoader.Get=function(win) {
 	return win._rcfacesClassLoader;
-}
+};
 
 /**
  * @method public static
@@ -2225,7 +2284,7 @@ f_classLoader.Get=function(win) {
  */
 f_classLoader.f_getName=function() {
 	return "f_classLoader";
-}
+};
 
 f_classLoader._kernelClass=true;
 

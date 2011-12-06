@@ -63,6 +63,8 @@ f_classLoader.prototype.f_loadContent = function(component, htmlNode, content, p
 		
 	f_core.Debug("f_asyncClassLoader", "f_loadContent: Set content on component id='"+component.id+"' htmlNode='"+htmlNode+"', htmlNode.tag='"+htmlNode.tagName+"' :\n"+content);
 	
+	this.f_processViewStates(htmlNode); // Pour nettoyer avant !
+	
 	try {
 		htmlNode.innerHTML=content;
 
@@ -70,19 +72,108 @@ f_classLoader.prototype.f_loadContent = function(component, htmlNode, content, p
 		f_core.Debug("f_asyncClassLoader", "f_loadContent: Exception when setting innerHTML for component id='"+component.id+"' htmlNode='"+htmlNode.tagName+"':\n"+content, x);
 	}
 	
-	if (processScripts!==false) {
+	{
 		var self=this;
 		
 		// le innerHTML peut être asynchrone !
 		
 		window.setTimeout(function() {
-			var asyncClassLoader=self;
-			self=null;
-		
-			asyncClassLoader.f_processScripts(component, htmlNode, scripts);
+			if (window._rcfacesExiting) {
+ 				return false;
+ 			}
+
+			try {
+				var asyncClassLoader=self;
+				self=null;
+				
+				asyncClassLoader.f_processViewStates(htmlNode);
+			
+				if (processScripts!==false) {
+					asyncClassLoader.f_processScripts(component, htmlNode, scripts);
+				}
+			} catch (x) {
+				f_core.Error("f_asyncClassLoader", "f_loadContent.timeout: process script exceptions", x);
+			}
 		}, 10);
 	}
-}
+};
+
+/**
+ * @method hidden
+ * @param HTMLElement htmlNode
+ * @return void
+ */
+f_classLoader.prototype.f_processViewStates = function(htmlNode) {
+	
+	var toRemove = null;
+	var newViewState = null;
+	
+	var inputs = htmlNode.ownerDocument.getElementsByName("javax.faces.ViewState");
+	for(var i=0;i<inputs.length;i++) {
+		var input=inputs[i];
+		if (input._viewState) {
+			continue; // Déjà connu
+		}
+		
+		input._viewState=true;
+	
+		var form=f_core.GetParentForm(input);
+
+		if (!form._viewState) {
+			// C'est le premier INPUT !
+			form._viewState = true;
+			
+			continue;
+		}
+		
+		var main=null;
+		
+		// pas connu, il existe déjà un autre input, on le cherche :
+		for(var j=0;j<inputs.length;j++) {
+			if (i==j) {
+				continue;
+			}
+			
+			var input2 = inputs[j];
+			if (!input2._viewState) {
+				continue;
+			}
+			
+			var form2=f_core.GetParentForm(input2);
+			if (form!=form2) {
+				continue;
+			}
+			
+			// C'est le notre !
+			main=input2;
+			break;
+		}
+		
+		if (!main) {
+			// On a un probleme d'algo !
+			continue;
+		}
+		
+		newViewState = input.value;
+		
+		if (!toRemove) {
+			toRemove = new Array;
+		}
+		toRemove.push(input);
+	}
+	
+	if (toRemove) {
+		for(var i=0;i<toRemove.length;i++) {
+			var node=toRemove[i];
+			
+			node.parentNode.removeChild(node);
+		}
+		
+		for(var j=0;j<inputs.length;j++) {
+			inputs[j].value=newViewState;
+		}
+	}
+};
 
 /**
  * @method hidden
@@ -551,5 +642,21 @@ f_classLoader.prototype._asyncSystemLoadBundle=function(bundleName) {
 	}
 	
 	f_core.AppendChild(document.body, script);
-}
+};
 
+
+/**
+ * @method hidden static
+ * @param HTMLElement htmlNode
+ * @param String newViewState
+ * @return void
+ */
+f_classLoader.ChangeJsfViewId = function(htmlNode, newViewState) {
+	var inputs = htmlNode.ownerDocument.getElementsByName("javax.faces.ViewState");
+
+	for(var i=0;i<inputs.length;i++) {
+		var input=inputs[i];
+	
+		input.value=newViewState;
+	}
+};

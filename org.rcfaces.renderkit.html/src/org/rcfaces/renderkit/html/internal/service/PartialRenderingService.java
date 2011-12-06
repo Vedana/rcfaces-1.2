@@ -258,7 +258,7 @@ public class PartialRenderingService extends AbstractHtmlService {
 
             jsWriter.writeMethodCall("f_updateNewPage").writeln(");");
 */
-            saveView(facesContext);
+            saveView(facesContext, null);
 
         } finally {
 
@@ -278,15 +278,6 @@ public class PartialRenderingService extends AbstractHtmlService {
 
             printWriter.write(cw.toCharArray());
         }
-    }
-
-    private void saveView(FacesContext facesContext) throws IOException {
-        StateManager stateManager = facesContext.getApplication()
-                .getStateManager();
-
-        Object state = stateManager.saveView(facesContext);
-
-        stateManager.writeState(facesContext, state);
     }
 
     public void setupComponent(IComponentRenderContext componentRenderContext) {

@@ -26,396 +26,409 @@ import org.rcfaces.core.internal.util.PathUtil;
  */
 public abstract class AbstractProcessContext implements IProcessContext {
 
-    private static final String REVISION = "$Revision$";
+	private static final Log LOG = LogFactory
+			.getLog(AbstractProcessContext.class);
 
-    private static final Log LOG = LogFactory
-            .getLog(AbstractProcessContext.class);
+	private static final String EXTERNAL_CONTEXT_PROPERTY = "org.rcfaces.renderkit.core.EXTERNAL_CONTEXT";
 
-    private static final String EXTERNAL_CONTEXT_PROPERTY = "org.rcfaces.renderkit.core.EXTERNAL_CONTEXT";
+	protected final RcfacesContext rcfacesContext;
 
-    protected final RcfacesContext rcfacesContext;
+	protected final FacesContext facesContext;
 
-    protected final FacesContext facesContext;
+	private final String contextPath;
 
-    private final String contextPath;
+	private final String servletPath;
 
-    private final String servletPath;
+	private String baseHREF;
 
-    private String baseHREF;
+	private Locale userLocale;
 
-    private Locale userLocale;
+	private boolean designerMode;
 
-    private boolean designerMode;
+	private boolean pageConfiguratorInitialized;
 
-    private boolean pageConfiguratorInitialized;
+	private Locale defaultAttributesLocale;
 
-    private Locale defaultAttributesLocale;
+	private String scriptType;
 
-    private String scriptType;
+	private TimeZone timeZone;
 
-    private TimeZone timeZone;
+	private Calendar calendar;
 
-    private Calendar calendar;
+	private TimeZone forcedDateTimeZone;
 
-    private TimeZone forcedDateTimeZone;
+	private TimeZone defaultTimeZone;
 
-    private TimeZone defaultTimeZone;
+	private Calendar forcedDateCalendar;
 
-    private Calendar forcedDateCalendar;
+	protected AbstractProcessContext(FacesContext facesContext) {
+		this.facesContext = facesContext;
 
-    protected AbstractProcessContext(FacesContext facesContext) {
-        this.facesContext = facesContext;
+		ExternalContext externalContext = facesContext.getExternalContext();
 
-        ExternalContext externalContext = facesContext.getExternalContext();
+		contextPath = externalContext.getRequestContextPath();
+		String servletPath = externalContext.getRequestServletPath();
+		int idx = servletPath.lastIndexOf('/');
+		if (idx >= 0) {
+			servletPath = servletPath.substring(0, idx);
+		}
 
-        contextPath = externalContext.getRequestContextPath();
-        String servletPath = externalContext.getRequestServletPath();
-        int idx = servletPath.lastIndexOf('/');
-        if (idx >= 0) {
-            servletPath = servletPath.substring(0, idx);
-        }
+		this.servletPath = servletPath;
 
-        this.servletPath = servletPath;
+		rcfacesContext = RcfacesContext.getInstance(facesContext);
 
-        rcfacesContext = RcfacesContext.getInstance(facesContext);
+		this.designerMode = rcfacesContext.isDesignerMode();
 
-        this.designerMode = rcfacesContext.isDesignerMode();
+	}
 
-    }
+	public final FacesContext getFacesContext() {
+		return facesContext;
+	}
 
-    public final FacesContext getFacesContext() {
-        return facesContext;
-    }
+	public Boolean getDebugMode() {
+		return null;
+	}
 
-    public Boolean getDebugMode() {
-        return null;
-    }
+	public Boolean getProfilerMode() {
+		return null;
+	}
 
-    public Boolean getProfilerMode() {
-        return null;
-    }
+	public boolean isDesignerMode() {
+		return designerMode;
+	}
 
-    public boolean isDesignerMode() {
-        return designerMode;
-    }
+	public final Locale getUserLocale() {
+		if (userLocale != null) {
+			return userLocale;
+		}
 
-    public final Locale getUserLocale() {
-        if (userLocale != null) {
-            return userLocale;
-        }
+		userLocale = ContextTools.getUserLocale(null);
 
-        userLocale = ContextTools.getUserLocale(null);
+		return userLocale;
+	}
 
-        return userLocale;
-    }
+	public Calendar getUserCalendar() {
+		if (calendar != null) {
+			return calendar;
+		}
 
-    public Calendar getUserCalendar() {
-        if (calendar != null) {
-            return calendar;
-        }
+		TimeZone timeZone = getUserTimeZone();
+		Locale locale = getUserLocale();
 
-        TimeZone timeZone = getUserTimeZone();
-        Locale locale = getUserLocale();
+		if (timeZone != null) {
+			calendar = Calendar.getInstance(timeZone, locale);
+			return calendar;
+		}
 
-        if (timeZone != null) {
-            calendar = Calendar.getInstance(timeZone, locale);
-            return calendar;
-        }
+		calendar = Calendar.getInstance(locale);
 
-        calendar = Calendar.getInstance(locale);
+		return calendar;
+	}
 
-        return calendar;
-    }
-
-    public TimeZone getUserTimeZone() {
-        if (timeZone != null) {
-            return timeZone;
-        }
-
-        timeZone = ContextTools.getUserTimeZone(null);
-
-        if (timeZone == null) {
-
-        }
-
-        return timeZone;
-    }
-
-    public final String getAbsolutePath(String uri, boolean containsContextPath) {
-
-        String contextPath;
-        if (containsContextPath) {
-            contextPath = this.contextPath;
-        } else {
-            contextPath = "";
-        }
-
-        if (uri == null || uri.length() < 1) {
-            // Retourne le context path
-
-            String p;
-            if (containsContextPath) {
-                p = contextPath + servletPath;
-            } else {
-                p = servletPath;
-            }
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Returns path='" + p + "' [uri=null]  ('"
-                        + contextPath + "''" + servletPath + "'.)");
-            }
-
-            return p;
-        }
-
-        if (uri.charAt(0) == '/') {
-            // URL absolue
-            String p;
-            if (containsContextPath) {
-                p = contextPath + uri;
-
-            } else if (uri.startsWith(this.contextPath)) {
-                p = uri.substring(this.contextPath.length());
-
-            } else {
-                p = uri;
-            }
-
-            p = PathUtil.normalizePath(p);
-            if (LOG.isDebugEnabled()) {
-                LOG
-                        .debug("Returns path='" + p + "' [uri=absolute]  ('"
-                                + contextPath + "''" + servletPath + "''" + uri
-                                + "'.)");
-            }
-            return p;
-        }
-
-        // C'est un URI relatif !
-
-        if (baseHREF != null) {
-            if (baseHREF.charAt(0) == '/') {
-                // base HREF absolue !
-
-                String p = PathUtil.normalizePath(baseHREF + uri);
-
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("Returns path='" + p
-                            + "' [uri=relative,baseHREF=absolute]  ('"
-                            + baseHREF + uri + "'.)");
-                }
-                return p;
-            }
-            // base HREF relatif !
-
-            String p = PathUtil.normalizePath(contextPath + servletPath + "/"
-                    + baseHREF + uri);
-
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Returns path='" + p
-                        + "' [uri=relative,baseHREF=relative]  ('"
-                        + contextPath + "''" + servletPath + "'/'" + baseHREF
-                        + uri + "'.)");
-            }
-            return p;
-        }
-
-        String p = PathUtil
-                .normalizePath(contextPath + servletPath + "/" + uri);
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Returns path='" + p
-                    + "' [uri=relative,baseHREF=null] ('" + contextPath + "''"
-                    + servletPath + "'/'" + uri + "'.)");
-        }
-        return p;
-    }
-
-    public final String getRelativePath(String uri) {
-        return null;
-    }
-
-    /*
-     * public final String computeFromContextPath(String uri, boolean
-     * canBeRelative) { String baseURI = getAbsolutePath(canBeRelative);
-     * 
-     * String ret; if (uri == null) { ret = baseURI; } / else if
-     * (baseURI.length() == 0) { if (uri.length() > 0) { } } /else {
-     * StringAppender u = new StringAppender(baseURI, uri.length() + 2);
-     * 
-     * if (baseURI.length() > 0) { u.append('/'); }
-     * 
-     * if (uri.length() > 0) { if (uri.charAt(0) == '/') {
-     * u.append(uri.substring(1)); } else if (u.length() > 1 &&
-     * u.charAt(u.length() - 1) == '/') { u.setLength(u.length() - 1);
-     * u.append(uri); } else { u.append(uri); } }
-     * 
-     * ret = u.toString(); }
-     * 
-     * if (Constants.ENCODE_URI) { ret = externalContext.encodeResourceURL(ret);
-     * }
-     * 
-     * if (LOG.isDebugEnabled()) { LOG.debug("Compute uri '" + uri + "' => '" +
-     * ret + "'."); }
-     * 
-     * return ret; }
-     */
-
-    public final String getBaseHREF() {
-        return baseHREF;
-    }
-
-    public final void changeBaseHREF(String baseHREF) {
-        String base = baseHREF;
-
-        if (base != null) {
-            base = normalizeBaseHREF(base);
-        }
-
-        this.baseHREF = base;
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Set baseHREF to '" + base + "' (param '" + baseHREF
-                    + "'.");
-        }
-    }
-
-    private String normalizeBaseHREF(String baseHREF) {
-        if (baseHREF.equals("/")) {
-            return baseHREF;
-        }
-
-        int idx = baseHREF.lastIndexOf('/'); // Retire le dernier segment qui
-        // doit être un fichier
-        if (idx < 1) {
-            return null;
-        }
-
-        baseHREF = baseHREF.substring(0, idx);
-
-        if (baseHREF.charAt(0) == '/') {
-            return baseHREF;
-        }
-
-        return PathUtil.normalizePath(contextPath + servletPath + baseHREF);
-    }
-
-    protected static void setProcessContext(IProcessContext externalContext) {
-        Map requestMap = externalContext.getFacesContext().getExternalContext()
-                .getRequestMap();
-        IProcessContext old = (IProcessContext) requestMap.put(
-                EXTERNAL_CONTEXT_PROPERTY, externalContext);
-        if (old != null) {
-            throw new FacesException("External constext is already defined ! ("
-                    + old + ")");
-        }
-    }
-
-    public static IProcessContext getProcessContext(FacesContext facesContext) {
-
-        if (facesContext == null) {
-            facesContext = FacesContext.getCurrentInstance();
-        }
-
-        ExternalContext externalContext = facesContext.getExternalContext();
-
-        Map requestMap = externalContext.getRequestMap();
-        return (IProcessContext) requestMap.get(EXTERNAL_CONTEXT_PROPERTY);
-
-    }
-
-    public final String getScriptType() {
-        initializePageConfigurator();
-
-        return scriptType;
-    }
-
-    public final Locale getDefaultLiteralLocale() {
-        initializePageConfigurator();
-
-        return defaultAttributesLocale;
-    }
-
-    public TimeZone getDefaultTimeZone() {
-        initializePageConfigurator();
-
-        return defaultTimeZone;
-    }
-
-    public TimeZone getForcedDateTimeZone() {
-        initializePageConfigurator();
-
-        return forcedDateTimeZone;
-    }
-
-    public Calendar getForcedDateCalendar() {
-        if (forcedDateCalendar != null) {
-            return forcedDateCalendar;
-        }
-
-        TimeZone timeZone = getForcedDateTimeZone();
-        if (timeZone == null) {
-            return null;
-        }
-
-        forcedDateCalendar = Calendar.getInstance(forcedDateTimeZone);
-
-        return forcedDateCalendar;
-    }
-
-    private void initializePageConfigurator() {
-        if (pageConfiguratorInitialized) {
-            return;
-        }
-
-        pageConfiguratorInitialized = true;
-
-        FacesContext facesContext = getFacesContext();
-
-        scriptType = PageConfiguration.getScriptType(facesContext);
-        defaultAttributesLocale = PageConfiguration
-                .getDefaultLiteralLocale(facesContext);
-
-        Map applicationMap = facesContext.getExternalContext()
-                .getApplicationMap();
-
-        defaultTimeZone = getTimeZone(applicationMap,
-                DEFAULT_TIMEZONE_PARAMETER);
-
-        forcedDateTimeZone = getTimeZone(applicationMap,
-                FORCED_DATE_TIMEZONE_PARAMETER);
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Page configurator of view "
-                    + facesContext.getViewRoot().getId() + ": scriptType="
-                    + scriptType + " defaultAttributesLocale="
-                    + defaultAttributesLocale);
-
-        }
-    }
-
-    private TimeZone getTimeZone(Map applicationMap,
-            String defaultTimezoneParameter) {
-
-        Object defaultTimeZone = applicationMap.get(defaultTimezoneParameter);
-        if ((defaultTimeZone instanceof String)
-                && ((String) defaultTimeZone).length() > 0) {
-            TimeZone timeZone = TimeZone.getTimeZone((String) defaultTimeZone);
-
-            if (timeZone == null) {
-                throw new FacesException("Can not get timeZone associated to '"
-                        + defaultTimeZone + "'");
-            }
-
-            applicationMap.put(defaultTimezoneParameter, timeZone);
-
-            return timeZone;
-        }
-
-        return (TimeZone) defaultTimeZone;
-    }
-
-    public RcfacesContext getRcfacesContext() {
-        return rcfacesContext;
-    }
+	public TimeZone getUserTimeZone() {
+		if (timeZone != null) {
+			return timeZone;
+		}
+
+		timeZone = ContextTools.getUserTimeZone(null);
+
+		if (timeZone == null) {
+
+		}
+
+		return timeZone;
+	}
+
+	public final String getAbsolutePath(String uri, boolean containsContextPath) {
+
+		String contextPath;
+		if (containsContextPath) {
+			contextPath = this.contextPath;
+		} else {
+			contextPath = "";
+		}
+
+		if (uri == null || uri.length() < 1) {
+			// Retourne le context path
+
+			String p;
+			if (containsContextPath) {
+				p = contextPath + servletPath;
+			} else {
+				p = servletPath;
+			}
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Returns path='" + p + "' [uri=null]  ('"
+						+ contextPath + "''" + servletPath + "'.)");
+			}
+
+			return p;
+		}
+
+		if (uri.charAt(0) == '/') {
+			// URL absolue
+			String p;
+			if (containsContextPath) {
+				p = contextPath + uri;
+
+			} else if (uri.startsWith(this.contextPath)) {
+				p = uri.substring(this.contextPath.length());
+
+			} else {
+				p = uri;
+			}
+
+			p = PathUtil.normalizePath(p);
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Returns path='" + p + "' [uri=absolute]  ('"
+						+ contextPath + "''" + servletPath + "''" + uri + "'.)");
+			}
+			return p;
+		}
+
+		// C'est un URI relatif !
+
+		if (baseHREF != null) {
+			if (baseHREF.charAt(0) == '/') {
+				// base HREF absolue !
+
+				String p = PathUtil.normalizePath(baseHREF + uri);
+
+				if (LOG.isDebugEnabled()) {
+					LOG.debug("Returns path='" + p
+							+ "' [uri=relative,baseHREF=absolute]  ('"
+							+ baseHREF + uri + "'.)");
+				}
+				return p;
+			}
+			// base HREF relatif !
+
+			String p = PathUtil.normalizePath(contextPath + servletPath + "/"
+					+ baseHREF + uri);
+
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Returns path='" + p
+						+ "' [uri=relative,baseHREF=relative]  ('"
+						+ contextPath + "''" + servletPath + "'/'" + baseHREF
+						+ uri + "'.)");
+			}
+			return p;
+		}
+
+		String p = PathUtil
+				.normalizePath(contextPath + servletPath + "/" + uri);
+
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Returns path='" + p
+					+ "' [uri=relative,baseHREF=null] ('" + contextPath + "''"
+					+ servletPath + "'/'" + uri + "'.)");
+		}
+		return p;
+	}
+
+	public final String getRelativePath(String uri) {
+		return null;
+	}
+
+	/*
+	 * public final String computeFromContextPath(String uri, boolean
+	 * canBeRelative) { String baseURI = getAbsolutePath(canBeRelative);
+	 * 
+	 * String ret; if (uri == null) { ret = baseURI; } / else if
+	 * (baseURI.length() == 0) { if (uri.length() > 0) { } } /else {
+	 * StringAppender u = new StringAppender(baseURI, uri.length() + 2);
+	 * 
+	 * if (baseURI.length() > 0) { u.append('/'); }
+	 * 
+	 * if (uri.length() > 0) { if (uri.charAt(0) == '/') {
+	 * u.append(uri.substring(1)); } else if (u.length() > 1 &&
+	 * u.charAt(u.length() - 1) == '/') { u.setLength(u.length() - 1);
+	 * u.append(uri); } else { u.append(uri); } }
+	 * 
+	 * ret = u.toString(); }
+	 * 
+	 * if (Constants.ENCODE_URI) { ret = externalContext.encodeResourceURL(ret);
+	 * }
+	 * 
+	 * if (LOG.isDebugEnabled()) { LOG.debug("Compute uri '" + uri + "' => '" +
+	 * ret + "'."); }
+	 * 
+	 * return ret; }
+	 */
+
+	public final String getBaseHREF() {
+		return baseHREF;
+	}
+
+	public final void changeBaseHREF(String baseHREF) {
+		String base = baseHREF;
+
+		if (base != null) {
+			base = normalizeBaseHREF(base);
+		}
+
+		this.baseHREF = base;
+
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Set baseHREF to '" + base + "' (param '" + baseHREF
+					+ "'.");
+		}
+	}
+
+	private String normalizeBaseHREF(String baseHREF) {
+		if (baseHREF.equals("/")) {
+			return baseHREF;
+		}
+
+		int idx = baseHREF.lastIndexOf('/'); // Retire le dernier segment qui
+		// doit être un fichier
+		if (idx < 1) {
+			return null;
+		}
+
+		baseHREF = baseHREF.substring(0, idx);
+
+		if (baseHREF.charAt(0) == '/') {
+			return baseHREF;
+		}
+
+		return PathUtil.normalizePath(contextPath + servletPath + baseHREF);
+	}
+
+	protected static void setProcessContext(IProcessContext externalContext) {
+		Map requestMap = externalContext.getFacesContext().getExternalContext()
+				.getRequestMap();
+		IProcessContext old = (IProcessContext) requestMap.put(
+				EXTERNAL_CONTEXT_PROPERTY, externalContext);
+		if (old != null) {
+			throw new FacesException("External constext is already defined ! ("
+					+ old + ")");
+		}
+	}
+
+	public static IProcessContext getProcessContext(FacesContext facesContext) {
+
+		if (facesContext == null) {
+			facesContext = FacesContext.getCurrentInstance();
+		}
+
+		ExternalContext externalContext = facesContext.getExternalContext();
+
+		Map<String, Object> requestMap = externalContext.getRequestMap();
+		IProcessContext processContext = (IProcessContext) requestMap
+				.get(EXTERNAL_CONTEXT_PROPERTY);
+
+		if (processContext == null) {
+			return new AbstractProcessContext(facesContext) {
+
+				@Override
+				public String getNamingSeparator() {
+					throw new IllegalStateException("Temporary process context");
+				}
+
+				@Override
+				public Boolean getMultiWindowMode() {
+					throw new IllegalStateException("Temporary process context");
+				}
+			};
+		}
+
+		return processContext;
+	}
+
+	public final String getScriptType() {
+		initializePageConfigurator();
+
+		return scriptType;
+	}
+
+	public final Locale getDefaultLiteralLocale() {
+		initializePageConfigurator();
+
+		return defaultAttributesLocale;
+	}
+
+	public TimeZone getDefaultTimeZone() {
+		initializePageConfigurator();
+
+		return defaultTimeZone;
+	}
+
+	public TimeZone getForcedDateTimeZone() {
+		initializePageConfigurator();
+
+		return forcedDateTimeZone;
+	}
+
+	public Calendar getForcedDateCalendar() {
+		if (forcedDateCalendar != null) {
+			return forcedDateCalendar;
+		}
+
+		TimeZone timeZone = getForcedDateTimeZone();
+		if (timeZone == null) {
+			return null;
+		}
+
+		forcedDateCalendar = Calendar.getInstance(forcedDateTimeZone);
+
+		return forcedDateCalendar;
+	}
+
+	private void initializePageConfigurator() {
+		if (pageConfiguratorInitialized) {
+			return;
+		}
+
+		pageConfiguratorInitialized = true;
+
+		FacesContext facesContext = getFacesContext();
+
+		scriptType = PageConfiguration.getScriptType(facesContext);
+		defaultAttributesLocale = PageConfiguration
+				.getDefaultLiteralLocale(facesContext);
+
+		Map applicationMap = facesContext.getExternalContext()
+				.getApplicationMap();
+
+		defaultTimeZone = getTimeZone(applicationMap,
+				DEFAULT_TIMEZONE_PARAMETER);
+
+		forcedDateTimeZone = getTimeZone(applicationMap,
+				FORCED_DATE_TIMEZONE_PARAMETER);
+
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Page configurator of view "
+					+ facesContext.getViewRoot().getId() + ": scriptType="
+					+ scriptType + " defaultAttributesLocale="
+					+ defaultAttributesLocale);
+
+		}
+	}
+
+	private TimeZone getTimeZone(Map applicationMap,
+			String defaultTimezoneParameter) {
+
+		Object defaultTimeZone = applicationMap.get(defaultTimezoneParameter);
+		if ((defaultTimeZone instanceof String)
+				&& ((String) defaultTimeZone).length() > 0) {
+			TimeZone timeZone = TimeZone.getTimeZone((String) defaultTimeZone);
+
+			if (timeZone == null) {
+				throw new FacesException("Can not get timeZone associated to '"
+						+ defaultTimeZone + "'");
+			}
+
+			applicationMap.put(defaultTimezoneParameter, timeZone);
+
+			return timeZone;
+		}
+
+		return (TimeZone) defaultTimeZone;
+	}
+
+	public RcfacesContext getRcfacesContext() {
+		return rcfacesContext;
+	}
 
 }

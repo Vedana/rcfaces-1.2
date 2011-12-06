@@ -765,6 +765,22 @@
 		</component>
 	</tag>
 	<tag>
+		<tag-name>toolTip</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.toolTip</component-type>
+			<renderer-type>org.rcfaces.core.toolTip</renderer-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>toolTipManager</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.toolTipManager</component-type>
+			<renderer-type>org.rcfaces.core.toolTipManager</renderer-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
 		<tag-name>convertByte</tag-name>
 		<converter>
 			<converter-id>org.rcfaces.Byte</converter-id>

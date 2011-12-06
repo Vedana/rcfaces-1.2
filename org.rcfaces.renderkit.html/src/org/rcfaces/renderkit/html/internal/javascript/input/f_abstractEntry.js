@@ -308,8 +308,7 @@ var __members = {
 	 * @return Number
 	 */
 	f_getMaxTextLength: f_class.ABSTRACT
-	
-}
+};
 
 new f_class("f_abstractEntry", {
 	extend: f_input,

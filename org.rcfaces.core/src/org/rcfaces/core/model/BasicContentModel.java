@@ -12,25 +12,23 @@ import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
  * @version $Revision$ $Date$
  */
 public class BasicContentModel extends AbstractContentModel {
-    private static final String REVISION = "$Revision$";
+	protected transient IGeneratedResourceInformation generatedInformation;
 
-    protected transient IGeneratedResourceInformation generatedInformation;
+	protected transient IGenerationResourceInformation generationInformation;
 
-    protected transient IGenerationResourceInformation generationInformation;
+	public BasicContentModel() {
+	}
 
-    public BasicContentModel() {
-    }
+	public BasicContentModel(Object value) {
+		super(value);
+	}
 
-    public BasicContentModel(Object value) {
-        super(value);
-    }
+	public void setInformations(
+			IGenerationResourceInformation generationInformation,
+			IGeneratedResourceInformation generatedInformation) {
+		super.setInformations(generationInformation, generatedInformation);
 
-    public void setInformations(
-            IGenerationResourceInformation generationInformation,
-            IGeneratedResourceInformation generatedInformation) {
-        super.setInformations(generationInformation, generatedInformation);
-
-        this.generationInformation = generationInformation;
-        this.generatedInformation = generatedInformation;
-    }
+		this.generationInformation = generationInformation;
+		this.generatedInformation = generatedInformation;
+	}
 }

@@ -26,18 +26,18 @@ public class SelectionTools extends CollectionTools {
     private static final Log LOG = LogFactory.getLog(SelectionTools.class);
 
     private static final IValuesAccessor SELECTION_PROVIDER_VALUES_ACCESSOR = new IValuesAccessor() {
-
-        public int getCount(Object checkProvider) {
-            return ((ISelectionProvider) checkProvider)
+		public int getCount(Object selectionProvider) {
+			return ((ISelectionProvider) selectionProvider)
                     .getSelectedValuesCount();
         }
 
-        public Object getFirst(Object checkProvider, Object refValues) {
-            return ((ISelectionProvider) checkProvider).getFirstSelectedValue();
+		public Object getFirst(Object selectionProvider, Object refValues) {
+			return ((ISelectionProvider) selectionProvider)
+					.getFirstSelectedValue();
         }
 
-        public Object[] listValues(Object checkProvider, Object refValues) {
-            return convertToObjectArray(((ISelectionProvider) checkProvider)
+		public Object[] listValues(Object selectionProvider, Object refValues) {
+			return convertToObjectArray(((ISelectionProvider) selectionProvider)
                     .getSelectedValues());
         }
 

@@ -45,6 +45,7 @@ public class ImageRenderer extends AbstractCssRenderer {
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
+		writeFirstTooltipClientId(htmlWriter);
 
         GeneratedImageInformation generatedImageInformation = null;
         IImageAccessors imageAccessors = (IImageAccessors) image
