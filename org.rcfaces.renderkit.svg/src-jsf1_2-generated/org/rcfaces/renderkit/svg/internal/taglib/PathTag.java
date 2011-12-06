@@ -57,139 +57,139 @@ public class PathTag extends NodeTag implements Tag {
 		return PathComponent.COMPONENT_TYPE;
 	}
 
-	public void setClip(ValueExpression clip) {
+	public final void setClip(ValueExpression clip) {
 		this.clip = clip;
 	}
 
-	public void setClipPath(ValueExpression clipPath) {
+	public final void setClipPath(ValueExpression clipPath) {
 		this.clipPath = clipPath;
 	}
 
-	public void setClipRule(ValueExpression clipRule) {
+	public final void setClipRule(ValueExpression clipRule) {
 		this.clipRule = clipRule;
 	}
 
-	public void setColor(ValueExpression color) {
+	public final void setColor(ValueExpression color) {
 		this.color = color;
 	}
 
-	public void setDisplay(ValueExpression display) {
+	public final void setDisplay(ValueExpression display) {
 		this.display = display;
 	}
 
-	public void setFill(ValueExpression fill) {
+	public final void setFill(ValueExpression fill) {
 		this.fill = fill;
 	}
 
-	public void setFillRule(ValueExpression fillRule) {
+	public final void setFillRule(ValueExpression fillRule) {
 		this.fillRule = fillRule;
 	}
 
-	public void setFillOpacity(ValueExpression fillOpacity) {
+	public final void setFillOpacity(ValueExpression fillOpacity) {
 		this.fillOpacity = fillOpacity;
 	}
 
-	public void setFontFamily(ValueExpression fontFamily) {
+	public final void setFontFamily(ValueExpression fontFamily) {
 		this.fontFamily = fontFamily;
 	}
 
-	public void setFontSize(ValueExpression fontSize) {
+	public final void setFontSize(ValueExpression fontSize) {
 		this.fontSize = fontSize;
 	}
 
-	public void setFontSizeAdjust(ValueExpression fontSizeAdjust) {
+	public final void setFontSizeAdjust(ValueExpression fontSizeAdjust) {
 		this.fontSizeAdjust = fontSizeAdjust;
 	}
 
-	public void setFontStretch(ValueExpression fontStretch) {
+	public final void setFontStretch(ValueExpression fontStretch) {
 		this.fontStretch = fontStretch;
 	}
 
-	public void setFontStyle(ValueExpression fontStyle) {
+	public final void setFontStyle(ValueExpression fontStyle) {
 		this.fontStyle = fontStyle;
 	}
 
-	public void setFontVariant(ValueExpression fontVariant) {
+	public final void setFontVariant(ValueExpression fontVariant) {
 		this.fontVariant = fontVariant;
 	}
 
-	public void setFontWeight(ValueExpression fontWeight) {
+	public final void setFontWeight(ValueExpression fontWeight) {
 		this.fontWeight = fontWeight;
 	}
 
-	public void setOpacity(ValueExpression opacity) {
+	public final void setOpacity(ValueExpression opacity) {
 		this.opacity = opacity;
 	}
 
-	public void setOverflow(ValueExpression overflow) {
+	public final void setOverflow(ValueExpression overflow) {
 		this.overflow = overflow;
 	}
 
-	public void setStopColor(ValueExpression stopColor) {
+	public final void setStopColor(ValueExpression stopColor) {
 		this.stopColor = stopColor;
 	}
 
-	public void setStopOpacity(ValueExpression stopOpacity) {
+	public final void setStopOpacity(ValueExpression stopOpacity) {
 		this.stopOpacity = stopOpacity;
 	}
 
-	public void setStroke(ValueExpression stroke) {
+	public final void setStroke(ValueExpression stroke) {
 		this.stroke = stroke;
 	}
 
-	public void setStrokeDashArray(ValueExpression strokeDashArray) {
+	public final void setStrokeDashArray(ValueExpression strokeDashArray) {
 		this.strokeDashArray = strokeDashArray;
 	}
 
-	public void setStrokeDashOffset(ValueExpression strokeDashOffset) {
+	public final void setStrokeDashOffset(ValueExpression strokeDashOffset) {
 		this.strokeDashOffset = strokeDashOffset;
 	}
 
-	public void setStrokeLineCap(ValueExpression strokeLineCap) {
+	public final void setStrokeLineCap(ValueExpression strokeLineCap) {
 		this.strokeLineCap = strokeLineCap;
 	}
 
-	public void setStrokeLineJoin(ValueExpression strokeLineJoin) {
+	public final void setStrokeLineJoin(ValueExpression strokeLineJoin) {
 		this.strokeLineJoin = strokeLineJoin;
 	}
 
-	public void setStrokeMiterLimit(ValueExpression strokeMiterLimit) {
+	public final void setStrokeMiterLimit(ValueExpression strokeMiterLimit) {
 		this.strokeMiterLimit = strokeMiterLimit;
 	}
 
-	public void setStrokeOpacity(ValueExpression strokeOpacity) {
+	public final void setStrokeOpacity(ValueExpression strokeOpacity) {
 		this.strokeOpacity = strokeOpacity;
 	}
 
-	public void setStrokeWidth(ValueExpression strokeWidth) {
+	public final void setStrokeWidth(ValueExpression strokeWidth) {
 		this.strokeWidth = strokeWidth;
 	}
 
-	public void setTextAlign(ValueExpression textAlign) {
+	public final void setTextAlign(ValueExpression textAlign) {
 		this.textAlign = textAlign;
 	}
 
-	public void setTextAnchor(ValueExpression textAnchor) {
+	public final void setTextAnchor(ValueExpression textAnchor) {
 		this.textAnchor = textAnchor;
 	}
 
-	public void setTextDecoration(ValueExpression textDecoration) {
+	public final void setTextDecoration(ValueExpression textDecoration) {
 		this.textDecoration = textDecoration;
 	}
 
-	public void setTextRendering(ValueExpression textRendering) {
+	public final void setTextRendering(ValueExpression textRendering) {
 		this.textRendering = textRendering;
 	}
 
-	public void setVisibility(ValueExpression visibility) {
+	public final void setVisibility(ValueExpression visibility) {
 		this.visibility = visibility;
 	}
 
-	public void setWordSpacing(ValueExpression wordSpacing) {
+	public final void setWordSpacing(ValueExpression wordSpacing) {
 		this.wordSpacing = wordSpacing;
 	}
 
-	public void setWritingMode(ValueExpression writingMode) {
+	public final void setWritingMode(ValueExpression writingMode) {
 		this.writingMode = writingMode;
 	}
 

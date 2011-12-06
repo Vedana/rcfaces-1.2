@@ -303,42 +303,28 @@ A boolean value indicating wether the composant is visible.
 			<name>bottom</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
-				<type>double</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<name>horizontalCenter</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>double</type>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
 			<name>left</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
-				<type>double</type>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
 			<name>right</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
-				<type>double</type>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
 			<name>top</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
-				<type>double</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<name>verticalCenter</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>double</type>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -867,42 +853,28 @@ A boolean value indicating wether the composant is visible.
 			<name>bottom</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
-				<type>double</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<name>horizontalCenter</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>double</type>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
 			<name>left</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
-				<type>double</type>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
 			<name>right</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
-				<type>double</type>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
 			<name>top</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
-				<type>double</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<name>verticalCenter</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>double</type>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>

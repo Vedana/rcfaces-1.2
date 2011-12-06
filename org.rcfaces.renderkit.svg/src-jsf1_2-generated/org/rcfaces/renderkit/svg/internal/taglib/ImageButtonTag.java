@@ -35,51 +35,51 @@ public class ImageButtonTag extends ImageTag implements Tag {
 		return ImageButtonComponent.COMPONENT_TYPE;
 	}
 
-	public void setDisabled(ValueExpression disabled) {
+	public final void setDisabled(ValueExpression disabled) {
 		this.disabled = disabled;
 	}
 
-	public void setAccessKey(ValueExpression accessKey) {
+	public final void setAccessKey(ValueExpression accessKey) {
 		this.accessKey = accessKey;
 	}
 
-	public void setTabIndex(ValueExpression tabIndex) {
+	public final void setTabIndex(ValueExpression tabIndex) {
 		this.tabIndex = tabIndex;
 	}
 
-	public void setBlurListener(ValueExpression blurListeners) {
+	public final void setBlurListener(ValueExpression blurListeners) {
 		this.blurListeners = blurListeners;
 	}
 
-	public void setFocusListener(ValueExpression focusListeners) {
+	public final void setFocusListener(ValueExpression focusListeners) {
 		this.focusListeners = focusListeners;
 	}
 
-	public void setKeyUpListener(ValueExpression keyUpListeners) {
+	public final void setKeyUpListener(ValueExpression keyUpListeners) {
 		this.keyUpListeners = keyUpListeners;
 	}
 
-	public void setKeyDownListener(ValueExpression keyDownListeners) {
+	public final void setKeyDownListener(ValueExpression keyDownListeners) {
 		this.keyDownListeners = keyDownListeners;
 	}
 
-	public void setKeyPressListener(ValueExpression keyPressListeners) {
+	public final void setKeyPressListener(ValueExpression keyPressListeners) {
 		this.keyPressListeners = keyPressListeners;
 	}
 
-	public void setImmediate(ValueExpression immediate) {
+	public final void setImmediate(ValueExpression immediate) {
 		this.immediate = immediate;
 	}
 
-	public void setValidationListener(ValueExpression validationListeners) {
+	public final void setValidationListener(ValueExpression validationListeners) {
 		this.validationListeners = validationListeners;
 	}
 
-	public void setSelectionListener(ValueExpression selectionListeners) {
+	public final void setSelectionListener(ValueExpression selectionListeners) {
 		this.selectionListeners = selectionListeners;
 	}
 
-	public void setFocusStyleClass(ValueExpression focusStyleClass) {
+	public final void setFocusStyleClass(ValueExpression focusStyleClass) {
 		this.focusStyleClass = focusStyleClass;
 	}
 
