@@ -27,38 +27,16 @@ import org.rcfaces.core.internal.converter.TextPositionConverter;
  * <p>The dateChooser Component is a button that shows a calendar and help the user to choose a date. It can be associated to a entry field, the choosen date is then automatically entered in the field. It works like an <a href="/comps/imageButtonComponent.html">Image Button Component</a>. The dateChooser Component does <b>not</b> provide an Entry field.</p>
  * <p>The dateChooser Component has the following capabilities :
  * <ul>
- * <li>IImageButtonFamilly,
- * <li>IValueChangeEventCapability,
- * <li>IForCapability,
- * <li>ICalendarLayoutCapability</li>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text, font &amp; image</li>
+ * <li>Margin &amp; border</li>
+ * <li>Help</li>
+ * <li>Visibility, Read-Only, Disabled</li>
+ * <li>Events Handling</li>
+ * <li>Association with another component</li>
  * </ul>
  * </p>
- * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/DateChooserComponent.html">dateChooser</a> renderer is link to the <a href="/jsdocs/index.html?f_dateChooser.html" target="_blank">f_dateChooser</a> javascript class. f_dateChooser extends f_imageButton, fa_calendarPopup</p>
- * 
- * <p> Table of component style classes: </p>
- * <table border="1" cellpadding="3" cellspacing="0" width="100%">
- * <tbody>
- * 
- * <tr style="text-align:left">
- * <th  width="33%">Style Name</th>
- * <th width="50%">Description</th>
- * </tr>
- * 
- * <tr  style="text-align:left">
- * <td width="33%">f_dateChooser</td>
- * <td id="ermvsh" width="50%">Defines styles for the wrapper DIV element.</td>
- * </tr>
- * <tr  style="text-align:left">
- * <td width="33%">f_dateChooser_image</td>
- * <td id="ermvsh" width="50%">Defines styles for the wrapper IMG element for the calendar icone  .</td>
- * </tr>
- * <tr  style="text-align:left">
- * <td width="33%">f_dateChooser_popup</td>
- * <td id="ermvsh" width="50%">Defines styles for the wrapper DIV element for the calendar pop-up.</td>
- * </tr>
- * </tbody>
- * </table>
  */
 public class DateChooserComponent extends AbstractCalendarComponent implements 
 	IImageButtonFamilly,

@@ -277,6 +277,8 @@
 	</facesComponent>
 
 	<component id="abstractBasic" abstract="true" extends="cameliaBase">
+		<implements id="org.rcfaces.core.internal.capability.IAnchoredPositionSettings" />		
+
 		<capability id="IUnlockedClientAttributesCapability" />
 		<capability id="IPartialRenderingCapability" />
 
@@ -288,6 +290,7 @@
 		<capability id="IWAIRoleCapability" />
 
 		<capability id="IPositionCapability" />
+		<capability id="IAnchoredPositionCapability" />
 		<capability id="ISizeCapability" />
 		<capability id="IMarginCapability" />
 		<capability id="IHelpCapability" />
@@ -763,7 +766,7 @@
 		<propertyValue>selected</propertyValue>
 	</component>
 
-	<!--<component id="checkButton3States" extends="abstractInput">
+	<component id="checkButton3States" extends="abstractInput">
 		<capability id="ITextCapability" />
 		<capability id="ITextDirectionCapability" />
 		<capability id="IHorizontalTextPositionCapability" />
@@ -797,7 +800,7 @@
 		<propertyValue>selectedState</propertyValue>
 	</component>
 
-	--><component id="combo" extends="abstractInput">
+	<component id="combo" extends="abstractInput">
 		<capability id="ISelectionEventCapability" />
 		<capability id="IRequiredCapability" />
 		<capability id="IFocusStyleClassCapability" />
@@ -2640,14 +2643,14 @@ Dans le cas d'un mode period !
 	<component id="imageSubmitButton" extends="imageButton">
 	</component>	
 	
-	<!--<component id="helpMessageZone" extends="abstractOutput">
+	<component id="helpMessageZone" extends="abstractOutput">
 		<capability id="ITextCapability" />
 		<capability id="ITextDirectionCapability" />
 		<capability id="IFontCapability" />
 		<capability id="ITextAlignmentCapability" />
 	</component>	
 
-	--><component id="hyperLink" extends="button">
+	<component id="hyperLink" extends="button">
 		<implements id="org.rcfaces.core.internal.capability.IConvertValueHolder" />
 			
 		<method id="setConverter(String)"/>
@@ -3140,7 +3143,7 @@ Dans le cas d'un mode period !
 		<attribute id="indeterminate" type="boolean" />		
 	</component>
 
-	<!--<component id="progressIndicator" extends="abstractBasic">
+	<component id="progressIndicator" extends="abstractBasic">
 		<implements id="javax.faces.component.NamingContainer" />
 		<template>
 			<import>org.rcfaces.core.component.ProgressBarComponent</import>
@@ -3156,7 +3159,7 @@ Dans le cas d'un mode period !
 		<attribute id="indeterminate" type="boolean" />		
 	</component>
 
-	--><component id="suggestTextEntry" extends="textEntry">
+	<component id="suggestTextEntry" extends="textEntry">
 		<capability id="IFilterCapability"/>
 		<capability id="IMaxResultNumberCapability"/>
 		<capability id="ISuggestionEventCapability" />
@@ -3231,7 +3234,10 @@ Dans le cas d'un mode period !
 	</component>	
 
 	<component id="ruler" extends="cameliaBase">
+		<implements id="org.rcfaces.core.internal.capability.IAnchoredPositionSettings" />		
+
 		<capability id="IPositionCapability" />
+		<capability id="IAnchoredPositionCapability" />
 		<capability id="IMarginCapability" />
 		<capability id="ISizeCapability" />
 		<capability id="IVisibilityCapability" />
@@ -3350,7 +3356,6 @@ Dans le cas d'un mode period !
 	<component id="tabbedPane" extends="cardBox">
 		<capability id="ICloseEventCapability" />
 		<capability id="IClosableCapability" />
-		<capability id="IPreSelectionEventCapability" />
 		
 		<!-- Affiche le titre de l'onglet -->
 		<capability id="IShowValueCapability"/>
@@ -3747,7 +3752,6 @@ Dans le cas d'un mode period !
 
 		<capability id="ILoadEventCapability" />
 		<capability id="IExpandEventCapability" />
-		<capability id="IPreSelectionEventCapability" />
 
 		<capability id="IDragEventCapability" />
 		<capability id="IDraggableCapability" />
@@ -4166,7 +4170,6 @@ Dans le cas d'un mode period !
 		<capability id="ILiteralLocaleCapability" />
 		<capability id="ILiteralTimeZoneCapability" />
 		<capability id="IStyleClassCapability"/>
-		<capability id="ITabIndexCapability"/>
 		
 		<capability id="IImmediateCapability" forceComponent="true"/>
 		
@@ -4420,6 +4423,8 @@ Dans le cas d'un mode period !
 		<method id="listServerDataKeys(javax.faces.context.FacesContext)" />
 		
 		<method id="setFilterProperties(String)" returnType="void" />
+		
+		<behaviorEvent id="service" />
 	</component>
 
 <!--

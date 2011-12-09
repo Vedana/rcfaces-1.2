@@ -20,33 +20,14 @@ import org.rcfaces.core.internal.converter.TextPositionConverter;
  * <p>The imageRadioButton Component is a <a href="/comps/radioButtonComponent.html">radioButton Component</a> with an image instead of the rounded box.</p>
  * <p>The imageRadioButton Component has the following capabilities :
  * <ul>
- * <li>IImageButtonFamilly </li>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text &amp; font</li>
+ * <li>Help</li>
+ * <li>Visibility, Read-Only, Disabled</li>
+ * <li>Events Handling</li>
  * </ul>
  * </p>
- * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageRadioButtonComponent.html">imageRadioButton</a> renderer is linked to the <a href="/jsdocs/index.html?f_imageRadioButton.html" target="_blank">f_imageRadioButton</a> javascript class. f_imageRadioButton extends f_imageCheckButton, fa_groupName, fa_required</p>
- * 
- * <p> Table of component style classes: </p>
- * <table border="1" cellpadding="3" cellspacing="0" width="100%">
- * <tbody>
- * 
- * <tr style="text-align:left">
- * <th  width="33%">Style Name</th>
- * <th width="50%">Description</th>
- * </tr>
- * 
- * <tr  style="text-align:left">
- * <td width="33%">f_imageRadioButton</td>
- * <td width="50%">Defines styles for the wrapper A element</td>
- * </tr>
- * 
- * <tr  style="text-align:left">
- * <td width="33%">f_imageRadioButton_image</td>
- * <td width="50%">Defines styles for the  IMG element</td>
- * </tr>
- * 
- * </tbody>
- * </table>
  */
 public class ImageRadioButtonComponent extends RadioButtonComponent implements 
 	IImageButtonFamilly {

@@ -9,6 +9,8 @@ import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.manager.ITransientAttributesManager;
 
 /**
@@ -18,6 +20,9 @@ import org.rcfaces.core.internal.manager.ITransientAttributesManager;
 public abstract class AbstractComponentRenderContext implements
         IComponentRenderContext {
     private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory
+            .getLog(AbstractComponentRenderContext.class);
 
     private static final String ATTRIBUTES_MAP = "org.rcfaces.core.RENDER_CONTEXT_ATTRIBUTES";
 

@@ -38,7 +38,7 @@ public interface IProcessContext {
 
     Boolean getProfilerMode();
 
-    boolean isDesignerMode();
+    IDesignerInterface getDesignerInterface();
 
     Locale getUserLocale();
 

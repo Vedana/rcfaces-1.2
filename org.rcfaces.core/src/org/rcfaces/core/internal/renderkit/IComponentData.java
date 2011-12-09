@@ -4,6 +4,8 @@
  */
 package org.rcfaces.core.internal.renderkit;
 
+import java.io.Serializable;
+
 import org.rcfaces.core.internal.IReleasable;
 
 /**
@@ -16,9 +18,9 @@ public interface IComponentData extends IProperties, IReleasable, IEventData {
 
     String[] getComponentParameters();
 
-    String getParameter(String parameterName);
+    String getParameter(Serializable parameterName);
 
-    String[] getParameters(String parameterName);
+    String[] getParameters(Serializable parameterName);
 
     boolean isEventComponent();
 }

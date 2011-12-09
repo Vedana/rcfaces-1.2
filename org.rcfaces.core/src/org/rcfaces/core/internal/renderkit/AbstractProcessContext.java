@@ -45,7 +45,7 @@ public abstract class AbstractProcessContext implements IProcessContext {
 
     private Locale userLocale;
 
-    private boolean designerMode;
+    private IDesignerInterface designerMode;
 
     private boolean pageConfiguratorInitialized;
 
@@ -79,7 +79,9 @@ public abstract class AbstractProcessContext implements IProcessContext {
 
         rcfacesContext = RcfacesContext.getInstance(facesContext);
 
-        this.designerMode = rcfacesContext.isDesignerMode();
+        if (rcfacesContext.isDesignerMode()) {
+            this.designerMode = new DefaultDesignerInterface();
+        }
 
     }
 
@@ -95,7 +97,7 @@ public abstract class AbstractProcessContext implements IProcessContext {
         return null;
     }
 
-    public boolean isDesignerMode() {
+    public IDesignerInterface getDesignerInterface() {
         return designerMode;
     }
 
@@ -182,10 +184,8 @@ public abstract class AbstractProcessContext implements IProcessContext {
 
             p = PathUtil.normalizePath(p);
             if (LOG.isDebugEnabled()) {
-                LOG
-                        .debug("Returns path='" + p + "' [uri=absolute]  ('"
-                                + contextPath + "''" + servletPath + "''" + uri
-                                + "'.)");
+                LOG.debug("Returns path='" + p + "' [uri=absolute]  ('"
+                        + contextPath + "''" + servletPath + "''" + uri + "'.)");
             }
             return p;
         }

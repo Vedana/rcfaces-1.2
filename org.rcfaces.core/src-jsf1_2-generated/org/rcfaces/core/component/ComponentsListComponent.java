@@ -19,39 +19,7 @@ import java.util.Arrays;
 import org.rcfaces.core.component.capability.IMenuCapability;
 
 /**
- * <p>The componentslist component Shows the components for each data with pagination.</p>
- * <p>The componentslist Component has the following capabilities :
- * <ul>
- * <li>IMenuCapability</li>
- * <li>IBorderCapability</li>
- * <li>IBorderTypeCapability</li>
- * <li>IScrollableCapability</li>
- * <li>IShowValueCapability </li>
- * </ul>
- * </p>
- * 
- * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ComponentsListComponent.html"> componentsList </a> renderer is link to the <a href="/jsdocs/index.html?f_componentsGrid.html" target="_blank">f_componentslist</a> javascript class. f_componentslist extends f_component, fa_pagedComponent</p>
- * 
- * <p> Table of component style classes: </p>
- * <table border="1" cellpadding="3" cellspacing="0" width="100%">
- * <tbody>
- * 
- * <tr style="text-align:left">
- * <th  width="33%">Style Name</th>
- * <th width="50%">Description</th>
- * </tr>
- * 
- * <tr  style="text-align:left">
- * <td width="33%">f_componentslist</td>
- * <td id="ermvsh" width="50%">Defines styles for the wrapper DIV element. Contains a Table</td>
- * </tr>
- * <tr  style="text-align:left">
- * <td width="33%">f_componentslist_cell</td>
- * <td id="ermvsh" width="50%">Defines styles for the wrapper TD element for the row.</td>
- * </tr>
- * </tbody>
- * </table>
+ * Shows the components for each data with pagination.
  */
 public class ComponentsListComponent extends AbstractDataComponent implements 
 	IMenuCapability,

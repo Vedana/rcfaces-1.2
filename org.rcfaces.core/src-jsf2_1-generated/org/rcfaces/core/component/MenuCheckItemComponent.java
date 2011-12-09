@@ -1,0 +1,32 @@
+package org.rcfaces.core.component;
+
+import org.rcfaces.core.component.MenuItemComponent;
+import org.rcfaces.core.internal.component.Properties;
+import org.apache.commons.logging.Log;
+import java.util.HashSet;
+import org.apache.commons.logging.LogFactory;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.Collection;
+
+/**
+ * A menu item with a check.
+ */
+public class MenuCheckItemComponent extends MenuItemComponent {
+
+	private static final Log LOG = LogFactory.getLog(MenuCheckItemComponent.class);
+
+	public static final String COMPONENT_TYPE="org.rcfaces.core.menuCheckItem";
+
+	protected static final Collection<String> BEHAVIOR_EVENT_NAMES=MenuItemComponent.BEHAVIOR_EVENT_NAMES;
+
+	public MenuCheckItemComponent() {
+		setRendererType(null);
+	}
+
+	public MenuCheckItemComponent(String componentId) {
+		this();
+		setId(componentId);
+	}
+
+}

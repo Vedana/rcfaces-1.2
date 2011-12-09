@@ -4,6 +4,7 @@
  */
 package org.rcfaces.core.internal.tools;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Map;
 
@@ -35,16 +36,16 @@ public final class FilterExpressionTools {
 
         private static final long serialVersionUID = -3817846186098661680L;
 
-        public boolean containsKey(String propertyName) {
+        public boolean containsKey(Serializable propertyName) {
             return false;
         }
 
-        public Object put(String filterName, Object value) {
+        public Object put(Serializable filterName, Object value) {
             throw new UnsupportedOperationException(
                     "Not supported for EMPTY filtersMap !");
         }
 
-        public Object remove(String filterName) {
+        public Object remove(Serializable filterName) {
             throw new UnsupportedOperationException(
                     "Not supported for EMPTY filtersMap !");
         }
@@ -89,31 +90,31 @@ public final class FilterExpressionTools {
         public void setTransient(boolean newTransientValue) {
         }
 
-        public Object getProperty(String name) {
+        public Object getProperty(Serializable name) {
             return null;
         }
 
-        public String getStringProperty(String name) {
+        public String getStringProperty(Serializable name) {
             return null;
         }
 
-        public String getStringProperty(String name, String defaultValue) {
+        public String getStringProperty(Serializable name, String defaultValue) {
             return defaultValue;
         }
 
-        public boolean getBoolProperty(String name, boolean defaultValue) {
+        public boolean getBoolProperty(Serializable name, boolean defaultValue) {
             return defaultValue;
         }
 
-        public Boolean getBooleanProperty(String name) {
+        public Boolean getBooleanProperty(Serializable name) {
             return null;
         }
 
-        public int getIntProperty(String name, int defaultValue) {
+        public int getIntProperty(Serializable name, int defaultValue) {
             return defaultValue;
         }
 
-        public Number getNumberProperty(String name) {
+        public Number getNumberProperty(Serializable name) {
             return null;
         }
 

@@ -10,6 +10,7 @@ package org.rcfaces.core.internal.capability;
  */
 public interface IRCFacesComponent {
     // boolean isClientRendered();
-    
+
+  
     void clearListeners();
 }

@@ -11,18 +11,22 @@ import java.net.URL;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
 public class ClassLocator {
-    private static final String REVISION = "$Revision$";
+    private static final Log LOG = LogFactory.getLog(ClassLocator.class);
 
     public static final Class load(String className, Object fallback,
             Object context) throws ClassNotFoundException {
 
         ClassNotFoundException thOrigin = null;
+        RuntimeException rtOrigin = null;
 
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
         if (cl != null) {
@@ -32,6 +36,19 @@ public class ClassLocator {
             } catch (ClassNotFoundException ex) {
                 if (thOrigin == null) {
                     thOrigin = ex;
+                }
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Find class '" + className + "'", ex);
+                }
+
+            } catch (RuntimeException ex) {
+                if (rtOrigin == null) {
+                    rtOrigin = ex;
+                }
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Find class '" + className + "'", ex);
                 }
             }
         }
@@ -51,6 +68,21 @@ public class ClassLocator {
                 if (thOrigin == null) {
                     thOrigin = ex;
                 }
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Find class '" + className + "' fallbackClass="
+                            + cls, ex);
+                }
+
+            } catch (RuntimeException ex) {
+                if (rtOrigin == null) {
+                    rtOrigin = ex;
+                }
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Find class '" + className + "' fallbackClass="
+                            + cls, ex);
+                }
             }
         }
 
@@ -60,6 +92,19 @@ public class ClassLocator {
         } catch (ClassNotFoundException ex) {
             if (thOrigin == null) {
                 thOrigin = ex;
+            }
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Find class '" + className + "' (classLocator)", ex);
+            }
+
+        } catch (RuntimeException ex) {
+            if (rtOrigin == null) {
+                rtOrigin = ex;
+            }
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Find class '" + className + "' (classLocator)", ex);
             }
         }
 
@@ -80,12 +125,31 @@ public class ClassLocator {
                 if (thOrigin == null) {
                     thOrigin = ex;
                 }
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Find class '" + className + "' (context="
+                            + context + ")", ex);
+                }
+
+            } catch (RuntimeException ex) {
+                if (rtOrigin == null) {
+                    rtOrigin = ex;
+                }
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Find class '" + className + "' (context="
+                            + context + ")", ex);
+                }
             }
         }
 
         if (thOrigin == null) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Can not find class '" + className + "'.");
+            }
+
             thOrigin = new ClassNotFoundException("Can not find class '"
-                    + className + "'.");
+                    + className + "'.", rtOrigin);
         }
 
         throw thOrigin;
@@ -98,25 +162,42 @@ public class ClassLocator {
 
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
         if (cl != null) {
-            URL url = cl.getResource(resourceLocation);
+            URL url = null;
+            try {
+                url = cl.getResource(resourceLocation);
 
-            if (testURL(url, thOrigin)) {
+            } catch (RuntimeException ex) {
+                LOG.debug("Resource not found '" + resourceLocation + "'.", ex);
+            }
+
+            if (url != null && testURL(url, thOrigin)) {
                 return url;
             }
         }
 
         if (fallback != null) {
-            URL url = fallback.getClass().getClassLoader().getResource(
-                    resourceLocation);
-            if (testURL(url, thOrigin)) {
-                return url;
+            try {
+                URL url = fallback.getClass().getClassLoader()
+                        .getResource(resourceLocation);
+                if (url != null && testURL(url, thOrigin)) {
+                    return url;
+                }
+
+            } catch (RuntimeException ex) {
+                LOG.debug("Resource not found '" + resourceLocation + "'.", ex);
             }
         }
 
-        URL url = ClassLocator.class.getClassLoader().getResource(
-                resourceLocation);
-        if (testURL(url, thOrigin)) {
-            return url;
+        try {
+            URL url = ClassLocator.class.getClassLoader().getResource(
+                    resourceLocation);
+
+            if (url != null && testURL(url, thOrigin)) {
+                return url;
+            }
+
+        } catch (RuntimeException ex) {
+            LOG.debug("Resource not found '" + resourceLocation + "'.", ex);
         }
 
         if (context instanceof FacesContext) {
@@ -129,10 +210,15 @@ public class ClassLocator {
         }
 
         if (context instanceof ClassLoader) {
-            url = ((ClassLoader) context).getResource(resourceLocation);
+            try {
+                URL url = ((ClassLoader) context).getResource(resourceLocation);
 
-            if (testURL(url, thOrigin)) {
-                return url;
+                if (url != null && testURL(url, thOrigin)) {
+                    return url;
+                }
+
+            } catch (RuntimeException ex) {
+                LOG.debug("Resource not found '" + resourceLocation + "'.", ex);
             }
         }
 

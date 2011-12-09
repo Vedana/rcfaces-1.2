@@ -42,6 +42,10 @@ public abstract class AbstractOutputTag extends CameliaTag implements Tag {
 	private ValueExpression waiRole;
 	private ValueExpression mouseOutListeners;
 	private ValueExpression mouseOverListeners;
+	private ValueExpression bottomPosition;
+	private ValueExpression leftPosition;
+	private ValueExpression rightPosition;
+	private ValueExpression topPosition;
 	private ValueExpression unlockedClientAttributeNames;
 	private ValueExpression initListeners;
 	private ValueExpression propertyChangeListeners;
@@ -146,6 +150,22 @@ public abstract class AbstractOutputTag extends CameliaTag implements Tag {
 		this.mouseOverListeners = mouseOverListeners;
 	}
 
+	public final void setBottomPosition(ValueExpression bottomPosition) {
+		this.bottomPosition = bottomPosition;
+	}
+
+	public final void setLeftPosition(ValueExpression leftPosition) {
+		this.leftPosition = leftPosition;
+	}
+
+	public final void setRightPosition(ValueExpression rightPosition) {
+		this.rightPosition = rightPosition;
+	}
+
+	public final void setTopPosition(ValueExpression topPosition) {
+		this.topPosition = topPosition;
+	}
+
 	public final void setUnlockedClientAttributeNames(ValueExpression unlockedClientAttributeNames) {
 		this.unlockedClientAttributeNames = unlockedClientAttributeNames;
 	}
@@ -200,6 +220,10 @@ public abstract class AbstractOutputTag extends CameliaTag implements Tag {
 			LOG.debug("  ariaLabel='"+ariaLabel+"'");
 			LOG.debug("  ariaLevel='"+ariaLevel+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
+			LOG.debug("  bottomPosition='"+bottomPosition+"'");
+			LOG.debug("  leftPosition='"+leftPosition+"'");
+			LOG.debug("  rightPosition='"+rightPosition+"'");
+			LOG.debug("  topPosition='"+topPosition+"'");
 			LOG.debug("  unlockedClientAttributeNames='"+unlockedClientAttributeNames+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  valueLocked='"+valueLocked+"'");
@@ -413,6 +437,42 @@ public abstract class AbstractOutputTag extends CameliaTag implements Tag {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.MOUSE_OVER_LISTENER_TYPE, mouseOverListeners);
 		}
 
+		if (bottomPosition != null) {
+			if (bottomPosition.isLiteralText()==false) {
+				component.setValueExpression(Properties.BOTTOM_POSITION, bottomPosition);
+
+			} else {
+				component.setBottomPosition(getInt(bottomPosition.getExpressionString()));
+			}
+		}
+
+		if (leftPosition != null) {
+			if (leftPosition.isLiteralText()==false) {
+				component.setValueExpression(Properties.LEFT_POSITION, leftPosition);
+
+			} else {
+				component.setLeftPosition(getInt(leftPosition.getExpressionString()));
+			}
+		}
+
+		if (rightPosition != null) {
+			if (rightPosition.isLiteralText()==false) {
+				component.setValueExpression(Properties.RIGHT_POSITION, rightPosition);
+
+			} else {
+				component.setRightPosition(getInt(rightPosition.getExpressionString()));
+			}
+		}
+
+		if (topPosition != null) {
+			if (topPosition.isLiteralText()==false) {
+				component.setValueExpression(Properties.TOP_POSITION, topPosition);
+
+			} else {
+				component.setTopPosition(getInt(topPosition.getExpressionString()));
+			}
+		}
+
 		if (unlockedClientAttributeNames != null) {
 			if (unlockedClientAttributeNames.isLiteralText()==false) {
 				component.setValueExpression(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, unlockedClientAttributeNames);
@@ -499,6 +559,10 @@ public abstract class AbstractOutputTag extends CameliaTag implements Tag {
 		waiRole = null;
 		mouseOutListeners = null;
 		mouseOverListeners = null;
+		bottomPosition = null;
+		leftPosition = null;
+		rightPosition = null;
+		topPosition = null;
 		unlockedClientAttributeNames = null;
 		initListeners = null;
 		propertyChangeListeners = null;

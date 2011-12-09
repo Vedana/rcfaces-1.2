@@ -59,56 +59,7 @@ import org.rcfaces.core.internal.converter.AdditionalInformationCardinalityConve
 import org.rcfaces.core.component.ComponentsColumnComponent;
 
 /**
- * <p>The componentGrid Component is a grid component. It can be compared to the grid found in the list part of the modern file explorer. It allows sorts, resizing, contextual menus ...</p>
- * <p>The componentGrid Component is an evolution of <a href="/comps/dataGridComponent.html">dataGrid component</a>. This component is a component container, it allows to:
- * <ul>
- * <li>ISelectionEventCapability</li>
- * <li>ISelectableCapability</li>
- * <li>ISelectionCardinalityCapability</li>
- * <li>ISelectedValuesCapability</li>
- * <li>IClientSelectionFullStateCapability</li>
- * <li>IAdditionalInformationEventCapability</li>
- * <li>IAdditionalInformationValuesCapability</li>
- * <li>IClientAdditionalInformationFullStateCapability</li>
- * <li>IAdditionalInformationCardinalityCapability</li>
- * <li>IDoubleClickEventCapability</li>
- * <li>ILoadEventCapability</li>
- * <li>IRequiredCapability</li>
- * <li>IBorderCapability</li>
- * <li>IRowStyleClassCapability</li>
- * <li>IShowValueCapability</li>
- * <li>IEmptyDataMessageCapability</li>
- * <li>IMenuCapability</li>
- * <li>IScrollableCapability</li>
- * <li>IPreferencesSettings</li>
- * <li>IPagedCapability</li>
- * <li>IHeaderVisibilityCapability</li>
- * <li>IGridComponent</li>
- * <li>IOrderedChildrenCapability</li>
- * <li>ISortedChildrenCapability</li>
- * <li>IComponentValueTypeCapability</li>
- * <li>ISelectionRangeComponent</li>
- * <li>ISortedComponentsCapability</li>
- * <li>IAdditionalInformationRangeComponent</li>
- * </ul></p>
- * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ComponentsGridComponent.html"> componentsGrid </a> renderer is link to the <a href="/jsdocs/index.html?f_componentsGrid.html" target="_blank">f_componentsGrid</a> javascript class. f_componentsGrid extends f_grid</p>
- * 
- * <p> Table of component style classes: </p>
- * <table border="1" cellpadding="3" cellspacing="0" width="100%">
- * <tbody>
- * 
- * <tr style="text-align:left">
- * <th  width="33%">Style Name</th>
- * <th width="50%">Description</th>
- * </tr>
- * 
- * <tr  style="text-align:left">
- * <td width="33%">f_componentsGrid</td>
- * <td id="ermvsh" width="50%">Defines styles for the wrapper DIV element. Contains f_grid styles.</td>
- * </tr>
- * </tbody>
- * </table>
+ * Reserved for future use
  */
 public class ComponentsGridComponent extends AbstractDataComponent implements 
 	ISelectionEventCapability,

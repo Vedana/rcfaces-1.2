@@ -40,42 +40,14 @@ import org.rcfaces.core.component.capability.ITextCapability;
  * <p>The textEntry Component is based on the standard HTML tag &lt;INPUT TYPE="text"&gt;.</p>
  * <p>The textEntry Component has the following capabilities :
  * <ul>
- * <li>IRequiredCapability</li>
- * <li>IAutoTabCapability</li>
- * <li>ITextCapability</li>
- * <li>ITextDirectionCapability</li>
- * <li>IEmptyMessageCapability</li>
- * <li>IReadOnlyCapability</li>
- * <li>IValueChangeEventCapability</li>
- * <li>IMenuCapability</li>
- * <li>IFocusStyleClassCapability</li>
- * <li>ISeverityStyleClassCapability</li>
- * <li>IAlternateTextCapability</li>
- * <li>IMaxTextLengthCapability</li>
- * <li>IClientValidationCapability</li>
- * <li>ISelectionEventCapability</li>
- * <li>IValidationParameters </li>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text &amp; font</li>
+ * <li>Help</li>
+ * <li>Visibility, Read-Only, Disabled</li>
+ * <li>Events Handling</li>
  * </ul>
  * </p>
- * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TextEntryComponent.html">textEntry</a> renderer is linked to the <a href="/jsdocs/index.html?f_textEntry.html" target="_blank">f_textEntry</a> javascript class. f_textEntry extends f_abstractEntry</p>
- * 
- * <p> Table of component style classes: </p>
- * <table border="1" cellpadding="3" cellspacing="0" width="100%">
- * <tbody>
- * 
- * <tr style="text-align:left">
- * <th  width="33%">Style Name</th>
- * <th width="50%">Description</th>
- * </tr>
- * 
- * <tr  style="text-align:left">
- * <td width="33%">f_textEntry</td>
- * <td width="50%">Defines styles for the wrapper element</td>
- * </tr>
- * 
- * </tbody>
- * </table>
  */
 public class TextEntryComponent extends AbstractInputComponent implements 
 	IRequiredCapability,
@@ -160,12 +132,12 @@ public class TextEntryComponent extends AbstractInputComponent implements
 
 		FacesContext facesContext=getFacesContext();
 
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "ValidationParameter", false);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "ValidationParameter", false);
 		if (dataMapAccessor==null) {
 			return null;
 		}
  
- 		IDataMapAccessor clientMapAccessor=engine.getDataMapAccessor(facesContext, "ClientValidationParameter", false);
+ 		IDataMapAccessor clientMapAccessor=getDataMapAccessor(facesContext, "ClientValidationParameter", false);
 		if (clientMapAccessor!=null) {
 			clientMapAccessor.removeData(name, facesContext);
 		}
@@ -188,7 +160,7 @@ public class TextEntryComponent extends AbstractInputComponent implements
 			facesContext=getFacesContext();
 		}
 
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "ValidationParameter", false);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "ValidationParameter", false);
 		if (dataMapAccessor==null) {
 			return null;
 		}
@@ -203,7 +175,7 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		if (facesContext==null) {
 			facesContext=getFacesContext();
 		}
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "ValidationParameter", false);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "ValidationParameter", false);
 		if (dataMapAccessor==null) {
 			return 0;
 		}
@@ -219,7 +191,7 @@ public class TextEntryComponent extends AbstractInputComponent implements
 			facesContext=getFacesContext();
 		}
 		
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "ValidationParameter", false);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "ValidationParameter", false);
 		if (dataMapAccessor==null) {
 			return Collections.EMPTY_MAP;
 		}
@@ -235,7 +207,7 @@ public class TextEntryComponent extends AbstractInputComponent implements
 			facesContext=getFacesContext();
 		}
 		
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "ValidationParameter", false);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "ValidationParameter", false);
 		if (dataMapAccessor==null) {
 			return Collections.EMPTY_MAP;
 		}
@@ -245,7 +217,7 @@ public class TextEntryComponent extends AbstractInputComponent implements
 			return Collections.EMPTY_MAP;
 		}
 		
-		IDataMapAccessor clientMapAccessor=engine.getDataMapAccessor(facesContext, "ClientValidationParameter", false);
+		IDataMapAccessor clientMapAccessor=getDataMapAccessor(facesContext, "ClientValidationParameter", false);
 		if (clientMapAccessor==null) {
 			if (Constants.READ_ONLY_COLLECTION_LOCK_ENABLED) {
 				map=Collections.unmodifiableMap(map);
@@ -286,15 +258,15 @@ public class TextEntryComponent extends AbstractInputComponent implements
 
 
 		FacesContext facesContext=getFacesContext();
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "ValidationParameter", true);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "ValidationParameter", true);
 		if (client) {
 			// On retire la limitation au niveau client si besoin !
-			IDataMapAccessor clientMapAccessor=engine.getDataMapAccessor(facesContext, "ClientValidationParameter", false);
+			IDataMapAccessor clientMapAccessor=getDataMapAccessor(facesContext, "ClientValidationParameter", false);
 			if (clientMapAccessor!=null) {
 				clientMapAccessor.removeData(name, facesContext);
 			}
 		} else {
-			IDataMapAccessor clientMapAccessor=engine.getDataMapAccessor(facesContext, "ClientValidationParameter", true);
+			IDataMapAccessor clientMapAccessor=getDataMapAccessor(facesContext, "ClientValidationParameter", true);
 			clientMapAccessor.setData(name, Boolean.FALSE, facesContext);
 		}
             
@@ -309,7 +281,7 @@ public class TextEntryComponent extends AbstractInputComponent implements
 			facesContext=getFacesContext();
 		}
 		
-		IDataMapAccessor clientMapAccessor=engine.getDataMapAccessor(facesContext, "ClientValidationParameter", false);
+		IDataMapAccessor clientMapAccessor=getDataMapAccessor(facesContext, "ClientValidationParameter", false);
 		if (clientMapAccessor==null) {
 			return false;
 		}

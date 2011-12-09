@@ -3,6 +3,8 @@
  */
 package org.rcfaces.core.internal.tools;
 
+import java.io.Serializable;
+
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.ToolBarComponent;
@@ -225,6 +227,15 @@ public class ImageAccessorTools {
                 return imageContentAccessor;
             }
         };
+    }
+
+    private static IContentAccessor createSubAccessor(
+            FacesContext facesContext, IComponentEngine engine,
+            Serializable attributeName,
+            IContentAccessor rootImageContentAccessor) {
+
+        return createSubAccessor(facesContext, engine,
+                String.valueOf(attributeName), rootImageContentAccessor);
     }
 
     private static IContentAccessor createSubAccessor(

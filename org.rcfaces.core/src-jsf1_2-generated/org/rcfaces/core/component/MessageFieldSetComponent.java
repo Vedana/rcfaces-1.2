@@ -13,6 +13,23 @@ import org.rcfaces.core.component.capability.IForCapability;
 import org.rcfaces.core.component.capability.ISeverityImagesCapability;
 import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 
+/**
+ * <p>The messageFieldSet Component is a <a href="/comps/fieldSetComponent.html">fieldSet Component</a> combined with a <a href="/comps/messageComponent.html">message COmponent</a> in the title part.</p>
+ * <p>The messageFieldSet Component has the following capabilities :
+ * <ul>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text, font &amp; image</li>
+ * <li>Margin &amp; border</li>
+ * <li>Help</li>
+ * <li>Visibility</li>
+ * <li>Background Image</li>
+ * <li>Events Handling</li>
+ * <li>Contextual Menu</li>
+ * <li>Async Render (AJAX)</li>
+ * </ul>
+ * </p>
+ */
 public class MessageFieldSetComponent extends FieldSetComponent implements 
 	IForCapability,
 	ISeverityStyleClassCapability,

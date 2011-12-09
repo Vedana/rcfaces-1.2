@@ -1,8 +1,8 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
-import org.rcfaces.core.internal.converter.DragDropEffectsConverter;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.DragDropEffectsConverter;
 import javax.faces.component.UISelectItem;
 import org.rcfaces.core.component.capability.IOverStyleClassCapability;
 import org.rcfaces.core.component.capability.ISelectableCapability;
@@ -10,7 +10,6 @@ import org.rcfaces.core.internal.tools.SelectionTools;
 import org.rcfaces.core.component.capability.ILoadEventCapability;
 import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability;
-import org.rcfaces.core.component.capability.IPreSelectionEventCapability;
 import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.capability.IDragEventCapability;
@@ -69,76 +68,16 @@ import org.rcfaces.core.component.AbstractInputComponent;
  * It allows contextual menus ...</p>
  * <p>The tree Component has the following capabilities :
  * <ul>
- * <li>IDoubleClickEventCapability</li>
- * <li>IRequiredCapability</li>
- * <li>IScrollableCapability</li>
- * <li>IBorderCapability</li>
- * <li>IReadOnlyCapability</li>
- * <li>IMenuCapability</li>
- * <li>IShowValueCapability</li>
- * <li>IOverStyleClassCapability</li>
- * <li>IFilterCapability</li>
- * <li>ILoadEventCapability</li>
- * <li>IExpandEventCapability</li>
- * <li>IPreSelectionEventCapability</li>
- * <li>IDragEventCapability</li>
- * <li>IDraggableCapability</li>
- * <li>IDropEventCapability</li>
- * <li>IDropCompleteEventCapability</li>
- * <li>IDroppableCapability</li>
- * <li>ICheckableCapability</li>
- * <li>ICheckCardinalityCapability</li>
- * <li>ICheckEventCapability</li>
- * <li>ICheckedValuesCapability</li>
- * <li>IClientCheckFullStateCapability</li>
- * <li>ISelectableCapability</li>
- * <li>ISelectionCardinalityCapability</li>
- * <li>ISelectionEventCapability</li>
- * <li>ISelectedValuesCapability</li>
- * <li>IClientSelectionFullStateCapability</li>
- * <li>IPreloadedLevelDepthCapability</li>
- * <li>IExpandableCapability</li>
- * <li>IExpandedValuesCapability</li>
- * <li>ICheckComponent</li>
- * <li>ISelectionComponent</li>
- * <li>IComponentValueTypeCapability</li>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text, font &amp; images</li>
+ * <li>Margin &amp; border</li>
+ * <li>Help</li>
+ * <li>Visibility, Read-Only, Disabled</li>
+ * <li>Events Handling</li>
+ * <li>Contextual actions in node or tree scope</li>
  * </ul>
  * </p>
- * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TreeComponent.html">tree</a> renderer is linked to the <a href="/jsdocs/index.html?f_tree.html" target="_blank">f_tree</a> javascript class. f_tree extends f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager<String[]>, fa_checkManager, fa_itemClientDatas, fa_scrollPositions, fa_overStyleClass, fa_filterProperties, fa_droppable, fa_draggable, fa_autoScroll, fa_autoOpen</p>
- * 
- * <p> Table of component style classes: </p>
- * <table border="1" cellpadding="3" cellspacing="0" width="100%">
- * <tbody>
- * 
- * <tr style="text-align:left">
- * <th  width="33%">Style Name</th>
- * <th width="50%">Description</th>
- * </tr>
- * 
- * <tr  style="text-align:left">
- * <td width="33%">f_tree</td>
- * <td width="50%">Defines styles for the wrapper DIV element</td>
- * </tr>
- * <tr  style="text-align:left">
- * <td width="33%">f_tree_body</td>
- * <td width="50%">Defines styles for the wrapper UL element</td>
- * </tr>
- * <tr  style="text-align:left">
- * <td width="33%">f_tree_parent</td>
- * <td width="50%">Defines styles for the wrapper LI element of the parent nodes</td>
- * </tr>
- * <tr  style="text-align:left">
- * <td width="33%">f_tree_depth</td>
- * <td width="50%">Defines styles for the DIV element of the depth node</td>
- * </tr>
- * <tr  style="text-align:left">
- * <td width="33%">f_tree_node</td>
- * <td width="50%">Defines styles for the DIV element of the node</td>
- * </tr>
- * 
- * </tbody>
- * </table>
  */
 public class TreeComponent extends AbstractInputComponent implements 
 	IDoubleClickEventCapability,
@@ -152,7 +91,6 @@ public class TreeComponent extends AbstractInputComponent implements
 	IFilterCapability,
 	ILoadEventCapability,
 	IExpandEventCapability,
-	IPreSelectionEventCapability,
 	IDragEventCapability,
 	IDraggableCapability,
 	IDropEventCapability,
@@ -181,7 +119,7 @@ public class TreeComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"checkListener","preloadedLevelDepth","selectionCardinality","droppable","defaultDisabledLeafImageURL","dragListener","dragTypes","checkable","checkCardinality","dropListener","dropEffects","overStyleClass","loadListener","checkedValues","selectionListener","defaultLeafImageURL","showValue","verticalScrollPosition","defaultSelectedLeafImageURL","cursorValue","border","required","clientSelectionFullState","preSelectionListener","bodyDroppable","defaultCollapsedImageURL","defaultExpandedImageURL","filterProperties","defaultDisabledImageURL","defaultImageURL","dragEffects","clientCheckFullState","expandListener","doubleClickListener","selectedValues","horizontalScrollPosition","dropCompleteListener","dropTypes","expansionUseValue","readOnly","selectable","expandedValues","hideRootExpandSign","defaultSelectedImageURL","defaultExpandedLeafImageURL","draggable","expandable"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"checkListener","preloadedLevelDepth","selectionCardinality","droppable","defaultDisabledLeafImageURL","dragListener","dragTypes","checkable","checkCardinality","dropListener","dropEffects","overStyleClass","loadListener","checkedValues","selectionListener","defaultLeafImageURL","showValue","verticalScrollPosition","defaultSelectedLeafImageURL","cursorValue","border","required","clientSelectionFullState","bodyDroppable","defaultCollapsedImageURL","defaultExpandedImageURL","filterProperties","defaultDisabledImageURL","defaultImageURL","dragEffects","expandListener","doubleClickListener","clientCheckFullState","selectedValues","horizontalScrollPosition","dropCompleteListener","dropTypes","expansionUseValue","readOnly","selectable","expandedValues","hideRootExpandSign","defaultSelectedImageURL","defaultExpandedLeafImageURL","draggable","expandable"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="value";
 
@@ -717,18 +655,6 @@ public class TreeComponent extends AbstractInputComponent implements
 
 	public final javax.faces.event.FacesListener [] listExpandListeners() {
 		return getFacesListeners(org.rcfaces.core.event.IExpandListener.class);
-	}
-
-	public final void addPreSelectionListener(org.rcfaces.core.event.IPreSelectionListener listener) {
-		addFacesListener(listener);
-	}
-
-	public final void removePreSelectionListener(org.rcfaces.core.event.IPreSelectionListener listener) {
-		removeFacesListener(listener);
-	}
-
-	public final javax.faces.event.FacesListener [] listPreSelectionListeners() {
-		return getFacesListeners(org.rcfaces.core.event.IPreSelectionListener.class);
 	}
 
 	public final void addDragListener(org.rcfaces.core.event.IDragListener listener) {

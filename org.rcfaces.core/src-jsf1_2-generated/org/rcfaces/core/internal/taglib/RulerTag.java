@@ -20,6 +20,10 @@ public class RulerTag extends CameliaTag implements Tag {
 
 	private ValueExpression x;
 	private ValueExpression y;
+	private ValueExpression bottomPosition;
+	private ValueExpression leftPosition;
+	private ValueExpression rightPosition;
+	private ValueExpression topPosition;
 	private ValueExpression marginBottom;
 	private ValueExpression marginLeft;
 	private ValueExpression marginRight;
@@ -45,6 +49,22 @@ public class RulerTag extends CameliaTag implements Tag {
 
 	public final void setY(ValueExpression y) {
 		this.y = y;
+	}
+
+	public final void setBottomPosition(ValueExpression bottomPosition) {
+		this.bottomPosition = bottomPosition;
+	}
+
+	public final void setLeftPosition(ValueExpression leftPosition) {
+		this.leftPosition = leftPosition;
+	}
+
+	public final void setRightPosition(ValueExpression rightPosition) {
+		this.rightPosition = rightPosition;
+	}
+
+	public final void setTopPosition(ValueExpression topPosition) {
+		this.topPosition = topPosition;
 	}
 
 	public final void setMarginBottom(ValueExpression marginBottom) {
@@ -114,6 +134,10 @@ public class RulerTag extends CameliaTag implements Tag {
 			}
 			LOG.debug("  x='"+x+"'");
 			LOG.debug("  y='"+y+"'");
+			LOG.debug("  bottomPosition='"+bottomPosition+"'");
+			LOG.debug("  leftPosition='"+leftPosition+"'");
+			LOG.debug("  rightPosition='"+rightPosition+"'");
+			LOG.debug("  topPosition='"+topPosition+"'");
 			LOG.debug("  marginBottom='"+marginBottom+"'");
 			LOG.debug("  marginLeft='"+marginLeft+"'");
 			LOG.debug("  marginRight='"+marginRight+"'");
@@ -157,6 +181,42 @@ public class RulerTag extends CameliaTag implements Tag {
 
 			} else {
 				component.setY(y.getExpressionString());
+			}
+		}
+
+		if (bottomPosition != null) {
+			if (bottomPosition.isLiteralText()==false) {
+				component.setValueExpression(Properties.BOTTOM_POSITION, bottomPosition);
+
+			} else {
+				component.setBottomPosition(getInt(bottomPosition.getExpressionString()));
+			}
+		}
+
+		if (leftPosition != null) {
+			if (leftPosition.isLiteralText()==false) {
+				component.setValueExpression(Properties.LEFT_POSITION, leftPosition);
+
+			} else {
+				component.setLeftPosition(getInt(leftPosition.getExpressionString()));
+			}
+		}
+
+		if (rightPosition != null) {
+			if (rightPosition.isLiteralText()==false) {
+				component.setValueExpression(Properties.RIGHT_POSITION, rightPosition);
+
+			} else {
+				component.setRightPosition(getInt(rightPosition.getExpressionString()));
+			}
+		}
+
+		if (topPosition != null) {
+			if (topPosition.isLiteralText()==false) {
+				component.setValueExpression(Properties.TOP_POSITION, topPosition);
+
+			} else {
+				component.setTopPosition(getInt(topPosition.getExpressionString()));
 			}
 		}
 
@@ -297,6 +357,10 @@ public class RulerTag extends CameliaTag implements Tag {
 	public void release() {
 		x = null;
 		y = null;
+		bottomPosition = null;
+		leftPosition = null;
+		rightPosition = null;
+		topPosition = null;
 		marginBottom = null;
 		marginLeft = null;
 		marginRight = null;

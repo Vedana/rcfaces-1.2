@@ -4,7 +4,6 @@
 package org.rcfaces.core.internal.renderkit;
 
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -42,16 +41,18 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
     private final String defaultUnlockedProperties[];
 
     protected AbstractCameliaRenderer0() {
-        Set unlockedProperties = new HashSet();
-        addUnlockProperties(unlockedProperties);
+        /*
+         * Set unlockedProperties = new HashSet();
+         * addUnlockProperties(unlockedProperties);
+         * 
+         * if (unlockedProperties.isEmpty() == false) {
+         * defaultUnlockedProperties = (String[]) unlockedProperties
+         * .toArray(new String[unlockedProperties.size()]);
+         * 
+         * } else { defaultUnlockedProperties = EMPTY_STRING_ARRAY; }
+         */
 
-        if (unlockedProperties.isEmpty() == false) {
-            defaultUnlockedProperties = (String[]) unlockedProperties
-                    .toArray(new String[unlockedProperties.size()]);
-
-        } else {
-            defaultUnlockedProperties = EMPTY_STRING_ARRAY;
-        }
+        defaultUnlockedProperties = EMPTY_STRING_ARRAY;
     }
 
     protected void addUnlockProperties(Set unlockedProperties) {
@@ -62,6 +63,7 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
         return defaultUnlockedProperties;
     }
 
+    @Override
     public final void encodeBegin(FacesContext context, UIComponent component)
             throws IOException {
 
@@ -115,6 +117,7 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
                 Boolean.TRUE);
     }
 
+    @Override
     public void encodeChildren(FacesContext facesContext, UIComponent component)
             throws IOException {
         if ((this instanceof IAsyncRenderer) == false) {
@@ -136,12 +139,13 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
         super.encodeChildren(facesContext, component);
     }
 
+    @Override
     public boolean getRendersChildren() {
         if ((this instanceof IAsyncRenderer) == false) {
             return false;
         }
 
-        if (RcfacesContext.isJSF1_2()) {
+        if (RcfacesContext.isJSF1_2() || RcfacesContext.isJSF2_0()) {
             // En jsf 1.2 nous sommes forcement en parcours d'arbre
             return true;
         }
@@ -159,6 +163,7 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
         return true;
     }
 
+    @Override
     public void encodeEnd(FacesContext context, UIComponent component)
             throws IOException {
 
@@ -205,7 +210,7 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
             IPartialRenderingCapability partialRenderingCapability = (IPartialRenderingCapability) component;
 
             if (partialRenderingCapability.isPartialRendering()) {
-                
+
             }
         }
 
@@ -216,19 +221,6 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
     }
 
     protected abstract IRequestContext getRequestContext(FacesContext context);
-
-    public final void decode(FacesContext context, UIComponent component) {
-
-        IRequestContext requestContext = getRequestContext(context);
-
-        String requestComponentId = getRequestComponentId(requestContext,
-                component);
-
-        IComponentData componentData = requestContext.getComponentData(
-                component, requestComponentId, this);
-
-        decode(requestContext, component, componentData);
-    }
 
     protected String getRequestComponentId(IRequestContext requestContext,
             UIComponent component) {
@@ -274,6 +266,7 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
         return ValuesTools.valueToString(value, component, facesContext);
     }
 
+    @Override
     public Object getConvertedValue(FacesContext context,
             UIComponent component, Object submittedValue)
             throws ConverterException {

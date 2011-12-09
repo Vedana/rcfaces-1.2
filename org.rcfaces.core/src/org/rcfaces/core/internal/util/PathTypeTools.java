@@ -17,8 +17,6 @@ import org.rcfaces.core.internal.renderkit.IProcessContext;
  * @version $Revision$ $Date$
  */
 public class PathTypeTools {
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory.getLog(PathTypeTools.class);
 
     public static String convertAbsolutePathToContextType(

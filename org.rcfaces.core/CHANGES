@@ -1,15 +1,5 @@
-ariaLabel :
-Ajout de l'attribut ariaLabel
-
-ListenerManager:
-Ajout d'un nouveau paramètre d'initialisation. 
-Permet de contrôler stratégie de gestion des listener à chaque chargement des composants
-
-IPreSelectionListener:
-Ajout du listener de pré-sélection
-
-scheduler:
-Ajout du composant planning.
+Format de génération des images:
+Permet d'utiliser les informations passées en parametre pour l'adaptation
 
 ComboGrid:
 Ajout des attributs forceValue, forLabel, valueFormatLabel et novalueFormatLabel.

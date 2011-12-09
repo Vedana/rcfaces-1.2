@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="src-jsf2_0"/>
+	<classpathentry kind="src" path="src-jsf2_0-generated"/>
+	<classpathentry kind="src" path="src-valueExpression"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-digester.jar" sourcepath="C:/Documents and Settings/oeuillot/Mes documents/Mes librairies JAVA/commons-digester-1.6/src/src/java"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-logging.jar" sourcepath="C:/Documents and Settings/oeuillot/Mes documents/Mes librairies JAVA/commons-logging-1.1/src/java"/>
+	<classpathentry exported="true" kind="lib" path="lib/jstl.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.9.jar" sourcepath="C:/Documents and Settings/oeuillot/Mes documents/Mes librairies JAVA/log4j-1.2.13/src/java"/>
+	<classpathentry kind="lib" path="lib/jsf2_0/jsf-api.jar" sourcepath="/jsf-2_0_3"/>
+	<classpathentry kind="lib" path="lib/jsf2_0/jsf-impl.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.5.0_12"/>
+	<classpathentry kind="lib" path="lib/jsf2_0/el-api.jar"/>
+	<classpathentry kind="lib" path="lib/jsf2_0/jsp-api.jar"/>
+	<classpathentry kind="lib" path="lib/jsf2_0/servlet-api.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

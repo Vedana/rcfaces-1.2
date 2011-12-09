@@ -20,25 +20,6 @@ import java.util.Set;
  * <li>Events Handling</li>
  * </ul>
  * </p>
- * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/PasswordEntrykComponent.html">passwordEntry</a> renderer is linked to the <a href="/jsdocs/index.html?f_passwordEntry.html" target="_blank">f_passwordEntry</a> javascript class. f_passwordEntry extends f_textEntry</p>
- * 
- * <p> Table of component style classes: </p>
- * <table border="1" cellpadding="3" cellspacing="0" width="100%">
- * <tbody>
- * 
- * <tr style="text-align:left">
- * <th  width="33%">Style Name</th>
- * <th width="50%">Description</th>
- * </tr>
- * 
- * <tr  style="text-align:left">
- * <td width="33%">f_passwordEntry</td>
- * <td width="50%">Defines styles for the INPUT element</td>
- * </tr>
- * 
- * </tbody>
- * </table>
  */
 public class PasswordEntryComponent extends TextEntryComponent {
 

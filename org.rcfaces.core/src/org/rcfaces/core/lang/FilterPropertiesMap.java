@@ -1,5 +1,6 @@
 package org.rcfaces.core.lang;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -52,8 +53,8 @@ public final class FilterPropertiesMap extends AbstractProperties implements
         return map.isEmpty();
     }
 
-    public Object put(String key, Object value) {
-        return map.put(key, value);
+    public Object put(Serializable key, Object value) {
+        return map.put(key.toString(), value);
     }
 
     public void putAll(Map t) {
@@ -76,16 +77,16 @@ public final class FilterPropertiesMap extends AbstractProperties implements
         map.putAll(t);
     }
 
-    public Object remove(String key) {
-        return map.remove(key);
+    public Object remove(Serializable key) {
+        return map.remove(key.toString());
     }
 
     public int size() {
         return map.size();
     }
 
-    public boolean containsKey(String propertyName) {
-        return map.containsKey(propertyName);
+    public boolean containsKey(Serializable propertyName) {
+        return map.containsKey(propertyName.toString());
     }
 
     public String[] listNames() {
@@ -135,8 +136,8 @@ public final class FilterPropertiesMap extends AbstractProperties implements
     public void setTransient(boolean newTransientValue) {
     }
 
-    public Object getProperty(String name) {
-        return map.get(name);
+    public Object getProperty(Serializable name) {
+        return map.get(name.toString());
     }
 
     public int hashCode() {

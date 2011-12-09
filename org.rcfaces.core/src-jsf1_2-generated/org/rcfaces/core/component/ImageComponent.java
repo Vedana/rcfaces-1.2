@@ -24,34 +24,15 @@ import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
  * <p>The image Component shows an image (it's equivalent to &lt;img .../&gt;).</p>
  * <p>The image Component has the following capabilities :
  * <ul>
- * <li>IImageCapability</li>
- * <li>IImageSizeCapability</li>
- * <li>IAlternateTextCapability</li>
- * <li>IFilterCapability</li>
- * <li>IImageAccessorsCapability</li>      </ul>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Image</li>
+ * <li>Margin</li>
+ * <li>Help</li>
+ * <li>Visibility</li>
+ * <li>Events Handling</li>
+ * </ul>
  * </p>
- * 
- * 
- * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageComponent.html">image</a> renderer is linked to the <a href="/jsdocs/index.html?f_image.html" target="_blank">f_image</a> javascript class. f_image extends f_filtredComponent</p>
- * 
- * <p> Table of component style classes: </p>
- * <table border="1" cellpadding="3" cellspacing="0" width="100%">
- * <tbody>
- * 
- * <tr style="text-align:left">
- * <th  width="33%">Style Name</th>
- * <th width="50%">Description</th>
- * </tr>
- * 
- * <tr  style="text-align:left">
- * <td width="33%">f_image</td>
- * <td width="50%">Defines styles for the wrapper IMG element</td>
- * </tr>
- * 
- * 
- * </tbody>
- * </table>
  */
 public class ImageComponent extends AbstractOutputComponent implements 
 	IImageCapability,

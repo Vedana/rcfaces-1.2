@@ -28,45 +28,6 @@ import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
 
-/**
- * <p>The viewDialog component represents popup modal view. It is based on the standard HTML tag &lt;IFrame&gt;.  </p>
- * 
- * <p>The viewDialog Component has the following capabilities :
- * <ul>
- * <li>IImageCapability</li>
- * <li>IStyleClassCapability</li>
- * <li>ITextCapability</li>
- * <li>ITextDirectionCapability</li>
- * <li>IVisibilityCapability</li>
- * <li>IDialogPriorityCapability</li>
- * <li>ISizeCapability</li>
- * <li>IHiddenModeCapability</li>
- * <li>ILookAndFeelCapability</li>
- * <li>IWAIRoleCapability</li>
- * <li>ICloseEventCapability</li>
- * <li>IClosableCapability</li>
- * <li>IImmediateCapability</li>
- * <li>IImageAccessorsCapability </li>
- * </ul>
- * </p>
- * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ViewDialogComponent.html">viewDialog</a> renderer is linked to the <a href="/jsdocs/index.html?f_viewDialog.html" target="_blank">f_viewDialog</a> javascript class. f_viewDialog extends f_dialog, fa_immediate </p>
- * <p> Table of component style classes: </p>
- * <table border="1" cellpadding="3" cellspacing="0" width="100%">
- * <tbody>
- * 
- * <tr style="text-align:left">
- * <th  width="33%">Style Name</th>
- * <th width="50%">Description</th>
- * </tr>
- * 
- * <tr  style="text-align:left">
- * <td width="33%">f_viewDialog</td>
- * <td width="50%">Defines styles for the wrapper FRAME element</td>
- * </tr>
- * </tbody>
- * </table>
- */
 public class ViewDialogComponent extends CameliaOutputComponent implements 
 	IImageCapability,
 	IStyleClassCapability,

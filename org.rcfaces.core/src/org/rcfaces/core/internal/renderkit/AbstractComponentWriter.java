@@ -4,6 +4,9 @@
  */
 package org.rcfaces.core.internal.renderkit;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -11,6 +14,9 @@ package org.rcfaces.core.internal.renderkit;
  */
 public abstract class AbstractComponentWriter implements IComponentWriter {
     private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory
+            .getLog(AbstractComponentWriter.class);
 
     private final IComponentRenderContext componentRenderContext;
 

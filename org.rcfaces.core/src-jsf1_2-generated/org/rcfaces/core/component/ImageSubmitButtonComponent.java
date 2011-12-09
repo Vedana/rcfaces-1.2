@@ -12,33 +12,15 @@ import java.util.Set;
  * <p>The ImageSubmitButton Component is a <a href="/comps/submitButtonComponent.html">submitButton Component</a> that can show an image.</p>
  * <p>The ImageSubmitButton Component has the following capabilities :
  * <ul>
- * <li>IImageButtonFamilly </li>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text, font &amp; image</li>
+ * <li>Margin &amp; border</li>
+ * <li>Help</li>
+ * <li>Visibility, Read-Only, Disabled</li>
+ * <li>Events Handling</li>
  * </ul>
  * </p>
- * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageSubmitButtonComponent.html">imageSubmitButton</a> renderer is linked to the <a href="/jsdocs/index.html?f_imageSubmitButton.html" target="_blank">f_imageSubmitButton</a> javascript class. f_imageSubmitButton extends f_imageButton</p>
- * 
- * <p> Table of component style classes: </p>
- * <table border="1" cellpadding="3" cellspacing="0" width="100%">
- * <tbody>
- * 
- * <tr style="text-align:left">
- * <th  width="33%">Style Name</th>
- * <th width="50%">Description</th>
- * </tr>
- * 
- * <tr  style="text-align:left">
- * <td width="33%">f_imageSubmitButton</td>
- * <td width="50%">Defines styles for the wrapper A element</td>
- * </tr>
- * 
- * <tr  style="text-align:left">
- * <td width="33%">f_imageSubmitButton_image</td>
- * <td width="50%">Defines styles for the IMG element</td>
- * </tr>
- * 
- * </tbody>
- * </table>
  */
 public class ImageSubmitButtonComponent extends ImageButtonComponent {
 

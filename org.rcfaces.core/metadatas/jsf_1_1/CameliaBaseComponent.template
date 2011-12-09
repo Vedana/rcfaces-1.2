@@ -479,6 +479,12 @@ ${FIELDS}
     		removeFacesListener(fcs[i]);
     	}
     }
+
+	protected final IDataMapAccessor getDataMapAccessor(FacesContext context, String name,
+            boolean modify) {
+            
+    	return engine.getDataMapAccessor(context, name, modify);
+    }
 	
 	public String toString() {
 		String name=getClass().getName();

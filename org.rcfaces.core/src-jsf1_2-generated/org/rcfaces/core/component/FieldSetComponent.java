@@ -27,56 +27,18 @@ import org.rcfaces.core.component.capability.ITextCapability;
  * <p>The fieldSet Component is a container with a title (text and/or picture).</p>
  * <p>The fieldSet Component has the following capabilities :
  * <ul>
- * <li>IFontCapability</li>
- * <li>ITextCapability</li>
- * <li>ITextDirectionCapability</li>
- * <li>ITextAlignmentCapability</li>
- * <li>IVerticalAlignmentCapability</li>
- * <li>IBorderTypeCapability</li>
- * <li>IImageCapability</li>
- * <li>IImageSizeCapability</li>
- * <li>IVariableScopeCapability</li>
- * <li>IOverStyleClassCapability</li>
- * <li>IImageAccessorsCapability</li>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text, font &amp; image</li>
+ * <li>Margin &amp; border</li>
+ * <li>Help</li>
+ * <li>Visibility</li>
+ * <li>Background Image</li>
+ * <li>Events Handling</li>
+ * <li>Contextual Menu</li>
+ * <li>Async Render (AJAX)</li>
  * </ul>
  * </p>
- * 
- * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/FieldSetComponent.html">fieldSet</a> renderer is link to the <a href="/jsdocs/index.html?f_fieldSet.html" target="_blank">f_fieldSet</a> javascript class. f_fieldSet extends f_component, fa_overStyleClass</p>
- * 
- * <p>Table of component style classes : </p>
- * 
- * <table border="1" cellpadding="3" cellspacing="0" width="100%">
- * <tbody >
- * <tr style="text-align:left">
- * <th  width="33%">Style Name</th>
- * <th width="50%">Description</th>
- * </tr>
- * <tr style="text-align:left">
- * <td width="33%">f_fieldSet
- * </td>
- * <td width="50%">
- * Defines styles for the wrapper DIV element
- * </td>
- * </tr>
- * <tr style="text-align:left">
- * <td  width="33%">
- * f_fieldSet_cellBody
- * </td>
- * <td width="50%">
- * Edit style of fieldSet body
- * </td>
- * </tr>
- * <tr style="text-align:left">
- * <td width="33%">
- * fb_rounded
- * </td>
- * <td width="50%">
- * The border rouned style class (contains the title)
- * </td>
- * </tr>
- * </tbody>
- * </table>
  */
 public class FieldSetComponent extends AbstractOutputComponent implements 
 	IFontCapability,

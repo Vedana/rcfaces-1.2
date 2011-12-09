@@ -275,7 +275,7 @@
 		<parameter type="String" name="name" />
 		<parameter type="javax.faces.context.FacesContext" name="facesContext" />
 		<code>
-		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
+		 IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", false);
 		 if (dataMapAccessor==null) {
 		 	return null;
 		 }
@@ -288,7 +288,7 @@
 	<method id="getClientDataCount" returnType="int">
 		<import>org.rcfaces.core.internal.component.IDataMapAccessor</import>
 		<code>
-		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
+		 IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", false);
 		 if (dataMapAccessor==null) {
 		 	return 0;
 		 }
@@ -302,7 +302,7 @@
 		<import>org.rcfaces.core.internal.tools.ComponentTools</import>
 		<parameter type="javax.faces.context.FacesContext" name="facesContext" />
 		<code>
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", false);
 		if (dataMapAccessor==null) {
 			return ComponentTools.STRING_EMPTY_ARRAY;
 		}
@@ -329,7 +329,7 @@
 		<import>java.util.Collections</import>
 		<parameter type="javax.faces.context.FacesContext" name="facesContext" />
 		<code>
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "clientData", false);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "clientData", false);
 		if (dataMapAccessor==null) {
 			return Collections.EMPTY_MAP;
 		}
@@ -344,7 +344,7 @@
 		<parameter type="String" name="name" />
 		<parameter type="String" name="value" />
 		<code>
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", true);
             
 		return (String)dataMapAccessor.setData(name, value, null);
 		</code>
@@ -355,7 +355,7 @@
 		<parameter type="String" name="name" />
 		<parameter type="javax.faces.el.ValueBinding" name="value" />
 		<code>
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", true);
             
 		dataMapAccessor.setData(name, value, null);
 		</code>
@@ -365,7 +365,7 @@
 		<import>org.rcfaces.core.internal.component.IDataMapAccessor</import>
 		<parameter type="String" name="name" />
 		<code>
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", false);
 		if (dataMapAccessor==null) {
 			return null;
 		}
@@ -379,7 +379,7 @@
 		<import>org.rcfaces.core.internal.component.IDataMapAccessor</import>
 		<parameter type="String" name="name" />
 		<code>
-		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		 IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
 		 if (dataMapAccessor==null) {
 		 	return null;
 		 }
@@ -392,7 +392,7 @@
 	<method id="getServerDataCount" returnType="int">
 		<import>org.rcfaces.core.internal.component.IDataMapAccessor</import>
 		<code>
-		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		 IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
 		 if (dataMapAccessor==null) {
 		 	return 0;
 		 }
@@ -406,7 +406,7 @@
 		<parameter type="String" name="name" />
 		<parameter type="Object" name="value" />
 		<code>
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", true);
             
 		return dataMapAccessor.setData(name, value, null);
 		</code>
@@ -416,7 +416,7 @@
 		<import>org.rcfaces.core.internal.component.IDataMapAccessor</import>
 		<parameter type="String" name="name" />
 		<code>
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
 		if (dataMapAccessor==null) {
 		 	return null;
 		}
@@ -430,7 +430,7 @@
 		<parameter type="String" name="name" />
 		<parameter type="javax.faces.el.ValueBinding" name="value" />
 		<code>
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", true);
             
 		dataMapAccessor.setData(name, value, null);
 		</code>
@@ -441,7 +441,7 @@
 		<parameter type="String" name="name" />
 		<parameter type="javax.faces.context.FacesContext" name="facesContext" />
 		<code>
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
 		if (dataMapAccessor==null) {
 			return null;
 		}
@@ -455,7 +455,7 @@
 		<import>org.rcfaces.core.internal.tools.ComponentTools</import>
 		<parameter type="javax.faces.context.FacesContext" name="facesContext" />
 		<code>
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
 		if (dataMapAccessor==null) {
 			return ComponentTools.STRING_EMPTY_ARRAY;
 		}
@@ -483,7 +483,7 @@
 		<import>org.rcfaces.core.internal.Constants</import>
 		<parameter type="javax.faces.context.FacesContext" name="facesContext" />
 		<code>
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "serverData", false);
  		if (dataMapAccessor==null) {
 			return Collections.EMPTY_MAP;
 		}
@@ -919,7 +919,7 @@
 			facesContext=getFacesContext();
 		}
 
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "ValidationParameter", false);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "ValidationParameter", false);
 		if (dataMapAccessor==null) {
 			return null;
 		}
@@ -935,7 +935,7 @@
 		if (facesContext==null) {
 			facesContext=getFacesContext();
 		}
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "ValidationParameter", false);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "ValidationParameter", false);
 		if (dataMapAccessor==null) {
 			return 0;
 		}
@@ -973,7 +973,7 @@
 			facesContext=getFacesContext();
 		}
 		
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "ValidationParameter", false);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "ValidationParameter", false);
 		if (dataMapAccessor==null) {
 			return Collections.EMPTY_MAP;
 		}
@@ -993,7 +993,7 @@
 			facesContext=getFacesContext();
 		}
 		
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "ValidationParameter", false);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "ValidationParameter", false);
 		if (dataMapAccessor==null) {
 			return Collections.EMPTY_MAP;
 		}
@@ -1003,7 +1003,7 @@
 			return Collections.EMPTY_MAP;
 		}
 		
-		IDataMapAccessor clientMapAccessor=engine.getDataMapAccessor(facesContext, "ClientValidationParameter", false);
+		IDataMapAccessor clientMapAccessor=getDataMapAccessor(facesContext, "ClientValidationParameter", false);
 		if (clientMapAccessor==null) {
 			if (Constants.READ_ONLY_COLLECTION_LOCK_ENABLED) {
 				map=Collections.unmodifiableMap(map);
@@ -1058,7 +1058,7 @@
 			facesContext=getFacesContext();
 		}
 		
-		IDataMapAccessor clientMapAccessor=engine.getDataMapAccessor(facesContext, "ClientValidationParameter", false);
+		IDataMapAccessor clientMapAccessor=getDataMapAccessor(facesContext, "ClientValidationParameter", false);
 		if (clientMapAccessor==null) {
 			return false;
 		}
@@ -1094,15 +1094,15 @@
 		<parameter type="boolean" name="client" />
 		<code>
 		FacesContext facesContext=getFacesContext();
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "ValidationParameter", true);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "ValidationParameter", true);
 		if (client) {
 			// On retire la limitation au niveau client si besoin !
-			IDataMapAccessor clientMapAccessor=engine.getDataMapAccessor(facesContext, "ClientValidationParameter", false);
+			IDataMapAccessor clientMapAccessor=getDataMapAccessor(facesContext, "ClientValidationParameter", false);
 			if (clientMapAccessor!=null) {
 				clientMapAccessor.removeData(name, facesContext);
 			}
 		} else {
-			IDataMapAccessor clientMapAccessor=engine.getDataMapAccessor(facesContext, "ClientValidationParameter", true);
+			IDataMapAccessor clientMapAccessor=getDataMapAccessor(facesContext, "ClientValidationParameter", true);
 			clientMapAccessor.setData(name, Boolean.FALSE, facesContext);
 		}
             
@@ -1116,12 +1116,12 @@
 		<code>
 		FacesContext facesContext=getFacesContext();
 
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "ValidationParameter", false);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "ValidationParameter", false);
 		if (dataMapAccessor==null) {
 			return null;
 		}
  
- 		IDataMapAccessor clientMapAccessor=engine.getDataMapAccessor(facesContext, "ClientValidationParameter", false);
+ 		IDataMapAccessor clientMapAccessor=getDataMapAccessor(facesContext, "ClientValidationParameter", false);
 		if (clientMapAccessor!=null) {
 			clientMapAccessor.removeData(name, facesContext);
 		}

@@ -33,6 +33,7 @@ import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.component.capability.IValidationEventCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.Constants1;
 import org.rcfaces.core.internal.RcfacesContext;
 
 import org.rcfaces.core.internal.capability.IVariableScopeCapability;
@@ -74,7 +75,7 @@ public abstract class CameliaGridComponent extends javax.faces.component.UICompo
 
 
 	protected CameliaGridComponent() {
-		IFactory factory = Constants.getCameliaFactory();
+		IFactory factory = Constants1.getCameliaFactory();
 
 		this.engine = factory.createComponentEngine();
 
@@ -603,6 +604,12 @@ public abstract class CameliaGridComponent extends javax.faces.component.UICompo
 
 		return true;
     } 
+	
+	protected final IDataMapAccessor getDataMapAccessor(FacesContext context, String name,
+            boolean modify) {
+            
+    	return engine.getDataMapAccessor(context, name, modify);
+    }
 	
 	public String toString() {
 		String name=getClass().getName();

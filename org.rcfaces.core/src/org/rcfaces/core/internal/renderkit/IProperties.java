@@ -4,6 +4,8 @@
  */
 package org.rcfaces.core.internal.renderkit;
 
+import java.io.Serializable;
+
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -11,20 +13,20 @@ package org.rcfaces.core.internal.renderkit;
  */
 public interface IProperties {
 
-    boolean containsKey(String name);
+    boolean containsKey(Serializable name);
 
-    Object getProperty(String name);
+    Object getProperty(Serializable name);
 
-    String getStringProperty(String name);
+    String getStringProperty(Serializable name);
 
-    String getStringProperty(String name, String defaultValue);
+    String getStringProperty(Serializable name, String defaultValue);
 
-    boolean getBoolProperty(String name, boolean defaultValue);
+    boolean getBoolProperty(Serializable name, boolean defaultValue);
 
-    Boolean getBooleanProperty(String name);
+    Boolean getBooleanProperty(Serializable name);
 
-    int getIntProperty(String name, int defaultValue);
+    int getIntProperty(Serializable name, int defaultValue);
 
-    Number getNumberProperty(String name);
+    Number getNumberProperty(Serializable name);
 
 }

@@ -28,6 +28,10 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 	private ValueExpression waiRole;
 	private ValueExpression x;
 	private ValueExpression y;
+	private ValueExpression bottomPosition;
+	private ValueExpression leftPosition;
+	private ValueExpression rightPosition;
+	private ValueExpression topPosition;
 	private ValueExpression width;
 	private ValueExpression height;
 	private ValueExpression marginBottom;
@@ -82,6 +86,22 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 
 	public final void setY(ValueExpression y) {
 		this.y = y;
+	}
+
+	public final void setBottomPosition(ValueExpression bottomPosition) {
+		this.bottomPosition = bottomPosition;
+	}
+
+	public final void setLeftPosition(ValueExpression leftPosition) {
+		this.leftPosition = leftPosition;
+	}
+
+	public final void setRightPosition(ValueExpression rightPosition) {
+		this.rightPosition = rightPosition;
+	}
+
+	public final void setTopPosition(ValueExpression topPosition) {
+		this.topPosition = topPosition;
 	}
 
 	public final void setWidth(ValueExpression width) {
@@ -157,6 +177,10 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 			LOG.debug("  waiRole='"+waiRole+"'");
 			LOG.debug("  x='"+x+"'");
 			LOG.debug("  y='"+y+"'");
+			LOG.debug("  bottomPosition='"+bottomPosition+"'");
+			LOG.debug("  leftPosition='"+leftPosition+"'");
+			LOG.debug("  rightPosition='"+rightPosition+"'");
+			LOG.debug("  topPosition='"+topPosition+"'");
 			LOG.debug("  width='"+width+"'");
 			LOG.debug("  height='"+height+"'");
 			LOG.debug("  marginBottom='"+marginBottom+"'");
@@ -258,6 +282,42 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 
 			} else {
 				component.setY(y.getExpressionString());
+			}
+		}
+
+		if (bottomPosition != null) {
+			if (bottomPosition.isLiteralText()==false) {
+				component.setValueExpression(Properties.BOTTOM_POSITION, bottomPosition);
+
+			} else {
+				component.setBottomPosition(getInt(bottomPosition.getExpressionString()));
+			}
+		}
+
+		if (leftPosition != null) {
+			if (leftPosition.isLiteralText()==false) {
+				component.setValueExpression(Properties.LEFT_POSITION, leftPosition);
+
+			} else {
+				component.setLeftPosition(getInt(leftPosition.getExpressionString()));
+			}
+		}
+
+		if (rightPosition != null) {
+			if (rightPosition.isLiteralText()==false) {
+				component.setValueExpression(Properties.RIGHT_POSITION, rightPosition);
+
+			} else {
+				component.setRightPosition(getInt(rightPosition.getExpressionString()));
+			}
+		}
+
+		if (topPosition != null) {
+			if (topPosition.isLiteralText()==false) {
+				component.setValueExpression(Properties.TOP_POSITION, topPosition);
+
+			} else {
+				component.setTopPosition(getInt(topPosition.getExpressionString()));
 			}
 		}
 
@@ -415,6 +475,10 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 		waiRole = null;
 		x = null;
 		y = null;
+		bottomPosition = null;
+		leftPosition = null;
+		rightPosition = null;
+		topPosition = null;
 		width = null;
 		height = null;
 		marginBottom = null;

@@ -22,45 +22,14 @@ import org.rcfaces.core.internal.converter.TextPositionConverter;
  * <p>The imageCombo Component is a <a href="/comps/comboComponent.html">combo Component</a> with an image added to the text.</p>
  * <p>The imageCombo Component has the following capabilities :
  * <ul>
- * <li>IImageButtonFamilly</li>
- * <li>IShowDropDownMarkCapability</li>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text, font &amp; image</li>
+ * <li>Help</li>
+ * <li>Visibility, Read-Only, Disabled</li>
+ * <li>Events Handling</li>
  * </ul>
  * </p>
- * 
- * 
- * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageComboComponent.html">imageCombo</a> renderer is linked to the <a href="/jsdocs/index.html?f_imageCombo.html" target="_blank">f_imageCombo</a> javascript class. f_imageCombo extends f_imageButton, fa_subMenu, fa_itemsWrapper</p>
- * 
- * <p> Table of component style classes: </p>
- * <table border="1" cellpadding="3" cellspacing="0" width="100%">
- * <tbody>
- * 
- * <tr style="text-align:left">
- * <th  width="33%">Style Name</th>
- * <th width="50%">Description</th>
- * </tr>
- * 
- * <tr  style="text-align:left">
- * <td width="33%">f_imageCombo</td>
- * <td width="50%">Defines styles for the wrapper DIV element</td>
- * </tr>
- * 
- * <tr  style="text-align:left">
- * <td width="33%">f_imageCheckButton_ctext</td>
- * <td width="50%">Defines styles for the  Text element of the combo</td>
- * </tr>
- * 
- * <tr  style="text-align:left">
- * <td width="33%">f_imageCheckButton_cimage</td>
- * <td width="50%">Defines styles for the IMG element of the combo</td>
- * </tr>
- * <tr  style="text-align:left">
- * <td width="33%">f_menu_popup</td>
- * <td width="50%">Defines styles for the pop-up element of the combo</td>
- * </tr>
- * 
- * </tbody>
- * </table>
  */
 public class ImageComboComponent extends AbstractMenuComponent implements 
 	IImageButtonFamilly,

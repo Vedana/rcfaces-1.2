@@ -18,8 +18,6 @@ import java.util.jar.Manifest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
-import org.rcfaces.core.internal.component.ComponentsFactory;
-import org.rcfaces.core.internal.component.IFactory;
 import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
 import org.rcfaces.core.internal.util.Delay;
 
@@ -124,8 +122,6 @@ public class Constants {
         LOG.info("RCFaces CORE version '" + version + "'");
     }
 
-    private static final IFactory defaultFactory;
-
     public static final IResourceLoaderFactory IMAGE_LOADER_FACTORY = null;
 
     public static final boolean CACHED_LOCALE_FORMATS = true;
@@ -143,7 +139,7 @@ public class Constants {
 
     public static final int ENABLE_ASYNC_MODE_VALUE = IAsyncRenderModeCapability.BUFFER_ASYNC_RENDER_MODE;
 
-    public static final boolean FACELETS_SUPPORT = true;
+    public static boolean FACELETS_SUPPORT = true;
 
     public static final boolean ADAPT_SELECT_ITEMS = true;
 
@@ -235,17 +231,10 @@ public class Constants {
             LOG.info("ENABLE_ASYNC_MODE_VALUE=unknown");
             break;
         }
-
-        defaultFactory = ComponentsFactory.getCameliaFactory(null);
-        LOG.info("Default components factory: " + defaultFactory.getName());
     }
 
     public static final String getPackagePrefix() {
         return CONSTANT_PREFIX;
-    }
-
-    public static IFactory getCameliaFactory() {
-        return defaultFactory;
     }
 
     public static String getVersion() {
@@ -302,9 +291,10 @@ public class Constants {
                 }
 
             } catch (Throwable th) {
-                LOG.error("Can not get " + versionName
-                        + " version by package API ! ("
-                        + clazzPackage.getName() + ")", th);
+                LOG.error(
+                        "Can not get " + versionName
+                                + " version by package API ! ("
+                                + clazzPackage.getName() + ")", th);
             }
         }
 

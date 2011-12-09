@@ -25,7 +25,6 @@ public class SchedulerTag extends CameliaTag implements Tag {
 	private ValueExpression literalLocale;
 	private ValueExpression literalTimeZone;
 	private ValueExpression styleClass;
-	private ValueExpression tabIndex;
 	private ValueExpression immediate;
 	private ValueExpression selectionListeners;
 	private ValueExpression dateBegin;
@@ -74,10 +73,6 @@ public class SchedulerTag extends CameliaTag implements Tag {
 
 	public final void setStyleClass(ValueExpression styleClass) {
 		this.styleClass = styleClass;
-	}
-
-	public final void setTabIndex(ValueExpression tabIndex) {
-		this.tabIndex = tabIndex;
 	}
 
 	public final void setImmediate(ValueExpression immediate) {
@@ -164,7 +159,6 @@ public class SchedulerTag extends CameliaTag implements Tag {
 			LOG.debug("  literalLocale='"+literalLocale+"'");
 			LOG.debug("  literalTimeZone='"+literalTimeZone+"'");
 			LOG.debug("  styleClass='"+styleClass+"'");
-			LOG.debug("  tabIndex='"+tabIndex+"'");
 			LOG.debug("  immediate='"+immediate+"'");
 			LOG.debug("  dateBegin='"+dateBegin+"'");
 			LOG.debug("  hourBegin='"+hourBegin+"'");
@@ -255,15 +249,6 @@ public class SchedulerTag extends CameliaTag implements Tag {
 
 			} else {
 				component.setStyleClass(styleClass.getExpressionString());
-			}
-		}
-
-		if (tabIndex != null) {
-			if (tabIndex.isLiteralText()==false) {
-				component.setValueExpression(Properties.TAB_INDEX, tabIndex);
-
-			} else {
-				component.setTabIndex(getInteger(tabIndex.getExpressionString()));
 			}
 		}
 
@@ -433,7 +418,6 @@ public class SchedulerTag extends CameliaTag implements Tag {
 		literalLocale = null;
 		literalTimeZone = null;
 		styleClass = null;
-		tabIndex = null;
 		immediate = null;
 		selectionListeners = null;
 		dateBegin = null;

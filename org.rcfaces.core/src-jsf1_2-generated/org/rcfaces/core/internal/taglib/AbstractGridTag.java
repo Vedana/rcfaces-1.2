@@ -18,91 +18,51 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 
 	private static final Log LOG=LogFactory.getLog(AbstractGridTag.class);
 
-	private ValueExpression marginBottom;
-	private ValueExpression marginLeft;
-	private ValueExpression marginRight;
-	private ValueExpression marginTop;
-	private ValueExpression resetListeners;
-	private ValueExpression keyUpListeners;
-	private ValueExpression keyDownListeners;
-	private ValueExpression keyPressListeners;
-	private ValueExpression x;
-	private ValueExpression y;
-	private ValueExpression userEventListeners;
 	private ValueExpression helpMessage;
 	private ValueExpression helpURL;
 	private ValueExpression toolTipText;
-	private ValueExpression partialRendering;
-	private ValueExpression styleClass;
-	private ValueExpression lookId;
-	private ValueExpression width;
-	private ValueExpression height;
 	private ValueExpression blurListeners;
 	private ValueExpression focusListeners;
 	private ValueExpression backgroundColor;
 	private ValueExpression foregroundColor;
 	private ValueExpression visible;
 	private ValueExpression errorListeners;
-	private ValueExpression ariaLabel;
-	private ValueExpression ariaLevel;
-	private ValueExpression waiRole;
 	private ValueExpression sortManager;
 	private ValueExpression mouseOutListeners;
 	private ValueExpression mouseOverListeners;
-	private ValueExpression unlockedClientAttributeNames;
 	private ValueExpression tabIndex;
-	private ValueExpression initListeners;
+	private ValueExpression unlockedClientAttributeNames;
 	private ValueExpression propertyChangeListeners;
+	private ValueExpression marginBottom;
+	private ValueExpression marginLeft;
+	private ValueExpression marginRight;
+	private ValueExpression marginTop;
+	private ValueExpression keyUpListeners;
+	private ValueExpression keyDownListeners;
+	private ValueExpression keyPressListeners;
+	private ValueExpression resetListeners;
+	private ValueExpression userEventListeners;
+	private ValueExpression x;
+	private ValueExpression y;
+	private ValueExpression partialRendering;
+	private ValueExpression lookId;
+	private ValueExpression styleClass;
+	private ValueExpression width;
+	private ValueExpression height;
+	private ValueExpression ariaLabel;
+	private ValueExpression ariaLevel;
+	private ValueExpression waiRole;
+	private ValueExpression bottomPosition;
+	private ValueExpression leftPosition;
+	private ValueExpression rightPosition;
+	private ValueExpression topPosition;
+	private ValueExpression initListeners;
 	private ValueExpression hiddenMode;
-	private ValueExpression margins;
 	private ValueExpression rows;
+	private ValueExpression margins;
 	private ValueExpression first;
 	private ValueExpression var;
 	private ValueExpression value;
-	public final void setMarginBottom(ValueExpression marginBottom) {
-		this.marginBottom = marginBottom;
-	}
-
-	public final void setMarginLeft(ValueExpression marginLeft) {
-		this.marginLeft = marginLeft;
-	}
-
-	public final void setMarginRight(ValueExpression marginRight) {
-		this.marginRight = marginRight;
-	}
-
-	public final void setMarginTop(ValueExpression marginTop) {
-		this.marginTop = marginTop;
-	}
-
-	public final void setResetListener(ValueExpression resetListeners) {
-		this.resetListeners = resetListeners;
-	}
-
-	public final void setKeyUpListener(ValueExpression keyUpListeners) {
-		this.keyUpListeners = keyUpListeners;
-	}
-
-	public final void setKeyDownListener(ValueExpression keyDownListeners) {
-		this.keyDownListeners = keyDownListeners;
-	}
-
-	public final void setKeyPressListener(ValueExpression keyPressListeners) {
-		this.keyPressListeners = keyPressListeners;
-	}
-
-	public final void setX(ValueExpression x) {
-		this.x = x;
-	}
-
-	public final void setY(ValueExpression y) {
-		this.y = y;
-	}
-
-	public final void setUserEventListener(ValueExpression userEventListeners) {
-		this.userEventListeners = userEventListeners;
-	}
-
 	public final void setHelpMessage(ValueExpression helpMessage) {
 		this.helpMessage = helpMessage;
 	}
@@ -113,26 +73,6 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 
 	public final void setToolTipText(ValueExpression toolTipText) {
 		this.toolTipText = toolTipText;
-	}
-
-	public final void setPartialRendering(ValueExpression partialRendering) {
-		this.partialRendering = partialRendering;
-	}
-
-	public final void setStyleClass(ValueExpression styleClass) {
-		this.styleClass = styleClass;
-	}
-
-	public final void setLookId(ValueExpression lookId) {
-		this.lookId = lookId;
-	}
-
-	public final void setWidth(ValueExpression width) {
-		this.width = width;
-	}
-
-	public final void setHeight(ValueExpression height) {
-		this.height = height;
 	}
 
 	public final void setBlurListener(ValueExpression blurListeners) {
@@ -159,18 +99,6 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 		this.errorListeners = errorListeners;
 	}
 
-	public final void setAriaLabel(ValueExpression ariaLabel) {
-		this.ariaLabel = ariaLabel;
-	}
-
-	public final void setAriaLevel(ValueExpression ariaLevel) {
-		this.ariaLevel = ariaLevel;
-	}
-
-	public final void setWaiRole(ValueExpression waiRole) {
-		this.waiRole = waiRole;
-	}
-
 	public final void setSortManager(ValueExpression sortManager) {
 		this.sortManager = sortManager;
 	}
@@ -183,32 +111,124 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 		this.mouseOverListeners = mouseOverListeners;
 	}
 
-	public final void setUnlockedClientAttributeNames(ValueExpression unlockedClientAttributeNames) {
-		this.unlockedClientAttributeNames = unlockedClientAttributeNames;
-	}
-
 	public final void setTabIndex(ValueExpression tabIndex) {
 		this.tabIndex = tabIndex;
 	}
 
-	public final void setInitListener(ValueExpression initListeners) {
-		this.initListeners = initListeners;
+	public final void setUnlockedClientAttributeNames(ValueExpression unlockedClientAttributeNames) {
+		this.unlockedClientAttributeNames = unlockedClientAttributeNames;
 	}
 
 	public final void setPropertyChangeListener(ValueExpression propertyChangeListeners) {
 		this.propertyChangeListeners = propertyChangeListeners;
 	}
 
+	public final void setMarginBottom(ValueExpression marginBottom) {
+		this.marginBottom = marginBottom;
+	}
+
+	public final void setMarginLeft(ValueExpression marginLeft) {
+		this.marginLeft = marginLeft;
+	}
+
+	public final void setMarginRight(ValueExpression marginRight) {
+		this.marginRight = marginRight;
+	}
+
+	public final void setMarginTop(ValueExpression marginTop) {
+		this.marginTop = marginTop;
+	}
+
+	public final void setKeyUpListener(ValueExpression keyUpListeners) {
+		this.keyUpListeners = keyUpListeners;
+	}
+
+	public final void setKeyDownListener(ValueExpression keyDownListeners) {
+		this.keyDownListeners = keyDownListeners;
+	}
+
+	public final void setKeyPressListener(ValueExpression keyPressListeners) {
+		this.keyPressListeners = keyPressListeners;
+	}
+
+	public final void setResetListener(ValueExpression resetListeners) {
+		this.resetListeners = resetListeners;
+	}
+
+	public final void setUserEventListener(ValueExpression userEventListeners) {
+		this.userEventListeners = userEventListeners;
+	}
+
+	public final void setX(ValueExpression x) {
+		this.x = x;
+	}
+
+	public final void setY(ValueExpression y) {
+		this.y = y;
+	}
+
+	public final void setPartialRendering(ValueExpression partialRendering) {
+		this.partialRendering = partialRendering;
+	}
+
+	public final void setLookId(ValueExpression lookId) {
+		this.lookId = lookId;
+	}
+
+	public final void setStyleClass(ValueExpression styleClass) {
+		this.styleClass = styleClass;
+	}
+
+	public final void setWidth(ValueExpression width) {
+		this.width = width;
+	}
+
+	public final void setHeight(ValueExpression height) {
+		this.height = height;
+	}
+
+	public final void setAriaLabel(ValueExpression ariaLabel) {
+		this.ariaLabel = ariaLabel;
+	}
+
+	public final void setAriaLevel(ValueExpression ariaLevel) {
+		this.ariaLevel = ariaLevel;
+	}
+
+	public final void setWaiRole(ValueExpression waiRole) {
+		this.waiRole = waiRole;
+	}
+
+	public final void setBottomPosition(ValueExpression bottomPosition) {
+		this.bottomPosition = bottomPosition;
+	}
+
+	public final void setLeftPosition(ValueExpression leftPosition) {
+		this.leftPosition = leftPosition;
+	}
+
+	public final void setRightPosition(ValueExpression rightPosition) {
+		this.rightPosition = rightPosition;
+	}
+
+	public final void setTopPosition(ValueExpression topPosition) {
+		this.topPosition = topPosition;
+	}
+
+	public final void setInitListener(ValueExpression initListeners) {
+		this.initListeners = initListeners;
+	}
+
 	public final void setHiddenMode(ValueExpression hiddenMode) {
 		this.hiddenMode = hiddenMode;
 	}
 
-	public final void setMargins(ValueExpression margins) {
-		this.margins = margins;
-	}
-
 	public final void setRows(ValueExpression rows) {
 		this.rows = rows;
+	}
+
+	public final void setMargins(ValueExpression margins) {
+		this.margins = margins;
 	}
 
 	public final void setFirst(ValueExpression first) {
@@ -225,32 +245,36 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
+			LOG.debug("  helpMessage='"+helpMessage+"'");
+			LOG.debug("  helpURL='"+helpURL+"'");
+			LOG.debug("  toolTipText='"+toolTipText+"'");
+			LOG.debug("  backgroundColor='"+backgroundColor+"'");
+			LOG.debug("  foregroundColor='"+foregroundColor+"'");
+			LOG.debug("  visible='"+visible+"'");
+			LOG.debug("  sortManager='"+sortManager+"'");
+			LOG.debug("  tabIndex='"+tabIndex+"'");
+			LOG.debug("  unlockedClientAttributeNames='"+unlockedClientAttributeNames+"'");
 			LOG.debug("  marginBottom='"+marginBottom+"'");
 			LOG.debug("  marginLeft='"+marginLeft+"'");
 			LOG.debug("  marginRight='"+marginRight+"'");
 			LOG.debug("  marginTop='"+marginTop+"'");
 			LOG.debug("  x='"+x+"'");
 			LOG.debug("  y='"+y+"'");
-			LOG.debug("  helpMessage='"+helpMessage+"'");
-			LOG.debug("  helpURL='"+helpURL+"'");
-			LOG.debug("  toolTipText='"+toolTipText+"'");
 			LOG.debug("  partialRendering='"+partialRendering+"'");
-			LOG.debug("  styleClass='"+styleClass+"'");
 			LOG.debug("  lookId='"+lookId+"'");
+			LOG.debug("  styleClass='"+styleClass+"'");
 			LOG.debug("  width='"+width+"'");
 			LOG.debug("  height='"+height+"'");
-			LOG.debug("  backgroundColor='"+backgroundColor+"'");
-			LOG.debug("  foregroundColor='"+foregroundColor+"'");
-			LOG.debug("  visible='"+visible+"'");
 			LOG.debug("  ariaLabel='"+ariaLabel+"'");
 			LOG.debug("  ariaLevel='"+ariaLevel+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
-			LOG.debug("  sortManager='"+sortManager+"'");
-			LOG.debug("  unlockedClientAttributeNames='"+unlockedClientAttributeNames+"'");
-			LOG.debug("  tabIndex='"+tabIndex+"'");
+			LOG.debug("  bottomPosition='"+bottomPosition+"'");
+			LOG.debug("  leftPosition='"+leftPosition+"'");
+			LOG.debug("  rightPosition='"+rightPosition+"'");
+			LOG.debug("  topPosition='"+topPosition+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
-			LOG.debug("  margins='"+margins+"'");
 			LOG.debug("  rows='"+rows+"'");
+			LOG.debug("  margins='"+margins+"'");
 			LOG.debug("  first='"+first+"'");
 			LOG.debug("  var='"+var+"'");
 		}
@@ -265,80 +289,6 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 
 		AbstractGridComponent component = (AbstractGridComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
-
-		if (marginBottom != null) {
-			if (marginBottom.isLiteralText()==false) {
-				component.setValueExpression(Properties.MARGIN_BOTTOM, marginBottom);
-
-			} else {
-				component.setMarginBottom(marginBottom.getExpressionString());
-			}
-		}
-
-		if (marginLeft != null) {
-			if (marginLeft.isLiteralText()==false) {
-				component.setValueExpression(Properties.MARGIN_LEFT, marginLeft);
-
-			} else {
-				component.setMarginLeft(marginLeft.getExpressionString());
-			}
-		}
-
-		if (marginRight != null) {
-			if (marginRight.isLiteralText()==false) {
-				component.setValueExpression(Properties.MARGIN_RIGHT, marginRight);
-
-			} else {
-				component.setMarginRight(marginRight.getExpressionString());
-			}
-		}
-
-		if (marginTop != null) {
-			if (marginTop.isLiteralText()==false) {
-				component.setValueExpression(Properties.MARGIN_TOP, marginTop);
-
-			} else {
-				component.setMarginTop(marginTop.getExpressionString());
-			}
-		}
-
-		if (resetListeners != null) {
-			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.RESET_LISTENER_TYPE, resetListeners);
-		}
-
-		if (keyUpListeners != null) {
-			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.KEY_UP_LISTENER_TYPE, keyUpListeners);
-		}
-
-		if (keyDownListeners != null) {
-			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.KEY_DOWN_LISTENER_TYPE, keyDownListeners);
-		}
-
-		if (keyPressListeners != null) {
-			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.KEY_PRESS_LISTENER_TYPE, keyPressListeners);
-		}
-
-		if (x != null) {
-			if (x.isLiteralText()==false) {
-				component.setValueExpression(Properties.X, x);
-
-			} else {
-				component.setX(x.getExpressionString());
-			}
-		}
-
-		if (y != null) {
-			if (y.isLiteralText()==false) {
-				component.setValueExpression(Properties.Y, y);
-
-			} else {
-				component.setY(y.getExpressionString());
-			}
-		}
-
-		if (userEventListeners != null) {
-			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.USER_EVENT_LISTENER_TYPE, userEventListeners);
-		}
 
 		if (helpMessage != null) {
 			if (helpMessage.isLiteralText()==false) {
@@ -364,51 +314,6 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 
 			} else {
 				component.setToolTipText(toolTipText.getExpressionString());
-			}
-		}
-
-		if (partialRendering != null) {
-			if (partialRendering.isLiteralText()==false) {
-				component.setValueExpression(Properties.PARTIAL_RENDERING, partialRendering);
-
-			} else {
-				component.setPartialRendering(getBool(partialRendering.getExpressionString()));
-			}
-		}
-
-		if (styleClass != null) {
-			if (styleClass.isLiteralText()==false) {
-				component.setValueExpression(Properties.STYLE_CLASS, styleClass);
-
-			} else {
-				component.setStyleClass(styleClass.getExpressionString());
-			}
-		}
-
-		if (lookId != null) {
-			if (lookId.isLiteralText()==false) {
-				component.setValueExpression(Properties.LOOK_ID, lookId);
-
-			} else {
-				component.setLookId(lookId.getExpressionString());
-			}
-		}
-
-		if (width != null) {
-			if (width.isLiteralText()==false) {
-				component.setValueExpression(Properties.WIDTH, width);
-
-			} else {
-				component.setWidth(width.getExpressionString());
-			}
-		}
-
-		if (height != null) {
-			if (height.isLiteralText()==false) {
-				component.setValueExpression(Properties.HEIGHT, height);
-
-			} else {
-				component.setHeight(height.getExpressionString());
 			}
 		}
 
@@ -451,6 +356,164 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.ERROR_LISTENER_TYPE, errorListeners);
 		}
 
+		if (sortManager != null) {
+			if (sortManager.isLiteralText()==false) {
+				component.setValueExpression(Properties.SORT_MANAGER, sortManager);
+
+			} else {
+				component.setSortManager(sortManager.getExpressionString());
+			}
+		}
+
+		if (mouseOutListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.MOUSE_OUT_LISTENER_TYPE, mouseOutListeners);
+		}
+
+		if (mouseOverListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.MOUSE_OVER_LISTENER_TYPE, mouseOverListeners);
+		}
+
+		if (tabIndex != null) {
+			if (tabIndex.isLiteralText()==false) {
+				component.setValueExpression(Properties.TAB_INDEX, tabIndex);
+
+			} else {
+				component.setTabIndex(getInteger(tabIndex.getExpressionString()));
+			}
+		}
+
+		if (unlockedClientAttributeNames != null) {
+			if (unlockedClientAttributeNames.isLiteralText()==false) {
+				component.setValueExpression(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, unlockedClientAttributeNames);
+
+			} else {
+				component.setUnlockedClientAttributeNames(unlockedClientAttributeNames.getExpressionString());
+			}
+		}
+
+		if (propertyChangeListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
+		}
+
+		if (marginBottom != null) {
+			if (marginBottom.isLiteralText()==false) {
+				component.setValueExpression(Properties.MARGIN_BOTTOM, marginBottom);
+
+			} else {
+				component.setMarginBottom(marginBottom.getExpressionString());
+			}
+		}
+
+		if (marginLeft != null) {
+			if (marginLeft.isLiteralText()==false) {
+				component.setValueExpression(Properties.MARGIN_LEFT, marginLeft);
+
+			} else {
+				component.setMarginLeft(marginLeft.getExpressionString());
+			}
+		}
+
+		if (marginRight != null) {
+			if (marginRight.isLiteralText()==false) {
+				component.setValueExpression(Properties.MARGIN_RIGHT, marginRight);
+
+			} else {
+				component.setMarginRight(marginRight.getExpressionString());
+			}
+		}
+
+		if (marginTop != null) {
+			if (marginTop.isLiteralText()==false) {
+				component.setValueExpression(Properties.MARGIN_TOP, marginTop);
+
+			} else {
+				component.setMarginTop(marginTop.getExpressionString());
+			}
+		}
+
+		if (keyUpListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.KEY_UP_LISTENER_TYPE, keyUpListeners);
+		}
+
+		if (keyDownListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.KEY_DOWN_LISTENER_TYPE, keyDownListeners);
+		}
+
+		if (keyPressListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.KEY_PRESS_LISTENER_TYPE, keyPressListeners);
+		}
+
+		if (resetListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.RESET_LISTENER_TYPE, resetListeners);
+		}
+
+		if (userEventListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.USER_EVENT_LISTENER_TYPE, userEventListeners);
+		}
+
+		if (x != null) {
+			if (x.isLiteralText()==false) {
+				component.setValueExpression(Properties.X, x);
+
+			} else {
+				component.setX(x.getExpressionString());
+			}
+		}
+
+		if (y != null) {
+			if (y.isLiteralText()==false) {
+				component.setValueExpression(Properties.Y, y);
+
+			} else {
+				component.setY(y.getExpressionString());
+			}
+		}
+
+		if (partialRendering != null) {
+			if (partialRendering.isLiteralText()==false) {
+				component.setValueExpression(Properties.PARTIAL_RENDERING, partialRendering);
+
+			} else {
+				component.setPartialRendering(getBool(partialRendering.getExpressionString()));
+			}
+		}
+
+		if (lookId != null) {
+			if (lookId.isLiteralText()==false) {
+				component.setValueExpression(Properties.LOOK_ID, lookId);
+
+			} else {
+				component.setLookId(lookId.getExpressionString());
+			}
+		}
+
+		if (styleClass != null) {
+			if (styleClass.isLiteralText()==false) {
+				component.setValueExpression(Properties.STYLE_CLASS, styleClass);
+
+			} else {
+				component.setStyleClass(styleClass.getExpressionString());
+			}
+		}
+
+		if (width != null) {
+			if (width.isLiteralText()==false) {
+				component.setValueExpression(Properties.WIDTH, width);
+
+			} else {
+				component.setWidth(width.getExpressionString());
+			}
+		}
+
+		if (height != null) {
+			if (height.isLiteralText()==false) {
+				component.setValueExpression(Properties.HEIGHT, height);
+
+			} else {
+				component.setHeight(height.getExpressionString());
+			}
+		}
+
 		if (ariaLabel != null) {
 			if (ariaLabel.isLiteralText()==false) {
 				component.setValueExpression(Properties.ARIA_LABEL, ariaLabel);
@@ -478,47 +541,44 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (sortManager != null) {
-			if (sortManager.isLiteralText()==false) {
-				component.setValueExpression(Properties.SORT_MANAGER, sortManager);
+		if (bottomPosition != null) {
+			if (bottomPosition.isLiteralText()==false) {
+				component.setValueExpression(Properties.BOTTOM_POSITION, bottomPosition);
 
 			} else {
-				component.setSortManager(sortManager.getExpressionString());
+				component.setBottomPosition(getInt(bottomPosition.getExpressionString()));
 			}
 		}
 
-		if (mouseOutListeners != null) {
-			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.MOUSE_OUT_LISTENER_TYPE, mouseOutListeners);
-		}
-
-		if (mouseOverListeners != null) {
-			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.MOUSE_OVER_LISTENER_TYPE, mouseOverListeners);
-		}
-
-		if (unlockedClientAttributeNames != null) {
-			if (unlockedClientAttributeNames.isLiteralText()==false) {
-				component.setValueExpression(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, unlockedClientAttributeNames);
+		if (leftPosition != null) {
+			if (leftPosition.isLiteralText()==false) {
+				component.setValueExpression(Properties.LEFT_POSITION, leftPosition);
 
 			} else {
-				component.setUnlockedClientAttributeNames(unlockedClientAttributeNames.getExpressionString());
+				component.setLeftPosition(getInt(leftPosition.getExpressionString()));
 			}
 		}
 
-		if (tabIndex != null) {
-			if (tabIndex.isLiteralText()==false) {
-				component.setValueExpression(Properties.TAB_INDEX, tabIndex);
+		if (rightPosition != null) {
+			if (rightPosition.isLiteralText()==false) {
+				component.setValueExpression(Properties.RIGHT_POSITION, rightPosition);
 
 			} else {
-				component.setTabIndex(getInteger(tabIndex.getExpressionString()));
+				component.setRightPosition(getInt(rightPosition.getExpressionString()));
+			}
+		}
+
+		if (topPosition != null) {
+			if (topPosition.isLiteralText()==false) {
+				component.setValueExpression(Properties.TOP_POSITION, topPosition);
+
+			} else {
+				component.setTopPosition(getInt(topPosition.getExpressionString()));
 			}
 		}
 
 		if (initListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.INIT_LISTENER_TYPE, initListeners);
-		}
-
-		if (propertyChangeListeners != null) {
-			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
 		}
 
 		if (hiddenMode != null) {
@@ -530,13 +590,6 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (margins != null) {
-			if (margins.isLiteralText()==false) {
-				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
-			}
-				component.setMargins(margins.getExpressionString());
-		}
-
 		if (rows != null) {
 			if (rows.isLiteralText()==false) {
 				component.setValueExpression(Properties.ROWS, rows);
@@ -544,6 +597,13 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 			} else {
 				component.setRows(getInt(rows.getExpressionString()));
 			}
+		}
+
+		if (margins != null) {
+			if (margins.isLiteralText()==false) {
+				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
+			}
+				component.setMargins(margins.getExpressionString());
 		}
 
 		if (first != null) {
@@ -575,44 +635,48 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 	}
 
 	public void release() {
-		marginBottom = null;
-		marginLeft = null;
-		marginRight = null;
-		marginTop = null;
-		resetListeners = null;
-		keyUpListeners = null;
-		keyDownListeners = null;
-		keyPressListeners = null;
-		x = null;
-		y = null;
-		userEventListeners = null;
 		helpMessage = null;
 		helpURL = null;
 		toolTipText = null;
-		partialRendering = null;
-		styleClass = null;
-		lookId = null;
-		width = null;
-		height = null;
 		blurListeners = null;
 		focusListeners = null;
 		backgroundColor = null;
 		foregroundColor = null;
 		visible = null;
 		errorListeners = null;
-		ariaLabel = null;
-		ariaLevel = null;
-		waiRole = null;
 		sortManager = null;
 		mouseOutListeners = null;
 		mouseOverListeners = null;
-		unlockedClientAttributeNames = null;
 		tabIndex = null;
-		initListeners = null;
+		unlockedClientAttributeNames = null;
 		propertyChangeListeners = null;
+		marginBottom = null;
+		marginLeft = null;
+		marginRight = null;
+		marginTop = null;
+		keyUpListeners = null;
+		keyDownListeners = null;
+		keyPressListeners = null;
+		resetListeners = null;
+		userEventListeners = null;
+		x = null;
+		y = null;
+		partialRendering = null;
+		lookId = null;
+		styleClass = null;
+		width = null;
+		height = null;
+		ariaLabel = null;
+		ariaLevel = null;
+		waiRole = null;
+		bottomPosition = null;
+		leftPosition = null;
+		rightPosition = null;
+		topPosition = null;
+		initListeners = null;
 		hiddenMode = null;
-		margins = null;
 		rows = null;
+		margins = null;
 		first = null;
 		var = null;
 		value = null;

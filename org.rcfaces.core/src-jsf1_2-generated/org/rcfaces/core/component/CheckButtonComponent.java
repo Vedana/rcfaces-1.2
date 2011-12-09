@@ -24,47 +24,14 @@ import org.rcfaces.core.component.capability.ITextCapability;
  * <p>The checkButton Component is equivalent to the &lt;INPUT TYPE="checkbox"&gt; HTML tag.</p>
  * <p>The checkButton Component has the following capabilities :
  * <ul>
- * <li>ITextCapability</li>
- * <li>ITextDirectionCapability</li>
- * <li>IHorizontalTextPositionCapability</li>
- * <li>ISelectionEventCapability</li>
- * <li>IReadOnlyCapability</li>
- * <li>IAlternateTextCapability</li>
- * <li>IFocusStyleClassCapability</li>
- * <li>ISeverityStyleClassCapability</li>
- * <li>ISelectedCapability</li>
+ * <li>Position &amp; Size</li>
+ * <li>Foreground &amp; Background Color</li>
+ * <li>Text &amp; font</li>
+ * <li>Help</li>
+ * <li>Visibility, Read-Only, Disabled</li>
+ * <li>Events Handling</li>
  * </ul>
  * </p>
- * 
- * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/CheckButtonComponent.html">checkButton</a> renderer is linked to the <a href="/jsdocs/index.html?f_checkButton">f_checkButton</a> javascript class. f_checkButton extends f_button</p>
- * 
- * <p> Table of component style classes: </p>
- * <table border="1" cellpadding="3" cellspacing="0" width="100%">
- * <tbody>
- * 
- * <tr style="text-align:left">
- * <th  width="33%">Style Name</th>
- * <th width="50%">Description</th>
- * </tr>
- * 
- * <tr  style="text-align:left">
- * <td width="33%">f_checkButton</td>
- * <td width="50%">Defines styles for the wrapper DIV element</td>
- * </tr>
- * 
- * <tr  style="text-align:left">
- * <td width="33%">f_checkButton_input</td>
- * <td width="50%">Defines styles for the wrapper Input button element </td>
- * </tr>
- * 
- * <tr  style="text-align:left">
- * <td width="33%">f_checkButton_text</td>
- * <td width="50%">Defines styles for the wrapper Span element containing the text </td>
- * </tr>
- * 
- * </tbody>
- * </table>
  */
 public class CheckButtonComponent extends AbstractInputComponent implements 
 	ITextCapability,

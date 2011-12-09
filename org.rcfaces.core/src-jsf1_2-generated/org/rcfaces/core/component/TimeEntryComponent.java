@@ -134,12 +134,12 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 
 		FacesContext facesContext=getFacesContext();
 
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "ValidationParameter", false);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "ValidationParameter", false);
 		if (dataMapAccessor==null) {
 			return null;
 		}
  
- 		IDataMapAccessor clientMapAccessor=engine.getDataMapAccessor(facesContext, "ClientValidationParameter", false);
+ 		IDataMapAccessor clientMapAccessor=getDataMapAccessor(facesContext, "ClientValidationParameter", false);
 		if (clientMapAccessor!=null) {
 			clientMapAccessor.removeData(name, facesContext);
 		}
@@ -262,7 +262,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 			facesContext=getFacesContext();
 		}
 
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "ValidationParameter", false);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "ValidationParameter", false);
 		if (dataMapAccessor==null) {
 			return null;
 		}
@@ -277,7 +277,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 		if (facesContext==null) {
 			facesContext=getFacesContext();
 		}
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "ValidationParameter", false);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "ValidationParameter", false);
 		if (dataMapAccessor==null) {
 			return 0;
 		}
@@ -293,7 +293,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 			facesContext=getFacesContext();
 		}
 		
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "ValidationParameter", false);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "ValidationParameter", false);
 		if (dataMapAccessor==null) {
 			return Collections.EMPTY_MAP;
 		}
@@ -309,7 +309,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 			facesContext=getFacesContext();
 		}
 		
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "ValidationParameter", false);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "ValidationParameter", false);
 		if (dataMapAccessor==null) {
 			return Collections.EMPTY_MAP;
 		}
@@ -319,7 +319,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 			return Collections.EMPTY_MAP;
 		}
 		
-		IDataMapAccessor clientMapAccessor=engine.getDataMapAccessor(facesContext, "ClientValidationParameter", false);
+		IDataMapAccessor clientMapAccessor=getDataMapAccessor(facesContext, "ClientValidationParameter", false);
 		if (clientMapAccessor==null) {
 			if (Constants.READ_ONLY_COLLECTION_LOCK_ENABLED) {
 				map=Collections.unmodifiableMap(map);
@@ -360,15 +360,15 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 
 
 		FacesContext facesContext=getFacesContext();
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "ValidationParameter", true);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "ValidationParameter", true);
 		if (client) {
 			// On retire la limitation au niveau client si besoin !
-			IDataMapAccessor clientMapAccessor=engine.getDataMapAccessor(facesContext, "ClientValidationParameter", false);
+			IDataMapAccessor clientMapAccessor=getDataMapAccessor(facesContext, "ClientValidationParameter", false);
 			if (clientMapAccessor!=null) {
 				clientMapAccessor.removeData(name, facesContext);
 			}
 		} else {
-			IDataMapAccessor clientMapAccessor=engine.getDataMapAccessor(facesContext, "ClientValidationParameter", true);
+			IDataMapAccessor clientMapAccessor=getDataMapAccessor(facesContext, "ClientValidationParameter", true);
 			clientMapAccessor.setData(name, Boolean.FALSE, facesContext);
 		}
             
@@ -383,7 +383,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 			facesContext=getFacesContext();
 		}
 		
-		IDataMapAccessor clientMapAccessor=engine.getDataMapAccessor(facesContext, "ClientValidationParameter", false);
+		IDataMapAccessor clientMapAccessor=getDataMapAccessor(facesContext, "ClientValidationParameter", false);
 		if (clientMapAccessor==null) {
 			return false;
 		}

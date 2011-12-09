@@ -45,7 +45,7 @@ public abstract class AbstractItemComponent extends CameliaItemComponent impleme
 	public void setServerData(String name, ValueExpression value) {
 
 
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", true);
             
 		dataMapAccessor.setData(name, value, null);
 		
@@ -54,7 +54,7 @@ public abstract class AbstractItemComponent extends CameliaItemComponent impleme
 	public Object setServerData(String name, Object value) {
 
 
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", true);
             
 		return dataMapAccessor.setData(name, value, null);
 		
@@ -63,7 +63,7 @@ public abstract class AbstractItemComponent extends CameliaItemComponent impleme
 	public void setClientData(String name, ValueExpression value) {
 
 
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", true);
             
 		dataMapAccessor.setData(name, value, null);
 		
@@ -72,7 +72,7 @@ public abstract class AbstractItemComponent extends CameliaItemComponent impleme
 	public String setClientData(String name, String value) {
 
 
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", true);
             
 		return (String)dataMapAccessor.setData(name, value, null);
 		
@@ -95,7 +95,7 @@ public abstract class AbstractItemComponent extends CameliaItemComponent impleme
 	public String getClientData(String name, FacesContext facesContext) {
 
 
-		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
+		 IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", false);
 		 if (dataMapAccessor==null) {
 		 	return null;
 		 }
@@ -107,7 +107,7 @@ public abstract class AbstractItemComponent extends CameliaItemComponent impleme
 	public Object getServerData(String name, FacesContext facesContext) {
 
 
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
 		if (dataMapAccessor==null) {
 			return null;
 		}
@@ -119,7 +119,7 @@ public abstract class AbstractItemComponent extends CameliaItemComponent impleme
 	public Map getClientDataMap(FacesContext facesContext) {
 
 
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "clientData", false);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "clientData", false);
 		if (dataMapAccessor==null) {
 			return Collections.EMPTY_MAP;
 		}
@@ -131,7 +131,7 @@ public abstract class AbstractItemComponent extends CameliaItemComponent impleme
 	public Map getServerDataMap(FacesContext facesContext) {
 
 
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "serverData", false);
  		if (dataMapAccessor==null) {
 			return Collections.EMPTY_MAP;
 		}
@@ -150,7 +150,7 @@ public abstract class AbstractItemComponent extends CameliaItemComponent impleme
 	public String[] listClientDataKeys(FacesContext facesContext) {
 
 
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", false);
 		if (dataMapAccessor==null) {
 			return ComponentTools.STRING_EMPTY_ARRAY;
 		}
@@ -162,7 +162,7 @@ public abstract class AbstractItemComponent extends CameliaItemComponent impleme
 	public String[] listServerDataKeys(FacesContext facesContext) {
 
 
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
 		if (dataMapAccessor==null) {
 			return ComponentTools.STRING_EMPTY_ARRAY;
 		}
@@ -196,7 +196,7 @@ public abstract class AbstractItemComponent extends CameliaItemComponent impleme
 	public int getServerDataCount() {
 
 
-		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		 IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
 		 if (dataMapAccessor==null) {
 		 	return 0;
 		 }
@@ -208,7 +208,7 @@ public abstract class AbstractItemComponent extends CameliaItemComponent impleme
 	public Object getServerData(String name) {
 
 
-		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		 IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
 		 if (dataMapAccessor==null) {
 		 	return null;
 		 }
@@ -220,7 +220,7 @@ public abstract class AbstractItemComponent extends CameliaItemComponent impleme
 	public Object removeServerData(String name) {
 
 
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
 		if (dataMapAccessor==null) {
 		 	return null;
 		}
@@ -232,7 +232,7 @@ public abstract class AbstractItemComponent extends CameliaItemComponent impleme
 	public int getClientDataCount() {
 
 
-		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
+		 IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", false);
 		 if (dataMapAccessor==null) {
 		 	return 0;
 		 }
@@ -251,7 +251,7 @@ public abstract class AbstractItemComponent extends CameliaItemComponent impleme
 	public String removeClientData(String name) {
 
 
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
+		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", false);
 		if (dataMapAccessor==null) {
 			return null;
 		}

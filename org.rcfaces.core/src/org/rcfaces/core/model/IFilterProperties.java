@@ -18,9 +18,9 @@ import org.rcfaces.core.internal.renderkit.IProperties;
 public interface IFilterProperties extends IProperties, Serializable,
         StateHolder {
 
-    Object put(String propertyName, Object value);
+    Object put(Serializable propertyName, Object value);
 
-    Object remove(String propertyName);
+    Object remove(Serializable propertyName);
 
     String[] listNames();
 

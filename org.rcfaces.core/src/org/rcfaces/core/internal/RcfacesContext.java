@@ -51,50 +51,77 @@ public abstract class RcfacesContext {
 
     public static final int JSF_1_2 = 0x100200;
 
+    public static final int JSF_2_0 = 0x200000;
+
+    private static final boolean isJSF2_0;
+    static {
+        boolean is2_0 = false;
+
+        try {
+            RcfacesContext.class.getClassLoader().loadClass(
+                    "javax.faces.component.behavior.Behavior");
+
+            is2_0 = true;
+
+            LOG.info("JSF version 2.0 detected !");
+
+        } catch (Throwable ex) {
+            LOG.trace(ex);
+        }
+
+        isJSF2_0 = is2_0;
+    }
+
     private static final boolean isJSF1_2;
     static {
         boolean is1_2 = false;
 
-        try {
-            RcfacesContext.class.getClassLoader().loadClass(
-                    "javax.faces.webapp.UIComponentELTag");
+        if (isJSF2_0 == false) {
+            try {
+                RcfacesContext.class.getClassLoader().loadClass(
+                        "javax.faces.webapp.UIComponentELTag");
 
-            is1_2 = true;
+                is1_2 = true;
 
-            LOG.info("JSF version 1.2 detected !");
+                LOG.info("JSF version 1.2 detected !");
 
-        } catch (Throwable ex) {
-            LOG.debug(ex);
+            } catch (Throwable ex) {
+                LOG.trace(ex);
+            }
         }
 
         isJSF1_2 = is1_2;
     }
 
     protected static final String CAMELIA_CONFIG_FILES_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".CONFIG_FILES";
+            .getPackagePrefix() + ".CONFIG_FILES";
 
     protected static final String LISTENER_MANAGER_STRATEGY_PARAMETER = Constants
-    	.getPackagePrefix()+ ".LISTENER_MANAGER_STRATEGY";
-  
+            .getPackagePrefix() + ".LISTENER_MANAGER_STRATEGY";
+
     protected static final String APPLICATION_VERSION_PROPERTY = "org.rcfaces.core.internal.APPLICATION_VERSION";
 
     private static final Lifecycle EMPTY_LIFECYCLE = new Lifecycle() {
         private static final String REVISION = "$Revision$";
 
+        @Override
         public void addPhaseListener(PhaseListener listener) {
         }
 
+        @Override
         public void execute(FacesContext context) throws FacesException {
         }
 
+        @Override
         public PhaseListener[] getPhaseListeners() {
             return new PhaseListener[0];
         }
 
+        @Override
         public void removePhaseListener(PhaseListener listener) {
         }
 
+        @Override
         public void render(FacesContext context) throws FacesException {
         }
     };
@@ -227,7 +254,7 @@ public abstract class RcfacesContext {
     public abstract String getApplicationVersion();
 
     public abstract boolean isDesignerMode();
-    
+
     public abstract int getListenerManagerStrategy();
 
     public abstract IServicesRegistry getServicesRegistry();
@@ -284,6 +311,10 @@ public abstract class RcfacesContext {
 
     public static boolean isJSF1_2() {
         return isJSF1_2;
+    }
+
+    public static boolean isJSF2_0() {
+        return isJSF2_0;
     }
 
 }

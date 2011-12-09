@@ -163,6 +163,12 @@ public class BasicComponentEngine extends AbstractComponentEngine {
         return i.doubleValue();
     }
 
+    /**
+     * Ne retourne pas de valeur de l'expression EL
+     * 
+     * @param propertyName
+     * @return
+     */
     final Object getLocalProperty(String propertyName) {
 
         if (debugEnabled) {
@@ -190,6 +196,14 @@ public class BasicComponentEngine extends AbstractComponentEngine {
         return value;
     }
 
+    /**
+     * Retourne la valeur de la propriété même si il faut utiliser une EL
+     * 
+     * @param propertyName
+     * @param requestedClass
+     * @param facesContext
+     * @return
+     */
     public final Object getInternalProperty(String propertyName,
             Class requestedClass, FacesContext facesContext) {
 
@@ -700,8 +714,8 @@ public class BasicComponentEngine extends AbstractComponentEngine {
         if (debugEnabled) {
             LOG.debug("Process update, enableDelta=" + enableDelta);
         }
-        
-        enableDelta=false;
+
+        enableDelta = false;
 
         if (enableDelta == true) {
             throw new FacesException(
@@ -764,7 +778,6 @@ public class BasicComponentEngine extends AbstractComponentEngine {
                     forceDelta);
         }
 
-        @Override
         public IPropertiesManager copyOriginalState() {
             BasicDataAccessor copy = new BasicDataAccessor(name);
             copy.propertiesManager = copy;

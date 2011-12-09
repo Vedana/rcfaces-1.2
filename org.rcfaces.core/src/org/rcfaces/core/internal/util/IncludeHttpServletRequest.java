@@ -21,19 +21,22 @@ import org.rcfaces.core.internal.webapp.ExtendedHttpServlet;
 public class IncludeHttpServletRequest extends HttpServletRequestWrapper {
     private static final String REVISION = "$Revision$";
 
-    private static final Set IGNORED_HEADER = new HashSet(8);
+    private static final Set<String> IGNORED_HEADER = new HashSet<String>(8);
     static {
         IGNORED_HEADER.add(ExtendedHttpServlet.HTTP_IF_MODIFIED_SINCE);
         IGNORED_HEADER.add(ExtendedHttpServlet.HTTP_IF_NONE_MATCH);
         IGNORED_HEADER.add(ExtendedHttpServlet.HTTP_LAST_MODIFIED);
         IGNORED_HEADER.add(ExtendedHttpServlet.HTTP_IF_NOT_HASH);
-        IGNORED_HEADER.add(ExtendedHttpServlet.HTTP_ACCEPT_ENCODING); // Desactive le GZIP !
+        IGNORED_HEADER.add(ExtendedHttpServlet.HTTP_ACCEPT_ENCODING); // Desactive
+                                                                      // le GZIP
+                                                                      // !
     }
 
     public IncludeHttpServletRequest(HttpServletRequest servletRequest) {
         super(servletRequest);
     }
 
+    @Override
     public long getDateHeader(String headerName) {
         if (IGNORED_HEADER.contains(headerName)) {
             return -1;
@@ -41,6 +44,7 @@ public class IncludeHttpServletRequest extends HttpServletRequestWrapper {
         return super.getDateHeader(headerName);
     }
 
+    @Override
     public String getHeader(String headerName) {
         if (IGNORED_HEADER.contains(headerName)) {
             return null;
@@ -48,6 +52,7 @@ public class IncludeHttpServletRequest extends HttpServletRequestWrapper {
         return super.getHeader(headerName);
     }
 
+    @Override
     public int getIntHeader(String headerName) {
         if (IGNORED_HEADER.contains(headerName)) {
             return -1;
@@ -56,6 +61,7 @@ public class IncludeHttpServletRequest extends HttpServletRequestWrapper {
         return super.getIntHeader(headerName);
     }
 
+    @Override
     public String getParameter(String parameterName) {
         if (IGNORED_HEADER.contains(parameterName)) {
             return null;
@@ -64,6 +70,7 @@ public class IncludeHttpServletRequest extends HttpServletRequestWrapper {
         return super.getParameter(parameterName);
     }
 
+    @Override
     public Enumeration getHeaders(String parameterName) {
         if (IGNORED_HEADER.contains(parameterName)) {
             return new Vector().elements();
@@ -71,6 +78,7 @@ public class IncludeHttpServletRequest extends HttpServletRequestWrapper {
         return super.getHeaders(parameterName);
     }
 
+    @Override
     public String[] getParameterValues(String parameterName) {
         if (IGNORED_HEADER.contains(parameterName)) {
             return null;
@@ -79,10 +87,12 @@ public class IncludeHttpServletRequest extends HttpServletRequestWrapper {
         return super.getParameterValues(parameterName);
     }
 
+    @Override
     public String getMethod() {
         return "GET";
     }
 
+    @Override
     public String getScheme() {
         return "http";
     }
