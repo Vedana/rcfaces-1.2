@@ -1305,6 +1305,7 @@ var __statics = {
 				+ dataGrid._columnSelected + "'");
 
 		dataGrid._columnSelected = undefined;
+		return f_core.CancelJsEvent(evt);
 	},
 	/**
 	 * @method private static
@@ -2784,7 +2785,8 @@ var __members = {
 		var labelComponent = column._label;
 
 		if (!labelComponent) {
-			return null;
+			var text=column._text;
+			return text;
 		}
 
 		return f_core.GetTextNode(labelComponent);
@@ -4871,8 +4873,8 @@ var __members = {
 			var columnIndex = col._index;
 			var tdIndex = 0;
 			for ( var j = 0; j < columns.length; j++) {
-				var col = columns[j];
-				if (!col._visibility) {
+				var col2 = columns[j];
+				if (!col2._visibility) {
 					continue;
 				}
 

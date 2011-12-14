@@ -181,18 +181,43 @@ var __statics = {
 		return (text1 > text2)? 1:-1;
 	},
 	/**
+	 * @method private static
+	 * @param String text
+	 * @return String
+	 */
+	_NormalizeInteger: function(text) {
+		return text.replace(/[^\d]/g, '');
+	},
+	/**
 	 * @method hidden static
 	 * @param String text1
 	 * @param String text2
 	 * @return Number
 	 */
 	Sort_Integer: function(text1, text2) {
-		var val1 = parseInt(text1, 10);
-		var val2 = parseInt(text2, 10);
+		var t1=f_dataGrid._NormalizeInteger(text1);
+		var t2=f_dataGrid._NormalizeInteger(text2);
+
+		var val1 = parseInt(t1, 10);
+		var val2 = parseInt(t2, 10);
 		if (val1 == val2) {
 			return 0;
 		}
 		return (val1 > val2)? 1:-1;
+	},
+	/**
+	 * @method private static
+	 * @param String text
+	 * @return String
+	 */
+	_NormalizeNumber: function(text) {
+		if (text.indexOf('.')>=0) {
+			return text.replace(/[^\d\.]/g, '');
+		}
+
+		text=text.replace(/[^\d\,]/g,'').replace(',', '.');
+		
+		return text;
 	},
 	/**
 	 * @method hidden static
@@ -201,8 +226,11 @@ var __statics = {
 	 * @return Number
 	 */
 	Sort_Number: function(text1, text2) {
-		var val1 = parseFloat(text1);
-		var val2 = parseFloat(text2);
+		var t1=f_dataGrid._NormalizeNumber(text1);
+		var t2=f_dataGrid._NormalizeNumber(text2);
+		
+		var val1 = parseFloat(t1);
+		var val2 = parseFloat(t2);
 		if (val1 == val2) {
 			return 0;
 		}

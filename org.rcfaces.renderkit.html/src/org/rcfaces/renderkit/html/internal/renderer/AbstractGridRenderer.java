@@ -2029,15 +2029,29 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 				objectWriter.writeSymbol("_id").writeString(columnId);
 			}
 
+			String columnText = null;
+			if (columnComponent instanceof ITextCapability) {
+				columnText = ((ITextCapability) columnComponent).getText();
+			}
+
 			int rowState = gridRenderContext.getColumnState(i);
 			if (rowState == AbstractGridRenderContext.SERVER_HIDDEN) {
 				objectWriter.writeSymbol("_visibility").writeNull();
+
+				if (columnText != null) {
+					objectWriter.writeSymbol("_text").writeString(columnText);
+				}
 
 				objectWriter.end();
 				continue;
 
 			} else if (rowState == AbstractGridRenderContext.CLIENT_HIDDEN) {
 				objectWriter.writeSymbol("_visibility").writeBoolean(false);
+
+				if (((generationMask & GENERATE_CELL_TEXT) == 0)
+						&& (columnText != null)) {
+					objectWriter.writeSymbol("_text").writeString(columnText);
+				}
 			}
 
 			if (columnStyleClasses != null) {
@@ -2212,11 +2226,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 			}
 
 			if ((generationMask & GENERATE_CELL_TEXT) > 0) {
-				if (columnComponent instanceof ITextCapability) {
-					String text = ((ITextCapability) columnComponent).getText();
-					if (text != null) {
-						objectWriter.writeSymbol("_text").writeString(text);
-					}
+				if (columnText != null) {
+					objectWriter.writeSymbol("_text").writeString(columnText);
 				}
 				if (columnComponent instanceof IToolTipTextCapability) {
 					String toolTip = ((IToolTipTextCapability) columnComponent)
