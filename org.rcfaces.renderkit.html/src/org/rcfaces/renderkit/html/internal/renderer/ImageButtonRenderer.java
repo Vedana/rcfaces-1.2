@@ -79,6 +79,8 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
 				}
 			}
 		}
+		
+		htmlWriter.getJavaScriptEnableMode().enableOnOver();
 
 		super.encodeEnd(writer);
 	}

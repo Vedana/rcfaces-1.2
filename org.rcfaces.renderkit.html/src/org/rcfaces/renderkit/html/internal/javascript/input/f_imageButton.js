@@ -10,8 +10,7 @@
  * @version $Revision$ $Date$
  */ 
 var __statics = {
-		
-	
+
 	/**
 	 * @field hidden static final String
 	 */
