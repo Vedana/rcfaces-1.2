@@ -1305,7 +1305,6 @@ var __statics = {
 				+ dataGrid._columnSelected + "'");
 
 		dataGrid._columnSelected = undefined;
-		return f_core.CancelJsEvent(evt);
 	},
 	/**
 	 * @method private static
