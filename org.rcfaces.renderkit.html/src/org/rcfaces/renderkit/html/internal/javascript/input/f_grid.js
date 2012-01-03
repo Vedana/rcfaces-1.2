@@ -987,6 +987,12 @@ var __statics = {
 
 		f_core.Debug(f_grid, "_Title_onMouseDown: perform event " + evt);
 
+		if (evt.preventDefault) {
+			evt.preventDefault();
+		} else {
+			evt.returnValue = false;
+		}
+
 		if (dataGrid.f_getEventLocked(evt)) {
 			return false;
 		}
@@ -1017,7 +1023,7 @@ var __statics = {
 
 		dataGrid._columnSelected = column;
 		dataGrid._updateTitleStyle(column);
-
+		
 		return true;
 	},
 	/**
