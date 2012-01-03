@@ -1206,7 +1206,7 @@ var f_core = {
 					f_core.AddEventListener(form, "submit", document._rcfacesDisableSubmit);
 					f_core.RemoveEventListener(form, "submit", f_core._OnSubmit);
 					f_core.RemoveEventListener(form, "reset", f_core._OnReset);
-		
+					
 					form._checkListeners=undefined; // List<method>
 					form._resetListeners=undefined; // List<method>
 					form._messageContext=undefined; // f_messageContext
@@ -1215,7 +1215,10 @@ var f_core = {
 					
 					if (form._rcfacesOldSubmit) {
 						try {
-							form.submit = form._rcfacesOldSubmit;
+							form.onsubmit=document._rcfacesDisableSubmit;
+							form.submit=document._rcfacesDisableSubmitReturnFalse;
+				
+//							form.submit = form._rcfacesOldSubmit;
 							
 						} catch (x) {
 							// Dans certaines versions de IE, il n'est pas possible de changer le submit !
@@ -1814,22 +1817,12 @@ var f_core = {
 				f_core.Profile(null, "f_core.SubmitEvent.serialized");
 			
 			}
+			
 			if (!win._rcfacesSubmitting) {
 				f_core._PerformPostSubmit(form);
 
 				if (win._rcfacesCleanUpOnSubmit!==false) {
-					var _win=win;
-					win._rcfacesCleanUpTimeout=win.setTimeout(function () {
-						var w=_win;
-						_win=null;
-						
-						if (w.f_core && w.f_core.ExitWindow) {
-							w.f_core.ExitWindow(w, true);
-						}
-						
-					}, f_core._CLEAN_UP_ON_SUBMIT_DELAY);
-					
-					f_core.Profile(null, "f_core.SubmitEvent.setTimer("+f_core._CLEAN_UP_ON_SUBMIT_DELAY+")");
+					f_core._DisableSubmit(win, form);
 				}
 			}
 				
@@ -2034,16 +2027,7 @@ var f_core = {
 					f_core._PerformPostSubmit(form);
 								
 					if (win._rcfacesCleanUpOnSubmit!==false) {
-						var _win=win;
-						win._rcfacesCleanUpTimeout=win.setTimeout(function () {
-							var w=_win;
-							_win=null;
-							
-							if (w.f_core && w.f_core.ExitWindow) {
-								w.f_core.ExitWindow(w, true);
-							}
-							
-						}, f_core._CLEAN_UP_ON_SUBMIT_DELAY);
+						f_core._DisableSubmit(win, form);
 					}
 				}
 								
@@ -2070,6 +2054,36 @@ var f_core = {
 		} finally {		
 			f_core.Profile(true, "f_core._submit("+url+")");
 		}
+	},
+	/**
+	 * @method private static
+	 * @param Window win
+	 * @param HTMLFormElement form
+	 * @return void
+	 */
+	_DisableSubmit: function(win, form) {
+		if (form) {
+			try {
+				form.onsubmit=document._rcfacesDisableSubmit;
+				form.submit=document._rcfacesDisableSubmitReturnFalse;
+				
+			} catch (x) {
+				// Dans certaines versions de IE, il n'est pas possible de changer le submit !
+			}			
+		}
+		
+		var _win=win;
+		win._rcfacesCleanUpTimeout=win.setTimeout(function () {
+			var w=_win;
+			_win=null;
+			
+			if (w.f_core && w.f_core.ExitWindow) {
+				w.f_core.ExitWindow(w, true);
+			}
+			
+		}, f_core._CLEAN_UP_ON_SUBMIT_DELAY);		
+		
+		f_core.Profile(null, "f_core.SubmitEvent.setTimer("+f_core._CLEAN_UP_ON_SUBMIT_DELAY+")");
 	},
 	/**
 	 * @method private static
@@ -6194,7 +6208,7 @@ var f_core = {
 		if (r>=0) {
 			var ps=url.substring(r+1);			
 			
-			var ps=ps.split("&");
+			ps=ps.split("&");
 			for(var i=0;i<ps.length;i++) {
 				var p=ps[i];
 				if (!p) {
@@ -6292,6 +6306,11 @@ var f_core = {
 	}
 };
 
+/**
+ * @method private static
+ * @param optional Event event
+ * @return Boolean
+ */
 document._rcfacesDisableSubmit=function(event) {
 	if (!event) {
 		event=this.ownerDocument.parentWindow.event;
@@ -6307,9 +6326,15 @@ document._rcfacesDisableSubmit=function(event) {
 	}
 	
 	return false;
-	
 };
 
+/**
+ * @method private static
+ * @return Boolean
+ */
+document._rcfacesDisableSubmitReturnFalse=function() {
+	return false;
+};
 
 f_core._InitLibrary(window);
 
