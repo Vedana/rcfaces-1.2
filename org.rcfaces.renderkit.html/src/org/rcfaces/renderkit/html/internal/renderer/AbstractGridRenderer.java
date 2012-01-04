@@ -262,6 +262,63 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
 		boolean ajax = needAjaxJavaScriptClasses(writer, dataGridComponent);
 
+		if (gridRenderContext.hasAdditionalInformations()) {
+			ajax = true;
+			javaScriptRenderContext.appendRequiredClass(JavaScriptClasses.GRID,
+					"additional");
+
+			if (needAdditionalInformationContextState()) {
+				IHtmlRenderContext htmlRenderContext = writer
+						.getHtmlComponentRenderContext().getHtmlRenderContext();
+
+				Object state = htmlRenderContext.saveState(htmlRenderContext
+						.getFacesContext());
+
+				if (LOG.isDebugEnabled()) {
+					LOG.debug("Save context state on "
+							+ ((UIComponent) dataGridComponent).getId()
+							+ " for additionalInformations");
+				}
+
+				if (state != null) {
+					String contentType = htmlRenderContext.getFacesContext()
+							.getResponseWriter().getContentType();
+
+					((UIComponent) dataGridComponent).getAttributes().put(
+							ADDITIONAL_INFORMATIONS_RENDER_CONTEXT_STATE,
+							new Object[] { state, contentType });
+				}
+			}
+		}
+
+		if (gridRenderContext.hasTooltips()) {
+			ajax = true;
+			javaScriptRenderContext.appendRequiredClass(JavaScriptClasses.GRID,
+					"toolTip");
+
+			if (getAdditionalInformationsRenderContextState(dataGridComponent) == null) {
+				IHtmlRenderContext htmlRenderContext = writer
+						.getHtmlComponentRenderContext().getHtmlRenderContext();
+				Object state = htmlRenderContext.saveState(htmlRenderContext
+						.getFacesContext());
+
+				if (LOG.isDebugEnabled()) {
+					LOG.debug("Save context state on "
+							+ ((UIComponent) dataGridComponent).getId()
+							+ " for tooltips");
+				}
+
+				if (state != null) {
+					String contentType = htmlRenderContext.getFacesContext()
+							.getResponseWriter().getContentType();
+
+					((UIComponent) dataGridComponent).getAttributes().put(
+							TOOLTIPS_RENDER_CONTEXT_STATE,
+							new Object[] { state, contentType });
+				}
+			}
+		}
+
 		if (ajax == false) {
 			// On a des colonnes triables coté serveur ?
 			int columnCount = gridRenderContext.getColumnCount();
@@ -287,49 +344,6 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 					}
 				}
 			}
-		}
-
-		if (gridRenderContext.hasAdditionalInformations()) {
-			ajax = true;
-			javaScriptRenderContext.appendRequiredClass(JavaScriptClasses.GRID,
-					"additional");
-
-			if (needAdditionalInformationContextState()) {
-				IHtmlRenderContext htmlRenderContext = writer
-						.getHtmlComponentRenderContext().getHtmlRenderContext();
-
-				Object state = htmlRenderContext.saveState(htmlRenderContext
-						.getFacesContext());
-
-				if (state != null) {
-					String contentType = htmlRenderContext.getFacesContext()
-							.getResponseWriter().getContentType();
-
-					((UIComponent) dataGridComponent).getAttributes().put(
-							ADDITIONAL_INFORMATIONS_RENDER_CONTEXT_STATE,
-							new Object[] { state, contentType });
-				}
-			}
-		}
-
-		if (gridRenderContext.hasTooltips()
-				&& getAdditionalInformationsRenderContextState(dataGridComponent) == null) {
-			IHtmlRenderContext htmlRenderContext = writer
-					.getHtmlComponentRenderContext().getHtmlRenderContext();
-			Object state = htmlRenderContext.saveState(htmlRenderContext
-					.getFacesContext());
-
-			if (state != null) {
-				String contentType = htmlRenderContext.getFacesContext()
-						.getResponseWriter().getContentType();
-
-				((UIComponent) dataGridComponent).getAttributes().put(
-						TOOLTIPS_RENDER_CONTEXT_STATE,
-						new Object[] { state, contentType });
-			}
-
-			javaScriptRenderContext.appendRequiredClass(JavaScriptClasses.GRID,
-					"toolTip");
 		}
 
 		if (ajax) {
@@ -2144,10 +2158,12 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 					objectWriter.writeSymbol("_titleToolTipId").write(tooltip);
 					hasToolTip = true;
 
-					String tooltipContent = titleToolTipContents[i];
-					if (tooltipContent != null) {
-						objectWriter.writeSymbol("_titleToolTipContent").write(
-								tooltipContent);
+					if (titleToolTipContents != null) {
+						String tooltipContent = titleToolTipContents[i];
+						if (tooltipContent != null) {
+							objectWriter.writeSymbol("_titleToolTipContent")
+									.write(tooltipContent);
+						}
 					}
 				}
 			}
