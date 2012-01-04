@@ -291,7 +291,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 			}
 		}
 
-		if (gridRenderContext.hasTooltips()) {
+		if (gridRenderContext.containsTooltips()) {
 			ajax = true;
 			javaScriptRenderContext.appendRequiredClass(JavaScriptClasses.GRID,
 					"toolTip");

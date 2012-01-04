@@ -95,8 +95,6 @@ import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractGridRenderContext {
-	private static final String REVISION = "$Revision$";
-
 	private static final Log LOG = LogFactory
 			.getLog(AbstractGridRenderContext.class);
 
@@ -242,6 +240,7 @@ public abstract class AbstractGridRenderContext {
 
 	private Set<ToolTipComponent> gridToolTips; // #head, #body, #row +
 												// (v:toolTipId) + #cell
+
 	private AbstractGridRenderContext(IProcessContext processContext,
 			IScriptRenderContext scriptRenderContext,
 			IGridComponent gridComponent, ISortedComponent sortedComponents[],
@@ -1329,4 +1328,25 @@ public abstract class AbstractGridRenderContext {
 
 	}
 
+	// Nous devons CONNAITRE en avance s'il y a des tooltips !
+	public boolean containsTooltips() {
+		if (gridComponent instanceof IToolTipComponent) {
+			if (((IToolTipComponent) gridComponent).listToolTips().hasNext()) {
+				return true;
+			}
+		}
+
+		for (IColumnIterator it = gridComponent.listColumns(); it.hasNext();) {
+			UIColumn column = it.next();
+
+			if (column instanceof IToolTipComponent) {
+				if (((IToolTipComponent) column).listToolTips().hasNext()) {
+					return true;
+				}
+			}
+
+		}
+
+		return false;
+	}
 }
