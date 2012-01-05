@@ -133,6 +133,21 @@ var f_core = {
 	_UNKNOWN_BROWER: "unknown",
 
 	/**
+	 * @field public static final Number
+	 */
+	LEFT_MOUSE_BUTTON: 0,
+
+	/**
+	 * @field public static final Number
+	 */
+	MIDDLE_MOUSE_BUTTON: 1,
+
+	/**
+	 * @field public static final Number
+	 */
+	RIGHT_MOUSE_BUTTON: 2,
+	
+	/**
 	 * Numero du bouton qui déclanche les popups. (Cela dépend de l'OS !)
 	 *
 	 * @field private static final Number
@@ -4982,16 +4997,37 @@ var f_core = {
 	 * @method hidden static
 	 */
 	GetEvtButton: function(evt) {
-		if (evt) {
-			if (evt.button!==undefined) {
-				return evt.button;
-			}
-			if (evt.which!==undefined) {
-				return evt.which;
-			}
+		if (!evt) {
+			return -1;
 		}
 		
-		return 0;
+		var button=evt.button;
+		if (button == null) {
+	       /* IE case SAUF IE9*/
+			var which = evt.which;
+			if (which & 0x01) {
+				return f_core.LEFT_MOUSE_BUTTON;
+			}
+			if (which & 0x02) {
+				return f_core.RIGHT_MOUSE_BUTTON;
+			}
+			if (which & 0x04) {
+				return f_core.MIDDLE_MOUSE_BUTTON;
+			}
+		
+			return -1;
+		}
+
+		switch(button) {
+		case 0:
+			return f_core.LEFT_MOUSE_BUTTON;
+		case 1:
+			return f_core.MIDDLE_MOUSE_BUTTON;
+		case 2:
+			return f_core.RIGHT_MOUSE_BUTTON;
+		}
+		
+		return -1;
 	},
 	/**
 	 * Returns an effect specified by its name.
@@ -5494,7 +5530,7 @@ var f_core = {
 					}
 				}
 								
-				pos=idx2+1
+				pos=idx2+1;
 				continue;
 			}
 			
