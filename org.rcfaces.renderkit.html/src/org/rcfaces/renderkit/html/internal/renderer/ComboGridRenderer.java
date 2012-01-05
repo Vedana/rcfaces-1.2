@@ -79,8 +79,6 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
 
 		AbstractGridRenderContext gridRenderContext = getGridRenderContext(componentRenderContext);
 
-		
-
 		Map formattedValues = null;
 		String formattedValue = null;
 		String formattedValueLabel = null;
@@ -92,30 +90,29 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
 
 		String labelColumnId = comboGridComponent
 				.getLabelColumnId(facesContext);
-		
+
 		Map formatValues = new HashMap();
 
 		String valueFormat = comboGridComponent.getValueFormat(facesContext);
 		if (valueFormat == null) {
-			if(labelColumnId != null) {
-				valueFormat = "{"+labelColumnId+"}";
-			}else {
-				valueFormat= "{"+valueColumnId+"}";
+			if (labelColumnId != null) {
+				valueFormat = "{" + labelColumnId + "}";
+			} else {
+				valueFormat = "{" + valueColumnId + "}";
 			}
 		}
 		formatValues.put("valueFormat", valueFormat);
-		
+
 		String valueFormatLabel = comboGridComponent
 				.getValueFormatLabel(facesContext);
-		if (valueFormatLabel == null ){
-			if(labelColumnId != null) {
-				valueFormatLabel = "{"+labelColumnId+"}";
-			}else {
-				valueFormatLabel = "{"+valueColumnId+"}";
+		if (valueFormatLabel == null) {
+			if (labelColumnId != null) {
+				valueFormatLabel = "{" + labelColumnId + "}";
+			} else {
+				valueFormatLabel = "{" + valueColumnId + "}";
 			}
-		} 
+		}
 		formatValues.put("valueFormatLabel", valueFormatLabel);
-		
 
 		if (selectedValue != null) {
 			UIComponent converterComponent = getColumn(comboGridComponent,
@@ -128,13 +125,13 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
 					&& convertedSelectedValue.length() > 0) {
 
 				formattedValues = formatValue(facesContext, comboGridComponent,
-						convertedSelectedValue, formatValues);
+						selectedValue, convertedSelectedValue, formatValues);
 				if (formattedValues != null) {
 					formattedValue = (String) formattedValues
 							.get("valueFormat");
 					formattedValueLabel = (String) formattedValues
 							.get("valueFormatLabel");
-				} 
+				}
 
 				if (formattedValue == null) {
 					componentRenderContext.setAttribute(INPUT_ERRORED_PROPERTY,
