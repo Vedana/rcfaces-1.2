@@ -41,8 +41,7 @@ var __members = {
 			return false;
 		}
 		
-		this.f_setSelected(!this.f_isSelected());
-		return true;
+		return this.f_super(arguments, event);
 	},
 	/**
 	 * Set selected state.
@@ -139,7 +138,7 @@ var __members = {
 	f_setValue: function(value) {
 		this.f_setSelected(value!==false);
 	}
-}
+};
 
 new f_class("f_imageRadioButton", {
 	extend: f_imageCheckButton, 
