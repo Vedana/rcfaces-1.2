@@ -1212,13 +1212,23 @@ var f_core = {
 				var forms = doc.forms;
 				for (var i=0; i<forms.length; i++) {
 					var form = forms[i];
-					
+	
+					try {
+						form.onsubmit=document._rcfacesDisableSubmit;
+						form.submit=document._rcfacesDisableSubmitReturnFalse;
+			
+//						form.submit = form._rcfacesOldSubmit;
+						
+					} catch (x) {
+						// Dans certaines versions de IE, il n'est pas possible de changer le submit !
+					}
+
 					if (!form._rcfacesInitialized) {
 						continue;
 					}
 					form._rcfacesInitialized=undefined;
 		
-					f_core.AddEventListener(form, "submit", document._rcfacesDisableSubmit);
+//					f_core.AddEventListener(form, "submit", document._rcfacesDisableSubmit);
 					f_core.RemoveEventListener(form, "submit", f_core._OnSubmit);
 					f_core.RemoveEventListener(form, "reset", f_core._OnReset);
 					
@@ -1229,15 +1239,6 @@ var f_core = {
 					form._serializedInputs=undefined; // Map<String, String>			
 					
 					if (form._rcfacesOldSubmit) {
-						try {
-							form.onsubmit=document._rcfacesDisableSubmit;
-							form.submit=document._rcfacesDisableSubmitReturnFalse;
-				
-//							form.submit = form._rcfacesOldSubmit;
-							
-						} catch (x) {
-							// Dans certaines versions de IE, il n'est pas possible de changer le submit !
-						}
 						
 						form._rcfacesOldSubmit = undefined;
 					}
@@ -1835,9 +1836,10 @@ var f_core = {
 			
 			if (!win._rcfacesSubmitting) {
 				f_core._PerformPostSubmit(form);
-
+				
+				f_core._DisableSubmit(form);
 				if (win._rcfacesCleanUpOnSubmit!==false) {
-					f_core._DisableSubmit(win, form);
+					f_core._BatchExitWindow(win);
 				}
 			}
 				
@@ -2041,9 +2043,11 @@ var f_core = {
 				} else {
 					f_core._PerformPostSubmit(form);
 								
+					f_core._DisableSubmit(form);
 					if (win._rcfacesCleanUpOnSubmit!==false) {
-						f_core._DisableSubmit(win, form);
+						f_core._BatchExitWindow(win);
 					}
+					
 				}
 								
 			} catch (ex) {
@@ -2072,21 +2076,29 @@ var f_core = {
 	},
 	/**
 	 * @method private static
-	 * @param Window win
 	 * @param HTMLFormElement form
 	 * @return void
 	 */
-	_DisableSubmit: function(win, form) {
-		if (form) {
+	_DisableSubmit: function(form) {
+		var forms = form.ownerDocument.document.forms;
+		for (var i=0; i<forms.length; i++) {
+			var form=forms[i];
 			try {
 				form.onsubmit=document._rcfacesDisableSubmit;
 				form.submit=document._rcfacesDisableSubmitReturnFalse;
 				
 			} catch (x) {
 				// Dans certaines versions de IE, il n'est pas possible de changer le submit !
-			}			
+			}
 		}
-		
+	},
+	
+	/**
+	 * @method private static
+	 * @param Window win
+	 * @return void
+	 */
+	_BatchExitWindow: function(win) {
 		var _win=win;
 		win._rcfacesCleanUpTimeout=win.setTimeout(function () {
 			var w=_win;
@@ -6350,6 +6362,9 @@ var f_core = {
 document._rcfacesDisableSubmit=function(event) {
 	if (!event) {
 		event=this.ownerDocument.parentWindow.event;
+		if (!event) {
+			return;
+		}
 	}
 	
 	event.cancelBubble = true;
