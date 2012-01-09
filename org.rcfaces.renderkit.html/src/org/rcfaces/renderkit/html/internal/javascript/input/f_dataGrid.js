@@ -1611,7 +1611,7 @@ var __members = {
 					f_imageRepository.PrepareImage(imageURL);
 				}				
 				
-				var imageTag=images[argIdx];
+				var imageTag=images[argIdx-1];
 				
 				if (f_grid.USE_BACKGROUND_IMAGE) {
 					if (imageURL) {
