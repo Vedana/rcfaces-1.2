@@ -979,7 +979,12 @@ var f_core = {
 			}
 	
 			f_core.Debug("f_core.profile", "Profiler: "+name+"  +"+diff+"ms.");
-			
+		
+		} catch (x) {
+			f_core.Error("f_core.profile", "Profiler function throws exception", x);
+
+			throw x;
+		
 		} finally {
 			f_core._LoggingProfile=undefined;
 		}
