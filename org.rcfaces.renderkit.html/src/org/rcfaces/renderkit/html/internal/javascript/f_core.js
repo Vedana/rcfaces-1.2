@@ -2080,12 +2080,13 @@ var f_core = {
 	 * @return void
 	 */
 	_DisableSubmit: function(form) {
-		var forms = form.ownerDocument.document.forms;
+		var doc=form.ownerDocument;
+		var forms = doc.forms;
 		for (var i=0; i<forms.length; i++) {
 			var form=forms[i];
 			try {
-				form.onsubmit=document._rcfacesDisableSubmit;
-				form.submit=document._rcfacesDisableSubmitReturnFalse;
+				form.onsubmit=doc._rcfacesDisableSubmit;
+				form.submit=doc._rcfacesDisableSubmitReturnFalse;
 				
 			} catch (x) {
 				// Dans certaines versions de IE, il n'est pas possible de changer le submit !
