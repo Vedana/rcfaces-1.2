@@ -896,7 +896,7 @@ f_classLoader.prototype = {
 		}
 		this._onMessageIds=undefined;
 		
-		f_core.Info(f_classLoader, "f_verifyOnMessage: initialize "+onMessageIds.length+" components.");
+		f_core.Debug(f_classLoader, "f_verifyOnMessage: initialize "+onMessageIds.length+" components.");
 		
 		this._initializeIds(onMessageIds);
 	},
@@ -1055,7 +1055,7 @@ f_classLoader.prototype = {
 		}
 		this._onSubmitIds=undefined;
 		
-		f_core.Info(f_classLoader, "f_verifyOnSubmit: initialize "+onSubmitIds.length+" components.");
+		f_core.Debug(f_classLoader, "f_verifyOnSubmit: initialize "+onSubmitIds.length+" components.");
 		
 		this._initializeIds(onSubmitIds);
 	},

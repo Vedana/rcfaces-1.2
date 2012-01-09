@@ -1833,7 +1833,9 @@ var f_core = {
 				f_core.Profile(null, "f_core.SubmitEvent.serialized");
 			
 			}
-			
+
+			f_core.Debug(f_core, "_OnSubmit: Preparing exit, submitting="+win._rcfacesSubmitting+" cleanUp="+win._rcfacesCleanUpOnSubmit);
+
 			if (!win._rcfacesSubmitting) {
 				f_core._PerformPostSubmit(form);
 				
@@ -1844,6 +1846,11 @@ var f_core = {
 			}
 				
 			return true;
+			
+		} catch (ex) {
+			f_core.Error(f_core, "_OnSubmit: Throws exception", ex);
+			return false;
+		
 		} finally {
 			f_core.Profile(true, "f_core.SubmitEvent");
 		}
@@ -1867,6 +1874,8 @@ var f_core = {
 		f_core.Assert(modal===undefined || modal===null || typeof(modal)=="boolean", "f_core._Submit: modal parameter must be undefined or a boolean.");
 
 		f_core.Profile(false, "f_core._submit("+url+")");
+
+		f_core.Debug(f_core, "_Submit: submit form='"+form+"' elt='"+elt+"' event='"+event+"' url='"+url+"' closeWindow="+closeWindow+" modal="+modal);
 
 		try {
 			// Check if we get called from the form itself and use it if none specified
@@ -1917,6 +1926,7 @@ var f_core = {
 
 			var doc=form.ownerDocument;
 			var win=f_core.GetWindow(doc);
+
 			
 			if (win.f_event.GetEventLocked(jsEvt, true)) {
 				return false;
@@ -1924,6 +1934,8 @@ var f_core = {
 	
 			// Double check this is a real FORM
 			f_core.Assert((form.tagName.toLowerCase()=="form"),"f_core._Submit: Invalid form '"+form.tagName+"'.");
+			
+			f_core.Debug(f_core, "_Submit: call onsubmit !");
 	
 			// Call onsubmit hook
 			try {
@@ -1931,6 +1943,8 @@ var f_core = {
 				
 				var ret = f_core._OnSubmit.call(form, jsEvt);
 				if (!ret) {
+					
+					f_core.Debug(f_core, "_Submit: call onsubmit returns "+ret);
 					return ret;
 				}
 				
@@ -1939,7 +1953,9 @@ var f_core = {
 			}
 
 			f_core.Profile(null, "f_core._submit.called");
-			
+
+			f_core.Debug(f_core, "_Submit: serialize elements ...");
+
 			// Serialize element if found
 			var id=null;
 			if (elt) {
@@ -2007,6 +2023,8 @@ var f_core = {
 			} else if (form._rcfacesOldTarget!==undefined) {
 				form.target=form._rcfacesOldTarget;
 			}
+
+			f_core.Debug(f_core, "_Submit: Enter SUBMIT_LOCK stage ..");
 	
 			win.f_event.EnterEventLock(f_event.SUBMIT_LOCK);
 			var unlockEvents=false;
@@ -2031,7 +2049,9 @@ var f_core = {
 				}
 	
 				f_core.Profile(null, "f_core._submit.postSubmit");
-		
+
+				f_core.Debug(f_core, "_Submit: Return from native call.  closeWindow="+closeWindow+" createWindowParameters="+createWindowParameters);
+
 				if (closeWindow) {
 					win._rcfacesCloseWindow=true;
 					return true;
@@ -2041,6 +2061,8 @@ var f_core = {
 					unlockEvents=true;
 
 				} else {
+					f_core.Debug(f_core, "_Submit: Perform post submit  cleanUp="+win._rcfacesCleanUpOnSubmit);
+
 					f_core._PerformPostSubmit(form);
 								
 					f_core._DisableSubmit(form);
@@ -2068,6 +2090,8 @@ var f_core = {
 				}
 			}
 
+			f_core.Info(f_core, "_Submit: Exit SUBMIT_LOCK stage ..");
+
 			return true;
 			
 		} finally {		
@@ -2080,6 +2104,8 @@ var f_core = {
 	 * @return void
 	 */
 	_DisableSubmit: function(form) {
+		f_core.Debug(f_core, "_DisableSubmit: disable form="+form);
+
 		var doc=form.ownerDocument;
 		var forms = doc.forms;
 		for (var i=0; i<forms.length; i++) {
@@ -2100,6 +2126,8 @@ var f_core = {
 	 * @return void
 	 */
 	_BatchExitWindow: function(win) {
+		f_core.Debug(f_core, "_BatchExitWindow: batch Exit window to "+f_core._CLEAN_UP_ON_SUBMIT_DELAY+"ms");
+
 		var _win=win;
 		win._rcfacesCleanUpTimeout=win.setTimeout(function () {
 			var w=_win;
