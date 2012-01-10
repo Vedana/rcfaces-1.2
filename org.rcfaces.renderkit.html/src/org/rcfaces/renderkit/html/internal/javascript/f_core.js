@@ -677,7 +677,7 @@ var f_core = {
 	 * @return void
 	 */
 	SetProfilerMode: function(profilerMode) {
-		f_core.Assert(profilerMode===undefined || typeof(profilerMode)=="function", "f_core.SetProfilerMode: Invalid profilerMode parameter ("+profilerMode+")");
+		f_core.Assert(profilerMode===undefined || profilerMode===false || typeof(profilerMode)=="function", "f_core.SetProfilerMode: Invalid profilerMode parameter ("+profilerMode+")");
 
 		if (profilerMode===false) {			
 			window.rcfacesProfilerCB=false;
@@ -1842,6 +1842,8 @@ var f_core = {
 			f_core.Debug(f_core, "_OnSubmit: Preparing exit, submitting="+win._rcfacesSubmitting+" cleanUp="+win._rcfacesCleanUpOnSubmit);
 
 			if (!win._rcfacesSubmitting) {
+				win.f_event.EnterEventLock(f_event.SUBMIT_LOCK);
+
 				f_core._PerformPostSubmit(form);
 				
 				f_core._DisableSubmit(form);
