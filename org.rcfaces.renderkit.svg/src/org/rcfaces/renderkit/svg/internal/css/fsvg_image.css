@@ -1,0 +1,16 @@
+/*
+ * $Id$
+ */
+
+/**
+ *
+ * @class fsvg_image
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+ 
+.fsvg_image  {
+	-moz-user-select: none;
+	user-select: none;
+}
