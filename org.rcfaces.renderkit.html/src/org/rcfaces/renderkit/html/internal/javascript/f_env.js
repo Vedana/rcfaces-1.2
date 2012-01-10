@@ -443,7 +443,7 @@ var __statics = {
 		
 		return url;
 	}
-}
+};
 
 new f_class("f_env", {
 	statics: __statics,
