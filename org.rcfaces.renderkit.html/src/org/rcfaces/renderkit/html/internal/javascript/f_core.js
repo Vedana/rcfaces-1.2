@@ -928,7 +928,7 @@ var f_core = {
 	 * @return void
 	 */
 	Profile: function(timeEnd, name, date, win) {
-		if (f_core._LoggingProfile || true) {
+		if (f_core._LoggingProfile) {
 			return;
 		}
 		if (!win) {
@@ -2118,6 +2118,8 @@ var f_core = {
 		for (var i=0; i<forms.length; i++) {
 			var form=forms[i];
 			try {
+				form.action="#";
+				
 				form.onsubmit=doc._rcfacesDisableSubmit;
 				form.submit=doc._rcfacesDisableSubmitReturnFalse;
 				
