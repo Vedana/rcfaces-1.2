@@ -779,7 +779,7 @@ var f_core = {
 		// Bug sous IE en LEVEL3 ... on ne peut pas compter sur le this !
 		f_core._OnExit=function() {
 			f_core.ExitWindow(win);
-		}
+		};
 	
 		f_core.AddEventListener(win, "load", f_core._OnInit);
 		f_core.AddEventListener(win, "unload", f_core._OnExit);
@@ -928,7 +928,7 @@ var f_core = {
 	 * @return void
 	 */
 	Profile: function(timeEnd, name, date, win) {
-		if (f_core._LoggingProfile) {
+		if (f_core._LoggingProfile || true) {
 			return;
 		}
 		if (!win) {
