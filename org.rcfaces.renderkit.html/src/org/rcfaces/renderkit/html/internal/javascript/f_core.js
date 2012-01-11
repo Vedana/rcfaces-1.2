@@ -2076,13 +2076,14 @@ var f_core = {
 					if (win._rcfacesCleanUpOnSubmit!==false) {
 						f_core._BatchExitWindow(win);
 					}
-					
 				}
 								
 			} catch (ex) {
 				// Dans le cas d'une exception, on libere les evenements, mais on renvoie l'exception ...
 				unlockEvents=true;
-				
+	
+				f_core.Error(f_core, "_Submit: throws exception", ex);
+
 				throw ex;
 			
 			} finally {
@@ -2092,12 +2093,14 @@ var f_core = {
 		//			if (dlg != null) {
 		//				dlg.focus();
 		//			}
-					
+
+					f_core.Debug(f_core, "_Submit: Exit SUBMIT_LOCK stage ..");
+
 					win.f_event.ExitEventLock(f_event.SUBMIT_LOCK);
 				}
 			}
 
-			f_core.Info(f_core, "_Submit: Exit SUBMIT_LOCK stage ..");
+			f_core.Info(f_core, "_Submit: exit function");
 
 			return true;
 			
@@ -2111,7 +2114,7 @@ var f_core = {
 	 * @return void
 	 */
 	_DisableSubmit: function(form) {
-		f_core.Debug(f_core, "_DisableSubmit: disable form="+form);
+		f_core.Debug(f_core, "_DisableSubmit: disable forms");
 
 		var doc=form.ownerDocument;
 		var forms = doc.forms;
@@ -2120,9 +2123,11 @@ var f_core = {
 			try {
 				form.action="#";
 				
-				form.onsubmit=doc._rcfacesDisableSubmit;
-				form.submit=doc._rcfacesDisableSubmitReturnFalse;
-				
+				form.onsubmit=document._rcfacesDisableSubmit;
+				form.submit=document._rcfacesDisableSubmitReturnFalse;
+
+				f_core.Debug(f_core, "_DisableSubmit: disable form "+form);
+
 			} catch (x) {
 				// Dans certaines versions de IE, il n'est pas possible de changer le submit !
 			}
