@@ -1348,7 +1348,6 @@ var __statics = {
 
 		var date=f_grid._TitleMouseDownTime; // Que pour Firefox
 		if (date && f_core.GetEvtButton(evt)==f_core.LEFT_MOUSE_BUTTON) {
-			var target = evt.target ? evt.target : evt.srcElement;
 			var buttons = evt.which;
 			var ctrlKey=evt.ctrlKey;
 			var altKey=evt.altKey;
@@ -1364,7 +1363,7 @@ var __statics = {
 						return;
 					}
 					
-					var doc = target.ownerDocument;
+					var doc = dataGrid.ownerDocument;
 					var evt = doc.createEvent('MouseEvents');
 					evt.initMouseEvent('click', true, true, doc.defaultView, detail, 0, 0, 0, 0, ctrlKey, altKey, shiftKey, metaKey, buttons, null);
 					
