@@ -1044,7 +1044,7 @@ var __statics = {
 			return;
 		}
 		f_grid._TitleWaitClickTimerId=undefined;
-		clearTimeout(id);
+		window.clearTimeout(id);
 	},
 	/**
 	 * @method private static
