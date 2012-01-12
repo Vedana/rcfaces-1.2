@@ -2127,6 +2127,17 @@ var f_core = {
 				form.submit=document._rcfacesDisableSubmitReturnFalse;
 
 				f_core.Debug(f_core, "_DisableSubmit: disable form "+form);
+				
+				var elts=form.getElementsByTagName("input");
+				for(var j=0;j<elts.length;j++) {
+					var e=elts[j];
+					var type=e.type;
+					if (!type || type.toLowerCase()!="hidden") {
+						continue;
+					}
+					
+					e.parentNode.removeChild(e);
+				}
 
 			} catch (x) {
 				// Dans certaines versions de IE, il n'est pas possible de changer le submit !
@@ -6154,7 +6165,7 @@ var f_core = {
 				return contentDocument.designMode=="on";
 				
 			} catch (ex) {
-				f_core.Info("IsComponentEditable: security exception ?", ex)
+				f_core.Info("IsComponentEditable: security exception ?", ex);
 			}
 			return false;			
 		}
