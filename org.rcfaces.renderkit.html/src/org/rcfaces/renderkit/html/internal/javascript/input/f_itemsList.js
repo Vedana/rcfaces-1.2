@@ -168,8 +168,11 @@ var __members = {
 		case fa_items.AS_PUSH_BUTTON:
 		case fa_items.AS_CHECK_BUTTON:
 		case fa_items.AS_RADIO_BUTTON:
-		case fa_items.AS_DROP_DOWN_MENU:
 			this._itemConfigureItemComponent(item, component);
+			break;
+
+		case fa_items.AS_DROP_DOWN_MENU:
+			this._itemConfigureDropMenuItemComponent(item, component);
 			break;
 
 		case fa_items.AS_SUBMIT_BUTTON: // trop tard !?
@@ -188,6 +191,20 @@ var __members = {
 	 * @return void
 	 */
 	_itemConfigureItemComponent: function(item, component) {
+		var itemsList=this;
+		
+		var selectionCallback=function(event) {
+			return itemsList._itemOnSelect(event);
+		};
+	
+		component.f_addEventListener(f_event.SELECTION, selectionCallback);		
+	},
+	/**
+	 * @method protected
+	 * @param f_event event
+	 * @return void
+	 */
+	_itemConfigureDropMenuItemComponent: function(item, component) {
 		var itemsList=this;
 		
 		var selectionCallback=function(event) {

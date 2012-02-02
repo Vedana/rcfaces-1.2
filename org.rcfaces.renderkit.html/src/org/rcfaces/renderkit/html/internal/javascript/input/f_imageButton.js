@@ -647,11 +647,11 @@ var __members = {
 			if (this.f_isReadOnly() || this.f_isDisabled()) {
 				return false;
 			}
-			
-			if (!value) {
-				value=this.f_getValue();
-			}
 		}	
+		
+		if (!value) {
+			value=this.f_getValue();
+		}
 		
 		var ret = this.f_super(arguments, type, evt, item, value, selectionProvider, detail, stage);
 		
