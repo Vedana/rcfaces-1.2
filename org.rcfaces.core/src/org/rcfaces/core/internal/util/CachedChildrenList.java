@@ -24,7 +24,6 @@ import org.rcfaces.core.internal.manager.ITransientAttributesManager;
  * @version $Revision$ $Date$
  */
 public final class CachedChildrenList extends AbstractReleasable {
-    private static final String REVISION = "$Revision$";
 
     private static final UIComponent[] UI_COMPONENT_EMPTY_ARRAY = new UIComponent[0];
 

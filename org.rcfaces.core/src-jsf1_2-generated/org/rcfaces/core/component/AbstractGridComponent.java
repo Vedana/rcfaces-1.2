@@ -1220,7 +1220,10 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 	}
 
 	public String getVar(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.VAR, facesContext);
+		String s = engine.getStringProperty(Properties.VAR, facesContext);
+
+
+return s;
 	}
 
 	public void setVar(String var) {

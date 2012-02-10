@@ -97,7 +97,7 @@ var __members = {
 	 * @return void
 	 */
 	fa_updateMessages: f_class.ABSTRACT
-}
+};
 
 new f_aspect("fa_messageText", {
 	extend: [ fa_message ],

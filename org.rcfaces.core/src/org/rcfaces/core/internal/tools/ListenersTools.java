@@ -14,6 +14,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IAdditionalInformationEventCapability;
 import org.rcfaces.core.component.capability.ICheckEventCapability;
+import org.rcfaces.core.component.capability.IClickEventCapability;
 import org.rcfaces.core.component.capability.ICloseEventCapability;
 import org.rcfaces.core.component.capability.ICriteriaEventCapability;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
@@ -43,6 +44,7 @@ import org.rcfaces.core.component.capability.IValueChangeEventCapability;
 import org.rcfaces.core.event.IAdditionalInformationListener;
 import org.rcfaces.core.event.IBlurListener;
 import org.rcfaces.core.event.ICheckListener;
+import org.rcfaces.core.event.IClickListener;
 import org.rcfaces.core.event.ICloseListener;
 import org.rcfaces.core.event.ICriteriaListener;
 import org.rcfaces.core.event.IDoubleClickListener;
@@ -77,6 +79,8 @@ import org.rcfaces.core.internal.listener.ChangeActionListener;
 import org.rcfaces.core.internal.listener.ChangeScriptListener;
 import org.rcfaces.core.internal.listener.CheckActionListener;
 import org.rcfaces.core.internal.listener.CheckScriptListener;
+import org.rcfaces.core.internal.listener.ClickActionListener;
+import org.rcfaces.core.internal.listener.ClickScriptListener;
 import org.rcfaces.core.internal.listener.CloseActionListener;
 import org.rcfaces.core.internal.listener.CloseScriptListener;
 import org.rcfaces.core.internal.listener.CriteriaActionListener;
@@ -130,1043 +134,1071 @@ import org.rcfaces.core.internal.listener.ValidationScriptListener;
  */
 public class ListenersTools {
 
-	private static final Log LOG = LogFactory.getLog(ListenersTools.class);
+    private static final Log LOG = LogFactory.getLog(ListenersTools.class);
+
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    public interface IListenerType {
 
-	/**
-	 * 
-	 * @author Olivier Oeuillot (latest modification by $Author$)
-	 * @version $Revision$ $Date$
-	 */
-	public interface IListenerType {
+        IServerActionListener addActionListener(UIComponent component,
+                Application application, String expression,
+                boolean partialRendering);
 
-		IServerActionListener addActionListener(UIComponent component,
-				Application application, String expression,
-				boolean partialRendering);
+        void addScriptListener(UIComponent component, String scriptType,
+                String expression);
+
+        Class getListenerClass();
+
+        // void clearListeners(UIComponent component);
+    }
+
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    private static abstract class AbstractListenerType implements IListenerType {
+    }
+
+    public static final IListenerType BLUR_LISTENER_TYPE = new AbstractListenerType() {
+
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+
+            IFocusBlurEventCapability focusBlurEventCapability = (IFocusBlurEventCapability) component;
+
+            focusBlurEventCapability.addBlurListener(new BlurScriptListener(
+                    scriptType, command));
+        }
+
+        public IServerActionListener addActionListener(UIComponent component,
+                Application application, String expression,
+                boolean partialRendering) {
+            IFocusBlurEventCapability focusBlurEventCapability = (IFocusBlurEventCapability) component;
+
+            BlurActionListener blurActionListener = new BlurActionListener(
+                    expression, partialRendering);
+            focusBlurEventCapability.addBlurListener(blurActionListener);
+
+            return blurActionListener;
+        }
+
+        public Class getListenerClass() {
+            return IBlurListener.class;
+        }
+    };
+
+    public static final IListenerType CRITERIA_LISTENER_TYPE = new AbstractListenerType() {
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+
+            ICriteriaEventCapability focusBlurEventCapability = (ICriteriaEventCapability) component;
+
+            focusBlurEventCapability
+                    .addCriteriaListener(new CriteriaScriptListener(scriptType,
+                            command));
+        }
+
+        public IServerActionListener addActionListener(UIComponent component,
+                Application application, String expression,
+                boolean partialRendering) {
+            ICriteriaEventCapability criteriaEventCapability = (ICriteriaEventCapability) component;
+
+            CriteriaActionListener criteriaActionListener = new CriteriaActionListener(
+                    expression, partialRendering);
+            criteriaEventCapability.addCriteriaListener(criteriaActionListener);
+
+            return criteriaActionListener;
+        }
+
+        public Class getListenerClass() {
+            return ICriteriaListener.class;
+        }
+    };
 
-		void addScriptListener(UIComponent component, String scriptType,
-				String expression);
+    public static final IListenerType DRAG_LISTENER_TYPE = new AbstractListenerType() {
+ 
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            IDragEventCapability dragEventCapability = (IDragEventCapability) component;
+
+            dragEventCapability.addDragListener(new DragScriptListener(
+                    scriptType, command));
+        }
+
+        public IServerActionListener addActionListener(UIComponent component,
+                Application application, String expression,
+                boolean partialRendering) {
+            throw new UnsupportedListenerTypeException("drag");
+        }
+
+        public Class getListenerClass() {
+            return IDragListener.class;
+        }
+    };
 
-		Class getListenerClass();
+    public static final IListenerType DROP_LISTENER_TYPE = new AbstractListenerType() {
 
-		// void clearListeners(UIComponent component);
-	}
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            IDropEventCapability selectEventCapability = (IDropEventCapability) component;
 
-	/**
-	 * 
-	 * @author Olivier Oeuillot (latest modification by $Author$)
-	 * @version $Revision$ $Date$
-	 */
-	private static abstract class AbstractListenerType implements IListenerType {
-	}
+            selectEventCapability.addDropListener(new DropScriptListener(
+                    scriptType, command));
+        }
 
-	public static final IListenerType BLUR_LISTENER_TYPE = new AbstractListenerType() {
+        public IServerActionListener addActionListener(UIComponent component,
+                Application application, String expression,
+                boolean partialRendering) {
+            throw new UnsupportedListenerTypeException("drop");
+        }
 
-		public void addScriptListener(UIComponent component, String scriptType,
-				String command) {
+        public Class getListenerClass() {
+            return IDropListener.class;
+        }
+    };
 
-			IFocusBlurEventCapability focusBlurEventCapability = (IFocusBlurEventCapability) component;
+    public static final IListenerType DROP_COMPLETE_LISTENER_TYPE = new AbstractListenerType() {
 
-			focusBlurEventCapability.addBlurListener(new BlurScriptListener(
-					scriptType, command));
-		}
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            IDropCompleteEventCapability selectEventCapability = (IDropCompleteEventCapability) component;
 
-		public IServerActionListener addActionListener(UIComponent component,
-				Application application, String expression,
-				boolean partialRendering) {
-			IFocusBlurEventCapability focusBlurEventCapability = (IFocusBlurEventCapability) component;
+            selectEventCapability
+                    .addDropCompleteListener(new DropCompleteScriptListener(
+                            scriptType, command));
+        }
 
-			BlurActionListener blurActionListener = new BlurActionListener(
-					expression, partialRendering);
-			focusBlurEventCapability.addBlurListener(blurActionListener);
+        public IServerActionListener addActionListener(UIComponent component,
+                Application application, String expression,
+                boolean partialRendering) {
+            IDropCompleteEventCapability selectEventCapability = (IDropCompleteEventCapability) component;
 
-			return blurActionListener;
-		}
+            DropCompleteActionListener dropActionListener = new DropCompleteActionListener(
+                    expression, partialRendering);
+            selectEventCapability.addDropCompleteListener(dropActionListener);
 
-		public Class getListenerClass() {
-			return IBlurListener.class;
-		}
-	};
+            return dropActionListener;
+        }
 
-	public static final IListenerType CRITERIA_LISTENER_TYPE = new AbstractListenerType() {
-		public void addScriptListener(UIComponent component, String scriptType,
-				String command) {
+        public Class getListenerClass() {
+            return IDropCompleteListener.class;
+        }
+    };
 
-			ICriteriaEventCapability focusBlurEventCapability = (ICriteriaEventCapability) component;
+    public static final IListenerType FOCUS_LISTENER_TYPE = new AbstractListenerType() {
 
-			focusBlurEventCapability
-					.addCriteriaListener(new CriteriaScriptListener(scriptType,
-							command));
-		}
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            IFocusBlurEventCapability focusBlurEventCapability = (IFocusBlurEventCapability) component;
 
-		public IServerActionListener addActionListener(UIComponent component,
-				Application application, String expression,
-				boolean partialRendering) {
-			ICriteriaEventCapability criteriaEventCapability = (ICriteriaEventCapability) component;
+            focusBlurEventCapability.addFocusListener(new FocusScriptListener(
+                    scriptType, command));
+        }
 
-			CriteriaActionListener criteriaActionListener = new CriteriaActionListener(
-					expression, partialRendering);
-			criteriaEventCapability.addCriteriaListener(criteriaActionListener);
+        public IServerActionListener addActionListener(UIComponent component,
+                Application application, String expression,
+                boolean partialRendering) {
+            IFocusBlurEventCapability expandEventCapability = (IFocusBlurEventCapability) component;
 
-			return criteriaActionListener;
-		}
+            FocusActionListener focusActionListener = new FocusActionListener(
+                    expression, partialRendering);
+            expandEventCapability.addFocusListener(focusActionListener);
 
-		public Class getListenerClass() {
-			return ICriteriaListener.class;
-		}
-	};
+            return focusActionListener;
+        }
 
-	public static final IListenerType DRAG_LISTENER_TYPE = new AbstractListenerType() {
+        public Class getListenerClass() {
+            return IFocusListener.class;
+        }
+    };
 
-		public void addScriptListener(UIComponent component, String scriptType,
-				String command) {
-			IDragEventCapability dragEventCapability = (IDragEventCapability) component;
+    public static final IListenerType LOAD_LISTENER_TYPE = new AbstractListenerType() {
 
-			dragEventCapability.addDragListener(new DragScriptListener(
-					scriptType, command));
-		}
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            ILoadEventCapability loadEventCapability = (ILoadEventCapability) component;
 
-		public IServerActionListener addActionListener(UIComponent component,
-				Application application, String expression,
-				boolean partialRendering) {
-			throw new UnsupportedListenerTypeException("drag");
-		}
+            loadEventCapability.addLoadListener(new LoadScriptListener(
+                    scriptType, command));
+        }
 
-		public Class getListenerClass() {
-			return IDragListener.class;
-		}
-	};
+        public IServerActionListener addActionListener(UIComponent component,
+                Application application, String expression,
+                boolean partialRendering) {
+            ILoadEventCapability loadEventCapability = (ILoadEventCapability) component;
 
-	public static final IListenerType DROP_LISTENER_TYPE = new AbstractListenerType() {
+            LoadActionListener loadActionListener = new LoadActionListener(
+                    expression, partialRendering);
+            loadEventCapability.addLoadListener(loadActionListener);
 
-		public void addScriptListener(UIComponent component, String scriptType,
-				String command) {
-			IDropEventCapability selectEventCapability = (IDropEventCapability) component;
+            return loadActionListener;
+        }
 
-			selectEventCapability.addDropListener(new DropScriptListener(
-					scriptType, command));
-		}
+        public Class getListenerClass() {
+            return ILoadListener.class;
+        }
+    };
 
-		public IServerActionListener addActionListener(UIComponent component,
-				Application application, String expression,
-				boolean partialRendering) {
-			throw new UnsupportedListenerTypeException("drop");
-		}
+    public static final IListenerType EXPAND_LISTENER_TYPE = new AbstractListenerType() {
 
-		public Class getListenerClass() {
-			return IDropListener.class;
-		}
-	};
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            IExpandEventCapability expandEventCapability = (IExpandEventCapability) component;
 
-	public static final IListenerType DROP_COMPLETE_LISTENER_TYPE = new AbstractListenerType() {
+            expandEventCapability.addExpandListener(new ExpandScriptListener(
+                    scriptType, command));
+        }
 
-		public void addScriptListener(UIComponent component, String scriptType,
-				String command) {
-			IDropCompleteEventCapability selectEventCapability = (IDropCompleteEventCapability) component;
+        public IServerActionListener addActionListener(UIComponent component,
+                Application application, String expression,
+                boolean partialRendering) {
+            IExpandEventCapability expandEventCapability = (IExpandEventCapability) component;
 
-			selectEventCapability
-					.addDropCompleteListener(new DropCompleteScriptListener(
-							scriptType, command));
-		}
+            ExpandActionListener expandActionListener = new ExpandActionListener(
+                    expression, partialRendering);
+            expandEventCapability.addExpandListener(expandActionListener);
 
-		public IServerActionListener addActionListener(UIComponent component,
-				Application application, String expression,
-				boolean partialRendering) {
-			IDropCompleteEventCapability selectEventCapability = (IDropCompleteEventCapability) component;
+            return expandActionListener;
+        }
 
-			DropCompleteActionListener dropActionListener = new DropCompleteActionListener(
-					expression, partialRendering);
-			selectEventCapability.addDropCompleteListener(dropActionListener);
+        public Class getListenerClass() {
+            return IExpandListener.class;
+        }
+    };
 
-			return dropActionListener;
-		}
+    public static final IListenerType ERROR_LISTENER_TYPE = new AbstractListenerType() {
 
-		public Class getListenerClass() {
-			return IDropCompleteListener.class;
-		}
-	};
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            IErrorEventCapability errorEventCapability = (IErrorEventCapability) component;
 
-	public static final IListenerType FOCUS_LISTENER_TYPE = new AbstractListenerType() {
+            errorEventCapability.addErrorListener(new ErrorScriptListener(
+                    scriptType, command));
+        }
 
-		public void addScriptListener(UIComponent component, String scriptType,
-				String command) {
-			IFocusBlurEventCapability focusBlurEventCapability = (IFocusBlurEventCapability) component;
+        public IServerActionListener addActionListener(UIComponent component,
+                Application application, String expression,
+                boolean partialRendering) {
+            IErrorEventCapability errorEventCapability = (IErrorEventCapability) component;
 
-			focusBlurEventCapability.addFocusListener(new FocusScriptListener(
-					scriptType, command));
-		}
+            ErrorActionListener errorActionListener = new ErrorActionListener(
+                    expression, partialRendering);
+            errorEventCapability.addErrorListener(errorActionListener);
 
-		public IServerActionListener addActionListener(UIComponent component,
-				Application application, String expression,
-				boolean partialRendering) {
-			IFocusBlurEventCapability expandEventCapability = (IFocusBlurEventCapability) component;
+            return errorActionListener;
+        }
 
-			FocusActionListener focusActionListener = new FocusActionListener(
-					expression, partialRendering);
-			expandEventCapability.addFocusListener(focusActionListener);
+        public Class getListenerClass() {
+            return IDropListener.class;
+        }
+    };
 
-			return focusActionListener;
-		}
+    public static final IListenerType DOUBLE_CLICK_LISTENER_TYPE = new AbstractListenerType() {
 
-		public Class getListenerClass() {
-			return IFocusListener.class;
-		}
-	};
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            IDoubleClickEventCapability doubleClickEventCapability = (IDoubleClickEventCapability) component;
 
-	public static final IListenerType LOAD_LISTENER_TYPE = new AbstractListenerType() {
+            doubleClickEventCapability
+                    .addDoubleClickListener(new DoubleClickScriptListener(
+                            scriptType, command));
+        }
 
-		public void addScriptListener(UIComponent component, String scriptType,
-				String command) {
-			ILoadEventCapability loadEventCapability = (ILoadEventCapability) component;
+        public IServerActionListener addActionListener(UIComponent component,
+                Application application, String expression,
+                boolean partialRendering) {
+            IDoubleClickEventCapability doubleClickEventCapability = (IDoubleClickEventCapability) component;
 
-			loadEventCapability.addLoadListener(new LoadScriptListener(
-					scriptType, command));
-		}
+            DoubleClickActionListener doubleClickActionListener = new DoubleClickActionListener(
+                    expression, partialRendering);
+            doubleClickEventCapability
+                    .addDoubleClickListener(doubleClickActionListener);
 
-		public IServerActionListener addActionListener(UIComponent component,
-				Application application, String expression,
-				boolean partialRendering) {
-			ILoadEventCapability loadEventCapability = (ILoadEventCapability) component;
+            return doubleClickActionListener;
+        }
 
-			LoadActionListener loadActionListener = new LoadActionListener(
-					expression, partialRendering);
-			loadEventCapability.addLoadListener(loadActionListener);
+        public Class getListenerClass() {
+            return IDoubleClickListener.class;
+        }
+    };
 
-			return loadActionListener;
-		}
+    public static final IListenerType CLICK_LISTENER_TYPE = new AbstractListenerType() {
 
-		public Class getListenerClass() {
-			return ILoadListener.class;
-		}
-	};
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            IClickEventCapability clickEventCapability = (IClickEventCapability) component;
 
-	public static final IListenerType EXPAND_LISTENER_TYPE = new AbstractListenerType() {
+            clickEventCapability.addClickListener(new ClickScriptListener(
+                    scriptType, command));
+        }
 
-		public void addScriptListener(UIComponent component, String scriptType,
-				String command) {
-			IExpandEventCapability expandEventCapability = (IExpandEventCapability) component;
+        public IServerActionListener addActionListener(UIComponent component,
+                Application application, String expression,
+                boolean partialRendering) {
+            IClickEventCapability clickEventCapability = (IClickEventCapability) component;
 
-			expandEventCapability.addExpandListener(new ExpandScriptListener(
-					scriptType, command));
-		}
+            ClickActionListener clickActionListener = new ClickActionListener(
+                    expression, partialRendering);
+            clickEventCapability.addClickListener(clickActionListener);
 
-		public IServerActionListener addActionListener(UIComponent component,
-				Application application, String expression,
-				boolean partialRendering) {
-			IExpandEventCapability expandEventCapability = (IExpandEventCapability) component;
+            return clickActionListener;
+        }
 
-			ExpandActionListener expandActionListener = new ExpandActionListener(
-					expression, partialRendering);
-			expandEventCapability.addExpandListener(expandActionListener);
+        public Class getListenerClass() {
+            return IClickListener.class;
+        }
+    };
 
-			return expandActionListener;
-		}
+    public static final IListenerType SELECTION_LISTENER_TYPE = new AbstractListenerType() {
 
-		public Class getListenerClass() {
-			return IExpandListener.class;
-		}
-	};
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            ISelectionEventCapability selectEventCapability = (ISelectionEventCapability) component;
 
-	public static final IListenerType ERROR_LISTENER_TYPE = new AbstractListenerType() {
+            selectEventCapability
+                    .addSelectionListener(new SelectionScriptListener(
+                            scriptType, command));
+        }
 
-		public void addScriptListener(UIComponent component, String scriptType,
-				String command) {
-			IErrorEventCapability errorEventCapability = (IErrorEventCapability) component;
+        public IServerActionListener addActionListener(UIComponent component,
+                Application application, String expression,
+                boolean partialRendering) {
+            ISelectionEventCapability selectEventCapability = (ISelectionEventCapability) component;
 
-			errorEventCapability.addErrorListener(new ErrorScriptListener(
-					scriptType, command));
-		}
+            SelectionActionListener selectionActionListener = new SelectionActionListener(
+                    expression, partialRendering);
+            selectEventCapability.addSelectionListener(selectionActionListener);
 
-		public IServerActionListener addActionListener(UIComponent component,
-				Application application, String expression,
-				boolean partialRendering) {
-			IErrorEventCapability errorEventCapability = (IErrorEventCapability) component;
+            return selectionActionListener;
+        }
 
-			ErrorActionListener errorActionListener = new ErrorActionListener(
-					expression, partialRendering);
-			errorEventCapability.addErrorListener(errorActionListener);
+        public Class getListenerClass() {
+            return ISelectionListener.class;
+        }
+    };
 
-			return errorActionListener;
-		}
+    public static final IListenerType ADDITIONAL_INFORMATION_LISTENER_TYPE = new AbstractListenerType() {
 
-		public Class getListenerClass() {
-			return IDropListener.class;
-		}
-	};
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            IAdditionalInformationEventCapability additionalInformationEventCapability = (IAdditionalInformationEventCapability) component;
 
-	public static final IListenerType DOUBLE_CLICK_LISTENER_TYPE = new AbstractListenerType() {
+            additionalInformationEventCapability
+                    .addAdditionalInformationListener(new AdditionalInformationScriptListener(
+                            scriptType, command));
+        }
 
-		public void addScriptListener(UIComponent component, String scriptType,
-				String command) {
-			IDoubleClickEventCapability doubleClickEventCapability = (IDoubleClickEventCapability) component;
+        public IServerActionListener addActionListener(UIComponent component,
+                Application application, String expression,
+                boolean partialRendering) {
+            IAdditionalInformationEventCapability additionalInformationEventCapability = (IAdditionalInformationEventCapability) component;
 
-			doubleClickEventCapability
-					.addDoubleClickListener(new DoubleClickScriptListener(
-							scriptType, command));
-		}
+            AdditionalInformationActionListener additionalInformationActionListener = new AdditionalInformationActionListener(
+                    expression, partialRendering);
+            additionalInformationEventCapability
+                    .addAdditionalInformationListener(additionalInformationActionListener);
 
-		public IServerActionListener addActionListener(UIComponent component,
-				Application application, String expression,
-				boolean partialRendering) {
-			IDoubleClickEventCapability doubleClickEventCapability = (IDoubleClickEventCapability) component;
+            return additionalInformationActionListener;
+        }
 
-			DoubleClickActionListener doubleClickActionListener = new DoubleClickActionListener(
-					expression, partialRendering);
-			doubleClickEventCapability
-					.addDoubleClickListener(doubleClickActionListener);
+        public Class getListenerClass() {
+            return IAdditionalInformationListener.class;
+        }
+    };
 
-			return doubleClickActionListener;
-		}
+    public static final IListenerType CHECK_LISTENER_TYPE = new AbstractListenerType() {
 
-		public Class getListenerClass() {
-			return IDoubleClickListener.class;
-		}
-	};
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            ICheckEventCapability checkEventCapability = (ICheckEventCapability) component;
 
-	public static final IListenerType SELECTION_LISTENER_TYPE = new AbstractListenerType() {
+            checkEventCapability.addCheckListener(new CheckScriptListener(
+                    scriptType, command));
+        }
 
-		public void addScriptListener(UIComponent component, String scriptType,
-				String command) {
-			ISelectionEventCapability selectEventCapability = (ISelectionEventCapability) component;
+        public IServerActionListener addActionListener(UIComponent component,
+                Application application, String expression,
+                boolean partialRendering) {
+            ICheckEventCapability checkEventCapability = (ICheckEventCapability) component;
 
-			selectEventCapability
-					.addSelectionListener(new SelectionScriptListener(
-							scriptType, command));
-		}
+            CheckActionListener checkActionListener = new CheckActionListener(
+                    expression, partialRendering);
+            checkEventCapability.addCheckListener(checkActionListener);
 
-		public IServerActionListener addActionListener(UIComponent component,
-				Application application, String expression,
-				boolean partialRendering) {
-			ISelectionEventCapability selectEventCapability = (ISelectionEventCapability) component;
+            return checkActionListener;
+        }
 
-			SelectionActionListener selectionActionListener = new SelectionActionListener(
-					expression, partialRendering);
-			selectEventCapability.addSelectionListener(selectionActionListener);
+        public Class getListenerClass() {
+            return ICheckListener.class;
+        }
+    };
 
-			return selectionActionListener;
-		}
+    public static final IListenerType CLOSE_LISTENER_TYPE = new AbstractListenerType() {
 
-		public Class getListenerClass() {
-			return ISelectionListener.class;
-		}
-	};
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            ICloseEventCapability closeEventCapability = (ICloseEventCapability) component;
 
-	public static final IListenerType ADDITIONAL_INFORMATION_LISTENER_TYPE = new AbstractListenerType() {
+            closeEventCapability.addCloseListener(new CloseScriptListener(
+                    scriptType, command));
+        }
 
-		public void addScriptListener(UIComponent component, String scriptType,
-				String command) {
-			IAdditionalInformationEventCapability additionalInformationEventCapability = (IAdditionalInformationEventCapability) component;
+        public IServerActionListener addActionListener(UIComponent component,
+                Application application, String expression,
+                boolean partialRendering) {
+            ICloseEventCapability closeEventCapability = (ICloseEventCapability) component;
 
-			additionalInformationEventCapability
-					.addAdditionalInformationListener(new AdditionalInformationScriptListener(
-							scriptType, command));
-		}
+            CloseActionListener closeActionListener = new CloseActionListener(
+                    expression, partialRendering);
+            closeEventCapability.addCloseListener(closeActionListener);
 
-		public IServerActionListener addActionListener(UIComponent component,
-				Application application, String expression,
-				boolean partialRendering) {
-			IAdditionalInformationEventCapability additionalInformationEventCapability = (IAdditionalInformationEventCapability) component;
+            return closeActionListener;
+        }
 
-			AdditionalInformationActionListener additionalInformationActionListener = new AdditionalInformationActionListener(
-					expression, partialRendering);
-			additionalInformationEventCapability
-					.addAdditionalInformationListener(additionalInformationActionListener);
+        public Class getListenerClass() {
+            return ICloseListener.class;
+        }
+    };
 
-			return additionalInformationActionListener;
-		}
+    public static final IListenerType VALUE_CHANGE_LISTENER_TYPE = new AbstractListenerType() {
 
-		public Class getListenerClass() {
-			return IAdditionalInformationListener.class;
-		}
-	};
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            IValueChangeEventCapability changeEventCapability = (IValueChangeEventCapability) component;
 
-	public static final IListenerType CHECK_LISTENER_TYPE = new AbstractListenerType() {
+            changeEventCapability
+                    .addValueChangeListener(new ChangeScriptListener(
+                            scriptType, command));
+        }
 
-		public void addScriptListener(UIComponent component, String scriptType,
-				String command) {
-			ICheckEventCapability checkEventCapability = (ICheckEventCapability) component;
+        public IServerActionListener addActionListener(UIComponent component,
+                Application application, String expression,
+                boolean partialRendering) {
+            IValueChangeEventCapability changeEventCapability = (IValueChangeEventCapability) component;
 
-			checkEventCapability.addCheckListener(new CheckScriptListener(
-					scriptType, command));
-		}
+            ChangeActionListener changeActionListener = new ChangeActionListener(
+                    expression, partialRendering);
+            changeEventCapability.addValueChangeListener(changeActionListener);
 
-		public IServerActionListener addActionListener(UIComponent component,
-				Application application, String expression,
-				boolean partialRendering) {
-			ICheckEventCapability checkEventCapability = (ICheckEventCapability) component;
+            return changeActionListener;
+        }
 
-			CheckActionListener checkActionListener = new CheckActionListener(
-					expression, partialRendering);
-			checkEventCapability.addCheckListener(checkActionListener);
+        public Class getListenerClass() {
+            return ValueChangeListener.class;
+        }
+    };
 
-			return checkActionListener;
-		}
+    public static final IListenerType SUGGESTION_LISTENER_TYPE = new AbstractListenerType() {
 
-		public Class getListenerClass() {
-			return ICheckListener.class;
-		}
-	};
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            ISuggestionEventCapability prepareEventCapability = (ISuggestionEventCapability) component;
 
-	public static final IListenerType CLOSE_LISTENER_TYPE = new AbstractListenerType() {
+            prepareEventCapability
+                    .addSuggestionListener(new SuggestionScriptListener(
+                            scriptType, command));
+        }
 
-		public void addScriptListener(UIComponent component, String scriptType,
-				String command) {
-			ICloseEventCapability closeEventCapability = (ICloseEventCapability) component;
+        public IServerActionListener addActionListener(UIComponent component,
+                Application application, String expression,
+                boolean partialRendering) {
+            ISuggestionEventCapability prepareEventCapability = (ISuggestionEventCapability) component;
 
-			closeEventCapability.addCloseListener(new CloseScriptListener(
-					scriptType, command));
-		}
+            SuggestionActionListener suggestionActionListener = new SuggestionActionListener(
+                    expression, partialRendering);
+            prepareEventCapability
+                    .addSuggestionListener(suggestionActionListener);
 
-		public IServerActionListener addActionListener(UIComponent component,
-				Application application, String expression,
-				boolean partialRendering) {
-			ICloseEventCapability closeEventCapability = (ICloseEventCapability) component;
+            return suggestionActionListener;
+        }
 
-			CloseActionListener closeActionListener = new CloseActionListener(
-					expression, partialRendering);
-			closeEventCapability.addCloseListener(closeActionListener);
+        public Class getListenerClass() {
+            return ISuggestionListener.class;
+        }
+    };
 
-			return closeActionListener;
-		}
+    public static final IListenerType PROPERTY_CHANGE_LISTENER_TYPE = new AbstractListenerType() {
 
-		public Class getListenerClass() {
-			return ICloseListener.class;
-		}
-	};
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            IPropertyChangeEventCapability changeEventCapability = (IPropertyChangeEventCapability) component;
 
-	public static final IListenerType VALUE_CHANGE_LISTENER_TYPE = new AbstractListenerType() {
+            changeEventCapability
+                    .addPropertyChangeListener(new PropertyChangeScriptListener(
+                            scriptType, command));
+        }
 
-		public void addScriptListener(UIComponent component, String scriptType,
-				String command) {
-			IValueChangeEventCapability changeEventCapability = (IValueChangeEventCapability) component;
+        public IServerActionListener addActionListener(UIComponent component,
+                Application application, String expression,
+                boolean partialRendering) {
+            IPropertyChangeEventCapability propertyChangeEventCapability = (IPropertyChangeEventCapability) component;
 
-			changeEventCapability
-					.addValueChangeListener(new ChangeScriptListener(
-							scriptType, command));
-		}
+            PropertyChangeActionListener propertyChangeActionListener = new PropertyChangeActionListener(
+                    expression, partialRendering);
+            propertyChangeEventCapability
+                    .addPropertyChangeListener(propertyChangeActionListener);
 
-		public IServerActionListener addActionListener(UIComponent component,
-				Application application, String expression,
-				boolean partialRendering) {
-			IValueChangeEventCapability changeEventCapability = (IValueChangeEventCapability) component;
+            return propertyChangeActionListener;
+        }
 
-			ChangeActionListener changeActionListener = new ChangeActionListener(
-					expression, partialRendering);
-			changeEventCapability.addValueChangeListener(changeActionListener);
+        public Class getListenerClass() {
+            return IPropertyChangeListener.class;
+        }
+    };
 
-			return changeActionListener;
-		}
+    public static final IListenerType KEY_PRESS_LISTENER_TYPE = new AbstractListenerType() {
 
-		public Class getListenerClass() {
-			return ValueChangeListener.class;
-		}
-	};
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            IKeyPressEventCapability keyEventCapability = (IKeyPressEventCapability) component;
+
+            keyEventCapability.addKeyPressListener(new KeyPressScriptListener(
+                    scriptType, command));
+        }
+
+        public IServerActionListener addActionListener(UIComponent component,
+                Application application, String expression,
+                boolean partialRendering) {
+            IKeyPressEventCapability keyPressEventCapability = (IKeyPressEventCapability) component;
 
-	public static final IListenerType SUGGESTION_LISTENER_TYPE = new AbstractListenerType() {
+            KeyPressActionListener keyPressActionListener = new KeyPressActionListener(
+                    expression, partialRendering);
+            keyPressEventCapability.addKeyPressListener(keyPressActionListener);
 
-		public void addScriptListener(UIComponent component, String scriptType,
-				String command) {
-			ISuggestionEventCapability prepareEventCapability = (ISuggestionEventCapability) component;
+            return keyPressActionListener;
+        }
+
+        public Class getListenerClass() {
+            return IKeyPressListener.class;
+        }
+    };
+
+    public static final IListenerType KEY_DOWN_LISTENER_TYPE = new AbstractListenerType() {
+
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            IKeyDownEventCapability keyEventCapability = (IKeyDownEventCapability) component;
+
+            keyEventCapability.addKeyDownListener(new KeyDownScriptListener(
+                    scriptType, command));
+        }
 
-			prepareEventCapability
-					.addSuggestionListener(new SuggestionScriptListener(
-							scriptType, command));
-		}
+        public IServerActionListener addActionListener(UIComponent component,
+                Application application, String expression,
+                boolean partialRendering) {
+            throw new UnsupportedListenerTypeException("keyDown");
+        }
+
+        public Class getListenerClass() {
+            return IKeyDownListener.class;
+        }
+    };
+
+    public static final IListenerType KEY_UP_LISTENER_TYPE = new AbstractListenerType() {
+
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            IKeyUpEventCapability keyEventCapability = (IKeyUpEventCapability) component;
+
+            keyEventCapability.addKeyUpListener(new KeyUpScriptListener(
+                    scriptType, command));
+        }
+
+        public IServerActionListener addActionListener(UIComponent component,
+                Application application, String expression,
+                boolean partialRendering) {
+            throw new UnsupportedListenerTypeException("keyUp");
+        }
+
+        public Class getListenerClass() {
+            return IKeyUpListener.class;
+        }
+    };
+
+    public static final IListenerType INIT_LISTENER_TYPE = new AbstractListenerType() {
+
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            IInitEventCapability initEventCapability = (IInitEventCapability) component;
+
+            initEventCapability.addInitListener(new InitScriptListener(
+                    scriptType, command));
+        }
+
+        public IServerActionListener addActionListener(UIComponent component,
+                Application application, String expression,
+                boolean partialRendering) {
+            throw new UnsupportedListenerTypeException("init");
+        }
 
-		public IServerActionListener addActionListener(UIComponent component,
-				Application application, String expression,
-				boolean partialRendering) {
-			ISuggestionEventCapability prepareEventCapability = (ISuggestionEventCapability) component;
+        public Class getListenerClass() {
+            return IInitListener.class;
+        }
+    };
+
+    public static final IListenerType MOUSE_OUT_LISTENER_TYPE = new AbstractListenerType() {
 
-			SuggestionActionListener suggestionActionListener = new SuggestionActionListener(
-					expression, partialRendering);
-			prepareEventCapability
-					.addSuggestionListener(suggestionActionListener);
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            IMouseEventCapability mouseEventCapability = (IMouseEventCapability) component;
 
-			return suggestionActionListener;
-		}
+            mouseEventCapability
+                    .addMouseOutListener(new MouseOutScriptListener(scriptType,
+                            command));
+        }
 
-		public Class getListenerClass() {
-			return ISuggestionListener.class;
-		}
-	};
+        public IServerActionListener addActionListener(UIComponent component,
+                Application application, String expression,
+                boolean partialRendering) {
+            throw new UnsupportedListenerTypeException("mouseOut");
+        }
 
-	public static final IListenerType PROPERTY_CHANGE_LISTENER_TYPE = new AbstractListenerType() {
+        public Class getListenerClass() {
+            return IMouseOutListener.class;
+        }
+    };
 
-		public void addScriptListener(UIComponent component, String scriptType,
-				String command) {
-			IPropertyChangeEventCapability changeEventCapability = (IPropertyChangeEventCapability) component;
+    public static final IListenerType MOUSE_OVER_LISTENER_TYPE = new AbstractListenerType() {
 
-			changeEventCapability
-					.addPropertyChangeListener(new PropertyChangeScriptListener(
-							scriptType, command));
-		}
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            IMouseEventCapability mouseEventCapability = (IMouseEventCapability) component;
 
-		public IServerActionListener addActionListener(UIComponent component,
-				Application application, String expression,
-				boolean partialRendering) {
-			IPropertyChangeEventCapability propertyChangeEventCapability = (IPropertyChangeEventCapability) component;
+            mouseEventCapability
+                    .addMouseOverListener(new MouseOverScriptListener(
+                            scriptType, command));
+        }
 
-			PropertyChangeActionListener propertyChangeActionListener = new PropertyChangeActionListener(
-					expression, partialRendering);
-			propertyChangeEventCapability
-					.addPropertyChangeListener(propertyChangeActionListener);
+        public IServerActionListener addActionListener(UIComponent component,
+                Application application, String expression,
+                boolean partialRendering) {
+            throw new UnsupportedListenerTypeException("mouseOver");
+        }
 
-			return propertyChangeActionListener;
-		}
+        public Class getListenerClass() {
+            return IMouseOverListener.class;
+        }
+    };
 
-		public Class getListenerClass() {
-			return IPropertyChangeListener.class;
-		}
-	};
+    public static final IListenerType PRE_SELECTION_LISTENER_TYPE = new AbstractListenerType() {
 
-	public static final IListenerType KEY_PRESS_LISTENER_TYPE = new AbstractListenerType() {
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            IPreSelectionEventCapability preSelectionEventCapability = (IPreSelectionEventCapability) component;
 
-		public void addScriptListener(UIComponent component, String scriptType,
-				String command) {
-			IKeyPressEventCapability keyEventCapability = (IKeyPressEventCapability) component;
-
-			keyEventCapability.addKeyPressListener(new KeyPressScriptListener(
-					scriptType, command));
-		}
-
-		public IServerActionListener addActionListener(UIComponent component,
-				Application application, String expression,
-				boolean partialRendering) {
-			IKeyPressEventCapability keyPressEventCapability = (IKeyPressEventCapability) component;
+            preSelectionEventCapability
+                    .addPreSelectionListener(new PreSelectionScriptListener(
+                            scriptType, command));
+        }
 
-			KeyPressActionListener keyPressActionListener = new KeyPressActionListener(
-					expression, partialRendering);
-			keyPressEventCapability.addKeyPressListener(keyPressActionListener);
+        public IServerActionListener addActionListener(UIComponent component,
+                Application application, String expression,
+                boolean partialRendering) {
+            throw new UnsupportedListenerTypeException("preSelection");
+        }
 
-			return keyPressActionListener;
-		}
-
-		public Class getListenerClass() {
-			return IKeyPressListener.class;
-		}
-	};
-
-	public static final IListenerType KEY_DOWN_LISTENER_TYPE = new AbstractListenerType() {
-
-		public void addScriptListener(UIComponent component, String scriptType,
-				String command) {
-			IKeyDownEventCapability keyEventCapability = (IKeyDownEventCapability) component;
-
-			keyEventCapability.addKeyDownListener(new KeyDownScriptListener(
-					scriptType, command));
-		}
-
-		public IServerActionListener addActionListener(UIComponent component,
-				Application application, String expression,
-				boolean partialRendering) {
-			throw new UnsupportedListenerTypeException("keyDown");
-		}
-
-		public Class getListenerClass() {
-			return IKeyDownListener.class;
-		}
-	};
-
-	public static final IListenerType KEY_UP_LISTENER_TYPE = new AbstractListenerType() {
-
-		public void addScriptListener(UIComponent component, String scriptType,
-				String command) {
-			IKeyUpEventCapability keyEventCapability = (IKeyUpEventCapability) component;
-
-			keyEventCapability.addKeyUpListener(new KeyUpScriptListener(
-					scriptType, command));
-		}
-
-		public IServerActionListener addActionListener(UIComponent component,
-				Application application, String expression,
-				boolean partialRendering) {
-			throw new UnsupportedListenerTypeException("keyUp");
-		}
-
-		public Class getListenerClass() {
-			return IKeyUpListener.class;
-		}
-	};
-
-	public static final IListenerType INIT_LISTENER_TYPE = new AbstractListenerType() {
-
-		public void addScriptListener(UIComponent component, String scriptType,
-				String command) {
-			IInitEventCapability initEventCapability = (IInitEventCapability) component;
-
-			initEventCapability.addInitListener(new InitScriptListener(
-					scriptType, command));
-		}
-
-		public IServerActionListener addActionListener(UIComponent component,
-				Application application, String expression,
-				boolean partialRendering) {
-			throw new UnsupportedListenerTypeException("init");
-		}
-
-		public Class getListenerClass() {
-			return IInitListener.class;
-		}
-	};
-
-	public static final IListenerType MOUSE_OUT_LISTENER_TYPE = new AbstractListenerType() {
-
-		public void addScriptListener(UIComponent component, String scriptType,
-				String command) {
-			IMouseEventCapability mouseEventCapability = (IMouseEventCapability) component;
-
-			mouseEventCapability
-					.addMouseOutListener(new MouseOutScriptListener(scriptType,
-							command));
-		}
-
-		public IServerActionListener addActionListener(UIComponent component,
-				Application application, String expression,
-				boolean partialRendering) {
-			throw new UnsupportedListenerTypeException("mouseOut");
-		}
-
-		public Class getListenerClass() {
-			return IMouseOutListener.class;
-		}
-	};
-
-	public static final IListenerType MOUSE_OVER_LISTENER_TYPE = new AbstractListenerType() {
-
-		public void addScriptListener(UIComponent component, String scriptType,
-				String command) {
-			IMouseEventCapability mouseEventCapability = (IMouseEventCapability) component;
-
-			mouseEventCapability
-					.addMouseOverListener(new MouseOverScriptListener(
-							scriptType, command));
-		}
-
-		public IServerActionListener addActionListener(UIComponent component,
-				Application application, String expression,
-				boolean partialRendering) {
-			throw new UnsupportedListenerTypeException("mouseOver");
-		}
-
-		public Class getListenerClass() {
-			return IMouseOverListener.class;
-		}
-	};
-	
-	public static final IListenerType PRE_SELECTION_LISTENER_TYPE = new AbstractListenerType() {
-
-		public void addScriptListener(UIComponent component, String scriptType,
-				String command) {
-			IPreSelectionEventCapability preSelectionEventCapability = (IPreSelectionEventCapability) component;
-
-			preSelectionEventCapability
-					.addPreSelectionListener(new PreSelectionScriptListener(
-							scriptType, command));
-		}
-
-		public IServerActionListener addActionListener(UIComponent component,
-				Application application, String expression,
-				boolean partialRendering) {
-			throw new UnsupportedListenerTypeException("preSelection");
-		}
-
-		public Class getListenerClass() {
-			return IPreSelectionListener.class;
-		}
-	};
-
-	public static final IListenerType SORT_LISTENER_TYPE = new AbstractListenerType() {
-
-		public void addScriptListener(UIComponent component, String scriptType,
-				String command) {
-			ISortEventCapability sortEventCapability = (ISortEventCapability) component;
-
-			sortEventCapability.addSortListener(new SortScriptListener(
-					scriptType, command));
-		}
-
-		public IServerActionListener addActionListener(UIComponent component,
-				Application application, String expression,
-				boolean partialRendering) {
-
-			ISortEventCapability sortEventCapability = (ISortEventCapability) component;
-
-			SortActionListener sortActionListener = new SortActionListener(
-					expression, partialRendering);
-			sortEventCapability.addSortListener(sortActionListener);
-
-			return sortActionListener;
-		}
-
-		public Class getListenerClass() {
-			return ISortListener.class;
-		}
-	};
+        public Class getListenerClass() {
+            return IPreSelectionListener.class;
+        }
+    };
 
-	public static final IListenerType RESET_LISTENER_TYPE = new AbstractListenerType() {
-
-		public void addScriptListener(UIComponent component, String scriptType,
-				String command) {
-			IResetEventCapability resetEventCapability = (IResetEventCapability) component;
-
-			resetEventCapability.addResetListener(new ResetScriptListener(
-					scriptType, command));
-		}
-
-		public IServerActionListener addActionListener(UIComponent component,
-				Application application, String expression,
-				boolean partialRendering) {
-
-			IResetEventCapability sortEventCapability = (IResetEventCapability) component;
-
-			ResetActionListener resetActionListener = new ResetActionListener(
-					expression, partialRendering);
-			sortEventCapability.addResetListener(resetActionListener);
-
-			return resetActionListener;
-		}
-
-		public Class getListenerClass() {
-			return IResetListener.class;
-		}
-	};
-
-	public static final IListenerType VALIDATION_LISTENER_TYPE = new AbstractListenerType() {
-
-		public void addScriptListener(UIComponent component, String scriptType,
-				String command) {
-			IValidationEventCapability validationEventCapability = (IValidationEventCapability) component;
-
-			validationEventCapability
-					.addValidationListener(new ValidationScriptListener(
-							scriptType, command));
-		}
+    public static final IListenerType SORT_LISTENER_TYPE = new AbstractListenerType() {
 
-		public IServerActionListener addActionListener(UIComponent component,
-				Application application, String expression,
-				boolean partialRendering) {
-			IValidationEventCapability validationEventCapability = (IValidationEventCapability) component;
-
-			ValidationActionListener validationActionListener = new ValidationActionListener(
-					expression, partialRendering);
-			validationEventCapability
-					.addValidationListener(validationActionListener);
-
-			return validationActionListener;
-		}
-
-		public Class getListenerClass() {
-			return IValidationListener.class;
-		}
-	};
-
-	public static final IListenerType MENU_LISTENER_TYPE = new AbstractListenerType() {
-
-		public void addScriptListener(UIComponent component, String scriptType,
-				String command) {
-			IMenuEventCapability menuEventCapability = (IMenuEventCapability) component;
-
-			menuEventCapability.addMenuListener(new MenuScriptListener(
-					scriptType, command));
-		}
-
-		public IServerActionListener addActionListener(UIComponent component,
-				Application application, String expression,
-				boolean partialRendering) {
-			throw new UnsupportedListenerTypeException("menuListener");
-		}
-
-		public Class getListenerClass() {
-			return IMenuListener.class;
-		}
-	};
-
-	public static final IListenerType USER_EVENT_LISTENER_TYPE = new AbstractListenerType() {
-
-		public void addScriptListener(UIComponent component, String scriptType,
-				String command) {
-			IUserEventCapability userEventCapability = (IUserEventCapability) component;
-
-			userEventCapability
-					.addUserEventListener(new UserEventScriptListener(
-							scriptType, command));
-		}
-
-		public IServerActionListener addActionListener(UIComponent component,
-				Application application, String expression,
-				boolean partialRendering) {
-
-			IUserEventCapability userEventCapability = (IUserEventCapability) component;
-
-			UserEventActionListener userEventActionListener = new UserEventActionListener(
-					expression, partialRendering);
-			userEventCapability.addUserEventListener(userEventActionListener);
-
-			return userEventActionListener;
-		}
-
-		public Class getListenerClass() {
-			return IUserEventListener.class;
-		}
-	};
-
-	public static final IListenerType SERVICE_EVENT_LISTENER_TYPE = new AbstractListenerType() {
-		public void addScriptListener(UIComponent component, String scriptType,
-				String command) {
-			IServiceEventCapability userEventCapability = (IServiceEventCapability) component;
-
-			userEventCapability
-					.addServiceEventListener(new ServiceEventScriptListener(
-							scriptType, command));
-		}
-
-		public IServerActionListener addActionListener(UIComponent component,
-				Application application, String expression,
-				boolean partialRendering) {
-
-			IServiceEventCapability userEventCapability = (IServiceEventCapability) component;
-
-			ServiceEventActionListener serviceEventActionListener = new ServiceEventActionListener(
-					expression, partialRendering);
-			userEventCapability
-					.addServiceEventListener(serviceEventActionListener);
-
-			return serviceEventActionListener;
-		}
-
-		public Class getListenerClass() {
-			return IServiceEventListener.class;
-		}
-	};
-
-	private static final String PARTIAL_RENDERING_PREFIX = "ppr:";
-
-	public static void parseListener(FacesContext facesContext,
-			UIComponent component, IListenerType listenerType, String expression) {
-		parseListener(facesContext, component, listenerType, expression, false,
-				null);
-	}
-
-	public static void parseListener(FacesContext facesContext,
-			UIComponent component, IListenerType listenerType,
-			String expression, IMethodExpressionCreator methodExpressionCreator) {
-		parseListener(facesContext, component, listenerType, expression, false,
-				methodExpressionCreator);
-	}
-
-	public static void parseListener(FacesContext facesContext,
-			UIComponent component, IListenerType listenerType,
-			String expression, boolean defaultAction,
-			IMethodExpressionCreator methodExpressionCreator) {
-		expression = expression.trim();
-		if (expression.length() < 1) {
-			return;
-		}
-
-		/*
-		 * if (defaultAction && (component instanceof UICommand)) { UICommand
-		 * command = (UICommand) component;
-		 * 
-		 * MethodBinding vb; if (isValueReference(expression)) { vb =
-		 * application.createMethodBinding(expression, null); } else { vb = new
-		 * ForwardMethodBinding(expression); }
-		 * 
-		 * command.setActionListener(vb); return; }
-		 */
-		String scriptType = getScriptType(facesContext);
-
-		char chs[] = expression.toCharArray();
-		int par = 0;
-		int acco = 0;
-		int brakets = 0;
-		int lastStart = 0;
-		int offset;
-		nextChar: for (offset = 0; offset < chs.length; offset++) {
-			char c = chs[offset];
-
-			if (c == '\"' || c == '\'') {
-				for (offset++; offset < chs.length; offset++) {
-					char c2 = chs[offset];
-
-					if (c == c2) {
-						continue nextChar;
-					}
-
-					if (c2 == '\\' && offset + 1 < chs.length) {
-						offset++;
-					}
-				}
-
-				// Mauvaise syntaxe
-				throw new FacesException(
-						"Syntax error on javascript expression='" + expression
-								+ "': quote or double-quote are not balanced.");
-			}
-			if (c == '(') {
-				par++;
-				continue;
-			}
-			if (c == ')') {
-				if (par < 1) {
-					throw new FacesException(
-							"Syntax error on javascript expression='"
-									+ expression
-									+ "': parentheses are not balanced");
-				}
-				par--;
-				continue;
-			}
-			if (c == '{') {
-				acco++;
-				continue;
-			}
-			if (c == '}') {
-				if (acco < 1) {
-					throw new FacesException(
-							"Syntax error on javascript expression='"
-									+ expression
-									+ "': braces are not balanced.");
-				}
-				acco--;
-				continue;
-			}
-			if (c == '[') {
-				brakets++;
-				continue;
-			}
-			if (c == ']') {
-				if (brakets < 1) {
-					throw new FacesException(
-							"Syntax error on javascript expression='"
-									+ expression
-									+ "': brackets are not balanced.");
-				}
-				brakets--;
-				continue;
-			}
-			if (c != ';') {
-				continue;
-			}
-
-			if (brakets > 0 || acco > 0 || par > 0) {
-				continue;
-			}
-
-			parseFunction(chs, lastStart, offset - 1, expression, facesContext,
-					component, listenerType, scriptType,
-					methodExpressionCreator);
-			lastStart = offset + 1;
-		}
-
-		if (lastStart < offset) {
-			parseFunction(chs, lastStart, offset - 1, expression, facesContext,
-					component, listenerType, scriptType,
-					methodExpressionCreator);
-		}
-	}
-
-	private static void parseFunction(char[] chs, int start, int end,
-			String listeners, FacesContext facesContext, UIComponent component,
-			IListenerType listenerType, String scriptType,
-			IMethodExpressionCreator methodExpressionCreator) {
-		for (; start < end; start++) {
-			char c = chs[start];
-			if (Character.isWhitespace(c) == false) {
-				break;
-			}
-		}
-
-		for (; end > start; end--) {
-			char c = chs[end];
-			if (Character.isWhitespace(c) == false) {
-				break;
-			}
-		}
-
-		if (start >= end) {
-			// Que du blanc !
-			return;
-		}
-
-		String s = listeners.substring(start, end + 1);
-
-		if (start + 4 < end) {
-			boolean partialRendering = false;
-			String actionExpression = s;
-
-			if (s.startsWith(PARTIAL_RENDERING_PREFIX)) {
-				partialRendering = true;
-				actionExpression = s.substring(PARTIAL_RENDERING_PREFIX
-						.length());
-			}
-
-			if (BindingTools.isBindingExpression(actionExpression)
-					|| isForwardReference(actionExpression)) {
-				// Value reference � ajouter !
-				if (LOG.isDebugEnabled()) {
-					LOG.debug("Add server listener to component '"
-							+ component.getId() + "' : " + s);
-				}
-
-				if (component instanceof IComponentLifeCycle) {
-					IComponentLifeCycle componentLifeCycle = (IComponentLifeCycle) component;
-
-					if (componentLifeCycle.confirmListenerAppend(facesContext,
-							listenerType.getListenerClass()) == false) {
-						return;
-					}
-				}
-
-				IServerActionListener serverActionListener = listenerType
-						.addActionListener(component,
-								facesContext.getApplication(),
-								actionExpression, partialRendering);
-
-				if (serverActionListener != null
-						&& methodExpressionCreator != null) {
-
-					serverActionListener.createMethodExpression(facesContext,
-							methodExpressionCreator);
-				}
-
-				return;
-			}
-		}
-
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("Add script listener (type=" + scriptType
-					+ ") to component '" + component.getId() + "' : " + s);
-		}
-		if (component instanceof IComponentLifeCycle) {
-			IComponentLifeCycle componentLifeCycle = (IComponentLifeCycle) component;
-
-			if (componentLifeCycle.confirmListenerAppend(facesContext,
-					listenerType.getListenerClass())) {
-				listenerType.addScriptListener(component, scriptType, s);
-			}
-		} else {
-			listenerType.addScriptListener(component, scriptType, s);
-		}
-
-	}
-
-	protected static boolean isForwardReference(String s) {
-		if (s.startsWith("#[") == false) {
-			return false;
-		}
-
-		if (s.endsWith("]") == false) {
-			return false;
-		}
-
-		return true;
-	}
-
-	public static final String getScriptType(FacesContext facesContext) {
-		return PageConfiguration.getScriptType(facesContext);
-	}
-
-	public interface IMethodExpressionCreator {
-		MethodExpression create(String expression, Class[] paramTypes);
-	}
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            ISortEventCapability sortEventCapability = (ISortEventCapability) component;
+
+            sortEventCapability.addSortListener(new SortScriptListener(
+                    scriptType, command));
+        }
+
+        public IServerActionListener addActionListener(UIComponent component,
+                Application application, String expression,
+                boolean partialRendering) {
+
+            ISortEventCapability sortEventCapability = (ISortEventCapability) component;
+
+            SortActionListener sortActionListener = new SortActionListener(
+                    expression, partialRendering);
+            sortEventCapability.addSortListener(sortActionListener);
+
+            return sortActionListener;
+        }
+
+        public Class getListenerClass() {
+            return ISortListener.class;
+        }
+    };
+
+    public static final IListenerType RESET_LISTENER_TYPE = new AbstractListenerType() {
+
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            IResetEventCapability resetEventCapability = (IResetEventCapability) component;
+
+            resetEventCapability.addResetListener(new ResetScriptListener(
+                    scriptType, command));
+        }
+
+        public IServerActionListener addActionListener(UIComponent component,
+                Application application, String expression,
+                boolean partialRendering) {
+
+            IResetEventCapability sortEventCapability = (IResetEventCapability) component;
+
+            ResetActionListener resetActionListener = new ResetActionListener(
+                    expression, partialRendering);
+            sortEventCapability.addResetListener(resetActionListener);
+
+            return resetActionListener;
+        }
+
+        public Class getListenerClass() {
+            return IResetListener.class;
+        }
+    };
+
+    public static final IListenerType VALIDATION_LISTENER_TYPE = new AbstractListenerType() {
+
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            IValidationEventCapability validationEventCapability = (IValidationEventCapability) component;
+
+            validationEventCapability
+                    .addValidationListener(new ValidationScriptListener(
+                            scriptType, command));
+        }
+
+        public IServerActionListener addActionListener(UIComponent component,
+                Application application, String expression,
+                boolean partialRendering) {
+            IValidationEventCapability validationEventCapability = (IValidationEventCapability) component;
+
+            ValidationActionListener validationActionListener = new ValidationActionListener(
+                    expression, partialRendering);
+            validationEventCapability
+                    .addValidationListener(validationActionListener);
+
+            return validationActionListener;
+        }
+
+        public Class getListenerClass() {
+            return IValidationListener.class;
+        }
+    };
+
+    public static final IListenerType MENU_LISTENER_TYPE = new AbstractListenerType() {
+
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            IMenuEventCapability menuEventCapability = (IMenuEventCapability) component;
+
+            menuEventCapability.addMenuListener(new MenuScriptListener(
+                    scriptType, command));
+        }
+
+        public IServerActionListener addActionListener(UIComponent component,
+                Application application, String expression,
+                boolean partialRendering) {
+            throw new UnsupportedListenerTypeException("menuListener");
+        }
+
+        public Class getListenerClass() {
+            return IMenuListener.class;
+        }
+    };
+
+    public static final IListenerType USER_EVENT_LISTENER_TYPE = new AbstractListenerType() {
+
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            IUserEventCapability userEventCapability = (IUserEventCapability) component;
+
+            userEventCapability
+                    .addUserEventListener(new UserEventScriptListener(
+                            scriptType, command));
+        }
+
+        public IServerActionListener addActionListener(UIComponent component,
+                Application application, String expression,
+                boolean partialRendering) {
+
+            IUserEventCapability userEventCapability = (IUserEventCapability) component;
+
+            UserEventActionListener userEventActionListener = new UserEventActionListener(
+                    expression, partialRendering);
+            userEventCapability.addUserEventListener(userEventActionListener);
+
+            return userEventActionListener;
+        }
+
+        public Class getListenerClass() {
+            return IUserEventListener.class;
+        }
+    };
+
+    public static final IListenerType SERVICE_EVENT_LISTENER_TYPE = new AbstractListenerType() {
+
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            IServiceEventCapability userEventCapability = (IServiceEventCapability) component;
+
+            userEventCapability
+                    .addServiceEventListener(new ServiceEventScriptListener(
+                            scriptType, command));
+        }
+
+        public IServerActionListener addActionListener(UIComponent component,
+                Application application, String expression,
+                boolean partialRendering) {
+
+            IServiceEventCapability userEventCapability = (IServiceEventCapability) component;
+
+            ServiceEventActionListener serviceEventActionListener = new ServiceEventActionListener(
+                    expression, partialRendering);
+            userEventCapability
+                    .addServiceEventListener(serviceEventActionListener);
+
+            return serviceEventActionListener;
+        }
+
+        public Class getListenerClass() {
+            return IServiceEventListener.class;
+        }
+    };
+
+    private static final String PARTIAL_RENDERING_PREFIX = "ppr:";
+
+    public static void parseListener(FacesContext facesContext,
+            UIComponent component, IListenerType listenerType, String expression) {
+        parseListener(facesContext, component, listenerType, expression, false,
+                null);
+    }
+
+    public static void parseListener(FacesContext facesContext,
+            UIComponent component, IListenerType listenerType,
+            String expression, IMethodExpressionCreator methodExpressionCreator) {
+        parseListener(facesContext, component, listenerType, expression, false,
+                methodExpressionCreator);
+    }
+
+    public static void parseListener(FacesContext facesContext,
+            UIComponent component, IListenerType listenerType,
+            String expression, boolean defaultAction,
+            IMethodExpressionCreator methodExpressionCreator) {
+        expression = expression.trim();
+        if (expression.length() < 1) {
+            return;
+        }
+
+        /*
+         * if (defaultAction && (component instanceof UICommand)) { UICommand
+         * command = (UICommand) component;
+         * 
+         * MethodBinding vb; if (isValueReference(expression)) { vb =
+         * application.createMethodBinding(expression, null); } else { vb = new
+         * ForwardMethodBinding(expression); }
+         * 
+         * command.setActionListener(vb); return; }
+         */
+        String scriptType = getScriptType(facesContext);
+
+        char chs[] = expression.toCharArray();
+        int par = 0;
+        int acco = 0;
+        int brakets = 0;
+        int lastStart = 0;
+        int offset;
+        nextChar: for (offset = 0; offset < chs.length; offset++) {
+            char c = chs[offset];
+
+            if (c == '\"' || c == '\'') {
+                for (offset++; offset < chs.length; offset++) {
+                    char c2 = chs[offset];
+
+                    if (c == c2) {
+                        continue nextChar;
+                    }
+
+                    if (c2 == '\\' && offset + 1 < chs.length) {
+                        offset++;
+                    }
+                }
+
+                // Mauvaise syntaxe
+                throw new FacesException(
+                        "Syntax error on javascript expression='" + expression
+                                + "': quote or double-quote are not balanced.");
+            }
+            if (c == '(') {
+                par++;
+                continue;
+            }
+            if (c == ')') {
+                if (par < 1) {
+                    throw new FacesException(
+                            "Syntax error on javascript expression='"
+                                    + expression
+                                    + "': parentheses are not balanced");
+                }
+                par--;
+                continue;
+            }
+            if (c == '{') {
+                acco++;
+                continue;
+            }
+            if (c == '}') {
+                if (acco < 1) {
+                    throw new FacesException(
+                            "Syntax error on javascript expression='"
+                                    + expression
+                                    + "': braces are not balanced.");
+                }
+                acco--;
+                continue;
+            }
+            if (c == '[') {
+                brakets++;
+                continue;
+            }
+            if (c == ']') {
+                if (brakets < 1) {
+                    throw new FacesException(
+                            "Syntax error on javascript expression='"
+                                    + expression
+                                    + "': brackets are not balanced.");
+                }
+                brakets--;
+                continue;
+            }
+            if (c != ';') {
+                continue;
+            }
+
+            if (brakets > 0 || acco > 0 || par > 0) {
+                continue;
+            }
+
+            parseFunction(chs, lastStart, offset - 1, expression, facesContext,
+                    component, listenerType, scriptType,
+                    methodExpressionCreator);
+            lastStart = offset + 1;
+        }
+
+        if (lastStart < offset) {
+            parseFunction(chs, lastStart, offset - 1, expression, facesContext,
+                    component, listenerType, scriptType,
+                    methodExpressionCreator);
+        }
+    }
+
+    private static void parseFunction(char[] chs, int start, int end,
+            String listeners, FacesContext facesContext, UIComponent component,
+            IListenerType listenerType, String scriptType,
+            IMethodExpressionCreator methodExpressionCreator) {
+        for (; start < end; start++) {
+            char c = chs[start];
+            if (Character.isWhitespace(c) == false) {
+                break;
+            }
+        }
+
+        for (; end > start; end--) {
+            char c = chs[end];
+            if (Character.isWhitespace(c) == false) {
+                break;
+            }
+        }
+
+        if (start >= end) {
+            // Que du blanc !
+            return;
+        }
+
+        String s = listeners.substring(start, end + 1);
+
+        if (start + 4 < end) {
+            boolean partialRendering = false;
+            String actionExpression = s;
+
+            if (s.startsWith(PARTIAL_RENDERING_PREFIX)) {
+                partialRendering = true;
+                actionExpression = s.substring(PARTIAL_RENDERING_PREFIX
+                        .length());
+            }
+
+            if (BindingTools.isBindingExpression(actionExpression)
+                    || isForwardReference(actionExpression)) {
+                // Value reference � ajouter !
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Add server listener to component '"
+                            + component.getId() + "' : " + s);
+                }
+
+                if (component instanceof IComponentLifeCycle) {
+                    IComponentLifeCycle componentLifeCycle = (IComponentLifeCycle) component;
+
+                    if (componentLifeCycle.confirmListenerAppend(facesContext,
+                            listenerType.getListenerClass()) == false) {
+                        return;
+                    }
+                }
+
+                IServerActionListener serverActionListener = listenerType
+                        .addActionListener(component,
+                                facesContext.getApplication(),
+                                actionExpression, partialRendering);
+
+                if (serverActionListener != null
+                        && methodExpressionCreator != null) {
+
+                    serverActionListener.createMethodExpression(facesContext,
+                            methodExpressionCreator);
+                }
+
+                return;
+            }
+        }
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Add script listener (type=" + scriptType
+                    + ") to component '" + component.getId() + "' : " + s);
+        }
+        if (component instanceof IComponentLifeCycle) {
+            IComponentLifeCycle componentLifeCycle = (IComponentLifeCycle) component;
+
+            if (componentLifeCycle.confirmListenerAppend(facesContext,
+                    listenerType.getListenerClass())) {
+                listenerType.addScriptListener(component, scriptType, s);
+            }
+        } else {
+            listenerType.addScriptListener(component, scriptType, s);
+        }
+
+    }
+
+    protected static boolean isForwardReference(String s) {
+        if (s.startsWith("#[") == false) {
+            return false;
+        }
+
+        if (s.endsWith("]") == false) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static final String getScriptType(FacesContext facesContext) {
+        return PageConfiguration.getScriptType(facesContext);
+    }
+
+    public interface IMethodExpressionCreator {
+        MethodExpression create(String expression, Class[] paramTypes);
+    }
 }

@@ -20,7 +20,6 @@ import org.rcfaces.core.internal.util.ClassLocator;
  * @version $Revision$ $Date$
  */
 public class AsyncModeTools {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(AsyncModeTools.class);
 

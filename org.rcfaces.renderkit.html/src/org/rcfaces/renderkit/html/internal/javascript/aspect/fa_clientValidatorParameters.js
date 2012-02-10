@@ -42,7 +42,7 @@ var __members = {
 	 	
 	 	return clientValidatorParameters[key];
 	 }
-}
+};
 
 new f_aspect("fa_clientValidatorParameters", {
 	members: __members

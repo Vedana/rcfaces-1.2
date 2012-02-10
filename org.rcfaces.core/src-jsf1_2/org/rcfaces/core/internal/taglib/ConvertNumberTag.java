@@ -21,7 +21,6 @@ import org.rcfaces.core.internal.converter.LocaleConverter;
  * @version $Revision$ $Date$
  */
 public class ConvertNumberTag extends CameliaConverterTag {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = 9211078836220394550L;
 

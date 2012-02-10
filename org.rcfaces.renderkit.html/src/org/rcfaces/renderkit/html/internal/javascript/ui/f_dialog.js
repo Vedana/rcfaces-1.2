@@ -20,7 +20,7 @@ var __statics = {
 		styleClass: "f_dialog"
 	}
 
-}
+};
 
 var __members = {
 
@@ -113,7 +113,7 @@ var __members = {
 	f_getDefaultFeatures: function() {
 		return f_dialog._DEFAULT_FEATURES;
 	}
-}
+};
 
 new f_class("f_dialog", {
 	extend: f_shell,

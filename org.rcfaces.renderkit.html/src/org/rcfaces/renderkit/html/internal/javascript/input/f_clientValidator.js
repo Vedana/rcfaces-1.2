@@ -303,20 +303,18 @@ var __statics = {
 				
 				var value=input.value;
 				
-				// Gestion du maxTextLength si mode insertion
-				if (selectionEnd == selectionStart) {
-					if (component.f_getMaxTextLength) {
-						var max = component.f_getMaxTextLength();
-						if (max >= 0 && value.length >= max) {
-							return true;
-						}
+				// Gestion du maxTextLength
+				if (component.f_getMaxTextLength) {
+					var max = component.f_getMaxTextLength();
+					if (max >= 0 && value.length >= max) {
+						return true;
 					}
 				}
 				
 				input.value = value.substring(0, selectionStart)+ ch + value.substring(selectionEnd);
 									
 				input.setSelectionRange(selectionStart + ch.length, selectionStart + ch.length);
-				var deltaW = input.scrollWidth - oldScrollWidth
+				var deltaW = input.scrollWidth - oldScrollWidth;
 				if (!input.scrollTop) {
 					input.scrollTop=oldScrollTop;
 				}
@@ -592,7 +590,7 @@ var __statics = {
 		}
 		return true;
 	}
-}
+};
 
 var __members = {
 	
@@ -985,7 +983,7 @@ var __members = {
 			return keyCode;
 		}
 
-		var component=this.f_getComponent();
+//		var component=this.f_getComponent();
 		for (var i=0; i<translators.length; i++) {
 			var t = translators[i];
 			
@@ -1163,7 +1161,7 @@ var __members = {
 		f_core.Debug(f_clientValidator, "_applyAutoCheck: apply checkers returns '"+checkVal+"' curVal='"+curVal+"'");
 
 		if (checkVal === null) {
-			f_core.Debug(f_clientValidator, "_applyAutoCheck: Applyed Checker returns error '"+this.f_getLastError()+"' for component '"+this._component.id+"'. (handled="+handled+")");
+			f_core.Debug(f_clientValidator, "_applyAutoCheck: Applyed Checker returns error '"+this.f_getLastError()+"' for component '"+this._component.id+"'.");
 			bRet = false;
 			if (fError) {
 				try {
@@ -1196,7 +1194,7 @@ var __members = {
 			f_core.Debug(f_clientValidator, "_applyAutoCheck: apply formatters returns '"+formatVal+"'");
 
 			if (formatVal == null) {
-				f_core.Debug(f_clientValidator, "_applyAutoCheck: Applyed formatters returns error '"+this.f_getLastError()+"' for component '"+this._component.id+"'. (handled="+handled+")");
+				f_core.Debug(f_clientValidator, "_applyAutoCheck: Applyed formatters returns error '"+this.f_getLastError()+"' for component '"+this._component.id+"'.");
 
 				bRet = false;
 				if (fError) {
@@ -1322,7 +1320,7 @@ var __members = {
 		var translators=this._translators;
 		if (!translators) {
 			translators = new Array;
-			this._translators = translators
+			this._translators = translators;
 		}
 		translators.push(expr);
 	},
@@ -1689,7 +1687,7 @@ var __members = {
 	
 		this._initialFormattedValue=this._input.value;
 	}
-}
+};
 
 new f_class("f_clientValidator", {
 	extend: f_object,

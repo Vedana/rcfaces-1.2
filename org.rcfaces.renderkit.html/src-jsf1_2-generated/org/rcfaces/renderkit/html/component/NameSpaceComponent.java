@@ -34,7 +34,10 @@ public class NameSpaceComponent extends CameliaBaseComponent {
 	}
 
 	public String getUri(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.URI, facesContext);
+		String s = engine.getStringProperty(Properties.URI, facesContext);
+
+
+return s;
 	}
 
 	public void setUri(String uri) {
@@ -54,7 +57,10 @@ public class NameSpaceComponent extends CameliaBaseComponent {
 	}
 
 	public String getPrefix(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.PREFIX, facesContext);
+		String s = engine.getStringProperty(Properties.PREFIX, facesContext);
+
+
+return s;
 	}
 
 	public void setPrefix(String prefix) {

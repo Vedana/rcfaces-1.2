@@ -80,7 +80,6 @@ import org.rcfaces.renderkit.html.internal.renderer.ToolBarRenderer;
  * @see ItemsToolFolderDecorator
  */
 public class ItemsListDecorator extends AbstractSelectItemsDecorator {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(ItemsListDecorator.class);
 
@@ -317,8 +316,8 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
                     .writeObjectLiteral(false);
 
             Object siValue = selectItem.getValue();
-            String selectItemValue = convertItemValue(javaScriptWriter
-                    .getHtmlComponentRenderContext(), siValue);
+            String selectItemValue = convertItemValue(
+                    javaScriptWriter.getHtmlComponentRenderContext(), siValue);
 
             if (selectItemValue == null) {
                 throw new FacesException(
@@ -399,8 +398,8 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
                     .getJavaScriptRenderContext().allocateVarName();
 
             javaScriptWriter.write("var ").write(componentVarName).write('=')
-                    .writeMethodCall("f_getItemComponent").write(
-                            selectItemVarName).writeln(");");
+                    .writeMethodCall("f_getItemComponent")
+                    .write(selectItemVarName).writeln(");");
 
             menuDecorator = pushMenuDecorator(componentVarName, itemId,
                     javaScriptWriter);
@@ -604,7 +603,8 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
         String description = selectItem.getDescription();
         if (description != null
                 && (itemComponent instanceof IToolTipTextCapability)) {
-            ((IToolTipTextCapability) itemComponent).setToolTipText(description);
+            ((IToolTipTextCapability) itemComponent)
+                    .setToolTipText(description);
         }
 
         boolean disabled = selectItem.isDisabled();

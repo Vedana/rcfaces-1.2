@@ -29,7 +29,6 @@ import org.rcfaces.core.internal.util.StateHolderTools;
  */
 public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
         implements IDeltaPropertiesAccessor {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(BasicDeltaPropertiesAccessor.class);
@@ -43,24 +42,26 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
     private final IPropertiesAccessor parent;
 
     private Map properties;
-    
-    
+
     private static IUnproxifyValueExpression unproxifyValueExpression = null;
-    
+
     static {
-    	try {
-    		ClassLocator.load("org.apache.jasper.el.JspValueExpression", BasicDeltaPropertiesAccessor.class, null);
-    		
-    		Class cl =ClassLocator.load("org.rcfaces.core.internal.jasper.JasperUnproxifyValueExpression", BasicDeltaPropertiesAccessor.class, null);
-    		unproxifyValueExpression= (IUnproxifyValueExpression) cl.newInstance();
-    	
-    	} catch (ClassNotFoundException ex) {
-    		LOG.error(ex.getMessage());
-    	} catch (Throwable ex) {
-    		 LOG.error(ex.getMessage());
-    	}
+        try {
+            ClassLocator.load("org.apache.jasper.el.JspValueExpression",
+                    BasicDeltaPropertiesAccessor.class, null);
+
+            Class cl = ClassLocator
+                    .load("org.rcfaces.core.internal.jasper.JasperUnproxifyValueExpression",
+                            BasicDeltaPropertiesAccessor.class, null);
+            unproxifyValueExpression = (IUnproxifyValueExpression) cl
+                    .newInstance();
+
+        } catch (ClassNotFoundException ex) {
+            LOG.error(ex.getMessage());
+        } catch (Throwable ex) {
+            LOG.error(ex.getMessage());
+        }
     }
-    
 
     public BasicDeltaPropertiesAccessor(IPropertiesAccessor parent) {
         this.parent = parent;
@@ -160,13 +161,13 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
 
     public void setProperty(FacesContext facesContext, String propertyName,
             ValueExpression valueExpression) {
-    	
+
         Object initialValue = parent.getProperty(propertyName);
-        
-        if (unproxifyValueExpression!=null) {
-        	valueExpression = unproxifyValueExpression.process(valueExpression);
+
+        if (unproxifyValueExpression != null) {
+            valueExpression = unproxifyValueExpression.process(valueExpression);
         }
-        
+
         if (initialValue != null && initialValue.equals(valueExpression)) {
             return;
         }
@@ -179,7 +180,7 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
                 "Can not set a ValueExpression while a delta phase.");
     }
 
-	public Object removeProperty(FacesContext facesContext, String propertyName) {
+    public Object removeProperty(FacesContext facesContext, String propertyName) {
 
         Object initialValue = parent.getProperty(propertyName);
         if (initialValue != null) {
@@ -207,6 +208,10 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
         }
 
         // Pas de valeur initiale !
+
+        if (properties == null) {
+            return null;
+        }
 
         // On positionne donc un UNDEFINED dans le delta !
         Object old = properties.put(propertyName, UNDEFINED);

@@ -12,14 +12,12 @@ import org.rcfaces.core.component.capability.IInputTypeCapability;
  * @version $Revision$ $Date$
  */
 public class SeparatorSelectItem extends SelectItem implements ISeparatorItem {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = -5825985202702986997L;
 
     private static final String SEPARATOR_KEY = "$-camelia#separator-$";
 
     public static final SelectItem SEPARATOR = new SeparatorSelectItem() {
-        private static final String REVISION = "$Revision$";
 
         private static final long serialVersionUID = 3542510884321447395L;
 

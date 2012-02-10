@@ -234,9 +234,10 @@ public class KeyEntryRenderer extends DataGridRenderer {
         }
 
         DataModel dataModel = gridRenderContext.getDataModel();
-        IFiltredModel filtredDataModel = (IFiltredModel) getAdapter(IFiltredModel.class, dataModel);
+        IFiltredModel filtredDataModel = (IFiltredModel) getAdapter(
+                IFiltredModel.class, dataModel);
         if (filtredDataModel != null) {
-             htmlWriter.writeAttributeNS("filtred", true);
+            htmlWriter.writeAttributeNS("filtred", true);
 
             IFilterProperties filterMap = gridRenderContext.getFiltersMap();
             if (filterMap != null && filterMap.isEmpty() == false) {
@@ -283,10 +284,9 @@ public class KeyEntryRenderer extends DataGridRenderer {
         }
 
         if (formattedValue != null) {
-			htmlWriter.writeValue(formattedValue);
-		}
+            htmlWriter.writeValue(formattedValue);
+        }
 
-        
         htmlWriter.endComponent();
 
         htmlWriter.endElement(IHtmlWriter.INPUT);
@@ -300,121 +300,20 @@ public class KeyEntryRenderer extends DataGridRenderer {
     }
 
     protected final Map formatValue(FacesContext facesContext,
-            KeyEntryComponent comboGridComponent,
-            String convertedSelectedValue, Map formatValues) {
+            KeyEntryComponent comboGridComponent, Object selectedValue,
+            String convertedSelectedValue, final Map formatValues) {
 
-        DataModel dataModel = comboGridComponent.getDataModelValue();
+        return (Map) filterValue(facesContext, comboGridComponent,
+                selectedValue, convertedSelectedValue, new IFilterProcessor() {
 
-        IComponentRefModel componentRefModel = (IComponentRefModel) 
-    		getAdapter(IComponentRefModel.class, dataModel);
-    
-	    if (componentRefModel != null) {
-	    	componentRefModel.setComponent((UIComponent) comboGridComponent);
-        }
+                    public Object process(FacesContext facesContext,
+                            KeyEntryComponent comboGridComponent,
+                            String convertedSelectedValue, Object rowData) {
 
-        IFiltredModel filtredDataModel = (IFiltredModel) 
-        	getAdapter(IFiltredModel.class, dataModel);
-        
-        if (filtredDataModel == null) {
-            if (true) {
-                LOG.error("Model does not implement IFiltredModel, returns *not found*");
-                return null;
-            }
-
-            if (LOG.isInfoEnabled()) {
-                LOG.info("Search a row value in a not filtred DataModel ! (comboGridComponent="
-                        + comboGridComponent.getId() + ")");
-            }
-
-            String var = comboGridComponent.getVar(facesContext);
-            if (var == null) {
-                throw new FacesException("Var attribute is null !");
-            }
-
-            Map requestMap = facesContext.getExternalContext().getRequestMap();
-            Object oldValue = requestMap.get(var);
-
-            try {
-                for (int rowIndex = 0;; rowIndex++) {
-                    dataModel.setRowIndex(rowIndex);
-
-                    if (dataModel.isRowAvailable() == false) {
-                        break;
+                        return formatValue(facesContext, comboGridComponent,
+                                rowData, formatValues);
                     }
-
-                    Object rowData = dataModel.getRowData();
-
-                    // @XXX TODO Est-ce la bonne clef ?
-                    if (true) {
-                        continue;
-                    }
-
-                    // Oui !
-                    return formatValue(facesContext, comboGridComponent,
-                            rowData, formatValues);
-                }
-
-            } finally {
-                requestMap.put(var, oldValue);
-                dataModel.setRowIndex(-1);
-            }
-
-            return null;
-        }
-
-        IFilterProperties filterProperties = comboGridComponent
-                .getFilterProperties(facesContext);
-        if (filterProperties == null) {
-            filterProperties = new FilterPropertiesMap();
-        } else {
-            filterProperties = new FilterPropertiesMap(filterProperties);
-        }
-
-        filterProperties.put("key", convertedSelectedValue);
-        filterProperties.put("text", convertedSelectedValue);
-
-        filtredDataModel.setFilter(filterProperties);
-
-        try {
-            dataModel.setRowIndex(0);
-
-            boolean available = dataModel.isRowAvailable();
-
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("formatValue index=0 available=" + available);
-            }
-
-            if (available == false) {
-                return null;
-            }
-
-            Object rowData = dataModel.getRowData();
-
-            String var = comboGridComponent.getVar(facesContext);
-
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("formatValue rowData='" + rowData + "' var='" + var
-                        + "'");
-            }
-
-            if (var == null) {
-                throw new FacesException("Var attribute is null !");
-            }
-
-            Map requestMap = facesContext.getExternalContext().getRequestMap();
-            Object oldValue = requestMap.put(var, rowData);
-
-            try {
-                return formatValue(facesContext, comboGridComponent, rowData,
-                        formatValues);
-
-            } finally {
-                requestMap.put(var, oldValue);
-            }
-
-        } finally {
-            dataModel.setRowIndex(-1);
-        }
+                });
     }
 
     protected final Map formatValue(FacesContext facesContext,
@@ -641,12 +540,11 @@ public class KeyEntryRenderer extends DataGridRenderer {
         }
 
         IFilterProperties filtersMap = tableContext.getFiltersMap();
-        IFiltredModel filtredDataModel = (IFiltredModel) 
-        	getAdapter(IFiltredModel.class, dataModel);
-        
+        IFiltredModel filtredDataModel = (IFiltredModel) getAdapter(
+                IFiltredModel.class, dataModel);
+
         if (filtersMap != null) {
             if (filtredDataModel != null) {
-
                 filtredDataModel.setFilter(filtersMap);
                 tableContext.updateRowCount();
 
@@ -743,11 +641,20 @@ public class KeyEntryRenderer extends DataGridRenderer {
         Object convertedSelectedValue = null;
         String selectedValue = componentData.getStringProperty("selected");
         if (selectedValue != null) {
-            UIComponent converterComponent = getColumn(comboGridComponent,
-                    comboGridComponent.getValueColumnId(facesContext));
+            convertedSelectedValue = filterValue(facesContext,
+                    comboGridComponent, null, selectedValue,
+                    new IFilterProcessor() {
 
-            convertedSelectedValue = ValuesTools.convertStringToValue(
-                    facesContext, converterComponent, selectedValue, false);
+                        public Object process(FacesContext facesContext,
+                                KeyEntryComponent comboGridComponent,
+                                String convertedSelectedValue, Object rowData) {
+
+                            ValueHolder vh = (ValueHolder) getRowValueColumn(comboGridComponent);
+
+                            return vh.getValue();
+                        }
+                    });
+
         } else if (comboGridComponent.isForceValidation(facesContext) == false) {
             // Verifier qu'il n'y a pas de converter
             if (ValuesTools.getConverter(comboGridComponent) == null) {
@@ -773,6 +680,151 @@ public class KeyEntryRenderer extends DataGridRenderer {
 
         unlockedProperties.add("selected");
         unlockedProperties.add("selectedValue");
+    }
+
+    protected interface IFilterProcessor {
+
+        Object process(FacesContext facesContext,
+                KeyEntryComponent comboGridComponent,
+                String convertedSelectedValue, Object rowData);
+
+    }
+
+    protected final Object filterValue(FacesContext facesContext,
+            KeyEntryComponent comboGridComponent, Object selectedValue,
+            String convertedSelectedValue, IFilterProcessor processor) {
+
+        DataModel dataModel = comboGridComponent.getDataModelValue();
+
+        IComponentRefModel componentRefModel = (IComponentRefModel) getAdapter(
+                IComponentRefModel.class, dataModel);
+
+        if (componentRefModel != null) {
+            componentRefModel.setComponent(comboGridComponent);
+        }
+
+        IFiltredModel filtredDataModel = (IFiltredModel) getAdapter(
+                IFiltredModel.class, dataModel);
+
+        if (filtredDataModel == null) {
+            if (false) {
+                LOG.error("Model does not implement IFiltredModel, returns *not found*");
+                return null;
+            }
+
+            if (LOG.isInfoEnabled()) {
+                LOG.info("Search a row value in a not filtred DataModel ! (comboGridComponent="
+                        + comboGridComponent.getId() + ")");
+            }
+
+            UIComponent rowValueColumn = getRowValueColumn(comboGridComponent);
+            if ((rowValueColumn instanceof ValueHolder) == false) {
+                throw new FacesException("Can not get row value for column '"
+                        + rowValueColumn + "'.");
+            }
+            ValueHolder columnValueHolder = (ValueHolder) rowValueColumn;
+
+            String var = comboGridComponent.getVar(facesContext);
+            if (var == null) {
+                throw new FacesException("Var attribute is null !");
+            }
+
+            Map<String, Object> requestMap = facesContext.getExternalContext()
+                    .getRequestMap();
+            Object oldValue = requestMap.get(var);
+
+            try {
+                for (int rowIndex = 0;; rowIndex++) {
+                    dataModel.setRowIndex(rowIndex);
+
+                    if (dataModel.isRowAvailable() == false) {
+                        break;
+                    }
+
+                    Object rowData = dataModel.getRowData();
+
+                    requestMap.put(var, rowData);
+
+                    Object value = columnValueHolder.getValue();
+
+                    String convertedValue = ValuesTools.convertValueToString(
+                            value, rowValueColumn, facesContext);
+
+                    if (convertedSelectedValue.equals(convertedValue) == false) {
+                        continue;
+                    }
+
+                    return processor.process(facesContext, comboGridComponent,
+                            convertedSelectedValue, rowData);
+
+                }
+
+            } finally {
+                requestMap.put(var, oldValue);
+                dataModel.setRowIndex(-1);
+            }
+
+            return null;
+        }
+
+        IFilterProperties filterProperties = comboGridComponent
+                .getFilterProperties(facesContext);
+        if (filterProperties == null) {
+            filterProperties = new FilterPropertiesMap();
+        } else {
+            filterProperties = new FilterPropertiesMap(filterProperties);
+        }
+
+        filterProperties.put("key", convertedSelectedValue);
+        filterProperties.put("text", convertedSelectedValue);
+
+        filterProperties.put("convertedValue", convertedSelectedValue);
+        if (selectedValue != null) {
+            filterProperties.put("value", selectedValue);
+        }
+
+        filtredDataModel.setFilter(filterProperties);
+
+        try {
+            dataModel.setRowIndex(0);
+
+            boolean available = dataModel.isRowAvailable();
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("formatValue index=0 available=" + available);
+            }
+
+            if (available == false) {
+                return null;
+            }
+
+            Object rowData = dataModel.getRowData();
+
+            String var = comboGridComponent.getVar(facesContext);
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("formatValue rowData='" + rowData + "' var='" + var
+                        + "'");
+            }
+
+            if (var == null) {
+                throw new FacesException("Var attribute is null !");
+            }
+
+            Map requestMap = facesContext.getExternalContext().getRequestMap();
+            Object oldValue = requestMap.put(var, rowData);
+
+            try {
+                return processor.process(facesContext, comboGridComponent,
+                        convertedSelectedValue, rowData);
+
+            } finally {
+                requestMap.put(var, oldValue);
+            }
+
+        } finally {
+            dataModel.setRowIndex(-1);
+        }
     }
 
     public void declare(INamespaceConfiguration nameSpaceProperties) {

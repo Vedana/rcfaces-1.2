@@ -68,7 +68,7 @@ var __statics = {
 		
 		f_messageContext.Get(component).f_addMessageObject(component, messageObject, true);
     }
-}
+};
 
 var __members = {
 	
@@ -216,7 +216,7 @@ var __members = {
 	toString: function() {
 		return "[f_messageObject severity='"+this._severity+"' summary='"+this._summary+"' detail='"+this._detail+"']";
 	}
-}
+};
 
 new f_class("f_messageObject", {
 	statics: __statics,

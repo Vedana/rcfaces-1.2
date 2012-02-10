@@ -376,7 +376,10 @@ public class KeyEntryComponent extends AbstractGridComponent implements
 	 * @return variable name
 	 */
 	public String getRowCountVar(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ROW_COUNT_VAR, facesContext);
+		String s = engine.getStringProperty(Properties.ROW_COUNT_VAR, facesContext);
+
+
+return s;
 	}
 
 	/**
@@ -412,7 +415,10 @@ public class KeyEntryComponent extends AbstractGridComponent implements
 	 * @return variable name
 	 */
 	public String getRowIndexVar(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ROW_INDEX_VAR, facesContext);
+		String s = engine.getStringProperty(Properties.ROW_INDEX_VAR, facesContext);
+
+
+return s;
 	}
 
 	/**
@@ -440,7 +446,10 @@ public class KeyEntryComponent extends AbstractGridComponent implements
 	}
 
 	public String getValueColumnId(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.VALUE_COLUMN_ID, facesContext);
+		String s = engine.getStringProperty(Properties.VALUE_COLUMN_ID, facesContext);
+
+
+return s;
 	}
 
 	public void setValueColumnId(String valueColumnId) {
@@ -460,7 +469,10 @@ public class KeyEntryComponent extends AbstractGridComponent implements
 	}
 
 	public String getLabelColumnId(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.LABEL_COLUMN_ID, facesContext);
+		String s = engine.getStringProperty(Properties.LABEL_COLUMN_ID, facesContext);
+
+
+return s;
 	}
 
 	public void setLabelColumnId(String labelColumnId) {
@@ -500,7 +512,10 @@ public class KeyEntryComponent extends AbstractGridComponent implements
 	}
 
 	public String getValueFormat(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.VALUE_FORMAT, facesContext);
+		String s = engine.getStringProperty(Properties.VALUE_FORMAT, facesContext);
+
+
+return s;
 	}
 
 	public void setValueFormat(String valueFormat) {
@@ -540,7 +555,10 @@ public class KeyEntryComponent extends AbstractGridComponent implements
 	}
 
 	public String getForLabel(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FOR_LABEL, facesContext);
+		String s = engine.getStringProperty(Properties.FOR_LABEL, facesContext);
+
+
+return s;
 	}
 
 	public void setForLabel(String forLabel) {
@@ -560,7 +578,10 @@ public class KeyEntryComponent extends AbstractGridComponent implements
 	}
 
 	public String getValueFormatLabel(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.VALUE_FORMAT_LABEL, facesContext);
+		String s = engine.getStringProperty(Properties.VALUE_FORMAT_LABEL, facesContext);
+
+
+return s;
 	}
 
 	public void setValueFormatLabel(String valueFormatLabel) {
@@ -580,7 +601,10 @@ public class KeyEntryComponent extends AbstractGridComponent implements
 	}
 
 	public String getNoValueFormatLabel(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.NO_VALUE_FORMAT_LABEL, facesContext);
+		String s = engine.getStringProperty(Properties.NO_VALUE_FORMAT_LABEL, facesContext);
+
+
+return s;
 	}
 
 	public void setNoValueFormatLabel(String noValueFormatLabel) {

@@ -555,6 +555,9 @@ public abstract class CameliaBaseComponent extends javax.faces.component.UICompo
         }
     }
 
+	public void settedPhase(FacesContext facesContext) {
+	}
+
     public void decodePhase(FacesContext facesContext) {
     }
 

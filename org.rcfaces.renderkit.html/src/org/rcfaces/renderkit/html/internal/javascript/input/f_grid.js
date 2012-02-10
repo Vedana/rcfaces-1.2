@@ -71,7 +71,7 @@ var __statics = {
 	/**
 	 * @field private static final Number
 	 */
-	_COLUMN_MAX_WIDTH : 640,
+	_COLUMN_MAX_WIDTH : 4096,
 
 	/**
 	 * @field private static final Number
@@ -297,7 +297,6 @@ var __statics = {
 			// On deplace le cursor avant de donner le focus !
 			dataGrid.f_forceFocus();
 
-			var sub = f_core.IsPopupButton(evt);
 			if (sub && this._selected) {
 				var menu = dataGrid.f_getSubMenuById(f_grid._ROW_MENU_ID);
 				if (menu) {
@@ -334,7 +333,7 @@ var __statics = {
 				evt = f_core.GetJsEvent(this);
 			}
 
-			if (dataGrid.f_getEventLocked(evt, false)) {
+			if (dataGrid.f_getEventLocked(evt)) {
 				f_core.Debug(f_grid, "RowMouseUp: event already locked");
 				return false;
 			}
@@ -604,7 +603,8 @@ var __statics = {
 	 * @method protected static
 	 * @param HTMLTableElement
 	 *            element
-	 * @param optional Boolean assertIfNotFound
+	 * @param optional
+	 *            Boolean assertIfNotFound
 	 * @return HTMLTableRowElement
 	 */
 	GetFirstRow : function(element, assertIfNotFound) {
@@ -1046,6 +1046,12 @@ var __statics = {
 
 		f_core.Debug(f_grid, "_Title_onMouseDown: perform event " + evt);
 
+		if (evt.preventDefault) {
+			evt.preventDefault();
+		} else {
+			evt.returnValue = false;
+		}
+
 		if (dataGrid.f_getEventLocked(evt)) {
 			return false;
 		}
@@ -1061,7 +1067,7 @@ var __statics = {
 				menuId = column._menuPopupId;
 			}
 			var menu = dataGrid.f_getSubMenuById(menuId);
-			
+
 			if (menu) {
 				menu.f_open(evt, {
 					position : f_popup.MOUSE_POSITION
@@ -1081,7 +1087,27 @@ var __statics = {
 		dataGrid._columnSelected = column;
 		dataGrid._updateTitleStyle(column);
 
+		if (f_core.IsGecko()) {
+			// GROS BUG firefox,  il existe une zone en dessous de la baseline qui n'envoie pas de CLICK !
+			f_grid._TitleMouseDownTime=new Date().getTime();
+			f_grid._TitleWaitClickTime=0;
+			f_grid._TitleIgnoreClickTime=0;
+			f_grid._TitleReleaseTimer();
+		}
+	
 		return true;
+	},
+	/**
+	 * @method private static
+	 * @return void
+	 */
+	_TitleReleaseTimer: function() {
+		var id=f_grid._TitleWaitClickTimerId;
+		if (!id) {
+			return;
+		}
+		f_grid._TitleWaitClickTimerId=undefined;
+		window.clearTimeout(id);
 	},
 	/**
 	 * @method private static
@@ -1303,6 +1329,16 @@ var __statics = {
 			evt = f_core.GetJsEvent(this);
 		}
 
+		f_grid._TitleReleaseTimer();
+		var lastClickTime=f_grid._TitleLastClickTime;
+		if (lastClickTime) { // Que Firefox
+			f_grid._TitleLastClickTime=0;
+			
+			if ((new Date().getTime()-lastClickTime)<400) {
+				return false;
+			}
+		}
+
 		f_core.Debug(f_grid, "_Title_onClick: perform event " + evt);
 
 		if (dataGrid.f_getEventLocked(evt, false)) {
@@ -1368,6 +1404,58 @@ var __statics = {
 				+ dataGrid._columnSelected + "'");
 
 		dataGrid._columnSelected = undefined;
+
+		dataGrid._updateTitleStyle(column);
+		
+		f_grid._TitleReleaseTimer();
+
+		var date=f_grid._TitleMouseDownTime; // Que pour Firefox
+		if (date && f_core.GetEvtButton(evt)==f_core.LEFT_MOUSE_BUTTON) {
+			var buttons = evt.which;
+			var ctrlKey=evt.ctrlKey;
+			var altKey=evt.altKey;
+			var shiftKey=evt.shiftKey;
+			var metaKey=evt.metaKey;
+			var detail=evt.detail;
+			
+			var now=new Date().getTime();
+			var delta=now-date;
+			if (delta<1000) {
+				f_grid._TitleWaitClickTimerId=window.setTimeout(function() {
+					if (window._rcfacesExiting) {
+						return;
+					}
+					
+					var doc = dataGrid.ownerDocument;
+					var evt = doc.createEvent('MouseEvents');
+					evt.initMouseEvent('click', true, true, doc.defaultView, detail, 0, 0, 0, 0, ctrlKey, altKey, shiftKey, metaKey, buttons, null);
+					
+					f_grid._TitleVerifyClick(dataGrid, column, evt);
+				}, 200);
+			}
+		}
+	},
+	/**
+	 * @method private static
+	 */
+	_TitleVerifyClick: function(dataGrid, column, evt) {
+		f_grid._TitleWaitClickTime=undefined;
+		f_grid._TitleLastClickTime=new Date().getTime();
+
+		if (column.f_fireEvent(f_event.SELECTION, evt, null, null, dataGrid) === false) {
+
+			f_core.Debug(f_grid,
+					"_TitleVerifyClick: event Selection returns false");
+
+			return;// On bloque le FOCUS !
+		}
+
+		var append = (evt.shiftKey);
+
+		f_core.Debug(f_grid, "_TitleVerifyClick: call set column sort append="
+				+ append);
+
+		dataGrid.f_setColumnSort(column, undefined, append);		
 	},
 	/**
 	 * @method private static
@@ -1540,7 +1628,8 @@ var __statics = {
 			if (dw) {
 				f_grid._DragCursorMove(dataGrid, column, dw);
 				
-				var cursorPos = f_core.GetAbsolutePosition(f_grid._DragColumn._cursor);
+				var cursorPos = f_core
+						.GetAbsolutePosition(f_grid._DragColumn._cursor);
 				dataGrid._dragDeltaX = dataGrid._dragEventPos.x - cursorPos.x
 						+ dataGrid._scrollTitle.scrollLeft;
 			}
@@ -1635,7 +1724,8 @@ var __statics = {
 			var w2=w - f_grid._TEXT_RIGHT_PADDING - f_grid._TEXT_LEFT_PADDING;
 			column._box.style.width = ((w2>0)?w2:0) + "px";
 			
-			var w3=w - f_grid._TEXT_RIGHT_PADDING - f_grid._TEXT_LEFT_PADDING + twidth;
+			var w3 = w - f_grid._TEXT_RIGHT_PADDING - f_grid._TEXT_LEFT_PADDING
+					+ twidth;
 			column._label.style.width = ((w3>0)?w3:0) + "px";
 	
 			var totalCols = 0;
@@ -1647,8 +1737,8 @@ var __statics = {
 					continue;
 				}
 	
-				f_core.Assert(cl._col, "f_grid._DragCursorMove: Invalid column '"
-						+ cl + "'.");
+				f_core.Assert(cl._col,
+						"f_grid._DragCursorMove: Invalid column '" + cl + "'.");
 	
 				totalCols += parseInt(cl._col.style.width, 10);
 			}
@@ -2119,6 +2209,7 @@ var __members = {
 		this.f_insertEventListenerFirst(f_event.KEYDOWN, this._performKeyDown);
 	},
 	f_finalize : function() {
+		f_grid._TitleReleaseTimer();
 
 		if (f_grid._DragColumn) {
 			f_grid._TitleCursorDragStop();
@@ -2371,9 +2462,11 @@ var __members = {
 				if (this._showLoadingAlert !== false) {
 					if (this._alertLoadingMessage === undefined) {
 						var resourceBundle = f_resourceBundle.Get(f_grid);
-						this._alertLoadingMessage = "f_grid: " + resourceBundle.f_get("EVENT_LOCKED");
+						this._alertLoadingMessage = "f_grid: "
+								+ resourceBundle.f_get("EVENT_LOCKED");
 					}
-					f_core.Debug(f_grid,
+					f_core
+							.Debug(f_grid,
 							"f_getEventLocked: popup error dialog, loading ...");
 
 					alert(this._alertLoadingMessage);
@@ -2850,7 +2943,8 @@ var __members = {
 		var labelComponent = column._label;
 
 		if (!labelComponent) {
-			return null;
+			var text=column._text;
+			return text;
 		}
 
 		return f_core.GetTextNode(labelComponent);
@@ -2929,6 +3023,10 @@ var __members = {
 					}
 
 					column._resizable = (column._minWidth >= f_grid._COLUMN_MIN_WIDTH && column._maxWidth >= column._minWidth);
+				}
+
+				if (column._titleToolTipId) {
+					
 				}
 
 			} else {
@@ -3023,14 +3121,18 @@ var __members = {
 			if (this._focus) {
 				suffix += "_focus";
 				if (this._serviceGridId){
-					var dataGridPopup = f_core.GetElementByClientId(this._serviceGridId);
+					var dataGridPopup = f_core
+							.GetElementByClientId(this._serviceGridId);
 					if (dataGridPopup._ariaInput){
-						fa_aria.SetElementAriaActiveDescendant(dataGridPopup._ariaInput, row.id);
+						fa_aria.SetElementAriaActiveDescendant(
+								dataGridPopup._ariaInput, row.id);
 					}else {
-						fa_aria.SetElementAriaActiveDescendant(this._scrollBody, row.id);
+						fa_aria.SetElementAriaActiveDescendant(
+								this._scrollBody, row.id);
 					}
 				}else {
-					fa_aria.SetElementAriaActiveDescendant(this._scrollBody, row.id);
+					fa_aria.SetElementAriaActiveDescendant(this._scrollBody,
+							row.id);
 				}
 			}
 
@@ -3422,7 +3524,7 @@ var __members = {
 
 			} else {
 				for ( var i = 0; i < rows.length; i++) {
-					if (rows[i]._rowIndex != rowIndex) {
+					if (rows[i]._index != rowIndex) {
 						continue;
 					}
 
@@ -3520,8 +3622,7 @@ var __members = {
 	 * 
 	 * @method public
 	 * 
-	 * @param optional
-	 *            Boolean fullUpdate to force rowCount and pager update
+	 * @param optional Boolean fullUpdate to force rowCount and pager update
 	 * 
 	 * @return void
 	 */
@@ -4928,8 +5029,8 @@ var __members = {
 			var columnIndex = col._index;
 			var tdIndex = 0;
 			for ( var j = 0; j < columns.length; j++) {
-				var col = columns[j];
-				if (!col._visibility) {
+				var col2 = columns[j];
+				if (!col2._visibility) {
 					continue;
 				}
 
@@ -5014,8 +5115,21 @@ var __members = {
 	 * @param f_component
 	 *            component Component or HTMLElement
 	 * @return Object Value of the row
+	 * @deprecated
 	 */
 	f_getRowValueFromCommponent: function(component){
+		return this.f_getRowValueFromComponent(component);
+	},
+	
+	/**
+	 * Return the value of the row which contains the specified component.
+	 * 
+	 * @method public
+	 * @param f_component
+	 *            component Component or HTMLElement
+	 * @return Object Value of the row
+	 */
+	f_getRowValueFromComponent: function(component){
 		while (component && typeof(component._rowIndex)!="number") {
 			component = component.parentNode;
 		}
@@ -5863,6 +5977,7 @@ var __members = {
 			this.f_hideAdditionalContent(row, animated);
 		}
 	},
+
 	/**
 	 * @method protected
 	 * @param Object
@@ -6425,7 +6540,6 @@ var __members = {
 
 		return true;
 	},
-
 	/**
 	 * @method protected
 	 * @param any
@@ -6611,14 +6725,13 @@ var __members = {
 	 *            event
 	 * @return String Identifier of column or <code>null</code> if not found.
 	 */
-	f_computeEventColumnId: function(event) {
+	f_computeEventColumnId : function(event) {
 		f_core.Assert(event instanceof f_event,
 				"f_grid.f_getEventColumnIndex: Invalid event parameter '"
 						+ event + "'.");
 
 		var jsEvent = event.f_getJsEvent();
 		var target = jsEvent.target ? jsEvent.target : jsEvent.srcElement;
-
 		return this.f_computeColumnIdByElement(target);
 	},
 
@@ -6632,6 +6745,7 @@ var __members = {
 		f_core.Assert(target && target.nodeType == f_core.ELEMENT_NODE,
 				"f_grid.f_computeColumnIdByElement: Invalid target parameter '"
 						+ target + "'.");
+
 
 		var lastCell;
 
@@ -6690,7 +6804,7 @@ var __members = {
 
 					break;
 				}
-
+				
 				break;
 			}
 		}
@@ -6823,27 +6937,29 @@ var __members = {
 	 * @return void
 	 */
 	f_selectAllPage: function() {
-		
 		if (!this._selectable) {
 			return;
 		}
-		
-		var rows = this.fa_listVisibleElements();
-		if(rows.length) {
-			
-			var l=new Array;
-			
-			for ( var i = 0; i < rows.length; i++) {
-				
-				var row = rows[i];
-				var elementValue=this.fa_getElementValue(row);
-				
-				if (!this.fa_isElementDisabled(row)) {
-					l.push(elementValue);
-				}
-			}
-			this._selectElementsRange(l, fa_selectionManager.RANGE_SELECTION, false, rows);
+		var first = this.f_getFirst();
+		var last = 1;
+		var rowCount = this.f_getRowCount();
+		var rows = -1;
+		if(this._rows) {
+			rows = this._rows;
 		}
+		if( rowCount > 0 && ((rows > 0 && rowCount < rows) || rows < 0)){
+			last = rowCount;
+		}else if(rows > 0) {
+			last = rows;
+		} 
+		
+		var end = first+last-1;
+		if (end > rowCount) {
+			end = rowCount - 1; // evite de selectioner des lignes en trop
+		}
+		this._selectRange(this.f_getRow(first),
+				this.f_getRow(end),
+				fa_selectionManager.RANGE_SELECTION);
 	},
 	
 	/**
@@ -6911,7 +7027,7 @@ var __members = {
 			}
 			
 			selection._items[i] = row;
-			selection._itemsValue[i] = this.fa_getElementValue(row);		
+			selection._itemsValue[i] = this.fa_getElementValue(row);
 		}
 		
 		if (!lastEffects) {

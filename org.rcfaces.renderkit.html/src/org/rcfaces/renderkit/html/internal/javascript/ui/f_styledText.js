@@ -31,7 +31,7 @@ var __members = {
 		
 		this.f_setProperty(f_prop.TEXT,text);
 	}
-}
+};
 
 new f_class("f_styledText", {
 	extend: f_text,

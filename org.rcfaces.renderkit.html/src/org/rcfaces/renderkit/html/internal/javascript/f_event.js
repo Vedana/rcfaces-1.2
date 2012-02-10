@@ -357,6 +357,13 @@ var __statics = {
 	CLOSE : "close",
 
 	/**
+	 * Click event name.
+	 * 
+	 * @field public static final String
+	 */
+	CLICK : "click",
+
+	/**
 	 * Double-click event name.
 	 * 
 	 * @field public static final String

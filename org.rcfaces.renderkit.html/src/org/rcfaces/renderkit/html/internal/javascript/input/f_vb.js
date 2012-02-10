@@ -1341,9 +1341,15 @@ var __statics = {
 
 	/**
 	 * @method public static
+	 * @return void
 	 * @context object:validator
 	 */
 	Behavior_required : function(validator, inVal) {
+		var comp=validator.f_getComponent();
+		if (comp.f_isRequired && !comp.f_isRequired()) {
+			return true;
+		}
+		
 		// Check if input value from format
 		var bRet = (inVal != null && inVal != "");
 
@@ -1648,7 +1654,7 @@ var __statics = {
 			return ret;
 		}
 	}
-}
+};
 
 new f_class("f_vb", {
 	statics : __statics

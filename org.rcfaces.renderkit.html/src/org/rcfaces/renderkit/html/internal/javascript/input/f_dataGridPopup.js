@@ -220,7 +220,7 @@ var __statics = {
 				
 		return dataGrid;
 	}
-}
+};
 
 var __members = {
 

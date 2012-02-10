@@ -173,7 +173,7 @@ var __members={
 	f_syncCall: function(parameter, progressMonitor) {
 		var requestId=this._allocateRequestId();
 		
-		var subProgressMonitor;
+		var subProgressMonitor=undefined;
 		if (progressMonitor) {
 			subProgressMonitor=f_subProgressMonitor.f_newInstance(progressMonitor, f_service._TOTAL_WORK_PROGRESS_MONITOR);
 		}

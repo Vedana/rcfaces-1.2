@@ -18,8 +18,6 @@ import org.rcfaces.core.component.capability.IInputTypeCapability;
  */
 public class MenuItem extends DefaultItem implements IMenuItem {
 
-    private static final String REVISION = "$Revision$";
-
     private static final long serialVersionUID = 1262314873491593499L;
 
     public MenuItem() {
@@ -38,6 +36,7 @@ public class MenuItem extends DefaultItem implements IMenuItem {
         super(menuItemComponent);
     }
 
+    @Override
     protected void setInputType(UIComponent inputComponent) {
 
         int type = IInputTypeCapability.AS_PUSH_BUTTON;

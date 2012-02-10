@@ -58,6 +58,7 @@
 	vertical-align: middle;
 	-moz-user-select: none;
 	user-select: none;
+	font-weight: normal;
 }
 
 .f_expandBar_label_expandable {

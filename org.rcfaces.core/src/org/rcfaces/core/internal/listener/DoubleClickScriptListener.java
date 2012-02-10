@@ -13,7 +13,6 @@ import org.rcfaces.core.event.IDoubleClickListener;
  */
 public class DoubleClickScriptListener extends AbstractScriptListener implements
         IDoubleClickListener {
-    private static final String REVISION = "$Revision$";
 
     public DoubleClickScriptListener(String scriptType, String command) {
         super(scriptType, command);

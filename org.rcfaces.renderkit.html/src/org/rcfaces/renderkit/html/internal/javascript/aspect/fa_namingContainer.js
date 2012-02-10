@@ -110,7 +110,7 @@ var __statics = {
 		return component;
 	},
 	/**
-	 * @method hidden static final 
+	 * @method hidden static 
 	 * @param HTMLElement component
 	 * @param String id <b>(The naming separator is ':')</b>
 	 * @param Boolean sibling
@@ -283,7 +283,7 @@ var __statics = {
 		
 		return null;
 	}
-}
+};
 
 new f_aspect("fa_namingContainer", {
 	statics: __statics

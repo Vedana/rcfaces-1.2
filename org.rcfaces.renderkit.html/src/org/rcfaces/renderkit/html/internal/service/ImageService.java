@@ -45,7 +45,6 @@ import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
  * @version $Revision$ $Date$
  */
 public class ImageService extends AbstractHtmlService {
-    private static final String REVISION = "$Revision$";
 
     private static final String SERVICE_ID = Constants.getPackagePrefix()
             + ".Image";

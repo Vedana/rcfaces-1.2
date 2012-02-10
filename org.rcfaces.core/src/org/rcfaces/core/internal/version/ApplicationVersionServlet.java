@@ -28,7 +28,6 @@ import org.rcfaces.core.internal.webapp.ExpirationDate;
  * @version $Revision$ $Date$
  */
 public class ApplicationVersionServlet extends ConfiguredHttpServlet {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = -4209462021160100620L;
 
@@ -39,6 +38,7 @@ public class ApplicationVersionServlet extends ConfiguredHttpServlet {
 
     private static final String APPLICATION_VERSION_URL_PROPERTY = "org.rcfaces.core.internal.rewriting.APPLICATION_VERSION_URL_PROPERTY";
 
+    @Override
     public void init(ServletConfig config) throws ServletException {
 
         super.init(config);
@@ -60,6 +60,7 @@ public class ApplicationVersionServlet extends ConfiguredHttpServlet {
         return (String) applicationMap.get(APPLICATION_VERSION_URL_PROPERTY);
     }
 
+    @Override
     protected void service(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
 
@@ -116,12 +117,14 @@ public class ApplicationVersionServlet extends ConfiguredHttpServlet {
                 }
             }
 
+            @Override
             public ServletOutputStream getOutputStream() throws IOException {
                 updateExpiration();
 
                 return super.getOutputStream();
             }
 
+            @Override
             public PrintWriter getWriter() throws IOException {
                 updateExpiration();
 

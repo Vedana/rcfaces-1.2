@@ -65,9 +65,8 @@ public class ClientValidatorTools {
         if (valueHolder.getConverter() != null) {
 
             if (LOG.isDebugEnabled()) {
-                LOG
-                        .debug("Converter of valueHolder is already setted for component='"
-                                + clientValidationCapability + "'.");
+                LOG.debug("Converter of valueHolder is already setted for component='"
+                        + clientValidationCapability + "'.");
             }
             return;
         }
@@ -172,8 +171,6 @@ public class ClientValidatorTools {
         }
 
         IClientValidationContext clientValidatorContext = new IClientValidationContext() {
-            private static final String REVISION = "$Revision$";
-
             public ICommand getClientValidatorCommand() {
                 return command;
             }

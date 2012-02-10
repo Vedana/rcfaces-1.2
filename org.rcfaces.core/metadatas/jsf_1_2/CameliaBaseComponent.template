@@ -555,6 +555,9 @@ ${FIELDS}
         }
     }
 
+	public void settedPhase(FacesContext facesContext) {
+	}
+
     public void decodePhase(FacesContext facesContext) {
     }
 

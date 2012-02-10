@@ -19,8 +19,6 @@ import org.rcfaces.core.internal.capability.IComponentLifeCycle;
  * @version $Revision$ $Date$
  */
 public abstract class CameliaTag extends UIComponentELTag {
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory.getLog(CameliaTag.class);
 
     private static final boolean debugEnabled = LOG.isDebugEnabled();
@@ -39,14 +37,6 @@ public abstract class CameliaTag extends UIComponentELTag {
         return Boolean.valueOf(value);
     }
 
-    protected static final Integer getInteger(String value) {
-        if (value == null) {
-            return null;
-        }
-
-        return Integer.valueOf(value);
-    }
-    
     protected static final Number getNumber(String value) {
         if (value == null || value.length() == 0) {
             return null;
@@ -66,6 +56,13 @@ public abstract class CameliaTag extends UIComponentELTag {
         return new Long(l);
     }
 
+    protected static final Integer getInteger(String value) {
+        if (value == null) {
+            return null;
+        }
+
+        return Integer.valueOf(value);
+    }
 
     protected static final int getInt(String value) {
         return Integer.parseInt(value);
@@ -185,6 +182,26 @@ public abstract class CameliaTag extends UIComponentELTag {
         }
 
         return component;
+    }
+
+    @Override
+    protected UIComponent createComponent(FacesContext facesContext,
+            String newId) throws JspException {
+        try {
+            UIComponent component = super.createComponent(facesContext, newId);
+
+            if (component instanceof IComponentLifeCycle) {
+                IComponentLifeCycle componentLifeCycle = (IComponentLifeCycle) component;
+
+                componentLifeCycle.settedPhase(facesContext);
+            }
+
+            return component;
+
+        } catch (RuntimeException ex) {
+            LOG.error("Can not create component '" + newId + "'.", ex);
+            throw ex;
+        }
     }
 
 }

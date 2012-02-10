@@ -18,11 +18,10 @@ import org.rcfaces.core.validator.IParameter;
  * @version $Revision$ $Date$
  */
 public class CommandParserIterator implements Iterator {
-    private static final String REVISION = "$Revision$";
 
     private static final IParameter[] EMPTY_PARAMETERS = new IParameter[0];
 
-    private final Iterator iterator;
+    private final Iterator<Command> iterator;
 
     public CommandParserIterator(String validatorCommand)
             throws SyntaxException {
@@ -38,18 +37,18 @@ public class CommandParserIterator implements Iterator {
     }
 
     public ICommand nextCommand() {
-        return (ICommand) iterator.next();
+        return iterator.next();
     }
 
     public void remove() {
         iterator.remove();
     }
 
-    private Iterator parseCommand(String validatorCommand)
+    private Iterator<Command> parseCommand(String validatorCommand)
             throws SyntaxException {
         char command[] = validatorCommand.toCharArray();
 
-        List list = new ArrayList();
+        List<Command> list = new ArrayList<Command>();
 
         Command cmd = null;
 
@@ -232,11 +231,10 @@ public class CommandParserIterator implements Iterator {
     }
 
     private static class Command implements ICommand {
-        private static final String REVISION = "$Revision$";
 
         private String name;
 
-        private List parameters;
+        private List<String> parameters;
 
         public String getName() {
             return name;
@@ -248,7 +246,7 @@ public class CommandParserIterator implements Iterator {
 
         public void addParameter(String parameterValue) {
             if (parameters == null) {
-                parameters = new LinkedList();
+                parameters = new LinkedList<String>();
             }
             parameters.add(parameterValue);
         }
@@ -260,10 +258,11 @@ public class CommandParserIterator implements Iterator {
 
             IParameter ps[] = new IParameter[parameters.size()];
             int i = 0;
-            for (Iterator it = parameters.iterator(); it.hasNext();) {
-                String value = (String) it.next();
+            for (Iterator<String> it = parameters.iterator(); it.hasNext();) {
+                String value = it.next();
 
-                ps[i++] = new Parameter(i, value);
+                ps[i] = new Parameter(i, value);
+                i++;
             }
 
             return ps;
@@ -271,7 +270,6 @@ public class CommandParserIterator implements Iterator {
     }
 
     private static class Parameter implements IParameter {
-        private static final String REVISION = "$Revision$";
 
         private final String name;
 
@@ -298,8 +296,6 @@ public class CommandParserIterator implements Iterator {
      * @version $Revision$ $Date$
      */
     public static class SyntaxException extends FacesException {
-
-        private static final String REVISION = "$Revision$";
 
         private static final long serialVersionUID = 2866070330212947352L;
 

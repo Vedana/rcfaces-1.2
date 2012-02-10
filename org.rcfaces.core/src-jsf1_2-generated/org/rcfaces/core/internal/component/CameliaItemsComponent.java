@@ -555,6 +555,9 @@ public abstract class CameliaItemsComponent extends javax.faces.component.UISele
         }
     }
 
+	public void settedPhase(FacesContext facesContext) {
+	}
+
     public void decodePhase(FacesContext facesContext) {
     }
 

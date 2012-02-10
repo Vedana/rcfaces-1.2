@@ -24,7 +24,6 @@ import org.rcfaces.core.internal.util.ComponentIterators;
  * @version $Revision$ $Date$
  */
 public class CardBoxTools {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(CardBoxTools.class);
 
@@ -32,7 +31,8 @@ public class CardBoxTools {
             Collections.EMPTY_LIST);
 
     public static ICardIterator listCards(CardBoxComponent component) {
-        List list = ComponentIterators.list(component, CardComponent.class);
+        List<CardComponent> list = ComponentIterators.list(component,
+                CardComponent.class);
         if (list.isEmpty()) {
             return EMPTY_COMPONENT_ITERATOR;
         }
@@ -86,7 +86,6 @@ public class CardBoxTools {
 
     private static final class CardListIterator extends
             ComponentIterators.ComponentListIterator implements ICardIterator {
-        private static final String REVISION = "$Revision$";
 
         public CardListIterator(List list) {
             super(list);

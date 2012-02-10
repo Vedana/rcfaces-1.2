@@ -22,6 +22,8 @@ public interface IHtmlElements {
 
     String DIV = "div";
 
+    String H_BASE = "h";
+
     String HR = "hr";
 
     String IFRAME = "iframe";

@@ -264,7 +264,7 @@ var __statics = {
 	Initializer: function() {
 		f_tabbedPane._PrepareImages();
 	}
-}
+};
 
 var __members = {
 
@@ -358,6 +358,7 @@ var __members = {
 			this._resizeHeight=true;
 //		}
 		
+		/*
 		if (this._resizeWidth || this._resizeHeight) {
 			this._resize();
 			
@@ -368,6 +369,7 @@ var __members = {
 				this.f_updateCardStyle(this._selectedCard);
 			}
 		}
+		*/
 	},
 	/**
 	 * @method private
@@ -413,7 +415,7 @@ var __members = {
 				//mleft-=f_core.ComputeBorderLength(textTitle, "left");
 				//mright-=f_core.ComputeBorderLength(textTitle, "right");
 				
-				var l=f_core.ComputeBorderLength(mask.parentNode, "left")
+				var l=f_core.ComputeBorderLength(mask.parentNode, "left");
 				mleft-=l;
 				mright-=l;
 			}
@@ -1166,7 +1168,7 @@ var __members = {
 	f_listTabs: function() {
 		return this.f_listCards();
 	}
-}
+};
  
 new f_class("f_tabbedPane", {
 	extend: f_cardBox,

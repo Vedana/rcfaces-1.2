@@ -29,7 +29,6 @@ import org.rcfaces.core.component.capability.IVisibilityCapability;
 public class BasicSelectItem extends SelectItem implements ISelectItem,
         IAccessKeyItem, IAcceleratorKeyItem, IGroupSelectItem, IInputTypeItem,
         IVisibleItem, IServerDataItem, IClientDataItem, IStyleClassItem {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = 6953469102413843158L;
 
@@ -141,7 +140,8 @@ public class BasicSelectItem extends SelectItem implements ISelectItem,
 
         if (getDescription() == null
                 && (component instanceof IToolTipTextCapability)) {
-            setDescription(((IToolTipTextCapability) component).getToolTipText());
+            setDescription(((IToolTipTextCapability) component)
+                    .getToolTipText());
         }
 
         this.inputType = s;

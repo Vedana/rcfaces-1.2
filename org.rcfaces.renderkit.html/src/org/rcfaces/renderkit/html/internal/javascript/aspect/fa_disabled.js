@@ -80,7 +80,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setProperty: f_class.ABSTRACT
-}
+};
 
 new f_aspect("fa_disabled", {
 	members: __members

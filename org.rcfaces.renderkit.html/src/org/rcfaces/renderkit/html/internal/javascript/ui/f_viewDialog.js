@@ -58,7 +58,7 @@ var __members = {
 			
 			this.f_setViewURL(f_core.GetAttributeNS(this,"viewURL","about:blank"));
 
-			if (f_core.GetBooleanAttributeNS(this,"visible",true)) {
+			if (f_core.GetBooleanAttributeNS(this, "visible", true)) {
 				this.f_open();
 			}
 		}		
@@ -321,7 +321,7 @@ var __members = {
 
 new f_class("f_viewDialog", {
 	extend: f_dialog,
-	aspects: [ fa_immediate ],
+	aspects: [ fa_immediate, fa_clientData ],
 	members: __members,
 	statics: __statics
 });

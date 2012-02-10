@@ -559,6 +559,9 @@ public abstract class CameliaSelectManyComponent extends javax.faces.component.U
         }
     }
 
+	public void settedPhase(FacesContext facesContext) {
+	}
+
     public void decodePhase(FacesContext facesContext) {
     }
 

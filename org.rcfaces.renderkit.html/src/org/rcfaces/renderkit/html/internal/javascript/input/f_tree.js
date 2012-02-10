@@ -764,7 +764,6 @@ var __members = {
 
 		this.f_super(arguments);
 	},
-	
 	_nodeFinalizer: function(li, deepFinalizer, deselectedNodeValues) {
 	
 		if (deepFinalizer) {
@@ -880,7 +879,6 @@ var __members = {
 			this.f_updateBreadCrumbs();		
 			
 			this._updateBodyWidth();
-			//this.f_updateScrollPosition();
 		}
 		
 		this.f_super(arguments);		
@@ -1182,7 +1180,7 @@ var __members = {
 	 */
 	f_closeNode: function(value, evt) {
 		var li=this._searchComponentByNodeOrValue(value);
-
+		
 		if (li === undefined) {
 			return false;
 		}	
@@ -3400,8 +3398,7 @@ var __members = {
 	 */
 	f_refreshContent: function(value) {
 		if (value===undefined) {		
-			//var children=this._nodes;
-			//pe
+
 			var ul=this._body;
 			var children=ul.childNodes;
 			var lis=ul.childNodes;

@@ -23,7 +23,6 @@ import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
  * @version $Revision$ $Date$
  */
 public class JavaScriptTools {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(JavaScriptTools.class);
 
@@ -57,8 +56,8 @@ public class JavaScriptTools {
             detail = js.allocateString(detail);
         }
 
-        js.write("var ").write(key).write('=').writeConstructor(
-                "f_messageObject");
+        js.write("var ").write(key).write('=')
+                .writeConstructor("f_messageObject");
 
         IObjectLiteralWriter objectLiteralWriter = js.writeObjectLiteral(true);
 

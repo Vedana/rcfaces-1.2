@@ -34,7 +34,10 @@ public class CriteriaItemFillerComponent extends CameliaItemsComponent {
 	}
 
 	public String getLogicalFilter(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.LOGICAL_FILTER, facesContext);
+		String s = engine.getStringProperty(Properties.LOGICAL_FILTER, facesContext);
+
+
+return s;
 	}
 
 	public void setLogicalFilter(String logicalFilter) {

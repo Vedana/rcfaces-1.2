@@ -30,7 +30,6 @@ import org.rcfaces.core.internal.util.ForwardMethodExpression;
  */
 abstract class AbstractActionListener implements StateHolder,
         IServerActionListener, IPartialRenderingListener {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(AbstractActionListener.class);
@@ -193,10 +192,11 @@ abstract class AbstractActionListener implements StateHolder,
             FacesEvent event) {
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Try method expression '" + methodBinding
-                    + "' parameters='" +  ((parameters != null)?
-                    		Arrays.asList(parameters):"null")
-                    + "' event='" + event + "'");
+            LOG.debug("Try method expression '"
+                    + methodBinding
+                    + "' parameters='"
+                    + ((parameters != null) ? Arrays.asList(parameters)
+                            : "null") + "' event='" + event + "'");
         }
 
         try {
@@ -204,10 +204,12 @@ abstract class AbstractActionListener implements StateHolder,
                     parameters);
 
             if (LOG.isDebugEnabled()) {
-                LOG.debug("Call method expression '" + methodBinding
-                        + "' parameters='" +  ((parameters != null)?
-                        		Arrays.asList(parameters):"null")
-                        + "' event='" + event + "' returns '" + ret + "'");
+                LOG.debug("Call method expression '"
+                        + methodBinding
+                        + "' parameters='"
+                        + ((parameters != null) ? Arrays.asList(parameters)
+                                : "null") + "' event='" + event + "' returns '"
+                        + ret + "'");
             }
 
             processReturn(facesContext, methodBinding, event, ret);

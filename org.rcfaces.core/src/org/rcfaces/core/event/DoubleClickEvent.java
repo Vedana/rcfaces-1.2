@@ -13,7 +13,6 @@ import javax.faces.event.FacesListener;
  * @version $Revision$ $Date$
  */
 public class DoubleClickEvent extends ActionEvent {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = 6193772389813084255L;
 

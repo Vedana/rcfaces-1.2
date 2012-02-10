@@ -21,7 +21,6 @@ import org.rcfaces.core.model.IIndexesModel;
  */
 public class ArrayIndexesModel extends AbstractIndexesModel implements
         Serializable, ICommitableObject {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = 7393822820762985697L;
 
@@ -119,7 +118,7 @@ public class ArrayIndexesModel extends AbstractIndexesModel implements
         }
 
         if (VERIFY_GARBAGE) {
-            Set set = new HashSet(count);
+            Set<Integer> set = new HashSet<Integer>(count);
             for (int i = 0; i < count; i++) {
                 if (set.add(new Integer(i)) == false) {
                     LOG.error("Y a un GROS probleme avec le garbage !");

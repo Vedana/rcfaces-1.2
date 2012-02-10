@@ -16,7 +16,6 @@ import org.rcfaces.core.internal.component.Properties;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractCameliaRenderer extends AbstractCameliaRenderer0 {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(AbstractCameliaRenderer.class);
@@ -45,8 +44,10 @@ public abstract class AbstractCameliaRenderer extends AbstractCameliaRenderer0 {
         ValueExpression valueExpression = component
                 .getValueExpression(Properties.SCOPE_VALUE);
 
-        writer.getComponentRenderContext().getRenderContext().pushScopeVar(var,
-                value, valueExpression, variableScopeCapability.isScopeSaveValue());
+        writer.getComponentRenderContext()
+                .getRenderContext()
+                .pushScopeVar(var, value, valueExpression,
+                        variableScopeCapability.isScopeSaveValue());
 
         writer.getComponentRenderContext().setAttribute(
                 VARIABLE_SCOPE_PROPERTY, var);
@@ -57,8 +58,8 @@ public abstract class AbstractCameliaRenderer extends AbstractCameliaRenderer0 {
         String scopeVar = (String) writer.getComponentRenderContext()
                 .getAttribute(VARIABLE_SCOPE_PROPERTY);
         if (scopeVar != null) {
-            writer.getComponentRenderContext().getRenderContext().popScopeVar(
-                    scopeVar);
+            writer.getComponentRenderContext().getRenderContext()
+                    .popScopeVar(scopeVar);
         }
 
         super.encodeEnd(writer);

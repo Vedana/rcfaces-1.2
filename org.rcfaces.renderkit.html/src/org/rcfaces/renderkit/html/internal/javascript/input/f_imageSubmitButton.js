@@ -29,7 +29,7 @@ var __members = {
 				
 		return false;
 	}
-}
+};
 
 new f_class("f_imageSubmitButton", {
 	extend: f_imageButton,

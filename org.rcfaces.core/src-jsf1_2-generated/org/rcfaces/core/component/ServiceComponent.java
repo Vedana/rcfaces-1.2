@@ -1,6 +1,7 @@
 package org.rcfaces.core.component;
 
 import java.util.TimeZone;
+import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
 import java.util.Map;
 import org.rcfaces.core.component.capability.IComponentLocaleCapability;
@@ -59,6 +60,7 @@ public class ServiceComponent extends CameliaBaseComponent implements
 	IServiceEventCapability,
 	IFilterCapability,
 	IErrorEventCapability,
+	IVisibilityCapability,
 	IComponentLocaleCapability,
 	IComponentTimeZoneCapability,
 	IClientDataManager,
@@ -70,7 +72,7 @@ public class ServiceComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"enableViewState","filterProperties","serviceId","componentTimeZone","componentLocale","errorListener","serviceEventListener","propertyChangeListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"enableViewState","filterProperties","serviceId","visible","componentTimeZone","componentLocale","errorListener","serviceEventListener","propertyChangeListener"}));
 	}
 
 	public ServiceComponent() {
@@ -217,6 +219,17 @@ public class ServiceComponent extends CameliaBaseComponent implements
 			IFilterProperties filterProperties=(IFilterProperties)FilterPropertiesConverter.SINGLETON.getAsObject(null, this, properties);
 			
 			setFilterProperties(filterProperties);
+		
+	}
+
+	public Boolean getVisibleState(FacesContext facesContext) {
+
+
+			if (engine.isPropertySetted(Properties.VISIBLE)==false) {
+				return null;
+			}
+			
+			return Boolean.valueOf(isVisible(facesContext));
 		
 	}
 
@@ -374,6 +387,36 @@ public class ServiceComponent extends CameliaBaseComponent implements
 		return getFacesListeners(org.rcfaces.core.event.IErrorListener.class);
 	}
 
+	public boolean isVisible() {
+		return isVisible(null);
+	}
+
+	/**
+	 * See {@link #isVisible() isVisible()} for more details
+	 */
+	public boolean isVisible(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.VISIBLE, true, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "visible" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isVisibleSetted() {
+		return engine.isPropertySetted(Properties.VISIBLE);
+	}
+
+	public void setVisible(boolean visible) {
+		engine.setProperty(Properties.VISIBLE, visible);
+	}
+
+	public Boolean getVisibleState() {
+
+
+			return getVisibleState(null);
+		
+	}
+
 	public java.util.Locale getComponentLocale() {
 		return getComponentLocale(null);
 	}
@@ -433,7 +476,10 @@ public class ServiceComponent extends CameliaBaseComponent implements
 	 * @return service id
 	 */
 	public String getServiceId(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.SERVICE_ID, facesContext);
+		String s = engine.getStringProperty(Properties.SERVICE_ID, facesContext);
+
+
+return s;
 	}
 
 	/**

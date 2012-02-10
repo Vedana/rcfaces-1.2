@@ -12,6 +12,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.event.FacesListener;
 
 import org.rcfaces.core.component.capability.ICheckEventCapability;
+import org.rcfaces.core.component.capability.IClickEventCapability;
 import org.rcfaces.core.component.capability.ICloseEventCapability;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import org.rcfaces.core.component.capability.IDragEventCapability;
@@ -44,14 +45,11 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  */
 public final class ListenerTools {
 
-    private static final String REVISION = "$Revision$";
-
     /**
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
     public static final INameSpace JAVASCRIPT_NAME_SPACE = new INameSpace() {
-        private static final String REVISION = "$Revision$";
 
         public String getSelectionEventName() {
             return JavaScriptClasses.EVENT_SELECTION_CST;
@@ -77,6 +75,10 @@ public final class ListenerTools {
             return JavaScriptClasses.EVENT_VALUE_CHANGE_CST;
         }
 
+        public String getClickEventName() {
+            return JavaScriptClasses.EVENT_CLICK_CST;
+        }
+
         public String getDoubleClickEventName() {
             return JavaScriptClasses.EVENT_DBLCLICK_CST;
         }
@@ -96,7 +98,7 @@ public final class ListenerTools {
         public String getMouseOverEventName() {
             return JavaScriptClasses.EVENT_MOUSEOVER_CST;
         }
-        
+
         public String getPreSelectionEventName() {
             return JavaScriptClasses.EVENT_PRE_SELECTION_CST;
         }
@@ -168,10 +170,13 @@ public final class ListenerTools {
      * @version $Revision$ $Date$
      */
     public static final INameSpace ATTRIBUTE_NAME_SPACE = new INameSpace() {
-        private static final String REVISION = "$Revision$";
 
         public String getSelectionEventName() {
             return JavaScriptClasses.EVENT_SELECTION_ATTRIBUTE;
+        }
+
+        public String getClickEventName() {
+            return JavaScriptClasses.EVENT_CLICK_ATTRIBUTE;
         }
 
         public String getCheckEventName() {
@@ -213,7 +218,7 @@ public final class ListenerTools {
         public String getMouseOverEventName() {
             return JavaScriptClasses.EVENT_MOUSEOVER_ATTRIBUTE;
         }
-        
+
         public String getPreSelectionEventName() {
             return JavaScriptClasses.EVENT_PRE_SELECTION_ATTRIBUTE;
         }
@@ -280,9 +285,9 @@ public final class ListenerTools {
 
     };
 
-    public static final Map getListenersByType(INameSpace nameSpace,
-            UIComponent component) {
-        Map map = null;
+    public static final Map<String, FacesListener[]> getListenersByType(
+            INameSpace nameSpace, UIComponent component) {
+        Map<String, FacesListener[]> map = null;
 
         if (component instanceof ISelectionEventCapability) {
             ISelectionEventCapability selectEventCapability = (ISelectionEventCapability) component;
@@ -339,6 +344,19 @@ public final class ListenerTools {
             }
         }
 
+        if (component instanceof IClickEventCapability) {
+            IClickEventCapability clickEventCapability = (IClickEventCapability) component;
+
+            FacesListener fls[] = clickEventCapability.listClickListeners();
+            if (fls.length > 0) {
+                if (map == null) {
+                    map = new HashMap(4);
+                }
+
+                map.put(nameSpace.getClickEventName(), fls);
+            }
+        }
+
         if (component instanceof IFocusBlurEventCapability) {
             IFocusBlurEventCapability focusBlurEventCapability = (IFocusBlurEventCapability) component;
 
@@ -382,12 +400,12 @@ public final class ListenerTools {
                 map.put(nameSpace.getMouseOverEventName(), fls);
             }
         }
-        
-        if (component instanceof IPreSelectionEventCapability) {
-        	IPreSelectionEventCapability preSelectionEventCapability =
-        			(IPreSelectionEventCapability) component;
 
-            FacesListener fls[] = preSelectionEventCapability.listPreSelectionListeners();
+        if (component instanceof IPreSelectionEventCapability) {
+            IPreSelectionEventCapability preSelectionEventCapability = (IPreSelectionEventCapability) component;
+
+            FacesListener fls[] = preSelectionEventCapability
+                    .listPreSelectionListeners();
             if (fls.length > 0) {
                 if (map == null) {
                     map = new HashMap(4);
@@ -634,7 +652,7 @@ public final class ListenerTools {
         }
 
         if (map == null) {
-            return Collections.EMPTY_MAP;
+            return Collections.emptyMap();
         }
         return map;
     }
@@ -650,6 +668,8 @@ public final class ListenerTools {
         String getValidationEventName();
 
         String getCheckEventName();
+
+        String getClickEventName();
 
         String getDoubleClickEventName();
 
@@ -674,7 +694,7 @@ public final class ListenerTools {
         String getMouseOutEventName();
 
         String getMouseOverEventName();
-        
+
         String getPreSelectionEventName();
 
         String getSuggestionEventName();

@@ -38,6 +38,7 @@ var __members = {
 	 * @return String
 	 */
 	f_getProperty: function(name) {
+		f_core.Assert(typeof(name)=="string", "fa_serializable.f_getProperty: Invalid name parameter '"+name+"'");
 		if (!this._properties) {
 			return undefined;
 		}
@@ -50,6 +51,8 @@ var __members = {
 	 * @return void
 	 */
 	f_setProperty: function(name, value, isList, listSep) {
+		f_core.Assert(typeof(name)=="string", "fa_serializable.f_setProperty: Invalid name parameter '"+name+"'");
+
 		if (this.fa_componentUpdated===false || this._noPropertyUpdates) {
 			f_core.Debug(fa_serializable, "f_setProperty: Ignore set property (component is not updated !)");
 			return;
@@ -65,7 +68,7 @@ var __members = {
 				listSep='\x01';
 			}
 			
-			var values;
+			var values=undefined;
 			if (value instanceof Array) {
 				values=value.join(listSep);
 
@@ -169,7 +172,7 @@ var __members = {
 	 * @method protected abstract optional
 	 */
 	f_serialize: f_class.OPTIONAL_ABSTRACT
-}
+};
 
 new f_aspect("fa_serializable", {
 	members: __members

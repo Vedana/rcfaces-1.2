@@ -95,7 +95,10 @@ public class CssStyleComponent extends CameliaBaseComponent implements
 	 * @return url
 	 */
 	public String getSrc(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.SRC, facesContext);
+		String s = engine.getStringProperty(Properties.SRC, facesContext);
+
+
+return s;
 	}
 
 	/**
@@ -131,7 +134,10 @@ public class CssStyleComponent extends CameliaBaseComponent implements
 	 * @return charset
 	 */
 	public String getSrcCharSet(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.SRC_CHAR_SET, facesContext);
+		String s = engine.getStringProperty(Properties.SRC_CHAR_SET, facesContext);
+
+
+return s;
 	}
 
 	/**
@@ -159,7 +165,10 @@ public class CssStyleComponent extends CameliaBaseComponent implements
 	}
 
 	public String getRequiredModules(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.REQUIRED_MODULES, facesContext);
+		String s = engine.getStringProperty(Properties.REQUIRED_MODULES, facesContext);
+
+
+return s;
 	}
 
 	public void setRequiredModules(String requiredModules) {
@@ -179,7 +188,10 @@ public class CssStyleComponent extends CameliaBaseComponent implements
 	}
 
 	public String getRequiredSets(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.REQUIRED_SETS, facesContext);
+		String s = engine.getStringProperty(Properties.REQUIRED_SETS, facesContext);
+
+
+return s;
 	}
 
 	public void setRequiredSets(String requiredSets) {

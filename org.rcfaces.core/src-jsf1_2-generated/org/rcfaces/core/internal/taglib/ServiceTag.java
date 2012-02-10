@@ -22,6 +22,7 @@ public class ServiceTag extends CameliaTag implements Tag {
 	private ValueExpression serviceEventListeners;
 	private ValueExpression filterProperties;
 	private ValueExpression errorListeners;
+	private ValueExpression visible;
 	private ValueExpression componentLocale;
 	private ValueExpression componentTimeZone;
 	private ValueExpression serviceId;
@@ -46,6 +47,10 @@ public class ServiceTag extends CameliaTag implements Tag {
 		this.errorListeners = errorListeners;
 	}
 
+	public void setVisible(ValueExpression visible) {
+		this.visible = visible;
+	}
+
 	public void setComponentLocale(ValueExpression componentLocale) {
 		this.componentLocale = componentLocale;
 	}
@@ -68,6 +73,7 @@ public class ServiceTag extends CameliaTag implements Tag {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
 			LOG.debug("  filterProperties='"+filterProperties+"'");
+			LOG.debug("  visible='"+visible+"'");
 			LOG.debug("  componentLocale='"+componentLocale+"'");
 			LOG.debug("  componentTimeZone='"+componentTimeZone+"'");
 			LOG.debug("  serviceId='"+serviceId+"'");
@@ -104,6 +110,15 @@ public class ServiceTag extends CameliaTag implements Tag {
 
 		if (errorListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.ERROR_LISTENER_TYPE, errorListeners);
+		}
+
+		if (visible != null) {
+			if (visible.isLiteralText()==false) {
+				component.setValueExpression(Properties.VISIBLE, visible);
+
+			} else {
+				component.setVisible(getBool(visible.getExpressionString()));
+			}
 		}
 
 		if (componentLocale != null) {
@@ -148,6 +163,7 @@ public class ServiceTag extends CameliaTag implements Tag {
 		serviceEventListeners = null;
 		filterProperties = null;
 		errorListeners = null;
+		visible = null;
 		componentLocale = null;
 		componentTimeZone = null;
 		serviceId = null;

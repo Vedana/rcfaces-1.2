@@ -24,7 +24,6 @@ import org.rcfaces.core.progressMonitor.SubProgressMonitor;
  * @version $Revision$ $Date$
  */
 public class ClientServiceRegistryImpl implements IClientServiceRegistry {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(ClientServiceRegistryImpl.class);
@@ -188,8 +187,6 @@ public class ClientServiceRegistryImpl implements IClientServiceRegistry {
     private static final class ClientServiceEventReturnValue extends
             ServiceEvent implements IEventReturnValue,
             IApplicationExceptionCapability {
-
-        private static final String REVISION = "$Revision$";
 
         private static final long serialVersionUID = 8740362936333831513L;
 

@@ -8,6 +8,11 @@
  * @version $Revision$ $Date$
  */
 var __members = {
+		
+	/**
+	 * @field private String
+	 */
+	_forComponentId: undefined,
 
 	/**
 	 * @method public
@@ -51,7 +56,26 @@ var __members = {
 		}
 		
 		return false;
-	}	
+	},
+	/**
+	 * @method public
+	 * @return String
+	 */
+	f_getForClientId: function() {
+		var forComponentId=this._forComponentId;
+		if (forComponentId!==undefined) {
+			return forComponentId;
+		}
+		
+		forComponentId=f_core.GetAttributeNS(this, "for", null);
+		if (!forComponentId) {
+			forComponentId=f_core.GetAttribute(this, "for", null);
+		}
+		
+		this._forComponentId=forComponentId;
+		
+		return forComponentId;
+	}
 };
 
 new f_class("f_text", {

@@ -558,6 +558,9 @@ public abstract class CameliaDataComponent extends org.rcfaces.core.internal.com
         }
     }
 
+	public void settedPhase(FacesContext facesContext) {
+	}
+
     public void decodePhase(FacesContext facesContext) {
     }
 

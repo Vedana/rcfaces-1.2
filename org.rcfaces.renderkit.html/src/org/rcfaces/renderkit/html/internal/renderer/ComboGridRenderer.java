@@ -21,6 +21,7 @@ import org.rcfaces.core.component.capability.IEmptyMessageCapability;
 import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.lang.StringAppender;
+import org.rcfaces.core.internal.manager.IValidationParameters;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
@@ -32,9 +33,11 @@ import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredModel;
 import org.rcfaces.core.model.ISelectedCriteria;
 import org.rcfaces.core.model.ISortedComponent;
+import org.rcfaces.renderkit.html.internal.EventsRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
+import org.rcfaces.renderkit.html.internal.IHtmlElements;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.ISubInputClientIdRenderer;
@@ -48,7 +51,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  */
 public class ComboGridRenderer extends KeyEntryRenderer implements
         ISubInputClientIdRenderer {
-
     private static final Log LOG = LogFactory.getLog(ComboGridRenderer.class);
 
     private static final int ARROW_IMAGE_WIDTH = 16;
@@ -79,8 +81,6 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
 
         AbstractGridRenderContext gridRenderContext = getGridRenderContext(componentRenderContext);
 
-
-
         Map formattedValues = null;
         String formattedValue = null;
         String formattedValueLabel = null;
@@ -93,29 +93,28 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
         String labelColumnId = comboGridComponent
                 .getLabelColumnId(facesContext);
 
-		Map formatValues = new HashMap();
+        Map formatValues = new HashMap();
 
-		String valueFormat = comboGridComponent.getValueFormat(facesContext);
-		if (valueFormat == null) {
-			if(labelColumnId != null) {
-				valueFormat = "{"+labelColumnId+"}";
-			}else {
-				valueFormat= "{"+valueColumnId+"}";
-			}
-		}
-		formatValues.put("valueFormat", valueFormat);
-		
-		String valueFormatLabel = comboGridComponent
-				.getValueFormatLabel(facesContext);
-		if (valueFormatLabel == null ){
-			if(labelColumnId != null) {
-				valueFormatLabel = "{"+labelColumnId+"}";
-			}else {
-				valueFormatLabel = "{"+valueColumnId+"}";
-			}
-		} 
-		formatValues.put("valueFormatLabel", valueFormatLabel);
-		
+        String valueFormat = comboGridComponent.getValueFormat(facesContext);
+        if (valueFormat == null) {
+            if (labelColumnId != null) {
+                valueFormat = "{" + labelColumnId + "}";
+            } else {
+                valueFormat = "{" + valueColumnId + "}";
+            }
+        }
+        formatValues.put("valueFormat", valueFormat);
+
+        String valueFormatLabel = comboGridComponent
+                .getValueFormatLabel(facesContext);
+        if (valueFormatLabel == null) {
+            if (labelColumnId != null) {
+                valueFormatLabel = "{" + labelColumnId + "}";
+            } else {
+                valueFormatLabel = "{" + valueColumnId + "}";
+            }
+        }
+        formatValues.put("valueFormatLabel", valueFormatLabel);
 
         if (selectedValue != null) {
             UIComponent converterComponent = getColumn(comboGridComponent,
@@ -128,7 +127,7 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
                     && convertedSelectedValue.length() > 0) {
 
                 formattedValues = formatValue(facesContext, comboGridComponent,
-                        convertedSelectedValue, formatValues);
+                        selectedValue, convertedSelectedValue, formatValues);
                 if (formattedValues != null) {
                     formattedValue = (String) formattedValues
                             .get("valueFormat");
@@ -254,6 +253,13 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
                     noValueFormatLabel);
         }
 
+        String clientValidatorParameters = constructClientValidatorParameters(
+                htmlWriter, comboGridComponent);
+        if (clientValidatorParameters != null) {
+            htmlWriter.writeAttributeNS("clientValidator",
+                    clientValidatorParameters);
+        }
+
         String ac = comboGridComponent.getForLabel(facesContext);
 
         IRenderContext renderContext = componentRenderContext
@@ -320,12 +326,12 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
             htmlWriter.writeAttributeNS("headerVisible", true);
         }
 
-		DataModel dataModel = gridRenderContext.getDataModel();
-		IFiltredModel filtredDataModel = (IFiltredModel) getAdapter(
-				IFiltredModel.class, dataModel);
-		if (filtredDataModel != null) {
-			 htmlWriter.writeAttributeNS("filtred", true);
- 
+        DataModel dataModel = gridRenderContext.getDataModel();
+        IFiltredModel filtredDataModel = (IFiltredModel) getAdapter(
+                IFiltredModel.class, dataModel);
+        if (filtredDataModel != null) {
+            htmlWriter.writeAttribute("v:filtred", true);
+
             IFilterProperties filterMap = gridRenderContext.getFiltersMap();
             if (filterMap != null && filterMap.isEmpty() == false) {
                 String filterExpression = HtmlTools.encodeFilterExpression(
@@ -422,6 +428,40 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
         htmlWriter.endComponent();
     }
 
+    private String constructClientValidatorParameters(IHtmlWriter htmlWriter,
+            IValidationParameters validationParameters) {
+
+        Map<String, String> parameters = validationParameters
+                .getValidationParametersMap();
+
+        StringAppender sb = new StringAppender(128);
+        for (Map.Entry<String, String> entry : parameters.entrySet()) {
+            String key = entry.getKey();
+
+            if (sb.length() > 0) {
+                sb.append(':');
+            }
+            if (key == null) {
+                key = "%";
+            }
+
+            EventsRenderer.appendCommand(sb, key);
+
+            String value = entry.getValue();
+
+            if (sb.length() > 0) {
+                sb.append(':');
+            }
+            if (value == null) {
+                value = "%";
+            }
+
+            EventsRenderer.appendCommand(sb, value);
+        }
+
+        return sb.toString();
+    }
+
     protected void writeImageSubComponent(IHtmlWriter htmlWriter)
             throws WriterException {
 
@@ -453,13 +493,14 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
         ComboGridComponent comboGridComponent = (ComboGridComponent) componentRenderContext
                 .getComponent();
 
-        htmlWriter.startElement(IHtmlWriter.INPUT);
+        htmlWriter.startElement(IHtmlElements.INPUT);
         if (colWidth > 0) {
             htmlWriter.writeStyle().writeWidthPx(colWidth - 4);
         }
 
         htmlWriter.writeType(IHtmlWriter.TEXT_INPUT_TYPE);
         htmlWriter.writeRole(IAccessibilityRoles.TEXTBOX);
+        htmlWriter.writeAutoComplete(IHtmlElements.AUTOCOMPLETE_OFF);
 
         htmlWriter.writeId(componentRenderContext.getComponentClientId()
                 + INPUT_ID_SUFFIX);
@@ -474,7 +515,7 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
 
         if (componentRenderContext.containsAttribute(INPUT_ERRORED_PROPERTY)) {
             sa.append(' ').append(getMainStyleClassName())
-					.append("_input_error");
+                    .append("_input_errored");
 
         } else if ((formattedValue == null || formattedValue.length() == 0)) {
             emptyMessage = comboGridComponent.getEmptyMessage(facesContext);
@@ -582,11 +623,11 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
             IScriptRenderContext scriptRenderContext, IGridComponent dg,
             int rowIndex, int forcedRows, ISortedComponent sortedComponents[],
             String filterExpression, String showAdditionals,
-			String hideAdditionals, ISelectedCriteria[] criteriaContainers) {
+            String hideAdditionals, ISelectedCriteria[] criteriaContainers) {
         DataGridRenderContext tableContext = new ComboGridRenderContext(
                 processContext, scriptRenderContext, dg, rowIndex, forcedRows,
                 sortedComponents, filterExpression, showAdditionals,
-				hideAdditionals, criteriaContainers);
+                hideAdditionals, criteriaContainers);
 
         return tableContext;
     }
@@ -613,16 +654,15 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
      */
     public class ComboGridRenderContext extends DataGridRenderContext {
 
-
         public ComboGridRenderContext(IProcessContext processContext,
                 IScriptRenderContext scriptRenderContext, IGridComponent dg,
                 int rowIndex, int forcedRows,
                 ISortedComponent[] sortedComponents, String filterExpression,
-				String showAdditionals, String hideAdditionals,
-				ISelectedCriteria[] criteriaContainers) {
+                String showAdditionals, String hideAdditionals,
+                ISelectedCriteria[] criteriaContainers) {
             super(processContext, scriptRenderContext, dg, rowIndex,
                     forcedRows, sortedComponents, filterExpression,
-					showAdditionals, hideAdditionals, criteriaContainers);
+                    showAdditionals, hideAdditionals, criteriaContainers);
         }
 
         public ComboGridRenderContext(

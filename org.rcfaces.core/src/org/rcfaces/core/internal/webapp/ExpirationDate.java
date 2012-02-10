@@ -24,8 +24,6 @@ import org.rcfaces.core.internal.util.Delay;
  */
 public class ExpirationDate implements Serializable {
 
-    private static final String REVISION = "$Revision$";
-
     private static final long serialVersionUID = 8408879197958606825L;
 
     private static final Log LOG = LogFactory.getLog(ExpirationDate.class);
@@ -155,6 +153,7 @@ public class ExpirationDate implements Serializable {
         return expiresDelay;
     }
 
+    @Override
     public String toString() {
         StringAppender sa = new StringAppender("[ExpirationDate", 128);
 

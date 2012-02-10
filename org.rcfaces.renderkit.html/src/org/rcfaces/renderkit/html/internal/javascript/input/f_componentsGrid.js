@@ -455,7 +455,7 @@ var __members = {
 			
 			if (this._selectable) {
 				row.onmousedown=f_grid.RowMouseDown;
-				row.onmouseup=f_grid.FiltredCancelJsEventHandler;
+				row.onmouseup=f_grid.RowMouseUp;
 				row.onclick=f_grid.FiltredCancelJsEventHandler;
 				row.ondblclick=f_grid.RowMouseDblClick;
 				row.onfocus=f_grid.GotFocus;
@@ -469,7 +469,7 @@ var __members = {
 			}
 		}
 		
-		this.f_super(arguments);
+		this.f_super(arguments);		
 	},
 	/**
 	 * @method protected
@@ -573,7 +573,7 @@ var __members = {
 
 		if (this._selectable) {
 			row.onmousedown=f_grid.RowMouseDown;
-			row.onmouseup=f_core.FiltredCancelJsEventHandler;
+			row.onmouseup=f_grid.RowMouseUp;
 			row.onclick=f_core.FiltredCancelJsEventHandler;
 			row.ondblclick=f_grid.RowMouseDblClick;
 			row.onfocus=f_grid.GotFocus;
@@ -751,7 +751,7 @@ var __members = {
 			rowsPool.f_removeElement(row);
 			tbody.removeChild(row);
 		}
-		
+
 		classLoader.f_completeGarbageObjects();
 
 		this.f_performPagedComponentInitialized();

@@ -18,13 +18,13 @@ import org.rcfaces.core.internal.util.ComponentIterators;
  * @version $Revision$ $Date$
  */
 public class TabbedPaneTools extends CardBoxTools {
-    private static final String REVISION = "$Revision$";
 
     private static final ITabIterator EMPTY_COMPONENT_ITERATOR = new TabListIterator(
-            Collections.EMPTY_LIST);
+            Collections.<TabComponent> emptyList());
 
     public static ITabIterator listTabs(TabbedPaneComponent component) {
-        List list = ComponentIterators.list(component, TabComponent.class);
+        List<TabComponent> list = ComponentIterators.list(component,
+                TabComponent.class);
         if (list.isEmpty()) {
             return EMPTY_COMPONENT_ITERATOR;
         }
@@ -38,15 +38,15 @@ public class TabbedPaneTools extends CardBoxTools {
      * @version $Revision$ $Date$
      */
     private static final class TabListIterator extends
-            ComponentIterators.ComponentListIterator implements ITabIterator {
-        private static final String REVISION = "$Revision$";
+            ComponentIterators.ComponentListIterator<TabComponent> implements
+            ITabIterator {
 
-        public TabListIterator(List list) {
+        public TabListIterator(List<TabComponent> list) {
             super(list);
         }
 
         public final TabComponent next() {
-            return (TabComponent) nextComponent();
+            return nextComponent();
         }
 
         public TabComponent[] toArray() {

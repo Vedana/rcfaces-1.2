@@ -1,5 +1,5 @@
 /*
- * $Id$
+* * $Id$
  */
  
 /** 
@@ -694,6 +694,13 @@ var __members = {
 		var parentComponent = this.f_getClass().f_getClassLoader().f_init(parent, true, true);
 		
 		return parentComponent;
+	},
+	/**
+	 * @method public
+	 * @return f_component
+	 */
+	f_getParentComponent: function() {
+		return f_core.GetParentComponent(this);
 	},
 	/**
 	 *

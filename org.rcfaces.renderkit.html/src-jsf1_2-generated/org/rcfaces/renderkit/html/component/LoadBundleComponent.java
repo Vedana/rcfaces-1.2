@@ -45,7 +45,10 @@ public class LoadBundleComponent extends CameliaBaseComponent {
 	 * @return bundle name
 	 */
 	public String getBundleName(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.BUNDLE_NAME, facesContext);
+		String s = engine.getStringProperty(Properties.BUNDLE_NAME, facesContext);
+
+
+return s;
 	}
 
 	/**
@@ -81,7 +84,10 @@ public class LoadBundleComponent extends CameliaBaseComponent {
 	 * @return base name of the resource bundle to be loaded.
 	 */
 	public String getBaseName(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.BASE_NAME, facesContext);
+		String s = engine.getStringProperty(Properties.BASE_NAME, facesContext);
+
+
+return s;
 	}
 
 	/**
@@ -109,7 +115,10 @@ public class LoadBundleComponent extends CameliaBaseComponent {
 	}
 
 	public String getSide(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.SIDE, facesContext);
+		String s = engine.getStringProperty(Properties.SIDE, facesContext);
+
+
+return s;
 	}
 
 	public void setSide(String side) {
@@ -129,7 +138,10 @@ public class LoadBundleComponent extends CameliaBaseComponent {
 	}
 
 	public String getServerScope(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.SERVER_SCOPE, facesContext);
+		String s = engine.getStringProperty(Properties.SERVER_SCOPE, facesContext);
+
+
+return s;
 	}
 
 	public void setServerScope(String serverScope) {

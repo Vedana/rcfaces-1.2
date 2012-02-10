@@ -15,6 +15,7 @@ import org.rcfaces.core.internal.converter.AsyncDecodeModeConverter;
 import org.apache.commons.logging.Log;
 import java.util.Set;
 import org.rcfaces.core.component.capability.IInitEventCapability;
+import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import org.rcfaces.core.component.capability.IAsyncDecodeModeCapability;
 import org.rcfaces.core.component.capability.ITypedComponentCapability;
 import org.rcfaces.core.component.capability.IBackgroundImageCapability;
@@ -23,6 +24,7 @@ import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
 import javax.el.ValueExpression;
+import org.rcfaces.core.component.capability.IClickEventCapability;
 import java.util.HashSet;
 import org.rcfaces.core.internal.converter.LayoutManagerTypeConverter;
 import java.util.Arrays;
@@ -68,6 +70,8 @@ public class BoxComponent extends AbstractBasicComponent implements
 	IBackgroundImageCapability,
 	IBorderCapability,
 	IMouseEventCapability,
+	IClickEventCapability,
+	IDoubleClickEventCapability,
 	IInitEventCapability,
 	ILoadEventCapability,
 	ILayoutManagerCapability,
@@ -85,7 +89,7 @@ public class BoxComponent extends AbstractBasicComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractBasicComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"backgroundImageVerticalRepeat","horizontalScroll","backgroundImageVerticalPosition","backgroundImageHorizontalRepeat","overStyleClass","type","asyncDecodeMode","backgroundImageHorizontalPosition","loadListener","asyncRenderMode","initListener","scopeSaveValue","scopeVar","mouseOverListener","verticalScroll","scopeValue","backgroundImageURL","border","mouseOutListener","layoutType"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"backgroundImageVerticalRepeat","horizontalScroll","backgroundImageVerticalPosition","backgroundImageHorizontalRepeat","doubleClickListener","overStyleClass","type","asyncDecodeMode","asyncRenderMode","backgroundImageHorizontalPosition","loadListener","initListener","scopeSaveValue","scopeVar","mouseOverListener","verticalScroll","clickListener","scopeValue","backgroundImageURL","border","mouseOutListener","layoutType"}));
 	}
 
 	public BoxComponent() {
@@ -278,6 +282,30 @@ public class BoxComponent extends AbstractBasicComponent implements
 
 	public final javax.faces.event.FacesListener [] listMouseOverListeners() {
 		return getFacesListeners(org.rcfaces.core.event.IMouseOverListener.class);
+	}
+
+	public final void addClickListener(org.rcfaces.core.event.IClickListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeClickListener(org.rcfaces.core.event.IClickListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listClickListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IClickListener.class);
+	}
+
+	public final void addDoubleClickListener(org.rcfaces.core.event.IDoubleClickListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeDoubleClickListener(org.rcfaces.core.event.IDoubleClickListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listDoubleClickListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IDoubleClickListener.class);
 	}
 
 	public final void addInitListener(org.rcfaces.core.event.IInitListener listener) {

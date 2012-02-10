@@ -17,8 +17,6 @@ import org.rcfaces.core.internal.lang.StringAppender;
  * @version $Revision$ $Date$
  */
 public class URIParameters {
-    private static final String REVISION = "$Revision$";
-
     public static final String PARAMETER_URI_SEPARATOR = "__";
 
     public static final char VERSION_PARAMETER = 'V';
@@ -58,7 +56,7 @@ public class URIParameters {
 
         int lastDot = uri.lastIndexOf('.');
 
-        List parameters = new ArrayList();
+        List<String> parameters = new ArrayList<String>(8);
 
         int last = 0;
         for (; last < uri.length();) {
@@ -85,8 +83,8 @@ public class URIParameters {
         String commands[] = new String[chs.length];
 
         int i = 0;
-        for (Iterator it = parameters.iterator(); it.hasNext(); i++) {
-            String s = (String) it.next();
+        for (Iterator<String> it = parameters.iterator(); it.hasNext(); i++) {
+            String s = it.next();
 
             chs[i] = s.charAt(0);
             commands[i] = s.substring(1);

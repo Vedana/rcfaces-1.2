@@ -32,7 +32,6 @@ import org.rcfaces.renderkit.html.internal.util.TextTypeTools;
  * @version $Revision$ $Date$
  */
 public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
-
     private static final String HTML_TYPE_PROPERTY = "org.rcfaces.renderkit.html.box.COMPONENT_TYPE";
 
     public void encodeBegin(IComponentWriter writer) throws WriterException {
@@ -40,7 +39,7 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        String type = TextTypeTools.getType(htmlWriter);
+        String type = getMainTagName(htmlWriter);
         if (type == null) {
             type = IHtmlWriter.DIV;
         }
@@ -51,6 +50,10 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
         htmlWriter.startElement(type);
 
         writeComponentAttributes(htmlWriter);
+    }
+
+    protected String getMainTagName(IHtmlWriter htmlWriter) {
+        return TextTypeTools.getType(htmlWriter);
     }
 
     protected void writeComponentAttributes(IHtmlWriter htmlWriter)

@@ -1829,7 +1829,10 @@ public class DataGridComponent extends AbstractDataComponent implements
 	 * @return column id
 	 */
 	public String getRowValueColumnId(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ROW_VALUE_COLUMN_ID, facesContext);
+		String s = engine.getStringProperty(Properties.ROW_VALUE_COLUMN_ID, facesContext);
+
+
+return s;
 	}
 
 	/**
@@ -1857,7 +1860,10 @@ public class DataGridComponent extends AbstractDataComponent implements
 	}
 
 	public String getRowLabelColumnId(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ROW_LABEL_COLUMN_ID, facesContext);
+		String s = engine.getStringProperty(Properties.ROW_LABEL_COLUMN_ID, facesContext);
+
+
+return s;
 	}
 
 	public void setRowLabelColumnId(String rowLabelColumnId) {
@@ -1885,7 +1891,10 @@ public class DataGridComponent extends AbstractDataComponent implements
 	 * @return variable name
 	 */
 	public String getRowCountVar(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ROW_COUNT_VAR, facesContext);
+		String s = engine.getStringProperty(Properties.ROW_COUNT_VAR, facesContext);
+
+
+return s;
 	}
 
 	/**
@@ -1921,7 +1930,10 @@ public class DataGridComponent extends AbstractDataComponent implements
 	 * @return variable name
 	 */
 	public String getRowIndexVar(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ROW_INDEX_VAR, facesContext);
+		String s = engine.getStringProperty(Properties.ROW_INDEX_VAR, facesContext);
+
+
+return s;
 	}
 
 	/**

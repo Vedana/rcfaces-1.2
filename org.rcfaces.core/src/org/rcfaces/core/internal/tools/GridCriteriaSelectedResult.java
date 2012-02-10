@@ -109,6 +109,9 @@ public class GridCriteriaSelectedResult extends AbstractCriteriaSelectedResult {
 					Object dataValue = CriteriaTools.getDataValue(facesContext,
 							gridComponent, sc.getConfig());
 					
+					if (dataValue == null) {
+						continue;
+					}
 					
 					boolean outCriteria = false;
 					if(nextRow == false)  {
@@ -123,9 +126,8 @@ public class GridCriteriaSelectedResult extends AbstractCriteriaSelectedResult {
 								outCriteria = true;
 							}
 						}
-						if (outCriteria == false) {
+						if (outCriteria == false)
 							possibleValues[i].add(dataValue);
-						}
 					}
 					if (selectedValues[i].contains(dataValue) == false) {
 						nextRow  = true;
@@ -134,11 +136,13 @@ public class GridCriteriaSelectedResult extends AbstractCriteriaSelectedResult {
 				}
 
 				for (int i = 0; i < notSelectedContainers.length; i++) {
-				
 					Object dataValue = CriteriaTools.getDataValue(facesContext,
 							gridComponent, notSelectedContainers[i]);
 					
-
+					if (dataValue == null) {
+						continue;
+					}
+					
 					notPossibleValues[i].add(dataValue);
 				}
 
@@ -182,7 +186,6 @@ public class GridCriteriaSelectedResult extends AbstractCriteriaSelectedResult {
 		for (Iterator<Object> it = values.iterator(); it.hasNext();) {
 			Object criteriaValue = it.next();
 
-			
 			String criteriaLabel = ValuesTools.convertValueToString(
 					criteriaValue, labelConverter, component, facesContext);
 
@@ -196,10 +199,8 @@ public class GridCriteriaSelectedResult extends AbstractCriteriaSelectedResult {
 		Collections.sort(criteriaItems, new Comparator<CriteriaItem>() {
 
 			public int compare(CriteriaItem o1, CriteriaItem o2) {
-				if (o1.getLabel() != null) {
-					return o1.getLabel().compareTo(o2.getLabel());
-				}
-				return 1; 
+
+				return o1.getLabel().compareTo(o2.getLabel());
 			}
 		});
 

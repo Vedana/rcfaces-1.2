@@ -26,6 +26,8 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 	private ValueExpression border;
 	private ValueExpression mouseOutListeners;
 	private ValueExpression mouseOverListeners;
+	private ValueExpression clickListeners;
+	private ValueExpression doubleClickListeners;
 	private ValueExpression initListeners;
 	private ValueExpression loadListeners;
 	private ValueExpression layoutType;
@@ -72,6 +74,14 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 
 	public void setMouseOverListener(ValueExpression mouseOverListeners) {
 		this.mouseOverListeners = mouseOverListeners;
+	}
+
+	public void setClickListener(ValueExpression clickListeners) {
+		this.clickListeners = clickListeners;
+	}
+
+	public void setDoubleClickListener(ValueExpression doubleClickListeners) {
+		this.doubleClickListeners = doubleClickListeners;
 	}
 
 	public void setInitListener(ValueExpression initListeners) {
@@ -218,6 +228,14 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.MOUSE_OVER_LISTENER_TYPE, mouseOverListeners);
 		}
 
+		if (clickListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.CLICK_LISTENER_TYPE, clickListeners);
+		}
+
+		if (doubleClickListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.DOUBLE_CLICK_LISTENER_TYPE, doubleClickListeners);
+		}
+
 		if (initListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.INIT_LISTENER_TYPE, initListeners);
 		}
@@ -326,6 +344,8 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 		border = null;
 		mouseOutListeners = null;
 		mouseOverListeners = null;
+		clickListeners = null;
+		doubleClickListeners = null;
 		initListeners = null;
 		loadListeners = null;
 		layoutType = null;

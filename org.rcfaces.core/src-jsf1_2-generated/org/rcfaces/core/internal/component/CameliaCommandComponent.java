@@ -559,6 +559,9 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
         }
     }
 
+	public void settedPhase(FacesContext facesContext) {
+	}
+
     public void decodePhase(FacesContext facesContext) {
     }
 

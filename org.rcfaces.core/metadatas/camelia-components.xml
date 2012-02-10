@@ -181,7 +181,6 @@
 		<tagAttribute id="rendered" type="boolean" generate="false"/>
 		<tagAttribute id="saveCompleteState" type="boolean" generate="true"/>
 	</facesComponent>
-	
 	<facesComponent id="cameliaGrid" extends="javax.faces.component.UIComponentBase" implements="javax.faces.component.NamingContainer" >
 		<field id="dataModel" type="javax.faces.model.DataModel" value="null" modifiers="transient"/>
 
@@ -519,7 +518,7 @@
 			return isItemDisabled();
 			</code>
 		</method>
-	
+		
 		<method id="getClientData(String,javax.faces.context.FacesContext)" />
 		<method id="setClientData(String,javax.faces.el.ValueBinding)" />
 
@@ -531,7 +530,7 @@
 
 		<method id="listClientDataKeys(javax.faces.context.FacesContext)" />
 		<method id="listServerDataKeys(javax.faces.context.FacesContext)" />
-
+		
 		<method id="setValueExpression" returnType="void">
 			<parameter type="String" name="name" />
 			<parameter type="ValueExpression" name="binding" />
@@ -695,6 +694,8 @@
 		<capability id="IBackgroundImageCapability" />
 		<capability id="IBorderCapability" />
 		<capability id="IMouseEventCapability" />
+		<capability id="IClickEventCapability" />
+		<capability id="IDoubleClickEventCapability" />
 		<capability id="IInitEventCapability" />
 		<capability id="ILoadEventCapability" />
 
@@ -742,8 +743,8 @@
 		<capability id="IToolTipIdCapability" />
 
 		<action id="action" type="selection" default="true" />
-	
-	<!-- 
+
+<!-- 
 		<method id="getValue" returnType="java.lang.Object">
 			<code>
 				return getValue(null);
@@ -975,7 +976,7 @@
 		<capability id="IDoubleClickEventCapability" />
 		<capability id="IUserEventCapability" />
 		<capability id="IInitEventCapability" />
-	
+
 		<attribute id="value" type="java.lang.Object" writeComponent="false"/>
 		
 		<!-- <attribute id="imagesProviderId" type="java.lang.String" setted="true"/>-->
@@ -987,7 +988,7 @@
 		<method id="getConverter()"/>
 
 		<method id="getVisibleState(javax.faces.context.FacesContext)" />
-	
+
 		<method id="getLocalValue" returnType="java.lang.Object">
 			<code>
 				return engine.getLocalValue(Properties.VALUE);
@@ -1013,8 +1014,8 @@
 		<method id="setHiddenMode(String)" />
 
 		<method id="setAscending(String)" />
-		
-		
+			
+
 		<method id="getCriteriaManager" returnType="org.rcfaces.core.component.capability.ICriteriaManagerCapability">
 			<code>
 				return CriteriaTools.getCriteriaManager(this);
@@ -1111,7 +1112,7 @@
 		<attribute id="noPagedMessage" type="java.lang.String"/>
 		
 	</component>
-
+	
 	<component id="criteriaList" extends="abstractBasic">
 		<capability id="IForCapability" required="true"/>
 
@@ -1143,7 +1144,6 @@
 		<capability id="IDropEventCapability" />
 		<capability id="IDropCompleteEventCapability" />
 		<capability id="IDroppableCapability" />
-		
 		<method id="setDragEffects(String)" />	
 		<method id="setDragTypes(String)" />
 		<method id="setDropEffects(String)" />
@@ -1160,7 +1160,7 @@
 		
 		<attribute id="rowDropEffects" type="int" />
 		<method id="setRowDropEffects(String)" />
-
+	
 		<attribute id="selectedCriteriaColumns" type="java.lang.Object" />
 
 		<capability id="ISelectionEventCapability" />
@@ -1218,6 +1218,7 @@
 		<attribute id="cellTextWrap" type="boolean" default="false"/>
 		
 		<attribute id="bodyDroppable" type="boolean" default="false"/>
+
 				
 		<action id="action" type="selection" default="true"/>
 		
@@ -1373,44 +1374,6 @@
 			</code>
 		</method>
 
-
-<!-- Criteria/Filtred -->
-
-		<method id="listCriteriaContainers" returnType="org.rcfaces.core.internal.capability.ICriteriaContainer[]">
-			<import>org.rcfaces.core.internal.tools.CriteriaTools</import>
-			<code>
-			return CriteriaTools.listCriteriaContainers(null, this);
-			</code>
-		</method>
-
-		<method id="listSelectedCriteriaContainers" returnType="org.rcfaces.core.internal.capability.ICriteriaContainer[]">
-			<import>org.rcfaces.core.internal.tools.CriteriaTools</import>
-			<code>
-				return CriteriaTools.getSelectedCriteriaColumns(null, this, engine, Properties.SELECTED_CRITERIA_COLUMNS);
-			</code>
-		</method>
-		
-		<method id="setSelectedCriteriaContainers" returnType="void">
-			<import>org.rcfaces.core.internal.tools.CriteriaTools</import>
-			<parameter name="components" type="org.rcfaces.core.internal.capability.ICriteriaContainer[]" />
-			<code>
-				CriteriaTools.setSelectedCriteriaColumns(null, this, engine, components, Properties.SELECTED_CRITERIA_COLUMNS);
-			</code>
-		</method>
-
-		<method id="processSelectedCriteria" returnType="org.rcfaces.core.model.ICriteriaSelectedResult">
-			<import>org.rcfaces.core.internal.tools.CriteriaTools</import>
-			<code>
-				return CriteriaTools.processCriteriaConfig(this, null);
-			</code>
-		</method>
-		<method id="processSelectedCriteria" returnType="org.rcfaces.core.model.ICriteriaSelectedResult">
-			<import>org.rcfaces.core.internal.tools.CriteriaTools</import>
-			<parameter type="org.rcfaces.core.model.ISelectedCriteria[]" name="configs" />
-			<code>
-				return CriteriaTools.processCriteriaConfig(this, configs);
-			</code>
-		</method>
 
 <!-- Criteria/Filtred -->
 
@@ -1755,7 +1718,6 @@
 		<implements id="org.rcfaces.core.component.capability.IOrderedChildrenCapability" properties="orderedChildren" />
 		<implements id="org.rcfaces.core.internal.capability.ISelectionRangeComponent" importMethods="false" />
 		<implements id="org.rcfaces.core.internal.capability.IAdditionalInformationRangeComponent" importMethods="false" />
-		
 		<implements id="org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability" importMethods="false" />
 
 		<implements id="org.rcfaces.core.internal.capability.ISortedComponentsCapability" importMethods="false" />
@@ -1801,7 +1763,7 @@
 		<attribute id="rowValue" type="java.lang.String" onlyValueBinding="true"/>
 		<attribute id="rowValueConverter" type="javax.faces.convert.Converter"/>
 		<attribute id="cellTextWrap" type="boolean" default="false"/>
-	
+		
 		<method id="getComponentValueType" returnType="org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType">
 			<import>org.rcfaces.core.internal.tools.GridTools</import>
 			<code>
@@ -2103,6 +2065,7 @@
 		<implements id="org.rcfaces.core.component.capability.IOrderedChildrenCapability" properties="orderedChildren" />
 		<implements id="org.rcfaces.core.internal.capability.IAdditionalInformationRangeComponent" importMethods="false" />
 		<implements id="org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability" importMethods="false" />
+		<implements id="org.rcfaces.core.internal.manager.IValidationParameters" />
 		
 		<method id="getComponentValueType" returnType="org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType">
 			<import>org.rcfaces.core.internal.tools.CollectionTools</import>
@@ -2124,6 +2087,7 @@
 		<capability id="IPagedCapability" />
 
 		<capability id="IHeaderVisibilityCapability" default="true"/>
+
 
 		<attribute id="popupWidth" type="int"/>
 		<attribute id="popupHeight" type="int"/>
@@ -2307,6 +2271,14 @@
 				AdditionalInformationTools.hideAll(null, this);
 			</code>
 		</method>
+
+		<method id="getValidationParameter(String,javax.faces.context.FacesContext)" />
+		<method id="getValidationParametersCount(javax.faces.context.FacesContext)" />
+		<method id="setValidationParameter(String,javax.faces.el.ValueBinding, boolean)" />
+		<method id="getValidationParametersMap(javax.faces.context.FacesContext)" />
+		<method id="getClientValidationParametersMap(javax.faces.context.FacesContext)" />
+		<method id="setValidationParameterData(String, Object, boolean)" />
+		<method id="isClientSideValidationParameter(String,javax.faces.context.FacesContext)" />
 		
 	</component>
 	
@@ -2804,7 +2776,7 @@ Dans le cas d'un mode period !
 		<capability id="IAlternateTextCapability" />
 	
 		<capability id="IFilterCapability"/>
-		
+						
 		<capability id="IToolTipIdCapability" />
 						
 		<method id="getImageAccessors" returnType="org.rcfaces.core.component.familly.IContentAccessors">
@@ -3025,11 +2997,27 @@ Dans le cas d'un mode period !
 		<capability id="IClosableCapability" default="true" />
 		<capability id="IImmediateCapability" forceComponent="true"/>
 
+		<capability id="IClientDataCapability" />
+		<capability id="IServerDataCapability" />
+
+
 		<attribute id="viewURL" type="java.lang.String" />
 		<attribute id="shellDecoratorName" type="java.lang.String" />
 
 		<method id="setHiddenMode(String)" />
 		<method id="getVisibleState(javax.faces.context.FacesContext)" />
+		
+		<method id="getClientData(String,javax.faces.context.FacesContext)" />
+		<method id="setClientData(String,javax.faces.el.ValueBinding)" />
+
+		<method id="getServerData(String,javax.faces.context.FacesContext)" />
+		<method id="setServerData(String,javax.faces.el.ValueBinding)" />
+
+		<method id="getClientDataMap(javax.faces.context.FacesContext)" />
+		<method id="getServerDataMap(javax.faces.context.FacesContext)" />
+
+		<method id="listClientDataKeys(javax.faces.context.FacesContext)" />
+		<method id="listServerDataKeys(javax.faces.context.FacesContext)" />
 	</component>
 	
 	<component id="submitWait" extends="cameliaBase">
@@ -3097,7 +3085,6 @@ Dans le cas d'un mode period !
 		<capability id="IPreloadedLevelDepthCapability" />
 		<capability id="IMenuEventCapability" />
 		<capability id="ISelectionEventCapability" />		
-		<capability id="IPreSelectionEventCapability" />
 		<capability id="ICheckEventCapability" />
 		<capability id="ICheckedValuesCapability" onlyValueBinding="true" />
 
@@ -3175,10 +3162,6 @@ Dans le cas d'un mode period !
 	<component id="menuRadioItem" extends="menuCheckItem" render="false">
 		<capability id="IRadioValueCapability" />
 	</component>
-	
-	<component id="menuCriteria" extends="menu" render="false">
-		
-	</component>
 
 	<component id="numberEntry" extends="abstractInput">
 		<implements id="org.rcfaces.core.internal.manager.IValidationParameters" />
@@ -3253,21 +3236,14 @@ Dans le cas d'un mode period !
 		</method>
 
 		<method id="setNumber">
-			<parameter type="String" name="number" />
-			<code>
-				setValue(number);
-			</code>
-		</method>
-		
-		<method id="setNumber">
 			<parameter type="java.lang.Number" name="number" />
 			<code>
 				setValue(number);
-			</code>
+			</code>			
 		</method>
 
 		<method id="setNumber">
-			<parameter type="java.lang.Number" name="number" />
+			<parameter type="String" name="number" />
 			<code>
 				setValue(number);
 			</code>
@@ -3442,6 +3418,10 @@ Dans le cas d'un mode period !
 		<attribute id="showIfMessage" type="boolean" />
 		<attribute id="setFocusIfMessage" type="boolean" />
 	</component>
+	
+	<component id="heading" extends="text">
+		<attribute id="level" type="int" required="true" />
+	</component>	
 	
 	<component id="styledText" extends="text">
 	</component>	
@@ -4563,6 +4543,8 @@ Dans le cas d'un mode period !
 		<capability id="IFilterCapability" />
 		<capability id="IErrorEventCapability" />
 
+		<capability id="IVisibilityCapability" />
+
 		<!-- Dans la sérialisation on en a besoin !!!! -->
 		<capability id="IComponentLocaleCapability" />
 		<capability id="IComponentTimeZoneCapability" />
@@ -4589,6 +4571,8 @@ Dans le cas d'un mode period !
 		<method id="listServerDataKeys(javax.faces.context.FacesContext)" />
 		
 		<method id="setFilterProperties(String)" returnType="void" />
+
+		<method id="getVisibleState(javax.faces.context.FacesContext)" />
 	</component>
 
 

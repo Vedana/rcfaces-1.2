@@ -389,7 +389,10 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	}
 
 	public String getMoreResultsMessage(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.MORE_RESULTS_MESSAGE, facesContext);
+		String s = engine.getStringProperty(Properties.MORE_RESULTS_MESSAGE, facesContext);
+
+
+return s;
 	}
 
 	public void setMoreResultsMessage(String moreResultsMessage) {

@@ -21,7 +21,7 @@ var __statics={
 			propertyChange: f_event.PROPERTY_CHANGE,
 			user: f_event.USER
 	}
-}
+};
 	
 var __members = {
 	f_gridColumn: function() {
@@ -81,7 +81,7 @@ var __members = {
 		
 		return 0;
 	}
-}
+};
 
 
 new f_class("f_gridColumn", {

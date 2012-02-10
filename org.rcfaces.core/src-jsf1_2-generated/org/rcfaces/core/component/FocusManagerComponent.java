@@ -48,7 +48,10 @@ public class FocusManagerComponent extends CameliaBaseComponent {
 	 * @return id
 	 */
 	public String getFocusId(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FOCUS_ID, facesContext);
+		String s = engine.getStringProperty(Properties.FOCUS_ID, facesContext);
+
+
+return s;
 	}
 
 	/**

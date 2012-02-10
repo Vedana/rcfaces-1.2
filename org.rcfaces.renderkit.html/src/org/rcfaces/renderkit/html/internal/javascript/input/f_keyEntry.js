@@ -53,7 +53,7 @@ var __statics = {
 		
 		return true;
 	}
-}
+};
 
 var __members = {
 	
@@ -193,7 +193,7 @@ var __members = {
 					return true;
 				}
 				
-				if (keyEntry._required) {
+				if (keyEntry.f_isRequired()) {
 					var summary=keyEntry.f_getClientValidatorParameter("REQUIRED_ERROR_SUMMARY");
 					var detail=keyEntry.f_getClientValidatorParameter("REQUIRED_ERROR_DETAIL");
 					
@@ -414,6 +414,7 @@ var __members = {
 	f_setValue: function(value) {
 		f_core.Assert(value===null || typeof(value)=="string", "f_keyEntry.f_setValue: Invalid value parameter ("+value+").");
 		f_core.Debug(f_keyEntry, "f_setValue: set input value ='"+value+"'");
+		
 		this._selectedValue="";		
 		this._inputValue=value;
 		this._formattedValue="";
@@ -631,7 +632,7 @@ var __members = {
 		var params={
 			gridId: this.id,
 			key: key
-		}
+		};
 	
 		var filterExpression=this.fa_getSerializedPropertiesExpression();
 		if (filterExpression) {
@@ -819,7 +820,7 @@ var __members = {
 	 */
 	fa_updateRequired: function() {
 		this.f_updateStyleClass();
-		this._required = true;
+//		this._required = true;  /// ????????
 
 		if (this._checkListeners) {
 			return;
@@ -837,7 +838,7 @@ var __members = {
 	},
 	fa_updateFilterProperties: function() {		
 	}
-}
+};
 
 new f_class("f_keyEntry", {
 	extend: f_textEntry,

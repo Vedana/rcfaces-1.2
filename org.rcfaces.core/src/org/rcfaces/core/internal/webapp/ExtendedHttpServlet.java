@@ -84,7 +84,7 @@ public class ExtendedHttpServlet extends HttpServlet {
 
     public static final String TEXT_PLAIN_MIME_TYPE = "text/plain";
 
-    private static Set useGZIPExtensions = new HashSet();
+    private static Set<String> useGZIPExtensions = new HashSet<String>(8);
     static {
         useGZIPExtensions.add(CSS_MIME_TYPE);
         useGZIPExtensions.add(HTML_MIME_TYPE);
@@ -112,9 +112,9 @@ public class ExtendedHttpServlet extends HttpServlet {
     }
 
     public static boolean hasGzipSupport(FacesContext facesContext) {
-        Map requestMap = facesContext.getExternalContext()
+        Map<String, String> requestMap = facesContext.getExternalContext()
                 .getRequestHeaderMap();
-        String contentEncoding = (String) requestMap.get(HTTP_ACCEPT_ENCODING);
+        String contentEncoding = requestMap.get(HTTP_ACCEPT_ENCODING);
 
         return hasGzipSupport(contentEncoding);
     }
@@ -265,6 +265,7 @@ public class ExtendedHttpServlet extends HttpServlet {
         }
     }
 
+    @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         try {

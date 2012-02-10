@@ -19,7 +19,6 @@ import org.rcfaces.core.internal.manager.IClientDataManager;
  * @version $Revision$ $Date$
  */
 public class ClientDataTag extends TagSupport implements Tag {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = -7633749361412060360L;
 
@@ -27,11 +26,11 @@ public class ClientDataTag extends TagSupport implements Tag {
 
     protected ValueExpression value;
 
-    public  void setName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public  void setValue(ValueExpression value) {
+    public void setValue(ValueExpression value) {
         this.value = value;
     }
 

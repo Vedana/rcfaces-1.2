@@ -25,6 +25,7 @@ import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.CssStyleClasses;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
+import org.rcfaces.renderkit.html.internal.IHtmlElements;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
@@ -37,6 +38,7 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  * @version $Revision$ $Date$
  */
 public class ExpandBarRenderer extends AbstractCssRenderer {
+    private static final String REVISION = "$Revision$";
 
     // private static final String COLLAPSED_BUTTON_IMAGE_URL =
     // "expandBar/arrow_collapsed.gif";
@@ -105,10 +107,11 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
 
         writeCssAttributes(htmlWriter);
 
-        int ariaLevel = expandBarComponent.getAriaLevel(facesContext);
-        if (ariaLevel > 0) {
-            htmlWriter.writeAriaLevel(ariaLevel);
-        }
+        // On met le ariaLevel en Hn du label !
+        /*
+         * int ariaLevel = expandBarComponent.getAriaLevel(facesContext); if
+         * (ariaLevel > 0) { htmlWriter.writeAriaLevel(ariaLevel); }
+         */
 
         String normalText = expandBarComponent.getText(facesContext);
         if (normalText != null) {
@@ -326,7 +329,14 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
 
         htmlWriter.endElement(IHtmlWriter.A);
 
-        htmlWriter.startElement(IHtmlWriter.LABEL);
+        String labelType = IHtmlElements.LABEL;
+
+        int ariaLevel = expandBarComponent.getAriaLevel(facesContext);
+        if (ariaLevel > 0) {
+            labelType = IHtmlElements.H_BASE + ariaLevel;
+        }
+
+        htmlWriter.startElement(labelType);
         htmlWriter.writeId(getLabelId(htmlWriter));
         htmlWriter.writeFor(buttonClientId);
 
@@ -345,7 +355,7 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
                     false);
         }
 
-        htmlWriter.endElement(IHtmlWriter.LABEL);
+        htmlWriter.endElement(labelType);
 
         UIComponent component = expandBarComponent.getFacet(HEAD_FACET_NAME);
         if (component != null) {

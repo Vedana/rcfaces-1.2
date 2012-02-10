@@ -10,7 +10,7 @@ import javax.faces.component.UIParameter;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public interface IParameterIterator extends IComponentIterator {
+public interface IParameterIterator extends IComponentIterator<UIParameter> {
 
     UIParameter next();
 

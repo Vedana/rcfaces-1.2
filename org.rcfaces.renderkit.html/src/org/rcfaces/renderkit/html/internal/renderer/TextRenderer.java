@@ -28,8 +28,6 @@ import org.rcfaces.renderkit.html.internal.util.TextTypeTools;
  * @version $Revision$ $Date$
  */
 public class TextRenderer extends AbstractCssRenderer {
-    private static final String REVISION = "$Revision$";
-
     private static final String DEFAULT_TEXT_ELEMENT = IHtmlWriter.LABEL;
 
     protected boolean useHtmlAccessKeyAttribute() {
@@ -51,7 +49,7 @@ public class TextRenderer extends AbstractCssRenderer {
 
         String element = null;
         String ac = textComponent.getFor();
-        if (ac == null) {
+        if (element == null) {
             element = getTextElement(htmlWriter);
         }
 
@@ -65,11 +63,7 @@ public class TextRenderer extends AbstractCssRenderer {
         writeCssAttributes(htmlWriter);
         writeTextDirection(htmlWriter, textComponent);
 
-        int ariaLevel = textComponent.getAriaLevel(componentRenderContext
-                .getFacesContext());
-        if (ariaLevel > 0) {
-            htmlWriter.writeAriaLevel(ariaLevel);
-        }
+        writeAriaLevelAttribute(htmlWriter, textComponent);
 
         if (ac != null) {
             // On peut pas calculer la véritable ID car le composant est peut
@@ -93,6 +87,7 @@ public class TextRenderer extends AbstractCssRenderer {
                 htmlWriter.writeFor(forId);
             }
         }
+        writeTextAttributes(htmlWriter, textComponent);
 
         if (writeText(htmlWriter, textComponent)) {
             // Un accessKey est postionné !
@@ -103,6 +98,22 @@ public class TextRenderer extends AbstractCssRenderer {
         htmlWriter.endElement(element);
 
         super.encodeEnd(htmlWriter);
+    }
+
+    protected void writeTextAttributes(IHtmlWriter htmlWriter,
+            TextComponent element) throws WriterException {
+
+    }
+
+    protected void writeAriaLevelAttribute(IHtmlWriter htmlWriter,
+            TextComponent textComponent) throws WriterException {
+
+        int ariaLevel = textComponent.getAriaLevel(htmlWriter
+                .getComponentRenderContext().getFacesContext());
+        if (ariaLevel > 0) {
+            htmlWriter.writeAriaLevel(ariaLevel);
+        }
+
     }
 
     protected String getDefaultTextElement(IHtmlWriter htmlWriter) {

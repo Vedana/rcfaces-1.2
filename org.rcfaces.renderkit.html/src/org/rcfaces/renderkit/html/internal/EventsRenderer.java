@@ -74,14 +74,12 @@ public class EventsRenderer {
     };
 
     private static final IJavascriptMode NONE_JAVASCRIPT_ENABLE = new IJavascriptMode() {
-        private static final String REVISION = "$Revision$";
 
         public void enableJavaScriptMode(IJavaScriptEnableMode mode) {
         }
     };
 
     private static final IJavascriptMode SUBMIT_JAVASCRIPT_ENABLE = new IJavascriptMode() {
-        private static final String REVISION = "$Revision$";
 
         public void enableJavaScriptMode(IJavaScriptEnableMode mode) {
             mode.enableOnSubmit();
@@ -89,7 +87,6 @@ public class EventsRenderer {
     };
 
     private static final IJavascriptMode OVER_JAVASCRIPT_ENABLE = new IJavascriptMode() {
-        private static final String REVISION = "$Revision$";
 
         public void enableJavaScriptMode(IJavaScriptEnableMode mode) {
             mode.enableOnOver();
@@ -115,6 +112,8 @@ public class EventsRenderer {
                 JavaScriptClasses.EVENT_MOUSEOVER, OVER_JAVASCRIPT_ENABLE);
         ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
                 JavaScriptClasses.EVENT_MOUSEOUT, OVER_JAVASCRIPT_ENABLE);
+        ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(JavaScriptClasses.EVENT_CLICK,
+                OVER_JAVASCRIPT_ENABLE);
 
         // FOCUS
         ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
@@ -135,7 +134,8 @@ public class EventsRenderer {
                 JavaScriptClasses.EVENT_KEYUP_ATTRIBUTE,
                 ONFOCUS_JAVASCRIPT_ENABLE);
         ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
-                JavaScriptClasses.EVENT_PRE_SELECTION, ONFOCUS_JAVASCRIPT_ENABLE);
+                JavaScriptClasses.EVENT_PRE_SELECTION,
+                ONFOCUS_JAVASCRIPT_ENABLE);
         ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
                 JavaScriptClasses.EVENT_SELECTION, ONFOCUS_JAVASCRIPT_ENABLE);
         ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(

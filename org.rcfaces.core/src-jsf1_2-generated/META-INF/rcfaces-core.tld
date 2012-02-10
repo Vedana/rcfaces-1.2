@@ -939,6 +939,25 @@ Executed when the pointer hover the component's area.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>clickListener</name>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+Executed when the component is double-clicked.
+		A string that represent a javascript expression to evaluate and eventually a server action to execute.
+		the two parts are separated by a semi-column.
+		If the javascript evaluation return false (by using the return keyword) the server action is not executed.
+		The server action is represented by a binding.
+]]></description>
+			<name>doubleClickListener</name>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<description><![CDATA[
 Executed when the component is intialized.
 		A string that represent a javascript expression to evaluate and eventually a server action to execute.
@@ -2966,7 +2985,7 @@ A boolean value indicating wether the component is selected.
 	</tag>
 	<tag>
 		<description><![CDATA[
-<p>The combo Component is equivalent to the standard HTML tag &lt;SELECT SIZE=1&gt;.</p>
+<p>The combo Component is equivalent to the standard HTML tag <SELECT SIZE=1><option>option 1</option> </SELECT>.</p>
       <p>The combo Component has the following capabilities :
       <ul>
         <li>ISelectionEventCapability</li>
@@ -7090,22 +7109,24 @@ A boolean value indicating that this component's value must be
 		</attribute>
 		<attribute>
 			<description><![CDATA[
+A string value holding the name of a request-scope attribute under which the model data for the
+          row selected by the current value of the "rowIndex" property (i.e.
+          also the current value of the "rowData" property) will be exposed.
+]]></description>
+			<name>var</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
 A string value holding the current value of the component.
 ]]></description>
 			<name>value</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.Object</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A number identifying the row to be displayed at the top of the component.
-]]></description>
-			<name>first</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -7120,23 +7141,21 @@ A string value specifying the margins for the component (compliant to CSS margin
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value holding the name of a request-scope attribute under which the model data for the
-          row selected by the current value of the "rowIndex" property (i.e.
-          also the current value of the "rowData" property) will be exposed.
-]]></description>
-			<name>var</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>java.lang.String</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
 An int value specifying the number of rows to display, starting with the one identified by the
           "first" property.  If this value is set to zero, all available rows in
           the underlying data model will be displayed.
 ]]></description>
 			<name>rows</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A number identifying the row to be displayed at the top of the component.
+]]></description>
+			<name>first</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>int</type>
@@ -8193,22 +8212,24 @@ A boolean value indicating that this component's value must be
 		</attribute>
 		<attribute>
 			<description><![CDATA[
+A string value holding the name of a request-scope attribute under which the model data for the
+          row selected by the current value of the "rowIndex" property (i.e.
+          also the current value of the "rowData" property) will be exposed.
+]]></description>
+			<name>var</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
 A string value holding the current value of the component.
 ]]></description>
 			<name>value</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.Object</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A number identifying the row to be displayed at the top of the component.
-]]></description>
-			<name>first</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -8223,23 +8244,21 @@ A string value specifying the margins for the component (compliant to CSS margin
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value holding the name of a request-scope attribute under which the model data for the
-          row selected by the current value of the "rowIndex" property (i.e.
-          also the current value of the "rowData" property) will be exposed.
-]]></description>
-			<name>var</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>java.lang.String</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
 An int value specifying the number of rows to display, starting with the one identified by the
           "first" property.  If this value is set to zero, all available rows in
           the underlying data model will be displayed.
 ]]></description>
 			<name>rows</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A number identifying the row to be displayed at the top of the component.
+]]></description>
+			<name>first</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>int</type>
@@ -11187,22 +11206,24 @@ A boolean value indicating that this component's value must be
 		</attribute>
 		<attribute>
 			<description><![CDATA[
+A string value holding the name of a request-scope attribute under which the model data for the
+          row selected by the current value of the "rowIndex" property (i.e.
+          also the current value of the "rowData" property) will be exposed.
+]]></description>
+			<name>var</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
 A string value holding the current value of the component.
 ]]></description>
 			<name>value</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.Object</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A number identifying the row to be displayed at the top of the component.
-]]></description>
-			<name>first</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -11217,23 +11238,21 @@ A string value specifying the margins for the component (compliant to CSS margin
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value holding the name of a request-scope attribute under which the model data for the
-          row selected by the current value of the "rowIndex" property (i.e.
-          also the current value of the "rowData" property) will be exposed.
-]]></description>
-			<name>var</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>java.lang.String</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
 An int value specifying the number of rows to display, starting with the one identified by the
           "first" property.  If this value is set to zero, all available rows in
           the underlying data model will be displayed.
 ]]></description>
 			<name>rows</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A number identifying the row to be displayed at the top of the component.
+]]></description>
+			<name>first</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>int</type>
@@ -27791,17 +27810,6 @@ A string value specifying the management of invisible state on the client.
 		<attribute>
 			<description><![CDATA[
 A boolean value indicating whether the summary portion of displayed messages
-          should be included.  Default value is "true".
-]]></description>
-			<name>showDetail</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>boolean</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A boolean value indicating whether the summary portion of displayed messages
           should be included.  Default value is "false".
 ]]></description>
 			<name>showSummary</name>
@@ -27818,6 +27826,17 @@ A component's id that express the link between the two components.
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating whether the summary portion of displayed messages
+          should be included.  Default value is "true".
+]]></description>
+			<name>showDetail</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -29088,13 +29107,12 @@ A boolean value indicating whether the summary portion of displayed messages
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A boolean value indicating whether the summary portion of displayed messages
-          should be included.  Default value is "true".
+A string value specifying the margins for the component (compliant to CSS margin).
 ]]></description>
-			<name>showDetail</name>
+			<name>margins</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
-				<type>boolean</type>
+				<type>java.lang.String</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -29109,12 +29127,13 @@ A boolean value indicating if the component specific messages should be shown or
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value specifying the margins for the component (compliant to CSS margin).
+A boolean value indicating whether the summary portion of displayed messages
+          should be included.  Default value is "true".
 ]]></description>
-			<name>margins</name>
+			<name>showDetail</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
-				<type>java.lang.String</type>
+				<type>boolean</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -29314,12 +29333,6 @@ Executed when the component is selected.
 		The server action is represented by a binding.
 ]]></description>
 			<name>selectionListener</name>
-			<deferred-value>
-				<type>java.lang.String</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<name>preSelectionListener</name>
 			<deferred-value>
 				<type>java.lang.String</type>
 			</deferred-value>
@@ -31213,158 +31226,6 @@ A string value specifying the value associated with the group when this componen
 A string specifying the name of the virtual entity that links different components together.
 ]]></description>
 			<name>groupName</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>java.lang.String</type>
-			</deferred-value>
-		</attribute>
-	</tag>
-	<tag>
-		<name>menuCriteria</name>
-		<tag-class>org.rcfaces.core.internal.taglib.MenuCriteriaTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
-		<attribute>
-			<description><![CDATA[
-A string specifying the identifier for this component.  This value must be
-          unique within the closest parent component that is a naming
-          container.
-]]></description>
-			<name>id</name>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-The value binding expression linking this component to a property in a backing bean.
-]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>javax.faces.component.UIComponent</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A string value holding the current value of the component.
-]]></description>
-			<name>value</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>java.lang.Object</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A boolean value indicating whether or not this component should be rendered
-          (during Render Response Phase), or processed on any subsequent
-          form submit.
-]]></description>
-			<name>rendered</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>boolean</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-The converter id to use. as specified in faces-config.xml.
-]]></description>
-			<name>converter</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>java.lang.String</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-An int value specifying the number of levels that should be preloaded when a node is displayed.
-]]></description>
-			<name>preloadedLevelDepth</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>int</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-Executed when a menu is activated.
-		A string that represent a javascript expression to evaluate and eventually a server action to execute.
-		the two parts are separated by a semi-column.
-		If the javascript evaluation return false (by using the return keyword) the server action is not executed.
-		The server action is represented by a binding.
-]]></description>
-			<name>menuListener</name>
-			<deferred-value>
-				<type>java.lang.String</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-Executed when the component is selected.
-		A string that represent a javascript expression to evaluate and eventually a server action to execute.
-		the two parts are separated by a semi-column.
-		If the javascript evaluation return false (by using the return keyword) the server action is not executed.
-		The server action is represented by a binding.
-]]></description>
-			<name>selectionListener</name>
-			<deferred-value>
-				<type>java.lang.String</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<name>preSelectionListener</name>
-			<deferred-value>
-				<type>java.lang.String</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-Executed when the component is checked.
-		A string that represent a javascript expression to evaluate and eventually a server action to execute.
-		the two parts are separated by a semi-column.
-		If the javascript evaluation return false (by using the return keyword) the server action is not executed.
-		The server action is represented by a binding.
-]]></description>
-			<name>checkListener</name>
-			<deferred-value>
-				<type>java.lang.String</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A table of the values associated with checked nodes for the component. (Binding only)
-]]></description>
-			<name>checkedValues</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>java.lang.Object</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-An id used to retreive a specific menu. For example, "#node" is used to call a menu on a tree node while "#body" is used for the menu boody.
-]]></description>
-			<name>menuId</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>java.lang.String</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A boolean value specifying wether the content of the component must be remove before the listener is called and the component displayed.
-]]></description>
-			<name>removeAllWhenShown</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>boolean</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-The converter id to use. as specified in faces-config.xml.
-]]></description>
-			<name>converter</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
@@ -38553,6 +38414,533 @@ A boolean value indicating wether the component should be get the focus when a m
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>boolean</type>
+			</deferred-value>
+		</attribute>
+	</tag>
+	<tag>
+		<name>heading</name>
+		<tag-class>org.rcfaces.core.internal.taglib.HeadingTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<description><![CDATA[
+A string specifying the identifier for this component.  This value must be
+          unique within the closest parent component that is a naming
+          container.
+]]></description>
+			<name>id</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+The value binding expression linking this component to a property in a backing bean.
+]]></description>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>javax.faces.component.UIComponent</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating whether or not this component should be rendered
+          (during Render Response Phase), or processed on any subsequent
+          form submit.
+]]></description>
+			<name>rendered</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value holding the current value of the component.
+]]></description>
+			<name>value</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.Object</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+The converter id to use. as specified in faces-config.xml.
+]]></description>
+			<name>converter</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value specifying the margin size for the component's bottom (compliant to CSS margin-bottom).
+]]></description>
+			<name>marginBottom</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value specifying the margin size for the component's left (compliant to CSS margin-left).
+]]></description>
+			<name>marginLeft</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value specifying the margin size for the component's right (compliant to CSS margin-right).
+]]></description>
+			<name>marginRight</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value specifying the margin size for the component's top (compliant to CSS margin-top).
+]]></description>
+			<name>marginTop</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+Executed when the component is called.
+		A string that represent a javascript expression to evaluate and eventually a server action to execute.
+		the two parts are separated by a semi-column.
+		If the javascript evaluation return false (by using the return keyword) the server action is not executed.
+		The server action is represented by a binding.
+]]></description>
+			<name>userEventListener</name>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value (as specified by CSS) for the x position of the component.
+]]></description>
+			<name>x</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value (as specified by CSS) for the x position of the component.
+]]></description>
+			<name>y</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value specifying the message to be shown by a <a href="/comps/helpMessageZoneComponent.html">helpMessageZone Component</a>.
+]]></description>
+			<name>helpMessage</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+An URL that points to a help page for the component. it is used for example by a <a href="/comps/helpButtonComponent.html">helpButton Component</a>.
+]]></description>
+			<name>helpURL</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value specifying the tooltip for the component (shown when the pointe hover the component).
+]]></description>
+			<name>toolTipText</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>partialRendering</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied to the component. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+			<name>styleClass</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value specifying the choosen look of the component.
+]]></description>
+			<name>lookId</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value (as specified by CSS) for the width of the component.
+]]></description>
+			<name>width</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value (as specified by CSS) for the height of the component.
+]]></description>
+			<name>height</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A color value (as specified by CSS) for the background.
+]]></description>
+			<name>backgroundColor</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A color value (as specified by CSS) for the text.
+]]></description>
+			<name>foregroundColor</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating wether the composant is visible.
+]]></description>
+			<name>visible</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>errorListener</name>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLabel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>waiRole</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>bottom</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>double</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>horizontalCenter</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>double</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>left</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>double</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>right</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>double</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>top</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>double</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>verticalCenter</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>double</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+Executed when the pointer leaves the area of the component.
+		A string that represent a javascript expression to evaluate.
+]]></description>
+			<name>mouseOutListener</name>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+Executed when the pointer hover the component's area.
+		A string that represent a javascript expression to evaluate.
+]]></description>
+			<name>mouseOverListener</name>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value holding a comma separated list of the client modifiable properties.
+]]></description>
+			<name>unlockedClientAttributeNames</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+Executed when the component is intialized.
+		A string that represent a javascript expression to evaluate and eventually a server action to execute.
+		the two parts are separated by a semi-column.
+		If the javascript evaluation return false (by using the return keyword) the server action is not executed.
+		The server action is represented by a binding.
+]]></description>
+			<name>initListener</name>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+Executed when a component's property is changed (by javascript).
+		A string that represent a javascript expression to evaluate and eventually a server action to execute.
+		the two parts are separated by a semi-column.
+		If the javascript evaluation return false (by using the return keyword) the server action is not executed.
+		The server action is represented by a binding.
+]]></description>
+			<name>propertyChangeListener</name>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value specifying the management of invisible state on the client.
+		Authorized values are :
+		<ul><li>
+		server : if not visible, nothing is sent to the client
+		</li><li>
+		phantom : if not visible, the data is sent to the client and the page estate is reserved for a futur eventual display of the component
+		</li><li>
+		ignore : if not visible, the data is sent to the client but no page estate is reserved
+		</li></ul>
+]]></description>
+			<name>hiddenMode</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>valueLocked</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value specifying the margins for the component (compliant to CSS margin).
+]]></description>
+			<name>margins</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value holding the current value of the component.
+]]></description>
+			<name>value</name>
+			<deferred-value/>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value specifying the text (literal or binding) to be shown.
+]]></description>
+			<name>text</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>textDirection</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating the <i>bold</i> property for the specified font.
+]]></description>
+			<name>fontBold</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.Boolean</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating the <i>italic</i> property for the specified font.
+]]></description>
+			<name>fontItalic</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.Boolean</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value indicating the name of the font used for this component.
+]]></description>
+			<name>fontName</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string indicating the size to use for the selected font. (or any other CSS accepted value for font size).
+		<br/>
+		values [xx-small|x-small|small|medium|large|x-large|xx-large|smaller|larger|<i>length</i> for example 10px|<i>%</i>]
+]]></description>
+			<name>fontSize</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating the <i>underline</i> property for the specified font.
+]]></description>
+			<name>fontUnderline</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.Boolean</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value specifying the alignement for the text in the component :
+		<ul><li>
+		left
+		</li><li>
+		right
+		</li><li>
+		center
+		</li></ul>
+]]></description>
+			<name>textAlignment</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string that indicates the alphanumeric key used to execute an action from the keyboard (in conjunction with a alteration key ex : Alt).
+]]></description>
+			<name>accessKey</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A component's id that express the link between the two components.
+]]></description>
+			<name>for</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value specifying the type of data (Java) to convert to or from.
+]]></description>
+			<name>type</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>level</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 	</tag>
@@ -52561,6 +52949,16 @@ A binded object that hold the filters to use on the server side. This property i
 			<name>errorListener</name>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating wether the composant is visible.
+]]></description>
+			<name>visible</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
 			</deferred-value>
 		</attribute>
 		<attribute>

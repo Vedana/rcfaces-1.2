@@ -182,14 +182,14 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 			
 	}
 
-	public void setNumber(String number) {
+	public void setNumber(Number number) {
 
 
 				setValue(number);
 			
 	}
 
-	public void setNumber(Number number) {
+	public void setNumber(String number) {
 
 
 				setValue(number);
@@ -768,7 +768,10 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * @return number format
 	 */
 	public String getNumberFormat(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.NUMBER_FORMAT, facesContext);
+		String s = engine.getStringProperty(Properties.NUMBER_FORMAT, facesContext);
+
+
+return s;
 	}
 
 	/**
@@ -804,7 +807,10 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * @return step
 	 */
 	public String getIntegerStep(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.INTEGER_STEP, facesContext);
+		String s = engine.getStringProperty(Properties.INTEGER_STEP, facesContext);
+
+
+return s;
 	}
 
 	/**
@@ -838,7 +844,10 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * Experimental Do not use.
 	 */
 	public String getFractionStep(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FRACTION_STEP, facesContext);
+		String s = engine.getStringProperty(Properties.FRACTION_STEP, facesContext);
+
+
+return s;
 	}
 
 	/**

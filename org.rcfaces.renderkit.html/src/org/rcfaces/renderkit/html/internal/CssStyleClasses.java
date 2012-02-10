@@ -210,10 +210,10 @@ public class CssStyleClasses implements ICssStyleClasses {
                 && styleClasseNames.contains(mainStyleClassName)) {
             os = new OrderedSet(styleClasseNames);
             os.remove(mainStyleClassName);
+        }
 
-            if (os.isEmpty()) {
-                return null;
-            }
+        if (os == null || os.isEmpty()) {
+            return null;
         }
 
         if (os.size() == 1) {

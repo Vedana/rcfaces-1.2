@@ -53,7 +53,8 @@ var __statics = {
 			detailLabel.style.display="inline";
 		}
 	}
-}
+};
+
 var __members = {
 	/**
 	 * @field private function
@@ -272,7 +273,7 @@ var __members = {
   			// this = document ... normalement
   			f_core.Debug(f_message, "f_addFocusAndBlurListener: this._onFocusCb on "+this);
   			message._performOnFocus(evt);
-		}
+		};
 		
 		var capture = undefined;
 		if (!f_core.IsInternetExplorer()) {
@@ -293,13 +294,15 @@ var __members = {
 			evt = f_core.GetJsEvent(this);
 		}
 
-		var target;
+		var target=undefined;
 		if (evt.target) {
 			target = evt.target;
 			
 		} else if (evt.srcElement) {
 			target = evt.srcElement;
 		}
+		
+		f_core.Assert(target, "f_message._performOnFocus: Target not found for event '"+evt+"'.");
 		
      	f_core.Debug(f_message, "_performOnFocus: target="+target.tagName+"#"+target.id+"."+target.className);
 		var compId = target.id;
@@ -365,7 +368,7 @@ var __members = {
 
 		this.f_setProperty(f_prop.TEXT, text);
 	}
-}
+};
 
 new f_class("f_message", {
 	extend: f_component, 

@@ -35,7 +35,7 @@ var __statics = {
 			evt = f_core.GetJsEvent(this);
 		}
 		
-		if (evt.timeStamp - fa_dataGridPopup.LAST_OUTSIDE < 100){
+		if(evt.timeStamp - fa_dataGridPopup.LAST_OUTSIDE < 100){
 			return false;
 		}
 	
@@ -110,7 +110,7 @@ var __statics = {
 		
 		return f_core.CancelJsEvent(evt);		
 	}
-}
+};
 
 var __members = {
 	
@@ -365,7 +365,7 @@ var __members = {
 		
 		return this.f_super(arguments, event);
 	}
-}
+};
 
 new f_class("f_comboGrid", {
 	extend: f_keyEntry,

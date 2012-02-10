@@ -27,8 +27,6 @@ import org.rcfaces.core.internal.capability.IStateChildrenList;
  * @version $Revision$ $Date$
  */
 public class BasicComponentEngine extends AbstractComponentEngine {
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory
             .getLog(BasicComponentEngine.class);
 
@@ -752,7 +750,6 @@ public class BasicComponentEngine extends AbstractComponentEngine {
      */
     protected class BasicDataAccessor extends BasicPropertiesManager implements
             IDataMapAccessor {
-        private static final String REVISION = "$Revision$";
 
         private final String name;
 
@@ -784,7 +781,7 @@ public class BasicComponentEngine extends AbstractComponentEngine {
 				copy.propertiesManager = this.propertiesManager
 						.copyOriginalState();
 			} else {
-				copy.propertiesManager = copy;
+            copy.propertiesManager = copy;
 			}
             copy.setCameliaFactory(factory);
             copy.originalPropertiesAccessor = originalPropertiesAccessor;
@@ -950,8 +947,8 @@ public class BasicComponentEngine extends AbstractComponentEngine {
             }
             s += "converter='" + converter + "'";
         }
-        
-        if (dataAccessorsByName != null
+
+		if (dataAccessorsByName != null
 				&& dataAccessorsByName.isEmpty() == false) {
 			for (Iterator it = dataAccessorsByName.entrySet().iterator(); it
 					.hasNext();) {

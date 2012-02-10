@@ -73,23 +73,23 @@ var __members = {
 			return true;
 		}
 		
-			type=type.toLowerCase();
+		type=type.toLowerCase();
 			
-			switch(type) {
-			case "first":
-			case "prev":
+		switch(type) {
+		case "first":
+		case "prev":
 			return (first<1);
 				
-			case "next":
-			case "last":
+		case "next":
+		case "last":
 			return (rowCount>0 && first+rows>=rowCount);
 
-			default:
-				var pageN=parseInt(type, 10);
-				if (!isNaN(pageN) && (first/rows)!=pageN) {
+		default:
+			var pageN=parseInt(type, 10);
+			if (!isNaN(pageN) && (first/rows)!=pageN) {
 				return (rowCount>=0 && pageN*rows>rowCount);
-				}
 			}
+		}
 			
 		return true;
 	},
@@ -130,6 +130,7 @@ var __members = {
 	 * @method protected
 	 * @param pagedComponent
 	 * @param type
+	 * @return void
 	 */
 	_processSelection: function(pagedComponent, type) {
 
@@ -184,7 +185,7 @@ var __members = {
 			fa_pagedComponent.RegisterPager(forComponent, this);
 		}
 	}
-}
+};
 
 new f_class("f_imagePagerButton", {
 	extend: f_imageButton,

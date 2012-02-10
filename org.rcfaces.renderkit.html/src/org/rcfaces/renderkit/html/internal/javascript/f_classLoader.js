@@ -238,7 +238,7 @@ f_classLoader.prototype = {
 			
 			document.body.onmouseover=null;
 		}
-		
+
 		this._onFireInits=undefined; // List<String>
 		this._onCompleteIds=undefined; // List<String>
 		this._onMessageIds=undefined; // List<String>
@@ -448,7 +448,7 @@ f_classLoader.prototype = {
 			}
 		}
 		f_core.Debug(f_classLoader, "f_onDocumentComplete: "+nb+" static DocumentComplete method(s) called.");
-	
+
 		nb=0;
 	
 		var documentCompleteObjects = this._documentCompleteObjects;
@@ -472,7 +472,7 @@ f_classLoader.prototype = {
 				f_core.Error(f_classLoader, "f_onDocumentComplete: Exception during documentComplete event for object "+obj.id+"/"+obj.tagName, x);
 			}
 		}	
-	
+
 		f_core.Debug(f_classLoader, "f_onDocumentComplete: "+nb+" f_documentComplete method(s) called.");
 	},
 	
@@ -896,7 +896,7 @@ f_classLoader.prototype = {
 		}
 		this._onMessageIds=undefined;
 		
-		f_core.Info(f_classLoader, "f_verifyOnMessage: initialize "+onMessageIds.length+" components.");
+		f_core.Debug(f_classLoader, "f_verifyOnMessage: initialize "+onMessageIds.length+" components.");
 		
 		this._initializeIds(onMessageIds);
 	},
@@ -961,7 +961,7 @@ f_classLoader.prototype = {
 		if (f_core.IsDebugEnabled(f_classLoader)) {
 			f_core.Debug(f_classLoader, "_initializeIds: ("+ids.length+" objects) ids="+ids.join());
 		}
-		
+
 		var documentComplete = this.f_isDocumentCompleted();
 
 		for(var i=0;i<ids.length;i++) {
@@ -997,7 +997,7 @@ f_classLoader.prototype = {
 				if (documentCompleteFct) {
 					documentCompleteFct.call(component);
 				}
-			}
+			}			
 		}
 	},
 	/**
@@ -1055,9 +1055,31 @@ f_classLoader.prototype = {
 		}
 		this._onSubmitIds=undefined;
 		
-		f_core.Info(f_classLoader, "f_verifyOnSubmit: initialize "+onSubmitIds.length+" components.");
+		f_core.Debug(f_classLoader, "f_verifyOnSubmit: initialize "+onSubmitIds.length+" components.");
 		
 		this._initializeIds(onSubmitIds);
+	},
+	/**
+	 * @method hidden final
+	 * @param Set ids
+	 * @return void
+	 */
+	f_initOnLayoutIds: function(ids) {
+		
+		if (f_core.IsDebugEnabled(f_classLoader)) {
+			var idsLog="";
+			for(var id in ids) {
+				if (idsLog) {
+					idsLog+=",";
+				}
+				
+				idsLog+=id;
+			}	
+
+			f_core.Debug(f_classLoader, "f_initOnLayoutIds: ids="+idsLog);
+		}
+
+		f_layoutManager.Get().f_addComponentClientIds(ids);
 	},
 	/**
 	 * @method hidden final
@@ -1131,8 +1153,8 @@ f_classLoader.prototype = {
 			var documentCompleteFct = component.f_documentComplete;
 			if (documentCompleteFct && self.f_isDocumentCompleted()) {
 				documentCompleteFct.call(component);
-			}		
-			
+			}
+		
 		};
 		
 		if (f_core.IsInternetExplorer()) {
@@ -1219,7 +1241,7 @@ f_classLoader.prototype = {
 			delete onOverIds[mainId];
 			
 			if (componentId!=mainId) {
-				component=component.ownerDocument.getElementById(mainId)
+				component=component.ownerDocument.getElementById(mainId);
 			}
 			
 			if (f_classLoader.IsObjectInitialized(component)) {
@@ -1959,7 +1981,7 @@ f_classLoader.prototype = {
 		}
 		return "[ClassLoader '"+this._window.location+"']";
 	}
-}
+};
 
 
 /**
@@ -1986,10 +2008,10 @@ f_classLoader._EMPTY_ARGUMENTS=[];
 f_classLoader._MakeClassName=function(claz, lookId) {
 	if (!lookId) {
 		return claz;
-	}
+	} 
 	
 	return claz+f_class._LOOK+lookId;
-}
+};
 
 
 /**
@@ -2041,7 +2063,7 @@ f_classLoader.Destroy=function(objects) {
 	if (lastClassLoader) {
 		lastClassLoader._destroy(toDestroy);
 	}
-}
+};
 
 /**
  * @method private static
@@ -2104,7 +2126,7 @@ f_classLoader._SerializeInputs=function(component) {
 	}
 	
 	return serializedInputs;
-}
+};
 
 /**
  * @method hidden static
@@ -2133,7 +2155,7 @@ f_classLoader.SerializeInputsIntoParam=function(parameters, component, updateInp
 	for(var name in serializedInputs) {
 		parameters[name]=serializedInputs[name];
 	}	
-}
+};
 
 /**
  * @method hidden static
@@ -2264,7 +2286,7 @@ f_classLoader.GetObjectState=function(object) {
  * @return Boolean
  */
 f_classLoader.IsObjectInitialized=function(object) {
-	f_core.Assert(object && typeof(object)=="object", "f_classLoader.IsObjectInitialized: Object is invalid ("+object+")");
+	f_core.Assert(object && typeof(object)=="object", "f_class.IsObjectInitialized: Object is invalid ("+object+")");
 
 	return !!object._kclass;
 };

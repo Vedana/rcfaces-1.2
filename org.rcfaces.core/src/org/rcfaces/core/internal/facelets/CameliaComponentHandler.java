@@ -140,6 +140,8 @@ public class CameliaComponentHandler extends CameliaComponentHandler0 {
                 ListenersTools.BLUR_LISTENER_TYPE));
         ATTRIBUTES_METADATA.put("checkListener", new ListenerAttributeMetaData(
                 ListenersTools.CHECK_LISTENER_TYPE));
+        ATTRIBUTES_METADATA.put("clickListener", new ListenerAttributeMetaData(
+                ListenersTools.CLICK_LISTENER_TYPE));
         ATTRIBUTES_METADATA.put("closeListener", new ListenerAttributeMetaData(
                 ListenersTools.CLOSE_LISTENER_TYPE));
         ATTRIBUTES_METADATA.put("doubleClickListener",
@@ -200,18 +202,15 @@ public class CameliaComponentHandler extends CameliaComponentHandler0 {
         ATTRIBUTES_METADATA.put("preSelectionListener",
                 new ListenerAttributeMetaData(
                         ListenersTools.PRE_SELECTION_LISTENER_TYPE));
-        ATTRIBUTES_METADATA.put("dragListener",
-                new ListenerAttributeMetaData(
-                        ListenersTools.DRAG_LISTENER_TYPE));
-        ATTRIBUTES_METADATA.put("dropListener",
-                new ListenerAttributeMetaData(
-                        ListenersTools.DROP_LISTENER_TYPE));
+        ATTRIBUTES_METADATA.put("dragListener", new ListenerAttributeMetaData(
+                ListenersTools.DRAG_LISTENER_TYPE));
+        ATTRIBUTES_METADATA.put("dropListener", new ListenerAttributeMetaData(
+                ListenersTools.DROP_LISTENER_TYPE));
         ATTRIBUTES_METADATA.put("dropCompleteListener",
                 new ListenerAttributeMetaData(
                         ListenersTools.DROP_COMPLETE_LISTENER_TYPE));
 
         ATTRIBUTES_METADATA.put("action", new IAttributeMetaData() {
-            private static final String REVISION = "$Revision$";
 
             public Metadata processAttribute(final String expression,
                     final IListenerType defaultListenerType,
@@ -269,8 +268,7 @@ public class CameliaComponentHandler extends CameliaComponentHandler0 {
         ATTRIBUTES_METADATA.put("dropTypes", ENUMERATION_ATTRIBUTE_METADATA);
         ATTRIBUTES_METADATA.put("rowDragTypes", ENUMERATION_ATTRIBUTE_METADATA);
         ATTRIBUTES_METADATA.put("rowDropTypes", ENUMERATION_ATTRIBUTE_METADATA);
-        
-        
+
     }
 
     public CameliaComponentHandler(ComponentConfig config) {
@@ -312,7 +310,6 @@ public class CameliaComponentHandler extends CameliaComponentHandler0 {
      * @version $Revision$ $Date$
      */
     private static class ComponentMetaRule extends MetaRule {
-        private static final String REVISION = "$Revision$";
 
         private final IListenerType defaultListenerType;
 

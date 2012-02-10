@@ -557,6 +557,9 @@ public abstract class CameliaValueColumnComponent extends javax.faces.component.
         }
     }
 
+	public void settedPhase(FacesContext facesContext) {
+	}
+
     public void decodePhase(FacesContext facesContext) {
     }
 

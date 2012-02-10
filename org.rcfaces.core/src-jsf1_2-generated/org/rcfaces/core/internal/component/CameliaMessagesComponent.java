@@ -555,6 +555,9 @@ public abstract class CameliaMessagesComponent extends javax.faces.component.UIM
         }
     }
 
+	public void settedPhase(FacesContext facesContext) {
+	}
+
     public void decodePhase(FacesContext facesContext) {
     }
 

@@ -39,7 +39,10 @@ public abstract class FileItemComponent extends CameliaItemComponent {
 	}
 
 	public String getCharSet(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.CHAR_SET, facesContext);
+		String s = engine.getStringProperty(Properties.CHAR_SET, facesContext);
+
+
+return s;
 	}
 
 	public void setCharSet(String charSet) {

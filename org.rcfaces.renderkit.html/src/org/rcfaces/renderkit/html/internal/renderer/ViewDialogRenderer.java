@@ -90,6 +90,8 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
             }
         }
 
+        writeClientData(htmlWriter, component);
+
         // TODO A refaire en décorator !
         List children = component.getChildren();
         Map values = null;
@@ -141,9 +143,10 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
             htmlWriter.writeAttributeNS("shellDecorator", shellDecorator);
         }
 
-        if (!component.isVisible(facesContext)) {
+        if (component.isVisible(facesContext) == false) {
             htmlWriter.writeAttributeNS("visible", false);
         }
+
         if (component.isDialogPrioritySetted()) {
             htmlWriter.writeAttributeNS("dialogPriority",
                     component.getDialogPriority(facesContext));

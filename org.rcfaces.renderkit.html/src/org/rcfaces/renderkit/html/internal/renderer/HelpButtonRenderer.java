@@ -58,7 +58,6 @@ public class HelpButtonRenderer extends ImageButtonRenderer {
      * @version $Revision$ $Date$
      */
     protected class HelpButtonDecorator extends ImageButtonDecorator {
-        private static final String REVISION = "$Revision$";
 
         public HelpButtonDecorator(IImageButtonFamilly imageButtonFamilly) {
             super(imageButtonFamilly);

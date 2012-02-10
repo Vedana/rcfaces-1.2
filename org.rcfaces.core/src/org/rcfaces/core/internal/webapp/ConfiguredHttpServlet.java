@@ -28,43 +28,34 @@ import org.rcfaces.core.internal.util.ServletTools;
  */
 public class ConfiguredHttpServlet extends ExtendedHttpServlet {
 
-    private static final String REVISION = "$Revision$";
-
     private static final long serialVersionUID = 8336388990583712944L;
 
     private static final Log LOG = LogFactory
             .getLog(ConfiguredHttpServlet.class);
 
     public static final String USE_GZIP_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".GZIP_SUPPORT";
+            .getPackagePrefix() + ".GZIP_SUPPORT";
 
     private static final String EXPIRE_PARAMETER = Constants.getPackagePrefix()
             + ".EXPIRES";
 
     private static final String VERSIONED_EXPIRE_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".VERSIONED_EXPIRES";
+            .getPackagePrefix() + ".VERSIONED_EXPIRES";
 
     private static final String ETAG_SUPPORT_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".ETAG_SUPPORT";
+            .getPackagePrefix() + ".ETAG_SUPPORT";
 
     private static final String HASH_SUPPORT_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".HASH_SUPPORT";
+            .getPackagePrefix() + ".HASH_SUPPORT";
 
     private static final String FILTERED_LOCALES_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".FILTERED_LOCALES";
+            .getPackagePrefix() + ".FILTERED_LOCALES";
 
     private static final String DEFAULT_LOCALE_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".DEFAULT_LOCALE";
+            .getPackagePrefix() + ".DEFAULT_LOCALE";
 
     private static final String LOCALE_SUPPORT_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".LOCALE_SUPPORT";
+            .getPackagePrefix() + ".LOCALE_SUPPORT";
 
     private static final String NONE_EXPIRATION_KEYWORD = "none";
 
@@ -78,14 +69,16 @@ public class ConfiguredHttpServlet extends ExtendedHttpServlet {
 
     private ExpirationDate versionedExpirationDate;
 
-    private Set filtredLocales;
+    private Set<Locale> filtredLocales;
 
     protected boolean localeSupport;
 
-    private final Map convertedLocales = new HashMap(32);
+    private final Map<String, Locale> convertedLocales = new HashMap<String, Locale>(
+            32);
 
     private Locale defaultLocale;
 
+    @Override
     public void init(ServletConfig config) throws ServletException {
 
         super.init(config);
@@ -232,7 +225,7 @@ public class ConfiguredHttpServlet extends ExtendedHttpServlet {
 
                     StringTokenizer st = new StringTokenizer(
                             acceptedLocaleNames, ", ");
-                    filtredLocales = new HashSet(st.countTokens());
+                    filtredLocales = new HashSet<Locale>(st.countTokens());
 
                     for (; st.hasMoreTokens();) {
                         String localeName = st.nextToken();
@@ -331,7 +324,7 @@ public class ConfiguredHttpServlet extends ExtendedHttpServlet {
 
         Locale locale;
         synchronized (convertedLocales) {
-            locale = (Locale) convertedLocales.get(localeName);
+            locale = convertedLocales.get(localeName);
         }
 
         if (locale != null) {

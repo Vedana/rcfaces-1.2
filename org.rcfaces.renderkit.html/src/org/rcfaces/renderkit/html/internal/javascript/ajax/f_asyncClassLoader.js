@@ -83,13 +83,13 @@ f_classLoader.prototype.f_loadContent = function(component, htmlNode, content, p
  			}
 
 			try {
-				var asyncClassLoader=self;
-				self=null;
-				
+			var asyncClassLoader=self;
+			self=null;
+		
 				asyncClassLoader.f_processViewStates(htmlNode);
 			
 				if (processScripts!==false) {
-					asyncClassLoader.f_processScripts(component, htmlNode, scripts);
+			asyncClassLoader.f_processScripts(component, htmlNode, scripts);
 				}
 			} catch (x) {
 				f_core.Error("f_asyncClassLoader", "f_loadContent.timeout: process script exceptions", x);
@@ -114,7 +114,7 @@ f_classLoader.prototype.f_processViewStates = function(htmlNode) {
 		if (input._viewState) {
 			continue; // Déjà connu
 		}
-		
+
 		input._viewState=true;
 	
 		var form=f_core.GetParentForm(input);
@@ -660,3 +660,4 @@ f_classLoader.ChangeJsfViewId = function(htmlNode, newViewState) {
 		input.value=newViewState;
 	}
 };
+

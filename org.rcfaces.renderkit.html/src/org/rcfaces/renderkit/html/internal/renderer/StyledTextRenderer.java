@@ -15,7 +15,6 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  * @version $Revision$ $Date$
  */
 public class StyledTextRenderer extends TextRenderer {
-    private static final String REVISION = "$Revision$";
 
     protected boolean writeText(IHtmlWriter writer, TextComponent textComponent)
             throws WriterException {

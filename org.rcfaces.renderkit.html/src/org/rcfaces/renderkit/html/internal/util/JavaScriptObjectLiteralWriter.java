@@ -15,8 +15,6 @@ import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
  * @version $Revision$ $Date$
  */
 public class JavaScriptObjectLiteralWriter implements IObjectLiteralWriter {
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory
             .getLog(JavaScriptObjectLiteralWriter.class);
 

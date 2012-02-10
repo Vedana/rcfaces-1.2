@@ -23,7 +23,6 @@ import org.rcfaces.core.internal.util.StateHolderTools;
  * @version $Revision$ $Date$
  */
 public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(BasicPropertiesAccessor.class);
@@ -72,9 +71,10 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
                 valueBinding.setValue(context.getELContext(), value);
 
             } catch (RuntimeException ex) {
-                LOG.error("Set value '" + value + "' to '"
-                        + valueBinding.getExpressionString() + " old='" + old
-                        + "'", ex);
+                LOG.error(
+                        "Set value '" + value + "' to '"
+                                + valueBinding.getExpressionString() + " old='"
+                                + old + "'", ex);
 
                 throw ex;
             }
@@ -104,10 +104,8 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
         Object old = valueBinding.getValue(context.getELContext());
 
         if (debugEnabled) {
-            LOG
-                    .debug("Set value '" + value + "' to '"
-                            + valueBinding.getExpressionString() + " old='"
-                            + old + "'");
+            LOG.debug("Set value '" + value + "' to '"
+                    + valueBinding.getExpressionString() + " old='" + old + "'");
         }
 
         try {

@@ -25,60 +25,59 @@ import org.rcfaces.renderkit.html.internal.renderer.AbstractGridRenderer;
  * @version $Revision$ $Date$
  */
 public class AdditionalInformationService extends AbtractGridService {
-	private static final String REVISION = "$Revision$";
 
-	private static final Log LOG = LogFactory
-			.getLog(AdditionalInformationService.class);
+    private static final Log LOG = LogFactory
+            .getLog(AdditionalInformationService.class);
 
-	private static final String ADDITIONAL_INFORMATION_SERVICE_VERSION = "1.0.0";
+    private static final String ADDITIONAL_INFORMATION_SERVICE_VERSION = "1.0.0";
 
-	private static final int DEFAULT_BUFFER_SIZE = 4096;
+    private static final int DEFAULT_BUFFER_SIZE = 4096;
 
-	private void writeAdditionalInformations(FacesContext facesContext,
-			PrintWriter printWriter, IGridComponent gridComponent,
-			AbstractGridRenderer dgr, String rowValue, String rowIndex)
-			throws WriterException {
+    private void writeAdditionalInformations(FacesContext facesContext,
+            PrintWriter printWriter, IGridComponent gridComponent,
+            AbstractGridRenderer dgr, String rowValue, String rowIndex)
+            throws WriterException {
 
-		CharArrayWriter cw = null;
-		PrintWriter pw = printWriter;
-		if (LOG.isTraceEnabled()) {
-			cw = new CharArrayWriter(2000);
-			pw = new PrintWriter(cw);
-		}
+        CharArrayWriter cw = null;
+        PrintWriter pw = printWriter;
+        if (LOG.isTraceEnabled()) {
+            cw = new CharArrayWriter(2000);
+            pw = new PrintWriter(cw);
+        }
 
-		Object states[] = dgr
-				.getAdditionalInformationsRenderContextState(gridComponent);
-		if (states == null) {
-			throw new FacesException(
-					"Can not get render context state for additional informations of gridComponent='"
-							+ gridComponent + "'");
-		}
+        Object states[] = dgr
+                .getAdditionalInformationsRenderContextState(gridComponent);
+        if (states == null) {
+            throw new FacesException(
+                    "Can not get render context state for additional informations of gridComponent='"
+                            + gridComponent + "'");
+        }
 
-		IHtmlRenderContext renderContext = HtmlRenderContext
-				.restoreRenderContext(facesContext, states[0], true);
+        IHtmlRenderContext renderContext = HtmlRenderContext
+                .restoreRenderContext(facesContext, states[0], true);
 
-		renderContext.pushComponent((UIComponent) gridComponent,
-				((UIComponent) gridComponent).getClientId(facesContext));
+        renderContext.pushComponent((UIComponent) gridComponent,
+                ((UIComponent) gridComponent).getClientId(facesContext));
 
-		dgr.renderAdditionalInformation(renderContext, pw, gridComponent,
-				RESPONSE_CHARSET, rowValue, rowIndex);
+        dgr.renderAdditionalInformation(renderContext, pw, gridComponent,
+                RESPONSE_CHARSET, rowValue, rowIndex);
 
-		if (LOG.isTraceEnabled()) {
-			pw.flush();
+        if (LOG.isTraceEnabled()) {
+            pw.flush();
 
-			LOG.trace(cw.toString());
+            LOG.trace(cw.toString());
 
-			printWriter.write(cw.toCharArray());
-		}
-	}
+            printWriter.write(cw.toCharArray());
+        }
+    }
 
-	@Override
-	protected void writeElement(FacesContext facesContext,
-			PrintWriter printWriter, IGridComponent component,
-			AbstractGridRenderer gridRenderer, String rowValue, String rowIndex)
-			throws WriterException {
+    @Override
+    protected void writeElement(FacesContext facesContext,
+            PrintWriter printWriter, IGridComponent component,
+            AbstractGridRenderer gridRenderer, String rowValue, String rowIndex)
+            throws WriterException {
 
-		writeAdditionalInformations(facesContext, printWriter,
-				(IGridComponent) component, gridRenderer, rowValue, rowIndex);
-	}
+        writeAdditionalInformations(facesContext, printWriter,
+                (IGridComponent) component, gridRenderer, rowValue, rowIndex);
+    }
 }

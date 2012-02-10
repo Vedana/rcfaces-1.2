@@ -331,7 +331,10 @@ public class ItemsToolFolderComponent extends AbstractInputComponent implements
 	}
 
 	public String getDefaultItemLookId(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_ITEM_LOOK_ID, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_ITEM_LOOK_ID, facesContext);
+
+
+return s;
 	}
 
 	public void setDefaultItemLookId(String defaultItemLookId) {
@@ -351,7 +354,10 @@ public class ItemsToolFolderComponent extends AbstractInputComponent implements
 	}
 
 	public String getDefaultItemStyleClass(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_ITEM_STYLE_CLASS, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_ITEM_STYLE_CLASS, facesContext);
+
+
+return s;
 	}
 
 	public void setDefaultItemStyleClass(String defaultItemStyleClass) {

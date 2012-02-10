@@ -11,10 +11,9 @@ import org.rcfaces.core.internal.adapter.IAdapterManager;
  */
 public abstract class AdaptedDataModel extends DataModel implements IAdaptable {
 
-	@SuppressWarnings("unchecked")
-	public <T> T getAdapter(Class<T> adapter, Object parameter) {
+	public Object getAdapter(Class adapter, Object parameter) {
 		if (adapter.isAssignableFrom(getClass())) {
-			return (T) this;
+			return this;
 		}
 
 		IAdapterManager adapterManager = RcfacesContext.getCurrentInstance()

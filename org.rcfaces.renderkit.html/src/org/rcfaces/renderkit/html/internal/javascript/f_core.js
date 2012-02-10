@@ -170,6 +170,21 @@ var f_core = {
 	_UNKNOWN_BROWER: "unknown",
 
 	/**
+	 * @field public static final Number
+	 */
+	LEFT_MOUSE_BUTTON: 0,
+
+	/**
+	 * @field public static final Number
+	 */
+	MIDDLE_MOUSE_BUTTON: 1,
+
+	/**
+	 * @field public static final Number
+	 */
+	RIGHT_MOUSE_BUTTON: 2,
+	
+	/**
 	 * Numero du bouton qui déclanche les popups. (Cela dépend de l'OS !)
 	 *
 	 * @field private static final Number
@@ -268,7 +283,7 @@ var f_core = {
 	 * @field private static Number
 	 */
 	_RequestKey: 0,
-	
+		
 	/**
 	 * @field private static Number
 	 */
@@ -709,7 +724,7 @@ var f_core = {
 	 * @return void
 	 */
 	SetProfilerMode: function(profilerMode) {
-		f_core.Assert(profilerMode===undefined || typeof(profilerMode)=="function", "f_core.SetProfilerMode: Invalid profilerMode parameter ("+profilerMode+")");
+		f_core.Assert(profilerMode===undefined || profilerMode===false || typeof(profilerMode)=="function", "f_core.SetProfilerMode: Invalid profilerMode parameter ("+profilerMode+")");
 
 		if (profilerMode===false) {			
 			window.rcfacesProfilerCB=false;
@@ -1015,6 +1030,11 @@ var f_core = {
 	
 			f_core.Debug("f_core.profile", "Profiler: "+name+"  +"+diff+"ms.");
 			
+		} catch (x) {
+			f_core.Error("f_core.profile", "Profiler function throws exception", x);
+
+			throw x;
+			
 		} finally {
 			f_core._LoggingProfile=undefined;
 		}
@@ -1254,12 +1274,22 @@ var f_core = {
 				for (var i=0; i<forms.length; i++) {
 					var form = forms[i];
 					
+					try {
+						form.onsubmit=document._rcfacesDisableSubmit;
+						form.submit=document._rcfacesDisableSubmitReturnFalse;
+			
+//						form.submit = form._rcfacesOldSubmit;
+						
+					} catch (x) {
+						// Dans certaines versions de IE, il n'est pas possible de changer le submit !
+					}
+
 					if (!form._rcfacesInitialized) {
 						continue;
 					}
 					form._rcfacesInitialized=undefined;
 		
-					f_core.AddEventListener(form, "submit", document._rcfacesDisableSubmit);
+//					f_core.AddEventListener(form, "submit", document._rcfacesDisableSubmit);
 					f_core.RemoveEventListener(form, "submit", f_core._OnSubmit);
 					f_core.RemoveEventListener(form, "reset", f_core._OnReset);
 		
@@ -1270,12 +1300,6 @@ var f_core = {
 					form._serializedInputs=undefined; // Map<String, String>			
 					
 					if (form._rcfacesOldSubmit) {
-						try {
-							form.submit = form._rcfacesOldSubmit;
-							
-						} catch (x) {
-							// Dans certaines versions de IE, il n'est pas possible de changer le submit !
-						}
 						
 						form._rcfacesOldSubmit = undefined;
 					}
@@ -1473,7 +1497,7 @@ var f_core = {
 			if (comp.nodeType!=f_core.ELEMENT_NODE) {
 				break;
 			}
-			
+		
 			var state= f_classLoader.GetObjectState(comp);
 			
 			if (state==f_classLoader.UNKNOWN_STATE) { // Unknown
@@ -1482,7 +1506,7 @@ var f_core = {
 			if (state==f_classLoader.INITIALIZED_STATE) { // Already initialized
 				return comp;
 			}
-		
+			
 			// We must initialize it !
 
 			var win=f_core.GetWindow(source);
@@ -1870,26 +1894,26 @@ var f_core = {
 				f_core.Profile(null, "f_core.SubmitEvent.serialized");
 			
 			}
+
+			f_core.Debug(f_core, "_OnSubmit: Preparing exit, submitting="+win._rcfacesSubmitting+" cleanUp="+win._rcfacesCleanUpOnSubmit);
+
 			if (!win._rcfacesSubmitting) {
+				win.f_event.EnterEventLock(f_event.SUBMIT_LOCK);
+
 				f_core._PerformPostSubmit(form);
 
+				f_core._DisableSubmit(form);
 				if (win._rcfacesCleanUpOnSubmit!==false) {
-					var _win=win;
-					win._rcfacesCleanUpTimeout=win.setTimeout(function () {
-						var w=_win;
-						_win=null;
-						
-						if (w.f_core && w.f_core.ExitWindow) {
-							w.f_core.ExitWindow(w, true);
-						}
-						
-					}, f_core._CLEAN_UP_ON_SUBMIT_DELAY);
-					
-					f_core.Profile(null, "f_core.SubmitEvent.setTimer("+f_core._CLEAN_UP_ON_SUBMIT_DELAY+")");
+					f_core._BatchExitWindow(win);
 				}
 			}
-				
+						
 			return true;
+					
+		} catch (ex) {
+			f_core.Error(f_core, "_OnSubmit: Throws exception", ex);
+			return false;
+				
 		} finally {
 			f_core.Profile(true, "f_core.SubmitEvent");
 		}
@@ -1913,6 +1937,8 @@ var f_core = {
 		f_core.Assert(modal===undefined || modal===null || typeof(modal)=="boolean", "f_core._Submit: modal parameter must be undefined or a boolean.");
 
 		f_core.Profile(false, "f_core._submit("+url+")");
+
+		f_core.Debug(f_core, "_Submit: submit form='"+form+"' elt='"+elt+"' event='"+event+"' url='"+url+"' closeWindow="+closeWindow+" modal="+modal);
 
 		try {
 			// Check if we get called from the form itself and use it if none specified
@@ -1971,12 +1997,16 @@ var f_core = {
 			// Double check this is a real FORM
 			f_core.Assert((form.tagName.toLowerCase()=="form"),"f_core._Submit: Invalid form '"+form.tagName+"'.");
 	
+			f_core.Debug(f_core, "_Submit: call onsubmit !");
+	
 			// Call onsubmit hook
 			try {
 				win._rcfacesSubmitting=true;
 				
 				var ret = f_core._OnSubmit.call(form, jsEvt);
 				if (!ret) {
+					
+					f_core.Debug(f_core, "_Submit: call onsubmit returns "+ret);
 					return ret;
 				}
 				
@@ -1986,6 +2016,8 @@ var f_core = {
 
 			f_core.Profile(null, "f_core._submit.called");
 			
+			f_core.Debug(f_core, "_Submit: serialize elements ...");
+
 			// Serialize element if found
 			var id=null;
 			if (elt) {
@@ -2054,6 +2086,8 @@ var f_core = {
 				form.target=form._rcfacesOldTarget;
 			}
 	
+			f_core.Debug(f_core, "_Submit: Enter SUBMIT_LOCK stage ..");
+	
 			win.f_event.EnterEventLock(f_event.SUBMIT_LOCK);
 			var unlockEvents=false;
 			try {
@@ -2078,6 +2112,8 @@ var f_core = {
 	
 				f_core.Profile(null, "f_core._submit.postSubmit");
 		
+				f_core.Debug(f_core, "_Submit: Return from native call.  closeWindow="+closeWindow+" createWindowParameters="+createWindowParameters);
+
 				if (closeWindow) {
 					win._rcfacesCloseWindow=true;
 					return true;
@@ -2087,19 +2123,13 @@ var f_core = {
 					unlockEvents=true;
 
 				} else {
+					f_core.Debug(f_core, "_Submit: Perform post submit  cleanUp="+win._rcfacesCleanUpOnSubmit);
+
 					f_core._PerformPostSubmit(form);
 								
+					f_core._DisableSubmit(form);
 					if (win._rcfacesCleanUpOnSubmit!==false) {
-						var _win=win;
-						win._rcfacesCleanUpTimeout=win.setTimeout(function () {
-							var w=_win;
-							_win=null;
-							
-							if (w.f_core && w.f_core.ExitWindow) {
-								w.f_core.ExitWindow(w, true);
-							}
-							
-						}, f_core._CLEAN_UP_ON_SUBMIT_DELAY);
+						f_core._BatchExitWindow(win);
 					}
 				}
 								
@@ -2107,6 +2137,8 @@ var f_core = {
 				// Dans le cas d'une exception, on libere les evenements, mais on renvoie l'exception ...
 				unlockEvents=true;
 				
+				f_core.Error(f_core, "_Submit: throws exception", ex);
+
 				throw ex;
 			
 			} finally {
@@ -2117,15 +2149,77 @@ var f_core = {
 		//				dlg.focus();
 		//			}
 					
+					f_core.Debug(f_core, "_Submit: Exit SUBMIT_LOCK stage ..");
+
 					win.f_event.ExitEventLock(f_event.SUBMIT_LOCK);
 				}
 			}
+
+			f_core.Info(f_core, "_Submit: exit function");
 
 			return true;
 			
 		} finally {		
 			f_core.Profile(true, "f_core._submit("+url+")");
 		}
+	},
+	/**
+	 * @method private static
+	 * @param HTMLFormElement form
+	 * @return void
+	 */
+	_DisableSubmit: function(form) {
+		f_core.Debug(f_core, "_DisableSubmit: disable forms");
+
+		var doc=form.ownerDocument;
+		var forms = doc.forms;
+		for (var i=0; i<forms.length; i++) {
+			var form=forms[i];
+			try {
+				form.action="#";
+				
+				form.onsubmit=document._rcfacesDisableSubmit;
+				form.submit=document._rcfacesDisableSubmitReturnFalse;
+
+				f_core.Debug(f_core, "_DisableSubmit: disable form "+form);
+				
+				var elts=form.getElementsByTagName("input");
+				for(var j=0;j<elts.length;j++) {
+					var e=elts[j];
+					var type=e.type;
+					if (!type || type.toLowerCase()!="hidden") {
+						continue;
+					}
+					
+					e.parentNode.removeChild(e);
+				}
+
+			} catch (x) {
+				// Dans certaines versions de IE, il n'est pas possible de changer le submit !
+			}
+		}
+	},
+	
+	/**
+	 * @method private static
+	 * @param Window win
+	 * @return void
+	 */
+	_BatchExitWindow: function(win) {
+		f_core.Debug(f_core, "_BatchExitWindow: batch Exit window to "+f_core._CLEAN_UP_ON_SUBMIT_DELAY+"ms");
+
+		var _win=win;
+		win._rcfacesCleanUpTimeout=win.setTimeout(function () {
+			var w=_win;
+			_win=null;
+			
+			if (w.f_core && w.f_core.ExitWindow) {
+				w.f_core.ExitWindow(w, true);
+			}
+			
+		}, f_core._CLEAN_UP_ON_SUBMIT_DELAY);		
+		
+		f_core.Profile(null, "f_core.SubmitEvent.setTimer("+f_core._CLEAN_UP_ON_SUBMIT_DELAY+")");
 	},
 	/**
 	 * @method private static
@@ -2666,9 +2760,9 @@ var f_core = {
 			checkListeners=new Array;
 			form._checkListeners=checkListeners;
 		}
-
+		
 		if (!component.id) {
-			component.id=f_core._AllocateAnoIdentifier();
+			component.id=f_core.AllocateAnoIdentifier();
 		}
 		
 		if (first) {
@@ -2716,11 +2810,7 @@ var f_core = {
 			form._resetListeners=resetListeners;
 		}
 		
-		if (!component.id) {
-			component.id=f_core._AllocateAnoIdentifier();
-		}
-		
-		resetListeners.f_addElement(component.id, callback);
+		resetListeners.f_addElement(callback);
 	},
 	/**
 	 * @method public static hidden
@@ -2736,10 +2826,7 @@ var f_core = {
 		if (!resetListeners) {
 			return false;
 		}	
-				
-		if (!component.id) {
-			return false;
-		}
+		
 		
 		var idx=resetListeners.indexOf(component.id);
 		if (idx<0) {
@@ -3854,10 +3941,10 @@ var f_core = {
 		}else {
 			evt.returnValue = false;	
 		}
-
+		
 		f_core.Debug(f_core, "CancelJsEvent: Cancel event type='"
 				+ evt.type + "' event='" + evt + "'.");
-		
+
 		return false;
 	},
 	/**
@@ -4575,7 +4662,7 @@ var f_core = {
 		}
 
 		if (!component.id) {
-			component.id=f_core._AllocateAnoIdentifier();
+			component.id=f_core.AllocateAnoIdentifier();
 		}
 		
 		handlers.push(component.id, listener);
@@ -4608,7 +4695,7 @@ var f_core = {
 	 * @method hidden static
 	 * @return String
 	 */
-	_AllocateAnoIdentifier: function() {
+	AllocateAnoIdentifier: function() {
 		return "__rcfaces_ano_"+(f_core._AnoIdentifier++);
 	},
 	/**
@@ -5227,18 +5314,36 @@ var f_core = {
 	 */
 	GetEvtButton: function(evt) {
 		if (!evt) {
-			return 0;
+			return -1;
 		}
 		
-		if (evt.button!==undefined) {
-			return evt.button;
+		var button=evt.button;
+		if (button == null) {
+	       /* IE case SAUF IE9*/
+			var which = evt.which;
+			if (which & 0x01) {
+				return f_core.LEFT_MOUSE_BUTTON;
+			}
+			if (which & 0x02) {
+				return f_core.RIGHT_MOUSE_BUTTON;
+			}
+			if (which & 0x04) {
+				return f_core.MIDDLE_MOUSE_BUTTON;
+			}
+		
+			return -1;
+		}
+
+		switch(button) {
+		case 0:
+			return f_core.LEFT_MOUSE_BUTTON;
+		case 1:
+			return f_core.MIDDLE_MOUSE_BUTTON;
+		case 2:
+			return f_core.RIGHT_MOUSE_BUTTON;
 		}
 		
-		if (evt.which!==undefined) {
-			return evt.which;
-		}
-		
-		return 0;
+		return -1;
 	},
 	/**
 	 * Returns an effect specified by its name.
@@ -6553,9 +6658,17 @@ var f_core = {
 	}
 };
 
+/**
+ * @method private static
+ * @param optional Event event
+ * @return Boolean
+ */
 document._rcfacesDisableSubmit=function(event) {
 	if (!event) {
 		event=this.ownerDocument.parentWindow.event;
+		if (!event) {
+			return;
+		}
 	}
 
 	event.cancelBubble = true;
@@ -6571,6 +6684,13 @@ document._rcfacesDisableSubmit=function(event) {
 	
 };
 
+/**
+ * @method private static
+ * @return Boolean
+ */
+document._rcfacesDisableSubmitReturnFalse=function() {
+	return false;
+};
 
 f_core._InitLibrary(window);
 

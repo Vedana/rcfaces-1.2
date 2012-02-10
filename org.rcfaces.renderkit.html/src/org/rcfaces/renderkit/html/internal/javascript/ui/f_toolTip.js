@@ -117,7 +117,7 @@ var __members = {
 	 */
 	f_getToolTipId: function() {
 		if (this._toolTipId === undefined) {
-			this._toolTipId = f_core.GetAttributeNS(this, "toolTipId", null);
+			this._toolTipId = f_core.GetAttribute(this, "v:toolTipId", null);
 		}
 
 		return this._toolTipId;
@@ -192,7 +192,7 @@ var __members = {
 		}
 
 		var ref = null;
-		var position = f_core.GetNumberAttributeNS(this, "position", undefined);
+		var position = f_core.GetNumberAttribute(this, "v:position", undefined);
 		if (position === undefined) {
 			ref = (this._elementItem) ? this._elementItem
 					: this._elementContainer;
@@ -228,7 +228,7 @@ var __members = {
 		if (this.f_isContentSpecified()) {
 			this._interactive=false;
 		}
-
+		
 		this.f_setVisible(true);
 
 		return true;

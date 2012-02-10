@@ -94,7 +94,7 @@ import org.rcfaces.renderkit.html.internal.renderer.ToolBarRenderer;
  * @version $Revision$ $Date$
  */
 public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
-
+ 
     private static final Log LOG = LogFactory
             .getLog(ItemsToolFolderDecorator.class);
 
@@ -1110,11 +1110,5 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
     public ItemsMenuDecorator peekMenuDecorator() {
         return (ItemsMenuDecorator) menuDecoratorStack.get(menuDecoratorStack
                 .size() - 1);
-    }
-
-    public void declare(INamespaceConfiguration nameSpaceProperties) {
-        super.declare(nameSpaceProperties);
-
-        nameSpaceProperties.addAttributes(null, new String[] { "separator" });
     }
 }

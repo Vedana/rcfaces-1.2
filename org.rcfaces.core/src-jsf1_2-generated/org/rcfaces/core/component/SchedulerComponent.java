@@ -607,7 +607,10 @@ public class SchedulerComponent extends CameliaBaseComponent implements
 	}
 
 	public String getPeriodLabel(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.PERIOD_LABEL, facesContext);
+		String s = engine.getStringProperty(Properties.PERIOD_LABEL, facesContext);
+
+
+return s;
 	}
 
 	public void setPeriodLabel(String periodLabel) {
@@ -627,7 +630,10 @@ public class SchedulerComponent extends CameliaBaseComponent implements
 	}
 
 	public String getPeriodStyle(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.PERIOD_STYLE, facesContext);
+		String s = engine.getStringProperty(Properties.PERIOD_STYLE, facesContext);
+
+
+return s;
 	}
 
 	public void setPeriodStyle(String periodStyle) {
@@ -667,7 +673,10 @@ public class SchedulerComponent extends CameliaBaseComponent implements
 	}
 
 	public String getPeriodToolTip(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.PERIOD_TOOL_TIP, facesContext);
+		String s = engine.getStringProperty(Properties.PERIOD_TOOL_TIP, facesContext);
+
+
+return s;
 	}
 
 	public void setPeriodToolTip(String periodToolTip) {
@@ -687,7 +696,10 @@ public class SchedulerComponent extends CameliaBaseComponent implements
 	}
 
 	public String getPeriodValue(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.PERIOD_VALUE, facesContext);
+		String s = engine.getStringProperty(Properties.PERIOD_VALUE, facesContext);
+
+
+return s;
 	}
 
 	public void setPeriodValue(String periodValue) {
@@ -707,7 +719,10 @@ public class SchedulerComponent extends CameliaBaseComponent implements
 	}
 
 	public String getPeriodType(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.PERIOD_TYPE, facesContext);
+		String s = engine.getStringProperty(Properties.PERIOD_TYPE, facesContext);
+
+
+return s;
 	}
 
 	public void setPeriodType(String periodType) {
@@ -727,7 +742,10 @@ public class SchedulerComponent extends CameliaBaseComponent implements
 	}
 
 	public String getVar(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.VAR, facesContext);
+		String s = engine.getStringProperty(Properties.VAR, facesContext);
+
+
+return s;
 	}
 
 	public void setVar(String var) {

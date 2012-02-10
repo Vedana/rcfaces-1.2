@@ -36,7 +36,10 @@ public class TextEditorToolFolderComponent extends ToolFolderComponent implement
 	}
 
 	public String getItemTypes(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ITEM_TYPES, facesContext);
+		String s = engine.getStringProperty(Properties.ITEM_TYPES, facesContext);
+
+
+return s;
 	}
 
 	public void setItemTypes(String itemTypes) {
@@ -56,7 +59,10 @@ public class TextEditorToolFolderComponent extends ToolFolderComponent implement
 	}
 
 	public String getFontSizes(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FONT_SIZES, facesContext);
+		String s = engine.getStringProperty(Properties.FONT_SIZES, facesContext);
+
+
+return s;
 	}
 
 	public void setFontSizes(String fontSizes) {
@@ -76,7 +82,10 @@ public class TextEditorToolFolderComponent extends ToolFolderComponent implement
 	}
 
 	public String getFontNames(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FONT_NAMES, facesContext);
+		String s = engine.getStringProperty(Properties.FONT_NAMES, facesContext);
+
+
+return s;
 	}
 
 	public void setFontNames(String fontNames) {
@@ -96,7 +105,10 @@ public class TextEditorToolFolderComponent extends ToolFolderComponent implement
 	}
 
 	public String getFor(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FOR, facesContext);
+		String s = engine.getStringProperty(Properties.FOR, facesContext);
+
+
+return s;
 	}
 
 	public void setFor(String forVal) {

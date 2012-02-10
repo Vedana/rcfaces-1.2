@@ -227,7 +227,10 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 	 * @return variable name
 	 */
 	public String getRowCountVar(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ROW_COUNT_VAR, facesContext);
+		String s = engine.getStringProperty(Properties.ROW_COUNT_VAR, facesContext);
+
+
+return s;
 	}
 
 	/**
@@ -263,7 +266,10 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 	 * @return variable name
 	 */
 	public String getRowIndexVar(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ROW_INDEX_VAR, facesContext);
+		String s = engine.getStringProperty(Properties.ROW_INDEX_VAR, facesContext);
+
+
+return s;
 	}
 
 	/**
@@ -335,7 +341,10 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 	 * @return list of CSS style classes
 	 */
 	public String getRowStyleClass(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ROW_STYLE_CLASS, facesContext);
+		String s = engine.getStringProperty(Properties.ROW_STYLE_CLASS, facesContext);
+
+
+return s;
 	}
 
 	/**
@@ -371,7 +380,10 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 	 * @return list of CSS style classes
 	 */
 	public String getColumnStyleClass(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.COLUMN_STYLE_CLASS, facesContext);
+		String s = engine.getStringProperty(Properties.COLUMN_STYLE_CLASS, facesContext);
+
+
+return s;
 	}
 
 	/**

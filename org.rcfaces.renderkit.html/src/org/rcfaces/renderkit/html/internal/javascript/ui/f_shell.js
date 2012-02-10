@@ -213,10 +213,9 @@ var __statics = {
 	 * @field public static final Number
 	 */
 	DESTROYED_STATUS: 0x31
-}
+};
 
 var __members = {
-
 
 	/**
 	 * @field private String
@@ -265,7 +264,7 @@ var __members = {
 	_showNextShell: true,
 
 	/**
-	 * @field private 
+	 * @field private any
 	 */
 	_returnValue: undefined,
 	
@@ -599,7 +598,7 @@ var __members = {
 
 	/**
 	 * @method public
-	 * @param Function returnValueFunction
+	 * @param optional Function returnValueFunction
 	 * @return void
 	 */
 	f_open: function(returnValueFunction) {
@@ -615,7 +614,7 @@ var __members = {
 
 	/**
 	 * @method public
-	 * @param optional Function returnValue
+	 * @param optional any returnValue
 	 * @return void
 	 */
 	f_close: function(returnValue) {
@@ -821,6 +820,22 @@ var __members = {
 		this._shellDecoratorName = shellDecoratorName;
 		
 	},
+	/**
+	 * @method public
+	 * @param String id Identifier of component.
+	 * @return HTMLElement
+	 */
+	f_findComponent: function(id) {
+		return fa_namingContainer.FindComponents(this, arguments);
+	},
+	/**
+	 * @method public
+	 * @param String id Identifier of component.
+	 * @return HTMLElement
+	 */
+	f_findSiblingComponent: function(id) {
+		return fa_namingContainer.FindSiblingComponents(this, arguments);
+	},
 	
 	/**
 	 * @method public
@@ -829,7 +844,7 @@ var __members = {
 	_toString: function() {
 		return "[f_shell id="+this._id+" styleClass='"+this._styleClass+"']";
 	}
-}
+};
 
 new f_class("f_shell", {
 	extend: f_object,

@@ -181,18 +181,43 @@ var __statics = {
 		return (text1 > text2)? 1:-1;
 	},
 	/**
+	 * @method private static
+	 * @param String text
+	 * @return String
+	 */
+	_NormalizeInteger: function(text) {
+		return text.replace(/[^\d]/g, '');
+	},
+	/**
 	 * @method hidden static
 	 * @param String text1
 	 * @param String text2
 	 * @return Number
 	 */
 	Sort_Integer: function(text1, text2) {
-		var val1 = parseInt(text1, 10);
-		var val2 = parseInt(text2, 10);
+		var t1=f_dataGrid._NormalizeInteger(text1);
+		var t2=f_dataGrid._NormalizeInteger(text2);
+
+		var val1 = parseInt(t1, 10);
+		var val2 = parseInt(t2, 10);
 		if (val1 == val2) {
 			return 0;
 		}
 		return (val1 > val2)? 1:-1;
+	},
+	/**
+	 * @method private static
+	 * @param String text
+	 * @return String
+	 */
+	_NormalizeNumber: function(text) {
+		if (text.indexOf('.')>=0) {
+			return text.replace(/[^\d\.]/g, '');
+		}
+
+		text=text.replace(/[^\d\,]/g,'').replace(',', '.');
+		
+		return text;
 	},
 	/**
 	 * @method hidden static
@@ -201,8 +226,11 @@ var __statics = {
 	 * @return Number
 	 */
 	Sort_Number: function(text1, text2) {
-		var val1 = parseFloat(text1);
-		var val2 = parseFloat(text2);
+		var t1=f_dataGrid._NormalizeNumber(text1);
+		var t2=f_dataGrid._NormalizeNumber(text2);
+		
+		var val1 = parseFloat(t1);
+		var val2 = parseFloat(t2);
 		if (val1 == val2) {
 			return 0;
 		}
@@ -266,7 +294,7 @@ var __statics = {
 				
 		return 0;
 	}
-}
+};
  
 var __members = {
 	
@@ -285,7 +313,7 @@ var __members = {
 		this._serviceGridId=this.id;
 		this._keyRowSearch=true;
 		this._countToken =0;
-		this._cellWrap=f_core.GetAttribute(this, "v:cellTextWrap", false);
+		this._cellWrap=f_core.GetAttributeNS(this,"cellTextWrap", false);
 		//this._noCellWrap=false;
 
 		if (!!this._cellWrap) {
@@ -695,7 +723,7 @@ var __members = {
 						td._toolTipId=col._toolTipId;
 						td._toolTipContent=col._toolTipContent;
 					}
-					
+
 					var labelComponent=doc.createElement("label");
 					row._label=labelComponent;
 					if (!cellText) {
@@ -792,7 +820,7 @@ var __members = {
 		if (ret<1) {
 			return 0;
 		}
-		
+
 		this.f_getClass().f_getClassLoader().f_completeGarbageObjects();
 
 		this.f_performPagedComponentInitialized();
@@ -976,8 +1004,9 @@ var __members = {
 			selection=0;
 		}		
 		
+		var params;
 		if (params === undefined){
-			var params=new Object;
+			params=new Object;
 		}
 		
 		params.gridId=this._serviceGridId;		
@@ -1534,8 +1563,8 @@ var __members = {
 		var images=row._cellImages;
 
 		var callUpdate=false;
-		var argIdx=0;
 		
+		var argIdx=0;
 		for(var i=0;i<cols.length;i++) {
 			var col=cols[i];
 			if (!col._visibility) {
@@ -1545,7 +1574,7 @@ var __members = {
 			var td=tds[argIdx++];
 			
 			var properties=configs[i];
-			if (!properties) {	
+			if (!properties) {
 				continue;
 			}
 			
@@ -1560,7 +1589,7 @@ var __members = {
 			
 			var toolTipText=properties._toolTipText;
 			if (toolTipText) {
-				td.title=toolTipText;
+				td.title=toolTipText;				
 				
 			} else {
 				var toolTipId = properties._toolTipId;  
@@ -1583,7 +1612,7 @@ var __members = {
 					f_imageRepository.PrepareImage(imageURL);
 				}				
 				
-				var imageTag=images[argIdx];
+				var imageTag=images[argIdx-1];
 				
 				if (f_grid.USE_BACKGROUND_IMAGE) {
 					if (imageURL) {
@@ -1859,11 +1888,9 @@ var __members = {
 	 * @method public
 	 */
 	f_checkAllPage: function() {
-	
 		if (!this._checkable) {
 			return;
 		}
-		
 		var elts = this.fa_listVisibleElements();
 		for(var i=0;i<elts.length;i++) {
 			var element=elts[i];
@@ -1987,7 +2014,7 @@ var __members = {
 		 				
 		 			} catch (x) {
 		 				
-		 			}	 				
+	}
 					if (dataGrid.f_processNextCommand()) {
 						return;
 					}
@@ -2045,7 +2072,7 @@ var __members = {
 								dataGrid.f_removePagedWait();
 							}
 						}
-												
+						
 						try {
 							f_core.WindowScopeEval(ret);
 							
@@ -2074,7 +2101,6 @@ var __members = {
 		});
 		
 	},
-	
 	/**
 	 * @method protected 
 	 * @param Array criteriaSelected  Sous la forme  [{ id: "idColonne", values: [ val1, val2 ] }, {...} ] 
@@ -2095,7 +2121,7 @@ var __members = {
 		this.f_refreshContent(true);
 		
 	},
-	
+			
 	fa_getColumnCriteriaCardinality: function (columnId) {
 		f_core.Assert(typeof(columnId)=="string" || typeof(columnId)=="object", "f_dataGrid.fa_getColumnCriteriaCardinality: Invalid columnId parameter ! ("+columnId+")");
 
@@ -2166,7 +2192,8 @@ var __members = {
 		
 		return this.f_getColumnName(column);
 	}
-		
+	
+	
 };
 
 new f_class("f_dataGrid", {

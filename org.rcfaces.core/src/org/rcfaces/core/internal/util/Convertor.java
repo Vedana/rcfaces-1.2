@@ -381,9 +381,8 @@ public final class Convertor {
             try {
                 toConvert = dateFormat.parse((String) toConvert);
                 if (logConvertor) {
-                    log(
-                            "Camelia.Convertor:CONVERT '" + d + "' => "
-                                    + toConvert, null);
+                    log("Camelia.Convertor:CONVERT '" + d + "' => " + toConvert,
+                            null);
                 }
 
                 return toConvert;

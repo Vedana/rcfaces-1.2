@@ -79,7 +79,6 @@ var __members = {
 		if (window._rcfacesExiting) {
 			return;
 		}
-		
 		var component = this;
 		var url=f_env.GetViewURI();
 		var request=new f_httpRequest(component, url, f_httpRequest.TEXT_HTML_MIME_TYPE);
@@ -91,16 +90,16 @@ var __members = {
 		
 		var self=this;
 		request.f_setListener({
-	 		onInit: function(request) {	 			
+	 		onInit: function(request) {
 	 			self.f_asyncShowWaiting();
 	 		},
 			/* *
 			 * @method public
 			 */
 	 		onError: function(request, status, text) {
-	 			
+				
 				f_core.Info(fa_asyncRender, "f_prepare.onError: Bad status: "+status);
-
+				
 				self.f_asyncHideWaiting(true);
 				
 				self.f_performAsyncErrorEvent(request, f_error.HTTP_ERROR, text);
@@ -125,7 +124,7 @@ var __members = {
 				try {
 					self.f_asyncHideWaiting(true);
 					self.f_asyncDestroyWaiting();
-					
+
 					if (request.f_getStatus()!=f_httpRequest.OK_STATUS) {
 						self.f_performAsyncErrorEvent(request, f_error.INVALID_RESPONSE_ASYNC_RENDER_ERROR, "Bad http response status ! ("+request.f_getStatusText()+")");
 						return;
@@ -151,14 +150,14 @@ var __members = {
 					if (responseContentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)>=0) {
 			 			self.f_asyncHideWaiting();
 
-			 			try {
+						try {
 							f_core.WindowScopeEval(ret);
 							
 						} catch (x) {
 							self.f_performAsyncErrorEvent(x, f_error.RESPONSE_EVALUATION_ASYNC_RENDER_ERROR, "Evaluation exception");
 						}
 						
-						self.fa_contentLoaded(ret, responseContentType, parent);
+						component.fa_contentLoaded(ret, responseContentType, parent);
 						return;
 					}
 					
@@ -168,6 +167,7 @@ var __members = {
 							self._asyncSetContent(ret);
 							
 							self.fa_contentLoaded(ret, responseContentType, parent);
+							
 						} catch (x) {
 							self.f_performAsyncErrorEvent(x, f_error.RESPONSE_EVALUATION_ASYNC_RENDER_ERROR, "Evaluation exception");
 						}
@@ -178,7 +178,7 @@ var __members = {
 					
 				} finally {				
 				}
-	 		}			
+			}
 		});
 
 		component._intLoading=true;
@@ -265,7 +265,7 @@ var __members = {
 			
 			if (immediate) {
 				waiting.f_close();
-				
+		
 			}
 		}
 	},

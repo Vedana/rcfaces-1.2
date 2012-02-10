@@ -18,13 +18,13 @@ import org.rcfaces.core.internal.util.ComponentIterators;
  * @version $Revision$ $Date$
  */
 public class ParameterTools {
-    private static final String REVISION = "$Revision$";
 
     private static final IParameterIterator EMPTY_PARAMETER_ITERATOR = new ParameterListIterator(
-            Collections.EMPTY_LIST);
+            Collections.<UIParameter> emptyList());
 
     public static IParameterIterator listParameters(UIComponent component) {
-        List list = ComponentIterators.list(component, UIParameter.class);
+        List<UIParameter> list = ComponentIterators.list(component,
+                UIParameter.class);
         if (list.isEmpty()) {
             return EMPTY_PARAMETER_ITERATOR;
         }
@@ -38,16 +38,15 @@ public class ParameterTools {
      * @version $Revision$ $Date$
      */
     private static final class ParameterListIterator extends
-            ComponentIterators.ComponentListIterator implements
+            ComponentIterators.ComponentListIterator<UIParameter> implements
             IParameterIterator {
-        private static final String REVISION = "$Revision$";
 
-        public ParameterListIterator(List list) {
+        public ParameterListIterator(List<UIParameter> list) {
             super(list);
         }
 
         public final UIParameter next() {
-            return (UIParameter) nextComponent();
+            return nextComponent();
         }
 
         public UIParameter[] toArray() {

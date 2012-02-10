@@ -46,7 +46,6 @@ import org.rcfaces.renderkit.html.internal.service.ComponentsListService;
  * @version $Revision$ $Date$
  */
 public class ComponentsListRenderer extends AbstractCssRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(ComponentsListRenderer.class);

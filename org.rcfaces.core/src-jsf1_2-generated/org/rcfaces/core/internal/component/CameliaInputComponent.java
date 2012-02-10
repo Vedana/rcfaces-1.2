@@ -566,6 +566,9 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
         }
     }
 
+	public void settedPhase(FacesContext facesContext) {
+	}
+
     public void decodePhase(FacesContext facesContext) {
     }
 

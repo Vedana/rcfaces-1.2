@@ -289,7 +289,6 @@ public final class GridServerSort {
      */
     private static class SortLong extends AbstractSortMethod {
 
-
         public Object convertValue(FacesContext facesContext,
                 UIComponent component, Object value) {
             if (value == null) {

@@ -946,6 +946,6 @@ var __members = {
 			}
 		}
 	}
-}
+};
 
 __statics._DeclarePrototypeClass(window._rcfacesClassLoader, "f_class", __statics, __members, __statics._CreateConstructor);

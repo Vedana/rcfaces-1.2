@@ -20,7 +20,6 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  * @version $Revision$ $Date$
  */
 public class CriteriaListRenderer extends AbstractCssRenderer {
-	private static final String REVISION = "$Revision$";
 
 	protected String getJavaScriptClassName() {
 		return JavaScriptClasses.CRITERIA_LIST;

@@ -18,39 +18,40 @@ import org.rcfaces.core.internal.util.ComponentIterators;
  */
 public class ToolTipTools extends CollectionTools {
 
-	private static final IToolTipIterator EMPTY_TOOLTIP_ITERATOR = new ToolTipListIterator(
-			Collections.EMPTY_LIST);
+    private static final Log LOG = LogFactory.getLog(ToolTipTools.class);
 
-	private static final Log LOG = LogFactory.getLog(ToolTipTools.class);
+    private static final IToolTipIterator EMPTY_TOOLTIP_ITERATOR = new ToolTipListIterator(
+            Collections.<ToolTipComponent> emptyList());
 
-	public static IToolTipIterator listToolTips(UIComponent component) {
-		List list = ComponentIterators.list(component, ToolTipComponent.class);
-		if (list.isEmpty()) {
-			return EMPTY_TOOLTIP_ITERATOR;
-		}
+    public static IToolTipIterator listToolTips(UIComponent component) {
+        List<ToolTipComponent> list = ComponentIterators.list(component,
+                ToolTipComponent.class);
+        if (list.isEmpty()) {
+            return EMPTY_TOOLTIP_ITERATOR;
+        }
 
-		return new ToolTipListIterator(list);
-	}
+        return new ToolTipListIterator(list);
+    }
 
-	/**
-	 * 
-	 * @author Olivier Oeuillot (latest modification by $Author$)
-	 * @version $Revision$ $Date$
-	 */
-	private static final class ToolTipListIterator extends
-			ComponentIterators.ComponentListIterator implements
-			IToolTipIterator {
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    private static final class ToolTipListIterator extends
+            ComponentIterators.ComponentListIterator<ToolTipComponent>
+            implements IToolTipIterator {
 
-		protected ToolTipListIterator(List list) {
-			super(list);
-		}
+        protected ToolTipListIterator(List<ToolTipComponent> list) {
+            super(list);
+        }
 
-		public final ToolTipComponent next() {
-			return (ToolTipComponent) nextComponent();
-		}
+        public final ToolTipComponent next() {
+            return nextComponent();
+        }
 
-		public ToolTipComponent[] toArray() {
-			return (ToolTipComponent[]) toArray(new ToolTipComponent[count()]);
-		}
-	}
+        public ToolTipComponent[] toArray() {
+            return (ToolTipComponent[]) toArray(new ToolTipComponent[count()]);
+        }
+    }
 }

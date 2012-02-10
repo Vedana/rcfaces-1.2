@@ -30,7 +30,8 @@ var __statics = {
 		
 		return true;
 	}
-}
+};
+
 var __members = {
 /*
 	f_messages: function() {
@@ -151,6 +152,6 @@ var __members = {
 			f_core.AppendChild(this, tbody);
 		}
 	}
-}
+};
 
 new f_class("f_messages", null, __statics, __members, f_component, fa_messageText);

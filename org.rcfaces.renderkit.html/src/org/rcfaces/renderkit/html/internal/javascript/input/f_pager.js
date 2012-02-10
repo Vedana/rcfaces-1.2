@@ -259,7 +259,7 @@ var __members = {
 	f_pager: function() {
 		this.f_super(arguments);
 		
-		this._for=f_core.GetAttribute(this, "v:for");
+		this._for=f_core.GetAttributeNS(this,"for");
 		
 		this._readAttributes();
 		
@@ -336,6 +336,21 @@ var __members = {
 			noPagedMessage=resourceBundle.f_get("NO_PAGED_MESSAGE");			
 		}
 		this._noPagedMessage=noPagedMessage;
+		
+/*
+ * f_core.Debug(f_pager, "Message='"+this._message+"'"); f_core.Debug(f_pager,
+ * "ZeroMessage='"+this._zeroMessage+"'"); f_core.Debug(f_pager,
+ * "OneMessage='"+this._oneMessage+"'"); f_core.Debug(f_pager,
+ * "ManyMessage='"+this._manyMessage+"'"); f_core.Debug(f_pager,
+ * "NoPagedMessage='"+this._noPagedMessage+"'"); f_core.Debug(f_pager,
+ * "ManyMessage2='"+this._manyMessage2+"'");
+ */
+		if (this._for) {
+			fa_pagedComponent.RegisterPager(this._for, this);
+
+		} else  {
+			f_core.Error(f_pager, "f_pager: 'for' attribute is not defined !");
+		}
 	},
 	_destroyButtons: function() {
 		var buttons=this._buttons;
@@ -495,7 +510,7 @@ var __members = {
 				this._processToken(fragment, varName, parameters, target);
 						
 				continue;	
-			}
+						}
 						
 			if (c=="\'") {
 					if (!span) {
@@ -569,7 +584,7 @@ var __members = {
 		case "bnext":		
 			this.f_appendNextButton(fragment, "next", parameters);
 			break;
-		
+			
 		case "blast":
 			this.f_appendLastButton(fragment, "last", parameters);
 			break;
@@ -580,7 +595,7 @@ var __members = {
 
 		default:
 			f_core.Error(f_pager, "Unknown pager message button '"+varName+"'.");
-			}
+		}
 	},
 	/**
 	 * @method private
@@ -879,11 +894,9 @@ var __members = {
 		
 	},
 	/**
-	 * @method hidden ????
-	 * Pas utilisé !
-	f_pagedComponentUpdated: function(dataComponent) {
-		this.fa_pagedComponentInitialized(dataComponent);
-	},
+	 * @method hidden ???? Pas utilisé ! f_pagedComponentUpdated:
+	 *         function(dataComponent) {
+	 *         this.fa_pagedComponentInitialized(dataComponent); },
 	 */
 	/**
 	 * @method private

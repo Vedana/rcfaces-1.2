@@ -68,7 +68,7 @@ var __statics = {
     	return true;
     }
     */
-}
+};
 
 var __members = {
 

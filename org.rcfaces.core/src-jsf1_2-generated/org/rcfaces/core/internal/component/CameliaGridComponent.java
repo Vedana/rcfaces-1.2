@@ -567,6 +567,9 @@ public abstract class CameliaGridComponent extends javax.faces.component.UICompo
         }
     }
 
+	public void settedPhase(FacesContext facesContext) {
+	}
+
     public void decodePhase(FacesContext facesContext) {
     }
 

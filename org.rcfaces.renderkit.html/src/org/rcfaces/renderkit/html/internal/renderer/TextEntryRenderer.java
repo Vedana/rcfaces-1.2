@@ -56,6 +56,7 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  * @version $Revision$ $Date$
  */
 public class TextEntryRenderer extends AbstractInputRenderer {
+    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(TextEntryRenderer.class);
 
@@ -891,7 +892,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         IClientValidatorDescriptor validatorDescriptor = clientValidationContext
                 .getClientValidatorDescriptor();
 
-        List params = new ArrayList();
+        List<String> params = new ArrayList<String>();
         IParameter cParameters[] = command.listParameters();
         IParameter vParameters[] = validatorDescriptor.listParameters();
         if ((cParameters != null && cParameters.length > 0)
@@ -904,7 +905,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
                     IParameter parameter = cParameters[i];
 
                     String name;
-                    if (i < vParameters.length) {
+                    if (vParameters != null && i < vParameters.length) {
                         name = vParameters[i].getName();
 
                     } else {

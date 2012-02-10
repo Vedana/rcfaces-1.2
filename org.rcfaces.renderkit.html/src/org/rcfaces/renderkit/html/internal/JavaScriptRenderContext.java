@@ -27,7 +27,6 @@ import org.rcfaces.renderkit.html.internal.renderer.InitRenderer;
  */
 public class JavaScriptRenderContext extends AbstractJavaScriptRenderContext {
 
-
     private static final Log LOG = LogFactory
             .getLog(JavaScriptRenderContext.class);
 
@@ -161,7 +160,7 @@ public class JavaScriptRenderContext extends AbstractJavaScriptRenderContext {
 
                 return;
             }
-
+            // TODO  A VOIR
             pushUnitializedComponent(componentRenderContext
                     .getComponentClientId());
         }

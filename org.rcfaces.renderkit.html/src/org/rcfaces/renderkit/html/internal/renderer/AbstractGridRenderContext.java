@@ -95,7 +95,6 @@ import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractGridRenderContext {
-
     private static final Log LOG = LogFactory
             .getLog(AbstractGridRenderContext.class);
 
@@ -240,6 +239,7 @@ public abstract class AbstractGridRenderContext {
     private String alertLoadingMessage = null;
 
 	private Set<ToolTipComponent> gridToolTips; // #head, #body, #row +
+												// (v:toolTipId) + #cell
 
     private AbstractGridRenderContext(IProcessContext processContext,
             IScriptRenderContext scriptRenderContext,
@@ -323,13 +323,13 @@ public abstract class AbstractGridRenderContext {
         }
 
         if (gridComponent instanceof IWheelSelectionCapability) {
-			wheelSelection = ((IWheelSelectionCapability) gridComponent)
-					.isWheelSelection();
+            wheelSelection = ((IWheelSelectionCapability) gridComponent)
+                    .isWheelSelection();
         }
 
         if (gridComponent instanceof IAlertLoadingMessageCapability) {
-			alertLoadingMessage = ((IAlertLoadingMessageCapability) gridComponent)
-					.getAlertLoadingMessage();
+            alertLoadingMessage = ((IAlertLoadingMessageCapability) gridComponent)
+                    .getAlertLoadingMessage();
         }
 
         if (gridComponent instanceof ICheckableCapability) {
@@ -543,14 +543,14 @@ public abstract class AbstractGridRenderContext {
             if (column instanceof IResizableCapability) {
                 if (((IResizableCapability) column).isResizable()) {
 
-                    if (widthNotSpecified) {
-						LOG.error("You must specify a width for a resizable column ! (#"
+                    if (false && widthNotSpecified) {
+                        LOG.error("You must specify a width for a resizable column ! (#"
                                 + i
                                 + ", columnId="
                                 + columnId
-								+ ", idw="
-								+ idw
-								+ ", dw='" + dw + "')");
+                                + ", idw="
+                                + idw
+                                + ", dw='" + dw + "')");
 
                         // Fred if dw = 0 should this be triggered ?
                         // See f_grid.js 2198
@@ -1328,4 +1328,25 @@ public abstract class AbstractGridRenderContext {
 
 	}
 
+	// Nous devons CONNAITRE en avance s'il y a des tooltips !
+	public boolean containsTooltips() {
+		if (gridComponent instanceof IToolTipComponent) {
+			if (((IToolTipComponent) gridComponent).listToolTips().hasNext()) {
+				return true;
+			}
+		}
+
+		for (IColumnIterator it = gridComponent.listColumns(); it.hasNext();) {
+			UIColumn column = it.next();
+
+			if (column instanceof IToolTipComponent) {
+				if (((IToolTipComponent) column).listToolTips().hasNext()) {
+					return true;
+				}
+			}
+
+		}
+
+		return false;
+	}
 }

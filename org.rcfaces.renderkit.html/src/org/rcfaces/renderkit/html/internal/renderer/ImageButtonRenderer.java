@@ -30,7 +30,6 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
  * @version $Revision$ $Date$
  */
 public class ImageButtonRenderer extends AbstractCssRenderer {
-
     public static final String IMAGE_BUTTON_WRITER = "camelia.writer.ImageButton";
 
     private static final String INTERNAL_VALUE_ATTRIBUTE = "camelia.internalValue";
@@ -79,6 +78,8 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
                 }
             }
         }
+
+		htmlWriter.getJavaScriptEnableMode().enableOnOver();
 
         super.encodeEnd(writer);
     }
@@ -133,7 +134,7 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
      */
     protected class ImageButtonDecorator extends
             AbstractImageButtonFamillyDecorator {
-
+ 
         public ImageButtonDecorator(IImageButtonFamilly imageButtonFamilly) {
             super(imageButtonFamilly);
         }

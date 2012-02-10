@@ -508,7 +508,7 @@ var __members = {
 		item._menu=this;
 		item.toString=function() {
 			return "[MenuItemSeparator]";
-		}
+		};
 		
 		this.f_addItem(parentItem, item);		
 		
@@ -1737,7 +1737,7 @@ var __members = {
 			f_popup.Gecko_releasePopup(popupObject);
 		}			
 		
-		var parentPopup;
+		var parentPopup=undefined;
 		var parentItem=this.f_getParentItem(menuItem);
 		if (parentItem) {		
 			parentPopup=this.f_getUIPopup(parentItem);
@@ -1808,9 +1808,9 @@ var __members = {
 	 * @return Object
 	 */
 	fa_getPopupCallbacks: f_class.ABSTRACT
-}
+};
 
 new f_aspect("fa_menuCore",
-		__statics, 
-		__members,
-		fa_groupName, fa_items, fa_aria);
+	__statics, 
+	__members,
+	fa_groupName, fa_items, fa_aria);

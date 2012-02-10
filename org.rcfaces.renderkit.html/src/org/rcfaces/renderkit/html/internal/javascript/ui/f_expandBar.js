@@ -86,7 +86,7 @@ var __statics = {
 		
 		return f_core.CancelJsEvent(evt);
 	}
-}
+};
 
 var __members = {
 	f_expandBar: function() {
@@ -137,7 +137,7 @@ var __members = {
 		if (groupName ) {	
 			this._groupName=groupName;
 		
-			this.f_addToGroup(groupName, this);
+			this.f_addToGroup(groupName, this.id);
 		}
 	
 		if (userExpandable) {
@@ -408,7 +408,7 @@ var __members = {
 		if (!set && groupName) {
 			var p=this;
 			
-			this.f_mapIntoGroup(groupName, function(item) {
+			this.f_mapIntoGroupOfComponents(groupName, function(item) {
 				if (item==p) {
 					return;
 				}
@@ -547,7 +547,8 @@ var __members = {
 		
 		return this.f_super(arguments);		
 	}
-}
+};
+
 new f_class("f_expandBar", {
 	extend: f_component,
 	aspects: [ fa_disabled, fa_readOnly, fa_collapsed, fa_groupName, fa_overStyleClass ],

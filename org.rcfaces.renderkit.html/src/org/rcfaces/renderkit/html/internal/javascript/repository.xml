@@ -292,7 +292,7 @@
 			<class name="fa_autoOpen">
 				<required-class name="f_aspect" />
 			</class>
-		</file>	
+		</file>		
 		
 		<file name="aspect/fa_toolTipContainer.js">
 			<class name="fa_toolTipContainer">
@@ -378,8 +378,11 @@
 				<required-class name="f_component" />
 			</class>
 		</file>
-		
-		
+		<file name="ui/f_heading.js">
+			<class name="f_heading">
+				<required-class name="f_text" />
+			</class>
+		</file>
 		<file name="ui/f_styledText.js">
 			<class name="f_styledText">
 				<required-class name="f_text" />
@@ -392,7 +395,7 @@
 				<required-class name="fa_message" />
 				<required-class name="fa_tabIndex"/>
 				<required-class name="fa_basicToolTipContainer"/>
-	
+
 				<required-style name="f_input.css" />
 			</class>
 		</file>
@@ -527,7 +530,7 @@
 			</class>
 		</file>
 	</module>
-	
+
 	<module id="tooltip">		
 		
 		<file name="ui/f_toolTipManager.js">
@@ -789,6 +792,7 @@
 		<file name="input/f_textEntry.js">
 			<class name="f_textEntry">
 				<required-class name="f_abstractEntry" />
+				<required-class name="fa_required"/>
 				
 				<required-class id="validator" name="f_clientValidator" />
 				<required-class id="features" name="f_clientValidator" />
@@ -1192,6 +1196,7 @@
 			<class name="f_viewDialog">
 				<required-class name="f_dialog" />
 				<required-class name="fa_immediate" />
+				<required-class name="fa_clientData" />
 			</class>
 		 </file>
 	</module>
@@ -1258,7 +1263,6 @@
 				<required-class name="fa_readOnly" />
 				<required-class name="fa_checkManager" />
 				<required-class name="fa_criteriaManager" />
-				
 
 				<required-style name="f_dataGrid.css" />
 			</class>

@@ -560,6 +560,9 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
         }
     }
 
+	public void settedPhase(FacesContext facesContext) {
+	}
+
     public void decodePhase(FacesContext facesContext) {
     }
 

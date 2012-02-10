@@ -27,7 +27,6 @@ import com.sun.facelets.tag.jsf.ComponentHandler;
  * @version $Revision$ $Date$
  */
 public class CameliaComponentHandler0 extends ComponentHandler {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(CameliaComponentHandler0.class);

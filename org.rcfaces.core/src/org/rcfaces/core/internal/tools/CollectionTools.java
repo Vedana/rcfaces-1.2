@@ -47,7 +47,8 @@ public class CollectionTools {
 
     private static final boolean SORT_INDICES = true;
 
-    private static final Map IMPLEMENTATION_TYPES = new HashMap(64);
+    private static final Map<Class< ? >, Class< ? >> IMPLEMENTATION_TYPES = new HashMap<Class< ? >, Class< ? >>(
+            64);
     static {
         IMPLEMENTATION_TYPES.put(Collection.class, ArrayList.class);
         IMPLEMENTATION_TYPES.put(List.class, ArrayList.class);
@@ -166,7 +167,7 @@ public class CollectionTools {
 
     protected static IValuesAccessor getValuesAccessor(Object values,
             Class providerClass, IValuesAccessor providerValuesAccessor,
-			boolean useValue, boolean indexSupported) {
+            boolean useValue, boolean indexSupported) {
 
         if (values == null) {
             if (useValue == false) {
@@ -203,7 +204,7 @@ public class CollectionTools {
             return MAP_VALUES_ACCESSOR;
         }
 
-		if (indexSupported && (values instanceof IIndexesModel)) {
+        if (indexSupported && (values instanceof IIndexesModel)) {
             if (useValue == false) {
                 return null;
             }
@@ -340,15 +341,15 @@ public class CollectionTools {
             return;
         }
 
-		if (component instanceof IGridComponent) {
-        List rowDatas = getRowDatas((IGridComponent) component, indices);
-        if (rowDatas.isEmpty()) {
+        if (component instanceof IGridComponent) {
+            List rowDatas = getRowDatas((IGridComponent) component, indices);
+            if (rowDatas.isEmpty()) {
+                return;
+            }
+
+            select(component, valuesAccessor, values, rowDatas);
             return;
         }
-
-        select(component, valuesAccessor, values, rowDatas);
-			return;
-		}
     }
 
     public static void select(UIComponent component,
@@ -371,16 +372,16 @@ public class CollectionTools {
             return;
         }
 
-		if (component instanceof IGridComponent) {
-        List rowDatas = getRowDatas((IGridComponent) component, start, end);
-        if (rowDatas.isEmpty()) {
+        if (component instanceof IGridComponent) {
+            List rowDatas = getRowDatas((IGridComponent) component, start, end);
+            if (rowDatas.isEmpty()) {
+                return;
+            }
+
+            select(component, valuesAccessor, values, rowDatas);
             return;
         }
-
-        select(component, valuesAccessor, values, rowDatas);
-			return;
-		}
-	}
+    }
 
     public static void select(UIComponent component,
             IValuesAccessor valuesAccessor, int index) {
@@ -399,27 +400,27 @@ public class CollectionTools {
             return;
         }
 
-		if (component instanceof IGridComponent) {
-	        Object rowData = getRowData((IGridComponent) component, index);
-	        if (rowData == null) {
-	            LOG.error("No rowData for index='" + index + "'.");
-	            return;
-	        }
-	
-	        if (LOG.isDebugEnabled()) {
-	            LOG.debug("Select index=" + index + " => " + rowData
-	                    + "   selectedValues=" + values);
-	        }
+        if (component instanceof IGridComponent) {
+            Object rowData = getRowData((IGridComponent) component, index);
+            if (rowData == null) {
+                LOG.error("No rowData for index='" + index + "'.");
+                return;
+            }
 
-			select(component, valuesAccessor, values,
-					Collections.singleton(rowData));
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Select index=" + index + " => " + rowData
+                        + "   selectedValues=" + values);
+            }
 
-			return;
-		}
+            select(component, valuesAccessor, values,
+                    Collections.singleton(rowData));
+
+            return;
+        }
     }
 
     public static void selectAll(UIComponent component,
-			IValuesAccessor valuesAccessor, IAllValuesProvider allValuesProvider) {
+            IValuesAccessor valuesAccessor, IAllValuesProvider allValuesProvider) {
 
         if ((component instanceof IGridComponent) == false) {
             throw new UnsupportedOperationException(
@@ -445,25 +446,25 @@ public class CollectionTools {
             return;
         }
 
-		if (component instanceof IGridComponent) {
-	        List rowDatas = getRowDatas((IGridComponent) component);
-	        if (rowDatas.isEmpty()) {
-	            return;
-	        }
-	
-	        select(component, valuesAccessor, values, rowDatas);
-			return;
-		}
+        if (component instanceof IGridComponent) {
+            List rowDatas = getRowDatas((IGridComponent) component);
+            if (rowDatas.isEmpty()) {
+                return;
+            }
 
-		if (allValuesProvider != null) {
-			List rowDatas = allValuesProvider.listAllValues(component);
-			if (rowDatas.isEmpty()) {
-				return;
-			}
+            select(component, valuesAccessor, values, rowDatas);
+            return;
+        }
 
-			select(component, valuesAccessor, values, rowDatas);
-			return;
-		}
+        if (allValuesProvider != null) {
+            List rowDatas = allValuesProvider.listAllValues(component);
+            if (rowDatas.isEmpty()) {
+                return;
+            }
+
+            select(component, valuesAccessor, values, rowDatas);
+            return;
+        }
     }
 
     public static void select(UIComponent component,
@@ -487,8 +488,8 @@ public class CollectionTools {
             return;
         }
 
-		select(component, valuesAccessor, values,
-				Collections.singletonList(rowValue));
+        select(component, valuesAccessor, values,
+                Collections.singletonList(rowValue));
     }
 
     private static Object select(UIComponent component,
@@ -711,8 +712,8 @@ public class CollectionTools {
             return;
         }
 
-		deselect(component, valuesAccessor, values,
-				Collections.singletonList(rowValue));
+        deselect(component, valuesAccessor, values,
+                Collections.singletonList(rowValue));
     }
 
     public static void deselect(UIComponent component,
@@ -732,23 +733,23 @@ public class CollectionTools {
             return;
         }
 
-		if (component instanceof IGridComponent) {
-	        Object rowData = getRowData((IGridComponent) component, index);
-	
-	        if (rowData == null) {
-	            LOG.error("No rowData for index='" + index + "'.");
-	            return;
-	        }
-	
-	        if (LOG.isDebugEnabled()) {
-	            LOG.debug("Deselect index=" + index + " => " + rowData
-	                    + "   selectedValues=" + values);
-	        }
+        if (component instanceof IGridComponent) {
+            Object rowData = getRowData((IGridComponent) component, index);
 
-			deselect(component, valuesAccessor, values,
-					Collections.singleton(rowData));
-			return;
-		}
+            if (rowData == null) {
+                LOG.error("No rowData for index='" + index + "'.");
+                return;
+            }
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Deselect index=" + index + " => " + rowData
+                        + "   selectedValues=" + values);
+            }
+
+            deselect(component, valuesAccessor, values,
+                    Collections.singleton(rowData));
+            return;
+        }
     }
 
     public static void deselect(UIComponent component,
@@ -775,15 +776,15 @@ public class CollectionTools {
             return;
         }
 
-		if (component instanceof IGridComponent) {
-	        List rowDatas = getRowDatas((IGridComponent) component, indices);
-	        if (rowDatas.isEmpty()) {
-	            return;
-	        }
-	
-	        deselect(component, valuesAccessor, values, rowDatas);
-			return;
-		}
+        if (component instanceof IGridComponent) {
+            List rowDatas = getRowDatas((IGridComponent) component, indices);
+            if (rowDatas.isEmpty()) {
+                return;
+            }
+
+            deselect(component, valuesAccessor, values, rowDatas);
+            return;
+        }
     }
 
     public static void deselect(UIComponent component,
@@ -806,16 +807,16 @@ public class CollectionTools {
             return;
         }
 
-		if (component instanceof IGridComponent) {
-	        List rowDatas = getRowDatas((IGridComponent) component, start, end);
-	        if (rowDatas.isEmpty()) {
-	            return;
-	        }
-	
-	        deselect(component, valuesAccessor, values, rowDatas);
-				return;
-	    }
-	}
+        if (component instanceof IGridComponent) {
+            List rowDatas = getRowDatas((IGridComponent) component, start, end);
+            if (rowDatas.isEmpty()) {
+                return;
+            }
+
+            deselect(component, valuesAccessor, values, rowDatas);
+            return;
+        }
+    }
 
     private static Object deselect(UIComponent component,
             IValuesAccessor valuesAccessor, Object values, Collection rowDatas) {
@@ -1440,7 +1441,7 @@ public class CollectionTools {
         IComponentValueType getComponentValueType();
     }
 
-	public interface IAllValuesProvider {
-		List<?> listAllValues(UIComponent component);
-	}
+    public interface IAllValuesProvider {
+        List< ? > listAllValues(UIComponent component);
+    }
 }

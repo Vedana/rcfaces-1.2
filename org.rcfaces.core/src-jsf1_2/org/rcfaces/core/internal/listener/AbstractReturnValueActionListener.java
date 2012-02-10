@@ -21,7 +21,6 @@ import org.rcfaces.core.lang.ApplicationException;
  */
 public abstract class AbstractReturnValueActionListener extends
         AbstractActionListener {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(AbstractReturnValueActionListener.class);

@@ -19,7 +19,7 @@ var __statics = {
 	 * @field private static final String
 	 */
 	_HOVER: "/helpButton/helpButtonHover.gif"
-}
+};
 
 var __members = {
 	f_helpButton: function() {
@@ -48,7 +48,7 @@ var __members = {
 			return false;		
 		});
 	}
-}
+};
 
 new f_class("f_helpButton", {
 	extend: f_imageButton,

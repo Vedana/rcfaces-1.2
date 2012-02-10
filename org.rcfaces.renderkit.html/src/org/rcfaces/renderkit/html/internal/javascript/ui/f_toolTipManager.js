@@ -3,6 +3,7 @@
  * 
  * @class public f_toolTipManager extends f_object, fa_commands
  * @author jbmeslin@vedana.com (latest modification by $Author$)
+ * @author olivier.oeuillot@vedana.com
  * @version $Revision$ $Date$
  */
 
@@ -39,7 +40,7 @@ var __statics = {
 		if (window._rcfacesExiting) {
 			return;
 		}
-
+			
 		// f_core.Debug(f_toolTipManager, "_ElementOver: event="+evt+"
 		// target="+evt.target);
 

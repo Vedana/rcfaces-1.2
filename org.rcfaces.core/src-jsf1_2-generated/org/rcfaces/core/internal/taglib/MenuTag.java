@@ -21,7 +21,6 @@ public class MenuTag extends CameliaTag implements Tag {
 	private ValueExpression preloadedLevelDepth;
 	private ValueExpression menuListeners;
 	private ValueExpression selectionListeners;
-	private ValueExpression preSelectionListeners;
 	private ValueExpression checkListeners;
 	private ValueExpression checkedValues;
 	private ValueExpression menuId;
@@ -42,10 +41,6 @@ public class MenuTag extends CameliaTag implements Tag {
 
 	public void setSelectionListener(ValueExpression selectionListeners) {
 		this.selectionListeners = selectionListeners;
-	}
-
-	public void setPreSelectionListener(ValueExpression preSelectionListeners) {
-		this.preSelectionListeners = preSelectionListeners;
 	}
 
 	public void setCheckListener(ValueExpression checkListeners) {
@@ -112,10 +107,6 @@ public class MenuTag extends CameliaTag implements Tag {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
 		}
 
-		if (preSelectionListeners != null) {
-			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.PRE_SELECTION_LISTENER_TYPE, preSelectionListeners);
-		}
-
 		if (checkListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.CHECK_LISTENER_TYPE, checkListeners);
 		}
@@ -165,7 +156,6 @@ public class MenuTag extends CameliaTag implements Tag {
 		preloadedLevelDepth = null;
 		menuListeners = null;
 		selectionListeners = null;
-		preSelectionListeners = null;
 		checkListeners = null;
 		checkedValues = null;
 		menuId = null;

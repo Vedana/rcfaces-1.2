@@ -29,7 +29,7 @@ var __statics = {
 		f_core.SubmitEvent(event);
 		return false;
 	}
-}
+};
 
 var __members = {
 
