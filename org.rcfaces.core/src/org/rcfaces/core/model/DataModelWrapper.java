@@ -11,76 +11,80 @@ import javax.faces.model.DataModelListener;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class DataModelWrapper extends DataModel {
+public class DataModelWrapper extends DataModel implements IDataModel {
 
-	private DataModel dataModel;
+    private DataModel dataModel;
 
-	protected void setWrappedDataModel(DataModel dataModel) {
-		this.dataModel = dataModel;
-	}
+    protected void setWrappedDataModel(DataModel dataModel) {
+        this.dataModel = dataModel;
+    }
 
-	public void addDataModelListener(DataModelListener listener) {
-		dataModel.addDataModelListener(listener);
-	}
+    protected DataModel getWrappedDataModel() {
+        return dataModel;
+    }
 
-	public DataModelListener[] getDataModelListeners() {
-		return dataModel.getDataModelListeners();
-	}
+    public void addDataModelListener(DataModelListener listener) {
+        dataModel.addDataModelListener(listener);
+    }
 
-	public int getRowCount() {
-		return dataModel.getRowCount();
-	}
+    public DataModelListener[] getDataModelListeners() {
+        return dataModel.getDataModelListeners();
+    }
 
-	public Object getRowData() {
-		return dataModel.getRowData();
-	}
+    public int getRowCount() {
+        return dataModel.getRowCount();
+    }
 
-	public int getRowIndex() {
-		return dataModel.getRowIndex();
-	}
+    public Object getRowData() {
+        return dataModel.getRowData();
+    }
 
-	public Object getWrappedData() {
-		return dataModel.getWrappedData();
-	}
+    public int getRowIndex() {
+        return dataModel.getRowIndex();
+    }
 
-	public boolean isRowAvailable() {
-		return dataModel.isRowAvailable();
-	}
+    public Object getWrappedData() {
+        return dataModel.getWrappedData();
+    }
 
-	public void removeDataModelListener(DataModelListener listener) {
-		dataModel.removeDataModelListener(listener);
-	}
+    public boolean isRowAvailable() {
+        return dataModel.isRowAvailable();
+    }
 
-	public void setRowIndex(int rowIndex) {
-		dataModel.setRowIndex(rowIndex);
-	}
+    public void removeDataModelListener(DataModelListener listener) {
+        dataModel.removeDataModelListener(listener);
+    }
 
-	public void setWrappedData(Object data) {
-		dataModel.setWrappedData(data);
-	}
+    public void setRowIndex(int rowIndex) {
+        dataModel.setRowIndex(rowIndex);
+    }
 
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((dataModel == null) ? 0 : dataModel.hashCode());
-		return result;
-	}
+    public void setWrappedData(Object data) {
+        dataModel.setWrappedData(data);
+    }
 
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		final DataModelWrapper other = (DataModelWrapper) obj;
-		if (dataModel == null) {
-			if (other.dataModel != null)
-				return false;
-		} else if (!dataModel.equals(other.dataModel))
-			return false;
-		return true;
-	}
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result
+                + ((dataModel == null) ? 0 : dataModel.hashCode());
+        return result;
+    }
+
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final DataModelWrapper other = (DataModelWrapper) obj;
+        if (dataModel == null) {
+            if (other.dataModel != null)
+                return false;
+        } else if (!dataModel.equals(other.dataModel))
+            return false;
+        return true;
+    }
 
 }
