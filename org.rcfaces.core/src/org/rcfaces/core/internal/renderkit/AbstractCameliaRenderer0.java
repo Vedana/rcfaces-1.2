@@ -28,321 +28,321 @@ import org.rcfaces.core.lang.IAdaptable;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractCameliaRenderer0 extends Renderer implements
-		IDefaultUnlockedPropertiesRenderer {
+        IDefaultUnlockedPropertiesRenderer {
 
-	private static final Log LOG = LogFactory
-			.getLog(AbstractCameliaRenderer0.class);
+    private static final Log LOG = LogFactory
+            .getLog(AbstractCameliaRenderer0.class);
 
-	private static final String HIDE_CHILDREN_PROPERTY = "camelia.ASYNC_TREE_MODE";
+    private static final String HIDE_CHILDREN_PROPERTY = "camelia.ASYNC_TREE_MODE";
 
-	private static final String COMPONENT_HIDDEN = "camelia.COMPONENT_HIDDEN";
+    private static final String COMPONENT_HIDDEN = "camelia.COMPONENT_HIDDEN";
 
-	private static final String[] EMPTY_STRING_ARRAY = new String[0];
+    private static final String[] EMPTY_STRING_ARRAY = new String[0];
 
-	private final String defaultUnlockedProperties[];
+    private final String defaultUnlockedProperties[];
 
-	protected AbstractCameliaRenderer0() {
-		Set<String> unlockedProperties = new HashSet<String>();
-		addUnlockProperties(unlockedProperties);
+    protected AbstractCameliaRenderer0() {
+        Set<String> unlockedProperties = new HashSet<String>();
+        addUnlockProperties(unlockedProperties);
 
-		if (unlockedProperties.isEmpty() == false) {
-			defaultUnlockedProperties = unlockedProperties
-					.toArray(new String[unlockedProperties.size()]);
+        if (unlockedProperties.isEmpty() == false) {
+            defaultUnlockedProperties = unlockedProperties
+                    .toArray(new String[unlockedProperties.size()]);
 
-		} else {
-			defaultUnlockedProperties = EMPTY_STRING_ARRAY;
-		}
-	}
+        } else {
+            defaultUnlockedProperties = EMPTY_STRING_ARRAY;
+        }
+    }
 
-	protected void addUnlockProperties(Set unlockedProperties) {
-	}
+    protected void addUnlockProperties(Set unlockedProperties) {
+    }
 
-	public String[] getDefaultUnlockedProperties(FacesContext facesContext,
-			UIComponent component) {
-		return defaultUnlockedProperties;
-	}
+    public String[] getDefaultUnlockedProperties(FacesContext facesContext,
+            UIComponent component) {
+        return defaultUnlockedProperties;
+    }
 
-	public final void encodeBegin(FacesContext context, UIComponent component)
-			throws IOException {
+    public final void encodeBegin(FacesContext context, UIComponent component)
+            throws IOException {
 
-		super.encodeBegin(context, component);
+        super.encodeBegin(context, component);
 
-		IRenderContext renderContext = getRenderContext(context);
+        IRenderContext renderContext = getRenderContext(context);
 
-		String clientId = renderContext.getComponentClientId(component);
+        String clientId = renderContext.getComponentClientId(component);
 
-		renderContext.pushComponent(component, clientId);
+        renderContext.pushComponent(component, clientId);
 
-		IComponentWriter writer = renderContext.getComponentWriter();
+        IComponentWriter writer = renderContext.getComponentWriter();
 
-		/*
-		 * if (component instanceof IVisibilityCapability) {
-		 * IComponentRenderContext componentRenderContext = writer
-		 * .getComponentRenderContext();
-		 * 
-		 * if (componentRenderContext.containsAttribute(COMPONENT_HIDDEN) ==
-		 * false) { if (Boolean.FALSE.equals(((IVisibilityCapability) component)
-		 * .getVisibleState())) {
-		 * 
-		 * // Visibilité PHANTOM
-		 * 
-		 * componentRenderContext.setAttribute(COMPONENT_HIDDEN, component); } }
-		 * }
-		 */
+        /*
+         * if (component instanceof IVisibilityCapability) {
+         * IComponentRenderContext componentRenderContext = writer
+         * .getComponentRenderContext();
+         * 
+         * if (componentRenderContext.containsAttribute(COMPONENT_HIDDEN) ==
+         * false) { if (Boolean.FALSE.equals(((IVisibilityCapability) component)
+         * .getVisibleState())) {
+         * 
+         * // Visibilité PHANTOM
+         * 
+         * componentRenderContext.setAttribute(COMPONENT_HIDDEN, component); } }
+         * }
+         */
 
-		try {
-			encodeBegin(writer);
+        try {
+            encodeBegin(writer);
 
-		} catch (RuntimeException e) {
-			LOG.error("Encode begin of component '" + clientId
-					+ "' throws an exception.", e);
+        } catch (RuntimeException e) {
+            LOG.error("Encode begin of component '" + clientId
+                    + "' throws an exception.", e);
 
-			throw new WriterException(null, e, component);
-		}
+            throw new WriterException(null, e, component);
+        }
 
-		if (writer instanceof ISgmlWriter) {
-			((ISgmlWriter) writer).endComponent();
-		}
-	}
+        if (writer instanceof ISgmlWriter) {
+            ((ISgmlWriter) writer).endComponent();
+        }
+    }
 
-	protected abstract void encodeBegin(IComponentWriter writer)
-			throws WriterException;
+    protected abstract void encodeBegin(IComponentWriter writer)
+            throws WriterException;
 
-	protected abstract IRenderContext getRenderContext(FacesContext context);
+    protected abstract IRenderContext getRenderContext(FacesContext context);
 
-	protected void hideChildren(IComponentRenderContext componentRenderContext) {
-		componentRenderContext.setAttribute(HIDE_CHILDREN_PROPERTY,
-				Boolean.TRUE);
-	}
+    protected void hideChildren(IComponentRenderContext componentRenderContext) {
+        componentRenderContext.setAttribute(HIDE_CHILDREN_PROPERTY,
+                Boolean.TRUE);
+    }
 
-	public void encodeChildren(FacesContext facesContext, UIComponent component)
-			throws IOException {
-		if ((this instanceof IAsyncRenderer) == false) {
-			super.encodeChildren(facesContext, component);
-			return;
-		}
+    public void encodeChildren(FacesContext facesContext, UIComponent component)
+            throws IOException {
+        if ((this instanceof IAsyncRenderer) == false) {
+            super.encodeChildren(facesContext, component);
+            return;
+        }
 
-		IRenderContext renderContext = getRenderContext(facesContext);
+        IRenderContext renderContext = getRenderContext(facesContext);
 
-		IComponentWriter componentWriter = renderContext.getComponentWriter();
+        IComponentWriter componentWriter = renderContext.getComponentWriter();
 
-		IComponentRenderContext componentRenderContext = componentWriter
-				.getComponentRenderContext();
+        IComponentRenderContext componentRenderContext = componentWriter
+                .getComponentRenderContext();
 
-		if (componentRenderContext.containsAttribute(HIDE_CHILDREN_PROPERTY)) {
-			return;
-		}
+        if (componentRenderContext.containsAttribute(HIDE_CHILDREN_PROPERTY)) {
+            return;
+        }
 
-		super.encodeChildren(facesContext, component);
-	}
+        super.encodeChildren(facesContext, component);
+    }
 
-	public boolean getRendersChildren() {
-		if ((this instanceof IAsyncRenderer) == false) {
-			return false;
-		}
+    public boolean getRendersChildren() {
+        if ((this instanceof IAsyncRenderer) == false) {
+            return false;
+        }
 
-		if (RcfacesContext.isJSF1_2()) {
-			// En jsf 1.2 nous sommes forcement en parcours d'arbre
-			return true;
-		}
+        if (RcfacesContext.isJSF1_2()) {
+            // En jsf 1.2 nous sommes forcement en parcours d'arbre
+            return true;
+        }
 
-		// Jsf 1.1 : on doit distinguer d'un parcours par TAG ou par
-		// programmation
+        // Jsf 1.1 : on doit distinguer d'un parcours par TAG ou par
+        // programmation
 
-		if (AsyncModeTools.isTagProcessor(null)) {
-			// Nous sommes en mode TAG, c'est le tag qui détourne le flux.
-			// NON => pas forcement, pas en mode tree !
-			return false;
-		}
+        if (AsyncModeTools.isTagProcessor(null)) {
+            // Nous sommes en mode TAG, c'est le tag qui détourne le flux.
+            // NON => pas forcement, pas en mode tree !
+            return false;
+        }
 
-		// Nous sommes en mode de rendu par parcours d'arbre ...
-		return true;
-	}
+        // Nous sommes en mode de rendu par parcours d'arbre ...
+        return true;
+    }
 
-	public void encodeEnd(FacesContext context, UIComponent component)
-			throws IOException {
+    public void encodeEnd(FacesContext context, UIComponent component)
+            throws IOException {
 
-		IRenderContext renderContext = getRenderContext(context);
+        IRenderContext renderContext = getRenderContext(context);
 
-		IComponentWriter writer = renderContext.getComponentWriter();
+        IComponentWriter writer = renderContext.getComponentWriter();
 
-		if (writer instanceof ISgmlWriter) {
-			((ISgmlWriter) writer).endComponent();
-		}
+        if (writer instanceof ISgmlWriter) {
+            ((ISgmlWriter) writer).endComponent();
+        }
 
-		renderContext.encodeEnd(writer);
+        renderContext.encodeEnd(writer);
 
-		try {
-			encodeEnd(writer);
+        try {
+            encodeEnd(writer);
 
-		} catch (RuntimeException e) {
+        } catch (RuntimeException e) {
 
-			String clientId = renderContext.getComponentClientId(component);
+            String clientId = renderContext.getComponentClientId(component);
 
-			LOG.error("Encode end of component '" + clientId
-					+ "' throws an exception.", e);
+            LOG.error("Encode end of component '" + clientId
+                    + "' throws an exception.", e);
 
-			throw new WriterException(null, e, component);
-		}
+            throw new WriterException(null, e, component);
+        }
 
-		super.encodeEnd(context, component);
+        super.encodeEnd(context, component);
 
-		if (writer instanceof ISgmlWriter) {
-			((ISgmlWriter) writer).endComponent();
-		}
+        if (writer instanceof ISgmlWriter) {
+            ((ISgmlWriter) writer).endComponent();
+        }
 
-		/*
-		 * if (component instanceof IVisibilityCapability) {
-		 * IComponentRenderContext componentRenderContext = writer
-		 * .getComponentRenderContext();
-		 * 
-		 * if (componentRenderContext.getAttribute(COMPONENT_HIDDEN) ==
-		 * component) {
-		 * componentRenderContext.removeAttribute(COMPONENT_HIDDEN); } }
-		 */
+        /*
+         * if (component instanceof IVisibilityCapability) {
+         * IComponentRenderContext componentRenderContext = writer
+         * .getComponentRenderContext();
+         * 
+         * if (componentRenderContext.getAttribute(COMPONENT_HIDDEN) ==
+         * component) {
+         * componentRenderContext.removeAttribute(COMPONENT_HIDDEN); } }
+         */
 
-		if (component instanceof IPartialRenderingCapability) {
-			IPartialRenderingCapability partialRenderingCapability = (IPartialRenderingCapability) component;
+        if (component instanceof IPartialRenderingCapability) {
+            IPartialRenderingCapability partialRenderingCapability = (IPartialRenderingCapability) component;
 
-			if (partialRenderingCapability.isPartialRendering()) {
+            if (partialRenderingCapability.isPartialRendering()) {
 
-			}
-		}
+            }
+        }
 
-		renderContext.popComponent(component);
-	}
+        renderContext.popComponent(component);
+    }
 
-	protected void encodeEnd(IComponentWriter writer) throws WriterException {
-	}
+    protected void encodeEnd(IComponentWriter writer) throws WriterException {
+    }
 
-	protected abstract IRequestContext getRequestContext(FacesContext context);
+    protected abstract IRequestContext getRequestContext(FacesContext context);
 
-	public final void decode(FacesContext context, UIComponent component) {
+    public final void decode(FacesContext context, UIComponent component) {
 
-		IRequestContext requestContext = getRequestContext(context);
+        IRequestContext requestContext = getRequestContext(context);
 
-		String requestComponentId = getRequestComponentId(requestContext,
-				component);
+        String requestComponentId = getRequestComponentId(requestContext,
+                component);
 
-		IComponentData componentData = requestContext.getComponentData(
-				component, requestComponentId, this);
+        IComponentData componentData = requestContext.getComponentData(
+                component, requestComponentId, this);
 
-		decode(requestContext, component, componentData);
-	}
+        decode(requestContext, component, componentData);
+    }
 
-	protected String getRequestComponentId(IRequestContext requestContext,
-			UIComponent component) {
-		return requestContext.getComponentId(component);
-	}
+    protected String getRequestComponentId(IRequestContext requestContext,
+            UIComponent component) {
+        return requestContext.getComponentId(component);
+    }
 
-	protected void decode(IRequestContext context, UIComponent component,
-			IComponentData componentData) {
-	}
+    protected void decode(IRequestContext context, UIComponent component,
+            IComponentData componentData) {
+    }
 
-	protected void decodeEvent(IRequestContext context, UIComponent component,
-			IEventData eventData) {
-	}
+    protected void decodeEvent(IRequestContext context, UIComponent component,
+            IEventData eventData) {
+    }
 
-	public void decodeChildren(FacesContext context, UIComponent component) {
-		for (Iterator<UIComponent> children = component.getFacetsAndChildren(); children
-				.hasNext();) {
-			UIComponent child = children.next();
-		
-			decodeChild(context, component, child);
-		}
-	}
+    public void decodeChildren(FacesContext context, UIComponent component) {
+        for (Iterator<UIComponent> children = component.getFacetsAndChildren(); children
+                .hasNext();) {
+            UIComponent child = children.next();
 
-	public void decodeChild(FacesContext context, UIComponent parent,
-			UIComponent child) {
-		child.processDecodes(context);
-	}
+            decodeChild(context, component, child);
+        }
+    }
 
-	public void decodeEnd(FacesContext context, UIComponent component) {
-	}
+    public void decodeChild(FacesContext context, UIComponent parent,
+            UIComponent child) {
+        child.processDecodes(context);
+    }
 
-	public boolean getDecodesChildren() {
-		return false;
-	}
+    public void decodeEnd(FacesContext context, UIComponent component) {
+    }
 
-	protected String convertValue(FacesContext facesContext,
-			ValueHolder valueHolder) {
-		return ValuesTools.valueToString(valueHolder, facesContext);
-	}
+    public boolean getDecodesChildren() {
+        return false;
+    }
 
-	protected String convertValue(FacesContext facesContext,
-			UIComponent component, Object value) {
-		return ValuesTools.valueToString(value, component, facesContext);
-	}
+    protected String convertValue(FacesContext facesContext,
+            ValueHolder valueHolder) {
+        return ValuesTools.valueToString(valueHolder, facesContext);
+    }
 
-	protected Object getAdapter(Class<?> adapter, Object object) {
-		return getAdapter(adapter, object, this);
-	}
+    protected String convertValue(FacesContext facesContext,
+            UIComponent component, Object value) {
+        return ValuesTools.valueToString(value, component, facesContext);
+    }
 
-	public static Object getAdapter(Class<?> adapter, Object object,
-			Object params) {
+    protected <T> T getAdapter(Class<T> adapter, Object object) {
+        return getAdapter(adapter, object, this);
+    }
 
-		if (object == null) {
-			throw new NullPointerException("Object is null !");
-		}
+    public static <T> T getAdapter(Class<T> adapter, Object object,
+            Object params) {
 
-		if (object instanceof IAdaptable) {
-			return ((IAdaptable) object).getAdapter(adapter, params);
-		}
-		
-		if (adapter.isAssignableFrom(object.getClass())) {
-			return object;
-		}
+        if (object == null) {
+            throw new NullPointerException("Object is null !");
+        }
 
-		return null;
-	}
+        if (object instanceof IAdaptable) {
+            return ((IAdaptable) object).getAdapter(adapter, params);
+        }
 
-	public Object getConvertedValue(FacesContext context,
-			UIComponent component, Object submittedValue)
-			throws ConverterException {
+        if (adapter.isAssignableFrom(object.getClass())) {
+            return (T) object;
+        }
 
-		return ValuesTools.convertStringToValue(context, component,
-				submittedValue, true);
-	}
+        return null;
+    }
 
-	protected static final Renderer getRenderer(FacesContext facesContext,
-			UIComponent component) {
-		String rendererType = component.getRendererType();
-		if (rendererType == null) {
-			LOG.error("Invalid renderType for component id="
-					+ component.getId() + " component=" + component);
-			return null;
-		}
+    public Object getConvertedValue(FacesContext context,
+            UIComponent component, Object submittedValue)
+            throws ConverterException {
 
-		RenderKit renderKit = facesContext.getRenderKit();
+        return ValuesTools.convertStringToValue(context, component,
+                submittedValue, true);
+    }
 
-		if (renderKit == null) {
-			LOG.error("No renderKit associated to renderKitId='"
-					+ facesContext.getViewRoot().getRenderKitId() + "'.");
+    protected static final Renderer getRenderer(FacesContext facesContext,
+            UIComponent component) {
+        String rendererType = component.getRendererType();
+        if (rendererType == null) {
+            LOG.error("Invalid renderType for component id="
+                    + component.getId() + " component=" + component);
+            return null;
+        }
 
-			return null;
-		}
+        RenderKit renderKit = facesContext.getRenderKit();
 
-		Renderer renderer = renderKit.getRenderer(component.getFamily(),
-				rendererType);
+        if (renderKit == null) {
+            LOG.error("No renderKit associated to renderKitId='"
+                    + facesContext.getViewRoot().getRenderKitId() + "'.");
 
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("getRenderer(id='" + component.getId() + " family='"
-					+ component.getFamily() + "' rendererType='" + rendererType
-					+ "' class='" + component.getClass().getName()
-					+ "') for renderKitId='"
-					+ facesContext.getViewRoot().getRenderKitId() + "' => "
-					+ renderer);
-		}
+            return null;
+        }
 
-		return renderer;
-	}
+        Renderer renderer = renderKit.getRenderer(component.getFamily(),
+                rendererType);
 
-	protected Object getValue(UIComponent component) {
-		return ValuesTools.getValue(component);
-	}
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("getRenderer(id='" + component.getId() + " family='"
+                    + component.getFamily() + "' rendererType='" + rendererType
+                    + "' class='" + component.getClass().getName()
+                    + "') for renderKitId='"
+                    + facesContext.getViewRoot().getRenderKitId() + "' => "
+                    + renderer);
+        }
 
-	protected boolean isComponentVisible(
-			IComponentRenderContext componentRenderContext) {
-		return componentRenderContext.containsAttribute(COMPONENT_HIDDEN) == false;
-	}
+        return renderer;
+    }
+
+    protected Object getValue(UIComponent component) {
+        return ValuesTools.getValue(component);
+    }
+
+    protected boolean isComponentVisible(
+            IComponentRenderContext componentRenderContext) {
+        return componentRenderContext.containsAttribute(COMPONENT_HIDDEN) == false;
+    }
 }

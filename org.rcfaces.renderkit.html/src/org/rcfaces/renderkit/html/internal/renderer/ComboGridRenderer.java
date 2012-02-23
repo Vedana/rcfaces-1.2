@@ -93,7 +93,7 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
         String labelColumnId = comboGridComponent
                 .getLabelColumnId(facesContext);
 
-        Map formatValues = new HashMap();
+        Map<String, String> formatValues = new HashMap<String, String>();
 
         String valueFormat = comboGridComponent.getValueFormat(facesContext);
         if (valueFormat == null) {

@@ -281,7 +281,7 @@ public class KeyLabelRenderer extends AbstractCssRenderer {
                         max);
             }
 
-            List l = new ArrayList();
+            List<SelectItem> l = new ArrayList<SelectItem>();
             for (; it.hasNext();) {
                 Object item = it.next();
 
@@ -293,14 +293,13 @@ public class KeyLabelRenderer extends AbstractCssRenderer {
                 l.add(selectItem);
             }
 
-            return (SelectItem[]) l.toArray(new SelectItem[l.size()]);
+            return l.toArray(new SelectItem[l.size()]);
         }
 
         if (value instanceof IAdaptable) {
             IAdaptable adaptable = (IAdaptable) value;
 
-            SelectItem sis[] = (SelectItem[]) adaptable.getAdapter(
-                    SelectItem[].class, null);
+            SelectItem sis[] = adaptable.getAdapter(SelectItem[].class, null);
             if (sis != null) {
                 return sis;
             }
@@ -308,7 +307,7 @@ public class KeyLabelRenderer extends AbstractCssRenderer {
 
         if (value.getClass().isArray()) {
             int length = Array.getLength(value);
-            List l = new ArrayList(length);
+            List<SelectItem> l = new ArrayList<SelectItem>(length);
 
             for (int i = 0; i < length; i++) {
                 Object element = Array.get(value, i);
@@ -322,12 +321,12 @@ public class KeyLabelRenderer extends AbstractCssRenderer {
                 l.add(si);
             }
 
-            return (SelectItem[]) l.toArray(new SelectItem[l.size()]);
+            return l.toArray(new SelectItem[l.size()]);
         }
 
         if (value instanceof Collection) {
             Collection c = (Collection) value;
-            List l = new ArrayList();
+            List<SelectItem> l = new ArrayList<SelectItem>();
 
             for (Iterator it = c.iterator(); it.hasNext();) {
                 Object element = it.next();
@@ -341,7 +340,7 @@ public class KeyLabelRenderer extends AbstractCssRenderer {
                 l.add(si);
             }
 
-            return (SelectItem[]) l.toArray(new SelectItem[l.size()]);
+            return l.toArray(new SelectItem[l.size()]);
         }
 
         SelectItem si = convertItem(value);
@@ -363,8 +362,7 @@ public class KeyLabelRenderer extends AbstractCssRenderer {
         if (item instanceof IAdaptable) {
             IAdaptable adaptable = (IAdaptable) item;
 
-            SelectItem si = (SelectItem) adaptable.getAdapter(SelectItem.class,
-                    null);
+            SelectItem si = adaptable.getAdapter(SelectItem.class, null);
             if (si != null) {
                 return si;
             }
