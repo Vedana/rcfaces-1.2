@@ -24,6 +24,8 @@ public interface IDataMapAccessor {
 
     Object removeData(String name, FacesContext facesContext);
 
+    void clearDatas(FacesContext facesContext);
+
     int getDataCount();
 
     String[] listDataKeys(FacesContext facesContext);

@@ -41,7 +41,7 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
 
     private final IPropertiesAccessor parent;
 
-    private Map properties;
+    private Map<String, Object> properties;
 
     private static IUnproxifyValueExpression unproxifyValueExpression = null;
 
@@ -50,7 +50,7 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
             ClassLocator.load("org.apache.jasper.el.JspValueExpression",
                     BasicDeltaPropertiesAccessor.class, null);
 
-            Class cl = ClassLocator
+            Class< ? > cl = ClassLocator
                     .load("org.rcfaces.core.internal.jasper.JasperUnproxifyValueExpression",
                             BasicDeltaPropertiesAccessor.class, null);
             unproxifyValueExpression = (IUnproxifyValueExpression) cl
@@ -223,6 +223,21 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
         return old;
     }
 
+    public void clearProperties(FacesContext facesContext) {
+
+        Set<String> names = keySet();
+        if (names.isEmpty()) {
+            return;
+        }
+
+        if (properties == null) {
+            properties = createMap(PROPERTY_INITIAL_SIZE);
+        }
+        for (String propertyName : names) {
+            properties.put(propertyName, UNDEFINED);
+        }
+    }
+
     public Object saveState(FacesContext context) {
         if (hasModifiedProperties() == false) {
             return null;
@@ -283,20 +298,22 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
         properties = null;
     }
 
-    public Set keySet() {
-        Set l = parent.keySet();
+    public Set<String> keySet() {
+        Set<String> l = parent.keySet();
         if (properties == null || properties.isEmpty()) {
             // Pas de propriétés locales !
             return l;
         }
 
-        Set v = new HashSet(l.size() + properties.size());
+        Set<String> v = new HashSet<String>(l.size() + properties.size());
         v.addAll(l);
 
-        for (Iterator it = properties.entrySet().iterator(); it.hasNext();) {
-            Map.Entry entry = (Map.Entry) it.next();
+        for (Iterator<Map.Entry<String, Object>> it = properties.entrySet()
+                .iterator(); it.hasNext();) {
+            Map.Entry<String, Object> entry = (Map.Entry<String, Object>) it
+                    .next();
 
-            String key = (String) entry.getKey();
+            String key = entry.getKey();
             Object value = entry.getValue();
 
             if (value == UNDEFINED) {

@@ -163,6 +163,14 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
         return old;
     }
 
+    public void clearProperties(FacesContext context) {
+        if (properties == null) {
+            return;
+        }
+
+        properties.clear();
+    }
+
     /*
      * (non-Javadoc)
      * 

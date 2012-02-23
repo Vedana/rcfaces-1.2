@@ -36,15 +36,15 @@ public class BasicComponentEngine extends AbstractComponentEngine {
 
     private static final String CONVERTER_ID_PROPERTY = "camalia.converterId";
 
-    static final Class BOOLEAN_CLASS = Boolean.class;
+    static final Class<Boolean> BOOLEAN_CLASS = Boolean.class;
 
-    static final Class STRING_CLASS = String.class;
+    static final Class<String> STRING_CLASS = String.class;
 
-    private static final Class INTEGER_CLASS = Integer.class;
+    private static final Class<Integer> INTEGER_CLASS = Integer.class;
 
     private static final Integer INTEGER_0 = new Integer(0);
 
-    private static final Class DOUBLE_CLASS = Double.class;
+    private static final Class<Double> DOUBLE_CLASS = Double.class;
 
     private static final Double DOUBLE_0 = new Double(0);
 
@@ -60,7 +60,7 @@ public class BasicComponentEngine extends AbstractComponentEngine {
 
     private Map transientAttributes;
 
-    private Map dataAccessorsByName;
+    private Map<String, IDataMapAccessor> dataAccessorsByName;
 
     private IPropertiesManager propertiesManager;
 
@@ -82,11 +82,12 @@ public class BasicComponentEngine extends AbstractComponentEngine {
         if (original.dataAccessorsByName != null
                 && original.dataAccessorsByName.isEmpty() == false) {
 
-            dataAccessorsByName = new HashMap(DATA_ACCESSORS_INIT_SIZE);
+            dataAccessorsByName = new HashMap<String, IDataMapAccessor>(
+                    DATA_ACCESSORS_INIT_SIZE);
 
-            for (Iterator it = original.dataAccessorsByName.entrySet()
-                    .iterator(); it.hasNext();) {
-                Map.Entry entry = (Map.Entry) it.next();
+            for (Iterator<Map.Entry<String, IDataMapAccessor>> it = original.dataAccessorsByName
+                    .entrySet().iterator(); it.hasNext();) {
+                Map.Entry<String, IDataMapAccessor> entry = it.next();
 
                 BasicDataAccessor originalDataAccessor = (BasicDataAccessor) entry
                         .getValue();
@@ -722,8 +723,8 @@ public class BasicComponentEngine extends AbstractComponentEngine {
 
         if (dataAccessorsByName != null
                 && dataAccessorsByName.isEmpty() == false) {
-            for (Iterator it = dataAccessorsByName.values().iterator(); it
-                    .hasNext();) {
+            for (Iterator<IDataMapAccessor> it = dataAccessorsByName.values()
+                    .iterator(); it.hasNext();) {
                 BasicDataAccessor dataAccessor = (BasicDataAccessor) it.next();
 
                 dataAccessor.commitDatas(context);
@@ -777,12 +778,12 @@ public class BasicComponentEngine extends AbstractComponentEngine {
 
         public IPropertiesManager copyOriginalState() {
             BasicDataAccessor copy = new BasicDataAccessor(name);
-			if (this.propertiesManager != this) {
-				copy.propertiesManager = this.propertiesManager
-						.copyOriginalState();
-			} else {
-            copy.propertiesManager = copy;
-			}
+            if (this.propertiesManager != this) {
+                copy.propertiesManager = this.propertiesManager
+                        .copyOriginalState();
+            } else {
+                copy.propertiesManager = copy;
+            }
             copy.setCameliaFactory(factory);
             copy.originalPropertiesAccessor = originalPropertiesAccessor;
 
@@ -797,6 +798,12 @@ public class BasicComponentEngine extends AbstractComponentEngine {
             IPropertiesAccessor propertiesAccessor = getDataPropertiesAccessor(true);
 
             return propertiesAccessor.removeProperty(facesContext, name);
+        }
+
+        public void clearDatas(FacesContext facesContext) {
+            IPropertiesAccessor propertiesAccessor = getDataPropertiesAccessor(true);
+
+            propertiesAccessor.clearProperties(facesContext);
         }
 
         public Object getData(String key, FacesContext facesContext) {
@@ -948,19 +955,19 @@ public class BasicComponentEngine extends AbstractComponentEngine {
             s += "converter='" + converter + "'";
         }
 
-		if (dataAccessorsByName != null
-				&& dataAccessorsByName.isEmpty() == false) {
-			for (Iterator it = dataAccessorsByName.entrySet().iterator(); it
-					.hasNext();) {
-				Map.Entry entry = (Map.Entry) it.next();
+        if (dataAccessorsByName != null
+                && dataAccessorsByName.isEmpty() == false) {
+            for (Iterator it = dataAccessorsByName.entrySet().iterator(); it
+                    .hasNext();) {
+                Map.Entry entry = (Map.Entry) it.next();
 
-				if (s.length() > 0) {
-					s += ",";
-				}
-				s += "dataAccessor[" + entry.getKey() + "]='"
-						+ entry.getValue() + "'";
-			}
-		}
+                if (s.length() > 0) {
+                    s += ",";
+                }
+                s += "dataAccessor[" + entry.getKey() + "]='"
+                        + entry.getValue() + "'";
+            }
+        }
 
         return s;
     }

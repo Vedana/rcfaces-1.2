@@ -25,6 +25,8 @@ public interface IPropertiesAccessor {
 
     Object removeProperty(FacesContext context, String name);
 
+    void clearProperties(FacesContext context);
+
     Object saveState(FacesContext context);
 
     void restoreState(FacesContext context, Object state);
@@ -33,7 +35,7 @@ public interface IPropertiesAccessor {
 
     IDeltaPropertiesAccessor createDeltaPropertiesAccessor();
 
-    Set keySet();
+    Set<String> keySet();
 
     int size();
 
