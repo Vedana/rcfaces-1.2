@@ -54,7 +54,7 @@ var __members = {
 			this._suggestionMinChars=1;
 		}
 		
-		this._showPopupForOneResult=f_core.GetBooleanAttribute(this, "v:showPopupForOneResult", false);
+		this._showPopupForOneResult=f_core.GetBooleanAttributeNS(this, "showPopupForOneResult", false);
 		
 		// Permet d'optimiser les propositions !
 		this._orderedResult=f_core.GetAttributeNS(this, "orderedResult", true);
@@ -542,7 +542,7 @@ var __members = {
 			
 			for(var i=4;i<arguments.length-1;) {
 				var keyArg=arguments[i++];
-				var valueArg=arguments[i++]
+				var valueArg=arguments[i++];
 
 				clientDatas[keyArg]=valueArg;
 			}
@@ -705,7 +705,7 @@ var __members = {
 	f_showProposal: function(proposalLabel, proposalValue, proposalItem, jsEvt) {
 		var label=this.f_getText();
 		
-		var labelCS=label
+		var labelCS=label;
 		var proposalLabelCS=proposalLabel;
 		
 		if (!this._caseSensitive) {

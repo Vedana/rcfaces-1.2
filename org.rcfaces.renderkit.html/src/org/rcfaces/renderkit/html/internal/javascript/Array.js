@@ -27,7 +27,8 @@ Array.prototype.f_removeElement=function(element) {
 		return true;
 	}
 	return false;
-}
+};
+
 /**
  * Removes the first occurrence in this list of the specified elements.
  *
@@ -51,7 +52,8 @@ Array.prototype.f_removeElements=function() {
 	}
 	
 	return cnt;
-}
+};
+
 /**
  * Adds the specified element to the list if the list does not contain the element.
  *
@@ -65,7 +67,8 @@ Array.prototype.f_addElement=function(element) {
 
 	this.push(element);
 	return true;
-}
+};
+
 /**
  * Adds the specified element to the list if the list does not contain the element.
  *
@@ -85,7 +88,8 @@ Array.prototype.f_addElements=function() {
 	}
 	
 	return cnt;		
-}
+};
+
 /**
  * Returns <tt>true</tt> if this array contains the specified element.
  *
@@ -103,7 +107,7 @@ Array.prototype.f_contains=function(element) {
 	}
 	
 	return false;
-}
+};
 
 /**
  * @method public static 
@@ -111,4 +115,4 @@ Array.prototype.f_contains=function(element) {
  */
 Array.f_getName=function() {
 	return "Array";
-}
+};

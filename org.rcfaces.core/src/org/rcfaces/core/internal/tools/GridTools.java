@@ -189,8 +189,8 @@ public class GridTools {
      * 
      * if (value == null) { return new ArrayIndexesModel(); }
      * 
-     * Class valueClass = value.getClass(); if (valueClass.isArray()) { int size =
-     * Array.getLength(value);
+     * Class valueClass = value.getClass(); if (valueClass.isArray()) { int size
+     * = Array.getLength(value);
      * 
      * return IndexesModels.selectAll(size); }
      * 
@@ -349,12 +349,10 @@ public class GridTools {
                         .getAdapter(DataModel.class, component);
                 if (dataModel != null) {
                     if (LOG.isDebugEnabled()) {
-                        LOG
-                                .debug("DataModel conversion: IAdaptable value type '"
-                                        + current
-                                        + "' for component '"
-                                        + component.getId()
-                                        + ", return a DataModel.");
+                        LOG.debug("DataModel conversion: IAdaptable value type '"
+                                + current
+                                + "' for component '"
+                                + component.getId() + ", return a DataModel.");
                     }
 
                     return dataModel;
@@ -370,12 +368,11 @@ public class GridTools {
 
             if (dataModel != null) {
                 if (LOG.isDebugEnabled()) {
-                    LOG
-                            .debug("DataModel conversion: AdaptableFactory response for type '"
-                                    + current
-                                    + "' for component '"
-                                    + component.getId()
-                                    + ", return a DataModel.");
+                    LOG.debug("DataModel conversion: AdaptableFactory response for type '"
+                            + current
+                            + "' for component '"
+                            + component.getId()
+                            + ", return a DataModel.");
                 }
 
                 return dataModel;
@@ -397,7 +394,6 @@ public class GridTools {
      * @version $Revision$ $Date$
      */
     static final class DataModelWrapper extends DataModel implements IDataModel {
-        private static final String REVISION = "$Revision$";
 
         private final IDataModel dataModel;
 
