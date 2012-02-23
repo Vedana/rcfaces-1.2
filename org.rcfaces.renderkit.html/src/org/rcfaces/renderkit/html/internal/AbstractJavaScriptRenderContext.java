@@ -653,6 +653,28 @@ public abstract class AbstractJavaScriptRenderContext implements
             writer.writeCall("f_env", "DisableClientValidation").writeln(");");
         }
 
+        Set<String> systemNames = processContext.getSystemParametersNames();
+        if (systemNames != null && systemNames.isEmpty() == false) {
+            writer.writeCall("f_env", "SetSystemParameterNames");
+
+            boolean first = true;
+            for (String name : systemNames) {
+                if (first) {
+                    first = false;
+                } else {
+                    writer.write(',');
+                }
+
+                writer.writeString(name);
+            }
+
+            writer.writeln(");");
+        }
+
+        if (htmlRenderContext.isClientValidation() == false) {
+            writer.writeCall("f_env", "DisableClientValidation").writeln(");");
+        }
+
         boolean flatIdentifier = processContext.isFlatIdentifierEnabled();
         if (flatIdentifier) {
             writer.writeCall("fa_namingContainer", "SetSeparator").writeln(

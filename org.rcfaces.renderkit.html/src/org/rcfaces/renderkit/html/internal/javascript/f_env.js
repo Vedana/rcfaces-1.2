@@ -442,6 +442,35 @@ var __statics = {
 		f_imageRepository.PrepareImage(url);
 		
 		return url;
+	},
+	/**
+	 * @method public static 
+	 * @param String... systemParameterNames
+	 * @return void
+	 */
+	SetSystemParameterNames: function(systemParameterNames) {
+		var names=f_env._SystemParameterNames;
+		if (!names) {
+			names=new Object();
+			f_env._SystemParameterNames=names;
+		}
+		
+		for(var i=0;i<arguments.length;i++) {
+			names[arguments[i]]=true;
+		}
+	},
+	/**
+	 * @method public static 
+	 * @return Object
+	 */
+	GetSystemParameterNames: function() {
+		var names=f_env._SystemParameterNames;
+		if (!names) {
+			names=new Object();
+			f_env._SystemParameterNames=names;
+		}
+
+		return names;
 	}
 };
 

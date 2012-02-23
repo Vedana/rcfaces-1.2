@@ -56,7 +56,8 @@ var __members = {
 			
 			this._parameters=f_core.ParseDataAttribute(this,f_core._VNS+":parameter");
 			
-			this.f_setViewURL(f_core.GetAttributeNS(this,"viewURL","about:blank"));
+			var viewURL=f_core.GetAttributeNS(this, "viewURL", "about:blank");
+			this.f_setViewURL(viewURL);
 
 			if (f_core.GetBooleanAttributeNS(this, "visible", true)) {
 				this.f_open();
@@ -181,7 +182,15 @@ var __members = {
 			var ds="";
 			var first=true;
 			
+			var system=f_env.GetSystemParameterNames();
+			
 			for(var key in param) {
+				
+				if (system[key]) {
+					url=f_core.AddParameter(url, key, param[key]);
+					continue;
+				}
+				
 				if (first) {
 					first=false;
 				} else {
