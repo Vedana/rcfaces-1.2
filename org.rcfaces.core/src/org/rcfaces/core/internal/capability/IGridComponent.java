@@ -30,6 +30,8 @@ public interface IGridComponent {
 
     int getFirst();
 
+    String getVar();
+
     String getRowCountVar();
 
     String getRowIndexVar();
