@@ -38,8 +38,13 @@ var __statics = {
 			lst=new Array;
 			dgp[componentId]=lst;
 		}
-		
-		lst.push(pager);
+
+		if (!pager.id) {
+			pager.id=f_core.AllocateAnoIdentifier();
+		}
+
+		// On enregistre l'ID pour eviter les leaks !
+		lst.push(pager.id);
 
 		var dp=pager.ownerDocument.getElementById(componentId);
 		// Le dataGrid n'existe pas forcement lors de son enregistrement !		
@@ -69,8 +74,10 @@ var __statics = {
 			return;
 		}
 		
+		var pagerId=pager.id;
+		
 		for(var componentId in dgp) {
-			dgp[componentId].f_removeElement(pager);
+			dgp[componentId].f_removeElement(pagerId);
 		}
 	},
 	/**
@@ -80,7 +87,7 @@ var __statics = {
 	Finalizer: function() {
 		fa_pagedComponent._DataPagers=undefined;
 	}
-}
+};
  
 var __members = {
 	fa_pagedComponent: function() {
@@ -134,9 +141,24 @@ var __members = {
 			return;
 		}
 		
+		var doc=this.ownerDocument;
+		
 		for(var i=0;i<lst.length;i++) {
-			var p=lst[i];
+			var pId=lst[i];
+			if (!pId) {
+				continue;
+			}
+			
+			var p=f_core.GetElementByClientId(pId, doc);
 			if (!p) {
+				lst[i]=undefined; // N'existe plus  (AJAX ???)
+				continue;
+			}
+
+			if (!p.fa_pagedComponentInitialized) {
+				f_core.Error(fa_pagedComponent, "f_performPagedComponentInitialized: Can not call fa_pagedComponentInitialized on pager='"+p.id+"'.");
+				
+				lst[i]=undefined;
 				continue;
 			}
 			
@@ -213,7 +235,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setFirst: f_class.ABSTRACT
-}
+};
 
 new f_aspect("fa_pagedComponent", {
 	extend: [ fa_filterProperties ],
