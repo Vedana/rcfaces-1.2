@@ -617,7 +617,7 @@ var __members = {
 				var evt = f_core.GetJsEvent(this);
 				
 				evt.cancelBubble=true;
-			}
+			};
 
 			focus.onbeforedeactivate=function() {
 
@@ -640,7 +640,7 @@ var __members = {
 				}
 				
 				return true;
-			}
+			};
 		}
 		
 		this.onmousedown=f_tree._BodyMouseDown;
@@ -2848,13 +2848,13 @@ var __members = {
 		var values=new Array;
 		var texts=new Array;
 		
-		var exp=/\|/g
+		var exp=/\|/g;
 		
 		this.f_mapHierarchicalValues(function(value, element) {
 			ids.unshift(element._divNode.id.replace(exp, " "));			
 			texts.unshift(element._node._label.replace(exp, " "));			
 			values.unshift(value.replace(exp, " "));
-		})
+		});
 		
 		this.setAttribute(f_core._VNS+":breadCrumbsIds", ids.join("|"));
 		this.setAttribute(f_core._VNS+":breadCrumbsValues", values.join("|"));
