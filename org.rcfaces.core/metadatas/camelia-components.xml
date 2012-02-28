@@ -316,7 +316,9 @@
 		<method id="getClientDataMap(javax.faces.context.FacesContext)" />
 
 		<method id="getServerData(String,javax.faces.context.FacesContext)" />
+		<method id="getServerDataValueExpression(String,javax.faces.context.FacesContext)" />
 		<method id="setServerData(String,javax.faces.el.ValueBinding)" />
+
 		<method id="listServerDataKeys(javax.faces.context.FacesContext)" />
 		<method id="getServerDataMap(javax.faces.context.FacesContext)" />
 
@@ -523,6 +525,7 @@
 		<method id="setClientData(String,javax.faces.el.ValueBinding)" />
 
 		<method id="getServerData(String,javax.faces.context.FacesContext)" />
+		<method id="getServerDataValueExpression(String,javax.faces.context.FacesContext)" />
 		<method id="setServerData(String,javax.faces.el.ValueBinding)" />
 
 		<method id="getClientDataMap(javax.faces.context.FacesContext)" />
@@ -2827,6 +2830,7 @@ Dans le cas d'un mode period !
 		<method id="setClientData(String,javax.faces.el.ValueBinding)" />
 
 		<method id="getServerData(String,javax.faces.context.FacesContext)" />
+		<method id="getServerDataValueExpression(String,javax.faces.context.FacesContext)" />
 		<method id="setServerData(String,javax.faces.el.ValueBinding)" />
 
 		<method id="getClientDataMap(javax.faces.context.FacesContext)" />
@@ -3011,6 +3015,7 @@ Dans le cas d'un mode period !
 		<method id="setClientData(String,javax.faces.el.ValueBinding)" />
 
 		<method id="getServerData(String,javax.faces.context.FacesContext)" />
+		<method id="getServerDataValueExpression(String,javax.faces.context.FacesContext)" />
 		<method id="setServerData(String,javax.faces.el.ValueBinding)" />
 
 		<method id="getClientDataMap(javax.faces.context.FacesContext)" />
@@ -4526,6 +4531,7 @@ Dans le cas d'un mode period !
 		<method id="setClientData(String,javax.faces.el.ValueBinding)" />
 
 		<method id="getServerData(String,javax.faces.context.FacesContext)" />
+		<method id="getServerDataValueExpression(String,javax.faces.context.FacesContext)" />
 		<method id="setServerData(String,javax.faces.el.ValueBinding)" />
 
 		<method id="getClientDataMap(javax.faces.context.FacesContext)" />
@@ -4562,6 +4568,7 @@ Dans le cas d'un mode period !
 		<method id="setClientData(String,javax.faces.el.ValueBinding)" />
 
 		<method id="getServerData(String,javax.faces.context.FacesContext)" />
+		<method id="getServerDataValueExpression(String,javax.faces.context.FacesContext)" />
 		<method id="setServerData(String,javax.faces.el.ValueBinding)" />
 
 		<method id="getClientDataMap(javax.faces.context.FacesContext)" />
