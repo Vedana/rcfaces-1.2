@@ -96,6 +96,18 @@ public abstract class AbstractMessagesComponent extends CameliaMessagesComponent
 		
 	}
 
+	public ValueExpression getServerDataValueExpression(String name, FacesContext facesContext) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
+		if (dataMapAccessor==null) {
+			return null;
+		}
+		
+		return dataMapAccessor.getValueExpression(name);
+		
+	}
+
 	public Object setServerData(String name, Object value) {
 
 
@@ -171,7 +183,7 @@ public abstract class AbstractMessagesComponent extends CameliaMessagesComponent
 	public Object getServerData(String name, FacesContext facesContext) {
 
 
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
 		if (dataMapAccessor==null) {
 			return null;
 		}

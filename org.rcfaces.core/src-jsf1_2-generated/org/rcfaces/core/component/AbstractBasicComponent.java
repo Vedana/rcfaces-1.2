@@ -159,12 +159,24 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 	public Object getServerData(String name, FacesContext facesContext) {
 
 
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
 		if (dataMapAccessor==null) {
 			return null;
 		}
 		
 		return dataMapAccessor.getData(name, facesContext);
+		
+	}
+
+	public ValueExpression getServerDataValueExpression(String name, FacesContext facesContext) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
+		if (dataMapAccessor==null) {
+			return null;
+		}
+		
+		return dataMapAccessor.getValueExpression(name);
 		
 	}
 

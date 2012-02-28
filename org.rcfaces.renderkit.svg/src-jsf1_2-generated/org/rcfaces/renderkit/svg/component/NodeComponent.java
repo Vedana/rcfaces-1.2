@@ -106,7 +106,7 @@ public abstract class NodeComponent extends CameliaItemComponent implements
 	public Object getServerData(String name, FacesContext facesContext) {
 
 
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
 		if (dataMapAccessor==null) {
 			return null;
 		}
