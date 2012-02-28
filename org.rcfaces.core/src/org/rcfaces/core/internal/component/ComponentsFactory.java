@@ -18,7 +18,6 @@ import org.rcfaces.core.internal.capability.IComponentEngine;
  * @version $Revision$ $Date$
  */
 public class ComponentsFactory implements IFactory {
-    private static final String REVISION = "$Revision$";
 
     private static final ComponentsFactory SINGLETON = new ComponentsFactory();
 
@@ -34,7 +33,7 @@ public class ComponentsFactory implements IFactory {
         return SINGLETON;
     }
 
-    public List createList(int size) {
+    public List< ? > createList(int size) {
         return new ArrayList(size);
     }
 

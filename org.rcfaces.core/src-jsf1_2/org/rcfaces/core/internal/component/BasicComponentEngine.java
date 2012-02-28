@@ -776,6 +776,7 @@ public class BasicComponentEngine extends AbstractComponentEngine {
                     forceDelta);
         }
 
+        @Override
         public IPropertiesManager copyOriginalState() {
             BasicDataAccessor copy = new BasicDataAccessor(name);
             if (this.propertiesManager != this) {
@@ -833,6 +834,24 @@ public class BasicComponentEngine extends AbstractComponentEngine {
             return object;
         }
 
+        public ValueExpression getValueExpression(String key) {
+            IPropertiesAccessor propertiesAccessor = getDataPropertiesAccessor(false);
+            if (propertiesAccessor == null) {
+                return null;
+            }
+
+            Object object = propertiesAccessor.getProperty(key);
+            if (object == null) {
+                return null;
+            }
+
+            if ((object instanceof ValueExpression) == false) {
+                return null;
+            }
+
+            return (ValueExpression) object;
+        }
+
         public Object setData(String name, Object value,
                 FacesContext facesContext) {
             IPropertiesAccessor propertiesAccessor = getDataPropertiesAccessor(true);
@@ -862,12 +881,12 @@ public class BasicComponentEngine extends AbstractComponentEngine {
                 return STRING_EMPTY_ARRAY;
             }
 
-            Collection c = propertiesAccessor.keySet();
+            Collection<String> c = propertiesAccessor.keySet();
             if (c.isEmpty()) {
                 return STRING_EMPTY_ARRAY;
             }
 
-            return (String[]) c.toArray(new String[c.size()]);
+            return c.toArray(new String[c.size()]);
         }
 
         public void restoreDataState(FacesContext context, Object datas) {
@@ -901,13 +920,13 @@ public class BasicComponentEngine extends AbstractComponentEngine {
             propertiesManager.commitManager(context);
         }
 
-        public Map getDataMap(FacesContext facesContext) {
+        public Map<String, Object> getDataMap(FacesContext facesContext) {
             String keys[] = listDataKeys(facesContext);
             if (keys.length < 1) {
-                return Collections.EMPTY_MAP;
+                return Collections.emptyMap();
             }
 
-            Map map = new HashMap(keys.length);
+            Map<String, Object> map = new HashMap<String, Object>(keys.length);
 
             for (int i = 0; i < keys.length; i++) {
                 String key = keys[i];

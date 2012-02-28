@@ -16,7 +16,6 @@ import org.rcfaces.core.internal.capability.IStateChildrenList;
  * @version $Revision$ $Date$
  */
 class BasicStateChildrenList implements IStateChildrenList {
-    private static final String REVISION = "$Revision$";
 
     private List list;
 
@@ -25,7 +24,9 @@ class BasicStateChildrenList implements IStateChildrenList {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.component.IStateIdChildrenList#setChildren(java.util.List)
+     * @see
+     * org.rcfaces.core.internal.component.IStateIdChildrenList#setChildren(
+     * java.util.List)
      */
     public final void setChildren(List list) {
         if (list == this.list) {
@@ -294,7 +295,8 @@ class BasicStateChildrenList implements IStateChildrenList {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.component.IStateIdChildrenList#getStateId()
+     * @see
+     * org.rcfaces.core.internal.component.IStateIdChildrenList#getStateId()
      */
     public final int getState() {
         return stateId;

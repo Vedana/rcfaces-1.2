@@ -29,7 +29,7 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
 
     private static final boolean debugEnabled = LOG.isDebugEnabled();
 
-    private Map properties;
+    private Map<String, Object> properties;
 
     public Object getProperty(String propertyName) {
         if (properties == null || properties.isEmpty()) {
@@ -185,8 +185,10 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
 
         Object rets[] = new Object[properties.size() * 2];
         int i = 0;
-        for (Iterator it = properties.entrySet().iterator(); it.hasNext();) {
-            Map.Entry entry = (Map.Entry) it.next();
+        for (Iterator<Map.Entry<String, Object>> it = properties.entrySet()
+                .iterator(); it.hasNext();) {
+            Map.Entry<String, Object> entry = (Map.Entry<String, Object>) it
+                    .next();
 
             Object value = entry.getValue();
             if (value == null) {
@@ -268,9 +270,9 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
         return properties.containsKey(propertyName);
     }
 
-    public Set keySet() {
+    public Set<String> keySet() {
         if (properties == null || properties.isEmpty()) {
-            return Collections.EMPTY_SET;
+            return Collections.emptySet();
         }
 
         return properties.keySet();
@@ -284,18 +286,19 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
         return properties.size();
     }
 
+    @Override
     public String toString() {
         if (properties == null) {
             return "[EMPTY]";
         }
 
-        Set keys = keySet();
+        Set<String> keys = keySet();
 
         String s = "{";
 
         boolean first = true;
-        for (Iterator it = keys.iterator(); it.hasNext();) {
-            String key = (String) it.next();
+        for (Iterator<String> it = keys.iterator(); it.hasNext();) {
+            String key = it.next();
 
             if (first) {
                 first = false;

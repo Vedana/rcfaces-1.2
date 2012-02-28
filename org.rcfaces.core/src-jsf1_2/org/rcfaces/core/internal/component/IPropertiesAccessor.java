@@ -3,6 +3,7 @@
  */
 package org.rcfaces.core.internal.component;
 
+import java.util.Map;
 import java.util.Set;
 
 import javax.el.ValueExpression;
@@ -39,6 +40,7 @@ public interface IPropertiesAccessor {
 
     int size();
 
-    void putAll(FacesContext context, Set propertiesMapEntry, Object undefined);
+    void putAll(FacesContext context,
+            Set<Map.Entry<String, Object>> propertiesMapEntry, Object undefined);
 
 }

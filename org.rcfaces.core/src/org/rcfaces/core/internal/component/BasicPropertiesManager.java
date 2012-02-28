@@ -16,7 +16,6 @@ import org.apache.commons.logging.LogFactory;
  */
 public class BasicPropertiesManager extends BasicPropertiesAccessor implements
         IPropertiesManager {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(BasicPropertiesManager.class);
@@ -116,9 +115,8 @@ public class BasicPropertiesManager extends BasicPropertiesAccessor implements
                                     .createDeltaPropertiesAccessor();
 
                             if (debugEnabled) {
-                                LOG
-                                        .debug("  create commitedPropertiesAccessor="
-                                                + commitedPropertiesAccessor);
+                                LOG.debug("  create commitedPropertiesAccessor="
+                                        + commitedPropertiesAccessor);
                             }
                         }
                     }
@@ -128,9 +126,8 @@ public class BasicPropertiesManager extends BasicPropertiesAccessor implements
                                 .createDeltaPropertiesAccessor();
 
                         if (debugEnabled) {
-                            LOG
-                                    .debug("  create deltaPropertiesAccessor from commited ="
-                                            + deltaPropertiesAccessor);
+                            LOG.debug("  create deltaPropertiesAccessor from commited ="
+                                    + deltaPropertiesAccessor);
                         }
 
                     } else {
@@ -138,9 +135,8 @@ public class BasicPropertiesManager extends BasicPropertiesAccessor implements
                                 .createDeltaPropertiesAccessor();
 
                         if (debugEnabled) {
-                            LOG
-                                    .debug("  create deltaPropertiesAccessor from original ="
-                                            + deltaPropertiesAccessor);
+                            LOG.debug("  create deltaPropertiesAccessor from original ="
+                                    + deltaPropertiesAccessor);
                         }
                     }
                 }
@@ -193,6 +189,7 @@ public class BasicPropertiesManager extends BasicPropertiesAccessor implements
 
     }
 
+    @SuppressWarnings("unused")
     public void restoreManagerState(FacesContext context, Object state) {
         if (state == null) {
             return;
@@ -277,6 +274,7 @@ public class BasicPropertiesManager extends BasicPropertiesAccessor implements
         return this;
     }
 
+    @Override
     public String toString() {
         if (deltaPropertiesAccessor != null) {
             return "[PropertiesManager:DELTA properties="

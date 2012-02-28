@@ -16,9 +16,9 @@ import org.rcfaces.core.internal.capability.IComponentEngine;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractComponentEngine implements IComponentEngine {
-    private static final String REVISION = "$Revision$";
 
-    static final Iterator EMPTY_ITERATOR = Collections.EMPTY_SET.iterator();
+    static final Iterator< ? > EMPTY_ITERATOR = Collections.EMPTY_SET
+            .iterator();
 
     protected final IFactory factory;
 
@@ -35,17 +35,17 @@ public abstract class AbstractComponentEngine implements IComponentEngine {
      * @see javax.faces.component.UIComponent#getFamily()
      */
 
-    protected static final boolean isListEmpty(Collection list) {
+    protected static final boolean isListEmpty(Collection< ? > list) {
         return (list == null) || (list.size() < 1);
     }
 
-    protected static final boolean isMapEmpty(Map map) {
+    protected static final boolean isMapEmpty(Map< ? , ? > map) {
         return (map == null) || (map.size() < 1);
     }
 
-    protected static final Iterator iteratorList(Collection list) {
+    protected static final <T> Iterator<T> iteratorList(Collection<T> list) {
         if (isListEmpty(list)) {
-            return EMPTY_ITERATOR;
+            return (Iterator<T>) EMPTY_ITERATOR;
         }
 
         return list.iterator();
