@@ -3,6 +3,8 @@
  */
 package org.rcfaces.core.lang;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.adapter.IAdapterManager;
 
@@ -13,10 +15,12 @@ import org.rcfaces.core.internal.adapter.IAdapterManager;
  */
 public class DefaultAdaptable implements IAdaptable {
 
-	public <T> T getAdapter(Class<T> adapter, Object parameter) {
-		IAdapterManager adapterManager = RcfacesContext.getCurrentInstance()
-				.getAdapterManager();
+    private static final Log LOG = LogFactory.getLog(DefaultAdaptable.class);
 
-		return adapterManager.getAdapter(this, adapter, parameter);
-	}
+    public <T> T getAdapter(Class<T> adapter, Object parameter) {
+        IAdapterManager adapterManager = RcfacesContext.getCurrentInstance()
+                .getAdapterManager();
+
+        return adapterManager.getAdapter(this, adapter, parameter);
+    }
 }

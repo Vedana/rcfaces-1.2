@@ -40,7 +40,6 @@ import org.rcfaces.core.provider.AbstractProvider;
  */
 public class ContentStorageEngineImpl extends AbstractProvider implements
         IContentStorageEngine {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(ContentStorageEngineImpl.class);
@@ -62,6 +61,7 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
     private final LimitedMap registredContentsByGenerationInformation = new LimitedMap(
             Constants.CONTENT_STORAGE_CACHE_SIZE);
 
+    @Override
     public void startup(FacesContext facesContext) {
         super.startup(facesContext);
 
@@ -98,7 +98,7 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
             IGeneratedResourceInformation generatedInformation,
             IGenerationResourceInformation generationInformation) {
 
-        boolean modified = false;
+        // boolean modified = false;
         if (generatedInformation == null) {
             generatedInformation = new BasicGeneratedResourceInformation();
         }
@@ -119,8 +119,7 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
                                     .getExternalContext().getApplicationMap());
 
                     if (contentStorageServletURL == null) {
-                        LOG
-                                .info("Content storage engine is disabled. (No started Content Storage Servlet)");
+                        LOG.info("Content storage engine is disabled. (No started Content Storage Servlet)");
 
                         return ContentAccessorFactory.UNSUPPORTED_CONTENT_ACCESSOR;
                     }
@@ -252,16 +251,15 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
 
                     try {
                         if (wrappedData instanceof IAdaptable) {
-                            resolvedContent = (IResolvedContent) ((IAdaptable) wrappedData)
+                            resolvedContent = ((IAdaptable) wrappedData)
                                     .getAdapter(IResolvedContent.class,
                                             parametrizedAdaptation);
                         }
 
                         if (resolvedContent == null) {
-                            resolvedContent = (IResolvedContent) adapterManager
-                                    .getAdapter(wrappedData,
-                                            IResolvedContent.class,
-                                            parametrizedAdaptation);
+                            resolvedContent = adapterManager.getAdapter(
+                                    wrappedData, IResolvedContent.class,
+                                    parametrizedAdaptation);
                         }
                     } catch (Exception ex) {
                         LOG.error(
@@ -305,8 +303,8 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
         }
 
         IContentAccessor contentAccessor = new BasicContentAccessor(null,
-                contentStorageServletURL + '/' + url, generatedInformation
-                        .getContentFamily());
+                contentStorageServletURL + '/' + url,
+                generatedInformation.getContentFamily());
 
         contentAccessor.setPathType(contentStorageServletPathType);
 
@@ -317,20 +315,19 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
             IGeneratedResourceInformation generatedInformation) {
 
         if (contentStorageServletURL == null) {
-            LOG
-                    .info("ContentStorage is not initialized. (Servlet path is invalid)");
+            LOG.info("ContentStorage is not initialized. (Servlet path is invalid)");
 
             return ContentAccessorFactory.UNSUPPORTED_CONTENT_ACCESSOR;
         }
 
         IResolvedContent resolvedContent = null;
         if (ref instanceof IAdaptable) {
-            resolvedContent = (IResolvedContent) ((IAdaptable) ref).getAdapter(
+            resolvedContent = ((IAdaptable) ref).getAdapter(
                     IResolvedContent.class, null);
         }
 
         if (resolvedContent == null) {
-            resolvedContent = (IResolvedContent) adapterManager.getAdapter(ref,
+            resolvedContent = adapterManager.getAdapter(ref,
                     IResolvedContent.class, null);
         }
 
@@ -362,7 +359,6 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
     public static class ResolvedContentAtRequest extends
             AbstractResolvedContent implements IResolvedContentWrapper,
             Serializable {
-        private static final String REVISION = "$Revision$";
 
         private static final long serialVersionUID = -7807317078965658005L;
 
@@ -418,6 +414,7 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
             return resolvedContent != null;
         }
 
+        @Override
         public String getURLSuffix() {
             if (isContentResolved()) {
                 return getResolvedContent().getURLSuffix();
@@ -430,6 +427,7 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
             return getResolvedContent().getInputStream();
         }
 
+        @Override
         public long getModificationDate() {
             if (isContentResolved()) {
                 return getResolvedContent().getModificationDate();
@@ -438,10 +436,12 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
             return specifiedLastModificationDate;
         }
 
+        @Override
         public int getLength() {
             return getResolvedContent().getLength();
         }
 
+        @Override
         public void appendHashInformations(StringAppender sa) {
             // Il faut les infos du content model ???
 
@@ -469,9 +469,8 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
                         contentModel, generationInformation, null);
 
                 if (wrappedData instanceof IAdaptable) {
-                    resolvedContent = (IResolvedContent) ((IAdaptable) wrappedData)
-                            .getAdapter(IResolvedContent.class,
-                                    parametrizedAdaptation);
+                    resolvedContent = ((IAdaptable) wrappedData).getAdapter(
+                            IResolvedContent.class, parametrizedAdaptation);
 
                     if (resolvedContent != null) {
                         return resolvedContent;
@@ -481,9 +480,9 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
                 RcfacesContext rcfacesContext = RcfacesContext
                         .getCurrentInstance();
 
-                resolvedContent = (IResolvedContent) rcfacesContext
-                        .getAdapterManager().getAdapter(wrappedData,
-                                IResolvedContent.class, parametrizedAdaptation);
+                resolvedContent = rcfacesContext.getAdapterManager()
+                        .getAdapter(wrappedData, IResolvedContent.class,
+                                parametrizedAdaptation);
 
                 if (resolvedContent != null) {
                     return resolvedContent;
@@ -501,24 +500,29 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
             }
         }
 
+        @Override
         public boolean isProcessAtRequest() {
             return true;
         }
 
+        @Override
         public boolean isErrored() {
             IResolvedContent resolvedContent = getResolvedContent();
 
             return errorState || resolvedContent.isErrored();
         }
 
+        @Override
         public String getETag() {
             return getResolvedContent().getETag();
         }
 
+        @Override
         public String getHash() {
             return getResolvedContent().getHash();
         }
 
+        @Override
         public String getResourceKey() {
             if (isContentResolved() == false && isProcessAtRequest()) {
                 // C'est traité sur la requete !
@@ -544,7 +548,6 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
      * @version $Revision$ $Date$
      */
     public static class Content implements StateHolder {
-        private static final String REVISION = "$Revision$";
 
         // private IGenerationResourceInformation generationInformation;
 

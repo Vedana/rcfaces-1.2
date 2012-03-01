@@ -12,45 +12,47 @@ import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
  * @version $Revision$ $Date$
  */
 public class ContentModelWrapper implements IContentModel {
-	private IContentModel contentModel;
+    private IContentModel contentModel;
 
-	public void setContentModel(IContentModel contentModel) {
-		this.contentModel = contentModel;
-	}
+    public void setContentModel(IContentModel contentModel) {
+        this.contentModel = contentModel;
+    }
 
-	public IContentModel getContentModel() {
-		return contentModel;
-	}
+    public IContentModel getContentModel() {
+        return contentModel;
+    }
 
-	public boolean checkNotModified() {
-		return contentModel.checkNotModified();
-	}
+    public boolean checkNotModified() {
+        return contentModel.checkNotModified();
+    }
 
-	public String getContentEngineId() {
-		return contentModel.getContentEngineId();
-	}
+    public String getContentEngineId() {
+        return contentModel.getContentEngineId();
+    }
 
-	public Object getWrappedData() {
-		return contentModel.getWrappedData();
-	}
+    public Object getWrappedData() {
+        return contentModel.getWrappedData();
+    }
 
-	public void setContentEngineId(String contentEngineId) {
-		contentModel.setContentEngineId(contentEngineId);
-	}
+    public void setContentEngineId(String contentEngineId) {
+        contentModel.setContentEngineId(contentEngineId);
+    }
 
-	public boolean equals(Object obj) {
-		return contentModel.equals(obj);
-	}
+    @Override
+    public boolean equals(Object obj) {
+        return contentModel.equals(obj);
+    }
 
-	public int hashCode() {
-		return contentModel.hashCode();
-	}
+    @Override
+    public int hashCode() {
+        return contentModel.hashCode();
+    }
 
-	public void setInformations(
-			IGenerationResourceInformation generationInformation,
-			IGeneratedResourceInformation generatedInformation) {
-		contentModel.setInformations(generationInformation,
-				generatedInformation);
-	}
+    public void setInformations(
+            IGenerationResourceInformation generationInformation,
+            IGeneratedResourceInformation generatedInformation) {
+        contentModel.setInformations(generationInformation,
+                generatedInformation);
+    }
 
 }
