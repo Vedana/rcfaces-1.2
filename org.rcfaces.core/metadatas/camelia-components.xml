@@ -1212,6 +1212,8 @@
 
 		<capability id="org.rcfaces.core.lang.provider.ICursorProvider"/>
 
+		<capability id="IScopeColumnIdCapability" />
+		
 		<attribute id="rowValueColumnId" type="java.lang.String" />
 		<attribute id="rowLabelColumnId" type="java.lang.String"/>
 
@@ -1221,7 +1223,6 @@
 		<attribute id="cellTextWrap" type="boolean" default="false"/>
 		
 		<attribute id="bodyDroppable" type="boolean" default="false"/>
-
 				
 		<action id="action" type="selection" default="true"/>
 		
@@ -1760,6 +1761,8 @@
 		<capability id="IRowToolTipIdCapability" />
 
 		<capability id="IHeaderVisibilityCapability" default="true"/>
+
+		<capability id="IScopeColumnIdCapability" />		
 
 		<attribute id="rowCountVar" type="java.lang.String" noValueBinding="true"/>
 		<attribute id="rowIndexVar" type="java.lang.String" noValueBinding="true"/>
