@@ -1087,12 +1087,12 @@ var __statics = {
 		dataGrid._columnSelected = column;
 		dataGrid._updateTitleStyle(column);
 
-		if (f_core.IsGecko()) {
-			// GROS BUG firefox,  il existe une zone en dessous de la baseline qui n'envoie pas de CLICK !
-			f_grid._TitleMouseDownTime=new Date().getTime();
-			f_grid._TitleWaitClickTime=0;
-			f_grid._TitleIgnoreClickTime=0;
+		if (f_core.IsGecko()) {			
 			f_grid._TitleReleaseTimer();
+
+			// GROS BUG firefox,  il existe une zone en dessous de la baseline qui n'envoie pas de CLICK !
+			f_grid._TitleClicked=false;
+			f_grid._TitleMouseDownTime=new Date().getTime();
 		}
 	
 		return true;
@@ -1127,7 +1127,7 @@ var __statics = {
 			return false;
 		}
 
-		var ascending;
+		var ascending=undefined;
 		var cancel;
 
 		var code = evt.keyCode;
@@ -1213,6 +1213,13 @@ var __statics = {
 				next = (cl == column);
 			}
 			break;
+		}
+
+		if (f_core.IsGecko()) {			
+			f_grid._TitleReleaseTimer();
+
+			// GROS BUG firefox,  il existe une zone en dessous de la baseline qui n'envoie pas de CLICK !
+			f_grid._TitleClicked=false;
 		}
 
 		if (ascending !== undefined) {
@@ -1329,16 +1336,17 @@ var __statics = {
 			evt = f_core.GetJsEvent(this);
 		}
 
-		f_grid._TitleReleaseTimer();
-		var lastClickTime=f_grid._TitleLastClickTime;
-		if (lastClickTime) { // Que Firefox
-			f_grid._TitleLastClickTime=0;
-			
-			if ((new Date().getTime()-lastClickTime)<400) {
+		if (f_grid._TitleClicked!==undefined) {
+			f_grid._TitleReleaseTimer();
+
+			f_core.Debug(f_grid, "_Title_onClick: already clicked ? =>"+f_grid._TitleClicked);
+
+			if (f_grid._TitleClicked) { // Que Firefox
 				return false;
 			}
+			f_grid._TitleClicked=true;
 		}
-
+		
 		f_core.Debug(f_grid, "_Title_onClick: perform event " + evt);
 
 		if (dataGrid.f_getEventLocked(evt, false)) {
@@ -1409,9 +1417,12 @@ var __statics = {
 		
 		f_grid._TitleReleaseTimer();
 
+
 		var date=f_grid._TitleMouseDownTime; // Que pour Firefox
+		f_core.Debug(f_grid, "_Title_onMouseUp: date="+date+"  buttons="+f_core.GetEvtButton(evt));
+
 		if (date && f_core.GetEvtButton(evt)==f_core.LEFT_MOUSE_BUTTON) {
-			var buttons = evt.which;
+			var buttons=evt.which;
 			var ctrlKey=evt.ctrlKey;
 			var altKey=evt.altKey;
 			var shiftKey=evt.shiftKey;
@@ -1420,12 +1431,21 @@ var __statics = {
 			
 			var now=new Date().getTime();
 			var delta=now-date;
-			if (delta<1000) {
+			
+			f_core.Debug(f_grid, "_Title_onMouseUp: delta="+delta+", start timeout callback");
+
+			if (delta<1000) {				
+				// Il faut que le DOWN et UP se fasse en moins de 1s !
 				f_grid._TitleWaitClickTimerId=window.setTimeout(function() {
 					if (window._rcfacesExiting) {
 						return;
 					}
+					if (!f_grid._TitleWaitClickTimerId) {
+						return;
+					}
 					
+					f_core.Debug(f_grid, "_Title_onMouseUp: Timeout callback wake up !");
+				
 					var doc = dataGrid.ownerDocument;
 					var evt = doc.createEvent('MouseEvents');
 					evt.initMouseEvent('click', true, true, doc.defaultView, detail, 0, 0, 0, 0, ctrlKey, altKey, shiftKey, metaKey, buttons, null);
@@ -1439,8 +1459,14 @@ var __statics = {
 	 * @method private static
 	 */
 	_TitleVerifyClick: function(dataGrid, column, evt) {
-		f_grid._TitleWaitClickTime=undefined;
-		f_grid._TitleLastClickTime=new Date().getTime();
+		if (f_grid._TitleClicked) {
+			f_core.Debug(f_grid, "_TitleVerifyClick: ignore verification ... click already performed !");
+
+			return false;
+		}
+		f_grid._TitleClicked=true;
+		
+		f_core.Debug(f_grid, "_TitleVerifyClick: perform verify click !");
 
 		if (column.f_fireEvent(f_event.SELECTION, evt, null, null, dataGrid) === false) {
 
