@@ -82,6 +82,7 @@ import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import org.rcfaces.core.component.capability.IAdditionalInformationEventCapability;
 import org.rcfaces.core.component.DataColumnComponent;
 import org.rcfaces.core.component.iterator.IAdditionalInformationIterator;
+import org.rcfaces.core.component.capability.IScopeColumnIdCapability;
 import org.rcfaces.core.component.capability.IDropEventCapability;
 import java.lang.String;
 import org.rcfaces.core.internal.converter.ClientFullStateConverter;
@@ -215,6 +216,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 	IHeaderVisibilityCapability,
 	IRowToolTipIdCapability,
 	ICursorProvider,
+	IScopeColumnIdCapability,
 	IToolTipComponent,
 	IGridComponent,
 	IDroppableGridComponent,
@@ -234,7 +236,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"dragListener","rowDropEffects","dropListener","dropEffects","fullCriteriaCount","emptyDataMessage","loadListener","checkedValues","selectionListener","paged","additionalInformationListener","cursorValue","border","required","bodyDroppable","doubleClickListener","clientCheckFullState","rowLabelColumnId","horizontalScrollPosition","rowCountVar","dropCompleteListener","rowToolTipId","dropTypes","rowDragEffects","rowValueColumnId","selectedCriteriaColumns","additionalInformationCardinality","rowIndexVar","checkListener","headerVisible","droppable","selectionCardinality","dragTypes","rowDropTypes","clientAdditionalInformationFullState","checkCardinality","checkable","cellTextWrap","rowDragTypes","additionalInformationValues","showValue","verticalScrollPosition","clientSelectionFullState","preferences","filterProperties","dragEffects","selectedValues","rowStyleClass","keySearchColumnId","readOnly","selectable","draggable","disabled"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"dragListener","scopeColumnId","rowDropEffects","dropListener","dropEffects","fullCriteriaCount","emptyDataMessage","loadListener","checkedValues","selectionListener","paged","additionalInformationListener","cursorValue","border","required","bodyDroppable","doubleClickListener","clientCheckFullState","rowLabelColumnId","horizontalScrollPosition","rowCountVar","dropCompleteListener","rowToolTipId","dropTypes","rowDragEffects","rowValueColumnId","selectedCriteriaColumns","additionalInformationCardinality","rowIndexVar","checkListener","headerVisible","droppable","selectionCardinality","dragTypes","rowDropTypes","clientAdditionalInformationFullState","checkCardinality","checkable","cellTextWrap","rowDragTypes","additionalInformationValues","showValue","verticalScrollPosition","clientSelectionFullState","preferences","filterProperties","dragEffects","selectedValues","rowStyleClass","keySearchColumnId","readOnly","selectable","draggable","disabled"}));
 	}
 
 	public DataGridComponent() {
@@ -1714,6 +1716,29 @@ public class DataGridComponent extends AbstractDataComponent implements
 
 	public void setCursorValue(java.lang.Object cursorValue) {
 		engine.setProperty(Properties.CURSOR_VALUE, cursorValue);
+	}
+
+	public java.lang.String getScopeColumnId() {
+		return getScopeColumnId(null);
+	}
+
+	/**
+	 * See {@link #getScopeColumnId() getScopeColumnId()} for more details
+	 */
+	public java.lang.String getScopeColumnId(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.SCOPE_COLUMN_ID, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "scopeColumnId" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isScopeColumnIdSetted() {
+		return engine.isPropertySetted(Properties.SCOPE_COLUMN_ID);
+	}
+
+	public void setScopeColumnId(java.lang.String scopeColumnId) {
+		engine.setProperty(Properties.SCOPE_COLUMN_ID, scopeColumnId);
 	}
 
 	public String[] getRowDragTypes() {

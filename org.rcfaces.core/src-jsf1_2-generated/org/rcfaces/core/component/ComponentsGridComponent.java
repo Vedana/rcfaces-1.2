@@ -51,6 +51,7 @@ import java.util.Set;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import org.rcfaces.core.component.capability.IAdditionalInformationEventCapability;
 import org.rcfaces.core.component.iterator.IAdditionalInformationIterator;
+import org.rcfaces.core.component.capability.IScopeColumnIdCapability;
 import java.lang.String;
 import org.rcfaces.core.internal.converter.ClientFullStateConverter;
 import org.rcfaces.core.component.capability.IAdditionalInformationValuesCapability;
@@ -135,6 +136,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	IPagedCapability,
 	IRowToolTipIdCapability,
 	IHeaderVisibilityCapability,
+	IScopeColumnIdCapability,
 	IGridComponent,
 	IOrderedChildrenCapability,
 	ISortedChildrenCapability,
@@ -149,7 +151,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headerVisible","selectionCardinality","clientAdditionalInformationFullState","cellTextWrap","emptyDataMessage","loadListener","selectionListener","paged","additionalInformationValues","showValue","additionalInformationListener","verticalScrollPosition","border","required","clientSelectionFullState","preferences","doubleClickListener","selectedValues","horizontalScrollPosition","rowStyleClass","rowCountVar","rowToolTipId","selectable","additionalInformationCardinality","rowValueConverter","rowIndexVar","rowValue"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headerVisible","selectionCardinality","clientAdditionalInformationFullState","scopeColumnId","cellTextWrap","emptyDataMessage","loadListener","selectionListener","paged","additionalInformationValues","showValue","additionalInformationListener","verticalScrollPosition","border","required","clientSelectionFullState","preferences","doubleClickListener","selectedValues","horizontalScrollPosition","rowStyleClass","rowCountVar","rowToolTipId","selectable","additionalInformationCardinality","rowValueConverter","rowIndexVar","rowValue"}));
 	}
 
 	public ComponentsGridComponent() {
@@ -985,6 +987,29 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 
 	public void setHeaderVisible(boolean headerVisible) {
 		engine.setProperty(Properties.HEADER_VISIBLE, headerVisible);
+	}
+
+	public java.lang.String getScopeColumnId() {
+		return getScopeColumnId(null);
+	}
+
+	/**
+	 * See {@link #getScopeColumnId() getScopeColumnId()} for more details
+	 */
+	public java.lang.String getScopeColumnId(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.SCOPE_COLUMN_ID, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "scopeColumnId" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isScopeColumnIdSetted() {
+		return engine.isPropertySetted(Properties.SCOPE_COLUMN_ID);
+	}
+
+	public void setScopeColumnId(java.lang.String scopeColumnId) {
+		engine.setProperty(Properties.SCOPE_COLUMN_ID, scopeColumnId);
 	}
 
 	/**

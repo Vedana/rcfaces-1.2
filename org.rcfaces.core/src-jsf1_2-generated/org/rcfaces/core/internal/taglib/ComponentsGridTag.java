@@ -40,6 +40,7 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 	private ValueExpression paged;
 	private ValueExpression rowToolTipId;
 	private ValueExpression headerVisible;
+	private ValueExpression scopeColumnId;
 	private ValueExpression rowCountVar;
 	private ValueExpression rowIndexVar;
 	private ValueExpression rowValue;
@@ -137,6 +138,10 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 		this.headerVisible = headerVisible;
 	}
 
+	public void setScopeColumnId(ValueExpression scopeColumnId) {
+		this.scopeColumnId = scopeColumnId;
+	}
+
 	public void setRowCountVar(ValueExpression rowCountVar) {
 		this.rowCountVar = rowCountVar;
 	}
@@ -180,6 +185,7 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 			LOG.debug("  paged='"+paged+"'");
 			LOG.debug("  rowToolTipId='"+rowToolTipId+"'");
 			LOG.debug("  headerVisible='"+headerVisible+"'");
+			LOG.debug("  scopeColumnId='"+scopeColumnId+"'");
 			LOG.debug("  rowCountVar='"+rowCountVar+"'");
 			LOG.debug("  rowIndexVar='"+rowIndexVar+"'");
 			LOG.debug("  rowValue='"+rowValue+"'");
@@ -361,6 +367,15 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 			}
 		}
 
+		if (scopeColumnId != null) {
+			if (scopeColumnId.isLiteralText()==false) {
+				component.setValueExpression(Properties.SCOPE_COLUMN_ID, scopeColumnId);
+
+			} else {
+				component.setScopeColumnId(scopeColumnId.getExpressionString());
+			}
+		}
+
 		if (rowCountVar != null) {
 			if (rowCountVar.isLiteralText()==false) {
 				throw new javax.faces.FacesException("Attribute 'rowCountVar' does not accept binding !");
@@ -426,6 +441,7 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 		paged = null;
 		rowToolTipId = null;
 		headerVisible = null;
+		scopeColumnId = null;
 		rowCountVar = null;
 		rowIndexVar = null;
 		rowValue = null;
