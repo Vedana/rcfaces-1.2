@@ -294,7 +294,7 @@ var __statics = {
 				
 		return 0;
 	}
-}
+};
  
 var __members = {
 	
@@ -1004,8 +1004,9 @@ var __members = {
 			selection=0;
 		}		
 		
+		var params;
 		if (params === undefined){
-			var params=new Object;
+			params=new Object;
 		}
 		
 		params.gridId=this._serviceGridId;		
@@ -1321,7 +1322,7 @@ var __members = {
 					
 					if (!this._checkFullState) {
 						// Pas de fullstate: elles sont perdues !
-						this.fa_fireSelectionChangedEvent();
+						this.fa_fireCheckChangedEvent(); 
 					}
 				}			
 			}
@@ -1905,7 +1906,9 @@ var __members = {
 	 * @method public
 	 */
 	f_uncheckAll: function() {
-		this._uncheckAllElements();
+		if (this._checkable) {
+			this._uncheckAllElements();
+		}
 	},
 	/**
 	 * Returns label of a row

@@ -72,7 +72,7 @@ var __statics = {
 	/**
 	 * @field private static final Number
 	 */
-	_COLUMN_MAX_WIDTH: 640,
+	_COLUMN_MAX_WIDTH : 4096,
 
 	/**
 	 * @field private static final Number
@@ -287,8 +287,13 @@ var __statics = {
 
 			var selection = fa_selectionManager.ComputeMouseSelection(evt);
 
-			dataGrid.f_moveCursor(this, true, evt, selection,
-					fa_selectionManager.BEGIN_PHASE);
+			var selectOnMousedown = false;
+			var srcElement = evt.target ? evt.target : evt.srcElement;
+			if (srcElement && this._label && srcElement.tagName == this._label.tagName) {
+				selectOnMousedown = true;
+			}
+		
+			dataGrid.f_moveCursor(this, true, evt, selection, fa_selectionManager.BEGIN_PHASE, selectOnMousedown);
 
 			// On deplace le cursor avant de donner le focus !
 			dataGrid.f_forceFocus();
@@ -330,10 +335,12 @@ var __statics = {
 			}
 
 			if (dataGrid.f_getEventLocked(evt)) {
+				f_core.Debug(f_grid, "RowMouseUp: event already locked");
 				return false;
 			}
 
 			if (!f_grid.VerifyTarget(evt)) {
+				f_core.Debug(f_grid, "RowMouseUp: invalid target");
 				return true;
 			}
 
@@ -348,6 +355,9 @@ var __statics = {
 
 			dataGrid.f_moveCursor(this, true, evt, selection,
 					fa_selectionManager.END_PHASE);
+
+			// On deplace le cursor avant de donner le focus !
+			dataGrid.f_forceFocus();
 
 			if (sub && this._selected) {
 				var menu = dataGrid.f_getSubMenuById(f_grid._ROW_MENU_ID);
@@ -506,6 +516,56 @@ var __statics = {
 		}
 
 		if (dataGrid.f_getEventLocked(evt)) {
+			return false;
+		}
+
+		if (!f_grid.VerifyTarget(evt)) {
+			return true;
+		}
+
+		if (dataGrid.f_isDisabled()) {
+			return f_core.CancelJsEvent(evt);
+		}
+
+		var sub = f_core.IsPopupButton(evt);
+		if (!sub) {
+			return f_core.CancelJsEvent(evt);
+		}
+
+		dataGrid.f_forceFocus();
+
+		var menuId = f_grid._BODY_MENU_ID;
+
+		// S'il y a une seule selection, on bascule en popup de ligne !
+		if (this._selectable && dataGrid._currentSelection.length) {
+			menuId = f_grid._ROW_MENU_ID;
+		}
+
+		var menu = dataGrid.f_getSubMenuById(menuId);
+		if (menu) {
+			if(menu.f_closeAllpopups) {
+				menu.f_closeAllpopups();
+			}			
+		}
+
+		return f_core.CancelJsEvent(evt);
+	},
+	
+	/**
+	 * @method private static
+	 * @param Event
+	 *            evt
+	 * @return Boolean
+	 * @context object:dataGrid
+	 */
+	_BodyMouseUp : function(evt) {
+		var dataGrid = this._dataGrid;
+
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+
+		if (dataGrid.f_getEventLocked(evt, false)) {
 			return false;
 		}
 
@@ -1003,7 +1063,11 @@ var __statics = {
 
 		var sub = f_core.IsPopupButton(evt);
 		if (sub) {
-			var menu = dataGrid.f_getSubMenuById(f_grid._HEAD_MENU_ID);
+			var menuId = f_grid._HEAD_MENU_ID;
+			if (column._menuPopupId) {
+				menuId = column._menuPopupId;
+			}
+			var menu = dataGrid.f_getSubMenuById(menuId);
 
 			if (menu) {
 				menu.f_open(evt, {
@@ -1025,11 +1089,11 @@ var __statics = {
 		dataGrid._updateTitleStyle(column);
 		
 		if (f_core.IsGecko()) {
-			// GROS BUG firefox,  il existe une zone en dessous de la baseline qui n'envoie pas de CLICK !
-			f_grid._TitleMouseDownTime=new Date().getTime();
-			f_grid._TitleWaitClickTime=0;
-			f_grid._TitleIgnoreClickTime=0;
 			f_grid._TitleReleaseTimer();
+
+			// GROS BUG firefox,  il existe une zone en dessous de la baseline qui n'envoie pas de CLICK !
+			f_grid._TitleClicked=false;
+			f_grid._TitleMouseDownTime=new Date().getTime();
 		}
 	
 		return true;
@@ -1044,7 +1108,7 @@ var __statics = {
 			return;
 		}
 		f_grid._TitleWaitClickTimerId=undefined;
-		clearTimeout(id);
+		window.clearTimeout(id);
 	},
 	/**
 	 * @method private static
@@ -1064,7 +1128,7 @@ var __statics = {
 			return false;
 		}
 
-		var ascending;
+		var ascending=undefined;
 		var cancel;
 
 		var code = evt.keyCode;
@@ -1150,6 +1214,13 @@ var __statics = {
 				next = (cl == column);
 			}
 			break;
+		}
+
+		if (f_core.IsGecko()) {			
+			f_grid._TitleReleaseTimer();
+
+			// GROS BUG firefox,  il existe une zone en dessous de la baseline qui n'envoie pas de CLICK !
+			f_grid._TitleClicked=false;
 		}
 
 		if (ascending !== undefined) {
@@ -1266,14 +1337,15 @@ var __statics = {
 			evt = f_core.GetJsEvent(this);
 		}
 
+		if (f_grid._TitleClicked!==undefined) {
 		f_grid._TitleReleaseTimer();
-		var lastClickTime=f_grid._TitleLastClickTime;
-		if (lastClickTime) { // Que Firefox
-			f_grid._TitleLastClickTime=0;
 			
-			if ((new Date().getTime()-lastClickTime)<400) {
+			f_core.Debug(f_grid, "_Title_onClick: already clicked ? =>"+f_grid._TitleClicked);
+
+			if (f_grid._TitleClicked) { // Que Firefox
 				return false;
 			}
+			f_grid._TitleClicked=true;
 		}
 
 		f_core.Debug(f_grid, "_Title_onClick: perform event " + evt);
@@ -1347,8 +1419,9 @@ var __statics = {
 		f_grid._TitleReleaseTimer();
 
 		var date=f_grid._TitleMouseDownTime; // Que pour Firefox
+		f_core.Debug(f_grid, "_Title_onMouseUp: date="+date+"  buttons="+f_core.GetEvtButton(evt));
+
 		if (date && f_core.GetEvtButton(evt)==f_core.LEFT_MOUSE_BUTTON) {
-			var target = evt.target ? evt.target : evt.srcElement;
 			var buttons = evt.which;
 			var ctrlKey=evt.ctrlKey;
 			var altKey=evt.altKey;
@@ -1358,13 +1431,22 @@ var __statics = {
 			
 			var now=new Date().getTime();
 			var delta=now-date;
+			
+			f_core.Debug(f_grid, "_Title_onMouseUp: delta="+delta+", start timeout callback");
+
 			if (delta<1000) {
+				// Il faut que le DOWN et UP se fasse en moins de 1s !
 				f_grid._TitleWaitClickTimerId=window.setTimeout(function() {
 					if (window._rcfacesExiting) {
 						return;
 					}
+					if (!f_grid._TitleWaitClickTimerId) {
+						return;
+					}
 					
-					var doc = target.ownerDocument;
+					f_core.Debug(f_grid, "_Title_onMouseUp: Timeout callback wake up !");
+					
+					var doc = dataGrid.ownerDocument;
 					var evt = doc.createEvent('MouseEvents');
 					evt.initMouseEvent('click', true, true, doc.defaultView, detail, 0, 0, 0, 0, ctrlKey, altKey, shiftKey, metaKey, buttons, null);
 					
@@ -1377,8 +1459,14 @@ var __statics = {
 	 * @method private static
 	 */
 	_TitleVerifyClick: function(dataGrid, column, evt) {
-		f_grid._TitleWaitClickTime=undefined;
-		f_grid._TitleLastClickTime=new Date().getTime();
+		if (f_grid._TitleClicked) {
+			f_core.Debug(f_grid, "_TitleVerifyClick: ignore verification ... click already performed !");
+
+			return false;
+		}
+		f_grid._TitleClicked=true;
+		
+		f_core.Debug(f_grid, "_TitleVerifyClick: perform verify click !");
 
 		if (column.f_fireEvent(f_event.SELECTION, evt, null, null, dataGrid) === false) {
 
@@ -1589,7 +1677,9 @@ var __statics = {
 			dataGrid._dragTimerId = undefined;
 		}
 
-		var w = column._col.offsetWidth + dw;
+		var head = column._head;
+		var hw =  parseInt (head.style.width);
+		var w = hw + dw;
 
 		f_core.Debug(f_grid, "_DragCursorMove: dw=" + dw + " w=" + w
 				+ " columnOffsetWidth=" + column._col.offsetWidth);
@@ -1603,7 +1693,7 @@ var __statics = {
 			w = column._maxWidth;
 		}
 
-		dw = w - column._col.offsetWidth;
+		dw = w - hw;
 
 		if (dw == 0) {
 			return 0;
@@ -1611,7 +1701,6 @@ var __statics = {
 
 		var tcol = column._tcol;
 		var col = column._col;
-		var head = column._head;
 		var tableOffsetWidth = dataGrid._table.offsetWidth;
 
 		var twidth = 0;
@@ -1628,6 +1717,8 @@ var __statics = {
 			col.style.width = w + "px";
 			head.style.width = w + "px";
 
+			column._widthSetted=w;
+	
 			var bw = w - f_grid._TEXT_RIGHT_PADDING - f_grid._TEXT_LEFT_PADDING;
 			if (bw < 0) {
 				bw = 0;
@@ -1649,6 +1740,10 @@ var __statics = {
 
 			col.style.width = w + "px"; // Colonne Des données ...
 
+			column._widthSetted=w;  // On desactive le calcul automatique pour cette colonne ...
+			column._widthPercent=undefined;
+			column._widthComputed=undefined;
+		
 			var w1 = w - cellMargin;
 			head.style.width = ((w1 > 0) ? w1 : 0) + "px";
 
@@ -2607,7 +2702,7 @@ var __members = {
 		var menu = this.f_getSubMenuById(f_grid._BODY_MENU_ID);
 		if (menu) {
 			scrollBody.onmousedown = f_grid._BodyMouseDown;
-			scrollBody.onmouseup = f_grid.FiltredCancelJsEventHandler;
+			scrollBody.onmouseup =  f_grid._BodyMouseUp;// f_grid.FiltredCancelJsEventHandler;
 			scrollBody.onclick = f_grid.FiltredCancelJsEventHandler;
 		}
 
@@ -2622,7 +2717,8 @@ var __members = {
 
 		/*
 		 * if (!this.f_isVisible()) {
-		 * this.f_getClass().f_getClassLoader().f_addVisibleComponentListener(this); }
+		 * this.f_getClass().f_getClassLoader().f_addVisibleComponentListener(this);
+		 *  }
 		 */
 	},
 	/**
@@ -3553,8 +3649,7 @@ var __members = {
 	 * 
 	 * @method public
 	 * 
-	 * @param optional
-	 *            Boolean fullUpdate to force rowCount and pager update
+	 * @param optional Boolean fullUpdate to force rowCount and pager update
 	 * 
 	 * @return void
 	 */
@@ -3987,14 +4082,13 @@ var __members = {
 
 		var cfocus = this._cfocus;
 		if (cfocus) {
-			if (f_core.IsGecko()) {
+			if (f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_6)) {
+				// pour *vraiment* donner les focus sous IE
+				// genere une exception sous FF : passer par une focntion anonyme ?
+				window.setTimeout(cfocus.focus, 0);
+			} else {
 				// fonctionnement de base
 				cfocus.focus();
-			} else {
-				// pour *vraiment* donner les focus sous IE
-				// genere une exception sous FF : passer par une focntion
-				// anonyme ?
-				window.setTimeout(cfocus.focus, 0);
 			}
 
 			return;
@@ -5048,8 +5142,21 @@ var __members = {
 	 * @param f_component
 	 *            component Component or HTMLElement
 	 * @return Object Value of the row
+	 * @deprecated
 	 */
 	f_getRowValueFromCommponent: function(component) {
+		return this.f_getRowValueFromComponent(component);
+	},
+	
+	/**
+	 * Return the value of the row which contains the specified component.
+	 * 
+	 * @method public
+	 * @param f_component
+	 *            component Component or HTMLElement
+	 * @return Object Value of the row
+	 */
+	f_getRowValueFromComponent: function(component){
 		while (component && typeof (component._rowIndex) != "number") {
 			component = component.parentNode;
 		}
@@ -5407,31 +5514,11 @@ var __members = {
 			return;
 		}
 
-		if (this._scrollTitle) {
-			var sw = this.style.width;
-			if (sw && sw.indexOf("px") > 0) {
-				var swPixel = parseInt(sw);
-
-				swPixel -= f_core.ComputeContentBoxBorderLength(this, "left",
-						"right");
-				this._scrollTitle.style.width = swPixel + "px";
-			}
-		}
-
-		if (!this._columnsLayoutPerformed) {
-			this.f_updateColumnsLayout();
-		}
-
-		var doc = this.ownerDocument;
-
-		var t0 = new Date().getTime();
-
-		this._titleLayout = true;
-
 		var body = this._scrollBody;
 		var clientWidth = body.clientWidth;
 		var offsetWidth = body.offsetWidth;
 		var scrollBarWidth = offsetWidth - clientWidth;
+		var verticalScrollBar = (scrollBarWidth>0);
 
 		if (scrollBarWidth <= 0) {
 			// Ben si y a pas de scrollbar a droite, on cherche en bas !
@@ -5442,39 +5529,113 @@ var __members = {
 			}
 		}
 
+			var sw = this.style.width;
+			if (sw && sw.indexOf("px") > 0) {
+				var swPixel = parseInt(sw);
+
+				swPixel -= f_core.ComputeContentBoxBorderLength(this, "left",
+						"right");
+			if (this._scrollTitle) {
+				this._scrollTitle.style.width = swPixel + "px";
+			}
+			body.style.width = swPixel + "px";
+			
+			offsetWidth=swPixel;
+			if (verticalScrollBar) {
+				clientWidth=offsetWidth-scrollBarWidth;
+			}
+		}
+
+		if (!this._columnsLayoutPerformed) {
+			this.f_updateColumnsLayout();
+		}
+
+		var doc = this.ownerDocument;
+
+		var cellMargin=f_grid._TEXT_RIGHT_PADDING+f_grid._TEXT_LEFT_PADDING;
+		
+		var t0 = new Date().getTime();
+
+		this._titleLayout = true;
+
+
 		var columns = this._columns;
 
 		var t1 = new Date().getTime();
 
-		// var cellMargin=f_grid._TEXT_RIGHT_PADDING+f_grid._TEXT_LEFT_PADDING;
-
-		var total = 0;
+		var total = 0; // total des colonnes fixe en px
+		var totalPercent = 0; // total des % 
+		var totalZero = 0; // total colone sans taille donnee
+		var colToProcess = new Array();
 		var ci = 0;
+		var webkit = false; // f_core.IsWebkit();
+		var ie = f_core.IsInternetExplorer();
 		for ( var i = 0; i < columns.length; i++) {
 			var column = columns[i];
 			if (column._visibility === false) {
 				continue;
 			}
 
-			var col = column._col;
+			var col = undefined;
+			if (webkit || ie) {
+				//the header column tag col does not have any size. So we get a cell. 
+				var rows = this._rowsPool;
+				if (rows.length > 0) {
+					col = rows[0]._cells[i]; 
+				}
+			}      
+			
+			if (!col) {
+				col = column._col;
+			}
+			
 			if (!col) {
 				break;
 			}
 
-			var w = col.offsetWidth;
-			if (!w && !col.offsetHeight) {
-				w = parseInt(col.style.width);
+			if (column._widthComputed) {
+				totalZero++;
+				colToProcess.push(column);
+				continue;
+			}
+			
+			if (column._widthPercent!==undefined) {
+				totalPercent += column._widthPercent;
+				colToProcess.push(column);
+				continue;
+			}
+
+			if (!column._widthSetted) {
+				var styleWidth = col.style.width;
+				var w = parseInt(styleWidth);
+				if (styleWidth.indexOf("%") > 0){
+					totalPercent += w;
+					column._widthPercent=w;
+					colToProcess.push(column);
+					continue;
+				}
+				
+				if (!w) {
+					totalZero ++;
+					column._widthComputed=true;
+					colToProcess.push(column);
+					continue;
+				}
 
 				if (isNaN(w) || w < 0) {
 					w = 0;
 				}
-			} else if (!col.style.width) {
-				col.style.width = w + "px"; // Probleme de scale sous firefox !
+	
+				column._widthSetted = w;
 			}
 
+			var w=column._widthSetted;
 			total += w;
 
-			var cw = w; // -cellMargin;
+			var cw = w;
+//			if (f_core.IsWebkit(f_core.WEBKIT_SAFARI)){ 
+//				cw -= cellMargin;
+//			}
 			if (cw < 0) {
 				cw = 0;
 			}
@@ -5483,6 +5644,129 @@ var __members = {
 			this._updateTitleCellBody(column, w);
 		}
 
+		// deuxième tour s il y a pas de donnée pour trident et webkit
+		if (colToProcess.length) {
+
+			var totalNonPx = clientWidth - total; 
+
+			for(var i=0;i<colToProcess.length;i++) {
+				var column = colToProcess[i];
+				
+				column._tempWidth=0;
+			}
+			
+			if (totalNonPx>0 && totalPercent>0) {			
+				var totalPercent=totalNonPx/100;
+				
+				// On affecte les %				
+				for(var i=0;i<colToProcess.length;i++) {
+					var column = colToProcess[i];
+					
+					var percent = column._widthPercent;
+					if (!percent) {
+						continue;
+					}
+					
+					var w=Math.floor(percent*totalPercent);
+					
+					if (column._maxWidth && w>column._maxWidth) {
+						w=column._maxWidth;
+					}
+					
+					if (totalNonPx<w) {
+						w=totalNonPx;
+					}					
+					
+					column._tempWidth+=w;
+					
+					totalNonPx-=w;
+				}							
+
+				// On verifie les mins ...
+				for(var i=0;i<colToProcess.length;i++) {
+					var column = colToProcess[i];
+
+					var percent = column._widthPercent;
+					if (!percent) {
+						continue;
+					}
+
+					var minWidth = column._minWidth;
+					if (!minWidth) {
+						continue;
+					}
+
+					var diff=minWidth-column._tempWidth;
+
+					if (diff<0) {
+						continue;
+					}
+										
+					if (diff>totalNonPx) {
+						diff=totalNonPx;
+					}
+					
+					column._tempWidth+=diff;
+					
+					totalNonPx-=diff;
+				}			
+			}
+						
+			if (totalNonPx>0 && totalZero>0) {
+				
+				var cnt=totalZero;
+				
+				// On affecte les colonnes sans taille !			
+				for(var i=0;i<colToProcess.length;i++) {
+					var column = colToProcess[i];
+
+					if (!column._widthComputed) {
+						continue;
+					}
+					
+					var w=Math.floor(totalNonPx/cnt);
+					
+					if (column._maxWidth && w>column._maxWidth) {
+						w=column._maxWidth;
+					}
+					
+					if (column._minWidth && w<column._minWidth) {
+						w=column._maxWidth;
+					}
+					
+					if (totalNonPx<w) {
+						w=totalNonPx;
+					}					
+					
+					column._tempWidth+=w;
+					
+					totalNonPx-=w;
+					cnt--;
+				}							
+			}
+		
+			
+			for(var i=0;i<colToProcess.length;i++) {
+				var column = colToProcess[i];
+
+				var w = column._tempWidth;
+				var cw = w;
+//				if (f_core.IsWebkit(f_core.WEBKIT_SAFARI)){ 
+//					cw -= cellMargin;
+//				}
+				if (cw < 0) {
+					cw = 0;
+				}
+				column._head.style.width = cw + "px";
+				this._updateTitleCellBody(column, w);
+				column._col.style.width=cw+"px";
+				
+				total+=w;
+				
+				f_core.Debug(f_grid, "Total="+total+" w="+w);
+			}							
+		}
+		
 		var t2 = new Date().getTime();
 
 		if (scrollBarWidth > 0) {
@@ -5493,8 +5777,7 @@ var __members = {
 			// body.style.height=h+"px";
 		}
 
-		if (f_core.IsInternetExplorer()
-				&& !f_core.GetBooleanAttribute(this, "v:sb", true)) {
+		if (ie && !f_core.GetBooleanAttribute(this, "v:sb", true)) { //ns
 			// this._title.style.width=total+"px";
 
 			if (!body.style.width) {
@@ -5505,6 +5788,11 @@ var __members = {
 				this._title.parentNode.style.width = (parseInt(
 						body.style.width, 10) - 2)
 						+ "px";
+			}
+		} else {
+			//body.style.width = total+"px";
+			if (this._table) {
+				this._table.style.width=total+"px";
 			}
 		}
 
@@ -6636,27 +6924,12 @@ var __members = {
 	 *            width Width of the component.
 	 * @return void
 	 */
-	f_setWidth: function(width) {
+	f_setWidth : function(width) {
 		f_core.Assert(typeof (width) == "number",
-				"f_component.f_setWidth: w parameter must be a number ! ("
+				"f_grid.f_setWidth: width parameter must be a number ! ("
 						+ width + ")");
 
-		var difference = this.offsetWidth - width;
 		this.style.width = width + "px";
-		this.f_setProperty(f_prop.WIDTH, width);
-
-		var scrollTitle = this.ownerDocument.getElementById(this.id
-				+ f_grid._DATA_TITLE_SCROLL_ID_SUFFIX);
-		if (scrollTitle) {
-			var otPixel = scrollTitle.offsetWidth - difference;
-			scrollTitle.style.width = otPixel + "px";
-		}
-		var scrollBody = this.ownerDocument.getElementById(this.id
-				+ f_grid._DATA_BODY_SCROLL_ID_SUFFIX);
-		if (scrollBody) {
-			var obPixel = scrollBody.offsetWidth - difference;
-			scrollBody.style.width = obPixel + "px";
-		}
 
 		this.f_updateTitle();
 	},
@@ -6671,18 +6944,14 @@ var __members = {
 	 *            height Height of the component.
 	 * @return void
 	 */
-	f_setHeight: function(height) {
-		f_core.Assert(typeof (height) == "number",
-				"f_component.f_setHeight: h parameter must be a number ! ("
-						+ height + ")");
+	f_setHeight : function(height) {
+		f_core.Assert(typeof (height) == "number", "f_grid.f_setHeight: h parameter must be a number ! ("+ height + ")");
 
 		var oldHeight = this.offsetHeight;
 		var difference = oldHeight - height;
 		this.style.height = height + "px";
-		this.f_setProperty(f_prop.HEIGHT, height);
 
-		var scrollBody = this.ownerDocument.getElementById(this.id
-				+ f_grid._DATA_BODY_SCROLL_ID_SUFFIX);
+		var scrollBody = this.ownerDocument.getElementById(this.id+ f_grid._DATA_BODY_SCROLL_ID_SUFFIX);
 		if (scrollBody) {
 			var oldbody = scrollBody.offsetHeight;
 			height = oldbody - difference;
@@ -6701,24 +6970,26 @@ var __members = {
 		if (!this._selectable) {
 			return;
 		}
-
-		var rows = this.fa_listVisibleElements();
-		if (rows.length) {
-
-			var l = new Array;
-
-			for ( var i = 0; i < rows.length; i++) {
-
-				var row = rows[i];
-				var elementValue = this.fa_getElementValue(row);
-
-				if (!this.fa_isElementDisabled(row)) {
-					l.push(elementValue);
+		var first = this.f_getFirst();
+		var last = 1;
+		var rowCount = this.f_getRowCount();
+		var rows = -1;
+		if(this._rows) {
+			rows = this._rows;
 				}
+		if( rowCount > 0 && ((rows > 0 && rowCount < rows) || rows < 0)){
+			last = rowCount;
+		}else if(rows > 0) {
+			last = rows;
 			}
-			this._selectElementsRange(l, fa_selectionManager.RANGE_SELECTION,
-					false, rows);
+		
+		var end = first+last-1;
+		if (end > rowCount) {
+			end = rowCount - 1; // evite de selectioner des lignes en trop
 		}
+		this._selectRange(this.f_getRow(first),
+				this.f_getRow(end),
+				fa_selectionManager.RANGE_SELECTION);
 	},
 
 	/**
@@ -6728,7 +6999,9 @@ var __members = {
 	 * @return void
 	 */
 	f_unselectAll: function() {
-		this.f_setSelection([]);
+		if (this._selectable) {
+			this.f_setSelection([]);
+		}
 	},
 	/**
 	 * 
