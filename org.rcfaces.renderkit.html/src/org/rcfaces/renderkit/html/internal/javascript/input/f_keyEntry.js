@@ -395,6 +395,9 @@ var __members = {
 	 * @see #f_getValue()
 	 */
 	f_getSelectedValue: function() {
+		if (this._selectedValue && (!this.f_isEditable() || this. f_isReadOnly())) {
+			return this._selectedValue;
+		}
 		return this.f_getValue();
 	},
 	/**

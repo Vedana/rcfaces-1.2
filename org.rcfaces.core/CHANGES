@@ -1,3 +1,6 @@
+f_keyEntry:
+Modification de f_getSelectedValue, pour pouvoir récupérer la clé d'une valeur de comboGrid même lorsqu'elle n'est pas editable ou readOnly
+
 GridTools:
 Ajout de la Classe GridTools et de la fonction HasSortedServerListener permettant de contrôler si un tableau doit être trier sur le serveur
 
