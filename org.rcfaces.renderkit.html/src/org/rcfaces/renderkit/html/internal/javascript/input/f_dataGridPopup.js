@@ -161,7 +161,7 @@ var __statics = {
 				//f_core.CreateElement(divTtext, "img", { "class": "f_grid_ttext", align: "left"});
 				
 				if (column._text) {
-					f_core.SetTextNode(divTtext, column._text);
+					f_core.SetTextNode(divTtext, column._text)
 				}
 			}
 		}
@@ -264,7 +264,7 @@ var __members = {
 			return;
 		}
 
-		var selection=undefined;
+		var selection;
 		
 		if (autoSelect>0) {
 			selection=this.fa_getElementValue(rows[0]);
@@ -303,7 +303,7 @@ var __members = {
 		
 		return this.f_super(arguments, evt);
 	}
-};
+}
  
 new f_class("f_dataGridPopup", {
 	extend: f_dataGrid,

@@ -395,9 +395,6 @@ var __members = {
 	 * @see #f_getValue()
 	 */
 	f_getSelectedValue: function() {
-		if (this._selectedValue && (!this.f_isEditable() || this. f_isReadOnly())) {
-			return this._selectedValue;
-		}
 		return this.f_getValue();
 	},
 	/**
@@ -433,23 +430,7 @@ var __members = {
 		}
 	},
 	/**
-	 * @method hidden
-	 * @param String value
-	 * @param Object rowValues
-	 * @return void
-	 */
-	f_setSyncValues: function(value, rowValues) {
-		var label=f_core.FormatMessage(this._valueFormat, rowValues);
-	
-		this.fa_valueSelected(value, label, rowValues);
-	},
-	/**
 	 * @method protected
-	 * @param String value
-	 * @param String label
-	 * @param Object rowValues
-	 * @param optional Boolean focusNext
-	 * @return void
 	 */
 	fa_valueSelected: function(value, label, rowValues, focusNext) {
 		f_core.Debug(f_keyEntry, "fa_valueSelected: value='"+value+"' label='"+label+"'");
@@ -489,7 +470,7 @@ var __members = {
 		this._selectedValue=value;
 		f_core.Debug(f_keyEntry, "fa_valueSelected: value is defined selectedValue='"+this._selectedValue+"'");
 		this._inputValue=value;
-		if (this._forLabel){
+		if(this._forLabel){
 			var labelComponent = f_core.GetElementById(this._forLabel);
 			if (labelComponent) {
 				labelComponent.f_setText(f_core.FormatMessage(this._valueFormatLabel,rowValues));

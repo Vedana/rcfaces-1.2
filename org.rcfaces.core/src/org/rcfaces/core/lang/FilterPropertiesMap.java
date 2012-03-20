@@ -129,12 +129,10 @@ public final class FilterPropertiesMap extends AbstractProperties implements
     public void setTransient(boolean newTransientValue) {
     }
 
-    @Override
     public Object getProperty(String name) {
         return map.get(name);
     }
 
-    @Override
     public int hashCode() {
         final int PRIME = 31;
         int result = 1;
@@ -142,7 +140,6 @@ public final class FilterPropertiesMap extends AbstractProperties implements
         return result;
     }
 
-    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

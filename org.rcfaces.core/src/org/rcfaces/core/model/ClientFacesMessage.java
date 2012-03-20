@@ -18,74 +18,74 @@ import org.rcfaces.core.component.capability.IClientDataCapability;
  * @version $Revision$ $Date$
  */
 public class ClientFacesMessage extends FacesMessage implements
-        IClientDataCapability {
-    private static final long serialVersionUID = 4456702905941225305L;
+		IClientDataCapability {
+	private static final long serialVersionUID = 4456702905941225305L;
 
-    private Map<String, String> clientDataMap;
+	private Map<String, String> clientDataMap;
 
-    public ClientFacesMessage() {
-        super();
-    }
+	public ClientFacesMessage() {
+		super();
+	}
 
-    public ClientFacesMessage(Severity severity, String summary, String detail) {
-        super(severity, summary, detail);
-    }
+	public ClientFacesMessage(Severity severity, String summary, String detail) {
+		super(severity, summary, detail);
+	}
 
-    public ClientFacesMessage(String summary, String detail) {
-        super(summary, detail);
-    }
+	public ClientFacesMessage(String summary, String detail) {
+		super(summary, detail);
+	}
 
-    public ClientFacesMessage(String summary) {
-        super(summary);
-    }
+	public ClientFacesMessage(String summary) {
+		super(summary);
+	}
 
-    public String getClientData(String name) {
-        if (clientDataMap == null) {
-            return null;
-        }
+	public String getClientData(String name) {
+		if (clientDataMap == null) {
+			return null;
+		}
 
-        return clientDataMap.get(name);
-    }
+		return clientDataMap.get(name);
+	}
 
-    public int getClientDataCount() {
-        if (clientDataMap == null) {
-            return 0;
-        }
+	public int getClientDataCount() {
+		if (clientDataMap == null) {
+			return 0;
+		}
 
-        return clientDataMap.size();
-    }
+		return clientDataMap.size();
+	}
 
-    public Map<String, String> getClientDataMap() {
-        if (clientDataMap == null) {
-            return Collections.emptyMap();
-        }
-        return new HashMap<String, String>(clientDataMap);
-    }
+	public Map<String, String> getClientDataMap() {
+		if (clientDataMap == null) {
+			return Collections.emptyMap();
+		}
+		return new HashMap<String, String>(clientDataMap);
+	}
 
-    public String[] listClientDataKeys() {
-        if (clientDataMap == null || clientDataMap.isEmpty()) {
-            return new String[] {};
-        }
+	public String[] listClientDataKeys() {
+		if (clientDataMap == null || clientDataMap.isEmpty()) {
+			return new String[] {};
+		}
 
-        Collection<String> keys = clientDataMap.keySet();
+		Collection<String> keys = clientDataMap.keySet();
 
-        return keys.toArray(new String[keys.size()]);
-    }
+		return keys.toArray(new String[keys.size()]);
+	}
 
-    public String removeClientData(String name) {
-        if (clientDataMap == null) {
-            return null;
-        }
+	public String removeClientData(String name) {
+		if (clientDataMap == null) {
+			return null;
+		}
 
-        return clientDataMap.remove(name);
-    }
+		return (String) clientDataMap.remove(name);
+	}
 
-    public String setClientData(String name, String data) {
-        if (clientDataMap == null) {
-            return null;
-        }
+	public String setClientData(String name, String data) {
+		if (clientDataMap == null) {
+			return null;
+		}
 
-        return clientDataMap.put(name, data);
-    }
+		return (String) clientDataMap.put(name, data);
+	}
 
 }
