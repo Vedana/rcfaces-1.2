@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.zip.GZIPOutputStream;
 
 import org.apache.commons.logging.Log;
@@ -26,6 +27,7 @@ import org.rcfaces.core.internal.util.MessageDigestSelector;
  */
 public class GZipedResolvedContent implements IGzippedResolvedContent,
         Serializable {
+    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = -6336824522228175406L;
 
@@ -218,7 +220,6 @@ public class GZipedResolvedContent implements IGzippedResolvedContent,
         return gzipState;
     }
 
-    @Override
     protected void finalize() throws Throwable {
         if (gzippedFile != null) {
             if (LOG.isDebugEnabled()) {
@@ -230,9 +231,8 @@ public class GZipedResolvedContent implements IGzippedResolvedContent,
                 gzippedFile.delete();
 
             } catch (Throwable th) {
-                LOG.error(
-                        "Can not delete file '" + gzippedFile.getAbsolutePath()
-                                + "'.", th);
+                LOG.error("Can not delete file '"
+                        + gzippedFile.getAbsolutePath() + "'.", th);
             }
             gzippedFile = null;
         }

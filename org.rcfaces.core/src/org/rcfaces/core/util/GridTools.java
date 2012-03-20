@@ -79,7 +79,7 @@ public class GridTools {
     }
 
     public static <T> T searchRowData(FacesContext facesContext,
-            IGridComponent component, IFilterGridProcessor<T> processor,
+            IGridComponent component, IFilterProcessor<T> processor,
             Object selectedValue, String convertedSelectedValue) {
 
         DataModel dataModel = component.getDataModelValue();
@@ -95,6 +95,10 @@ public class GridTools {
                 IFiltredModel.class, dataModel, null);
 
         if (filtredDataModel == null) {
+            if (false) {
+                LOG.error("Model does not implement IFiltredModel, returns *not found*");
+                return null;
+            }
 
             if (LOG.isInfoEnabled()) {
                 LOG.info("Search a row value in a not filtred DataModel ! (comboGridComponent="
@@ -135,7 +139,7 @@ public class GridTools {
 
                     if (selectedValue != null && selectedValue.equals(value)) {
                         return processor.process(facesContext, component,
-                                rowData);
+                                selectedValue, convertedSelectedValue, rowData);
                     }
 
                     if (convertedSelectedValue == null) {
@@ -149,7 +153,8 @@ public class GridTools {
                         continue;
                     }
 
-                    return processor.process(facesContext, component, rowData);
+                    return processor.process(facesContext, component,
+                            selectedValue, convertedSelectedValue, rowData);
                 }
 
             } finally {
@@ -164,24 +169,21 @@ public class GridTools {
                 .getFilterProperties();
         if (filterProperties == null) {
             filterProperties = new FilterPropertiesMap();
-
         } else {
             filterProperties = new FilterPropertiesMap(filterProperties);
         }
 
-        if (processor.initializeFilterProperties(filterProperties, dataModel) == false) {
+        if (convertedSelectedValue != null) {
+            filterProperties.put("key", convertedSelectedValue);
+            filterProperties.put("text", convertedSelectedValue);
 
-            if (convertedSelectedValue != null) {
-                filterProperties.put("key", convertedSelectedValue);
-                filterProperties.put("text", convertedSelectedValue);
-
-                filterProperties.put("convertedValue", convertedSelectedValue);
-            }
-
-            if (selectedValue != null) {
-                filterProperties.put("value", selectedValue);
-            }
+            filterProperties.put("convertedValue", convertedSelectedValue);
         }
+        if (selectedValue != null) {
+            filterProperties.put("value", selectedValue);
+        }
+
+        processor.initializeFilterProperties(filterProperties, dataModel);
 
         filtredDataModel.setFilter(filterProperties);
 
@@ -216,7 +218,8 @@ public class GridTools {
             Object oldValue = requestMap.put(var, rowData);
 
             try {
-                return processor.process(facesContext, component, rowData);
+                return processor.process(facesContext, component,
+                        selectedValue, convertedSelectedValue, rowData);
 
             } finally {
                 requestMap.put(var, oldValue);
@@ -227,102 +230,21 @@ public class GridTools {
         }
     }
 
-    public static <T> T searchRowData(FacesContext facesContext,
-            DataModel dataModel, IFilterDataModelProcessor<T> processor) {
-
-        IFiltredModel filtredDataModel = AbstractCameliaRenderer0.getAdapter(
-                IFiltredModel.class, dataModel, null);
-
-        if (filtredDataModel == null) {
-
-            if (LOG.isInfoEnabled()) {
-                LOG.info("Search a row value in a not filtred DataModel ! (comboGridComponent="
-                        + dataModel + ")");
-            }
-
-            processor.initializeFilterProperties(null, dataModel);
-
-            try {
-                for (int rowIndex = 0;; rowIndex++) {
-                    dataModel.setRowIndex(rowIndex);
-
-                    if (dataModel.isRowAvailable() == false) {
-                        break;
-                    }
-
-                    Object rowData = dataModel.getRowData();
-
-                    if (processor.accept(facesContext, dataModel, rowData) == false) {
-                        continue;
-                    }
-
-                    return processor.process(facesContext, dataModel, rowData);
-                }
-
-            } finally {
-                dataModel.setRowIndex(-1);
-            }
-
-            return null;
-        }
-
-        IFilterProperties filterProperties = new FilterPropertiesMap();
-
-        processor.initializeFilterProperties(filterProperties, dataModel);
-
-        filtredDataModel.setFilter(filterProperties);
-
-        try {
-            dataModel.setRowIndex(0);
-
-            boolean available = dataModel.isRowAvailable();
-
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("formatValue index=0 available=" + available);
-            }
-
-            if (available == false) {
-                return null;
-            }
-
-            Object rowData = dataModel.getRowData();
-
-            return processor.process(facesContext, dataModel, rowData);
-
-        } finally {
-            dataModel.setRowIndex(-1);
-        }
-    }
-
     /**
      * 
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
-    public interface IFilterGridProcessor<T> {
+    public interface IFilterProcessor<T> {
 
-        boolean initializeFilterProperties(IFilterProperties filterProperties,
+        T process(FacesContext facesContext, IGridComponent dataComponent,
+                Object selectedValue, String convertedSelectedValue,
+                Object rowData);
+
+        void initializeFilterProperties(IFilterProperties filterProperties,
                 DataModel dataModel);
 
         UIComponent getRowValueColumn(IGridComponent component);
 
-        T process(FacesContext facesContext, IGridComponent dataComponent,
-                Object rowData);
-    }
-
-    /**
-     * 
-     * @author Olivier Oeuillot (latest modification by $Author$)
-     * @version $Revision$ $Date$
-     */
-    public interface IFilterDataModelProcessor<T> {
-
-        boolean initializeFilterProperties(IFilterProperties filterProperties,
-                DataModel dataModel);
-
-        boolean accept(FacesContext facesContext, DataModel dataModel,
-                Object rowData);
-
-        T process(FacesContext facesContext, DataModel dataModel, Object rowData);
     }
 }

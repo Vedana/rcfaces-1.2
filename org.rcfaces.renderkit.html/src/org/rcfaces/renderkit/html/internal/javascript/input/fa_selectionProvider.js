@@ -28,7 +28,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setSelection: f_class.ABSTRACT
-};
+}
 
 new f_aspect("fa_selectionProvider", {
 	members: __members

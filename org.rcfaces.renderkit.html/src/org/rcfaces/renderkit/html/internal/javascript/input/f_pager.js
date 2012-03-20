@@ -336,6 +336,21 @@ var __members = {
 			noPagedMessage=resourceBundle.f_get("NO_PAGED_MESSAGE");			
 		}
 		this._noPagedMessage=noPagedMessage;
+		
+/*
+ * f_core.Debug(f_pager, "Message='"+this._message+"'"); f_core.Debug(f_pager,
+ * "ZeroMessage='"+this._zeroMessage+"'"); f_core.Debug(f_pager,
+ * "OneMessage='"+this._oneMessage+"'"); f_core.Debug(f_pager,
+ * "ManyMessage='"+this._manyMessage+"'"); f_core.Debug(f_pager,
+ * "NoPagedMessage='"+this._noPagedMessage+"'"); f_core.Debug(f_pager,
+ * "ManyMessage2='"+this._manyMessage2+"'");
+ */
+		if (this._for) {
+			fa_pagedComponent.RegisterPager(this._for, this);
+
+		} else  {
+			f_core.Error(f_pager, "f_pager: 'for' attribute is not defined !");
+		}
 	},
 	_destroyButtons: function() {
 		var buttons=this._buttons;

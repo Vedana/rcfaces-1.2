@@ -3117,20 +3117,7 @@ var __members = {
 			selectionDetail=f_calendarObject.MONTH_SELECTION_DETAIL;
 			d=new Date(cursorDate.getTime());
 			
-			var searchedMonth = d.getMonth()+delta;
-			d.setMonth(searchedMonth);
-
-			var searchDelta = -1;
-			if (searchedMonth < 0) {
-				searchedMonth = 12 + searchedMonth;
-				searchDelta = 1;
-			} else if (searchedMonth > 11) {
-				searchedMonth = searchedMonth - 12;
-			}
-			
-			while (searchedMonth != d.getMonth()) {
-				d.setDate(d.getDate() + searchDelta);
-			}
+			d.setMonth(d.getMonth()+delta);
 
 			switch(this._mode) {
 			case f_calendarObject.PERIOD_MODE:
