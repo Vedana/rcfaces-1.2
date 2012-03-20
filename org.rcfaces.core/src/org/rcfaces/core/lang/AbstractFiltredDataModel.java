@@ -15,8 +15,6 @@ import javax.faces.model.DataModel;
 import javax.faces.model.DataModelEvent;
 import javax.faces.model.DataModelListener;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.adapter.IAdapterManager;
 import org.rcfaces.core.model.IFilterProperties;
@@ -29,9 +27,6 @@ import org.rcfaces.core.model.IFiltredModel;
  */
 public abstract class AbstractFiltredDataModel<E> extends DataModel implements
         IAdaptable, IFiltredModel, StateHolder {
-
-    private static final Log LOG = LogFactory
-            .getLog(AbstractFiltredDataModel.class);
 
     private List<E> filtredDatas;
 
@@ -86,7 +81,6 @@ public abstract class AbstractFiltredDataModel<E> extends DataModel implements
         rowCount = dataModel.getRowCount();
     }
 
-    @SuppressWarnings("unchecked")
     public <T> T getAdapter(Class<T> adapter, Object parameter) {
         if (adapter.isAssignableFrom(getClass())) {
             return (T) this;
@@ -221,10 +215,8 @@ public abstract class AbstractFiltredDataModel<E> extends DataModel implements
                 return;
             }
 
-            @SuppressWarnings("unchecked")
-            E rowData = (E) dataModel.getRowData();
-
-            if (accept(rowData, dataModelRowIndex, filterProperties) == false) {
+            if (accept((E) dataModel.getRowData(), dataModelRowIndex,
+                    filterProperties) == false) {
                 continue;
             }
 
@@ -280,7 +272,6 @@ public abstract class AbstractFiltredDataModel<E> extends DataModel implements
 
         if (obj != null) {
             for (int i = 0; i < obj.length; i++) {
-                @SuppressWarnings("unchecked")
                 E rowData = (E) obj[i];
 
                 if (accept(rowData, i, filterProperties) == false) {

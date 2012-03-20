@@ -44,20 +44,26 @@ import org.rcfaces.core.provider.AbstractProvider;
 public class ResourceProxyHandlerImpl extends AbstractProvider implements
         IContentProxyHandler, IResourceProxyHandler {
 
+    private static final String REVISION = "$Revision$";
+
     private static final Log LOG = LogFactory
             .getLog(ResourceProxyHandlerImpl.class);
 
     private static final String RESOURCES_DEFAULT_PROXY_URL_PARAMETER = Constants
-            .getPackagePrefix() + ".RESOURCE_PROXY_DEFAULT_URL";
+            .getPackagePrefix()
+            + ".RESOURCE_PROXY_DEFAULT_URL";
 
     private static final String RESOURCES_PROXY_RULES_PATHS_PARAMETER = Constants
-            .getPackagePrefix() + ".RESOURCE_PROXY_RULES_PATHS";
+            .getPackagePrefix()
+            + ".RESOURCE_PROXY_RULES_PATHS";
 
     private static final String ENABLE_FILTRED_RESOURCES_PROXY_PARAMETER = Constants
-            .getPackagePrefix() + ".ENABLE_FILTRED_RESOURCES_PROXY";
+            .getPackagePrefix()
+            + ".ENABLE_FILTRED_RESOURCES_PROXY";
 
     private static final String ENABLE_FRAMEWORK_RESOURCES_PROXY_PARAMETER = Constants
-            .getPackagePrefix() + ".ENABLE_FRAMEWORK_RESOURCES_PROXY";
+            .getPackagePrefix()
+            + ".ENABLE_FRAMEWORK_RESOURCES_PROXY";
 
     protected static final String PROTOCOL_KEYWORD = "protocol";
 
@@ -87,8 +93,7 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
 
     private boolean enabled;
 
-    private final Map<String, IKeywordValue> keywordValueMap = new HashMap<String, IKeywordValue>(
-            16);
+    private final Map keywordValueMap = new HashMap(16);
 
     private boolean filtredResourcesEnabled;
 
@@ -98,7 +103,6 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
         return ID;
     }
 
-    @Override
     public void startup(FacesContext facesContext) {
 
         ExternalContext externalContext = facesContext.getExternalContext();
@@ -111,11 +115,11 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
 
         if ((defaultURL == null || "none".equalsIgnoreCase(defaultURL))
                 && (rulesPaths == null || rulesPaths.trim().length() == 0)) {
-            LOG.info("Disable application proxy rewriting engine. (context parameter '"
-                    + RESOURCES_DEFAULT_PROXY_URL_PARAMETER
-                    + "="
-                    + defaultURL
-                    + "')");
+            LOG
+                    .info("Disable application proxy rewriting engine. (context parameter '"
+                            + RESOURCES_DEFAULT_PROXY_URL_PARAMETER
+                            + "="
+                            + defaultURL + "')");
             return;
         }
 
@@ -361,7 +365,8 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
 
             String keyword = url.substring(j, i);
 
-            IKeywordValue keywordValue = keywordValueMap.get(keyword);
+            IKeywordValue keywordValue = (IKeywordValue) keywordValueMap
+                    .get(keyword);
             if (keywordValue != null) {
                 String ret = keywordValue.getValue(facesContext, keyword);
                 if (ret != null) {
@@ -391,9 +396,10 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
     }
 
     protected void fillKeywordValues(RcfacesContext rcfacesContext,
-            Map<String, IKeywordValue> replaceMap) {
+            Map replaceMap) {
 
         replaceMap.put(PROTOCOL_KEYWORD, new IKeywordValue() {
+            private static final String REVISION = "$Revision$";
 
             public String getValue(FacesContext facesContext, String keyword) {
                 Object request = facesContext.getExternalContext().getRequest();
@@ -413,6 +419,7 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
         });
 
         replaceMap.put(LOCAL_NAME_KEYWORD, new IKeywordValue() {
+            private static final String REVISION = "$Revision$";
 
             public String getValue(FacesContext facesContext, String keyword) {
                 Object request = facesContext.getExternalContext().getRequest();
@@ -432,6 +439,7 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
         });
 
         replaceMap.put(LOCAL_ADDR_KEYWORD, new IKeywordValue() {
+            private static final String REVISION = "$Revision$";
 
             public String getValue(FacesContext facesContext, String keyword) {
                 Object request = facesContext.getExternalContext().getRequest();
@@ -465,6 +473,7 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
         });
 
         replaceMap.put(LOCAL_PORT_KEYWORD, new IKeywordValue() {
+            private static final String REVISION = "$Revision$";
 
             public String getValue(FacesContext facesContext, String keyword) {
                 Object request = facesContext.getExternalContext().getRequest();
@@ -484,6 +493,7 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
         });
 
         replaceMap.put(OPTIONAL_LOCAL_PORT_KEYWORD, new IKeywordValue() {
+            private static final String REVISION = "$Revision$";
 
             public String getValue(FacesContext facesContext, String keyword) {
                 Object request = facesContext.getExternalContext().getRequest();
@@ -536,7 +546,7 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
     private void loadRules(ExternalContext externalContext, String rulesPath) {
         StringTokenizer st = new StringTokenizer(rulesPath, ",");
 
-        List<IPatternRule> rules = new ArrayList<IPatternRule>(32);
+        List rules = new ArrayList(32);
 
         Digester digester = new Digester();
         fillDigesterRules(digester, rules);
@@ -568,23 +578,23 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
         }
 
         if (rules.isEmpty() == false) {
-            this.rules = rules.toArray(new IPatternRule[rules.size()]);
+            this.rules = (IPatternRule[]) rules.toArray(new IPatternRule[rules
+                    .size()]);
         }
     }
 
-    protected void fillDigesterRules(Digester digester,
-            final List<IPatternRule> rules) {
+    protected void fillDigesterRules(Digester digester, final List rules) {
 
-        final Map<String, String> infos = new HashMap<String, String>();
+        final Map infos = new HashMap();
 
         digester.addRule("rules/rule", new Rule() {
 
             public void end(String namespace, String name) throws Exception {
 
-                String url = infos.get("url");
+                String url = (String) infos.get("url");
                 Map attributes = null;
-                String pattern = infos.get("pattern");
-                String regexp = infos.get("regexp");
+                String pattern = (String) infos.get("pattern");
+                String regexp = (String) infos.get("regexp");
                 infos.clear();
 
                 if (url == null) {
@@ -614,13 +624,15 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
                         }
 
                         if (pattern.lastIndexOf('*') == 0) {
-                            rules.add(new EndsWithRule(url, attributes, pattern));
+                            rules
+                                    .add(new EndsWithRule(url, attributes,
+                                            pattern));
                             return;
                         }
 
                         throw new FacesException(
-                                "Invalid expression ! (Use regexp tag to declare more complex pattern) '"
-                                        + pattern + "'.");
+                                "Invalid expression ! (Use regexp tag to declare more complex pattern) '" + pattern
+                                        + "'.");
                     }
 
                     rules.add(new BasicPatternRule(url, attributes, pattern));
@@ -639,7 +651,6 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
         });
         digester.addRule("rules/rule/pattern", new Rule() {
 
-            @Override
             public void body(String namespace, String name, String text)
                     throws Exception {
                 infos.put("pattern", text);
@@ -647,7 +658,6 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
         });
         digester.addRule("rules/rule/regexp", new Rule() {
 
-            @Override
             public void body(String namespace, String name, String text)
                     throws Exception {
                 infos.put("regexp", text);
@@ -655,7 +665,6 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
         });
         digester.addRule("rules/rule/url", new Rule() {
 
-            @Override
             public void body(String namespace, String name, String text)
                     throws Exception {
                 infos.put("url", text);
@@ -714,7 +723,6 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
             return attributes;
         }
 
-        @Override
         public String toString() {
             return "[Rule baseURI='" + baseURI + "' attributes='" + attributes
                     + "']";
@@ -739,7 +747,6 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
             return pattern;
         }
 
-        @Override
         public int hashCode() {
             return pattern.hashCode();
         }
@@ -748,7 +755,6 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
             return pattern.equals(url);
         }
 
-        @Override
         public boolean equals(Object obj) {
             if (this == obj)
                 return true;
@@ -765,7 +771,6 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
             return true;
         }
 
-        @Override
         public String toString() {
             return "[BasicRule pattern='" + pattern + "' baseURI='" + baseURI
                     + "' attributes='" + attributes + "']";

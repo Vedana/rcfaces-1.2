@@ -23,57 +23,46 @@ public class DataModelWrapper extends DataModel implements IDataModel {
         return dataModel;
     }
 
-    @Override
     public void addDataModelListener(DataModelListener listener) {
         dataModel.addDataModelListener(listener);
     }
 
-    @Override
     public DataModelListener[] getDataModelListeners() {
         return dataModel.getDataModelListeners();
     }
 
-    @Override
     public int getRowCount() {
         return dataModel.getRowCount();
     }
 
-    @Override
     public Object getRowData() {
         return dataModel.getRowData();
     }
 
-    @Override
     public int getRowIndex() {
         return dataModel.getRowIndex();
     }
 
-    @Override
     public Object getWrappedData() {
         return dataModel.getWrappedData();
     }
 
-    @Override
     public boolean isRowAvailable() {
         return dataModel.isRowAvailable();
     }
 
-    @Override
     public void removeDataModelListener(DataModelListener listener) {
         dataModel.removeDataModelListener(listener);
     }
 
-    @Override
     public void setRowIndex(int rowIndex) {
         dataModel.setRowIndex(rowIndex);
     }
 
-    @Override
     public void setWrappedData(Object data) {
         dataModel.setWrappedData(data);
     }
 
-    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
@@ -82,7 +71,6 @@ public class DataModelWrapper extends DataModel implements IDataModel {
         return result;
     }
 
-    @Override
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
