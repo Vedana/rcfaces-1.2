@@ -1,3 +1,6 @@
+f_calendarObject:
+Correction bug défilement des mois lorsque le dernier jour du mois est sélectionné et que le nouveau mois n'a pas le même jour
+
 f_keyEntry:
 Modification de f_getSelectedValue, pour pouvoir récupérer la clé d'une valeur de comboGrid même lorsqu'elle n'est pas editable ou readOnly
 
