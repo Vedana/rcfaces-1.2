@@ -324,7 +324,7 @@ var __statics = {
 		
 		return dataGridPopup._onSearchClick(jsEvent);
 	}
-};
+}
 
 var __members = {
 		
@@ -418,8 +418,8 @@ var __members = {
 				f_core.VerifyProperties(searchInput);
 			}
 			
-			if (this._ariaInput){
-				this._ariaInput = undefined; // HtmlInputElement
+			if(this._ariaInput){
+				this._ariaInput = undefined // HtmlInputElement
 			}
 			
 			var searchIcon=this._searchIcon;
@@ -467,8 +467,8 @@ var __members = {
 	f_constructDataGrid: function(parent) {
 		f_core.Debug(fa_dataGridPopup, "f_constructDataGrid: construct components parent="+parent);
 
-		var rows=f_core.GetNumberAttributeNS(this, "rows");
-		var paged=f_core.GetBooleanAttributeNS(this, "paged", true);
+		var rows=f_core.GetNumberAttributeNS(this,"rows");
+		var paged=f_core.GetBooleanAttributeNS(this,"paged", true);
 		
 		var hasPager=(rows>0 && paged);
 		
@@ -939,6 +939,6 @@ var __members = {
 	 * @return void
 	 */	
 	fa_valueSelected: f_class.ABSTRACT
-};
+}
 
 new f_aspect("fa_dataGridPopup", __statics, __members, fa_filterProperties);

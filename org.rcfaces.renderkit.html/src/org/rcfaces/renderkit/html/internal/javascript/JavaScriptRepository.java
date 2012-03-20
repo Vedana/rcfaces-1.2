@@ -40,6 +40,7 @@ import org.xml.sax.Attributes;
  */
 public class JavaScriptRepository extends BasicHierarchicalRepository implements
         IJavaScriptRepository {
+    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = 7359720004642078904L;
 
@@ -126,6 +127,8 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
     protected class JavaScriptFile extends HierarchicalFile implements
             IClassFile {
 
+        private static final String REVISION = "$Revision$";
+
         private static final long serialVersionUID = 4826077949811747989L;
 
         private List classes;
@@ -209,6 +212,7 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
         super.addRules(digester, container);
 
         digester.addRule("repository", new Rule() {
+            private static final String REVISION = "$Revision$";
 
             public void begin(String namespace, String name,
                     Attributes attributes) throws Exception {
@@ -263,25 +267,35 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
             public void end(String namespace, String name) throws Exception {
 
                 ClassImpl clazz = (ClassImpl) this.digester.peek();
-
+                
                 /*
-                 * List l = null;
-                 * 
-                 * IClass cls[] = clazz.listRequiredClasses(null); for (int i =
-                 * 0; i < cls.length; i++) { IHierarchicalFile file =
-                 * cls[i].getFile();
-                 * 
-                 * if (l == null) { l = new ArrayList(); } l.add(file); }
-                 * 
-                 * IHierarchicalFile resources[] = clazz
-                 * .listRequiredResources(null); if (resources.length > 0) { if
-                 * (l == null) { l = new ArrayList(); }
-                 * l.addAll(Arrays.asList(resources)); }
-                 * 
-                 * if (l != null) { ((HierarchicalFile) clazz.getFile())
-                 * .addDependencies((IHierarchicalFile[]) l .toArray(new
-                 * IHierarchicalFile[l.size()])); }
-                 */
+                List l = null;
+
+                IClass cls[] = clazz.listRequiredClasses(null);
+                for (int i = 0; i < cls.length; i++) {
+                    IHierarchicalFile file = cls[i].getFile();
+
+                    if (l == null) {
+                        l = new ArrayList();
+                    }
+                    l.add(file);
+                }
+
+                IHierarchicalFile resources[] = clazz
+                        .listRequiredResources(null);
+                if (resources.length > 0) {
+                    if (l == null) {
+                        l = new ArrayList();
+                    }
+                    l.addAll(Arrays.asList(resources));
+                }
+
+                if (l != null) {
+                    ((HierarchicalFile) clazz.getFile())
+                            .addDependencies((IHierarchicalFile[]) l
+                                    .toArray(new IHierarchicalFile[l.size()]));
+                }
+                */
 
                 this.digester.pop();
             }
@@ -364,7 +378,7 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
                     throw new FacesException("Can not find class '" + className
                             + "' to link requirements.");
                 }
-
+                
                 clazz.resolve(classesByName);
 
                 addRequiredClass(requiredId, clazz);
@@ -594,8 +608,8 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
                     if (first) {
                         first = false;
 
-                        sa.append("f_resourceBundle.Define2(\"")
-                                .append(className).append("\",{\n");
+                        sa.append("f_resourceBundle.Define2(\"").append(
+                                className).append("\",{\n");
                     } else {
                         sa.append(",\n");
                     }

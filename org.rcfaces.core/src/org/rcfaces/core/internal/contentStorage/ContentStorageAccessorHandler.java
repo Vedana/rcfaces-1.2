@@ -23,8 +23,8 @@ import org.rcfaces.core.provider.AbstractProvider;
  */
 public class ContentStorageAccessorHandler extends AbstractProvider implements
         IContentAccessorHandler {
+    private static final String REVISION = "$Revision$";
 
-    @Override
     public void startup(FacesContext facesContext) {
         super.startup(facesContext);
 

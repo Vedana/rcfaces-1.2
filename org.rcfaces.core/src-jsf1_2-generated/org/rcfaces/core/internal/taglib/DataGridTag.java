@@ -60,7 +60,6 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 	private ValueExpression headerVisible;
 	private ValueExpression rowToolTipId;
 	private ValueExpression cursorValue;
-	private ValueExpression scopeColumnId;
 	private ValueExpression rowDragTypes;
 	private ValueExpression rowDragEffects;
 	private ValueExpression rowDropTypes;
@@ -246,10 +245,6 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		this.cursorValue = cursorValue;
 	}
 
-	public void setScopeColumnId(ValueExpression scopeColumnId) {
-		this.scopeColumnId = scopeColumnId;
-	}
-
 	public void setRowDragTypes(ValueExpression rowDragTypes) {
 		this.rowDragTypes = rowDragTypes;
 	}
@@ -341,7 +336,6 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			LOG.debug("  headerVisible='"+headerVisible+"'");
 			LOG.debug("  rowToolTipId='"+rowToolTipId+"'");
 			LOG.debug("  cursorValue='"+cursorValue+"'");
-			LOG.debug("  scopeColumnId='"+scopeColumnId+"'");
 			LOG.debug("  rowDragTypes='"+rowDragTypes+"'");
 			LOG.debug("  rowDragEffects='"+rowDragEffects+"'");
 			LOG.debug("  rowDropTypes='"+rowDropTypes+"'");
@@ -686,15 +680,6 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			}
 		}
 
-		if (scopeColumnId != null) {
-			if (scopeColumnId.isLiteralText()==false) {
-				component.setValueExpression(Properties.SCOPE_COLUMN_ID, scopeColumnId);
-
-			} else {
-				component.setScopeColumnId(scopeColumnId.getExpressionString());
-			}
-		}
-
 		if (rowDragTypes != null) {
 			if (rowDragTypes.isLiteralText()==false) {
 				component.setValueExpression(Properties.ROW_DRAG_TYPES, rowDragTypes);
@@ -842,7 +827,6 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		headerVisible = null;
 		rowToolTipId = null;
 		cursorValue = null;
-		scopeColumnId = null;
 		rowDragTypes = null;
 		rowDragEffects = null;
 		rowDropTypes = null;
