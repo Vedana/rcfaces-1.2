@@ -47,16 +47,16 @@ import org.rcfaces.core.lang.IAdaptable;
 import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredCollection;
-import org.rcfaces.core.model.IFiltredCollection2;
 import org.rcfaces.core.model.IFiltredCollection.IFiltredIterator;
+import org.rcfaces.core.model.IFiltredCollection2;
 import org.rcfaces.renderkit.html.internal.EventDecoders;
+import org.rcfaces.renderkit.html.internal.EventDecoders.IEventDecoder;
+import org.rcfaces.renderkit.html.internal.EventDecoders.IEventObjectDecoder;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRequestContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
-import org.rcfaces.renderkit.html.internal.EventDecoders.IEventDecoder;
-import org.rcfaces.renderkit.html.internal.EventDecoders.IEventObjectDecoder;
 
 /**
  * 
@@ -189,8 +189,8 @@ public abstract class AbstractSelectItemsDecorator extends
         }
 
         decoratorComponentData = requestContext.getComponentData(
-                getComponent(), getComponentClientId(requestContext
-                        .getFacesContext()), null);
+                getComponent(),
+                getComponentClientId(requestContext.getFacesContext()), null);
 
         return decoratorComponentData;
     }
@@ -480,10 +480,11 @@ public abstract class AbstractSelectItemsDecorator extends
             if (value instanceof ISelectItemGroup) {
                 ISelectItemGroup selectItemGroup = (ISelectItemGroup) value;
 
-                SelectItemGroup sig = new SelectItemGroup(selectItemGroup
-                        .getLabel(), selectItemGroup.getDescription(),
-                        selectItemGroup.isDisabled(), selectItemGroup
-                                .getSelectItems());
+                SelectItemGroup sig = new SelectItemGroup(
+                        selectItemGroup.getLabel(),
+                        selectItemGroup.getDescription(),
+                        selectItemGroup.isDisabled(),
+                        selectItemGroup.getSelectItems());
 
                 sig.setValue(selectItemGroup.getValue());
 
@@ -588,12 +589,13 @@ public abstract class AbstractSelectItemsDecorator extends
     }
 
     protected void encodeNodes(UIComponent component) throws WriterException {
-    	Iterator it = iterateNodes(component);
+        Iterator it = iterateNodes(component);
 
-        encodeComponents(it, 0, true);    
+        encodeComponents(it, 0, true);
     }
-    
-    protected Iterator iterateNodes(UIComponent component) throws WriterException {
+
+    protected Iterator iterateNodes(UIComponent component)
+            throws WriterException {
         Iterator it = component.getChildren().iterator();
 
         return it;
@@ -704,37 +706,39 @@ public abstract class AbstractSelectItemsDecorator extends
                         max);
             }
 
-            try {
-                int sic = 0;
+            if (it != null) {
+                try {
+                    int sic = 0;
 
-                for (; it.hasNext();) {
-                    Object item = it.next();
+                    for (; it.hasNext();) {
+                        Object item = it.next();
 
-                    SelectItem si = convertToSelectItem(item);
-                    if (si == null) {
-                        if (LOG.isDebugEnabled()) {
-                            LOG.debug("Can not convert '" + item
-                                    + "' to SelectItem !");
+                        SelectItem si = convertToSelectItem(item);
+                        if (si == null) {
+                            if (LOG.isDebugEnabled()) {
+                                LOG.debug("Can not convert '" + item
+                                        + "' to SelectItem !");
+                            }
+                            continue;
                         }
-                        continue;
+
+                        encodeSelectItem(component, si, depth, visible);
+
+                        sic++;
                     }
 
-                    encodeSelectItem(component, si, depth, visible);
-
-                    sic++;
-                }
-
-                if (it instanceof IFiltredCollection.IFiltredIterator) {
-                    int s = ((IFiltredCollection.IFiltredIterator) it)
-                            .getSize();
-                    if (s > sic) {
-                        selectItemCount += s - sic;
+                    if (it instanceof IFiltredCollection.IFiltredIterator) {
+                        int s = ((IFiltredCollection.IFiltredIterator) it)
+                                .getSize();
+                        if (s > sic) {
+                            selectItemCount += s - sic;
+                        }
                     }
-                }
 
-            } finally {
-                if (it instanceof IFiltredIterator) {
-                    ((IFiltredIterator) it).release();
+                } finally {
+                    if (it instanceof IFiltredIterator) {
+                        ((IFiltredIterator) it).release();
+                    }
                 }
             }
 
@@ -935,8 +939,8 @@ public abstract class AbstractSelectItemsDecorator extends
             Object selectItemValue) {
 
         return ValuesTools.valueToString(selectItemValue, getConverter(),
-                componentContext.getComponent(), componentContext
-                        .getFacesContext());
+                componentContext.getComponent(),
+                componentContext.getFacesContext());
     }
 
     protected Object convertToItemValue(
@@ -1354,8 +1358,8 @@ public abstract class AbstractSelectItemsDecorator extends
 
         javaScriptWriter.writeln(");");
     }
-    
-	public void refreshNode(UIComponent component) throws WriterException {
-	}
+
+    public void refreshNode(UIComponent component) throws WriterException {
+    }
 
 }
