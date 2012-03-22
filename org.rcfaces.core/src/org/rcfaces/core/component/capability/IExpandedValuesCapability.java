@@ -19,5 +19,5 @@ public interface IExpandedValuesCapability extends IExpansionProvider {
      * void setCheckedValues(Object values);
      */
 
-    Class getExpandedValuesType(FacesContext facesContext);
+    Class< ? > getExpandedValuesType(FacesContext facesContext);
 }
