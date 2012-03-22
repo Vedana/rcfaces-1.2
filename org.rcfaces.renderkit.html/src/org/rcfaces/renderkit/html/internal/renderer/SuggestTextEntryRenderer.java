@@ -48,6 +48,8 @@ public class SuggestTextEntryRenderer extends TextEntryRenderer implements
             throws WriterException {
         htmlWriter = super.writeInputAttributes(htmlWriter);
 
+        htmlWriter.writeAutoComplete(IHtmlWriter.AUTOCOMPLETE_OFF);
+
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
 
@@ -85,7 +87,12 @@ public class SuggestTextEntryRenderer extends TextEntryRenderer implements
             htmlWriter.writeAttributeNS("forceProposal", true);
         }
 
-        
+        boolean disableProposals = suggestTextEntryComponent
+                .isDisableProposals(facesContext);
+        if (disableProposals) {
+            htmlWriter.writeAttributeNS("disableProposals", true);
+        }
+
         boolean showPopupForOneResult = suggestTextEntryComponent
                 .isShowPopupForOneResult(facesContext);
         if (showPopupForOneResult) {
@@ -109,27 +116,27 @@ public class SuggestTextEntryRenderer extends TextEntryRenderer implements
 
         boolean orderedResult = suggestTextEntryComponent
                 .isOrderedItems(facesContext);
-        
-        Iterator  it = suggestTextEntryComponent.getChildren().iterator();
+
+        Iterator it = suggestTextEntryComponent.getChildren().iterator();
         for (; it.hasNext();) {
             UIComponent component = (UIComponent) it.next();
             if (component instanceof UISelectItems) {
-            	UISelectItems uiSelectItems = (UISelectItems) component;
+                UISelectItems uiSelectItems = (UISelectItems) component;
 
-				Object itemsValue = uiSelectItems.getValue();
-				if (itemsValue != null) {
-					IOrderedIterator orderedIterator = (IOrderedIterator) getAdapter(
-							IOrderedIterator.class, itemsValue);
+                Object itemsValue = uiSelectItems.getValue();
+                if (itemsValue != null) {
+                    IOrderedIterator orderedIterator = getAdapter(
+                            IOrderedIterator.class, itemsValue);
 
-	                if (orderedIterator != null) {
-	                	orderedResult = orderedIterator.isOrdered();
-	                }
-	            	break;
-				}
-                
+                    if (orderedIterator != null) {
+                        orderedResult = orderedIterator.isOrdered();
+                    }
+                    break;
+                }
+
             }
         }
-            
+
         if (orderedResult == false) {
             htmlWriter.writeAttributeNS("orderedResult", false);
         }
@@ -236,9 +243,10 @@ public class SuggestTextEntryRenderer extends TextEntryRenderer implements
     public void declare(INamespaceConfiguration nameSpaceProperties) {
         super.declare(nameSpaceProperties);
 
-        nameSpaceProperties.addAttributes(null, new String[] {
-                "maxResultNumber", "suggestionDelayMs", "suggestionMinChars",
-                "caseSensitive", "forceProposal", "suggestionValue",
-                "moreResultsMessage", "orderedResult", "showPopupForOneResult" });
+        nameSpaceProperties.addAttributes(null,
+                new String[] { "maxResultNumber", "suggestionDelayMs",
+                        "suggestionMinChars", "caseSensitive", "forceProposal",
+                        "suggestionValue", "moreResultsMessage",
+                        "orderedResult", "showPopupForOneResult" });
     }
 }
