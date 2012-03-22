@@ -4070,32 +4070,27 @@ var f_core = {
 	 * @param String[] side
 	 * @return Number
 	 */
-	ComputeCssLengths: function(component, properties, args) {	
+	ComputeCssLengths: function(component, properties, sides) {	
 		var length=0;
-
-		var ie=f_core.IsInternetExplorer();		
 		
-		var width=(ie)?"Width":"-width";
-		
-		for(var i=1;i<args.length;i++) {
-			side=args[i];
-
-			if (ie) {
-				side=side.substring(0, 1).toUpperCase()+side.substring(1);
-				
-			} else {
-				side="-"+side;
+		for(var i=0;i<sides.length;i++) {
+			var side=sides[i];
+			
+			if (typeof(side) != "string") {
+				continue;
 			}
 			
-			for(var j=0;j<properties.length;j++) {				
-				var property=properties[j]+side;
-				if (properties[j]=="border") {
-					property+=width;
+			for(var j=0;j<properties.length;j++) {
+				var propName=properties[j];
+				var property=propName+"-"+side;
+				
+				if (propName=="border") {
+					property+="-width";
 				}
 				
 				var l=f_core.GetCurrentStyleProperty(component, property);
 				if (l && l.indexOf("px")>0) {
-					length+=parseInt(l);
+					length+=parseInt(l, 10);
 				}
 			}
 		}		
@@ -4706,6 +4701,10 @@ var f_core = {
 	 */
 	GetCurrentStyleProperty: function(component, attributeId) {
 		if (f_core.IsInternetExplorer()) {
+			attributeId = attributeId.replace(/\-(\w)/g, function(all, letter){
+				return letter.toUpperCase();
+			});
+			
 			return component.currentStyle[attributeId];
 		}
 		
@@ -4714,7 +4713,7 @@ var f_core = {
 		}
 		
 		f_core.Assert(false, "f_core.GetCurrentStyleProperty: Browser not supported !");
-		return null;
+		return undefined;
 	},
 	/**
 	 * @method private static 
