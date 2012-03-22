@@ -26,7 +26,7 @@ var __statics={
 	Initializer: function() {	
 	
 		try {
-			if (!window.console || !window.console.firebug) {
+			if (!window.console || !window.console.log) {
 				return;
 			}
 		} catch (x) {
@@ -61,9 +61,9 @@ var __statics={
 		}
 		
 		f_fireBugAppender._oldAssert.call(f_core, test, message);
-	}
-	
-}
+	}	
+};
+
 var __members = {
 	f_fireBugAppender: function() {
 		this.f_super(arguments);
