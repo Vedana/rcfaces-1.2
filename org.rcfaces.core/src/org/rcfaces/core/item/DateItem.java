@@ -25,8 +25,6 @@ import org.rcfaces.core.lang.Period;
  */
 public class DateItem extends SelectItem implements IDateItem {
 
-    private static final String REVISION = "$Revision$";
-
     private static final long serialVersionUID = -2332673361111286166L;
 
     private String styleClass;

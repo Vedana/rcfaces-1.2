@@ -44,8 +44,6 @@ import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
  */
 class DefaultItem extends SelectItemGroup {
 
-    private static final String REVISION = "$Revision$";
-
     private static final long serialVersionUID = -3799667579566545958L;
 
     protected static final SelectItem SELECT_ITEMS_EMPTY_ARRAY[] = new SelectItem[0];

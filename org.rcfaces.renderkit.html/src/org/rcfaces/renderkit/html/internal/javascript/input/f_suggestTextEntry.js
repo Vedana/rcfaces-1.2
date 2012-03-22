@@ -54,10 +54,12 @@ var __members = {
 			this._suggestionMinChars=1;
 		}
 		
+		this._disableProposals=f_core.GetBooleanAttributeNS(this,"disableProposals", false);
+			
 		this._showPopupForOneResult=f_core.GetBooleanAttributeNS(this, "showPopupForOneResult", false);
 		
 		// Permet d'optimiser les propositions !
-		this._orderedResult=f_core.GetAttributeNS(this, "orderedResult", true);
+		this._orderedResult=f_core.GetBooleanAttributeNS(this, "orderedResult", true);
 	//	this._orderedResult=true;
 
 		this._suggestionValue=f_core.GetAttributeNS(this, "suggestionValue");
@@ -105,6 +107,7 @@ var __members = {
 		// this._loading=undefined; // boolean
 		// this._moreResultsMessage=undefined; // String
 		// this._focus=undefined; // boolean
+		// this._disableProposals=undefined; // Boolean
 
 		// this._oldClassName=undefined; // string
 		// this._canSuggest=undefined; // boolean
@@ -203,10 +206,11 @@ var __members = {
 		var value=this.f_getValue();
 		var showPopup=false;
 		var disableAutoComplete = false;
+		
 		switch(jsEvt.keyCode) {
 		case f_key.VK_DOWN:
 		case f_key.VK_UP:
-			if (menuOpened) {
+			if (menuOpened || this._disableProposals) {
 				return f_core.CancelJsEvent(jsEvt);
 			}
 
@@ -262,6 +266,10 @@ var __members = {
 			window.clearTimeout(timerId);
 		}
 		
+		if (this._disableProposals) {
+			return;
+		}
+		
 		var suggestionDelayMs=this._suggestionDelayMs;		
 		if (suggestionDelayMs<1) {
 			return;
@@ -284,7 +292,6 @@ var __members = {
 			this._onSuggestTimeOut(undefined,disableAutoComplete);
 			
 		} else {
-			
 			this._lastValue=value;
 
 			var suggestTextEntry=this;
@@ -366,7 +373,19 @@ var __members = {
 		if (this._calling) {
 			return;
 		}
+
+		var oldCalling=this._calling;
+		try {
+			this._calling=true;
+	
+			if (this.f_fireEvent(f_event.MENU)==false) {
+				return;
+			}
 		
+		} finally {
+			this._calling=oldCalling;
+		}
+
 		var params=new Object;
 		params.componentId=this.id;
 		
@@ -381,7 +400,7 @@ var __members = {
 		if (maxResultNumber>0) {
 			params.maxResultNumber=maxResultNumber;
 		}
-		
+
 		this.f_appendCommand(function(suggestTextEntry) {
 			suggestTextEntry._callServer(params, text);
 		});
@@ -393,10 +412,11 @@ var __members = {
 		this._calling=true;
 		
 		try {
-			if (this.f_fireEvent(f_event.MENU)==false) {
-				return;
-			}	
-		
+			// OO: Déplacé dans fa_updateFilterProperties()
+			// if (this.f_fireEvent(f_event.MENU)==false) {
+			// 	return;
+			// }
+			
 			this.f_setLoading(true);
 			
 			f_core.Debug(f_suggestTextEntry, "_callServer: Call server text='"+text+"' maxResultNumber="+params.maxResultNumber);
@@ -536,7 +556,8 @@ var __members = {
 	 * @return Object New item.
 	 */
 	f_appendItem: function(label, value, description, imageURL, clientDataName1, clientDataValue1, clientDataName2) {
-		var clientDatas;
+		var clientDatas=undefined;
+		
 		if (arguments.length>4) {
 			clientDatas=new Object;
 			
@@ -548,7 +569,7 @@ var __members = {
 			}
 		}
 		
-		var item={
+		var item = {
 			_label: label,
 			_value: value,
 			_description: description,
@@ -614,7 +635,8 @@ var __members = {
 		
 		if (disableAutoComplete) {
 			this._showPopup(undefined, undefined, text);
-		}else {
+			
+		} else {
 			this.f_showProposal(rs[0]._label, rs[0]._value, rs[0], null);
 		}
 		
@@ -832,7 +854,7 @@ var __members = {
 			ret.push(results[i]);
 		}
 
-		var complete;
+		var complete=undefined;
 	
 //	alert("State="+state+" resultsLength="+results.length+" rowCount="+this._rowCount+" ordered="+this._orderedResult);
 	
@@ -969,7 +991,7 @@ var __members = {
 		
 		this._focus=undefined;
 	}
-}
+};
 
 //new f_class("f_suggestTextEntry", null, __statics, __members, f_textEntry, fa_filterProperties, fa_commands);
 new f_class("f_suggestTextEntry", {

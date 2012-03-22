@@ -34,7 +34,7 @@ public class BasicSelectItem extends SelectItem implements ISelectItem,
 
     private static final String[] STRING_EMPTY_ARRAY = new String[0];
 
-    private Map serverDatas;
+    private Map<String, Object> serverDatas;
 
     private Map clientDatas;
 
@@ -224,9 +224,9 @@ public class BasicSelectItem extends SelectItem implements ISelectItem,
         return serverDatas.isEmpty();
     }
 
-    public Map getServerDataMap() {
+    public Map<String, Object> getServerDataMap() {
         if (serverDatas == null) {
-            serverDatas = new HashMap();
+            serverDatas = new HashMap<String, Object>();
         }
 
         return serverDatas;
@@ -240,7 +240,7 @@ public class BasicSelectItem extends SelectItem implements ISelectItem,
         return clientDatas.isEmpty();
     }
 
-    public Map getClientDataMap() {
+    public Map<String, Object> getClientDataMap() {
         if (clientDatas == null) {
             clientDatas = new HashMap();
         }

@@ -4845,7 +4845,7 @@ var __members = {
 
 		var image = column._image;
 		if (image) {
-			var imageURL;
+			var imageURL=undefined;
 
 			if (this.f_isDisabled()) {
 				imageURL = column._titleDisabledImageURL;

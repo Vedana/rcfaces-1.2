@@ -1391,6 +1391,18 @@ f_classLoader.prototype = {
 					f_core.Error(f_classLoader, "f_init: f_completeComponent throws exception for component '"+component.id+"'.", x);
 				}
 			}
+			
+			if (this._documentCompleted) {				
+				var documentCompleteFct = component.f_documentComplete;
+				if (documentCompleteFct) {
+					try {
+						documentCompleteFct.call(component);
+					
+					} catch (x) {
+						f_core.Error(f_classLoader, "f_init: f_documentComplete throws exception for component '"+component.id+"'.", x);
+					}
+				}
+			}
 		}
 				
 		return component;

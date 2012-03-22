@@ -2661,15 +2661,20 @@ Dans le cas d'un mode period !
 		<capability id="IToolTipTextCapability" />
 
 		<binding-alias id="toolTipText" target="itemDescription" />
-		<method id="setToolTip" returnType="void">
+		<method id="setToolTipText" returnType="void">
 			<parameter type="java.lang.String" name="text" />
 			<code>
 			setItemDescription(text);
 			</code>
 		</method>
-		<method id="getToolTip" returnType="String">
+		<method id="getToolTipText" returnType="String">
 			<code>
 			return getItemDescription();
+			</code>
+		</method>
+		<method id="isToolTipTextSetted" returnType="boolean">
+			<code>
+			return getItemDescription()!=null;			
 			</code>
 		</method>
 		
@@ -3320,6 +3325,7 @@ Dans le cas d'un mode period !
 		<attribute id="moreResultsMessage" type="java.lang.String" />
 		<attribute id="orderedItems" type="boolean" default="true" />
 		<attribute id="showPopupForOneResult" type="boolean" />
+		<attribute id="disableProposals" type="boolean" />
 	
 		<method id="setSuggestionConverter(String)" />
 		<method id="setSuggestionConverter(String,javax.faces.context.FacesContext)" />
