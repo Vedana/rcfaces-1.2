@@ -468,7 +468,7 @@ f_classLoader.prototype._asyncPostLoad=function(interactiveMode) {
 	
 	// Appel du onload des composants parents !
 	interactiveMode._component.f_fireEvent("load");
-}
+};
 
 /**
  * @method private
