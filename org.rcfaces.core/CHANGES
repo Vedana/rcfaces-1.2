@@ -1,3 +1,18 @@
+f_suggestTextEntry,  SuggestTextEntryRenderer:
+Support du disableProposals
+
+f_core:
+Amélioration du système du calcul des propriétés du CSS
+
+f_fireBugAppender:
+Support de la nouvelle version de firebug
+
+f_classLoader:
+Appel du documentComplete pour les composants qui sont initialisés apres le documentComplete
+
+AbstractSelectItemsDecorator:
+Gestion du filtre qui retourne null a iterator()
+
 f_calendarObject:
 Correction bug défilement des mois lorsque le dernier jour du mois est sélectionné et que le nouveau mois n'a pas le même jour
 
