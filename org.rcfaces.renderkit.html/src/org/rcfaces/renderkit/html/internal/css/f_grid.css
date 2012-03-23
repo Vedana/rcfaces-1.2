@@ -186,6 +186,18 @@
 	padding: 0 3px;
 }
 
+.f_grid_cell_align_left {
+	text-align: left;	
+}
+
+.f_grid_cell_align_center {
+	text-align: center;
+}
+
+.f_grid_cell_align_right {
+	text-align: right;
+}
+
 .f_grid_label {
 	white-space: nowrap;
 	cursor: inherit;
@@ -402,4 +414,14 @@
  
 .f_grid_wrap .f_dataGrid_row {
 	height: auto;
+}
+
+.f_grid_hidden_title {
+	display:none;
+	position:absolute;
+	left:-10000px;
+	top:auto;
+	height:1px;
+	overflow:hidden;
+	line-height: 0px;
 }

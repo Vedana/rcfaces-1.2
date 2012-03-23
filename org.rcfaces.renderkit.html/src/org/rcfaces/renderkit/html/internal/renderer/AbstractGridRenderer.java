@@ -45,6 +45,7 @@ import org.rcfaces.core.component.capability.IDroppableCapability;
 import org.rcfaces.core.component.capability.IEmptyDataMessageCapability;
 import org.rcfaces.core.component.capability.IFilterCapability;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
+import org.rcfaces.core.component.capability.IGridCaptionCapability;
 import org.rcfaces.core.component.capability.IImageSizeCapability;
 import org.rcfaces.core.component.capability.IMenuCapability;
 import org.rcfaces.core.component.capability.IMenuPopupIdCapability;
@@ -132,6 +133,7 @@ import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.SubMenuDecorator;
 import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools;
+import org.w3c.dom.html.HTMLElement;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -1114,8 +1116,21 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             htmlWriter.writeWidth("100%");
         }
 
+        // Accessibility : summary
+        if (gridComponent instanceof IGridCaptionCapability) {
+        	String summary = ((IGridCaptionCapability)gridComponent).getSummary();
+        	if (summary != null) {
+        		htmlWriter.writeAttribute("summary", summary);
+        	}
+        	String caption = ((IGridCaptionCapability)gridComponent).getCaption();
+        	if (caption != null) {
+                encodeHiddenCaption(htmlWriter, gridRenderContext, caption);
+        	}
+        }
+        
         encodeHeader(htmlWriter, gridRenderContext);
-
+        encodeHiddenTitle(htmlWriter, gridRenderContext);
+        
         htmlWriter.startElement(IHtmlWriter.TBODY);
         htmlWriter.writeClass(getTitleTableBodyClassName(htmlWriter));
 
@@ -1184,10 +1199,6 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
     }
 
-    protected String getWAIRole() {
-        return IAccessibilityRoles.GRID;
-    }
-
     protected String getDataBodyScrollClassName(IHtmlWriter htmlWriter) {
         return GRID_MAIN_STYLE_CLASS + "_dataBody_scroll";
     }
@@ -1230,6 +1241,10 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                 + DATA_TITLE_SCROLL_ID_SUFFIX;
     }
 
+    protected String getHiddenTitleClassName(IHtmlWriter htmlWriter) {
+        return GRID_MAIN_STYLE_CLASS + "_hidden_title";
+    }
+    
     protected int getTitleHeight() {
         return 20;
     }
@@ -1461,7 +1476,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             }
 
             if (column instanceof IOrderCapability) {
-                String altText = null;
+                String titleText = null;
 
                 ISortedComponent sortedComponents[] = tableContext
                         .listSortedComponents();
@@ -1471,10 +1486,10 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                     }
 
                     if (((IOrderCapability) column).isAscending()) {
-                        altText = getResourceBundleValue(htmlWriter,
+                        titleText = getResourceBundleValue(htmlWriter,
                                 "f_grid.DESCENDING_SORT");
                     } else {
-                        altText = getResourceBundleValue(htmlWriter,
+                        titleText = getResourceBundleValue(htmlWriter,
                                 "f_grid.ASCENDING_SORT");
                     }
 
@@ -1482,12 +1497,12 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                     break;
                 }
 
-                if (altText == null) {
-                    altText = getResourceBundleValue(htmlWriter,
+                if (titleText == null) {
+                    titleText = getResourceBundleValue(htmlWriter,
                             "f_grid.NO_SORT");
                 }
 
-                htmlWriter.writeAlt(altText);
+                htmlWriter.writeTitle(titleText);
             }
 
         }
@@ -1652,6 +1667,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
         UIColumn dcs[] = new UIColumn[columns.length];
 
+        // Colgroup
         int is = 0;
         for (int i = 0; i < columns.length; i++) {
             UIColumn dc = columns[i];
@@ -1665,7 +1681,69 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         }
     }
 
-    private void encodeTitleCol(IHtmlWriter htmlWriter, UIColumn column,
+    /**
+     * Accessibility : write hidden <CAPTION>
+     * @param htmlWriter Writer
+     * @param gridRenderContext Context
+     * @param caption Caption content
+     * @throws WriterException
+     */
+    protected void encodeHiddenCaption(IHtmlWriter htmlWriter,
+            AbstractGridRenderContext gridRenderContext, 
+            String caption) throws WriterException {
+    	htmlWriter.startElement(IHtmlWriter.CAPTION);
+        htmlWriter.writeClass(getHiddenTitleClassName(htmlWriter));
+    	htmlWriter.writeText(caption);
+        htmlWriter.endElement(IHtmlWriter.CAPTION);
+    }
+    
+    /**
+     * Accessibility : write hidden <THEAD>
+     * @param htmlWriter Writer
+     * @param gridRenderContext Context
+     * @throws WriterException
+     */
+    protected void encodeHiddenTitle(IHtmlWriter htmlWriter,
+            AbstractGridRenderContext gridRenderContext) throws WriterException {
+        UIColumn columns[] = gridRenderContext.listColumns();
+
+        htmlWriter.startElement(IHtmlWriter.THEAD);
+        htmlWriter.writeClass(getHiddenTitleClassName(htmlWriter));
+        
+        htmlWriter.startElement(IHtmlWriter.TR);
+        for (int i = 0; i < columns.length; i++) {
+            UIColumn dc = columns[i];
+            if (gridRenderContext.getColumnState(i) != AbstractGridRenderContext.VISIBLE) {
+                continue;
+            }
+            encodeHiddenTitleCol(htmlWriter, dc, gridRenderContext);
+        }
+        htmlWriter.endElement(IHtmlWriter.TR);
+        htmlWriter.endElement(IHtmlWriter.THEAD);
+    }
+
+    /**
+     * Accessibility : Write <TD> for a column inside the hidden <THEAD> 
+     * @param htmlWriter writer
+     * @param column Column
+     * @param gridRenderContext COntext
+     * @throws WriterException
+     */
+    private void encodeHiddenTitleCol(IHtmlWriter htmlWriter, UIColumn column,
+			AbstractGridRenderContext gridRenderContext) throws WriterException {
+    	htmlWriter.startElement(IHtmlWriter.TH);
+    	htmlWriter.writeAttribute("scope", "col");
+        String text = null;
+        if (column instanceof ITextCapability) {
+            text = ((ITextCapability) column).getText();
+        }
+        if (text != null && text.trim().length() > 0) {
+            htmlWriter.writeText(text);
+        }
+    	htmlWriter.endElement(IHtmlWriter.TH);    	
+	}
+
+	private void encodeTitleCol(IHtmlWriter htmlWriter, UIColumn column,
             AbstractGridRenderContext gridRenderContext, int columnIndex)
             throws WriterException {
         htmlWriter.startElement(IHtmlWriter.COL);
@@ -2281,6 +2359,12 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                                 toolTip);
                     }
                 }
+            }
+            
+            String scopeColId = gridRenderContext.getScopeColId();
+            if (scopeColId != null && scopeColId.equals(columnComponent.getId())) {
+                objectWriter.writeSymbol("_scopeCol").writeBoolean(
+                        true);
             }
 
             writeGridColumnProperties(objectWriter, gridRenderContext,

@@ -36,6 +36,7 @@ public class KeyEntryTag extends AbstractGridTag implements Tag {
 	private ValueExpression labelColumnId;
 	private ValueExpression selectedValue;
 	private ValueExpression valueFormat;
+	private ValueExpression valueFormatTooltip;
 	private ValueExpression forceValidation;
 	private ValueExpression forLabel;
 	private ValueExpression valueFormatLabel;
@@ -116,6 +117,10 @@ public class KeyEntryTag extends AbstractGridTag implements Tag {
 		this.valueFormat = valueFormat;
 	}
 
+	public void setValueFormatTooltip(ValueExpression valueFormatTooltip) {
+		this.valueFormatTooltip = valueFormatTooltip;
+	}
+
 	public void setForceValidation(ValueExpression forceValidation) {
 		this.forceValidation = forceValidation;
 	}
@@ -154,6 +159,7 @@ public class KeyEntryTag extends AbstractGridTag implements Tag {
 			LOG.debug("  labelColumnId='"+labelColumnId+"'");
 			LOG.debug("  selectedValue='"+selectedValue+"'");
 			LOG.debug("  valueFormat='"+valueFormat+"'");
+			LOG.debug("  valueFormatTooltip='"+valueFormatTooltip+"'");
 			LOG.debug("  forceValidation='"+forceValidation+"'");
 			LOG.debug("  forLabel='"+forLabel+"'");
 			LOG.debug("  valueFormatLabel='"+valueFormatLabel+"'");
@@ -324,6 +330,15 @@ public class KeyEntryTag extends AbstractGridTag implements Tag {
 			}
 		}
 
+		if (valueFormatTooltip != null) {
+			if (valueFormatTooltip.isLiteralText()==false) {
+				component.setValueExpression(Properties.VALUE_FORMAT_TOOLTIP, valueFormatTooltip);
+
+			} else {
+				component.setValueFormatTooltip(valueFormatTooltip.getExpressionString());
+			}
+		}
+
 		if (forceValidation != null) {
 			if (forceValidation.isLiteralText()==false) {
 				component.setValueExpression(Properties.FORCE_VALIDATION, forceValidation);
@@ -380,6 +395,7 @@ public class KeyEntryTag extends AbstractGridTag implements Tag {
 		labelColumnId = null;
 		selectedValue = null;
 		valueFormat = null;
+		valueFormatTooltip = null;
 		forceValidation = null;
 		forLabel = null;
 		valueFormatLabel = null;

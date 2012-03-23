@@ -2245,6 +2245,10 @@ A string specifying a converter id or a binding to a converter object. This conv
 			<attribute-name>showPopupForOneResult</attribute-name>
 			<attribute-class>boolean</attribute-class>
 		</attribute>
+		<attribute>
+			<attribute-name>disableProposals</attribute-name>
+			<attribute-class>boolean</attribute-class>
+		</attribute>
 	</component>
 	<component>
 		<description><![CDATA[

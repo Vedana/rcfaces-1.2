@@ -31,6 +31,7 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 	private ValueExpression moreResultsMessage;
 	private ValueExpression orderedItems;
 	private ValueExpression showPopupForOneResult;
+	private ValueExpression disableProposals;
 	public String getComponentType() {
 		return SuggestTextEntryComponent.COMPONENT_TYPE;
 	}
@@ -87,6 +88,10 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 		this.showPopupForOneResult = showPopupForOneResult;
 	}
 
+	public void setDisableProposals(ValueExpression disableProposals) {
+		this.disableProposals = disableProposals;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (SuggestTextEntryComponent.COMPONENT_TYPE==getComponentType()) {
@@ -103,6 +108,7 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 			LOG.debug("  moreResultsMessage='"+moreResultsMessage+"'");
 			LOG.debug("  orderedItems='"+orderedItems+"'");
 			LOG.debug("  showPopupForOneResult='"+showPopupForOneResult+"'");
+			LOG.debug("  disableProposals='"+disableProposals+"'");
 		}
 		if ((uiComponent instanceof SuggestTextEntryComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -222,6 +228,15 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 				component.setShowPopupForOneResult(getBool(showPopupForOneResult.getExpressionString()));
 			}
 		}
+
+		if (disableProposals != null) {
+			if (disableProposals.isLiteralText()==false) {
+				component.setValueExpression(Properties.DISABLE_PROPOSALS, disableProposals);
+
+			} else {
+				component.setDisableProposals(getBool(disableProposals.getExpressionString()));
+			}
+		}
 	}
 
 	public void release() {
@@ -238,6 +253,7 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 		moreResultsMessage = null;
 		orderedItems = null;
 		showPopupForOneResult = null;
+		disableProposals = null;
 
 		super.release();
 	}

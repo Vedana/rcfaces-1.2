@@ -506,10 +506,15 @@ var __members = {
 			this._blankImageURL=blankImageURL;
 		}
 
-		var img=f_core.CreateElement(parent, "img", {
+		var link=f_core.CreateElement(parent, "a", {
+			className: className,
+			title: tooltip
+		});
+		
+		var img=f_core.CreateElement(link, "img", {
 			className: className,
 			src: blankImageURL,
-			title: tooltip
+			alt: tooltip
 		});
 		
 		img.onmousedown=f_shellDecorator._TitleButton_onmousedown;

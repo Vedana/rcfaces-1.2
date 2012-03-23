@@ -534,6 +534,21 @@ var __members = {
 		var rowValueColumnIndex=this._rowValueColumnIndex;
 		var columns=this._columns;
 		var cellWrap=this._cellWrap;
+
+		// Accessibility : Get line header cell value
+		var idxBak = idx;
+		for (var i=0; i < columns.length;i++) {
+			var col=columns[i];
+			var cellText = "";
+			if (col._visibility != null && i !=rowValueColumnIndex) {
+				cellText=arguments[idx++];
+			}
+			if (col._scopeCol) {
+				row._lineHeader = cellText;
+			}
+		}
+		idx = idxBak;
+		
 		for(var i=0;i<columns.length;i++) {
 			var col=columns[i];
 
@@ -595,12 +610,17 @@ var __members = {
 					if (!cellWrap) {
 						td.noWrap=true;
 					}
+					
+					cClassName.push(" f_grid_cell_align_"+col._align);
 					td.className=cClassName.join("");
+
 					td._text=cellText;
 					td.onbeforeactivate=f_core.CancelJsEventHandler;
 					
-					td.align=col._align;
 
+					if (col._scopeCol) {
+						td.scope = "row";
+					}
 
 					if (this._selectable) {
 //						td.onmouseup=f_dataGrid._ReturnFalse;
@@ -623,6 +643,8 @@ var __members = {
 						}
 						
 						if (this._additionalInformations) {
+							var link=doc.createElement("a");
+							
 							var button=doc.createElement("img");
 							button.width=f_grid.IMAGE_WIDTH;
 							button.height=f_grid.IMAGE_HEIGHT;
@@ -631,12 +653,13 @@ var __members = {
 							button.onclick=f_dataGrid._AdditionalInformationSelect;
 							button.onfocus=f_grid.GotFocus;
 							button.tabIndex=-1;
-							
 							button.className="f_grid_additional_button";
 							
+							row._additionalLink=link;
 							row._additionalButton=button;
 
-							f_core.AppendChild(ctrlContainer, button);
+							f_core.AppendChild(link, button);
+							f_core.AppendChild(ctrlContainer, link);
 						}
 						
 						if (this._checkable) {
@@ -675,6 +698,10 @@ var __members = {
 								input.disabled=true;
 							}
 							
+							input.title = f_resourceBundle.Get(f_grid).f_formatParams("CHECK_TITLE", {
+								value: row._lineHeader
+							});
+
 							f_core.AppendChild(ctrlContainer, input);
 							
 							checked = this.fa_updateElementCheck(row, checked);

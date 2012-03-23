@@ -614,7 +614,6 @@ var __statics = {
 		var child = element.firstChild;
 		for (; child; child = child.nextSibling) {
 			switch (child.tagName.toLowerCase()) {
-			case "thead":
 			case "tbody":
 				if (child.firstChild) {
 					return child.rows[0];
@@ -2095,7 +2094,6 @@ var __members = {
 
 		this.f_initializeTableLayout();
 
-		// this._tbody.style.visibility="hidden";
 		this._tbody.style.display = "none";
 
 		this._blankImageURL = f_env.GetBlankImageURL();
@@ -2117,17 +2115,22 @@ var __members = {
 			this._sortIndicator = sortIndicator;
 			f_core.AppendChild(this, sortIndicator);
 
+			var link=this.ownerDocument.createElement("A");
+			f_core.AppendChild(sortIndicator, link);
+			link.href=f_core.JAVASCRIPT_VOID;
+
 			var img = this.ownerDocument.createElement("IMG");
 			img.className = "f_grid_sortManager_image";
 			img.src = this._blankImageURL;
-			img.alt = "*";
 			img.width = 16;
 			img.height = 16;
 
 			var resourceBundle = f_resourceBundle.Get(f_grid);
-			img.title = resourceBundle.f_get("SORT_CONFIGURATION");
-
-			f_core.AppendChild(sortIndicator, img);
+			var title = resourceBundle.f_get("SORT_CONFIGURATION");
+			img.alt = title;
+			link.title = title;
+			
+			f_core.AppendChild(link, img);
 		}
 
 		var tabIndex = f_core.GetNumberAttributeNS(this,"tabindex", 0);
@@ -2757,6 +2760,10 @@ var __members = {
 		if (this._interactiveShow) {
 			this.f_setFirst(this._first, this._cursor);
 		}
+		
+		if (this._thead) {
+			this._thead.style.display = "block";
+		}
 	},
 	/**
 	 * @method protected
@@ -3230,13 +3237,14 @@ var __members = {
 
 				if (shown) {
 					buttonClassName += " f_grid_additional_button_expanded";
-					additionalAlt = f_resourceBundle.Get(f_grid).f_get(
-							"COLLAPSE_BUTTON");
-
+					additionalAlt = f_resourceBundle.Get(f_grid).f_formatParams("COLLAPSE_BUTTON", {
+						value: row._lineHeader
+					});
 				} else {
 					buttonClassName += " f_grid_additional_button_collapsed";
-					additionalAlt = f_resourceBundle.Get(f_grid).f_get(
-							"EXPAND_BUTTON");
+					additionalAlt = f_resourceBundle.Get(f_grid).f_formatParams("EXPAND_BUTTON", {
+						value: row._lineHeader
+					});
 				}
 
 				if (this.f_isDisabled()) {
@@ -3249,6 +3257,12 @@ var __members = {
 			}
 			if (button.alt != additionalAlt) {
 				button.alt = additionalAlt;
+			}
+			var link = row._additionalLink;
+			if (link) {
+				if (link.title != additionalAlt) {
+					link.title = additionalAlt;
+				}
 			}
 		}
 	},
@@ -3329,7 +3343,9 @@ var __members = {
 					className.push(" f_grid_cell_cursor");
 				}
 			}
-
+			
+			className.push(" f_grid_cell_align_"+col._align);
+			
 			var sclassName = className.join("");
 
 			if (td.className != sclassName) {
@@ -4806,21 +4822,21 @@ var __members = {
 
 		var suffix = "";
 		var wc = className;
-		var sortAlt = "";
+		var titleAlt = "";
 		if (column._ascendingOrder !== undefined) {
 			if (column._ascendingOrder) {
 				suffix = "_ascending";
-				sortAlt = f_resourceBundle.Get(f_grid).f_get("ASCENDING_SORT");
+				titleAlt = f_resourceBundle.Get(f_grid).f_get("ASCENDING_SORT");
 
 			} else {
 				suffix = "_descending";
-				sortAlt = f_resourceBundle.Get(f_grid).f_get("DESCENDING_SORT");
+				titleAlt = f_resourceBundle.Get(f_grid).f_get("DESCENDING_SORT");
 			}
 			className += " " + className + suffix;
 			stextClassName += " " + stextClassName + suffix;
 
 		} else if (column._method || column._sorter) {
-			sortAlt = f_resourceBundle.Get(f_grid).f_get("NO_SORT");
+			titleAlt = f_resourceBundle.Get(f_grid).f_get("NO_SORT");
 		}
 
 		this._updateTitleCellBody(column);
@@ -4839,8 +4855,8 @@ var __members = {
 		if (box.className != stextClassName) {
 			box.className = stextClassName;
 		}
-		if (label.alt != sortAlt) {
-			label.alt = sortAlt;
+		if (label.title != titleAlt) {
+			label.title = titleAlt;
 		}
 
 		var image = column._image;
@@ -5344,8 +5360,12 @@ var __members = {
 		if (firstTBody && !firstTBody.firstChild) {
 			table.removeChild(firstTBody);
 		}
-		// this._tbody.style.visibility="hidden";
 		this._tbody.style.display = "none";
+
+		this._thead = table.tHead;
+		if (this._thead)  {
+			this._thead.style.display = "none";
+		}
 
 		var scrollBody = this;
 		var catchScrollEvent = false;

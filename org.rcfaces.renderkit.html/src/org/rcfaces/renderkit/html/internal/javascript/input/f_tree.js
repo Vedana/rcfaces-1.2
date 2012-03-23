@@ -1776,17 +1776,23 @@ var __members = {
 
 		var node=li._node;		
 		
-		var suffix="";
+		var suffix="_leaf";
+		var alt_title="";
 		if (node._container) {
 	
 			if (!node._opened) {
-				suffix+="_opened";
-				command.alt=f_resourceBundle.Get(f_tree).f_get("OPEN_NODE");
+				suffix = "_opened";
+				alt_title=f_resourceBundle.Get(f_tree).f_get("OPEN_NODE");
 				
 			} else {
-				suffix+="_closed";
-				command.alt=f_resourceBundle.Get(f_tree).f_get("CLOSE_NODE");
+				suffix = "_closed";
+				alt_title=f_resourceBundle.Get(f_tree).f_get("CLOSE_NODE");
 			}
+		}
+		
+		command.alt = alt_title;
+		if (alt_title != "") {
+			command.title = alt_title;
 		}
 		
 		if (node._selected) {

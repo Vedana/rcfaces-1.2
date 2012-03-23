@@ -61,7 +61,7 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(TextEntryComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"filterProperties","maxResultNumber","menuListener","suggestionMinChars","caseSensitive","suggestionValue","forceProposal","showPopupForOneResult","suggestionListener","suggestionConverter","orderedItems","suggestionDelayMs","moreResultsMessage"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"filterProperties","maxResultNumber","menuListener","suggestionMinChars","caseSensitive","suggestionValue","forceProposal","showPopupForOneResult","suggestionListener","suggestionConverter","disableProposals","orderedItems","suggestionDelayMs","moreResultsMessage"}));
 	}
 
 	public SuggestTextEntryComponent() {
@@ -445,6 +445,26 @@ return s;
 	 */
 	public boolean isShowPopupForOneResultSetted() {
 		return engine.isPropertySetted(Properties.SHOW_POPUP_FOR_ONE_RESULT);
+	}
+
+	public boolean isDisableProposals() {
+		return isDisableProposals(null);
+	}
+
+	public boolean isDisableProposals(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.DISABLE_PROPOSALS, false, facesContext);
+	}
+
+	public void setDisableProposals(boolean disableProposals) {
+		engine.setProperty(Properties.DISABLE_PROPOSALS, disableProposals);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "disableProposals" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isDisableProposalsSetted() {
+		return engine.isPropertySetted(Properties.DISABLE_PROPOSALS);
 	}
 
 	protected Set getCameliaFields() {

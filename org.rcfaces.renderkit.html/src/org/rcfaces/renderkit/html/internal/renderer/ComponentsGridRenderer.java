@@ -803,14 +803,22 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                 sa.append(' ').append(styleClass);
             }
 
-            htmlWriter.writeClass(sa.toString());
-
             if (cellHorizontalAligments != null) {
                 String alignment = cellHorizontalAligments[columnIndex];
                 if (alignment != null) {
-                    htmlWriter.writeAlign(alignment);
+                	sa.append(" f_grid_cell_align_").append(alignment);
                 }
             }
+
+            htmlWriter.writeClass(sa.toString());
+
+            
+            // Accessibility : add scope="row" for the scope column
+            String scopeColId = gridRenderContext.getScopeColId();
+            if (scopeColId != null && scopeColId.equals(column.getId())) {
+            	htmlWriter.writeAttribute("scope", "row");
+            }
+            
             htmlWriter.endComponent();
 
             htmlWriter.writeln();
