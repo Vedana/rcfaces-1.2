@@ -2103,7 +2103,8 @@ var __members = {
 		this.f_openActionList(f_event.SELECTION);
 
 		if (this._sortManager) {
-			var sortIndicator = this.ownerDocument.createElement("DIV");
+			var sortIndicator = this.ownerDocument.createElement("A");
+			sortIndicator.href=f_core.JAVASCRIPT_VOID;
 			sortIndicator.className = "f_grid_sortManager";
 			sortIndicator._dataGrid = this;
 
@@ -2115,10 +2116,6 @@ var __members = {
 			this._sortIndicator = sortIndicator;
 			f_core.AppendChild(this, sortIndicator);
 
-			var link=this.ownerDocument.createElement("A");
-			f_core.AppendChild(sortIndicator, link);
-			link.href=f_core.JAVASCRIPT_VOID;
-
 			var img = this.ownerDocument.createElement("IMG");
 			img.className = "f_grid_sortManager_image";
 			img.src = this._blankImageURL;
@@ -2128,9 +2125,9 @@ var __members = {
 			var resourceBundle = f_resourceBundle.Get(f_grid);
 			var title = resourceBundle.f_get("SORT_CONFIGURATION");
 			img.alt = title;
-			link.title = title;
+			sortIndicator.title = title;
 			
-			f_core.AppendChild(link, img);
+			f_core.AppendChild(sortIndicator, img);
 		}
 
 		var tabIndex = f_core.GetNumberAttributeNS(this,"tabindex", 0);
@@ -2259,7 +2256,7 @@ var __members = {
 		 */
 		var sortIndicator = this._sortIndicator;
 		if (sortIndicator) {
-			this._sortIndicator = undefined; // HtmlDivElement
+			this._sortIndicator = undefined; // HtmlAElement
 
 			sortIndicator._dataGrid = undefined;
 
@@ -3256,13 +3253,7 @@ var __members = {
 				button.className = buttonClassName;
 			}
 			if (button.alt != additionalAlt) {
-				button.alt = additionalAlt;
-			}
-			var link = row._additionalLink;
-			if (link) {
-				if (link.title != additionalAlt) {
-					link.title = additionalAlt;
-				}
+				button.title = button.alt = additionalAlt;
 			}
 		}
 	},

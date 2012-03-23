@@ -79,9 +79,25 @@ var __statics = {
 		this._selected=false;
 		
 		shellDecorator._updateTitleButton(button);
-		shellDecorator._performTitleButton(button, evt);		
 	},
 	
+	/**
+	 * @method private static
+	 * @param Event evt
+	 * @return void
+	 * @context object:shellDecorator
+	 */
+	_TitleButton_onclick: function(evt) {
+		var button=this;
+		var shellDecorator=button._shellDecorator;
+		
+		if (!evt) {
+			evt=f_core.GetJsEvent(this);
+		}
+		
+		shellDecorator._performTitleButton(button, evt);		
+	},
+
 	/**
 	 * @method private static
 	 * @param Event evt
@@ -315,16 +331,22 @@ var __members = {
 	 * @return void
 	 */
 	f_clearButton: function(button) {
-//		button._over=undefined; // boolean
-//		button._selected=undefined; // boolean
-//		button._className=undefined; // String
-//		button._eventName=undefined; // String
-//		button._name=undefined; // String
-		button._shellDecorator=undefined; // f_shellDecorator		
-		button.onmousedown=null;
-		button.onmouseup=null;
-		button.onmouseover=null;
-		button.onmouseout=null;		
+		var img = button.img;
+//		img._over=undefined; // boolean
+//		img._selected=undefined; // boolean
+//		img._className=undefined; // String
+//		img._eventName=undefined; // String
+//		img._name=undefined; // String
+		img._shellDecorator=undefined; // f_shellDecorator		
+		img.onmousedown=null;
+		img.onmouseup=null;
+		img.onmouseover=null;
+		img.onmouseout=null;
+		
+		var link = button.link;
+		link._shellDecorator=undefined; // f_shellDecorator	
+		link.onclick=undefined;
+//		link._name=undefined; // String		
 	},
 	/**
 	 * @method public
@@ -507,9 +529,12 @@ var __members = {
 		}
 
 		var link=f_core.CreateElement(parent, "a", {
-			className: className,
-			title: tooltip
+			title: tooltip,
+			href: f_core.JAVASCRIPT_VOID
 		});
+		link._shellDecorator=this;
+		link.onclick=f_shellDecorator._TitleButton_onclick;
+		link._name=name;
 		
 		var img=f_core.CreateElement(link, "img", {
 			className: className,
@@ -530,7 +555,7 @@ var __members = {
 			this._buttons=new Object;
 		}
 		
-		this._buttons[name]=className;
+		this._buttons[name]={link: link, img: img};
 	},
 	/**
 	 * @method hidden

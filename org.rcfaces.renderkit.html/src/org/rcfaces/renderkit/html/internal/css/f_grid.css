@@ -102,6 +102,7 @@
 
 .f_grid_tcell,
 .f_grid_sortManager {
+	display: block;
 	color: #000;
 	vertical-align: middle;
 	margin: 0;

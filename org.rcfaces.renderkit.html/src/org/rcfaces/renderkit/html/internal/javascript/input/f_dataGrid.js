@@ -643,8 +643,6 @@ var __members = {
 						}
 						
 						if (this._additionalInformations) {
-							var link=doc.createElement("a");
-							
 							var button=doc.createElement("img");
 							button.width=f_grid.IMAGE_WIDTH;
 							button.height=f_grid.IMAGE_HEIGHT;
@@ -655,11 +653,9 @@ var __members = {
 							button.tabIndex=-1;
 							button.className="f_grid_additional_button";
 							
-							row._additionalLink=link;
 							row._additionalButton=button;
 
-							f_core.AppendChild(link, button);
-							f_core.AppendChild(ctrlContainer, link);
+							f_core.AppendChild(ctrlContainer, button);
 						}
 						
 						if (this._checkable) {
