@@ -525,7 +525,7 @@ var __members = {
 			this._buttons=new Object;
 		}
 		
-		this._buttons[name]=className;
+		this._buttons[name]=img;
 	},
 	/**
 	 * @method hidden
