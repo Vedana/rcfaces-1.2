@@ -367,6 +367,7 @@ public class EventDecoders {
         EVENT_DECODERS.put(JavaScriptClasses.EVENT_DROP_COMPLETE,
                 new AbstractEventDecoder() {
 
+                    @SuppressWarnings("unchecked")
                     public void decodeEvent(IRequestContext requestContext,
                             UIComponent component, IEventData eventData,
                             IEventObjectDecoder eventObjectDecoder) {
@@ -383,9 +384,9 @@ public class EventDecoders {
                         Object sourceItem = map.get("sourceItemValue");
                         int effect = ((Number) map.get("effect")).intValue();
                         String types[] = null;
-                        List l = (List) map.get("types");
+                        List<String> l = (List<String>) map.get("types");
                         if (l != null) {
-                            types = (String[]) l.toArray(new String[l.size()]);
+                            types = l.toArray(new String[l.size()]);
                         }
 
                         FacesEvent event = new DropCompleteEvent(component,

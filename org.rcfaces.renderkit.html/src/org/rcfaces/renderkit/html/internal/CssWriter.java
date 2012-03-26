@@ -19,8 +19,6 @@ import org.rcfaces.core.internal.util.FastWriter;
  * @version $Revision$ $Date$
  */
 public class CssWriter extends FastWriter implements ICssWriter {
-    private static final String REVISION = "$Revision$";
-
     protected static final String BACKGROUND = "background";
 
     protected static final String BACKGROUND_COLOR = "background-color";
@@ -365,6 +363,7 @@ public class CssWriter extends FastWriter implements ICssWriter {
         return this;
     }
 
+    @SuppressWarnings("null")
     public final ICssWriter writeMargin(IMarginCapability element) {
         int cnt = 0;
 

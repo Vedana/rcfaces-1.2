@@ -20,7 +20,6 @@ import org.rcfaces.renderkit.html.internal.renderer.ICssStyleClasses;
  * @version $Revision$ $Date$
  */
 public class CssStyleClasses implements ICssStyleClasses {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(CssStyleClasses.class);
 
@@ -28,11 +27,11 @@ public class CssStyleClasses implements ICssStyleClasses {
 
     private final String mainStyleClassName;
 
-    private Collection specificStyleClasses;
+    private Collection<String> specificStyleClasses;
 
-    private Collection styleClasseNames;
+    private Collection<String> styleClasseNames;
 
-    private Collection suffixes;
+    private Collection<String> suffixes;
 
     public CssStyleClasses(String mainStyleClassName, String styleClasses[]) {
         verifyStyleClass(mainStyleClassName);
@@ -72,7 +71,7 @@ public class CssStyleClasses implements ICssStyleClasses {
 
     public void addSpecificStyleClass(String styleClass) {
         if (specificStyleClasses == null) {
-            specificStyleClasses = new OrderedSet(4);
+            specificStyleClasses = new OrderedSet<String>(4);
         }
 
         StringTokenizer st = new StringTokenizer(styleClass);
@@ -83,7 +82,7 @@ public class CssStyleClasses implements ICssStyleClasses {
 
     public void addStyleClass(String styleClass) {
         if (styleClasseNames == null) {
-            styleClasseNames = new OrderedSet(4);
+            styleClasseNames = new OrderedSet<String>(4);
 
             if (mainStyleClassName != null) {
                 styleClasseNames.add(mainStyleClassName);
@@ -100,7 +99,7 @@ public class CssStyleClasses implements ICssStyleClasses {
         verifyStyleClass(suffixStyleClass);
 
         if (suffixes == null) {
-            suffixes = new OrderedSet(2);
+            suffixes = new OrderedSet<String>(2);
         }
 
         suffixes.add(suffixStyleClass);
@@ -124,7 +123,7 @@ public class CssStyleClasses implements ICssStyleClasses {
 
     public String[] listStyleClasses() {
         if (styleClasseNames != null) {
-            return (String[]) styleClasseNames
+            return styleClasseNames
                     .toArray(new String[styleClasseNames.size()]);
         }
 
@@ -208,7 +207,7 @@ public class CssStyleClasses implements ICssStyleClasses {
 
         if (mainStyleClassName != null
                 && styleClasseNames.contains(mainStyleClassName)) {
-            os = new OrderedSet(styleClasseNames);
+            os = new OrderedSet<String>(styleClasseNames);
             os.remove(mainStyleClassName);
         }
 

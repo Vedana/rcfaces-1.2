@@ -23,20 +23,18 @@ import org.rcfaces.core.lang.OrderedSet;
  * @version $Revision$ $Date$
  */
 public class HtmlValuesTools extends ValuesTools {
-    private static final String REVISION = "$Revision$";
-
     private static final Object[] OBJECT_EMPTY_ARRAY = new Object[0];
 
-    public static List parseValues(FacesContext facesContext,
+    public static List<Object> parseValues(FacesContext facesContext,
             UIComponent component, boolean convert, boolean testValue,
             String values) {
         StringTokenizer st = new StringTokenizer(values,
                 HtmlTools.LIST_SEPARATORS);
         if (st.hasMoreTokens() == false) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
 
-        List tokens = new ArrayList(st.countTokens());
+        List<Object> tokens = new ArrayList<Object>(st.countTokens());
         for (; st.hasMoreTokens();) {
             tokens.add(st.nextToken());
         }
@@ -46,15 +44,15 @@ public class HtmlValuesTools extends ValuesTools {
         }
 
         Object vs[] = convertStringsToValues(facesContext, component,
-                testValue, (String[]) tokens.toArray(new String[tokens.size()]));
+                testValue, tokens.toArray(new String[tokens.size()]));
 
         return Arrays.asList(vs);
     }
 
     public static boolean updateValues(FacesContext facesContext,
-            UIComponent component, boolean convert, Set values,
+            UIComponent component, boolean convert, Set<Object> values,
             String valuesToAdd, String valuesToRemove) {
-        List vadd = Collections.EMPTY_LIST;
+        List<Object> vadd = Collections.emptyList();
         if (valuesToAdd != null) {
             vadd = parseValues(facesContext, component, convert, true,
                     valuesToAdd);
@@ -91,7 +89,7 @@ public class HtmlValuesTools extends ValuesTools {
             return OBJECT_EMPTY_ARRAY;
         }
 
-        Set set = new OrderedSet(l.size());
+        Set<Object> set = new OrderedSet<Object>(l.size());
 
         set.addAll(Arrays.asList(convertValuesToString(l.toArray(), component,
                 facesContext)));

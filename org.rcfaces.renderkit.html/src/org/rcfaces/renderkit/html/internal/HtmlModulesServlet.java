@@ -20,13 +20,10 @@ import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
  */
 public class HtmlModulesServlet extends ConfiguredHttpServlet {
 
-    private static final String REVISION = "$Revision$";
-
     private static final long serialVersionUID = -4351260850085049246L;
 
     private static final String MODULES_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".MODULES";
+            .getPackagePrefix() + ".MODULES";
 
     private Set modules;
 
@@ -46,13 +43,13 @@ public class HtmlModulesServlet extends ConfiguredHttpServlet {
     }
 
     private static Set parseModules(ServletContext context) {
-        Set modulesNames = null;
+        Set<String> modulesNames = null;
 
         String modulesNamesList = context.getInitParameter(MODULES_PARAMETER);
         if (modulesNamesList != null && modulesNamesList.trim().length() > 0) {
             StringTokenizer st = new StringTokenizer(modulesNamesList, ",;");
 
-            modulesNames = new HashSet(st.countTokens());
+            modulesNames = new HashSet<String>(st.countTokens());
             for (; st.hasMoreTokens();) {
                 String moduleName = st.nextToken();
 

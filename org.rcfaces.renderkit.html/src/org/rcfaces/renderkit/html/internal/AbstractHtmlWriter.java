@@ -57,12 +57,13 @@ public abstract class AbstractHtmlWriter extends
 
     private ICssWriter cssWriter;
 
-    private Set subComponents;
+    private Set<String> subComponents;
 
     public AbstractHtmlWriter(AbstractRenderContext renderContext) {
         this(renderContext, renderContext.getFacesContext().getResponseWriter());
     }
 
+    @SuppressWarnings("unchecked")
     protected AbstractHtmlWriter(AbstractRenderContext renderContext,
             ResponseWriter responseWriter) {
         super(renderContext.getFacesContext(), renderContext.getComponent(),
@@ -72,7 +73,7 @@ public abstract class AbstractHtmlWriter extends
 
         this.responseWriter = responseWriter;
 
-        subComponents = (Set) ((ITransientAttributesManager) renderContext
+        subComponents = (Set<String>) ((ITransientAttributesManager) renderContext
                 .getComponent())
                 .getTransientAttribute(SUB_COMPONENTS_IDS_PROPERTY);
     }
@@ -260,15 +261,17 @@ public abstract class AbstractHtmlWriter extends
         return this;
     }
 
+    @SuppressWarnings("unchecked")
     public ISgmlWriter startElement(String name, UIComponent component)
             throws WriterException {
         closeCssWriter();
 
         if (VERIFY_TAG_STACK) {
-            Stack tagStack = (Stack) getFacesContext().getExternalContext()
-                    .getRequestMap().get(TAG_STACK_PROPERTY);
+            Stack<Object> tagStack = (Stack<Object>) getFacesContext()
+                    .getExternalContext().getRequestMap()
+                    .get(TAG_STACK_PROPERTY);
             if (tagStack == null) {
-                tagStack = new Stack();
+                tagStack = new Stack<Object>();
 
                 getFacesContext().getExternalContext().getRequestMap()
                         .put(TAG_STACK_PROPERTY, tagStack);
@@ -612,6 +615,7 @@ public abstract class AbstractHtmlWriter extends
         return this;
     }
 
+    @SuppressWarnings("unused")
     public IHtmlWriter writeRole(String role) throws WriterException {
         if (Constants.ACCESSIBILITY_ROLE_SUPPORT == false) {
             return this;
@@ -697,7 +701,7 @@ public abstract class AbstractHtmlWriter extends
 
     public void addSubFocusableComponent(String subComponentClientId) {
         if (subComponents == null) {
-            subComponents = new HashSet(4);
+            subComponents = new HashSet<String>(4);
 
             ((ITransientAttributesManager) renderContext.getComponent())
                     .setTransientAttribute(SUB_COMPONENTS_IDS_PROPERTY,
@@ -714,8 +718,7 @@ public abstract class AbstractHtmlWriter extends
             return STRING_EMPTY_ARRAY;
         }
 
-        return (String[]) subComponents
-                .toArray(new String[subComponents.size()]);
+        return subComponents.toArray(new String[subComponents.size()]);
     }
 
     public String getRcfacesNamespace() {

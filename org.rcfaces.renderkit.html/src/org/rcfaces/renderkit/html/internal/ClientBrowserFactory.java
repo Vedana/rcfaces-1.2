@@ -47,6 +47,7 @@ public class ClientBrowserFactory {
 
     }
 
+    @SuppressWarnings("cast")
     public IClientBrowser get(FacesContext facesContext) {
 
         String userAgent = (String) facesContext.getExternalContext()
@@ -107,7 +108,7 @@ public class ClientBrowserFactory {
                 version = searchVersion(ua, idx);
 
             } else {
-            	idx = ua.indexOf("chrome");
+                idx = ua.indexOf("chrome");
                 if (idx >= 0) {
                     type = IClientBrowser.CHROME_BROWSER_TYPE;
                     int idx2 = ua.indexOf('/', idx);
@@ -120,10 +121,10 @@ public class ClientBrowserFactory {
                         version = ua.substring(idx2 + 1, idx3).trim();
                     }
 
-                }else {
+                } else {
                     idx = ua.indexOf("safari");
                     if (idx >= 0) {
-                    	idx = ua.indexOf("version");
+                        idx = ua.indexOf("version");
                         type = IClientBrowser.SAFARI_BROWSER_TYPE;
                         int idx2 = ua.indexOf('/', idx);
                         int idx3 = ua.indexOf(' ', idx);
@@ -136,19 +137,19 @@ public class ClientBrowserFactory {
                         }
 
                     } else {
-	                    idx = ua.indexOf("firefox");
-	                    if (idx >= 0) {
-	                        type = IClientBrowser.FIREFOX_BROWSER_TYPE;
-	                        int idx2 = ua.indexOf('/', idx);
-	                        int idx3 = ua.indexOf(' ', idx);
-	                        if (idx3 < 0) {
-	                            idx3 = ua.length();
-	                        }
-	
-	                        if (idx2 > idx && idx3 > idx2) {
-	                            version = ua.substring(idx2 + 1, idx3).trim();
-	                        }
-	                    }
+                        idx = ua.indexOf("firefox");
+                        if (idx >= 0) {
+                            type = IClientBrowser.FIREFOX_BROWSER_TYPE;
+                            int idx2 = ua.indexOf('/', idx);
+                            int idx3 = ua.indexOf(' ', idx);
+                            if (idx3 < 0) {
+                                idx3 = ua.length();
+                            }
+
+                            if (idx2 > idx && idx3 > idx2) {
+                                version = ua.substring(idx2 + 1, idx3).trim();
+                            }
+                        }
                     }
                 }
             }

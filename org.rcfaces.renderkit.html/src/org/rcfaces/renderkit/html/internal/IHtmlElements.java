@@ -18,6 +18,8 @@ public interface IHtmlElements {
 
     String BR = "br";
 
+    String CAPTION = "caption";
+    
     String COL = "col";
 
     String DIV = "div";

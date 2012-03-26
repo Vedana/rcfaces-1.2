@@ -443,6 +443,7 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
         }
     }
 
+    @SuppressWarnings("unused")
     protected static String normalizeMarginValue(String value) {
         value = value.trim();
 

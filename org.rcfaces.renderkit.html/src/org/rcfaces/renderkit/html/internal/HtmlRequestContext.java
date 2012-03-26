@@ -36,8 +36,6 @@ import org.rcfaces.core.internal.renderkit.IRequestContext;
  */
 public class HtmlRequestContext extends AbstractRequestContext implements
         IHtmlRequestContext {
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory.getLog(HtmlRequestContext.class);
 
     public static final String EVENT_SERIAL = "VFC_SERIAL";
@@ -62,9 +60,9 @@ public class HtmlRequestContext extends AbstractRequestContext implements
 
     private static final char PROPERTY_END = '}';
 
-    private Map parameters;
+    private Map<String, String[]> parameters;
 
-    private Map properties;
+    private Map<String, Object> properties;
 
     private String eventComponentId;
 
@@ -84,13 +82,12 @@ public class HtmlRequestContext extends AbstractRequestContext implements
             LOG.trace("Parsed camelia properties => " + properties);
         }
 
-        Set keys = new HashSet(parameters.size() + properties.size());
+        Set<String> keys = new HashSet<String>(parameters.size()
+                + properties.size());
         keys.addAll(parameters.keySet());
         keys.addAll(properties.keySet());
 
-        for (Iterator it = keys.iterator(); it.hasNext();) {
-            String key = (String) it.next();
-
+        for (String key : keys) {
             putComponentData(key, Boolean.FALSE);
         }
 
@@ -109,10 +106,10 @@ public class HtmlRequestContext extends AbstractRequestContext implements
         }
     }
 
-    protected Map parseProperties(Map parameters) {
+    protected Map<String, Object> parseProperties(Map parameters) {
         Object facesDatas = parameters.get(EVENT_SERIAL);
         if (facesDatas == null) {
-            return Collections.EMPTY_MAP;
+            return Collections.emptyMap();
         }
 
         return parseCameliaData(facesDatas);
@@ -136,14 +133,15 @@ public class HtmlRequestContext extends AbstractRequestContext implements
     protected IComponentData getComponentData(UIComponent component,
             String componentId, Object data, Renderer renderer) {
 
-        Map properties = Collections.EMPTY_MAP;
-        Map parameters = this.parameters;
+        Map<String, Object> properties = Collections.emptyMap();
+        Map<String, String[]> parameters = this.parameters;
 
-        String values = (String) this.properties.get(componentId);
-        if (values != null) {
+        Object values = this.properties.get(componentId);
+        if (values instanceof String) {
             // Il faut transformer la valeur serialisée en Map
             properties = HtmlTools.decodeParametersToMap(getProcessContext(),
-                    component, renderer, values, PROPERTY_SEPARATORS, "");
+                    component, renderer, (String) values, PROPERTY_SEPARATORS,
+                    "");
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Decode component data of '" + componentId + "' to "
@@ -175,9 +173,7 @@ public class HtmlRequestContext extends AbstractRequestContext implements
             eventComponent = true;
 
             if (LOG.isDebugEnabled()) {
-                LOG
-                        .debug("Event detected for component '" + componentId
-                                + "'.");
+                LOG.debug("Event detected for component '" + componentId + "'.");
             }
 
         } else if ((properties == null || properties.isEmpty())
@@ -191,7 +187,7 @@ public class HtmlRequestContext extends AbstractRequestContext implements
             return emptyComponentData();
         }
 
-        Set unlockedProperties = null;
+        Set<String> unlockedProperties = null;
 
         if (isLockedClientAttributes()) {
             if (component instanceof IUnlockedClientAttributesCapability) {
@@ -203,7 +199,7 @@ public class HtmlRequestContext extends AbstractRequestContext implements
                 }
 
             } else {
-                unlockedProperties = Collections.EMPTY_SET;
+                unlockedProperties = Collections.emptySet();
             }
 
         } else if (component instanceof IUnlockedClientAttributesCapability) {
@@ -218,7 +214,7 @@ public class HtmlRequestContext extends AbstractRequestContext implements
                     .getDefaultUnlockedProperties(getFacesContext(), component);
             if (defaultUnlockedProperties != null
                     && defaultUnlockedProperties.length > 0) {
-                unlockedProperties = new HashSet(unlockedProperties);
+                unlockedProperties = new HashSet<String>(unlockedProperties);
                 unlockedProperties.addAll(Arrays
                         .asList(defaultUnlockedProperties));
             }
@@ -231,19 +227,19 @@ public class HtmlRequestContext extends AbstractRequestContext implements
         return hcd;
     }
 
-    private Set filterProperties(IUnlockedClientAttributesCapability component,
-            boolean defaultLock) {
+    private Set<String> filterProperties(
+            IUnlockedClientAttributesCapability component, boolean defaultLock) {
         String unlockedAttributes = component.getUnlockedClientAttributeNames();
         if (unlockedAttributes == null) {
             if (defaultLock) {
-                return Collections.EMPTY_SET;
+                return Collections.emptySet();
             }
 
             return null;
         }
 
         if (defaultLock == false && unlockedAttributes.length() == 0) {
-            return Collections.EMPTY_SET;
+            return Collections.emptySet();
         }
 
         unlockedAttributes = unlockedAttributes.trim();
@@ -251,7 +247,7 @@ public class HtmlRequestContext extends AbstractRequestContext implements
             return null;
         }
 
-        Set ret = null;
+        Set<String> ret = null;
 
         StringTokenizer st = new StringTokenizer(unlockedAttributes,
                 ",; \t\r\n");
@@ -259,13 +255,13 @@ public class HtmlRequestContext extends AbstractRequestContext implements
             String attributeName = st.nextToken();
 
             if (ret == null) {
-                ret = new HashSet(unlockedAttributes.length() / 8);
+                ret = new HashSet<String>(unlockedAttributes.length() / 8);
             }
             ret.add(attributeName);
         }
 
         if (ret == null) {
-            return Collections.EMPTY_SET;
+            return Collections.emptySet();
         }
 
         return ret;
@@ -306,7 +302,7 @@ public class HtmlRequestContext extends AbstractRequestContext implements
         return value.toString();
     }
 
-    private Map parseCameliaData(Object object) {
+    private Map<String, Object> parseCameliaData(Object object) {
         String datas;
         if (object instanceof String) {
             datas = (String) object;
@@ -319,15 +315,13 @@ public class HtmlRequestContext extends AbstractRequestContext implements
                             + "')=*Empty array*");
                 }
 
-                return Collections.EMPTY_MAP;
+                return Collections.emptyMap();
             }
 
-            Map ret = parseCameliaData(Array.get(object, 0));
+            Map<String, Object> ret = parseCameliaData(Array.get(object, 0));
 
             if (LOG.isDebugEnabled()) {
-                LOG
-                        .debug("parseCameliaData('" + object + "')[0]='" + ret
-                                + "'");
+                LOG.debug("parseCameliaData('" + object + "')[0]='" + ret + "'");
             }
 
             return ret;
@@ -338,11 +332,12 @@ public class HtmlRequestContext extends AbstractRequestContext implements
                 LOG.debug("parseCameliaData('" + object + "')=*UNKNOWN*");
             }
 
-            return Collections.EMPTY_MAP;
+            return Collections.emptyMap();
         }
 
         char cs[] = datas.toCharArray();
-        Map properties = new HashMap((cs.length / 16) + 1);
+        Map<String, Object> properties = new HashMap<String, Object>(
+                (cs.length / 16) + 1);
 
         for (int i = 0; i < cs.length;) {
             int nameStart = i;
@@ -406,13 +401,11 @@ public class HtmlRequestContext extends AbstractRequestContext implements
         }
 
         if (LOG.isDebugEnabled()) {
-            LOG
-                    .debug("parseCameliaData('" + object + "')='" + properties
-                            + "'");
+            LOG.debug("parseCameliaData('" + object + "')='" + properties + "'");
         }
 
         if (properties.size() < 1) {
-            return Collections.EMPTY_MAP;
+            return Collections.emptyMap();
         }
 
         return properties;
@@ -704,7 +697,8 @@ public class HtmlRequestContext extends AbstractRequestContext implements
     }
 
     static IRequestContext getRequestContext(FacesContext context) {
-        Map requestMap = context.getExternalContext().getRequestMap();
+        Map<String, Object> requestMap = context.getExternalContext()
+                .getRequestMap();
 
         IRequestContext requestContext = (IRequestContext) requestMap
                 .get(REQUEST_CONTEXT);

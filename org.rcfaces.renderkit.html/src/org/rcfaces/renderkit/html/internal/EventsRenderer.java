@@ -27,7 +27,6 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools;
  * @version $Revision$ $Date$
  */
 public class EventsRenderer {
-    private static final String REVISION = "$Revision$";
 
     static final String DEFAULT_SUBMIT = "submit";
 
@@ -97,7 +96,8 @@ public class EventsRenderer {
 
     private static final int GLOBAL_SUBMIT_TYPE = 1;
 
-    private static final Map ENABLE_JAVASCRIPT_BY_LISTENER_TYPE = new HashMap(8);
+    private static final Map<String, IJavascriptMode> ENABLE_JAVASCRIPT_BY_LISTENER_TYPE = new HashMap<String, IJavascriptMode>(
+            8);
     static {
         // INIT
         ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
@@ -421,7 +421,7 @@ public class EventsRenderer {
 
             cnt++;
 
-            IJavascriptMode javascriptMode = (IJavascriptMode) ENABLE_JAVASCRIPT_BY_LISTENER_TYPE
+            IJavascriptMode javascriptMode = ENABLE_JAVASCRIPT_BY_LISTENER_TYPE
                     .get(listenerType);
             if (javascriptMode != null) {
                 javascriptMode.enableJavaScriptMode(javaScriptEnableMode);
@@ -450,7 +450,7 @@ public class EventsRenderer {
                         DEFAULT_PARTIAL_RENDERING_JAVA_SCRIPT_CLASSNAME, null);
             }
 
-            IJavascriptMode javascriptMode = (IJavascriptMode) ENABLE_JAVASCRIPT_BY_LISTENER_TYPE
+            IJavascriptMode javascriptMode = ENABLE_JAVASCRIPT_BY_LISTENER_TYPE
                     .get(listenerType);
             if (javascriptMode != null) {
                 javascriptMode.enableJavaScriptMode(javaScriptEnableMode);

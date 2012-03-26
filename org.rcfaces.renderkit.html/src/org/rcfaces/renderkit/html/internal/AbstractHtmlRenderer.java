@@ -72,7 +72,6 @@ import org.rcfaces.renderkit.html.internal.service.AsyncRenderService;
 public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
         implements IEventObjectDecoder, INamespaceContributor {
 
-
     private static final Log LOG = LogFactory
             .getLog(AbstractHtmlRenderer.class);
 
@@ -120,15 +119,15 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
             IComponentDecorator componentDecorator) throws WriterException {
     }
 
-	@Deprecated
+    @Deprecated
     protected final IHtmlWriter writeTitle(IHtmlWriter writer,
             IToolTipCapability element) throws WriterException {
 
-		return writeTitle(writer, (IToolTipTextCapability) element);
-	}
+        return writeTitle(writer, (IToolTipTextCapability) element);
+    }
 
-	protected final IHtmlWriter writeTitle(IHtmlWriter writer,
-			IToolTipTextCapability element) throws WriterException {
+    protected final IHtmlWriter writeTitle(IHtmlWriter writer,
+            IToolTipTextCapability element) throws WriterException {
         String title = element.getToolTipText();
 
         if (title == null) {
@@ -314,8 +313,8 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
         UIComponent component = writer.getComponentRenderContext()
                 .getComponent();
 
-		if (component instanceof IToolTipTextCapability) {
-			writeTitle(writer, (IToolTipTextCapability) component);
+        if (component instanceof IToolTipTextCapability) {
+            writeTitle(writer, (IToolTipTextCapability) component);
         }
 
         if (component instanceof IHelpCapability) {
@@ -469,12 +468,12 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
                     unlockedProperties = ups;
 
                 } else if (ups != null && ups.length > 0) {
-                    Set s = new HashSet(Arrays.asList(unlockedProperties));
+                    Set<String> s = new HashSet<String>(
+                            Arrays.asList(unlockedProperties));
 
                     s.addAll(Arrays.asList(ups));
 
-                    unlockedProperties = (String[]) s.toArray(new String[s
-                            .size()]);
+                    unlockedProperties = s.toArray(new String[s.size()]);
                 }
             }
         }
@@ -504,10 +503,10 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
             }
         }
 
-		if (component instanceof IToolTipTextCapability) {
+        if (component instanceof IToolTipTextCapability) {
             String hp = componentData.getStringProperty("toolTip");
             if (hp != null) {
-				IToolTipTextCapability toolTipCapability = (IToolTipTextCapability) component;
+                IToolTipTextCapability toolTipCapability = (IToolTipTextCapability) component;
 
                 String old = toolTipCapability.getToolTipText();
 
@@ -868,6 +867,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
         return true;
     }
 
+    @SuppressWarnings("unused")
     public String convertClientId(FacesContext context, String clientId) {
         if (Constants.CLIENT_NAMING_SEPARATOR_SUPPORT == false) {
             return super.convertClientId(context, clientId);
