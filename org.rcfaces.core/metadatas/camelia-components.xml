@@ -1214,6 +1214,8 @@
 
 		<capability id="IScopeColumnIdCapability" />
 		
+		<capability id="IGridCaptionCapability"/>
+		
 		<attribute id="rowValueColumnId" type="java.lang.String" />
 		<attribute id="rowLabelColumnId" type="java.lang.String"/>
 
@@ -1763,6 +1765,8 @@
 		<capability id="IHeaderVisibilityCapability" default="true"/>
 
 		<capability id="IScopeColumnIdCapability" />		
+
+		<capability id="IGridCaptionCapability"/>
 
 		<attribute id="rowCountVar" type="java.lang.String" noValueBinding="true"/>
 		<attribute id="rowIndexVar" type="java.lang.String" noValueBinding="true"/>
@@ -2329,6 +2333,8 @@
 	
 		<attribute id="valueFormat" type="java.lang.String"/>
 	
+		<attribute id="valueFormatTooltip" type="java.lang.String"/>
+
 		<attribute id="forceValidation" type="boolean" default="false"/>
 		
 		<attribute id="forLabel" type="java.lang.String"/>
@@ -2994,6 +3000,7 @@ Dans le cas d'un mode period !
 
 	<component id="viewDialog" extends="cameliaOutput">
 		<implements id="org.rcfaces.core.internal.capability.IImageAccessorsCapability" />
+		<implements id="javax.faces.component.NamingContainer" />
 
 		<capability id="IImageCapability" />
 		<capability id="IStyleClassCapability" />
