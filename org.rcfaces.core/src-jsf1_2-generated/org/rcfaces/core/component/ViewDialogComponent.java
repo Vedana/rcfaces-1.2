@@ -1,5 +1,6 @@
 package org.rcfaces.core.component;
 
+import javax.faces.component.NamingContainer;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
 import java.util.Map;
@@ -91,7 +92,8 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 	IImmediateCapability,
 	IClientDataCapability,
 	IServerDataCapability,
-	IImageAccessorsCapability {
+	IImageAccessorsCapability,
+	NamingContainer {
 
 	private static final Log LOG = LogFactory.getLog(ViewDialogComponent.class);
 
