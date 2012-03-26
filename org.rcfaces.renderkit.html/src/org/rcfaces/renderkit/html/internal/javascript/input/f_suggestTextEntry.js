@@ -990,6 +990,26 @@ var __members = {
 		}
 		
 		this._focus=undefined;
+	},
+	/**
+	 * 
+	 * @param optional Boolean set  (Default value is <code>true</code>)
+	 * @return void
+	 */
+	f_setDisableProposals: function(set) {
+		if (set!==false) {
+			set=true;
+		}
+		
+		this._disableProposals=set;
+		
+		this.f_setProperty(f_prop.DISABLE_PROPOSALS, set);
+	},
+	/**
+	 * @return Boolean
+	 */
+	f_isDisableProposals: function() {
+		return !!this._disableProposals;
 	}
 };
 

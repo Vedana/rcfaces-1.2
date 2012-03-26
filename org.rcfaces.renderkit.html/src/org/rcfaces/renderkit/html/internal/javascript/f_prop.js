@@ -84,6 +84,11 @@ var __statics = {
 	/**
 	 * @field hidden static final String
 	 */
+	DISABLE_PROPOSALS:		"disableProposals",
+
+	/**
+	 * @field hidden static final String
+	 */
 	DISABLED:				"disabled",
 
 	/**
