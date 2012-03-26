@@ -26,6 +26,8 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IFilterCapability;
 import org.rcfaces.core.component.capability.IMaxResultNumberCapability;
 import org.rcfaces.core.internal.RcfacesContext;
+import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
+import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.lang.ApplicationException;
@@ -164,8 +166,8 @@ public class ItemsService extends AbstractHtmlService {
                     printWriter = response.getWriter();
 
                 } else {
-                    ConfiguredHttpServlet
-                            .setGzipContentEncoding((HttpServletResponse) response, true);
+                    ConfiguredHttpServlet.setGzipContentEncoding(
+                            (HttpServletResponse) response, true);
 
                     OutputStream outputStream = response.getOutputStream();
 
@@ -178,8 +180,11 @@ public class ItemsService extends AbstractHtmlService {
                     printWriter = new PrintWriter(writer, false);
                 }
 
+                IProcessContext processContext = AbstractProcessContext
+                        .getProcessContext(facesContext);
+
                 IFilterProperties filterProperties = HtmlTools
-                        .decodeFilterExpression(null, component,
+                        .decodeFilterExpression(processContext, component,
                                 filterExpression);
 
                 writeJs(facesContext, printWriter, filterCapability,
@@ -239,9 +244,9 @@ public class ItemsService extends AbstractHtmlService {
 
         String varId = jsWriter.getComponentVarName();
 
-        jsWriter.write("var ").write(varId).write('=').writeCall("f_core",
-                "GetElementByClientId").writeString(componentId).writeln(
-                ", document);");
+        jsWriter.write("var ").write(varId).write('=')
+                .writeCall("f_core", "GetElementByClientId")
+                .writeString(componentId).writeln(", document);");
         dgr.encodeFilteredItems(jsWriter, component, filterProperties,
                 maxResultNumber);
 
