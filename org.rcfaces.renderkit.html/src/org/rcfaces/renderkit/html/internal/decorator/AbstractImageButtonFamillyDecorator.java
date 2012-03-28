@@ -362,6 +362,9 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                     writer.writeClass(getImageClassName(htmlBorderWriter));
                     writeImageSrc(writer, imageSrc);
                     writeImageSize(writer, imageButtonFamilly);
+                    if (alternateText != null) {
+                        writer.writeAlt(alternateText);
+                    }
                     writer.endElement(IHtmlWriter.IMG);
                 }
 
@@ -443,9 +446,6 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
         if (accessKey != null) {
             writer.writeAccessKey(accessKey);
-        }
-        if (alternateText != null) {
-            writer.writeAlt(alternateText);
         }
     }
 
@@ -694,10 +694,6 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             writeImageAttributes();
             writer.writeHRef(IHtmlWriter.JAVASCRIPT_VOID);
 
-            if (alternateText != null) {
-                writer.writeAlt(alternateText);
-            }
-
             String inputId = getInputId(writer, htmlBorderWriter);
             writer.writeId(inputId);
             writer.addSubFocusableComponent(inputId);
@@ -707,7 +703,9 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             writer.writeClass(getImageClassName(htmlBorderWriter));
             writeImageSrc(writer, imageSrc);
             writeImageSize(writer, imageButtonFamilly);
-
+            if (alternateText != null) {
+                writer.writeAlt(alternateText);
+            }
             writer.endElement(IHtmlWriter.IMG);
         }
 
