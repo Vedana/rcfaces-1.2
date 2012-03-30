@@ -9,8 +9,8 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.content.IOperationContentLoader;
 import org.rcfaces.core.internal.content.AbstractBufferOperationContentModel.ContentInformation;
+import org.rcfaces.core.internal.content.IOperationContentLoader;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
 import org.rcfaces.core.internal.util.IPath;
@@ -58,9 +58,9 @@ public class CssSteadyStateParser implements ICssParser {
         LOG.info("Enable 'CssSteadyState' css parser.");
     }
 
-    private static final Set VALID_ELEMENTS = new HashSet(Arrays
-            .asList(new String[] { "A", "ABBR", "ACRONYM", "ADDRESS", "APPLET",
-                    "AREA", "B", "BASE", "BASEFONT", "BDO", "BIG",
+    private static final Set VALID_ELEMENTS = new HashSet(
+            Arrays.asList(new String[] { "A", "ABBR", "ACRONYM", "ADDRESS",
+                    "APPLET", "AREA", "B", "BASE", "BASEFONT", "BDO", "BIG",
                     "BLOCKQUOTE", "BODY", "BR", "BUTTON", "CAPTION", "CENTER",
                     "CITE", "CODE", "COL", "COLGROUP", "DD", "DEL", "DFN",
                     "DIR", "DIV", "DL", "DT", "EM", "FIELDSET", "FONT", "FORM",
@@ -74,10 +74,12 @@ public class CssSteadyStateParser implements ICssParser {
                     "TEXTAREA", "TFOOT", "TH", "THEAD", "TITLE", "TR", "TT",
                     "U", "UL", "VAR" }));
 
+    @Override
     public String getParserName() {
         return "Steady State Css parser";
     }
 
+    @Override
     public String normalizeBuffer(Map applicationParameters,
             IResourceLoaderFactory resourceLoaderFactory, String baseURL,
             String styleSheetContent, IParserContext parserContext,
@@ -135,8 +137,9 @@ public class CssSteadyStateParser implements ICssParser {
                 CSSStyleDeclaration declaration = styleRule.getStyle();
 
                 if (styleRule instanceof SelectorsRule) {
-                    verifySelectors(((SelectorsRule) styleRule)
-                            .getSelectorList(), basePath.toString());
+                    verifySelectors(
+                            ((SelectorsRule) styleRule).getSelectorList(),
+                            basePath.toString());
                 }
 
                 for (int j = 0; j < declaration.getLength(); j++) {
@@ -183,9 +186,8 @@ public class CssSteadyStateParser implements ICssParser {
 
             if (isValidURL(href) == false) {
                 if (LOG.isDebugEnabled()) {
-                    LOG
-                            .debug("Ignore import rule: absolute or protocol, # or ? detected. ("
-                                    + href + ")");
+                    LOG.debug("Ignore import rule: absolute or protocol, # or ? detected. ("
+                            + href + ")");
                 }
                 continue;
             }
@@ -390,9 +392,8 @@ public class CssSteadyStateParser implements ICssParser {
 
         if (isValidURL(href) == false) {
             if (LOG.isDebugEnabled()) {
-                LOG
-                        .debug("Ignore import rule: absolute or protocol, # or ? detected. ("
-                                + href + ")");
+                LOG.debug("Ignore import rule: absolute or protocol, # or ? detected. ("
+                        + href + ")");
             }
             return;
         }
@@ -417,8 +418,8 @@ public class CssSteadyStateParser implements ICssParser {
             contextRelativePath = new Path("..").append(contextRelativePath);
         }
 
-        value.setStringValue(CSSPrimitiveValue.CSS_URI, contextRelativePath
-                .toString());
+        value.setStringValue(CSSPrimitiveValue.CSS_URI,
+                contextRelativePath.toString());
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Path relocation: change path '" + href + "' to '"
