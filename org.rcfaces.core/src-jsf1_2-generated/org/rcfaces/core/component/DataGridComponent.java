@@ -25,6 +25,7 @@ import org.rcfaces.core.component.capability.IRowToolTipIdCapability;
 import org.rcfaces.core.component.capability.ISortedChildrenCapability;
 import org.rcfaces.core.component.capability.IDroppableCapability;
 import org.rcfaces.core.internal.converter.CheckCardinalityConverter;
+import org.rcfaces.core.component.capability.IGridCaptionCapability;
 import org.rcfaces.core.internal.capability.IAdditionalInformationRangeComponent;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.tools.CheckTools;
@@ -217,6 +218,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 	IRowToolTipIdCapability,
 	ICursorProvider,
 	IScopeColumnIdCapability,
+	IGridCaptionCapability,
 	IToolTipComponent,
 	IGridComponent,
 	IDroppableGridComponent,
@@ -236,7 +238,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"dragListener","scopeColumnId","rowDropEffects","dropListener","dropEffects","fullCriteriaCount","emptyDataMessage","loadListener","checkedValues","selectionListener","paged","additionalInformationListener","cursorValue","border","required","bodyDroppable","doubleClickListener","clientCheckFullState","rowLabelColumnId","horizontalScrollPosition","rowCountVar","dropCompleteListener","rowToolTipId","dropTypes","rowDragEffects","rowValueColumnId","selectedCriteriaColumns","additionalInformationCardinality","rowIndexVar","checkListener","headerVisible","droppable","selectionCardinality","dragTypes","rowDropTypes","clientAdditionalInformationFullState","checkCardinality","checkable","cellTextWrap","rowDragTypes","additionalInformationValues","showValue","verticalScrollPosition","clientSelectionFullState","preferences","filterProperties","dragEffects","selectedValues","rowStyleClass","keySearchColumnId","readOnly","selectable","draggable","disabled"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"summary","dragListener","scopeColumnId","rowDropEffects","dropListener","dropEffects","fullCriteriaCount","emptyDataMessage","loadListener","checkedValues","selectionListener","paged","additionalInformationListener","cursorValue","border","required","bodyDroppable","doubleClickListener","clientCheckFullState","rowLabelColumnId","horizontalScrollPosition","rowCountVar","dropCompleteListener","rowToolTipId","dropTypes","rowDragEffects","rowValueColumnId","selectedCriteriaColumns","additionalInformationCardinality","rowIndexVar","checkListener","headerVisible","droppable","selectionCardinality","dragTypes","rowDropTypes","clientAdditionalInformationFullState","checkCardinality","checkable","cellTextWrap","rowDragTypes","additionalInformationValues","showValue","verticalScrollPosition","clientSelectionFullState","preferences","filterProperties","dragEffects","selectedValues","caption","rowStyleClass","keySearchColumnId","readOnly","selectable","draggable","disabled"}));
 	}
 
 	public DataGridComponent() {
@@ -1739,6 +1741,52 @@ public class DataGridComponent extends AbstractDataComponent implements
 
 	public void setScopeColumnId(java.lang.String scopeColumnId) {
 		engine.setProperty(Properties.SCOPE_COLUMN_ID, scopeColumnId);
+	}
+
+	public java.lang.String getCaption() {
+		return getCaption(null);
+	}
+
+	/**
+	 * See {@link #getCaption() getCaption()} for more details
+	 */
+	public java.lang.String getCaption(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.CAPTION, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "caption" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isCaptionSetted() {
+		return engine.isPropertySetted(Properties.CAPTION);
+	}
+
+	public void setCaption(java.lang.String caption) {
+		engine.setProperty(Properties.CAPTION, caption);
+	}
+
+	public java.lang.String getSummary() {
+		return getSummary(null);
+	}
+
+	/**
+	 * See {@link #getSummary() getSummary()} for more details
+	 */
+	public java.lang.String getSummary(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.SUMMARY, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "summary" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isSummarySetted() {
+		return engine.isPropertySetted(Properties.SUMMARY);
+	}
+
+	public void setSummary(java.lang.String summary) {
+		engine.setProperty(Properties.SUMMARY, summary);
 	}
 
 	public String[] getRowDragTypes() {

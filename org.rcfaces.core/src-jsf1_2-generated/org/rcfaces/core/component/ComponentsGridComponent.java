@@ -15,6 +15,7 @@ import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.capability.IRowToolTipIdCapability;
 import org.rcfaces.core.component.capability.ISortedChildrenCapability;
+import org.rcfaces.core.component.capability.IGridCaptionCapability;
 import org.rcfaces.core.internal.capability.IAdditionalInformationRangeComponent;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.component.capability.IScrollableCapability;
@@ -23,8 +24,8 @@ import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.core.internal.tools.AdditionalInformationTools;
 import java.lang.Object;
 import org.rcfaces.core.internal.tools.OrderTools;
-import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.iterator.IColumnIterator;
+import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.capability.IEmptyDataMessageCapability;
 import org.rcfaces.core.component.capability.IClientSelectionFullStateCapability;
 import org.rcfaces.core.component.AbstractDataComponent;
@@ -137,6 +138,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	IRowToolTipIdCapability,
 	IHeaderVisibilityCapability,
 	IScopeColumnIdCapability,
+	IGridCaptionCapability,
 	IGridComponent,
 	IOrderedChildrenCapability,
 	ISortedChildrenCapability,
@@ -151,7 +153,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headerVisible","selectionCardinality","clientAdditionalInformationFullState","scopeColumnId","cellTextWrap","emptyDataMessage","loadListener","selectionListener","paged","additionalInformationValues","showValue","additionalInformationListener","verticalScrollPosition","border","required","clientSelectionFullState","preferences","doubleClickListener","selectedValues","horizontalScrollPosition","rowStyleClass","rowCountVar","rowToolTipId","selectable","additionalInformationCardinality","rowValueConverter","rowIndexVar","rowValue"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headerVisible","summary","selectionCardinality","clientAdditionalInformationFullState","scopeColumnId","cellTextWrap","emptyDataMessage","loadListener","selectionListener","paged","additionalInformationValues","showValue","additionalInformationListener","verticalScrollPosition","border","required","clientSelectionFullState","preferences","doubleClickListener","selectedValues","horizontalScrollPosition","caption","rowCountVar","rowStyleClass","rowToolTipId","selectable","additionalInformationCardinality","rowValueConverter","rowIndexVar","rowValue"}));
 	}
 
 	public ComponentsGridComponent() {
@@ -1010,6 +1012,52 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 
 	public void setScopeColumnId(java.lang.String scopeColumnId) {
 		engine.setProperty(Properties.SCOPE_COLUMN_ID, scopeColumnId);
+	}
+
+	public java.lang.String getCaption() {
+		return getCaption(null);
+	}
+
+	/**
+	 * See {@link #getCaption() getCaption()} for more details
+	 */
+	public java.lang.String getCaption(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.CAPTION, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "caption" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isCaptionSetted() {
+		return engine.isPropertySetted(Properties.CAPTION);
+	}
+
+	public void setCaption(java.lang.String caption) {
+		engine.setProperty(Properties.CAPTION, caption);
+	}
+
+	public java.lang.String getSummary() {
+		return getSummary(null);
+	}
+
+	/**
+	 * See {@link #getSummary() getSummary()} for more details
+	 */
+	public java.lang.String getSummary(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.SUMMARY, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "summary" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isSummarySetted() {
+		return engine.isPropertySetted(Properties.SUMMARY);
+	}
+
+	public void setSummary(java.lang.String summary) {
+		engine.setProperty(Properties.SUMMARY, summary);
 	}
 
 	/**

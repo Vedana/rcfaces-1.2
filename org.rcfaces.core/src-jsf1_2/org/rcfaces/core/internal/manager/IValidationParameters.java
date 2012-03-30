@@ -14,7 +14,8 @@ import javax.el.ValueExpression;
  * @version $Revision$ $Date$
  */
 public interface IValidationParameters {
-    void setValidationParameter(String name, ValueExpression value, boolean client);
+    void setValidationParameter(String name, ValueExpression value,
+            boolean client);
 
     String setValidationParameter(String name, String value, boolean clientSide);
 
@@ -26,7 +27,7 @@ public interface IValidationParameters {
 
     int getValidationParametersCount();
 
-    Map getValidationParametersMap();
+    Map<String, String> getValidationParametersMap();
 
-    Map getClientValidationParametersMap();
+    Map<String, String> getClientValidationParametersMap();
 }

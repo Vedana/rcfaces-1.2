@@ -41,6 +41,8 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 	private ValueExpression rowToolTipId;
 	private ValueExpression headerVisible;
 	private ValueExpression scopeColumnId;
+	private ValueExpression caption;
+	private ValueExpression summary;
 	private ValueExpression rowCountVar;
 	private ValueExpression rowIndexVar;
 	private ValueExpression rowValue;
@@ -142,6 +144,14 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 		this.scopeColumnId = scopeColumnId;
 	}
 
+	public void setCaption(ValueExpression caption) {
+		this.caption = caption;
+	}
+
+	public void setSummary(ValueExpression summary) {
+		this.summary = summary;
+	}
+
 	public void setRowCountVar(ValueExpression rowCountVar) {
 		this.rowCountVar = rowCountVar;
 	}
@@ -186,6 +196,8 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 			LOG.debug("  rowToolTipId='"+rowToolTipId+"'");
 			LOG.debug("  headerVisible='"+headerVisible+"'");
 			LOG.debug("  scopeColumnId='"+scopeColumnId+"'");
+			LOG.debug("  caption='"+caption+"'");
+			LOG.debug("  summary='"+summary+"'");
 			LOG.debug("  rowCountVar='"+rowCountVar+"'");
 			LOG.debug("  rowIndexVar='"+rowIndexVar+"'");
 			LOG.debug("  rowValue='"+rowValue+"'");
@@ -376,6 +388,24 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 			}
 		}
 
+		if (caption != null) {
+			if (caption.isLiteralText()==false) {
+				component.setValueExpression(Properties.CAPTION, caption);
+
+			} else {
+				component.setCaption(caption.getExpressionString());
+			}
+		}
+
+		if (summary != null) {
+			if (summary.isLiteralText()==false) {
+				component.setValueExpression(Properties.SUMMARY, summary);
+
+			} else {
+				component.setSummary(summary.getExpressionString());
+			}
+		}
+
 		if (rowCountVar != null) {
 			if (rowCountVar.isLiteralText()==false) {
 				throw new javax.faces.FacesException("Attribute 'rowCountVar' does not accept binding !");
@@ -442,6 +472,8 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 		rowToolTipId = null;
 		headerVisible = null;
 		scopeColumnId = null;
+		caption = null;
+		summary = null;
 		rowCountVar = null;
 		rowIndexVar = null;
 		rowValue = null;

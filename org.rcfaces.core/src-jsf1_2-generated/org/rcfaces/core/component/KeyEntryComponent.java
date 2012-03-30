@@ -44,7 +44,7 @@ public class KeyEntryComponent extends AbstractGridComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractGridComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"noValueFormatLabel","filterProperties","suggestionMinChars","valueFormat","rowCountVar","valueFormatLabel","emptyDataMessage","forceValidation","editable","emptyMessage","selectionListener","maxTextLength","readOnly","labelColumnId","forLabel","suggestionDelayMs","selectedValue","valueColumnId","required","border","rowIndexVar","disabled"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"noValueFormatLabel","filterProperties","suggestionMinChars","valueFormat","valueFormatTooltip","rowCountVar","valueFormatLabel","emptyDataMessage","forceValidation","editable","emptyMessage","selectionListener","maxTextLength","readOnly","labelColumnId","forLabel","suggestionDelayMs","selectedValue","valueColumnId","required","border","rowIndexVar","disabled"}));
 	}
 
 	public KeyEntryComponent() {
@@ -528,6 +528,29 @@ return s;
 	 */
 	public boolean isValueFormatSetted() {
 		return engine.isPropertySetted(Properties.VALUE_FORMAT);
+	}
+
+	public String getValueFormatTooltip() {
+		return getValueFormatTooltip(null);
+	}
+
+	public String getValueFormatTooltip(javax.faces.context.FacesContext facesContext) {
+		String s = engine.getStringProperty(Properties.VALUE_FORMAT_TOOLTIP, facesContext);
+
+
+return s;
+	}
+
+	public void setValueFormatTooltip(String valueFormatTooltip) {
+		engine.setProperty(Properties.VALUE_FORMAT_TOOLTIP, valueFormatTooltip);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "valueFormatTooltip" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isValueFormatTooltipSetted() {
+		return engine.isPropertySetted(Properties.VALUE_FORMAT_TOOLTIP);
 	}
 
 	public boolean isForceValidation() {
