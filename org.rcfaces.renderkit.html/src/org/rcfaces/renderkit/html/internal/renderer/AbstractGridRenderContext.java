@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
@@ -44,6 +45,7 @@ import org.rcfaces.core.component.capability.IOrderedChildrenCapability;
 import org.rcfaces.core.component.capability.IPagedCapability;
 import org.rcfaces.core.component.capability.IResizableCapability;
 import org.rcfaces.core.component.capability.IRowStyleClassCapability;
+import org.rcfaces.core.component.capability.IScopeColumnIdCapability;
 import org.rcfaces.core.component.capability.ISelectableCapability;
 import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
 import org.rcfaces.core.component.capability.IShowValueCapability;
@@ -69,6 +71,7 @@ import org.rcfaces.core.internal.capability.ISortedComponentsCapability;
 import org.rcfaces.core.internal.capability.IToolTipComponent;
 import org.rcfaces.core.internal.component.IImageAccessors;
 import org.rcfaces.core.internal.component.IStatesImageAccessors;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.lang.StringAppender;
@@ -240,7 +243,8 @@ public abstract class AbstractGridRenderContext {
 
 	private Set<ToolTipComponent> gridToolTips; // #head, #body, #row +
 												// (v:toolTipId) + #cell
-
+	private String scopeColId = null;
+	
     private AbstractGridRenderContext(IProcessContext processContext,
             IScriptRenderContext scriptRenderContext,
             IGridComponent gridComponent, ISortedComponent sortedComponents[],
@@ -276,7 +280,10 @@ public abstract class AbstractGridRenderContext {
         if (gridComponent instanceof IDroppableCapability) {
             isDroppable = ((IDroppableCapability) gridComponent).isDroppable();
         }
-
+        
+        // Accessibility : get scope column
+        scopeColId = findScopeColumnId(gridComponent);
+        
         initialize(checkTitleImages);
 
     }
@@ -954,6 +961,10 @@ public abstract class AbstractGridRenderContext {
         return columnIds[index];
     }
 
+    public String getScopeColId() {
+    	return scopeColId;
+    }
+    
     public void updateRowCount() {
         rowCount = -2;
     }
@@ -1348,5 +1359,64 @@ public abstract class AbstractGridRenderContext {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Accessibility : get the column holding the scope="row" attribbute
+	 * @param dg ComponentsGrid component
+	 * @return
+	 */
+	private String findScopeColumnId(IGridComponent grid) {
+		// 1st case : column id attribute is set
+		if (grid instanceof IScopeColumnIdCapability) {
+			String scopeColumnId = ((IScopeColumnIdCapability)grid).getScopeColumnId();
+			
+			if (scopeColumnId != null) {
+				for (IColumnIterator it = grid.listColumns(); it.hasNext();) {
+					UIColumn column = it.next();
+					if (scopeColumnId.equals(column.getId())) {
+						return column.getId();
+					}
+				}
+				// ID not found !!!
+				throw new FacesException("Can not find column '" + scopeColumnId
+						+ "'.");
+			}
+		}
+		
+		// Get first visible column that has a binding
+		for (IColumnIterator it = grid.listColumns(); it.hasNext();) {
+			UIColumn column = it.next();
+			if (column.isRendered()) {
+				// Column must be visible
+				if (column instanceof IVisibilityCapability && !((IVisibilityCapability)column).isVisible()) {
+					continue;
+				}
+				if (isColumnDataBound(column)) {
+					return column.getId();
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Is column content data-bound ?
+	 * @param column Grid column
+	 * @return true if a column or one of its children is data-bound
+	 */
+	private boolean isColumnDataBound(UIComponent column) {
+		// The column must have a variable content via a Value Expression
+        ValueExpression valueExpression = column.getValueExpression(Properties.VALUE);
+        if (valueExpression != null) {
+        	return true;
+        }
+        List<UIComponent> children = column.getChildren();
+        for (UIComponent child : children) {
+			if (isColumnDataBound(child)) {
+				return true;
+			}
+		}
+        return false;
 	}
 }

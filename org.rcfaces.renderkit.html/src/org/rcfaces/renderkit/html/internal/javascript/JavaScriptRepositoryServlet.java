@@ -36,13 +36,12 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.lang.ByteBufferInputStream;
 import org.rcfaces.core.internal.lang.StringAppender;
-import org.rcfaces.core.internal.repository.BasicHierarchicalRepository;
 import org.rcfaces.core.internal.repository.HierarchicalRepositoryServlet;
 import org.rcfaces.core.internal.repository.IHierarchicalRepository;
-import org.rcfaces.core.internal.repository.IRepository;
 import org.rcfaces.core.internal.repository.IHierarchicalRepository.IHierarchicalFile;
 import org.rcfaces.core.internal.repository.IHierarchicalRepository.IModule;
 import org.rcfaces.core.internal.repository.IHierarchicalRepository.ISet;
+import org.rcfaces.core.internal.repository.IRepository;
 import org.rcfaces.core.internal.repository.IRepository.IContent;
 import org.rcfaces.core.internal.repository.IRepository.IContext;
 import org.rcfaces.core.internal.repository.IRepository.IFile;
@@ -62,7 +61,6 @@ import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository.ICla
  * @version $Revision$ $Date$
  */
 public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = -2654621696260702001L;
 
@@ -75,7 +73,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
     private static final String MAIN_REPOSITORY_DIRECTORY_LOCATION = JavaScriptRepository.class
             .getPackage().getName().replace('.', '/');
 
-    //private static final String MAIN_REPOSITORY_LOCATION = "/repository.xml";
+    // private static final String MAIN_REPOSITORY_LOCATION = "/repository.xml";
 
     private static final String PARAMETER_PREFIX = Constants.getPackagePrefix()
             + ".javascript";
@@ -90,16 +88,13 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
             + ".REPOSITORIES";
 
     private static final String NO_CACHE_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".NO_CACHE";
+            .getPackagePrefix() + ".NO_CACHE";
 
     private static final String COMPILED_JS_SUFFIX_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".COMPILED_JS_SUFFIX";
+            .getPackagePrefix() + ".COMPILED_JS_SUFFIX";
 
     private static final String CONFIGURATION_VERSION_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".CONFIGURATION_VERSION";
+            .getPackagePrefix() + ".CONFIGURATION_VERSION";
 
     private static final String SYMBOLS_FILENAME = "/symbols";
 
@@ -108,8 +103,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
     private static final String CONTEXT_REPOSITORY_PROPERTY = "org.rcfaces.renderkit.html.javascript.ContextRepository";
 
     private static final String JAVASCRIPT_SYMBOLS_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".javascript.SYMBOLS";
+            .getPackagePrefix() + ".javascript.SYMBOLS";
 
     private static final DateFormat HEADER_DATE_FORMAT;
     static {
@@ -121,7 +115,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
     private static final String JAVASCRIPT_VERSION_PROPERTY = "javascript.version";
 
-    private static final Set SYMBOLS_FILENAMES = new HashSet(2);
+    private static final Set<String> SYMBOLS_FILENAMES = new HashSet<String>(2);
 
     private static final String JAVASCRIPT_REPOSITORY_TYPE = "javascript";
 
@@ -166,8 +160,8 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
         htmlRCFacesBuildId = Constants.getBuildId();
 
         if (mainRepositoryURI == null) {
-            mainRepositoryURI = ServletTools.computeResourceURI(config
-                    .getServletContext(), null, getClass());
+            mainRepositoryURI = ServletTools.computeResourceURI(
+                    config.getServletContext(), null, getClass());
         }
 
         if (mainRepositoryURI == null) {
@@ -255,10 +249,11 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
                 mainRepositoryURI, repositoryVersion, applicationParamaters);
         servletContext.setAttribute(REPOSITORY_PROPERTY, repository);
 
-        List repositoriesLocation = new ArrayList(32);
-        //String location = getMainRepositoryDirectoryLocation()+ MAIN_REPOSITORY_LOCATION;
-        //repositoriesLocation.add(location);
-        //LOG.debug("Add repository location '" + location + "'. [main]");
+        List<String> repositoriesLocation = new ArrayList<String>(32);
+        // String location = getMainRepositoryDirectoryLocation()+
+        // MAIN_REPOSITORY_LOCATION;
+        // repositoriesLocation.add(location);
+        // LOG.debug("Add repository location '" + location + "'. [main]");
 
         RcfacesContext rcfacesContext = RcfacesContext.getInstance(
                 servletContext, null, null);
@@ -317,9 +312,8 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
                         repositoryContainer = getClass().getClassLoader();
 
                         if (en.hasMoreElements()) {
-                            LOG
-                                    .error("CAUTION: Same resource into differents locations ... ("
-                                            + repositoryLocation + ")");
+                            LOG.error("CAUTION: Same resource into differents locations ... ("
+                                    + repositoryLocation + ")");
                         }
                     } else {
                         LOG.error("Can not load url '" + url + "'.");
@@ -345,17 +339,13 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
                     in.close();
 
                 } catch (IOException ex) {
-                    LOG
-                            .error("Can not close '" + repositoryLocation
-                                    + "'.", ex);
+                    LOG.error("Can not close '" + repositoryLocation + "'.", ex);
                 }
             }
 
-            LOG
-                    .debug("Repository location '" + repositoryLocation
-                            + "' loaded");
+            LOG.debug("Repository location '" + repositoryLocation + "' loaded");
         }
-        
+
         // Resolve
         repository.resolveDependencies();
 
@@ -443,7 +433,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
     protected ISet initializeDefaultSet() {
 
-        List mds = new ArrayList(8);
+        List<IFile> mds = new ArrayList<IFile>(8);
 
         IModule modules[] = getHierarchicalRepository().listModules();
 
@@ -467,10 +457,10 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
         String uri = getSetURI(name);
 
-        mds = Arrays.asList(ret);
+        mds = Arrays.<IFile> asList(ret);
 
         ISet set = getHierarchicalRepository().declareSet(name, uri,
-                (IModule[]) mds.toArray(new IModule[mds.size()]));
+                mds.toArray(new IModule[mds.size()]));
 
         return set;
     }
@@ -552,8 +542,9 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
                     }
 
                 } catch (IOException ex) {
-                    LOG.error("Can not get connection of '"
-                            + file.getFilename() + "'. (" + surl + ")", ex);
+                    LOG.error(
+                            "Can not get connection of '" + file.getFilename()
+                                    + "'. (" + surl + ")", ex);
                 }
             }
 
@@ -712,7 +703,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
             dependencies = new IHierarchicalFile[] { file };
         }
 
-        List classes = new ArrayList(dependencies.length);
+        List<IClass> classes = new ArrayList<IClass>(dependencies.length);
         for (int i = 0; i < dependencies.length; i++) {
             IFile dependency = dependencies[i];
             if ((dependency instanceof IJavaScriptRepository.IClassFile) == false) {
@@ -765,7 +756,8 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
     public static IRepository.IContext getContextRepository(
             FacesContext facesContext) {
-        Map map = facesContext.getExternalContext().getRequestMap();
+        Map<String, Object> map = facesContext.getExternalContext()
+                .getRequestMap();
 
         IRepository.IContext context = (IRepository.IContext) map
                 .get(CONTEXT_REPOSITORY_PROPERTY);

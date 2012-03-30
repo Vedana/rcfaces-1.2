@@ -52,7 +52,7 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
 
     private static final boolean KEEP_LANGUAGE_LOCALE = false;
 
-    private final Map classByName = new HashMap();
+    private final Map<String, IClass> classByName = new HashMap<String, IClass>();
 
     private final Map dependenciesById = new HashMap();
 
@@ -100,7 +100,7 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
     }
 
     public IClass getClassByName(String className) {
-        return (IClass) classByName.get(className);
+        return classByName.get(className);
     }
 
     protected IHierarchicalFile convertType(Object next, int typeOfCollection) {
@@ -128,7 +128,7 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
 
         private static final long serialVersionUID = 4826077949811747989L;
 
-        private List classes;
+        private List<IClass> classes;
 
         private final boolean remapSymbols;
 
@@ -157,12 +157,12 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
                 return CLASS_EMPTY_ARRAY;
             }
 
-            return (IClass[]) classes.toArray(new IClass[classes.size()]);
+            return classes.toArray(new IClass[classes.size()]);
         }
 
         public void addClass(IClass name) {
             if (classes == null) {
-                classes = new ArrayList(4);
+                classes = new ArrayList<IClass>(4);
             }
 
             classes.add(name);
@@ -315,19 +315,18 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
      * @version $Revision$ $Date$
      */
     protected static class ClassImpl implements IClass {
-        private static final String REVISION = "$Revision$";
 
         private final String name;
 
         private final IHierarchicalFile file;
 
-        private List requiredClass;
+        private List<IClass> requiredClass;
 
-        private List requiredClassByName;
+        private List<String> requiredClassByName;
 
         private IClass requiredClassArray[];
 
-        private Map requiredClassById = new HashMap();
+        private Map<String, Object> requiredClassById = new HashMap<String, Object>();
 
         public ClassImpl(String name, IHierarchicalFile file) {
             this.file = file;
@@ -340,7 +339,7 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
 
         public void addRequiredClass(String requiredId, String clazz) {
             if (requiredClassByName == null) {
-                requiredClassByName = new ArrayList();
+                requiredClassByName = new ArrayList<String>();
             }
 
             requiredClassByName.add(requiredId);
@@ -370,14 +369,14 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
                 addRequiredClass(requiredId, clazz);
             }
 
-            List l = null;
+            List<IHierarchicalFile> l = null;
 
             IClass cls[] = listRequiredClasses(null);
             for (int i = 0; i < cls.length; i++) {
                 IHierarchicalFile file = cls[i].getFile();
 
                 if (l == null) {
-                    l = new ArrayList();
+                    l = new ArrayList<IHierarchicalFile>();
                 }
                 l.add(file);
             }
@@ -385,31 +384,31 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
             IHierarchicalFile resources[] = listRequiredResources(null);
             if (resources.length > 0) {
                 if (l == null) {
-                    l = new ArrayList();
+                    l = new ArrayList<IHierarchicalFile>();
                 }
                 l.addAll(Arrays.asList(resources));
             }
 
             if (l != null) {
-                ((HierarchicalFile) getFile())
-                        .addDependencies((IHierarchicalFile[]) l
-                                .toArray(new IHierarchicalFile[l.size()]));
+                ((HierarchicalFile) getFile()).addDependencies(l
+                        .toArray(new IHierarchicalFile[l.size()]));
             }
         }
 
         private void addRequiredClass(String requiredId, IClass clazz) {
             if (requiredId == null) {
                 if (requiredClass == null) {
-                    requiredClass = new ArrayList();
+                    requiredClass = new ArrayList<IClass>();
                 }
 
                 requiredClass.add(clazz);
                 return;
             }
 
-            List requiredClass = (List) requiredClassById.get(requiredId);
+            List<IClass> requiredClass = (List<IClass>) requiredClassById
+                    .get(requiredId);
             if (requiredClass == null) {
-                requiredClass = new ArrayList();
+                requiredClass = new ArrayList<IClass>();
                 requiredClassById.put(requiredId, requiredClass);
             }
 
@@ -432,7 +431,7 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
 
                 listInheritRequiredClasses(requiredClass, null);
 
-                requiredClassArray = (IClass[]) requiredClass
+                requiredClassArray = requiredClass
                         .toArray(new IClass[requiredClass.size()]);
                 requiredClass = null;
                 return requiredClassArray;
@@ -443,9 +442,9 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
                 return (IClass[]) obj;
             }
 
-            List l = (List) obj;
+            List<IClass> l = (List<IClass>) obj;
             if (l == null) {
-                l = new ArrayList();
+                l = new ArrayList<IClass>();
             }
             listInheritRequiredClasses(l, requiredId);
 
@@ -455,7 +454,7 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
                 requiredClassArray = CLASS_EMPTY_ARRAY;
 
             } else {
-                requiredClassArray = (IClass[]) l.toArray(new IClass[l.size()]);
+                requiredClassArray = l.toArray(new IClass[l.size()]);
             }
 
             requiredClassById.put(requiredId, requiredClassArray);
@@ -463,8 +462,8 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
             return requiredClassArray;
         }
 
-        public void listInheritRequiredClasses(List l, String requiredId) {
-            Set l2 = new HashSet(l);
+        public void listInheritRequiredClasses(List<IClass> l, String requiredId) {
+            Set<IClass> l2 = new HashSet<IClass>(l);
             if (requiredId != null) {
                 l2.addAll(Arrays.asList(listRequiredClasses(null)));
             }
@@ -500,7 +499,7 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
 
         ExternalContext ext = facesContext.getExternalContext();
 
-        Map request = ext.getRequestMap();
+        Map<String, Object> request = ext.getRequestMap();
         String uri = (String) request.get(JAVASCRIPT_BASE_URI_PROPERTY);
         if (uri != null) {
             return uri;

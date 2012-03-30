@@ -16,7 +16,7 @@ import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
  */
 public interface IScriptOperation extends IBufferOperation {
 
-    String filter(Map applicationParameters,
+    String filter(Map<String, Object> applicationParameters,
             IResourceLoaderFactory resourceLoaderFactory, String scriptURL,
             String scriptContent, IScriptOperationContext operationContext)
             throws IOException;

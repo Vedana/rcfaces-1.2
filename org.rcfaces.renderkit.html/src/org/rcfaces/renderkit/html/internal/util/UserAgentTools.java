@@ -14,6 +14,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.renderkit.html.component.capability.IUserAgentVaryCapability;
 import org.rcfaces.renderkit.html.internal.ClientBrowserFactory;
 import org.rcfaces.renderkit.html.internal.IClientBrowser;
+import org.rcfaces.renderkit.html.internal.IClientBrowser.BrowserType;
 import org.rcfaces.renderkit.html.item.IUserAgentVaryFileItem;
 
 /**
@@ -22,36 +23,25 @@ import org.rcfaces.renderkit.html.item.IUserAgentVaryFileItem;
  * @version $Revision$ $Date$
  */
 public class UserAgentTools {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(UserAgentTools.class);
 
     private static final String USER_AGENTS_PROPERTY = "org.rcfaces.renderkit.html.USER_AGENTS";
 
-    private static final Map AGENT_NAMES = new HashMap();
+    private static final Map<String, BrowserType> AGENT_NAMES = new HashMap<String, BrowserType>();
     static {
-        AGENT_NAMES
-                .put(
-                        IUserAgentVaryCapability.MICROSOFT_INTERNET_EXPLORER,
-                        new Integer(
-                                IClientBrowser.MICROSOFT_INTERNET_EXPLORER_BROWSER_TYPE));
-        AGENT_NAMES
-                .put(
-                        IUserAgentVaryCapability.INTERNET_EXPLORER,
-                        new Integer(
-                                IClientBrowser.MICROSOFT_INTERNET_EXPLORER_BROWSER_TYPE));
+        AGENT_NAMES.put(IUserAgentVaryCapability.MICROSOFT_INTERNET_EXPLORER,
+                BrowserType.MICROSOFT_INTERNET_EXPLORER);
+        AGENT_NAMES.put(IUserAgentVaryCapability.INTERNET_EXPLORER,
+                BrowserType.MICROSOFT_INTERNET_EXPLORER);
 
-        AGENT_NAMES.put(IUserAgentVaryCapability.FIREFOX, new Integer(
-                IClientBrowser.FIREFOX_BROWSER_TYPE));
+        AGENT_NAMES.put(IUserAgentVaryCapability.FIREFOX, BrowserType.FIREFOX);
 
-        AGENT_NAMES.put(IUserAgentVaryCapability.SAFARI, new Integer(
-                IClientBrowser.SAFARI_BROWSER_TYPE));
+        AGENT_NAMES.put(IUserAgentVaryCapability.SAFARI, BrowserType.SAFARI);
 
-        AGENT_NAMES.put(IUserAgentVaryCapability.OPERA, new Integer(
-                IClientBrowser.OPERA_BROWSER_TYPE));
+        AGENT_NAMES.put(IUserAgentVaryCapability.OPERA, BrowserType.OPERA);
 
-        AGENT_NAMES.put(IUserAgentVaryCapability.CHROME, new Integer(
-                IClientBrowser.CHROME_BROWSER_TYPE));
+        AGENT_NAMES.put(IUserAgentVaryCapability.CHROME, BrowserType.CHROME);
     }
 
     public static boolean accept(FacesContext facesContext,
@@ -68,6 +58,7 @@ public class UserAgentTools {
         return accept(facesContext, userAgent);
     }
 
+    @SuppressWarnings("unchecked")
     private static boolean accept(FacesContext facesContext, String userAgent) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Verify browser '" + userAgent + "'");
@@ -85,15 +76,17 @@ public class UserAgentTools {
             userAgent = userAgent.substring(1);
         }
 
-        Map requestMap = facesContext.getExternalContext().getRequestMap();
+        Map<String, Object> requestMap = facesContext.getExternalContext()
+                .getRequestMap();
 
-        Map userAgentVersions = (Map) requestMap.get(USER_AGENTS_PROPERTY);
+        Map<String, Boolean> userAgentVersions = (Map<String, Boolean>) requestMap
+                .get(USER_AGENTS_PROPERTY);
         if (userAgentVersions == null) {
-            userAgentVersions = new HashMap(4);
+            userAgentVersions = new HashMap<String, Boolean>(4);
             requestMap.put(USER_AGENTS_PROPERTY, userAgentVersions);
 
         } else {
-            Boolean b = (Boolean) userAgentVersions.get(userAgent);
+            Boolean b = userAgentVersions.get(userAgent);
 
             if (b != null) {
                 if (LOG.isDebugEnabled()) {
@@ -118,7 +111,7 @@ public class UserAgentTools {
             return not;
         }
 
-        int browserType = client.getBrowserType();
+        BrowserType browserType = client.getBrowserType();
 
         StringTokenizer st = new StringTokenizer(userAgent, ",");
         next_rule: for (; st.hasMoreTokens();) {
@@ -131,8 +124,8 @@ public class UserAgentTools {
                 ruleAgent = ruleAgent.substring(0, idx);
             }
 
-            int ruleBrowserType = computeBrowserType(ruleAgent);
-            if (ruleBrowserType == IClientBrowser.UNKNOWN_BROWSER_TYPE) {
+            BrowserType ruleBrowserType = computeBrowserType(ruleAgent);
+            if (ruleBrowserType == BrowserType.UNKNOWN) {
                 LOG.info("Unknown browser '" + ruleAgent + "'");
                 continue;
             }
@@ -219,12 +212,12 @@ public class UserAgentTools {
         return not;
     }
 
-    private static int computeBrowserType(String agent) {
-        Integer type = (Integer) AGENT_NAMES.get(agent.toLowerCase());
+    private static BrowserType computeBrowserType(String agent) {
+        BrowserType type = AGENT_NAMES.get(agent.toLowerCase());
         if (type == null) {
-            return IClientBrowser.UNKNOWN_BROWSER_TYPE;
+            return BrowserType.UNKNOWN;
         }
-        return type.intValue();
+        return type;
     }
 
 }

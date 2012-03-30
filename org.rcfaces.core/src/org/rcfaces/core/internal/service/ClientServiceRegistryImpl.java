@@ -28,10 +28,11 @@ public class ClientServiceRegistryImpl implements IClientServiceRegistry {
     private static final Log LOG = LogFactory
             .getLog(ClientServiceRegistryImpl.class);
 
-    private final Map clientServicesByRequestId = new HashMap(32);
+    private final Map<String, IClientService> clientServicesByRequestId = new HashMap<String, IClientService>(
+            32);
 
     public IClientService getClientServiceById(String requestId) {
-        return (IClientService) clientServicesByRequestId.get(requestId);
+        return clientServicesByRequestId.get(requestId);
     }
 
     public IClientService createClientService(String requestId,
@@ -256,6 +257,7 @@ public class ClientServiceRegistryImpl implements IClientServiceRegistry {
             this.applicationException = applicationException;
         }
 
+        @Override
         protected IProgressMonitor createProgressMonitor() {
             if (progressMonitor == null) {
                 return super.createProgressMonitor();

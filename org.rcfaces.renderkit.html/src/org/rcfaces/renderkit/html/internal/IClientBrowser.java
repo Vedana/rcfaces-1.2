@@ -10,19 +10,11 @@ package org.rcfaces.renderkit.html.internal;
  */
 public interface IClientBrowser {
 
-    int UNKNOWN_BROWSER_TYPE = 0;
+    public enum BrowserType {
+        UNKNOWN, MICROSOFT_INTERNET_EXPLORER, FIREFOX, SAFARI, OPERA, CHROME
+    }
 
-    int MICROSOFT_INTERNET_EXPLORER_BROWSER_TYPE = 1;
-
-    int FIREFOX_BROWSER_TYPE = 2;
-
-    int SAFARI_BROWSER_TYPE = 3;
-
-    int OPERA_BROWSER_TYPE = 4;
-
-    int CHROME_BROWSER_TYPE = 5;
-
-    int getBrowserType();
+    BrowserType getBrowserType();
 
     String getUserAgent();
 
@@ -33,6 +25,13 @@ public interface IClientBrowser {
     int getReleaseVersion();
 
     String getBrowserId();
+
+    /**
+     * 
+     * @return Boolean if mobile version is determined, or <code>null</code> if
+     *         not detected.
+     */
+    Boolean isMobileVersion();
 
     boolean equalsType(IClientBrowser clientBrowser);
 }

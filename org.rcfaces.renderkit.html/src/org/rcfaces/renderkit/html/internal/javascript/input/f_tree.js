@@ -11,8 +11,6 @@
  */
  
 var __statics = {
-
-
 	/**
 	 * @field private static final Number
 	 */
@@ -1491,7 +1489,7 @@ var __members = {
 
 		request.f_setRequestHeader("X-Camelia", "tree.request");
 		
-		var params = {
+		var requestParams = {
 			treeId: this.id,
 			waitingId: waitingNode._id,
 			node: params 
@@ -1499,10 +1497,10 @@ var __members = {
 		
 		var filterExpression=this.fa_getSerializedPropertiesExpression();
 		if (filterExpression) {
-			params.filterExpression=filterExpression;
+			requestParams.filterExpression=filterExpression;
 		}
 
-		request.f_doFormRequest(params);
+		request.f_doFormRequest(requestParams);
 		
 	},
 	
@@ -1546,7 +1544,7 @@ var __members = {
 		
 		var divNode=doc.createElement("div");
 		f_core.AppendChild(li, divNode);
-		divNode.className="f_tree_depth"+(parentDepth+1)+" f_tree_waiting"
+		divNode.className="f_tree_depth"+(parentDepth+1)+" f_tree_waiting";
 		divNode.style.paddingLeft=(parentDepth*f_tree._COMMAND_IMAGE_WIDTH)+"px";
 		
 		var command=doc.createElement("img");
@@ -1777,17 +1775,21 @@ var __members = {
 		var node=li._node;		
 		
 		var suffix="";
+		var alt_title="";
 		if (node._container) {
-	
 			if (!node._opened) {
 				suffix+="_opened";
-				command.alt=f_resourceBundle.Get(f_tree).f_get("OPEN_NODE");
+				alt_title=f_resourceBundle.Get(f_tree).f_get("OPEN_NODE");
 				
 			} else {
 				suffix+="_closed";
-				command.alt=f_resourceBundle.Get(f_tree).f_get("CLOSE_NODE");
+				alt_title=f_resourceBundle.Get(f_tree).f_get("CLOSE_NODE");
 			}
+		} else {
+			suffix+="_leaf";
 		}
+		command.title = alt_title;
+		// command.alt = alt_title; OO: ET LE ALT ???
 		
 		if (node._selected) {
 			suffix+="_selected";
@@ -2179,9 +2181,9 @@ var __members = {
 		if (node) {
 			if (node._parentTreeNode) {
 				return node._parentTreeNode;
-			} else {
-				return this._getParentNode(node._node);
 			}
+
+			return this._getParentNode(node._node);
 		}
 		return node;
 	},
@@ -2652,7 +2654,7 @@ var __members = {
 		listLI.push(cursorLi);
 		
 		for(var i=0;i<listLI.length;i++) {
-			var li=listLI[i]
+			var li=listLI[i];
 			var node=li._node;
 			
 			if (!node._container) {
@@ -2699,7 +2701,7 @@ var __members = {
 		this._lastKeyDate=now;
 		this._lastKey=key;
 		
-		return this._searchTreeNodeByText(key, true, evt, selection)
+		return this._searchTreeNodeByText(key, true, evt, selection);
 	},
 	/**
 	 * @method private
@@ -2833,7 +2835,7 @@ var __members = {
 		
 		this.f_mapHierarchicalValues(function(value, element) {
 			values.unshift(value);
-		}, value)
+		}, value);
 		
 		return values;
 	},

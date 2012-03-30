@@ -38,8 +38,6 @@ import org.rcfaces.core.internal.webapp.URIParameters;
  */
 public abstract class RepositoryServlet extends ConfiguredHttpServlet {
 
-    private static final String REVISION = "$Revision$";
-
     private static final long serialVersionUID = 7028775289298926045L;
 
     private static final Log LOG = LogFactory.getLog(RepositoryServlet.class);
@@ -51,8 +49,7 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
     private static final String MODULES_PREFIX = ".modules";
 
     private static final String NO_CACHE_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".NO_CACHE";
+            .getPackagePrefix() + ".NO_CACHE";
 
     private static final String GROUP_ALL_DEFAULT_VALUE = null;
 
@@ -60,7 +57,8 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
 
     private static final int CONTENT_INITIAL_SIZE = 16000;
 
-    private final Map fileToRecordByLocale = new HashMap(128);
+    private final Map<Locale, Map<IFile, Record>> fileToRecordByLocale = new HashMap<Locale, Map<IFile, Record>>(
+            128);
 
     private IRepository repository;
 
@@ -68,6 +66,7 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
 
     private boolean devMode;
 
+    @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
@@ -117,6 +116,7 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
     protected abstract IRepository initializeRepository(ServletConfig config)
             throws IOException;
 
+    @Override
     protected void doHead(HttpServletRequest request,
             HttpServletResponse response) throws IOException {
 
@@ -124,6 +124,7 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
         doGet(request, response);
     }
 
+    @Override
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws IOException {
 
@@ -218,13 +219,13 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
         }
 
         synchronized (fileToRecordByLocale) {
-            Map fileToRecord = (Map) fileToRecordByLocale.get(locale);
+            Map<IFile, Record> fileToRecord = fileToRecordByLocale.get(locale);
             if (fileToRecord == null) {
-                fileToRecord = new HashMap();
+                fileToRecord = new HashMap<IFile, Record>();
                 fileToRecordByLocale.put(locale, fileToRecord);
             }
 
-            record = (Record) fileToRecord.get(file);
+            record = fileToRecord.get(file);
             if (record == null) {
                 record = newRecord(file, locale);
 
@@ -743,6 +744,7 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
             return null;
         }
 
+        @Override
         public String toString() {
             return "[Record file='"
                     + file

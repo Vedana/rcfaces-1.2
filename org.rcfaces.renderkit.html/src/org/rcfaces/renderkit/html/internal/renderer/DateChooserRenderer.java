@@ -140,7 +140,7 @@ public class DateChooserRenderer extends AbstractCalendarRenderer implements
         dateChooserComponent.setSubmittedExternalValue(date);
     }
 
-    protected void addUnlockProperties(Set unlockedProperties) {
+    protected void addUnlockProperties(Set<String> unlockedProperties) {
         super.addUnlockProperties(unlockedProperties);
 
         unlockedProperties.add(Properties.VALUE);
@@ -162,7 +162,6 @@ public class DateChooserRenderer extends AbstractCalendarRenderer implements
      */
     protected class DateChooserButtonDecorator extends
             AbstractImageButtonFamillyDecorator {
-        private static final String REVISION = "$Revision$";
 
         private boolean firstLine = true;
 

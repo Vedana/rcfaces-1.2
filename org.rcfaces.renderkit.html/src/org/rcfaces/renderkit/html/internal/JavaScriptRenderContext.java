@@ -34,7 +34,7 @@ public class JavaScriptRenderContext extends AbstractJavaScriptRenderContext {
 
     private static final String STRING_EMPTY_ARRAY[] = new String[0];
 
-    private Set uninitializedComponents = new HashSet();
+    private Set<String> uninitializedComponents = new HashSet<String>();
 
     public JavaScriptRenderContext(FacesContext facesContext) {
         super(facesContext);
@@ -44,7 +44,7 @@ public class JavaScriptRenderContext extends AbstractJavaScriptRenderContext {
             JavaScriptRenderContext javaScriptRenderContext) {
         super(javaScriptRenderContext);
 
-        this.uninitializedComponents = new HashSet(
+        this.uninitializedComponents = new HashSet<String>(
                 javaScriptRenderContext.uninitializedComponents);
     }
 
@@ -160,7 +160,7 @@ public class JavaScriptRenderContext extends AbstractJavaScriptRenderContext {
 
                 return;
             }
-            // TODO  A VOIR
+            // TODO A VOIR
             pushUnitializedComponent(componentRenderContext
                     .getComponentClientId());
         }
@@ -202,7 +202,7 @@ public class JavaScriptRenderContext extends AbstractJavaScriptRenderContext {
             return STRING_EMPTY_ARRAY;
         }
 
-        String old[] = (String[]) uninitializedComponents
+        String old[] = uninitializedComponents
                 .toArray(new String[uninitializedComponents.size()]);
         uninitializedComponents.clear();
 

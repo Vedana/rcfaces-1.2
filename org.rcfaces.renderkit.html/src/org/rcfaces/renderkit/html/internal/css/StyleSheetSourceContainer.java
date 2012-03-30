@@ -25,14 +25,13 @@ import org.xml.sax.Attributes;
  * @version $Revision$ $Date$
  */
 public class StyleSheetSourceContainer extends SourceContainer {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(StyleSheetSourceContainer.class);
 
     private static final String CSS_REPOSITORY_TYPE = "css";
 
-    public StyleSheetSourceContainer(ServletConfig config, Set modules,
+    public StyleSheetSourceContainer(ServletConfig config, Set<String> modules,
             String charSet, boolean canUseGzip, boolean canUseETag,
             boolean canUseHash, String repositoryVersion)
             throws ServletException {
@@ -134,9 +133,9 @@ public class StyleSheetSourceContainer extends SourceContainer {
             super(parameter);
         }
 
-        protected List filterFiles(List files) {
+        protected List<SourceFile> filterFiles(List<SourceFile> files) {
 
-            List l = super.filterFiles(files);
+            List<SourceFile> l = super.filterFiles(files);
 
             if (parameter == null) {
                 return l;

@@ -26,46 +26,49 @@ import org.xml.sax.Attributes;
 public class RepositoryManagerImpl extends AbstractProvider implements
         IRepositoryManager {
 
-    private static final String REVISION = "$Revision$";
-
     private static final String ID = "org.rcfaces.core.REPOSITORY_MANAGER";
 
     private static final String[] STRING_EMPTY_ARRAY = new String[0];
 
-    private final Map repositories = new HashMap(16);
+    private Map<String, String[]> repositories;
+
+    private Map<String, List<String>> repositoriesList = new HashMap<String, List<String>>(
+            16);
 
     public String getId() {
         return ID;
     }
 
+    @Override
     public void startup(FacesContext facesContext) {
         super.startup(facesContext);
 
         RcfacesContext rcfacesContext = RcfacesContext
                 .getInstance(facesContext);
 
-        String families[] = listFamilies();
-        for (int i = 0; i < families.length; i++) {
-            String family = families[i];
+        repositories = new HashMap<String, String[]>(repositoriesList.size());
+        for (Map.Entry<String, List<String>> entry : repositoriesList
+                .entrySet()) {
+            String familyName = entry.getKey();
+            List<String> l = entry.getValue();
 
-            List l = (List) repositories.get(family);
+            String r[] = l.toArray(new String[l.size()]);
 
-            String r[] = (String[]) l.toArray(new String[l.size()]);
-
-            repositories.put(family, r);
+            repositories.put(familyName, r);
         }
+        repositoriesList = null;
 
         rcfacesContext.setRepositoryManager(this);
     }
 
     public String[] listFamilies() {
-        Collection c = repositories.keySet();
+        Collection<String> c = repositories.keySet();
 
-        return (String[]) c.toArray(new String[c.size()]);
+        return c.toArray(new String[c.size()]);
     }
 
     public String[] listRepositoryLocations(String family) {
-        String rls[] = (String[]) repositories.get(family);
+        String rls[] = repositories.get(family);
         if (rls == null) {
             return STRING_EMPTY_ARRAY;
         }
@@ -73,18 +76,20 @@ public class RepositoryManagerImpl extends AbstractProvider implements
         return rls;
     }
 
+    @Override
     public void configureRules(Digester digester) {
         super.configureRules(digester);
 
         digester.addRule("rcfaces-config/repositories/repository", new Rule() {
-            private static final String REVISION = "$Revision$";
 
+            @Override
             public void begin(String namespace, String name,
                     Attributes attributes) throws Exception {
 
                 super.digester.push(new RepositoryBean());
             }
 
+            @Override
             public void end(String namespace, String name) throws Exception {
                 RepositoryBean adapterBean = (RepositoryBean) super.digester
                         .pop();
@@ -109,11 +114,11 @@ public class RepositoryManagerImpl extends AbstractProvider implements
                     + type + "\", location=\"" + location + "\")");
         }
 
-        List l = (List) repositories.get(type);
+        List<String> l = repositoriesList.get(type);
         if (l == null) {
-            l = new ArrayList();
+            l = new ArrayList<String>();
 
-            repositories.put(type, l);
+            repositoriesList.put(type, l);
         }
 
         l.add(location);
@@ -125,8 +130,6 @@ public class RepositoryManagerImpl extends AbstractProvider implements
      * @version $Revision$ $Date$
      */
     public static class RepositoryBean {
-
-        private static final String REVISION = "$Revision$";
 
         public String location;
 

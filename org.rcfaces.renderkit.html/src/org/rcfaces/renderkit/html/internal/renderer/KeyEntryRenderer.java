@@ -102,6 +102,15 @@ public class KeyEntryRenderer extends DataGridRenderer {
             formatValues.put("valueFormat", valueFormat);
         }
 
+        // Si on a déja un toolTipText, on ignore valueFormatTooltip
+        if (comboGridComponent.getToolTipText(facesContext) == null) {
+	        String valueFormatTooltip = comboGridComponent.getValueFormatTooltip(facesContext);
+	        if (valueFormatTooltip != null) {
+	            htmlWriter.writeAttributeNS("valueFormatTooltip", valueFormatTooltip);
+	            formatValues.put("valueFormatTooltip", valueFormatTooltip);
+	        }
+        }
+        
         String valueFormatLabel = comboGridComponent
                 .getValueFormatLabel(facesContext);
         if (valueFormatLabel != null) {
@@ -112,6 +121,7 @@ public class KeyEntryRenderer extends DataGridRenderer {
         Map formattedValues = null;
         String formattedValue = null;
         String formattedValueLabel = null;
+        String formattedValueTooltip = null;
         String convertedSelectedValue = null;
         Object selectedValue = comboGridComponent
                 .getSelectedValue(facesContext);
@@ -135,6 +145,8 @@ public class KeyEntryRenderer extends DataGridRenderer {
                             .get("valueFormat");
                     formattedValueLabel = (String) formattedValues
                             .get("valueFormatLabel");
+                    formattedValueTooltip = (String) formattedValues
+                    		.get("valueFormatTooltip");
                 }
 
                 if (formattedValue == null) {
@@ -287,6 +299,9 @@ public class KeyEntryRenderer extends DataGridRenderer {
             htmlWriter.writeValue(formattedValue);
         }
 
+        if (formattedValueTooltip != null) {
+        	htmlWriter.writeTitle(formattedValueTooltip);
+        }
         htmlWriter.endComponent();
 
         htmlWriter.endElement(IHtmlWriter.INPUT);
@@ -831,7 +846,7 @@ public class KeyEntryRenderer extends DataGridRenderer {
         super.declare(nameSpaceProperties);
 
         nameSpaceProperties.addAttributes(null, new String[] { "valueFormat",
-                "valueFormatLabel", "editable", "readOnly", "disabled",
+                "valueFormatLabel", "valueFormatTooltip", "editable", "readOnly", "disabled",
                 "maxTextLength", "suggestionDelayMs", "suggestionMinChars",
                 "noValueFormatLabel", "forLabel", "forceValidation",
                 "valueColumnId", "labelColumnId", "filtred",

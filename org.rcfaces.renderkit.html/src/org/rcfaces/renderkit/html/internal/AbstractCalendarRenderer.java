@@ -312,11 +312,11 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
         }
 
         if (value instanceof IAdaptable) {
-            return (Date) ((IAdaptable) value).getAdapter(Date.class, null);
+            return ((IAdaptable) value).getAdapter(Date.class, null);
         }
 
-        return (Date) RcfacesContext.getInstance(facesContext)
-                .getAdapterManager().getAdapter(value, Date.class, null);
+        return RcfacesContext.getInstance(facesContext).getAdapterManager()
+                .getAdapter(value, Date.class, null);
     }
 
     public static Date[] convertValueToDateArray(FacesContext facesContext,
@@ -353,7 +353,7 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
                 return null;
             }
 
-            List ds = new ArrayList(c.size());
+            List<Date> ds = new ArrayList<Date>(c.size());
 
             for (Iterator it = c.iterator(); it.hasNext();) {
                 Date next = convertValueToDate(facesContext, it.next());
@@ -365,10 +365,10 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
                 ds.add(next);
             }
 
-            return (Date[]) ds.toArray(new Date[ds.size()]);
+            return ds.toArray(new Date[ds.size()]);
         }
 
-        return (Date[]) RcfacesContext.getCurrentInstance().getAdapterManager()
+        return RcfacesContext.getCurrentInstance().getAdapterManager()
                 .getAdapter(value, Date[].class, null);
     }
 
@@ -407,10 +407,10 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
         }
 
         if (value instanceof IAdaptable) {
-            return (Period) ((IAdaptable) value).getAdapter(Period.class, null);
+            return ((IAdaptable) value).getAdapter(Period.class, null);
         }
 
-        return (Period) RcfacesContext.getCurrentInstance().getAdapterManager()
+        return RcfacesContext.getCurrentInstance().getAdapterManager()
                 .getAdapter(value, Period.class, null);
     }
 
@@ -448,7 +448,7 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
                 return null;
             }
 
-            List ds = new ArrayList(c.size());
+            List<Period> ds = new ArrayList<Period>(c.size());
 
             for (Iterator it = c.iterator(); it.hasNext();) {
                 Period next = convertValueToPeriod(facesContext, it.next());
@@ -460,11 +460,11 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
                 ds.add(next);
             }
 
-            return (Period[]) ds.toArray(new Period[ds.size()]);
+            return ds.toArray(new Period[ds.size()]);
         }
 
-        return (Period[]) RcfacesContext.getCurrentInstance()
-                .getAdapterManager().getAdapter(value, Period[].class, null);
+        return RcfacesContext.getCurrentInstance().getAdapterManager()
+                .getAdapter(value, Period[].class, null);
     }
 
     public void declare(INamespaceConfiguration nameSpaceProperties) {

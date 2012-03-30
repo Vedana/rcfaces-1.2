@@ -34,7 +34,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  * @version $Revision$ $Date$
  */
 public class CalendarRenderer extends AbstractCalendarRenderer {
-    private static final String REVISION = "$Revision$";
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.CALENDAR;
@@ -188,6 +187,7 @@ public class CalendarRenderer extends AbstractCalendarRenderer {
         }
     }
 
+    @SuppressWarnings("unchecked")
     protected void decode(IRequestContext context, UIComponent component,
             IComponentData componentData) {
         super.decode(context, component, componentData);
@@ -197,7 +197,7 @@ public class CalendarRenderer extends AbstractCalendarRenderer {
         Object dateValue = componentData.getProperty("value");
 
         if (dateValue instanceof Collection) {
-            Collection c = (Collection) dateValue;
+            Collection<Date> c = (Collection<Date>) dateValue;
 
             switch (calendarComponent.getMode(context.getFacesContext())) {
             case ICalendarModeCapability.DATE_CALENDAR_MODE:

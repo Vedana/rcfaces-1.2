@@ -22,11 +22,11 @@ import org.rcfaces.core.internal.lang.StringAppender;
  * @version $Revision$ $Date$
  */
 public final class HTMLCodec extends XMLCodec {
-    private static final String REVISION = "$Revision$";
 
     private static final String[] htmlArray = new String[256];
 
-    private static final Map codes = new HashMap(htmlArray.length);
+    private static final Map<String, String> codes = new HashMap<String, String>(
+            htmlArray.length);
 
     static {
         htmlArray[161] = "&iexcl;"; // inverted exclamation ¡ &#161; --> ¡
@@ -280,7 +280,7 @@ public final class HTMLCodec extends XMLCodec {
             sb.append(html.substring(pos, p));
 
             String key = html.substring(p, p1 + 1);
-            String v = (String) codes.get(key.toLowerCase());
+            String v = codes.get(key.toLowerCase());
 
             if (v == null) {
                 try {

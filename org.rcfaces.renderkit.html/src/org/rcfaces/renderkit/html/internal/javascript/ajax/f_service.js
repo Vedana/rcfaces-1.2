@@ -219,7 +219,6 @@ var __members={
 			
 			var content=request.f_getResponse();
 	
-			var state;
 			if (responseContentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)>=0) {
 				// Il nous faut un retour ... on a pas trop le choix concernant l'Eval		
 				content=f_core.WindowScopeEval(content);
@@ -244,7 +243,7 @@ var __members={
 	 * @method private
 	 */
 	_prepareRequest: function(request, requestId, parameter) {
-		var params;
+		var params=undefined;
 		var type;		
 				
 		if (parameter==null) {
@@ -269,7 +268,7 @@ var __members={
 			params.data=String(parameter);
 		}
 	
-		if (!type) {
+		if (type && params) {
 			var filterExpression=this.fa_getSerializedPropertiesExpression();
 			if (filterExpression) {
 				params.filterExpression=filterExpression;
@@ -294,7 +293,7 @@ var __members={
 		var request=new f_httpRequest(this, url);
 		var params=this._prepareRequest(request, requestId, parameter);
 		
-		var subProgressMonitor;
+		var subProgressMonitor=undefined;
 		if (progressMonitor) {
 			var total=(showLoading)?f_service._TOTAL_WORK_PROGRESS_MONITOR:1;
 
@@ -311,7 +310,7 @@ var __members={
 			onInit: function(request) {						
 				service._setRequestState(requestId, f_service.REQUESTING_STATE);
 				
-				if (showLoading) {
+				if (showLoading && subProgressMonitor) {
 					subProgressMonitor.f_work(f_service._INIT_PROGRESS_MONITOR);
 				}
 			},
@@ -326,7 +325,7 @@ var __members={
 							
 				service._setRequestState(requestId, f_service.LOADING_STATE);
 
-				if (showLoading) {
+				if (showLoading && subProgressMonitor) {
 					subProgressMonitor.f_work(f_service._LOADING_PROGRESS_MONITOR);
 				}
 			},
@@ -334,7 +333,7 @@ var __members={
 			 * @method public
 			 */
 	 		onLoad: function(request, content, contentType) {
-				if (showLoading) {
+				if (showLoading && subProgressMonitor) {
 					subProgressMonitor.f_work(f_service._LOADED_PROGRESS_MONITOR);
 				}
 

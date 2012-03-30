@@ -84,6 +84,7 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
         Map formattedValues = null;
         String formattedValue = null;
         String formattedValueLabel = null;
+        String formattedValueTooltip = null;
         String convertedSelectedValue = null;
         Object selectedValue = comboGridComponent
                 .getSelectedValue(facesContext);
@@ -104,6 +105,15 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
             }
         }
         formatValues.put("valueFormat", valueFormat);
+
+        // Si on a déja un toolTipText, on ignore valueFormatTooltip
+        String valueFormatTooltip = null;
+        if (comboGridComponent.getToolTipText(facesContext) == null) {
+	        valueFormatTooltip = comboGridComponent.getValueFormatTooltip(facesContext);
+	        if (valueFormatTooltip != null) {
+	            formatValues.put("valueFormatTooltip", valueFormatTooltip);
+	        }
+        }
 
         String valueFormatLabel = comboGridComponent
                 .getValueFormatLabel(facesContext);
@@ -133,6 +143,8 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
                             .get("valueFormat");
                     formattedValueLabel = (String) formattedValues
                             .get("valueFormatLabel");
+                    formattedValueTooltip = (String) formattedValues
+                            .get("valueFormatTooltip");
                 }
 
                 if (formattedValue == null) {
@@ -192,6 +204,10 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
 
         if (valueFormatLabel != null) {
             htmlWriter.writeAttributeNS("valueFormatLabel", valueFormatLabel);
+        }
+
+        if (valueFormatTooltip != null) {
+            htmlWriter.writeAttributeNS("valueFormatTooltip", valueFormatTooltip);
         }
 
         int rows = gridRenderContext.getRows();
@@ -407,7 +423,7 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
         htmlWriter.startElement(IHtmlWriter.TD);
         htmlWriter.writeClass(getMainStyleClassName() + "_inputCell");
 
-        writeInputSubComponent(htmlWriter, formattedValue, colWidth);
+        writeInputSubComponent(htmlWriter, formattedValue, colWidth, formattedValueTooltip);
 
         htmlWriter.endElement(IHtmlWriter.TD);
 
@@ -485,7 +501,7 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
     }
 
     protected void writeInputSubComponent(IHtmlWriter htmlWriter,
-            String formattedValue, int colWidth) throws WriterException {
+            String formattedValue, int colWidth, String title) throws WriterException {
 
         IComponentRenderContext componentRenderContext = htmlWriter
                 .getComponentRenderContext();
@@ -530,6 +546,10 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
 
         htmlWriter.writeClass(sa.toString());
 
+        if (title != null) {
+        	htmlWriter.writeTitle(title);
+        }
+        
         writeInputAttributes(htmlWriter);
 
         Integer tabIndex = comboGridComponent

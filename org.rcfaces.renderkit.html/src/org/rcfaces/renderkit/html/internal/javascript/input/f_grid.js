@@ -386,7 +386,7 @@ var __statics = {
 			return true;
 		}
 
-		var target;
+		var target=undefined;
 		if (evt.target) {
 			target = evt.target;
 
@@ -614,7 +614,6 @@ var __statics = {
 		var child = element.firstChild;
 		for (; child; child = child.nextSibling) {
 			switch (child.tagName.toLowerCase()) {
-			case "thead":
 			case "tbody":
 				if (child.firstChild) {
 					return child.rows[0];
@@ -1128,7 +1127,7 @@ var __statics = {
 		}
 
 		var ascending=undefined;
-		var cancel;
+		var cancel=undefined;
 
 		var code = evt.keyCode;
 		switch (code) {
@@ -2095,7 +2094,6 @@ var __members = {
 
 		this.f_initializeTableLayout();
 
-		// this._tbody.style.visibility="hidden";
 		this._tbody.style.display = "none";
 
 		this._blankImageURL = f_env.GetBlankImageURL();
@@ -2105,7 +2103,8 @@ var __members = {
 		this.f_openActionList(f_event.SELECTION);
 
 		if (this._sortManager) {
-			var sortIndicator = this.ownerDocument.createElement("DIV");
+			var sortIndicator = this.ownerDocument.createElement("A");
+			sortIndicator.href=f_core.JAVASCRIPT_VOID;
 			sortIndicator.className = "f_grid_sortManager";
 			sortIndicator._dataGrid = this;
 
@@ -2115,18 +2114,24 @@ var __members = {
 			sortIndicator.onmouseup = f_grid._SortIndication_onmouseup;
 
 			this._sortIndicator = sortIndicator;
-			f_core.AppendChild(this, sortIndicator);
+			
+			if (this.id!=this._scrollBody.id) {
+				f_core.InsertBefore(this, sortIndicator, this._scrollBody);
+			} else {
+				f_core.AppendChild(this, sortIndicator);
+			}
 
 			var img = this.ownerDocument.createElement("IMG");
 			img.className = "f_grid_sortManager_image";
 			img.src = this._blankImageURL;
-			img.alt = "*";
 			img.width = 16;
 			img.height = 16;
 
 			var resourceBundle = f_resourceBundle.Get(f_grid);
-			img.title = resourceBundle.f_get("SORT_CONFIGURATION");
-
+			var title = resourceBundle.f_get("SORT_CONFIGURATION");
+			img.alt = title;
+			sortIndicator.title = title;
+			
 			f_core.AppendChild(sortIndicator, img);
 		}
 
@@ -2256,7 +2261,7 @@ var __members = {
 		 */
 		var sortIndicator = this._sortIndicator;
 		if (sortIndicator) {
-			this._sortIndicator = undefined; // HtmlDivElement
+			this._sortIndicator = undefined; // HtmlAElement
 
 			sortIndicator._dataGrid = undefined;
 
@@ -2757,6 +2762,10 @@ var __members = {
 		if (this._interactiveShow) {
 			this.f_setFirst(this._first, this._cursor);
 		}
+		
+		if (this._thead) {
+			this._thead.style.display = "block";
+		}
 	},
 	/**
 	 * @method protected
@@ -3230,13 +3239,14 @@ var __members = {
 
 				if (shown) {
 					buttonClassName += " f_grid_additional_button_expanded";
-					additionalAlt = f_resourceBundle.Get(f_grid).f_get(
-							"COLLAPSE_BUTTON");
-
+					additionalAlt = f_resourceBundle.Get(f_grid).f_formatParams("COLLAPSE_BUTTON", {
+						value: row._lineHeader
+					});
 				} else {
 					buttonClassName += " f_grid_additional_button_collapsed";
-					additionalAlt = f_resourceBundle.Get(f_grid).f_get(
-							"EXPAND_BUTTON");
+					additionalAlt = f_resourceBundle.Get(f_grid).f_formatParams("EXPAND_BUTTON", {
+						value: row._lineHeader
+					});
 				}
 
 				if (this.f_isDisabled()) {
@@ -3248,7 +3258,7 @@ var __members = {
 				button.className = buttonClassName;
 			}
 			if (button.alt != additionalAlt) {
-				button.alt = additionalAlt;
+				button.title = button.alt = additionalAlt;
 			}
 		}
 	},
@@ -3329,7 +3339,9 @@ var __members = {
 					className.push(" f_grid_cell_cursor");
 				}
 			}
-
+			
+			className.push(" f_grid_cell_align_"+col._align);
+			
 			var sclassName = className.join("");
 
 			if (td.className != sclassName) {
@@ -3542,7 +3554,7 @@ var __members = {
 				return null;
 			}
 
-			var r;
+			var r=undefined;
 			if (indexByValue) {
 				if (rowIndex >= 0 && rowIndex < rows.length) {
 					r = rows[rowIndex];
@@ -3738,6 +3750,14 @@ var __members = {
 				column._col2 = undefined; // HTMLTableColElement
 
 				f_core.VerifyProperties(col);
+			}
+
+
+			var sorterImage = column._sorterImage;
+			if (sorterImage) {
+				column._sorterImage = undefined; // HTMLImageElement
+
+				f_core.VerifyProperties(sorterImage);
 			}
 
 			// column._align=undefined; // String
@@ -4806,21 +4826,28 @@ var __members = {
 
 		var suffix = "";
 		var wc = className;
-		var sortAlt = "";
+		var titleAlt = "";
+		var sorterAttributeName="defSorter";
 		if (column._ascendingOrder !== undefined) {
 			if (column._ascendingOrder) {
 				suffix = "_ascending";
-				sortAlt = f_resourceBundle.Get(f_grid).f_get("ASCENDING_SORT");
+				titleAlt = f_resourceBundle.Get(f_grid).f_get("ASCENDING_SORT");
+				sorterAttributeName="ascSorter";
 
 			} else {
 				suffix = "_descending";
-				sortAlt = f_resourceBundle.Get(f_grid).f_get("DESCENDING_SORT");
+				titleAlt = f_resourceBundle.Get(f_grid).f_get("DESCENDING_SORT");
+				sorterAttributeName="descSorter";
 			}
 			className += " " + className + suffix;
 			stextClassName += " " + stextClassName + suffix;
 
 		} else if (column._method || column._sorter) {
-			sortAlt = f_resourceBundle.Get(f_grid).f_get("NO_SORT");
+			titleAlt = f_resourceBundle.Get(f_grid).f_get("NO_SORT");
+		}
+		
+		if (column._sorterImage) {
+			column._sorterImage.src=f_core.GetAttributeNS(this, sorterAttributeName, "");
 		}
 
 		this._updateTitleCellBody(column);
@@ -4839,8 +4866,8 @@ var __members = {
 		if (box.className != stextClassName) {
 			box.className = stextClassName;
 		}
-		if (label.alt != sortAlt) {
-			label.alt = sortAlt;
+		if (label.title != titleAlt) {
+			label.title = titleAlt;
 		}
 
 		var image = column._image;
@@ -5344,8 +5371,12 @@ var __members = {
 		if (firstTBody && !firstTBody.firstChild) {
 			table.removeChild(firstTBody);
 		}
-		// this._tbody.style.visibility="hidden";
 		this._tbody.style.display = "none";
+
+		this._thead = table.tHead;
+		if (this._thead)  {
+			this._thead.style.display = "none";
+		}
 
 		var scrollBody = this;
 		var catchScrollEvent = false;
@@ -5397,7 +5428,7 @@ var __members = {
 		}
 		this._columnsLayoutPerformed = true;
 
-		var heads;
+		var heads=undefined;
 		var cols;
 
 		var columns = this._columns;
@@ -5471,6 +5502,7 @@ var __members = {
 							"f_grid.f_updateColumnsLayout: Invalid structure of header (no Label)");
 			column._label = label;
 
+					
 			if (column._sorter) {
 				// label.onmousedown=f_grid._Title_onMouseDown;
 				// label.onmouseup=f_grid._Title_onMouseUp;
@@ -5479,11 +5511,16 @@ var __members = {
 				label.onclick = f_grid._Title_onClick;
 				label.onkeydown = f_grid._Title_onKeyDown;
 				label._column = column;
+				
+				var tid=label.id.substring(0, label.id.lastIndexOf("::"))+"::sorter";
+				column._sorterImage=document.getElementById(tid);
 			}
 
-			var image = f_core.GetFirstElementByTagName(label, "img");
-			if (image) {
-				column._image = image;
+			if (column._hasImage) {
+				var image = f_core.GetFirstElementByTagName(label, "img");
+				if (image) {
+					column._image = image;
+				}
 			}
 
 			if (column._resizable) {
@@ -6773,7 +6810,7 @@ var __members = {
 						+ target + "'.");
 
 
-		var lastCell;
+		var lastCell=undefined;
 
 		for (; target; target = target.parentNode) {
 			if (target == this || target == this._scrollBody) {

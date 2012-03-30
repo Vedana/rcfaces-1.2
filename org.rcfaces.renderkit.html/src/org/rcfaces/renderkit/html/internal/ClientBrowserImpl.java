@@ -12,13 +12,12 @@ import org.apache.commons.logging.LogFactory;
  * @version $Revision$ $Date$
  */
 class ClientBrowserImpl implements IClientBrowser {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(ClientBrowserImpl.class);
 
     private final String userAgent;
 
-    private final int browserType;
+    private final BrowserType browserType;
 
     private final int majorVersion;
 
@@ -28,8 +27,11 @@ class ClientBrowserImpl implements IClientBrowser {
 
     private final String browserId;
 
-    ClientBrowserImpl(String userAgent, int browserType, int majorVersion,
-            int minorVersion, int releaseVersion, String browserId) {
+    private final Boolean isMobileVersion;
+
+    ClientBrowserImpl(String userAgent, BrowserType browserType,
+            int majorVersion, int minorVersion, int releaseVersion,
+            String browserId, Boolean isMobileVersion) {
 
         this.userAgent = userAgent;
         this.browserType = browserType;
@@ -37,9 +39,10 @@ class ClientBrowserImpl implements IClientBrowser {
         this.minorVersion = minorVersion;
         this.releaseVersion = releaseVersion;
         this.browserId = browserId;
+        this.isMobileVersion = isMobileVersion;
     }
 
-    public int getBrowserType() {
+    public BrowserType getBrowserType() {
         return browserType;
     }
 
@@ -63,10 +66,28 @@ class ClientBrowserImpl implements IClientBrowser {
         return browserId;
     }
 
+    public Boolean isMobileVersion() {
+        return isMobileVersion;
+    }
+
+    public boolean equalsType(IClientBrowser clientBrowser) {
+        if (clientBrowser == null) {
+            return false;
+        }
+
+        return getBrowserId().equals(clientBrowser.getBrowserId());
+    }
+
+    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + browserType;
+        result = prime * result
+                + ((browserId == null) ? 0 : browserId.hashCode());
+        result = prime * result
+                + ((browserType == null) ? 0 : browserType.hashCode());
+        result = prime * result
+                + ((isMobileVersion == null) ? 0 : isMobileVersion.hashCode());
         result = prime * result + majorVersion;
         result = prime * result + minorVersion;
         result = prime * result + releaseVersion;
@@ -75,6 +96,7 @@ class ClientBrowserImpl implements IClientBrowser {
         return result;
     }
 
+    @Override
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
@@ -83,7 +105,17 @@ class ClientBrowserImpl implements IClientBrowser {
         if (getClass() != obj.getClass())
             return false;
         ClientBrowserImpl other = (ClientBrowserImpl) obj;
+        if (browserId == null) {
+            if (other.browserId != null)
+                return false;
+        } else if (!browserId.equals(other.browserId))
+            return false;
         if (browserType != other.browserType)
+            return false;
+        if (isMobileVersion == null) {
+            if (other.isMobileVersion != null)
+                return false;
+        } else if (!isMobileVersion.equals(other.isMobileVersion))
             return false;
         if (majorVersion != other.majorVersion)
             return false;
@@ -99,19 +131,12 @@ class ClientBrowserImpl implements IClientBrowser {
         return true;
     }
 
-    public boolean equalsType(IClientBrowser clientBrowser) {
-        if (clientBrowser == null) {
-            return false;
-        }
-
-        return getBrowserId().equals(clientBrowser.getBrowserId());
-    }
-
     public String toString() {
-        return "[ClientBrowserImpl browserId=" + browserId + ", browserType="
+        return "[ClientBrowserImpl browserId='" + browserId + "', browserType="
                 + browserType + ", majorVersion=" + majorVersion
                 + ", minorVersion=" + minorVersion + ", releaseVersion="
-                + releaseVersion + ", userAgent=" + userAgent + "]";
+                + releaseVersion + ", isMobileVersion=" + isMobileVersion
+                + " userAgent='" + userAgent + "']";
     }
 
 }

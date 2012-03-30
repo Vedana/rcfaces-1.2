@@ -54,8 +54,14 @@ public interface IHtmlProcessContext extends IProcessContext {
 
     String getStyleSheetURI(String uri, boolean containsContextPath);
 
+    String getModuleStyleSheetURI(String moduleName, String uri,
+            boolean containsContextPath);
+
     IContentAccessor getStyleSheetContentAccessor(String uri,
             IContentFamily contentType);
+
+    IContentAccessor getModuleStyleSheetContentAccessor(String moduleName,
+            String uri, IContentFamily contentType);
 
     String getNameSpaceURI();
 

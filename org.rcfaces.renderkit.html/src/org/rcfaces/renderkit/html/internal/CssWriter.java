@@ -239,9 +239,9 @@ public class CssWriter extends FastWriter implements ICssWriter {
             writeFontFamily(fontName);
         }
 
-        if (fontSize != null) {
-            writeFontSize(fontSize);
-        }
+        // if (fontSize != null) {
+        // writeFontSize(fontSize);
+        // }
 
         if (fbold != null) {
             if (fbold.booleanValue()) {

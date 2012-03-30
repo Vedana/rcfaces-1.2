@@ -107,6 +107,11 @@
 	background: transparent url('tree/command.gif') no-repeat scroll 0 0;
 }
 
+.f_tree_command_leaf,
+.f_tree_command_leaf_selected {
+	cursor: default;
+}
+
 .f_tree_command_closed,
 .f_tree_command_closed_selected {
 	background-position: -16px 0;

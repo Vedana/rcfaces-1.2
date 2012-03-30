@@ -45,7 +45,7 @@ public class ImageRenderer extends AbstractCssRenderer {
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
-		writeFirstTooltipClientId(htmlWriter);
+        writeFirstTooltipClientId(htmlWriter);
 
         GeneratedImageInformation generatedImageInformation = null;
         IImageAccessors imageAccessors = (IImageAccessors) image
@@ -94,7 +94,8 @@ public class ImageRenderer extends AbstractCssRenderer {
         int imageWidth = image.getImageWidth(facesContext);
         int imageHeight = image.getImageHeight(facesContext);
 
-        if (imageWidth < 0 && imageHeight < 0) {
+        if (imageWidth < 0 && imageHeight < 0
+                && generatedImageInformation != null) {
             imageWidth = generatedImageInformation.getImageWidth();
             imageHeight = generatedImageInformation.getImageHeight();
         }

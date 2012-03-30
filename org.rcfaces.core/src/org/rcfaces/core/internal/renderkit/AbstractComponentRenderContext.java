@@ -17,7 +17,6 @@ import org.rcfaces.core.internal.manager.ITransientAttributesManager;
  */
 public abstract class AbstractComponentRenderContext implements
         IComponentRenderContext {
-    private static final String REVISION = "$Revision$";
 
     private static final String ATTRIBUTES_MAP = "org.rcfaces.core.RENDER_CONTEXT_ATTRIBUTES";
 
@@ -29,7 +28,7 @@ public abstract class AbstractComponentRenderContext implements
 
     private FacesContext facesContext;
 
-    private Map attributes;
+    private Map<String, Object> attributes;
 
     private boolean componentVisible = true;
 
@@ -80,7 +79,7 @@ public abstract class AbstractComponentRenderContext implements
 
     public Object setAttribute(String key, Object value) {
         if (attributes == null) {
-            attributes = new HashMap();
+            attributes = new HashMap<String, Object>();
 
             if (PUT_ATTRIBUTES_MAP_INTO_COMPONENT) {
                 if (component instanceof ITransientAttributesManager) {

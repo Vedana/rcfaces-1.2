@@ -3,6 +3,8 @@
  */
 package org.rcfaces.renderkit.html.internal;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.faces.context.FacesContext;
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
+import org.rcfaces.renderkit.html.internal.IClientBrowser.BrowserType;
 
 /**
  * 
@@ -22,20 +25,28 @@ public class ClientBrowserFactory {
     private static final Log LOG = LogFactory
             .getLog(ClientBrowserFactory.class);
 
-    private static final IClientBrowser USER_AGENTS[] = {
-            new ClientBrowserImpl(null, IClientBrowser.UNKNOWN_BROWSER_TYPE, 0,
-                    0, 0, ""),
-            new ClientBrowserImpl(null,
-                    IClientBrowser.MICROSOFT_INTERNET_EXPLORER_BROWSER_TYPE, 0,
-                    0, 0, "ie"),
-            new ClientBrowserImpl(null, IClientBrowser.FIREFOX_BROWSER_TYPE, 0,
-                    0, 0, "ff"),
-            new ClientBrowserImpl(null, IClientBrowser.SAFARI_BROWSER_TYPE, 0,
-                    0, 0, "sa"),
-            new ClientBrowserImpl(null, IClientBrowser.OPERA_BROWSER_TYPE, 0,
-                    0, 0, "op"),
-            new ClientBrowserImpl(null, IClientBrowser.CHROME_BROWSER_TYPE, 0,
-                    0, 0, "ch") };
+    private static final Map<BrowserType, IClientBrowser> USER_AGENTS = new HashMap<IClientBrowser.BrowserType, IClientBrowser>();
+    static {
+        USER_AGENTS.put(BrowserType.UNKNOWN, new ClientBrowserImpl(null,
+                BrowserType.UNKNOWN, 0, 0, 0, "", null));
+
+        USER_AGENTS.put(BrowserType.MICROSOFT_INTERNET_EXPLORER,
+                new ClientBrowserImpl(null,
+                        BrowserType.MICROSOFT_INTERNET_EXPLORER, 0, 0, 0, "ie",
+                        null));
+
+        USER_AGENTS.put(BrowserType.FIREFOX, new ClientBrowserImpl(null,
+                BrowserType.FIREFOX, 0, 0, 0, "ff", null));
+
+        USER_AGENTS.put(BrowserType.SAFARI, new ClientBrowserImpl(null,
+                BrowserType.SAFARI, 0, 0, 0, "sa", null));
+
+        USER_AGENTS.put(BrowserType.OPERA, new ClientBrowserImpl(null,
+                BrowserType.OPERA, 0, 0, 0, "op", null));
+
+        USER_AGENTS.put(BrowserType.CHROME, new ClientBrowserImpl(null,
+                BrowserType.CHROME, 0, 0, 0, "ch", null));
+    }
 
     private static ClientBrowserFactory SINGLETON = new ClientBrowserFactory();
 
@@ -47,11 +58,13 @@ public class ClientBrowserFactory {
 
     }
 
-    @SuppressWarnings("cast")
     public IClientBrowser get(FacesContext facesContext) {
 
-        String userAgent = (String) facesContext.getExternalContext()
-                .getRequestHeaderMap().get(ConfiguredHttpServlet.USER_AGENT);
+        Map<String, String> requestHeaderMap = facesContext
+                .getExternalContext().getRequestHeaderMap();
+
+        String userAgent = requestHeaderMap
+                .get(ConfiguredHttpServlet.USER_AGENT);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Get client browser from facesContext='" + userAgent
@@ -80,17 +93,18 @@ public class ClientBrowserFactory {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Get client browser from userAgent: userAgent is NULL");
             }
-            return USER_AGENTS[IClientBrowser.UNKNOWN_BROWSER_TYPE];
+            return USER_AGENTS.get(BrowserType.UNKNOWN);
         }
 
         String ua = userAgent.toLowerCase().trim();
 
-        int type = IClientBrowser.UNKNOWN_BROWSER_TYPE;
+        BrowserType type = BrowserType.UNKNOWN;
         String version = null;
+        Boolean isMobileVersion = null;
 
         int idx = ua.indexOf("msie");
         if (idx >= 0) {
-            type = IClientBrowser.MICROSOFT_INTERNET_EXPLORER_BROWSER_TYPE;
+            type = BrowserType.MICROSOFT_INTERNET_EXPLORER;
             int idx2 = ua.indexOf(';', idx);
             int idx3 = ua.indexOf(')', idx);
 
@@ -104,13 +118,13 @@ public class ClientBrowserFactory {
         } else {
             idx = ua.indexOf("opera");
             if (idx >= 0) {
-                type = IClientBrowser.OPERA_BROWSER_TYPE;
+                type = BrowserType.OPERA;
                 version = searchVersion(ua, idx);
 
             } else {
                 idx = ua.indexOf("chrome");
                 if (idx >= 0) {
-                    type = IClientBrowser.CHROME_BROWSER_TYPE;
+                    type = BrowserType.CHROME;
                     int idx2 = ua.indexOf('/', idx);
                     int idx3 = ua.indexOf(' ', idx);
                     if (idx3 < 0) {
@@ -125,7 +139,7 @@ public class ClientBrowserFactory {
                     idx = ua.indexOf("safari");
                     if (idx >= 0) {
                         idx = ua.indexOf("version");
-                        type = IClientBrowser.SAFARI_BROWSER_TYPE;
+                        type = BrowserType.SAFARI;
                         int idx2 = ua.indexOf('/', idx);
                         int idx3 = ua.indexOf(' ', idx);
                         if (idx3 < 0) {
@@ -139,7 +153,7 @@ public class ClientBrowserFactory {
                     } else {
                         idx = ua.indexOf("firefox");
                         if (idx >= 0) {
-                            type = IClientBrowser.FIREFOX_BROWSER_TYPE;
+                            type = BrowserType.FIREFOX;
                             int idx2 = ua.indexOf('/', idx);
                             int idx3 = ua.indexOf(' ', idx);
                             if (idx3 < 0) {
@@ -182,7 +196,8 @@ public class ClientBrowserFactory {
         }
 
         IClientBrowser clientBrowser = new ClientBrowserImpl(userAgent, type,
-                major, minor, release, USER_AGENTS[type].getBrowserId());
+                major, minor, release, USER_AGENTS.get(type).getBrowserId(),
+                isMobileVersion);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Get client browser from userAgent='" + userAgent
@@ -227,8 +242,7 @@ public class ClientBrowserFactory {
     }
 
     public IClientBrowser getClientBrowserById(String browserId) {
-        for (int i = 0; i < USER_AGENTS.length; i++) {
-            IClientBrowser clientBrowser = USER_AGENTS[i];
+        for (IClientBrowser clientBrowser : USER_AGENTS.values()) {
 
             if (clientBrowser.getBrowserId().equalsIgnoreCase(browserId) == false) {
                 continue;
@@ -237,6 +251,6 @@ public class ClientBrowserFactory {
             return clientBrowser;
         }
 
-        return USER_AGENTS[IClientBrowser.UNKNOWN_BROWSER_TYPE];
+        return USER_AGENTS.get(BrowserType.UNKNOWN);
     }
 }

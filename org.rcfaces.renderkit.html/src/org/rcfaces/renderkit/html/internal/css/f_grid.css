@@ -102,6 +102,7 @@
 
 .f_grid_tcell,
 .f_grid_sortManager {
+	display: block;
 	color: #000;
 	vertical-align: middle;
 	margin: 0;
@@ -184,6 +185,18 @@
 .f_grid_cell_cursor {
 	border: 1px dotted black;
 	padding: 0 3px;
+}
+
+.f_grid_cell_align_left {
+	text-align: left;	
+}
+
+.f_grid_cell_align_center {
+	text-align: center;
+}
+
+.f_grid_cell_align_right {
+	text-align: right;
 }
 
 .f_grid_label {
@@ -403,3 +416,30 @@
 .f_grid_wrap .f_dataGrid_row {
 	height: auto;
 }
+
+.f_grid_hidden_title {
+	position:absolute;
+	left:-10000px;
+	top:auto;
+	height:1px;
+	overflow:hidden;
+	line-height: 0px;
+}
+
+.f_grid_sorterHasImage .f_grid_stext_ascending {
+	background-image: none;
+}
+
+.f_grid_sorterHasImage .f_grid_stext_descending {
+	background-image: none;
+}
+
+.f_grid_sorterHasImage .f_grid_stext_sortable {
+	background-image: none;
+}
+
+.f_grid_tsorter {
+	position: absolute;
+	right: 0;
+}
+

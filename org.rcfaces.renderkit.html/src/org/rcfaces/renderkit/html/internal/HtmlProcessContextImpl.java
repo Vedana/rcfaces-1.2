@@ -157,6 +157,80 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
         }
     }
 
+    public IContentAccessor getModuleStyleSheetContentAccessor(
+            String moduleName, String uri, IContentFamily contentType) {
+        String url = getModuleStyleSheetURI(moduleName, uri, false);
+        if (url == null) {
+            return null;
+        }
+
+        IContentAccessor contentAccessor = ContentAccessorFactory
+                .createFromWebResource(getFacesContext(), url, contentType);
+
+        contentAccessor.setContentVersionHandler(null); // Pas besoin de version
+        // !
+        contentAccessor.setPathType(IContentPath.CONTEXT_PATH_TYPE);
+
+        return contentAccessor;
+    }
+
+    public final String getModuleStyleSheetURI(String moduleName, String uri,
+            boolean containsContextPath) {
+
+        ICssConfig cssConfig = StylesheetsServlet.getConfig(this, moduleName);
+
+        String styleSheetURI = cssConfig.getDefaultStyleSheetURI();
+        String path = null;
+
+        if (containsContextPath) {
+            IResourceProxyHandler resourceProxyHandler = RcfacesContext
+                    .getInstance(facesContext).getResourceProxyHandler();
+            if (resourceProxyHandler != null
+                    && resourceProxyHandler.isEnabled()
+                    && resourceProxyHandler.isFrameworkResourcesEnabled()) {
+
+                path = resourceProxyHandler.computeProxyedURL(facesContext,
+                        null, null, styleSheetURI);
+            }
+
+            if (path == null) {
+                path = FacesContext.getCurrentInstance().getExternalContext()
+                        .getRequestContextPath()
+                        + styleSheetURI;
+            }
+        } else {
+            path = styleSheetURI;
+        }
+
+        if (uri == null) {
+            return path;
+        }
+
+        StringAppender u = new StringAppender(path, uri.length() + 2);
+
+        if (uri != null && uri.length() > 0) {
+            if (uri.startsWith("/") == false) {
+                u.append('/');
+
+            } else if (u.charAt(u.length() - 1) != '/') {
+                u.append('/');
+            }
+            u.append(uri);
+        } else {
+            u.append('/');
+        }
+
+        String ret = u.toString();
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Compute stylesheet uri '" + uri
+                    + "' (containsContextPath=" + containsContextPath
+                    + ") => '" + ret + "'.");
+        }
+
+        return ret;
+    }
+
     public IContentAccessor getStyleSheetContentAccessor(String uri,
             IContentFamily contentType) {
         String url = getStyleSheetURI(uri, false);

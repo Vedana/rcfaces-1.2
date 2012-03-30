@@ -628,7 +628,8 @@ var __members = {
 		
 		f_core.Debug(f_suggestTextEntry, "_showProposal: result="+rs+" forceProposal="+this._forceProposal);
 		
-		if (!this._forceProposal && rs.length>1) {	
+		var mightShowPopup=(rs.length> 1 || (this._showPopupForOneResult && rs.length > 0));
+		if (!this._forceProposal && mightShowPopup) {	
 			this._showPopup(undefined, undefined, text);
 			return;
 		}
@@ -640,7 +641,7 @@ var __members = {
 			this.f_showProposal(rs[0]._label, rs[0]._value, rs[0], null);
 		}
 		
-		if (rs.length> 1 || (this._showPopupForOneResult && rs.length > 0)) {	
+		if (mightShowPopup) {	
 			this._showPopup(undefined, undefined, text);
 		}
 	},

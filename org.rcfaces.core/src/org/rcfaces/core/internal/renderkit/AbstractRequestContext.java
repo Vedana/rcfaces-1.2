@@ -21,7 +21,6 @@ import org.rcfaces.core.internal.Constants;
  */
 public abstract class AbstractRequestContext extends AbstractReleasable
         implements IRequestContext {
-    private static final String REVISION = "$Revision$";
 
     protected static final String EMPTY_PROPERTIES[] = new String[0];
 
@@ -29,7 +28,8 @@ public abstract class AbstractRequestContext extends AbstractReleasable
 
     private static final String LOCKED_CLIENT_ATTRIBUTES_ENABLED = LOCKED_CLIENT_ATTRIBUTES_PROPERTY;
 
-    private final Map componentDatas = new HashMap(32);
+    private final Map<String, Object> componentDatas = new HashMap<String, Object>(
+            32);
 
     private IComponentData emptyComponentData;
 
@@ -84,8 +84,8 @@ public abstract class AbstractRequestContext extends AbstractReleasable
     public static void setLockedAttributes(FacesContext facesContext,
             boolean lock) {
 
-        facesContext.getViewRoot().getAttributes().put(
-                LOCKED_CLIENT_ATTRIBUTES_ENABLED, Boolean.valueOf(lock));
+        facesContext.getViewRoot().getAttributes()
+                .put(LOCKED_CLIENT_ATTRIBUTES_ENABLED, Boolean.valueOf(lock));
     }
 
     /*
@@ -145,13 +145,13 @@ public abstract class AbstractRequestContext extends AbstractReleasable
      */
     protected static abstract class AbstractComponentData extends
             AbstractProperties implements IComponentData {
-        private static final String REVISION = "$Revision$";
     }
 
     public String getComponentId(UIComponent component) {
         return component.getClientId(getFacesContext());
     }
 
+    @Override
     public void release() {
         componentDatas.clear();
 

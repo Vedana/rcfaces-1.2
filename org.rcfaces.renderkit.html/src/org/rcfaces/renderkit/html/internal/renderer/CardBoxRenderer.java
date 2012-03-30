@@ -35,7 +35,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  * @version $Revision$ $Date$
  */
 public class CardBoxRenderer extends AbstractCssRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final String TABBED_PANE_JSF12_PROPERTY = "org.rcfaces.renderkit.html.TABBED_PANE_JSF1_2";
 
@@ -164,7 +163,7 @@ public class CardBoxRenderer extends AbstractCssRenderer {
         }
     }
 
-    protected void addUnlockProperties(Set unlockedProperties) {
+    protected void addUnlockProperties(Set<String> unlockedProperties) {
         super.addUnlockProperties(unlockedProperties);
 
         unlockedProperties.add(Properties.SELECTED);

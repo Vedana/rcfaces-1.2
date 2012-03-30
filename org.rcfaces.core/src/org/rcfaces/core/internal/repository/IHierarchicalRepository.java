@@ -17,7 +17,7 @@ public interface IHierarchicalRepository extends IRepository {
 
     int FILENAME_COLLECTION_TYPE = 1;
 
-    IHierarchicalFile[] computeFiles(Collection collection,
+    IHierarchicalFile[] computeFiles(Collection<IFile> collection,
             int typeOfCollection, IContext context);
 
     IModule[] listModules();

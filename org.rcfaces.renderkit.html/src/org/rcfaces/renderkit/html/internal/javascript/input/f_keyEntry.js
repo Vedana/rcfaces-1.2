@@ -68,7 +68,7 @@ var __members = {
 		this._forLabel=f_core.GetAttributeNS(this,"forLabel");
 		this._valueFormatLabel=f_core.GetAttributeNS(this,"valueFormatLabel");
 		this._noValueFormatLabel=f_core.GetAttributeNS(this,"noValueFormatLabel", "");
-		
+		this._valueFormatTooltip=f_core.GetAttributeNS(this,"valueFormatTooltip", "");
 		this._filtred=true;
 		
 		var input=this.f_getInput();
@@ -122,6 +122,7 @@ var __members = {
 		// this._valueFormat=undefined; // String
 		// this._valueFormatLabel=undefined; // String
 		// this._noValueFormatLabel=undefined; // String
+		// this._valueFormatTooltip=undefined; // String
 		// this._forLabel=undefined; // String
 		// this._formattedValue=undefined; // String
 		// this._inputValue=undefined; // String
@@ -360,7 +361,7 @@ var __members = {
 				
 				this.f_updateInputStyle();
 			}
-				
+
 			if (this._selectedValue && newInput!=this._selectedValue && (this.f_isEditable() && !this.f_isReadOnly())) {
 				f_core.Debug(f_keyEntry, "f_onSuggest: value='"+this._selectedValue+"' not equals input ='"+newInput+"'");
 				this._selectedValue=null;
@@ -427,7 +428,7 @@ var __members = {
 		this.f_updateInputStyle();
 		
 		this.f_getInput().value=value;
-		
+
 		if (!this._focus) {
 			this._verifyKey(value);
 		}
@@ -442,6 +443,24 @@ var __members = {
 		var label=f_core.FormatMessage(this._valueFormat, rowValues);
 	
 		this.fa_valueSelected(value, label, rowValues);
+	},
+	/**
+	 * @method private
+	 * @return void
+	 */
+	f_updateTitle: function(rowValues) {
+		var input=this.f_getInput();
+		if (this._valueFormatTooltip != "") {
+			if (this._keyErrored) {
+				input.title=f_resourceBundle.Get(f_keyEntry).f_formatParams("INVALIDKEY_ERROR_SUMMARY");
+			} else {
+				if (rowValues) {
+					input.title=f_core.FormatMessage(this._valueFormatTooltip,rowValues);
+				} else {
+					input.title=undefined;
+				}
+			}
+		}
 	},
 	/**
 	 * @method protected
@@ -478,6 +497,8 @@ var __members = {
 					labelComponent.f_setText(this._noValueFormatLabel);
 				}
 			}
+			this.f_updateTitle();
+			
 			this.f_fireEvent(f_event.SELECTION, null, null, null);		
 			return;
 		}
@@ -495,6 +516,7 @@ var __members = {
 				labelComponent.f_setText(f_core.FormatMessage(this._valueFormatLabel,rowValues));
 			}
 		}
+		this.f_updateTitle(rowValues);
 		
 		var input=this.f_getInput();
 		
@@ -591,6 +613,7 @@ var __members = {
 		var inputValue=input.value;
 		
 		this._inputValue=inputValue;
+
 		if (inputValue && !this._selectedValue && this.f_isEditable() && !this.f_isReadOnly()) {
 			this._verifyKey(inputValue);
 		}
@@ -600,6 +623,9 @@ var __members = {
 			if (labelComponent) {
 				labelComponent.f_setText(this._noValueFormatLabel);
 			}
+		}
+		if (!inputValue) {
+			this.f_updateTitle();
 		}
 		
 		if (!inputValue && this._emptyMessage) {

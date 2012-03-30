@@ -28,6 +28,7 @@ import org.rcfaces.core.component.capability.IMaxResultNumberCapability;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
+import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.lang.ApplicationException;
@@ -234,7 +235,7 @@ public class ItemsService extends AbstractHtmlService {
 
         CharArrayWriter cw = null;
         PrintWriter pw = printWriter;
-        if (LOG.isTraceEnabled()) {
+        if (true) {
             cw = new CharArrayWriter(2000);
             pw = new PrintWriter(cw);
         }
@@ -247,15 +248,39 @@ public class ItemsService extends AbstractHtmlService {
         jsWriter.write("var ").write(varId).write('=')
                 .writeCall("f_core", "GetElementByClientId")
                 .writeString(componentId).writeln(", document);");
-        dgr.encodeFilteredItems(jsWriter, component, filterProperties,
-                maxResultNumber);
 
-        if (LOG.isTraceEnabled()) {
+        try {
+            dgr.encodeFilteredItems(jsWriter, component, filterProperties,
+                    maxResultNumber);
+
             pw.flush();
 
-            LOG.trace(cw.toString());
+            if (LOG.isTraceEnabled()) {
+                LOG.trace(cw.toString());
+            }
 
             printWriter.write(cw.toCharArray());
+
+        } catch (RuntimeException ex) {
+            sendException(facesContext, printWriter, (UIComponent) component,
+                    componentId, ex);
         }
+    }
+
+    protected void sendException(FacesContext facesContext,
+            PrintWriter printWriter, UIComponent component, String componentId,
+            RuntimeException ex) throws WriterException {
+        IJavaScriptWriter jsWriter = new JavaScriptResponseWriter(facesContext,
+                printWriter, RESPONSE_CHARSET, component, componentId);
+
+        String varId = jsWriter.getComponentVarName();
+
+        jsWriter.write("var ").write(varId).write('=')
+                .writeCall("f_core", "GetElementByClientId")
+                .writeString(componentId).writeln(", document);");
+
+        jsWriter.writeCall(varId, "f_performErrorEvent").write(null).write(',')
+                .writeInt(1).write(',').writeString(ex.getMessage())
+                .writeln(");");
     }
 }

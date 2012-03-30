@@ -30,14 +30,13 @@ public class CommonsLogger implements ILogger {
     private static final Log LOG = LogFactory.getLog(CommonsLogger.class);
 
     private static final String DEFAULT_LOG_LEVEL_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".client.DEFAULT_LOG_LEVEL";
+            .getPackagePrefix() + ".client.DEFAULT_LOG_LEVEL";
 
     private static final String LOG_LEVELS_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".client.LOG_LEVELS";
+            .getPackagePrefix() + ".client.LOG_LEVELS";
 
-    private static final Map LOG_LEVELS = new HashMap(8);
+    private static final Map<String, Object> LOG_LEVELS = new HashMap<String, Object>(
+            8);
 
     static {
         LOG_LEVELS.put("FATAL", new Integer(0));

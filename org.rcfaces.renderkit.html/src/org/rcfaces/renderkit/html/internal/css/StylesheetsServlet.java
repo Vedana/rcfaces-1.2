@@ -50,7 +50,6 @@ import org.xml.sax.InputSource;
  * @version $Revision$ $Date$
  */
 public class StylesheetsServlet extends HtmlModulesServlet {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = 708578720264413327L;
 
@@ -69,7 +68,8 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
     private static final String CSS_CONFIG_PROPERTY = "org.rcfaces.renderkit.html.CSS_CONFIG";
 
-    private static Map extensions = new HashMap(10);
+    private static Map<String, String> extensions = new HashMap<String, String>(
+            10);
     {
         extensions.put("js", JAVASCRIPT_MIME_TYPE);
         extensions.put("txt", TEXT_PLAIN_MIME_TYPE);
@@ -82,7 +82,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
         extensions.put("cur", "image/x-win-bitmap");
     }
 
-    private static Set useFilterExtensions = new HashSet();
+    private static Set<String> useFilterExtensions = new HashSet<String>();
     static {
         useFilterExtensions.add(CSS_MIME_TYPE);
     }
@@ -93,26 +93,23 @@ public class StylesheetsServlet extends HtmlModulesServlet {
     }
 
     private static final String REPOSITORY_VERSION_SUPPORT_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".REPOSITORY_VERSION_SUPPORT";
+            .getPackagePrefix() + ".REPOSITORY_VERSION_SUPPORT";
 
     private static final String CONFIGURATION_VERSION_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".CONFIGURATION_VERSION";
+            .getPackagePrefix() + ".CONFIGURATION_VERSION";
 
     private static final String NO_CACHE_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".NO_CACHE";
+            .getPackagePrefix() + ".NO_CACHE";
 
     private static final int WORK_BUFFER_SIZE = 32000;
 
     private static final String CHARSET_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".CSS_CHARSET";
+            .getPackagePrefix() + ".CSS_CHARSET";
 
     private static final String DEFAULT_MODULE_NAME = "core";
 
-    private final Map bufferedResponse = new HashMap(1024);
+    private final Map<String, Object> bufferedResponse = new HashMap<String, Object>(
+            1024);
 
     private String styleSheetURI;
 
@@ -122,7 +119,8 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
     private boolean noCache = false;
 
-    private final Map moduleRepositories = new HashMap(8);
+    private final Map<String, ModuleRepository> moduleRepositories = new HashMap<String, ModuleRepository>(
+            8);
 
     // private Object useMetaContentStyleType;
 
@@ -146,8 +144,8 @@ public class StylesheetsServlet extends HtmlModulesServlet {
     public void init(ServletConfig config) throws ServletException {
 
         if (styleSheetURI == null) {
-            styleSheetURI = ServletTools.computeResourceURI(config
-                    .getServletContext(), null, getClass());
+            styleSheetURI = ServletTools.computeResourceURI(
+                    config.getServletContext(), null, getClass());
         }
 
         super.init(config);
@@ -168,24 +166,24 @@ public class StylesheetsServlet extends HtmlModulesServlet {
                     + "\"  for sevlet '" + getServletName() + "'");
         }
 
-        String repositoriesPaths[] = RcfacesContext.getInstance(
-                getServletContext(), null, null).getRepositoryManager()
-                .listRepositoryLocations("css");
+        String repositoriesPaths[] = RcfacesContext
+                .getInstance(getServletContext(), null, null)
+                .getRepositoryManager().listRepositoryLocations("css");
 
         for (int i = 0; i < repositoriesPaths.length; i++) {
             loadRepository(repositoriesPaths[i]);
         }
     }
 
+    @SuppressWarnings("unused")
     private void loadRepository(String repositoryPath) throws ServletException {
 
-        final Set modules = new HashSet();
+        final Set<String> modules = new HashSet<String>();
 
         Digester digester = new Digester();
         digester.setUseContextClassLoader(true);
 
         digester.setEntityResolver(new EntityResolver() {
-            private static final String REVISION = "$Revision$";
 
             public InputSource resolveEntity(String string, String string1) {
                 return new InputSource(new CharArrayReader(new char[0]));
@@ -195,7 +193,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
         final String[] baseDirectoryRef = new String[1];
 
-        final Set modulesHasAgentVary = new HashSet();
+        final Set<String> modulesHasAgentVary = new HashSet<String>();
 
         digester.addRule("repository", new Rule() {
 
@@ -339,10 +337,12 @@ public class StylesheetsServlet extends HtmlModulesServlet {
                 if (configurationVersion == null) {
                     configurationVersion = getParameter(CONFIGURATION_VERSION_PARAMETER);
                 }
-                if (configurationVersion!=null && configurationVersion.length()==0){
-                     throw new ServletException("Context-Param : org.rcfaces.renderkit.html.CONFIGURATION_VERSION can not be an empty string");
+                if (configurationVersion != null
+                        && configurationVersion.length() == 0) {
+                    throw new ServletException(
+                            "Context-Param : org.rcfaces.renderkit.html.CONFIGURATION_VERSION can not be an empty string");
                 }
-  
+
                 if (configurationVersion == null) {
                     if (DEFAULT_MODULE_NAME.equals(moduleName)) {
                         configurationVersion = Constants.getBuildId();
@@ -431,8 +431,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
     private StyleSheetSourceContainer getRepository(String moduleName)
             throws ServletException {
 
-        ModuleRepository mr = (ModuleRepository) moduleRepositories
-                .get(moduleName);
+        ModuleRepository mr = moduleRepositories.get(moduleName);
         if (mr == null) {
             throw new ServletException("Invalid module '" + moduleName + "'.");
         }
@@ -446,8 +445,8 @@ public class StylesheetsServlet extends HtmlModulesServlet {
         return mr.getStyleSheetRepository();
     }
 
-    private StyleSheetSourceContainer createStyleSheetRepository(Set modules)
-            throws ServletException {
+    private StyleSheetSourceContainer createStyleSheetRepository(
+            Set<String> modules) throws ServletException {
 
         /* Pas de version au niveau du container ! */
 
@@ -521,8 +520,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             url = url.substring(idx + 1);
         }
 
-        ModuleRepository moduleRepository = (ModuleRepository) moduleRepositories
-                .get(moduleName);
+        ModuleRepository moduleRepository = moduleRepositories.get(moduleName);
 
         if (moduleRepository == null) {
             LOG.error("Unknown module ! (moduleName='" + moduleName + "')");
@@ -599,7 +597,10 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             return;
         }
 
-        responseFacade.send(request, response, versionned);
+        // Ca ne peut être NULL !
+        if (responseFacade != null) {
+            responseFacade.send(request, response, versionned);
+        }
     }
 
     private Response record200(String url, InputStream in, int size,
@@ -614,7 +615,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
         }
         String extension = url.substring(ex + 1).toLowerCase();
 
-        String mimeType = (String) extensions.get(extension);
+        String mimeType = extensions.get(extension);
         if (mimeType == null) {
             throw new ServletException("Unknown extension '" + extension + "'");
         }
@@ -699,7 +700,6 @@ public class StylesheetsServlet extends HtmlModulesServlet {
      * @version $Revision$ $Date$
      */
     private class ResponseFacade {
-        private static final String REVISION = "$Revision$";
 
         private final String url;
 
@@ -1142,9 +1142,8 @@ public class StylesheetsServlet extends HtmlModulesServlet {
      * @version $Revision$ $Date$
      */
     protected static final class CssConfig implements ICssConfig {
-        private static final String REVISION = "$Revision$";
 
-        private final Map userAgentVaries;
+        private final Map<String, String> userAgentVaries;
 
         private final String styleSheetURI;
 
@@ -1157,7 +1156,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             this.styleSheetFileName = styleSheetFileName;
             this.styleSheetURI = styleSheetURI;
             this.charSet = charSet;
-            this.userAgentVaries = (userAgentVaryEnabled) ? (new HashMap())
+            this.userAgentVaries = (userAgentVaryEnabled) ? (new HashMap<String, String>())
                     : null;
         }
 
@@ -1173,7 +1172,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             String browserId = clientBrowser.getBrowserId();
 
             synchronized (userAgentVaries) {
-                String uri = (String) userAgentVaries.get(browserId);
+                String uri = userAgentVaries.get(browserId);
                 if (uri != null) {
                     return uri;
                 }
@@ -1204,13 +1203,13 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
         private final String baseURL;
 
-        private final Set modules;
+        private final Set<String> modules;
 
         private final String version;
 
         public ModuleRepository(
                 StyleSheetSourceContainer styleSheetSourceContainer,
-                String baseURL, String version, Set modules) {
+                String baseURL, String version, Set<String> modules) {
             this.version = version;
             this.styleSheetSourceContainer = styleSheetSourceContainer;
 
@@ -1226,7 +1225,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             return version;
         }
 
-        public Set listModules() {
+        public Set<String> listModules() {
             return modules;
         }
 

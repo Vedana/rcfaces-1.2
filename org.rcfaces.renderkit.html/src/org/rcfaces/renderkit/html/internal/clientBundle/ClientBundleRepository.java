@@ -38,7 +38,6 @@ import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
  */
 class ClientBundleRepository extends AbstractRepository implements
         IClientBundleRepository {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = -2753241645405120653L;
 
@@ -118,12 +117,9 @@ class ClientBundleRepository extends AbstractRepository implements
      * @version $Revision$ $Date$
      */
     private class ResourceContent extends AbstractContent {
-        private static final String REVISION = "$Revision$";
-
         private final byte buffer[];
 
         public ResourceContent(ResourceBundle resourceBundle, String baseName) {
-
             buffer = createBuffer(resourceBundle, baseName);
         }
 
@@ -147,8 +143,6 @@ class ClientBundleRepository extends AbstractRepository implements
      */
     private final class ResourceFile implements IFile {
 
-        private static final String REVISION = "$Revision$";
-
         private static final long serialVersionUID = -1983757389992719786L;
 
         private static final String ERROR_VERSION = "ERR";
@@ -157,7 +151,7 @@ class ClientBundleRepository extends AbstractRepository implements
 
         private String uri;
 
-        private Map localizedUris;
+        private Map<Locale, String> localizedUris;
 
         public ResourceFile(String baseName) {
             this.baseName = baseName;
@@ -185,7 +179,7 @@ class ClientBundleRepository extends AbstractRepository implements
                     return uri;
                 }
             } else if (localizedUris != null) {
-                String luri = (String) localizedUris.get(locale);
+                String luri = localizedUris.get(locale);
                 if (luri != null) {
                     return luri;
                 }
@@ -225,7 +219,7 @@ class ClientBundleRepository extends AbstractRepository implements
                 uri = ret;
             } else {
                 if (localizedUris == null) {
-                    localizedUris = new HashMap(4);
+                    localizedUris = new HashMap<Locale, String>(4);
                 }
 
                 localizedUris.put(locale, ret);
@@ -325,6 +319,7 @@ class ClientBundleRepository extends AbstractRepository implements
         return out.toByteArray();
     }
 
+    @SuppressWarnings("unused")
     private void verifyBundleKey(String key) {
         if (key.length() < 1) {
             throw new FacesException("Key of bundle can not be empty !");

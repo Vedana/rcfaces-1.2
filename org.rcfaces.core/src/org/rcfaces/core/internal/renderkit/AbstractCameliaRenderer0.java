@@ -54,7 +54,7 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
         }
     }
 
-    protected void addUnlockProperties(Set unlockedProperties) {
+    protected void addUnlockProperties(Set<String> unlockedProperties) {
     }
 
     public String[] getDefaultUnlockedProperties(FacesContext facesContext,
@@ -62,6 +62,7 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
         return defaultUnlockedProperties;
     }
 
+    @Override
     public final void encodeBegin(FacesContext context, UIComponent component)
             throws IOException {
 
@@ -115,6 +116,7 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
                 Boolean.TRUE);
     }
 
+    @Override
     public void encodeChildren(FacesContext facesContext, UIComponent component)
             throws IOException {
         if ((this instanceof IAsyncRenderer) == false) {
@@ -136,6 +138,7 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
         super.encodeChildren(facesContext, component);
     }
 
+    @Override
     public boolean getRendersChildren() {
         if ((this instanceof IAsyncRenderer) == false) {
             return false;
@@ -159,6 +162,7 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
         return true;
     }
 
+    @Override
     public void encodeEnd(FacesContext context, UIComponent component)
             throws IOException {
 
@@ -217,6 +221,7 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
 
     protected abstract IRequestContext getRequestContext(FacesContext context);
 
+    @Override
     public final void decode(FacesContext context, UIComponent component) {
 
         IRequestContext requestContext = getRequestContext(context);
@@ -296,6 +301,7 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
         return null;
     }
 
+    @Override
     public Object getConvertedValue(FacesContext context,
             UIComponent component, Object submittedValue)
             throws ConverterException {

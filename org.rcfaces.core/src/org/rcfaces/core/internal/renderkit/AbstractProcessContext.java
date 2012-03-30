@@ -296,8 +296,8 @@ public abstract class AbstractProcessContext implements IProcessContext {
     }
 
     protected static void setProcessContext(IProcessContext externalContext) {
-        Map requestMap = externalContext.getFacesContext().getExternalContext()
-                .getRequestMap();
+        Map<String, Object> requestMap = externalContext.getFacesContext()
+                .getExternalContext().getRequestMap();
         IProcessContext old = (IProcessContext) requestMap.put(
                 EXTERNAL_CONTEXT_PROPERTY, externalContext);
         if (old != null) {
@@ -386,7 +386,7 @@ public abstract class AbstractProcessContext implements IProcessContext {
         defaultAttributesLocale = PageConfiguration
                 .getDefaultLiteralLocale(facesContext);
 
-        Map applicationMap = facesContext.getExternalContext()
+        Map<String, Object> applicationMap = facesContext.getExternalContext()
                 .getApplicationMap();
 
         defaultTimeZone = getTimeZone(applicationMap,

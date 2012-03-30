@@ -24,8 +24,6 @@ import org.rcfaces.core.internal.webapp.URIParameters;
  */
 public abstract class AbstractRepository implements IRepository {
 
-    private static final String REVISION = "$Revision$";
-
     private static final long serialVersionUID = -3328226384749670660L;
 
     private static final Log LOG = LogFactory.getLog(AbstractRepository.class);
@@ -34,9 +32,9 @@ public abstract class AbstractRepository implements IRepository {
 
     private static final Object[] OBJECT_EMPTY_ARRAY = new Object[0];
 
-    protected final Map filesByName = new HashMap();
+    protected final Map<String, IFile> filesByName = new HashMap<String, IFile>();
 
-    protected final Map filesByURI = new HashMap();
+    protected final Map<String, IFile> filesByURI = new HashMap<String, IFile>();
 
     protected final String repositoryVersion;
 
@@ -61,11 +59,11 @@ public abstract class AbstractRepository implements IRepository {
     }
 
     public IFile getFileByURI(String uri) {
-        return (IFile) filesByURI.get(uri);
+        return filesByURI.get(uri);
     }
 
     public IFile getFileByName(String name) {
-        return (IFile) filesByName.get(name);
+        return filesByName.get(name);
     }
 
     public IContext createContext(Locale locale) {
@@ -80,9 +78,7 @@ public abstract class AbstractRepository implements IRepository {
      * @version $Revision$ $Date$
      */
     protected static class ContextImpl implements IContext {
-        private static final String REVISION = "$Revision$";
-
-        private final Set files = new HashSet(32);
+        private final Set<IFile> files = new HashSet<IFile>(32);
 
         private final Locale locale;
 
@@ -132,10 +128,10 @@ public abstract class AbstractRepository implements IRepository {
                 return null;
             }
 
-            Iterator it = files.iterator();
+            Iterator<IFile> it = files.iterator();
             Object ret[] = new Object[files.size()];
             for (int i = 0; it.hasNext();) {
-                IFile file = (IFile) it.next();
+                IFile file = it.next();
 
                 ret[i++] = ((File) file).getId();
             }
@@ -155,8 +151,6 @@ public abstract class AbstractRepository implements IRepository {
      */
     protected class File implements IFile {
 
-        private static final String REVISION = "$Revision$";
-
         private static final long serialVersionUID = -8396517787887070898L;
 
         private final String id;
@@ -173,7 +167,7 @@ public abstract class AbstractRepository implements IRepository {
 
         private LocalizedFile unlocalizedFile;
 
-        private Map localizedFiles;
+        private Map<Locale, LocalizedFile> localizedFiles;
 
         public File(String name, String filename, String unlocalizedURI,
                 Object unlocalizedContentLocation,
@@ -236,11 +230,10 @@ public abstract class AbstractRepository implements IRepository {
             locale = adaptLocale(locale, this);
 
             if (localizedFiles == null) {
-                localizedFiles = new HashMap(4);
+                localizedFiles = new HashMap<Locale, LocalizedFile>(4);
             }
 
-            LocalizedFile localizedFile = (LocalizedFile) localizedFiles
-                    .get(locale);
+            LocalizedFile localizedFile = localizedFiles.get(locale);
             if (localizedFile != null) {
                 return localizedFile;
             }
@@ -252,6 +245,7 @@ public abstract class AbstractRepository implements IRepository {
             return localizedFile;
         }
 
+        @Override
         public boolean equals(Object obj) {
             if (obj == this) {
                 return true;
@@ -265,6 +259,7 @@ public abstract class AbstractRepository implements IRepository {
             return f.filename.equals(filename);
         }
 
+        @Override
         public int hashCode() {
             return hashCode;
         }
@@ -276,8 +271,6 @@ public abstract class AbstractRepository implements IRepository {
      * @version $Revision$ $Date$
      */
     protected static class LocalizedFile {
-        private static final String REVISION = "$Revision$";
-
         private final String uri;
 
         private final Object[] contentLocations;

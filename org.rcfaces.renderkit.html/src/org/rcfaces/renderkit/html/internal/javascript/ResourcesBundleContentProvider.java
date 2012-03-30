@@ -19,7 +19,6 @@ import org.rcfaces.core.internal.util.FilteredContentProvider;
  * @version $Revision$ $Date$
  */
 public class ResourcesBundleContentProvider extends FilteredContentProvider {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(ResourcesBundleContentProvider.class);

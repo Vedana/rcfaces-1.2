@@ -22,7 +22,6 @@ import org.apache.commons.logging.LogFactory;
  * @version $Revision$ $Date$
  */
 public abstract class LocalizedSourceContainer extends SourceContainer {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(LocalizedSourceContainer.class);
@@ -30,7 +29,7 @@ public abstract class LocalizedSourceContainer extends SourceContainer {
     private final String localizedSuffixes[];
 
     public LocalizedSourceContainer(ServletConfig config,
-            String repositoryType, Set modules, String charSet,
+            String repositoryType, Set<String> modules, String charSet,
             boolean canUseGzip, boolean canUseETag, boolean canUseHash,
             String externalRepositoriesPropertyName, String repositoryVersion)
             throws ServletException {
@@ -40,6 +39,7 @@ public abstract class LocalizedSourceContainer extends SourceContainer {
         this.localizedSuffixes = getLocalizedSuffixes(config);
     }
 
+    @Override
     protected URL getURL(String path) {
         for (int i = 0; i < localizedSuffixes.length; i++) {
             String p = path + localizedSuffixes[i];
@@ -56,7 +56,7 @@ public abstract class LocalizedSourceContainer extends SourceContainer {
     protected String[] getLocalizedSuffixes(ServletConfig config) {
         Locale locale = Locale.getDefault();
 
-        List l = new ArrayList();
+        List<String> l = new ArrayList<String>();
 
         if (locale != null) {
             String language = locale.getLanguage();
@@ -76,6 +76,6 @@ public abstract class LocalizedSourceContainer extends SourceContainer {
 
         l.add("");
 
-        return (String[]) l.toArray(new String[l.size()]);
+        return l.toArray(new String[l.size()]);
     }
 }

@@ -117,8 +117,9 @@ public class JavaScriptRenderer extends AbstractFilesCollectorRenderer {
                 FileItemSource fileItemSource = sources[i];
 
                 IContentAccessor contentAccessor = ContentAccessorFactory
-                        .createFromWebResource(facesContext, fileItemSource
-                                .getSource(), IContentFamily.SCRIPT);
+                        .createFromWebResource(facesContext,
+                                fileItemSource.getSource(),
+                                IContentFamily.SCRIPT);
 
                 String source = contentAccessor.resolveURL(facesContext, null,
                         null);
@@ -203,14 +204,14 @@ public class JavaScriptRenderer extends AbstractFilesCollectorRenderer {
             return;
         }
 
-        final List files = new ArrayList(32);
+        final List<IFile> files = new ArrayList<IFile>(32);
 
         if (requiredFiles != null) {
             StringTokenizer st = new StringTokenizer(requiredFiles, ",");
             for (; st.hasMoreTokens();) {
                 String requiredFile = st.nextToken().trim();
 
-                IRepository.IFile file = repository.getSetByName(requiredFile);
+                IFile file = repository.getSetByName(requiredFile);
                 if (file == null) {
                     file = repository.getModuleByName(requiredFile);
                     if (file == null) {
@@ -319,7 +320,7 @@ public class JavaScriptRenderer extends AbstractFilesCollectorRenderer {
         }
 
         if (javaScriptRenderContext.isCollectorMode()) {
-            javaScriptRenderContext.appendRequiredFiles((IFile[]) files
+            javaScriptRenderContext.appendRequiredFiles(files
                     .toArray(new IFile[files.size()]));
 
             return;
