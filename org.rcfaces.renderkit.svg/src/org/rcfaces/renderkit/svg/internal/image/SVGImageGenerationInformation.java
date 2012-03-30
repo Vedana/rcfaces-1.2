@@ -18,7 +18,6 @@ import org.rcfaces.renderkit.svg.item.INodeItem;
  * @version $Revision$ $Date$
  */
 public class SVGImageGenerationInformation extends GenerationImageInformation {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(SVGImageGenerationInformation.class);

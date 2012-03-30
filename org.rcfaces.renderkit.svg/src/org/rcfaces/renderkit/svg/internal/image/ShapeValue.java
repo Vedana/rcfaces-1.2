@@ -26,7 +26,6 @@ import org.rcfaces.renderkit.svg.item.INodeItem;
  * @version $Revision$ $Date$
  */
 public class ShapeValue implements StateHolder {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(ShapeValue.class);
 
@@ -118,8 +117,8 @@ public class ShapeValue implements StateHolder {
                     sa.setLength(0);
                 }
 
-                sa.append(String.valueOf((int) fs[0])).append(',').append(
-                        String.valueOf((int) fs[1]));
+                sa.append(String.valueOf((int) fs[0])).append(',')
+                        .append(String.valueOf((int) fs[1]));
 
                 continue;
             }
