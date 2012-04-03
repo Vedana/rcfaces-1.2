@@ -333,7 +333,7 @@ var __members = {
 		//this._countToken=undefided; // Integer
 		//		this._lastKeyDate=undefined; // number
 		//		this._lastKey=undefined; // char
-
+		
 		this.f_super(arguments);
 	},
 	/**
@@ -646,12 +646,23 @@ var __members = {
 							var button=doc.createElement("img");
 							button.width=f_grid.IMAGE_WIDTH;
 							button.height=f_grid.IMAGE_HEIGHT;
-							button.src=this._blankImageURL;
+								button.src=this._blankImageURL;
 							button._row=row;
 							button.onclick=f_dataGrid._AdditionalInformationSelect;
 							button.onfocus=f_grid.GotFocus;
 							button.tabIndex=-1;
-							button.className="f_grid_additional_button";
+							
+							var cn="f_grid_additional_button";
+							
+							if (this._additionnalOpenImageURL===undefined) {								
+								this._additionnalOpenImageURL=f_core.GetAttributeNS(this, "addOpenImageURL", null);
+								if (this._additionnalOpenImageURL) {
+									this._additionnalCloseImageURL=f_core.GetAttributeNS(this, "addCloseImageURL");
+									
+									this._tbody.className+=" f_grid_additional_hasImage";
+								}
+							}
+							button.className=cn;
 							
 							row._additionalButton=button;
 

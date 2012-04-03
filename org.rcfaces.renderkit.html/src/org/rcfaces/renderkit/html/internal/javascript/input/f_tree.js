@@ -721,6 +721,8 @@ var __members = {
 //		this._defaultExpandedLeafImageURL=undefined; // string
 //		this._defaultSelectedLeafImageURL=undefined; // string
 //		this._defaultDisabledLeafImageURL=undefined; // string
+		
+		// this._commandImages=undefined; // Map<String, String>
 
 		var lis=this._nodesList;
 		this._nodesList=undefined;
@@ -1765,7 +1767,120 @@ var __members = {
 				input.disabled=node._disabled;
 			}
 		}
+		
+		var command=li._command;
+		if (command && this._hasCommandImages(li, command, node)) {
+			this._updateCommandImage(li, command, node, {
+				disabled: node._disabled,
+				container: !!node._container,
+				root: node._parentTreeNode==this,
+				leaf: !node._container,
+				cursor:  (this._focus && li==cursor),
+				opened: node._opened,
+				closed: (node.container && !node._opened),
+				selected: node._selected,
+				dndOver: li._dndOver,
+				labelOver: li._labelOver,
+				over: li._over,
+				depth: li._depth
+			});
+		}
 	},
+	/**
+	 * @method protected
+	 * @param HTMLElement li Graphical component
+	 * @param HTMLImageElement command Command component
+	 * @param Object node Logical treenode
+	 * @return Boolean
+	 */
+	_hasCommandImages: function(li, command, node) {
+		if (this._hasCommandImage!==undefined) {
+			return this._hasCommandImage;
+		}
+		
+		var url=f_core.GetAttributeNS(this, "cmdNode");
+		if (!url) {
+			this._hasCommandImage=false;
+			return false;
+		}
+		var images=new Object();
+		this._commandImages=images;
+		
+		images._cmdNodeImageURL=url;
+		
+		images._cmdNodeOpenedImageURL=f_core.GetAttributeNS(this, "cmdNodeOpened");
+		images._cmdNodeDisabledImageURL=f_core.GetAttributeNS(this, "cmdNodeDisabled");
+
+		images._cmdRootImageURL=f_core.GetAttributeNS(this, "cmdRoot");
+		images._cmdRootOpenedImageURL=f_core.GetAttributeNS(this, "cmdRootOpened");
+		images._cmdRootDisabledImageURL=f_core.GetAttributeNS(this, "cmdRootDisabled");
+
+		images._cmdLeafImageURL=f_core.GetAttributeNS(this, "cmdLeaf");
+		images._cmdLeafDisabledImageURL=f_core.GetAttributeNS(this, "cmdLeafDisabled");
+
+		this._hasCommandImage=true;
+		return true;
+	},
+	/**
+	 * @method hidden
+	 * @param Object properties
+	 * @return void
+	 */
+	_setCommandImagesURL: function(images) {
+		this._hasCommandImage=true;
+		this._commandImages=images;
+	},
+	/**
+	 * @method protected
+	 * @param HTMLElement li Graphical component
+	 * @param HTMLImageElement command Command component
+	 * @param Object node Logical treenode
+	 */
+	_updateCommandImage: function(li, command, node, properties) {
+		if (!this._hasCommandImage) {
+			return;
+		}
+		
+		var images=this._commandImages;
+		
+		var url=images._cmdNodeImageURL;
+		
+		if (properties.opened && images._cmdNodeOpenedImageURL) {
+			url=images._cmdNodeOpenedImageURL;
+		}
+		if (properties.disabled && images._cmdNodeDisabledImageURL) {
+			url=images._cmdNodeDisabledImageURL;
+		}
+		
+		if (properties.root) {
+			if (images._cmdRootImageURL) {
+				url=images._cmdRootImageURL;
+			}
+			if (properties.opened && images._cmdRootOpenedImageURL) {
+				url=images._cmdRootOpenedImageURL;
+			}
+			if (properties.disabled && images._cmdRootDisabledImageURL) {
+				url=images._cmdRootDisabledImageURL;
+			}
+		}
+		if (properties.leaf) {
+			if (images._cmdLeafImageURL) {
+				url=images._cmdLeafImageURL;
+			}
+			if (properties.disabled && images._cmdLeafDisabledImageURL) {
+				url=images._cmdLeafDisabledImageURL;
+			}	
+		}
+		
+		if (command.src!=url) {
+			command.src=url;
+		}
+	},
+	/**
+	 * @method protected
+	 * @param HTMLElement li Graphical component
+	 * @return void
+	 */
 	_updateCommandStyle: function(li) {
 		var command=li._command;
 		if (!command) {

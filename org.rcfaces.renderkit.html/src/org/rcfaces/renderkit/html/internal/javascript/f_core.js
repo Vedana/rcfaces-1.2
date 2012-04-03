@@ -233,6 +233,11 @@ var f_core = {
 	 * @field private static final String[]
 	 */
 	_CONTENT_LENGTHS: [ "border", "padding"],
+
+	/**
+	 * @field private static final String[]
+	 */
+	_PADDING_LENGTHS: [ "padding"],
 	
 	/**
 	 * @field hidden static boolean
@@ -4062,6 +4067,15 @@ var f_core = {
 	 */
 	ComputeContentBoxBorderLength: function(component, side) {
 		return f_core.ComputeCssLengths(component, f_core._CONTENT_LENGTHS, arguments);
+	},
+	/**
+	 * @method static
+	 * @param HTMLElement component
+	 * @param String... side
+	 * @return Number
+	 */
+	ComputePaddingBoxBorderLength: function(component, side) {
+		return f_core.ComputeCssLengths(component, f_core._PADDING_LENGTHS, arguments);
 	},
 	/**
 	 * @method private static

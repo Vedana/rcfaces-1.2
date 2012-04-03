@@ -155,3 +155,7 @@
 	height: 16px;
 }
 
+.f_tree_commandHasImages .f_tree_command {
+	background: none;
+}
+

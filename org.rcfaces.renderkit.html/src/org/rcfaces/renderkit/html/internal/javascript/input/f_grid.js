@@ -106,16 +106,6 @@ var __statics = {
 	/**
 	 * @field private static final Number
 	 */
-	_TEXT_RIGHT_PADDING : 4,
-
-	/**
-	 * @field private static final Number
-	 */
-	_TEXT_LEFT_PADDING : 4,
-
-	/**
-	 * @field private static final Number
-	 */
 	_SORT_PADDING : 18,
 
 	/**
@@ -1718,7 +1708,7 @@ var __statics = {
 			
 			column._widthSetted=w;
 	
-			var bw = w - f_grid._TEXT_RIGHT_PADDING - f_grid._TEXT_LEFT_PADDING;
+			var bw = w - this._textLeftRightPadding;
 			if (bw < 0) {
 				bw = 0;
 			}
@@ -1744,14 +1734,18 @@ var __statics = {
 			column._widthComputed=undefined;
 		
 			var w1=w - cellMargin;
-			head.style.width = ((w1>0)?w1:0) + "px";
+			w1=((w1>0)?w1:0)+"px";
+			head.style.width = w1;
 			
-			var w2=w - f_grid._TEXT_RIGHT_PADDING - f_grid._TEXT_LEFT_PADDING;
-			column._box.style.width = ((w2>0)?w2:0) + "px";
+			var w2 = w - this._textLeftRightPadding;
+			w2=((w2>0)?w2:0)+"px";
+			column._box.style.width = w2;
+			column._box.style.maxWidth = w2;
 			
-			var w3 = w - f_grid._TEXT_RIGHT_PADDING - f_grid._TEXT_LEFT_PADDING
-					+ twidth;
-			column._label.style.width = ((w3>0)?w3:0) + "px";
+			var w3 = w - this._textLeftRightPadding	+ twidth;
+			w3=((w3>0)?w3:0)+"px";
+			column._label.style.width = w3;
+			column._label.style.maxWidth = w3;
 	
 			var totalCols = 0;
 			var columns = dataGrid._columns;
@@ -2039,6 +2033,21 @@ var __members = {
 	 */
 	_keySearchColumnIndex : undefined,
 
+	/**
+	 * 
+	 * 
+	 * @field protected String
+	 */
+	_additionnalOpenImageURL: undefined,
+
+	/**
+	 * 
+	 * 
+	 * @field protected String
+	 */
+	_additionnalCloseImageURL: undefined,
+
+	
 	f_grid : function() {
 		this.f_super(arguments);
 
@@ -2089,7 +2098,7 @@ var __members = {
 		}
 		
 
-		this._sortPadding = f_core.GetNumberAttributeNS(this,"sortPadding",
+		this._sortPadding = f_core.GetNumberAttributeNS(this, "sortPadding",
 				f_grid._SORT_PADDING);
 
 		this.f_initializeTableLayout();
@@ -2274,6 +2283,9 @@ var __members = {
 		this._dragAndDropEngine=undefined;
 		this._targetDragAndDropEngine=undefined;
 		
+		// this._additionnalOpenImageURL=undefined; // String
+		// this._additionnalCloseImageURL=undefined; // String
+
 		// this._bodyDroppable=undefined; Boolean
 		// this._sortPadding=undefined; // Number
 		// this._serializedIndexes=undefined; // number[]
@@ -2305,6 +2317,8 @@ var __members = {
 		// this._loading=undefined; // Boolean
 		// this._emptyDataMessage=undefined; // String
 		// this._refreshFullUpdateState=undefined; // Boolean
+		
+		this._thead = undefined; // HTMLTheadElement
 		this._emptyDataMessageLabel = undefined; // HTMLElement
 
 		var waiting = this._waiting;
@@ -3229,6 +3243,7 @@ var __members = {
 			var buttonClassName = "f_grid_additional_button";
 
 			var additionalAlt = "";
+			var additionalImageURL=null;
 
 			var content = row._additionalContent;
 			if (content === false) {
@@ -3242,11 +3257,14 @@ var __members = {
 					additionalAlt = f_resourceBundle.Get(f_grid).f_formatParams("COLLAPSE_BUTTON", {
 						value: row._lineHeader
 					});
+					additionalImageURL=this._additionnalOpenImageURL;
+					
 				} else {
 					buttonClassName += " f_grid_additional_button_collapsed";
 					additionalAlt = f_resourceBundle.Get(f_grid).f_formatParams("EXPAND_BUTTON", {
 						value: row._lineHeader
 					});
+					additionalImageURL=this._additionnalCloseImageURL;
 				}
 
 				if (this.f_isDisabled()) {
@@ -3259,6 +3277,9 @@ var __members = {
 			}
 			if (button.alt != additionalAlt) {
 				button.title = button.alt = additionalAlt;
+			}
+			if (additionalImageURL) {
+				button.src=additionalImageURL;
 			}
 		}
 	},
@@ -4899,7 +4920,7 @@ var __members = {
 	 *            column
 	 * @param optional
 	 *            Number swidth
-	 * @return void
+	 * @retu_updatern void
 	 */
 	_updateTitleCellBody : function(column, swidth) {
 
@@ -4912,7 +4933,7 @@ var __members = {
 			swidth = parseInt(cw, 10);
 		}
 
-		swidth -= f_grid._TEXT_RIGHT_PADDING + f_grid._TEXT_LEFT_PADDING;
+		swidth -= this._textLeftRightPadding;
 		if (swidth < 0) {
 			swidth = 0;
 		}
@@ -4920,9 +4941,11 @@ var __members = {
 		var box = column._box;
 		var label = column._label;
 
-		var sw = swidth + "px";
-		if (box.style.width != sw) {
-			box.style.width = sw;
+		var boxStyle=box.style;
+		var sw = (swidth>0?swidth:0) + "px";
+		if (boxStyle.width != sw) {
+			boxStyle.width = sw;
+			boxStyle.maxWidth = sw;
 		}
 
 		var cursor = column._cursor;
@@ -4932,15 +4955,13 @@ var __members = {
 
 		if (column._ascendingOrder !== undefined) {
 			swidth -= this._sortPadding;
-			if (swidth < 0) {
-				swidth = 0;
-			}
-
-			sw = swidth + "px";
+			sw = (swidth>0?swidth:0) + "px";
 		}
 
-		if (label.style.width != sw) {
-			label.style.width = sw;
+		var labelStyle=label.style;
+		if (labelStyle.width != sw) {
+			labelStyle.width = sw;
+			labelStyle.maxWidth = sw;
 		}
 	},
 	fa_updateFilterProperties : function(filterProperties) {
@@ -5588,15 +5609,14 @@ var __members = {
 
 		var doc = this.ownerDocument;
 		
-		var cellMargin=f_grid._TEXT_RIGHT_PADDING+f_grid._TEXT_LEFT_PADDING;
-		
 		var t0 = new Date().getTime();
 
 		this._titleLayout = true;
 
-
 		var columns = this._columns;
 
+		var cellBorderLength=1;
+		
 		var t1 = new Date().getTime();
 
 		var total = 0; // total des colonnes fixe en px
@@ -5667,10 +5687,16 @@ var __members = {
 			
 			var w=column._widthSetted;
 			total += w;
+
 			
+			if (this._textLeftRightPadding===undefined) {
+				this._textLeftRightPadding=f_core.ComputePaddingBoxBorderLength(column._box.parentNode, "left", "right");
+//				alert(this._textLeftRightPadding);
+			}		
+
 			var cw = w;
 			if (f_core.IsWebkit(f_core.WEBKIT_SAFARI)){ 
-				cw -= cellMargin;
+				cw -= this._textLeftRightPadding;
 			}
 			if (cw < 0) {
 				cw = 0;
@@ -5795,7 +5821,7 @@ var __members = {
 				}
 				column._head.style.width = cw + "px";
 				this._updateTitleCellBody(column, w);
-				column._col.style.width=cw+"px";
+				column._col.style.width=(cw)+"px";
 				
 				total+=w;
 				

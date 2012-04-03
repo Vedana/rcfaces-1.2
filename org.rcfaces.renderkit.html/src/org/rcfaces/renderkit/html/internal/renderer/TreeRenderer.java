@@ -29,9 +29,11 @@ import org.rcfaces.renderkit.html.internal.AbstractSelectItemsRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
+import org.rcfaces.renderkit.html.internal.IHtmlComponentWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
+import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.ISelectItemNodeWriter;
@@ -170,6 +172,40 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
             }
         }
 
+        String commandImageURL = getCommandNodeImageURL(htmlWriter);
+        if (false && commandImageURL != null) {
+            htmlWriter.writeAttributeNS("cmdNode", commandImageURL);
+
+            String url = getCommandNodeOpenedImageURL(htmlWriter);
+            if (url != null) {
+                htmlWriter.writeAttributeNS("cmdNodeOpened", url);
+            }
+            url = getCommandNodeDisabledImageURL(htmlWriter);
+            if (url != null) {
+                htmlWriter.writeAttributeNS("cmdNodeDisabled", url);
+            }
+            url = getCommandRootImageURL(htmlWriter);
+            if (url != null) {
+                htmlWriter.writeAttributeNS("cmdRoot", url);
+            }
+            url = getCommandRootOpenedImageURL(htmlWriter);
+            if (url != null) {
+                htmlWriter.writeAttributeNS("cmdRootOpened", url);
+            }
+            url = getCommandRootDisabledImageURL(htmlWriter);
+            if (url != null) {
+                htmlWriter.writeAttributeNS("cmdRootDisabled", url);
+            }
+            url = getCommandLeafImageURL(htmlWriter);
+            if (url != null) {
+                htmlWriter.writeAttributeNS("cmdLeaf", url);
+            }
+            url = getCommandLeafDisabledImageURL(htmlWriter);
+            if (url != null) {
+                htmlWriter.writeAttributeNS("cmdLeafDisabled", url);
+            }
+        }
+
         htmlWriter.startElement(IHtmlWriter.A);
         htmlWriter.writeId(componentContext.getComponentClientId()
                 + FOCUS_ID_SUFFIX);
@@ -187,7 +223,12 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
         htmlWriter.startElement(IHtmlWriter.UL);
         htmlWriter.writeId(componentContext.getComponentClientId()
                 + BODY_ID_SUFFIX);
-        htmlWriter.writeClass("f_tree_body");
+
+        String className = "f_tree_body";
+        if (commandImageURL != null) {
+            className += " f_tree_commandHasImages";
+        }
+        htmlWriter.writeClass(className);
     }
 
     protected String getWAIRole() {
@@ -198,6 +239,62 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
         super.addUnlockProperties(unlockedProperties);
 
         unlockedProperties.add("cursor");
+    }
+
+    @Override
+    protected void encodeJavaScript(IJavaScriptWriter jsWriter)
+            throws WriterException {
+
+        super.encodeJavaScript(jsWriter);
+
+        if (true) {
+            String commandImageURL = getCommandNodeImageURL(jsWriter);
+            if (commandImageURL != null) {
+                IObjectLiteralWriter objWriter = jsWriter.writeMethodCall(
+                        "_setCommandImagesURL").writeObjectLiteral(false);
+
+                objWriter.writeSymbol("_cmdNodeImageURL").writeString(
+                        commandImageURL);
+
+                String url = getCommandNodeOpenedImageURL(jsWriter);
+                if (url != null) {
+                    objWriter.writeSymbol("_cmdNodeOpenedImageURL")
+                            .writeString(url);
+                }
+                url = getCommandNodeDisabledImageURL(jsWriter);
+                if (url != null) {
+                    objWriter.writeSymbol("_cmdNodeDisabledImageURL")
+                            .writeString(url);
+                }
+                url = getCommandRootImageURL(jsWriter);
+                if (url != null) {
+                    objWriter.writeSymbol("_cmdRootImageURL").writeString(url);
+                }
+                url = getCommandRootOpenedImageURL(jsWriter);
+                if (url != null) {
+                    objWriter.writeSymbol("_cmdRootOpenedImageURL")
+                            .writeString(url);
+                }
+                url = getCommandRootDisabledImageURL(jsWriter);
+                if (url != null) {
+                    objWriter.writeSymbol("_cmdRootDisabledImageURL")
+                            .writeString(url);
+                }
+                url = getCommandLeafImageURL(jsWriter);
+                if (url != null) {
+                    objWriter.writeSymbol("_cmdLeafImageURL").writeString(url);
+                }
+                url = getCommandLeafDisabledImageURL(jsWriter);
+                if (url != null) {
+                    objWriter.writeSymbol("_cmdLeafDisabledImageURL")
+                            .writeString(url);
+                }
+
+                objWriter.end().writeln(");");
+            }
+
+        }
+
     }
 
     protected void decode(IRequestContext context, UIComponent component,
@@ -381,6 +478,43 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
         }
 
         return ret;
+    }
+
+    protected String getCommandNodeImageURL(IHtmlComponentWriter htmlWriter) {
+        return null;
+    }
+
+    protected String getCommandNodeOpenedImageURL(
+            IHtmlComponentWriter htmlWriter) {
+        return null;
+    }
+
+    protected String getCommandNodeDisabledImageURL(
+            IHtmlComponentWriter htmlWriter) {
+        return null;
+    }
+
+    protected String getCommandRootImageURL(IHtmlComponentWriter htmlWriter) {
+        return null;
+    }
+
+    protected String getCommandRootOpenedImageURL(
+            IHtmlComponentWriter htmlWriter) {
+        return null;
+    }
+
+    protected String getCommandRootDisabledImageURL(
+            IHtmlComponentWriter htmlWriter) {
+        return null;
+    }
+
+    protected String getCommandLeafImageURL(IHtmlComponentWriter htmlWriter) {
+        return null;
+    }
+
+    protected String getCommandLeafDisabledImageURL(
+            IHtmlComponentWriter htmlWriter) {
+        return null;
     }
 
     public void declare(INamespaceConfiguration nameSpaceProperties) {

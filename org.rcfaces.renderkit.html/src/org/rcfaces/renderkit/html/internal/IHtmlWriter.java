@@ -12,7 +12,8 @@ import org.rcfaces.core.internal.renderkit.WriterException;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public interface IHtmlWriter extends ISgmlWriter, IHtmlElements {
+public interface IHtmlWriter extends ISgmlWriter, IHtmlComponentWriter,
+        IHtmlElements {
 
     String getRcfacesNamespace();
 
@@ -21,8 +22,6 @@ public interface IHtmlWriter extends ISgmlWriter, IHtmlElements {
     IJavaScriptEnableMode getJavaScriptEnableMode();
 
     void addSubFocusableComponent(String subComponentClientId);
-
-    IHtmlComponentRenderContext getHtmlComponentRenderContext();
 
     IHtmlWriter writeType(String type) throws WriterException;
 

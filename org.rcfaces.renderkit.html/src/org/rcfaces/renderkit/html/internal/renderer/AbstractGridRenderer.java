@@ -124,6 +124,7 @@ import org.rcfaces.renderkit.html.internal.IClientBrowser;
 import org.rcfaces.renderkit.html.internal.IClientBrowser.BrowserType;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
+import org.rcfaces.renderkit.html.internal.IHtmlComponentWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlElements;
 import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
@@ -1295,6 +1296,10 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         return GRID_MAIN_STYLE_CLASS + "_dataBody_scroll";
     }
 
+    protected String getColgroupClassName(IHtmlWriter htmlWriter) {
+        return GRID_MAIN_STYLE_CLASS + "_colgroup";
+    }
+
     protected String getDataBodyScrollId(IHtmlWriter htmlWriter) {
         return htmlWriter.getComponentRenderContext().getComponentClientId()
                 + DATA_BODY_SCROLL_ID_SUFFIX;
@@ -1540,28 +1545,88 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             }
         }
 
-        String columnTagName = IHtmlWriter.DIV;
+        boolean sorted = false;
+        boolean hasSortImageURL = (htmlWriter.getComponentRenderContext()
+                .getAttribute(GRID_HAS_SORTER_IMAGE_URL_PROPERTY) != null);
+        String sortImageURL = null;
+        String titleText = null;
 
+        if (column instanceof IOrderCapability) {
+
+            ISortedComponent sortedComponents[] = tableContext
+                    .listSortedComponents();
+            for (int i = 0; i < sortedComponents.length; i++) {
+                if (sortedComponents[i].getComponent() != column) {
+                    continue;
+                }
+
+                if (((IOrderCapability) column).isAscending()) {
+                    titleText = getResourceBundleValue(htmlWriter,
+                            "f_grid.DESCENDING_SORT");
+
+                    if (hasSortImageURL) {
+                        sortImageURL = getAscendingSorterImageURL(htmlWriter);
+                    }
+
+                } else {
+                    titleText = getResourceBundleValue(htmlWriter,
+                            "f_grid.ASCENDING_SORT");
+
+                    if (hasSortImageURL) {
+                        sortImageURL = getDescendingSorterImageURL(htmlWriter);
+                    }
+                }
+
+                sorted = true;
+                break;
+            }
+            if (hasSortImageURL) {
+                sortImageURL = getNormalSorterImageURL(htmlWriter);
+            }
+
+        }
+
+        String columnTagName = IHtmlWriter.DIV;
         boolean command = false;
         if (tableContext.getSortCommand(columnIndex) != null) {
             columnTagName = IHtmlWriter.A;
             command = true;
         }
-        htmlWriter.startElement(columnTagName);
 
-        boolean sorted = false;
+        if (hasSortImageURL && command) {
+            htmlWriter.startElement(IHtmlElements.IMG);
 
-        String sortImageURL = null;
-        boolean hasSortImageURL = (htmlWriter.getComponentRenderContext()
-                .getAttribute(GRID_HAS_SORTER_IMAGE_URL_PROPERTY) != null);
+            htmlWriter.writeId(getTitleDivSorterId(htmlWriter, column));
+            htmlWriter
+                    .writeClass(getTitleDivSorterClassName(htmlWriter, column));
 
-        if (command) {
-            if (columnTagName == IHtmlWriter.A) {
-                htmlWriter.writeHRef(IHtmlWriter.JAVASCRIPT_VOID);
+            if (sortImageURL == null) {
+                sortImageURL = htmlWriter.getHtmlComponentRenderContext()
+                        .getHtmlRenderContext().getHtmlProcessContext()
+                        .getStyleSheetURI(BLANK_IMAGE_URL, true);
             }
 
+            htmlWriter.writeSrc(sortImageURL);
+
+            int imageWidth = getSorterImageWidth(htmlWriter);
+            int imageHeight = getSorterImageHeight(htmlWriter);
+            if (imageWidth >= 0 && imageHeight >= 0) {
+                htmlWriter.writeWidth(imageWidth).writeHeight(imageHeight);
+            }
+
+            htmlWriter.endElement(IHtmlElements.IMG);
+        }
+
+        htmlWriter.startElement(columnTagName);
+
+        htmlWriter.writeId(getTitleDivTextId(htmlWriter, column));
+        htmlWriter.writeClass(getTitleDivTextClassName(htmlWriter, column));
+
+        if (command) {
+            htmlWriter.writeHRef(IHtmlWriter.JAVASCRIPT_VOID);
+
             UIComponent component = htmlWriter.getComponentRenderContext()
-                    .getComponent();
+                    .getComponent(); // On prend le même TabIndex
             if (component instanceof ITabIndexCapability) {
                 Integer tabIndex = ((ITabIndexCapability) component)
                         .getTabIndex();
@@ -1571,53 +1636,12 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                 }
             }
 
-            if (column instanceof IOrderCapability) {
-                String titleText = null;
-
-                ISortedComponent sortedComponents[] = tableContext
-                        .listSortedComponents();
-                for (int i = 0; i < sortedComponents.length; i++) {
-                    if (sortedComponents[i].getComponent() != column) {
-                        continue;
-                    }
-
-                    if (((IOrderCapability) column).isAscending()) {
-                        titleText = getResourceBundleValue(htmlWriter,
-                                "f_grid.DESCENDING_SORT");
-
-                        if (hasSortImageURL) {
-                            sortImageURL = getAscendingSorterImageURL(htmlWriter);
-                        }
-
-                    } else {
-                        titleText = getResourceBundleValue(htmlWriter,
-                                "f_grid.ASCENDING_SORT");
-
-                        if (hasSortImageURL) {
-                            sortImageURL = getDescendingSorterImageURL(htmlWriter);
-                        }
-                    }
-
-                    sorted = true;
-                    break;
-                }
-
-                if (titleText == null) {
-                    titleText = getResourceBundleValue(htmlWriter,
-                            "f_grid.NO_SORT");
-
-                    if (hasSortImageURL) {
-                        sortImageURL = getNormalSorterImageURL(htmlWriter);
-                    }
-                }
-
-                htmlWriter.writeTitle(titleText);
+            if (titleText == null) {
+                titleText = getResourceBundleValue(htmlWriter, "f_grid.NO_SORT");
             }
 
+            htmlWriter.writeTitle(titleText);
         }
-
-        htmlWriter.writeId(getTitleDivTextId(htmlWriter, column));
-        htmlWriter.writeClass(getTitleDivTextClassName(htmlWriter, column));
 
         String halign = null;
         if (column instanceof IAlignmentCapability) {
@@ -1702,7 +1726,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             }
         }
 
-        htmlWriter.startElement(IHtmlElements.SPAN);
+        // htmlWriter.startElement(IHtmlElements.SPAN);
         String text = null;
         if (column instanceof ITextCapability) {
             text = ((ITextCapability) column).getText();
@@ -1715,31 +1739,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             htmlWriter.writeText(ISgmlWriter.NBSP);
             htmlWriter.write(' ');
         }
-        htmlWriter.endElement(IHtmlElements.SPAN);
-
-        if (hasSortImageURL) {
-            htmlWriter.startElement(IHtmlElements.IMG);
-
-            htmlWriter.writeId(getTitleDivSorterId(htmlWriter, column));
-            htmlWriter
-                    .writeClass(getTitleDivSorterClassName(htmlWriter, column));
-
-            if (sortImageURL == null) {
-                sortImageURL = htmlWriter.getHtmlComponentRenderContext()
-                        .getHtmlRenderContext().getHtmlProcessContext()
-                        .getStyleSheetURI(BLANK_IMAGE_URL, true);
-            }
-
-            htmlWriter.writeSrc(sortImageURL);
-
-            int imageWidth = getSorterImageWidth(htmlWriter);
-            int imageHeight = getSorterImageHeight(htmlWriter);
-            if (imageWidth >= 0 && imageHeight >= 0) {
-                htmlWriter.writeWidth(imageWidth).writeHeight(imageHeight);
-            }
-
-            htmlWriter.endElement(IHtmlElements.IMG);
-        }
+        // htmlWriter.endElement(IHtmlElements.SPAN);
 
         htmlWriter.endElement(columnTagName);
 
@@ -1811,6 +1811,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
         UIColumn dcs[] = new UIColumn[columns.length];
 
+        htmlWriter.startElement(IHtmlElements.COLGROUP);
+        htmlWriter.writeClass(getColgroupClassName(htmlWriter));
         // Colgroup
         int is = 0;
         for (int i = 0; i < columns.length; i++) {
@@ -1823,6 +1825,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             dcs[is++] = dc;
             encodeTitleCol(htmlWriter, dc, gridRenderContext, i);
         }
+        htmlWriter.endElement(IHtmlElements.COLGROUP);
     }
 
     /**
@@ -3135,23 +3138,23 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         return writer;
     }
 
-    protected String getAscendingSorterImageURL(IHtmlWriter writer) {
+    protected String getAscendingSorterImageURL(IHtmlComponentWriter writer) {
         return null;
     }
 
-    protected String getDescendingSorterImageURL(IHtmlWriter writer) {
+    protected String getDescendingSorterImageURL(IHtmlComponentWriter writer) {
         return null;
     }
 
-    protected String getNormalSorterImageURL(IHtmlWriter writer) {
+    protected String getNormalSorterImageURL(IHtmlComponentWriter writer) {
         return null;
     }
 
-    protected int getSorterImageHeight(IHtmlWriter htmlWriter) {
+    protected int getSorterImageHeight(IHtmlComponentWriter htmlWriter) {
         return -1;
     }
 
-    protected int getSorterImageWidth(IHtmlWriter htmlWriter) {
+    protected int getSorterImageWidth(IHtmlComponentWriter htmlWriter) {
         return -1;
     }
 

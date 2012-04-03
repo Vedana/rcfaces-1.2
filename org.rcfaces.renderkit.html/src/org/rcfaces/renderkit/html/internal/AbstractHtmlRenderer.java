@@ -81,6 +81,8 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
 
     private static final String RIGHT_TO_LEFT = "RTL";
 
+    private static final String DEFAULT_MODULE_IMAGE_URL_PROPERTY = "--default--";
+
     protected void encodeBegin(IComponentWriter writer) throws WriterException {
         super.encodeBegin(writer);
 
@@ -994,6 +996,37 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
     public Object decodeEventObject(IRequestContext requestContext,
             UIComponent component, IEventData eventData) {
         return null;
+    }
+
+    protected final String computeAndCacheImageURL(IHtmlComponentWriter writer,
+            String moduleName, String path) {
+
+        if (moduleName == null) {
+            moduleName = DEFAULT_MODULE_IMAGE_URL_PROPERTY;
+        }
+
+        String key = "imageURL|" + moduleName + "|" + path;
+
+        String url = (String) writer.getComponentRenderContext().getAttribute(
+                key);
+        if (url != null) {
+            return url;
+        }
+
+        IHtmlProcessContext htmlProcessContext = ((IHtmlComponentRenderContext) writer
+                .getComponentRenderContext()).getHtmlRenderContext()
+                .getHtmlProcessContext();
+
+        if (moduleName == DEFAULT_MODULE_IMAGE_URL_PROPERTY) {
+            url = htmlProcessContext.getStyleSheetURI(path, true);
+        } else {
+            url = htmlProcessContext.getModuleStyleSheetURI(moduleName, path,
+                    true);
+        }
+
+        writer.getComponentRenderContext().setAttribute(key, url);
+
+        return url;
     }
 
     public void declare(INamespaceConfiguration nameSpaceProperties) {
