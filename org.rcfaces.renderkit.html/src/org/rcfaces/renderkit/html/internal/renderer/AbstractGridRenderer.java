@@ -2699,10 +2699,6 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             ret = new String[values.length];
         }
 
-        if (values == null) {
-            return ret;
-        }
-
         for (int i = 0; i < values.length; i++) {
             if (values[i] == null) {
                 continue;
