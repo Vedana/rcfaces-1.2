@@ -1852,6 +1852,14 @@ var __members = {
 			url=images._cmdNodeDisabledImageURL;
 		}
 		
+		if (properties.leaf) {
+			if (images._cmdLeafImageURL) {
+				url=images._cmdLeafImageURL;
+			}
+			if (properties.disabled && images._cmdLeafDisabledImageURL) {
+				url=images._cmdLeafDisabledImageURL;
+			}	
+		}
 		if (properties.root) {
 			if (images._cmdRootImageURL) {
 				url=images._cmdRootImageURL;
@@ -1862,14 +1870,6 @@ var __members = {
 			if (properties.disabled && images._cmdRootDisabledImageURL) {
 				url=images._cmdRootDisabledImageURL;
 			}
-		}
-		if (properties.leaf) {
-			if (images._cmdLeafImageURL) {
-				url=images._cmdLeafImageURL;
-			}
-			if (properties.disabled && images._cmdLeafDisabledImageURL) {
-				url=images._cmdLeafDisabledImageURL;
-			}	
 		}
 		
 		if (command.src!=url) {
