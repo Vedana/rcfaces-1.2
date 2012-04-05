@@ -32,7 +32,7 @@ var __statics = {
 		
 		return combo.f_fireEvent(f_event.SELECTION, evt, null, combo.f_getValue(), combo);
 	}
-}
+};
 
 var __members = {
 
@@ -562,8 +562,7 @@ var __members = {
 	 */
 	fa_cancelFilterRequest: function() {
 	}
-}
-
+};
 
 new f_class("f_abstractList", {
 	extend: f_input,
