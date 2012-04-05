@@ -109,10 +109,11 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
         // Si on a déja un toolTipText, on ignore valueFormatTooltip
         String valueFormatTooltip = null;
         if (comboGridComponent.getToolTipText(facesContext) == null) {
-	        valueFormatTooltip = comboGridComponent.getValueFormatTooltip(facesContext);
-	        if (valueFormatTooltip != null) {
-	            formatValues.put("valueFormatTooltip", valueFormatTooltip);
-	        }
+            valueFormatTooltip = comboGridComponent
+                    .getValueFormatTooltip(facesContext);
+            if (valueFormatTooltip != null) {
+                formatValues.put("valueFormatTooltip", valueFormatTooltip);
+            }
         }
 
         String valueFormatLabel = comboGridComponent
@@ -207,7 +208,8 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
         }
 
         if (valueFormatTooltip != null) {
-            htmlWriter.writeAttributeNS("valueFormatTooltip", valueFormatTooltip);
+            htmlWriter.writeAttributeNS("valueFormatTooltip",
+                    valueFormatTooltip);
         }
 
         int rows = gridRenderContext.getRows();
@@ -271,7 +273,8 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
 
         String clientValidatorParameters = constructClientValidatorParameters(
                 htmlWriter, comboGridComponent);
-        if (clientValidatorParameters != null) {
+        if (clientValidatorParameters != null
+                && clientValidatorParameters.length() > 0) {
             htmlWriter.writeAttributeNS("clientValidator",
                     clientValidatorParameters);
         }
@@ -343,8 +346,8 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
         }
 
         DataModel dataModel = gridRenderContext.getDataModel();
-        IFiltredModel filtredDataModel = (IFiltredModel) getAdapter(
-                IFiltredModel.class, dataModel);
+        IFiltredModel filtredDataModel = getAdapter(IFiltredModel.class,
+                dataModel);
         if (filtredDataModel != null) {
             htmlWriter.writeAttribute("v:filtred", true);
 
@@ -423,7 +426,8 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
         htmlWriter.startElement(IHtmlWriter.TD);
         htmlWriter.writeClass(getMainStyleClassName() + "_inputCell");
 
-        writeInputSubComponent(htmlWriter, formattedValue, colWidth, formattedValueTooltip);
+        writeInputSubComponent(htmlWriter, formattedValue, colWidth,
+                formattedValueTooltip);
 
         htmlWriter.endElement(IHtmlWriter.TD);
 
@@ -501,7 +505,8 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
     }
 
     protected void writeInputSubComponent(IHtmlWriter htmlWriter,
-            String formattedValue, int colWidth, String title) throws WriterException {
+            String formattedValue, int colWidth, String title)
+            throws WriterException {
 
         IComponentRenderContext componentRenderContext = htmlWriter
                 .getComponentRenderContext();
@@ -547,9 +552,9 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
         htmlWriter.writeClass(sa.toString());
 
         if (title != null) {
-        	htmlWriter.writeTitle(title);
+            htmlWriter.writeTitle(title);
         }
-        
+
         writeInputAttributes(htmlWriter);
 
         Integer tabIndex = comboGridComponent
