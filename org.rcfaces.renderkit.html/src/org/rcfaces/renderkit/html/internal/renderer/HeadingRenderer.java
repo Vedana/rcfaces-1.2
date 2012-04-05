@@ -48,6 +48,25 @@ public class HeadingRenderer extends TextRenderer {
     }
 
     @Override
+    protected ICssStyleClasses createStyleClasses(IHtmlWriter htmlWriter) {
+        ICssStyleClasses cssStyleClasses = super.createStyleClasses(htmlWriter);
+
+        HeadingComponent headingComponent = (HeadingComponent) htmlWriter
+                .getComponentRenderContext().getComponent();
+        int ariaLevel = headingComponent.getLevel();
+
+        if (ariaLevel < 1) {
+            ariaLevel = headingComponent.getAriaLevel();
+        }
+
+        if (ariaLevel > 0) {
+            cssStyleClasses.addSuffix("_h" + ariaLevel);
+        }
+
+        return cssStyleClasses;
+    }
+
+    @Override
     protected void writeAriaLevelAttribute(IHtmlWriter htmlWriter,
             TextComponent textComponent) throws WriterException {
         int ariaLevel = ((HeadingComponent) textComponent).getLevel(htmlWriter
