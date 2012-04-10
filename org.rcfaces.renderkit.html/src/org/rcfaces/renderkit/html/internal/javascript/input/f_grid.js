@@ -1734,18 +1734,18 @@ var __statics = {
 			column._widthComputed=undefined;
 		
 			var w1=w - cellMargin;
-			w1=((w1>0)?w1:0)+"px";
-			head.style.width = w1;
+			w1=((w1>0)?w1:0);
+			head.style.width = w1+"px";
 			
-			var w2 = w - this._textLeftRightPadding;
-			w2=((w2>0)?w2:0)+"px";
-			column._box.style.width = w2;
-			column._box.style.maxWidth = w2;
+			var w2 = w - dataGrid._textLeftRightPadding;
+			w2=((w2>0)?w2:0);
+			column._box.style.width = w2+"px";
+			column._box.style.maxWidth = w2+"px";
 			
-			var w3 = w - this._textLeftRightPadding	+ twidth;
-			w3=((w3>0)?w3:0)+"px";
-			column._label.style.width = w3;
-			column._label.style.maxWidth = w3;
+			var w3 = w - dataGrid._textLeftRightPadding	+ twidth;
+			w3=((w3>0)?w3:0);
+			column._label.style.width = w3+"px";
+			column._label.style.maxWidth = w3+"px";
 	
 			var totalCols = 0;
 			var columns = dataGrid._columns;
@@ -4932,10 +4932,17 @@ var __members = {
 
 			swidth = parseInt(cw, 10);
 		}
+		
+		if (this._textLeftRightPadding===undefined) {
+			this._textLeftRightPadding=f_core.ComputePaddingBoxBorderLength(column._box.parentNode, "left", "right");
+//			alert(this._textLeftRightPadding);
+		}		
 
-		swidth -= this._textLeftRightPadding;
-		if (swidth < 0) {
-			swidth = 0;
+		if (this._textLeftRightPadding>0) {
+			swidth -= this._textLeftRightPadding;
+			if (swidth < 0) {
+				swidth = 0;
+			}
 		}
 
 		var box = column._box;
@@ -5619,6 +5626,7 @@ var __members = {
 		
 		var t1 = new Date().getTime();
 
+	
 		var total = 0; // total des colonnes fixe en px
 		var totalPercent = 0; // total des % 
 		var totalZero = 0; // total colone sans taille donnee
@@ -5626,7 +5634,7 @@ var __members = {
 		var ci = 0;
 		var webkit = f_core.IsWebkit();
 		var ie = f_core.IsInternetExplorer();
-		for ( var i = 0; i < columns.length; i++) {
+		for (var i = 0; i < columns.length; i++) {
 			var column = columns[i];
 			if (column._visibility === false) {
 				continue;
@@ -5694,8 +5702,9 @@ var __members = {
 //				alert(this._textLeftRightPadding);
 			}		
 
+			
 			var cw = w;
-			if (f_core.IsWebkit(f_core.WEBKIT_SAFARI)){ 
+			if (f_core.IsWebkit(f_core.WEBKIT_SAFARI)) { 
 				cw -= this._textLeftRightPadding;
 			}
 			if (cw < 0) {
