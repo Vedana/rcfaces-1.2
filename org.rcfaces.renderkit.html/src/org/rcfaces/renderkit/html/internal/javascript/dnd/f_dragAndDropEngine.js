@@ -677,7 +677,7 @@ var __members = {
 			return false;
 		}
 		
-		var targetItemValue=this._targetItemValue;
+//		var targetItemValue=this._targetItemValue;
 		var types=this._currentDropTypes;
 		var effect=this._currentDropEffect;
 		
@@ -1196,7 +1196,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return first sourceItem
+	 * @return any first sourceItem
 	 */
 	f_getSourceItem: function() {
 		if (this._sourceItems && this._sourceItems[0]) {
@@ -1206,7 +1206,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return first sourceItemValue
+	 * @return any first sourceItemValue
 	 */
 	f_getSourceItemValue: function() {
 		if (this._sourceItemsValue && this._sourceItemsValue[0]) {
@@ -1216,42 +1216,35 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return array of sourceItems
+	 * @return Array array of sourceItems
 	 */
 	f_getSourceItems: function() {
 		return this._sourceItems;
 	},
 	/**
 	 * @method public
-	 * @return array of sourceItemValues
+	 * @return Array array of sourceItemValues
 	 */
 	f_getSourceItemsValue: function() {
 		return this._sourceItemsValue;
 	},
 	/**
 	 * @method public
-	 * @return source Component
+	 * @return any source Component
 	 */
 	f_getSourceComponent: function() {
 		return this._sourceComponent;
 	},
 	/**
 	 * @method public
-	 * @return last mouse position
+	 * @return Number[] last mouse position
 	 */
 	f_getLastMousePosition: function() {
 		return this._lastMousePosition;
 	},
 	/**
 	 * @method public
-	 * @return last mouse position
-	 */
-	fa_getLastMousePosition: function() {
-		return this._lastMousePosition;
-	},
-	/**
-	 * @method public
-	 * @return the scrollable container
+	 * @return HtmlElement the scrollable container
 	 */
 	fa_getScrollableContainer: function() {
 		return document.body;
@@ -1265,7 +1258,7 @@ var __members = {
 		var event;
 		
 		if (f_core.IsInternetExplorer()) {
-			var event = document.createEventObject();
+			event = document.createEventObject();
 			event.detail = 0;
 			event.screenX = this._lastClientX;
 			event.screenY = this._lastClientY;
@@ -1279,7 +1272,6 @@ var __members = {
 			event.relatedTarget = document.body;
 
 		} else {
-			
 			event=document.createEvent("MouseEvents");		
 			
 			event.initMouseEvent("move", 
