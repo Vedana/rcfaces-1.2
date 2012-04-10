@@ -64,7 +64,9 @@ var __members = {
 //		this._onLayoutIds = undefined; // List<String>
 //		this._installed = undefined; // Boolean
 //		this._documentComplete = undefined; // Boolean
-				
+		
+		this._layoutFunc=undefined; // Function
+		
 //		this.f_super(arguments); // Y a pas d'heritage
 	},
 	/**
@@ -131,7 +133,12 @@ var __members = {
 		}
 		this._installed=true;
 		
-		f_core.AddResizeEventListener(this, this.f_layoutAllComponents);		
+		var self=this;
+		this._layoutFunc=function() {
+			self.f_layoutAllComponents();
+		};
+		
+		f_core.AddResizeEventListener(null, this._layoutFunc);		
 	},
 	/**
 	 * @method private
@@ -143,7 +150,12 @@ var __members = {
 		}
 		this._installed=false;
 		
-		f_core.RemoveResizeEventListener(this, this.f_layoutAllComponents);				
+		var layoutFunc=this._layoutFunc;
+		if (layoutFunc) {
+			this._layoutFunc=undefined;
+		
+			f_core.RemoveResizeEventListener(null, layoutFunc);
+		}
 	},
 	/**
 	 * @method public

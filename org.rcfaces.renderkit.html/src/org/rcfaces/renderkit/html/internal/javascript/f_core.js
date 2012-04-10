@@ -4633,19 +4633,23 @@ var f_core = {
 		f_core.Debug(f_core, "Start processing of resize event ... ("+(handlers.length/2)+" calls)");
 
 		for(var i=0;i<handlers.length;i+=2) {
-			var component = doc.getElementById(handlers[i]);
-			if (!component) {
-				handlers.splice(i, 2);
 
-				i-=2;
+			var componentId=handlers[i];
+			if (componentId) {
+				// On filtre l'evenement pour CE COMPOSANT
 				
-				continue;
+				component = doc.getElementById(componentId);	
+				if (!component) {
+					// Il n'existe plus ... On le retire de la liste !
+					handlers.splice(i, 2);
+					i-=2;					
+					continue;
+				}
 			}
 			
-			var func = handlers[i+1];
-			
+			var func = handlers[i+1];			
 			try {
-				func.call(component);
+				func.call(win);
 				
 			} catch (x) {
 				f_core.Error(f_core, "Call of resize event on '"+component+"' thows an exception", x);
@@ -4656,7 +4660,7 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static
-	 * @param HTMLElement component
+	 * @param HTMLElement component Component which received the event, or NULL if all resize events.
 	 * @param Function listener
 	 * @return Boolean
 	 */
@@ -4670,11 +4674,18 @@ var f_core = {
 			f_core.AddEventListener(window, "resize", f_core._OnResizeEvent);
 		}
 
-		if (!component.id) {
-			component.id=f_core.AllocateAnoIdentifier();
+		if (component) {
+			if (!component.id) {
+				component.id=f_core.AllocateAnoIdentifier();
+			}
+
+			component=component.id;
+
+		} else {
+			component=null; // On s'assure que c'est bien NULL !
 		}
 		
-		handlers.push(component.id, listener);
+		handlers.push(component, listener);
 		return true;
 	},
 	/**
@@ -4690,7 +4701,7 @@ var f_core = {
 		}
 		
 		for(var i=0; i<handlers.length;i+=2) {
-			if (handlers[i]!=component.id || handlers[i+1]!=listener) {
+			if ((component && handlers[i]!=component.id) || (!component && handlers[i]) || handlers[i+1]!=listener) {
 				continue;
 			}
 			
