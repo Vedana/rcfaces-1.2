@@ -64,8 +64,8 @@ public class CheckTools extends CollectionTools {
 
     public static int getCount(Object checkedValues) {
         IValuesAccessor valuesAccessor = getValuesAccessor(checkedValues,
-				ICheckProvider.class, CHECK_PROVIDER_VALUES_ACCESSOR, true,
-				true);
+                ICheckProvider.class, CHECK_PROVIDER_VALUES_ACCESSOR, true,
+                true);
 
         if (valuesAccessor == null) {
             return 0;
@@ -75,8 +75,8 @@ public class CheckTools extends CollectionTools {
 
     public static Object getFirst(Object checkedValues, Object refValue) {
         IValuesAccessor valuesAccessor = getValuesAccessor(checkedValues,
-				ICheckProvider.class, CHECK_PROVIDER_VALUES_ACCESSOR, true,
-				true);
+                ICheckProvider.class, CHECK_PROVIDER_VALUES_ACCESSOR, true,
+                true);
 
         if (valuesAccessor == null) {
             return null;
@@ -87,8 +87,8 @@ public class CheckTools extends CollectionTools {
 
     public static Object[] listValues(Object checkedValues, Object refValue) {
         IValuesAccessor valuesAccessor = getValuesAccessor(checkedValues,
-				ICheckProvider.class, CHECK_PROVIDER_VALUES_ACCESSOR, true,
-				true);
+                ICheckProvider.class, CHECK_PROVIDER_VALUES_ACCESSOR, true,
+                true);
 
         if (valuesAccessor == null) {
             return EMPTY_VALUES;
@@ -99,8 +99,8 @@ public class CheckTools extends CollectionTools {
 
     public static Object getAdaptedValues(Object value, boolean useValue) {
         IValuesAccessor valuesAccessor = getValuesAccessor(value,
-				ICheckProvider.class, CHECK_PROVIDER_VALUES_ACCESSOR, useValue,
-				true);
+                ICheckProvider.class, CHECK_PROVIDER_VALUES_ACCESSOR, useValue,
+                true);
 
         if (valuesAccessor == null) {
             return null;
@@ -111,8 +111,8 @@ public class CheckTools extends CollectionTools {
 
     public static boolean setAdaptedValues(Object value, Object values) {
         IValuesAccessor valuesAccessor = getValuesAccessor(value,
-				ICheckProvider.class, CHECK_PROVIDER_VALUES_ACCESSOR, false,
-				true);
+                ICheckProvider.class, CHECK_PROVIDER_VALUES_ACCESSOR, false,
+                true);
 
         if (valuesAccessor == null) {
             return false;
@@ -146,7 +146,7 @@ public class CheckTools extends CollectionTools {
 
     public static void checkAll(FacesContext facesContext,
             ICheckComponent component) {
-		selectAll((UIComponent) component, CHECK_PROVIDER_VALUES_ACCESSOR, null);
+        selectAll((UIComponent) component, CHECK_PROVIDER_VALUES_ACCESSOR, null);
     }
 
     public static void uncheck(FacesContext facesContext,
@@ -184,7 +184,7 @@ public class CheckTools extends CollectionTools {
                 valuesSet);
     }
 
-    public static Set checkValuesToSet(FacesContext facesContext,
+    public static Set<Object> checkValuesToSet(FacesContext facesContext,
             ICheckComponent component, boolean immutable) {
         return valuesToSet((UIComponent) component,
                 CHECK_PROVIDER_VALUES_ACCESSOR, immutable);

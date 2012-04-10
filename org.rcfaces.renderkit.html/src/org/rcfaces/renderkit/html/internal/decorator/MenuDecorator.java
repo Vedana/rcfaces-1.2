@@ -55,7 +55,6 @@ import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
  * @version $Revision$ $Date$
  */
 public class MenuDecorator extends AbstractSelectItemsDecorator {
-    private static final String REVISION = "$Revision$";
 
     private static final String DISABLED_ITEMS = "disabledItems";
 
@@ -65,7 +64,7 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
 
     private static final String UNCHECKED_ITEMS = "uncheckedItems";
 
-    private final Set subClientIds = new HashSet();
+    private final Set<String> subClientIds = new HashSet<String>();
 
     public MenuDecorator(UIComponent component) {
         super(component, null);
@@ -188,8 +187,8 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
         javaScriptWriter.write("var ").write(varId).write('=');
 
         javaScriptWriter.writeCall(managerVarId, "f_appendItem2");
-        javaScriptWriter.write(parentVarId).write(',').writeString(sid).write(
-                ',');
+        javaScriptWriter.write(parentVarId).write(',').writeString(sid)
+                .write(',');
 
         IObjectLiteralWriter objectLiteralWriter = javaScriptWriter
                 .writeObjectLiteral(false);
@@ -220,16 +219,17 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
 
         case IInputTypeCapability.AS_CHECK_BUTTON:
             objectLiteralWriter.writeSymbol("_type").writeInt(style);
-            
+
             if (menuContext.isValueChecked(selectItem, selectItemValue)) {
                 objectLiteralWriter.writeSymbol("_checked").writeBoolean(true);
             }
 
             break;
         }
-        
+
         if (this instanceof CriteriaMenuDecorator) {
-        	objectLiteralWriter.writeSymbol("_criteriaPopup").writeBoolean(true);
+            objectLiteralWriter.writeSymbol("_criteriaPopup")
+                    .writeBoolean(true);
         }
 
         if (selectItem instanceof IAccessKeyItem) {
@@ -275,7 +275,7 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
 
             IProcessContext processContext = javaScriptWriter
                     .getHtmlRenderContext().getProcessContext();
-            List l = null;
+            List<IScriptListener> l = null;
             for (int i = 0; i < facesListeners.length; i++) {
                 FacesListener facesListener = facesListeners[i];
 
@@ -290,7 +290,8 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
                     continue;
                 }
                 if (l == null) {
-                    l = new ArrayList(facesListeners.length - i);
+                    l = new ArrayList<IScriptListener>(facesListeners.length
+                            - i);
                 }
 
                 l.add(scriptListener);
@@ -467,11 +468,11 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
     public void decode(IRequestContext requestContext,
             UIComponent decodedComponent, IComponentData componentData) {
 
-    	
-    	String requestComponentId = requestContext.getComponentId(component);
-    	
-    	componentData = requestContext.getComponentData(component, requestComponentId, null);
-    	
+        String requestComponentId = requestContext.getComponentId(component);
+
+        componentData = requestContext.getComponentData(component,
+                requestComponentId, null);
+
         super.decode(requestContext, decodedComponent, componentData);
 
         FacesContext facesContext = requestContext.getFacesContext();
@@ -523,13 +524,13 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
 
             if (checkedItems != null || uncheckedItems != null) {
                 boolean checkModified = false;
-                Set checkValues = CheckTools.checkValuesToSet(facesContext,
-                        (ICheckComponent) component, false);
+                Set<Object> checkValues = CheckTools.checkValuesToSet(
+                        facesContext, (ICheckComponent) component, false);
 
                 if (checkedItems != null && checkedItems.length() > 0) {
 
-                    List values = HtmlValuesTools.parseValues(facesContext,
-                            component, true, false, checkedItems);
+                    List<Object> values = HtmlValuesTools.parseValues(
+                            facesContext, component, true, false, checkedItems);
 
                     if (checkValues.addAll(values)) {
                         checkModified = true;
@@ -537,8 +538,9 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
                 }
 
                 if (uncheckedItems != null && uncheckedItems.length() > 0) {
-                    List values = HtmlValuesTools.parseValues(facesContext,
-                            component, true, false, uncheckedItems);
+                    List<Object> values = HtmlValuesTools.parseValues(
+                            facesContext, component, true, false,
+                            uncheckedItems);
 
                     if (checkValues.removeAll(values)) {
                         checkModified = true;

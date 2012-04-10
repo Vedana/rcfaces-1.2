@@ -116,7 +116,7 @@ public abstract class AbstractSelectItemsDecorator extends
 
             this.selectItemsContext = context;
 
-            Iterator it = iterateNodes(component);
+            Iterator<UIComponent> it = iterateNodes(component);
             encodeComponents(it, 0, true);
 
             postEncodeContainer();
@@ -403,11 +403,9 @@ public abstract class AbstractSelectItemsDecorator extends
             return true;
         }
 
-        SelectItem selectItems[] = (SelectItem[]) adapt(value,
-                SelectItem[].class);
+        SelectItem selectItems[] = adapt(value, SelectItem[].class);
         if (selectItems == null) {
-            ISelectItem selectItems2[] = (ISelectItem[]) adapt(value,
-                    ISelectItem[].class);
+            ISelectItem selectItems2[] = adapt(value, ISelectItem[].class);
 
             if (selectItems2 != null) {
                 selectItems = new SelectItem[selectItems2.length];
@@ -435,7 +433,7 @@ public abstract class AbstractSelectItemsDecorator extends
             return true;
         }
 
-        SelectItem selectItem = (SelectItem) adapt(value, SelectItem.class);
+        SelectItem selectItem = adapt(value, SelectItem.class);
         if (selectItem == null) {
             ISelectItem selectItem2 = (ISelectItem) adapt(value,
                     SelectItem.class);
@@ -454,11 +452,10 @@ public abstract class AbstractSelectItemsDecorator extends
         return true;
     }
 
-    private Object adapt(Object adaptable, Class adapterClass) {
+    private <T> T adapt(Object adaptable, Class<T> adapterClass) {
 
         if (adaptable instanceof IAdaptable) {
-            Object adapted = ((IAdaptable) adaptable).getAdapter(adapterClass,
-                    null);
+            T adapted = ((IAdaptable) adaptable).getAdapter(adapterClass, null);
             if (adapted != null) {
                 return adapted;
             }
@@ -500,8 +497,8 @@ public abstract class AbstractSelectItemsDecorator extends
         if (value instanceof IAdaptable) {
             IAdaptable adaptable = (IAdaptable) value;
 
-            SelectItem selectItem = (SelectItem) adaptable.getAdapter(
-                    SelectItem.class, null);
+            SelectItem selectItem = adaptable
+                    .getAdapter(SelectItem.class, null);
             if (selectItem != null) {
                 return selectItem;
             }
@@ -510,9 +507,8 @@ public abstract class AbstractSelectItemsDecorator extends
         if (Constants.ADAPT_SELECT_ITEMS) {
             RcfacesContext rcfacesContext = getComponentRenderContext()
                     .getRenderContext().getProcessContext().getRcfacesContext();
-            SelectItem selectItem = (SelectItem) rcfacesContext
-                    .getAdapterManager().getAdapter(value, SelectItem.class,
-                            null);
+            SelectItem selectItem = rcfacesContext.getAdapterManager()
+                    .getAdapter(value, SelectItem.class, null);
             if (selectItem != null) {
                 return selectItem;
             }
@@ -589,23 +585,23 @@ public abstract class AbstractSelectItemsDecorator extends
     }
 
     protected void encodeNodes(UIComponent component) throws WriterException {
-        Iterator it = iterateNodes(component);
+        Iterator<UIComponent> it = iterateNodes(component);
 
         encodeComponents(it, 0, true);
     }
 
-    protected Iterator iterateNodes(UIComponent component)
+    protected Iterator<UIComponent> iterateNodes(UIComponent component)
             throws WriterException {
-        Iterator it = component.getChildren().iterator();
+        Iterator<UIComponent> it = component.getChildren().iterator();
 
         return it;
     }
 
-    protected void encodeComponents(Iterator it, int depth, boolean visible)
-            throws WriterException {
+    protected void encodeComponents(Iterator<UIComponent> it, int depth,
+            boolean visible) throws WriterException {
 
         for (; it.hasNext();) {
-            UIComponent component = (UIComponent) it.next();
+            UIComponent component = it.next();
 
             if (component instanceof UISelectItems) {
                 UISelectItems uiSelectItems = (UISelectItems) component;
@@ -960,7 +956,7 @@ public abstract class AbstractSelectItemsDecorator extends
     protected final List listComponents(Map childrenClientIds, String itemIds,
             Class capability) {
 
-        List l = null;
+        List<UIComponent> l = null;
 
         StringTokenizer st = new StringTokenizer(itemIds,
                 HtmlTools.LIST_SEPARATORS);
@@ -977,24 +973,24 @@ public abstract class AbstractSelectItemsDecorator extends
             }
 
             if (l == null) {
-                l = new ArrayList();
+                l = new ArrayList<UIComponent>();
             }
 
             l.add(item);
         }
 
         if (l == null) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
 
         return l;
 
     }
 
-    protected final List listSelectItems(Map childrenValues, String itemIds,
-            Class capability) {
+    protected final List<SelectItem> listSelectItems(Map childrenValues,
+            String itemIds, Class capability) {
 
-        List l = null;
+        List<SelectItem> l = null;
 
         StringTokenizer st = new StringTokenizer(itemIds,
                 HtmlTools.LIST_SEPARATORS);
@@ -1011,22 +1007,23 @@ public abstract class AbstractSelectItemsDecorator extends
             }
 
             if (l == null) {
-                l = new ArrayList();
+                l = new ArrayList<SelectItem>();
             }
 
             l.add(item);
         }
 
         if (l == null) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
 
         return l;
 
     }
 
-    protected final Map mapChildrenClientId(Map map,
-            IRequestContext renderContext, UIComponent container) {
+    protected final Map<String, UIComponent> mapChildrenClientId(
+            Map<String, UIComponent> map, IRequestContext renderContext,
+            UIComponent container) {
 
         List children = container.getChildren();
         for (Iterator it = children.iterator(); it.hasNext();) {
@@ -1038,7 +1035,7 @@ public abstract class AbstractSelectItemsDecorator extends
             }
 
             if (map == null) {
-                map = new HashMap();
+                map = new HashMap<String, UIComponent>();
             }
             map.put(childClientId, child);
 
@@ -1052,7 +1049,8 @@ public abstract class AbstractSelectItemsDecorator extends
         return map;
     }
 
-    protected final Map mapChildrenItemValues(Map map, FacesContext context,
+    protected final Map<Object, UIComponent> mapChildrenItemValues(
+            Map<Object, UIComponent> map, FacesContext context,
             UIComponent container) {
 
         List children = container.getChildren();
@@ -1068,7 +1066,7 @@ public abstract class AbstractSelectItemsDecorator extends
             }
 
             if (map == null) {
-                map = new HashMap();
+                map = new HashMap<Object, UIComponent>();
             }
             map.put(value, child);
 

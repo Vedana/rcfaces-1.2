@@ -429,20 +429,23 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
             dropWalker.pop(selectItem);
         }
     }
-    
+
     /**
-     * Called from the {@link TreeService} to refresh the father node of the newly
-     * rendered nodes
-     * @param selectItem father node
-     * @param hasChild 
+     * Called from the {@link TreeService} to refresh the father node of the
+     * newly rendered nodes
+     * 
+     * @param selectItem
+     *            father node
+     * @param hasChild
      * @throws WriterException
      */
-    public void refreshNode(SelectItem selectItem, boolean hasChild) throws WriterException {
+    public void refreshNode(SelectItem selectItem, boolean hasChild)
+            throws WriterException {
 
         TreeRenderContext treeRenderContext = (TreeRenderContext) getContext();
 
         javaScriptWriter.getComponentVarName();
-        
+
         javaScriptWriter.writeMethodCall("f_refreshNode");
 
         Object selectItemValue = selectItem.getValue();
@@ -450,11 +453,11 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
         String value = convertItemValue(
                 javaScriptWriter.getHtmlComponentRenderContext(),
                 selectItemValue);
-    	javaScriptWriter.writeString(value).write(',');
+        javaScriptWriter.writeString(value).write(',');
 
-    	writeNodeObject(treeRenderContext, selectItem, true, hasChild);
+        writeNodeObject(treeRenderContext, selectItem, true, hasChild);
 
-    	javaScriptWriter.writeln(");");
+        javaScriptWriter.writeln(");");
 
         if (dragWalker != null) {
             dragWalker.pop(selectItem);
@@ -465,96 +468,99 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
         }
     }
 
-    private void writeNodeObject(TreeRenderContext treeRenderContext, SelectItem selectItem, boolean forRefresh, boolean hasChild) throws WriterException {
+    private void writeNodeObject(TreeRenderContext treeRenderContext,
+            SelectItem selectItem, boolean forRefresh, boolean hasChild)
+            throws WriterException {
 
-    	IObjectLiteralWriter objectLiteralWriter = javaScriptWriter.writeObjectLiteral(false);
+        IObjectLiteralWriter objectLiteralWriter = javaScriptWriter
+                .writeObjectLiteral(false);
 
-    	Object selectItemValue = selectItem.getValue();
-		
-		if (!forRefresh) {
-			String value = convertItemValue(
-			        javaScriptWriter.getHtmlComponentRenderContext(),
-			        selectItemValue);
-			if (value != null) {
-			    objectLiteralWriter.writeSymbol("_value").writeString(value);
-			}
-		}
-		
-		String text = selectItem.getLabel();
-		if (text != null) {
-		    objectLiteralWriter.writeSymbol("_label").writeString(text);
-		}
-		
-		String toolTip = selectItem.getDescription();
-		if (toolTip != null) {
-		    objectLiteralWriter.writeSymbol("_description")
-		            .writeString(toolTip);
-		}
-		
-		if (selectItem.isDisabled()) {
-		    objectLiteralWriter.writeSymbol("_disabled").writeBoolean(true);
-		}
-		
-		if (treeRenderContext.isUserExpandable()) {
-		    if (treeRenderContext.isValueExpanded(selectItem, selectItemValue)) { // Expand
-		        objectLiteralWriter.writeSymbol("_expanded").writeBoolean(true);
-		    }
-		}
-		
-		if (treeRenderContext.writeSelectionFullState() == false) {
-		    if (treeRenderContext.isValueSelected(selectItem, selectItemValue)) { // SELECTION
-		        objectLiteralWriter.writeSymbol("_selected").writeBoolean(true);
-		    }
-		}
-		
-		if (treeRenderContext.writeCheckFullState() == false) {
-		    if (treeRenderContext.isValueChecked(selectItem, selectItemValue)) { // CHECK
-		        objectLiteralWriter.writeSymbol("_checked").writeBoolean(true);
-		    }
-		}
-		
-		if (selectItem instanceof IStyleClassItem) {
-		    String styleClass = ((IStyleClassItem) selectItem).getStyleClass();
-		    if (styleClass != null) {
-		        objectLiteralWriter.writeSymbol("_styleClass").writeString(
-		                styleClass);
-		    }
-		}
-		
-		if (selectItem instanceof IImagesItem) {
-		    writeSelectItemImages((IImagesItem) selectItem, javaScriptWriter,
-		            null, null, false, objectLiteralWriter);
-		}
-		
-		if (selectItem instanceof IClientDataItem) {
-		    writeItemClientDatas((IClientDataItem) selectItem,
-		            javaScriptWriter, null, null, objectLiteralWriter);
-		}
-		
-		if (selectItem instanceof IMenuPopupIdCapability) {
-		    String menuPopupId = ((IMenuPopupIdCapability) selectItem)
-		            .getMenuPopupId();
-		    if (menuPopupId != null) {
-		        objectLiteralWriter.writeSymbol("_menuPopupId").writeString(
-		                menuPopupId);
-		    }
-		}
-		
-		if (forRefresh) {
-			objectLiteralWriter.writeSymbol("_hasChild").writeBoolean(hasChild);
-		}
-		
-		if (dragWalker != null) {
-		    dragWalker.pushAndWriteAttributes(objectLiteralWriter, selectItem);
-		}
-		
-		if (dropWalker != null) {
-		    dropWalker.pushAndWriteAttributes(objectLiteralWriter, selectItem);
-		}
-		
-		objectLiteralWriter.end();
+        Object selectItemValue = selectItem.getValue();
+
+        if (!forRefresh) {
+            String value = convertItemValue(
+                    javaScriptWriter.getHtmlComponentRenderContext(),
+                    selectItemValue);
+            if (value != null) {
+                objectLiteralWriter.writeSymbol("_value").writeString(value);
+            }
+        }
+
+        String text = selectItem.getLabel();
+        if (text != null) {
+            objectLiteralWriter.writeSymbol("_label").writeString(text);
+        }
+
+        String toolTip = selectItem.getDescription();
+        if (toolTip != null) {
+            objectLiteralWriter.writeSymbol("_description")
+                    .writeString(toolTip);
+        }
+
+        if (selectItem.isDisabled()) {
+            objectLiteralWriter.writeSymbol("_disabled").writeBoolean(true);
+        }
+
+        if (treeRenderContext.isUserExpandable()) {
+            if (treeRenderContext.isValueExpanded(selectItem, selectItemValue)) { // Expand
+                objectLiteralWriter.writeSymbol("_expanded").writeBoolean(true);
+            }
+        }
+
+        if (treeRenderContext.writeSelectionFullState() == false) {
+            if (treeRenderContext.isValueSelected(selectItem, selectItemValue)) { // SELECTION
+                objectLiteralWriter.writeSymbol("_selected").writeBoolean(true);
+            }
+        }
+
+        if (treeRenderContext.writeCheckFullState() == false) {
+            if (treeRenderContext.isValueChecked(selectItem, selectItemValue)) { // CHECK
+                objectLiteralWriter.writeSymbol("_checked").writeBoolean(true);
+            }
+        }
+
+        if (selectItem instanceof IStyleClassItem) {
+            String styleClass = ((IStyleClassItem) selectItem).getStyleClass();
+            if (styleClass != null) {
+                objectLiteralWriter.writeSymbol("_styleClass").writeString(
+                        styleClass);
+            }
+        }
+
+        if (selectItem instanceof IImagesItem) {
+            writeSelectItemImages((IImagesItem) selectItem, javaScriptWriter,
+                    null, null, false, objectLiteralWriter);
+        }
+
+        if (selectItem instanceof IClientDataItem) {
+            writeItemClientDatas((IClientDataItem) selectItem,
+                    javaScriptWriter, null, null, objectLiteralWriter);
+        }
+
+        if (selectItem instanceof IMenuPopupIdCapability) {
+            String menuPopupId = ((IMenuPopupIdCapability) selectItem)
+                    .getMenuPopupId();
+            if (menuPopupId != null) {
+                objectLiteralWriter.writeSymbol("_menuPopupId").writeString(
+                        menuPopupId);
+            }
+        }
+
+        if (forRefresh) {
+            objectLiteralWriter.writeSymbol("_hasChild").writeBoolean(hasChild);
+        }
+
+        if (dragWalker != null) {
+            dragWalker.pushAndWriteAttributes(objectLiteralWriter, selectItem);
+        }
+
+        if (dropWalker != null) {
+            dropWalker.pushAndWriteAttributes(objectLiteralWriter, selectItem);
+        }
+
+        objectLiteralWriter.end();
     }
-    
+
     /*
      * (non-Javadoc)
      * 
@@ -593,7 +599,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
             this.selectItemsContext = selectItemsContext;
 
             super.encodeNodes(treeComponent);
-            
+
             nodeRenderer.refreshNode(treeComponent);
 
         } finally {
@@ -638,7 +644,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
         return null;
     }
 
-    protected void addUnlockProperties(Set unlockedProperties) {
+    protected void addUnlockProperties(Set<String> unlockedProperties) {
         super.addUnlockProperties(unlockedProperties);
 
         unlockedProperties.add("checkedItems");
@@ -678,7 +684,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
                 }
             }
 
-            Set values = CollectionTools.valuesToSet(v, false);
+            Set<Object> values = CollectionTools.valuesToSet(v, false);
 
             if (HtmlValuesTools.updateValues(facesContext, tree, false, values,
                     checkedValues, uncheckedValues)) {
@@ -745,7 +751,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
                 // Set values = ValuesTools.valueToSet(v, true);
 
                 // On recommence à ZERO ! ??? nous sommes en full state ?
-                Set values = new OrderedSet();
+                Set<Object> values = new OrderedSet<Object>();
 
                 HtmlValuesTools.updateValues(facesContext, tree, true, values,
                         selectedValues, deselectedValues);
@@ -759,7 +765,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
         String collapsedValues = componentData
                 .getStringProperty("collapsedItems");
         if (collapsedValues != null || expandedValues != null) {
-            Set expansionValues = ExpansionTools.expansionValuesToSet(
+            Set<Object> expansionValues = ExpansionTools.expansionValuesToSet(
                     facesContext, component, false);
 
             if (HtmlValuesTools.updateValues(facesContext, tree, true,
@@ -856,9 +862,9 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
 
     protected abstract class AbstractDragDropWalker {
 
-        private final List dragDropSelectItemStates;
+        private final List<DragDropItemState> dragDropSelectItemStates;
 
-        private final List selectItemLastDragDropInfos;
+        private final List<Object> selectItemLastDragDropInfos;
 
         private String[] cachedDragDropTypes;
 
@@ -866,8 +872,8 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
 
         public AbstractDragDropWalker(int dragDropEffects,
                 String dragDropTypes[]) {
-            dragDropSelectItemStates = new ArrayList(8);
-            selectItemLastDragDropInfos = new ArrayList(8);
+            dragDropSelectItemStates = new ArrayList<DragDropItemState>(8);
+            selectItemLastDragDropInfos = new ArrayList<Object>(8);
 
             if (dragDropEffects < 0) {
                 dragDropEffects = IDragAndDropEffects.DEFAULT_DND_EFFECT;
@@ -998,7 +1004,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
                             .writeInt(dragDropEffects.intValue());
                 }
             }
-            
+
             selectItemLastDragDropInfos.add(serializedDragDropTypes);
             selectItemLastDragDropInfos.add(dragDropEffects);
         }
@@ -1041,8 +1047,8 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
                 return null;
             }
 
-            return (DragDropItemState) dragDropSelectItemStates
-                    .get(dragDropSelectItemStates.size() - offset - 1);
+            return dragDropSelectItemStates.get(dragDropSelectItemStates.size()
+                    - offset - 1);
         }
 
         protected abstract String[] getDragDropTypes(SelectItem mainItem,

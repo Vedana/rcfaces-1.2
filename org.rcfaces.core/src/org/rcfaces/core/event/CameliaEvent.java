@@ -15,30 +15,31 @@ import org.rcfaces.core.internal.listener.IScriptListener;
  * @version $Revision$ $Date$
  */
 abstract class CameliaEvent extends FacesEvent implements ITypedEvent {
-	private static final long serialVersionUID = -2844437297380361681L;
+    private static final long serialVersionUID = -2844437297380361681L;
 
-	protected final int type;
+    protected final int type;
 
-	public CameliaEvent(UIComponent component) {
-		this(component, 0);
-	}
+    public CameliaEvent(UIComponent component) {
+        this(component, 0);
+    }
 
-	public CameliaEvent(UIComponent component, int type) {
-		super(component);
+    public CameliaEvent(UIComponent component, int type) {
+        super(component);
 
-		this.type = type;
-	}
+        this.type = type;
+    }
 
-	public final int getType() {
-		return type;
-	}
+    public final int getType() {
+        return type;
+    }
 
-	public boolean isAppropriateListener(FacesListener listener) {
-		if (listener instanceof IScriptListener) {
-			return false;
-		}
+    @Override
+    public boolean isAppropriateListener(FacesListener listener) {
+        if (listener instanceof IScriptListener) {
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
 }

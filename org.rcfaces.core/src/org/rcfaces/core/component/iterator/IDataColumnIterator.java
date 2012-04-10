@@ -14,7 +14,8 @@ import org.rcfaces.core.component.DataColumnComponent;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public interface IDataColumnIterator extends IComponentIterator {
+public interface IDataColumnIterator extends
+        IComponentIterator<DataColumnComponent> {
 
     /**
      * Returns the next DataColumnComponent in the iteration. Calling this

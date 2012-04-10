@@ -21,7 +21,6 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
  */
 
 public class SelectItemsJsContext extends SelectItemsContext {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(SelectItemsJsContext.class);
@@ -33,7 +32,7 @@ public class SelectItemsJsContext extends SelectItemsContext {
         }
     }
 
-    private final List varIds = new ArrayList(8);
+    private final List<String> varIds = new ArrayList<String>(8);
 
     private final boolean disabled;
 
@@ -81,7 +80,7 @@ public class SelectItemsJsContext extends SelectItemsContext {
         if (varIds.isEmpty()) {
             throw new NullPointerException("No var available into stack !");
         }
-        return (String) varIds.get(varIds.size() - 1);
+        return varIds.get(varIds.size() - 1);
     }
 
     public int countVarId() {

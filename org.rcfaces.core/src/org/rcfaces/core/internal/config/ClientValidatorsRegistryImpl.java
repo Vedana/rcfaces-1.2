@@ -86,6 +86,7 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
         digester.addRule("rcfaces-config/clientValidators/render-kit",
                 new Rule() {
 
+                    @Override
                     public void begin(String namespace, String name,
                             Attributes attributes) throws Exception {
 
@@ -97,6 +98,7 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
                         super.digester.push(renderKit);
                     }
 
+                    @Override
                     public void end(String namespace, String name)
                             throws Exception {
                         super.digester.pop();
@@ -117,6 +119,7 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
                 "rcfaces-config/clientValidators/render-kit/clientValidator",
                 new Rule() {
 
+                    @Override
                     public void end(String namespace, String name)
                             throws Exception {
                         ClientValidator clientValidator = (ClientValidator) getDigester()
@@ -131,6 +134,7 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
                 "rcfaces-config/clientValidators/render-kit/clientValidator/filter",
                 new Rule() {
 
+                    @Override
                     public void begin(String namespace, String name,
                             Attributes attributes) throws Exception {
                         ClientValidator clientValidator = (ClientValidator) getDigester()
@@ -139,6 +143,7 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
                         clientValidator
                                 .setFilter(new TaskDescriptor(attributes) {
 
+                                    @Override
                                     protected IClientValidatorTask computeClientValidatorTask(
                                             String serverTaskClassName,
                                             Attributes attributes) {
@@ -174,6 +179,7 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
                 "rcfaces-config/clientValidators/render-kit/clientValidator/translator",
                 new Rule() {
 
+                    @Override
                     public void begin(String namespace, String name,
                             Attributes attributes) throws Exception {
                         ClientValidator clientValidator = (ClientValidator) getDigester()
@@ -188,6 +194,7 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
                 "rcfaces-config/clientValidators/render-kit/clientValidator/checker",
                 new Rule() {
 
+                    @Override
                     public void begin(String namespace, String name,
                             Attributes attributes) throws Exception {
                         ClientValidator clientValidator = (ClientValidator) getDigester()
@@ -201,6 +208,7 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
                 "rcfaces-config/clientValidators/render-kit/clientValidator/formatter",
                 new Rule() {
 
+                    @Override
                     public void begin(String namespace, String name,
                             Attributes attributes) throws Exception {
                         ClientValidator clientValidator = (ClientValidator) getDigester()
@@ -214,6 +222,7 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
                 "rcfaces-config/clientValidators/render-kit/clientValidator/behavior",
                 new Rule() {
 
+                    @Override
                     public void begin(String namespace, String name,
                             Attributes attributes) throws Exception {
                         ClientValidator clientValidator = (ClientValidator) getDigester()
@@ -227,6 +236,7 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
                 "rcfaces-config/clientValidators/render-kit/clientValidator/onerror",
                 new Rule() {
 
+                    @Override
                     public void begin(String namespace, String name,
                             Attributes attributes) throws Exception {
                         ClientValidator clientValidator = (ClientValidator) getDigester()
@@ -239,8 +249,8 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
         digester.addRule(
                 "rcfaces-config/clientValidators/render-kit/clientValidator/oncheckerror",
                 new Rule() {
-                    private static final String REVISION = "$Revision$";
 
+                    @Override
                     public void begin(String namespace, String name,
                             Attributes attributes) throws Exception {
                         ClientValidator clientValidator = (ClientValidator) getDigester()
@@ -254,6 +264,7 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
                 "rcfaces-config/clientValidators/render-kit/clientValidator/processor",
                 new Rule() {
 
+                    @Override
                     public void begin(String namespace, String name,
                             Attributes attributes) throws Exception {
                         ClientValidator clientValidator = (ClientValidator) getDigester()
@@ -267,6 +278,7 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
                 "rcfaces-config/clientValidators/render-kit/clientValidator/required-class",
                 new Rule() {
 
+                    @Override
                     public void begin(String namespace, String name,
                             Attributes attributes) throws Exception {
                         ClientValidator clientValidator = (ClientValidator) getDigester()
@@ -332,6 +344,7 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
 
     }
 
+    @Override
     protected AbstractRenderKitRegistryImpl.RenderKit createRenderKit() {
         return new RenderKit();
     }
@@ -344,9 +357,8 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
     public static class RenderKit extends
             AbstractRenderKitRegistryImpl.RenderKit {
 
-        private final Map clientValidatorsById = new HashMap(128);
-
-        private final Map stringAdaptersById = new HashMap(128);
+        private final Map<String, IClientValidatorDescriptor> clientValidatorsById = new HashMap<String, IClientValidatorDescriptor>(
+                128);
 
         public RenderKit() {
         }
@@ -377,7 +389,7 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
                     sa.append(timeZone.toString());
                 }
 
-                IClientValidatorDescriptor clientValidatorDescriptor = (IClientValidatorDescriptor) clientValidatorsById
+                IClientValidatorDescriptor clientValidatorDescriptor = clientValidatorsById
                         .get(sa.toString());
                 if (clientValidatorDescriptor != null) {
                     return clientValidatorDescriptor;
@@ -390,8 +402,8 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
                     sa.append('$');
                     sa.append(locale.toString());
 
-                    clientValidatorDescriptor = (IClientValidatorDescriptor) clientValidatorsById
-                            .get(sa.toString());
+                    clientValidatorDescriptor = clientValidatorsById.get(sa
+                            .toString());
                     if (clientValidatorDescriptor != null) {
                         return clientValidatorDescriptor;
                     }
@@ -403,7 +415,7 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
                 sa.append('$');
                 sa.append(timeZone.toString());
 
-                IClientValidatorDescriptor clientValidatorDescriptor = (IClientValidatorDescriptor) clientValidatorsById
+                IClientValidatorDescriptor clientValidatorDescriptor = clientValidatorsById
                         .get(sa.toString());
                 if (clientValidatorDescriptor != null) {
                     return clientValidatorDescriptor;
@@ -413,7 +425,7 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
                 sa.append(validatorId);
             }
 
-            IClientValidatorDescriptor clientValidatorDescriptor = (IClientValidatorDescriptor) clientValidatorsById
+            IClientValidatorDescriptor clientValidatorDescriptor = clientValidatorsById
                     .get(sa.toString());
             return clientValidatorDescriptor;
         }
@@ -438,7 +450,7 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
 
         private String id;
 
-        private List requiredClassesList;
+        private List<String> requiredClassesList;
 
         private String requiredClasses[] = STRING_EMPTY_ARRAY;
 
@@ -468,7 +480,7 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
 
         public void addRequiredClass(String className) {
             if (requiredClassesList == null) {
-                requiredClassesList = new ArrayList();
+                requiredClassesList = new ArrayList<String>();
             }
 
             requiredClassesList.add(className);
@@ -570,7 +582,7 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
 
         public void prepare() {
             if (requiredClassesList != null) {
-                requiredClasses = (String[]) requiredClassesList
+                requiredClasses = requiredClassesList
                         .toArray(new String[requiredClassesList.size()]);
                 requiredClassesList = null;
             }
@@ -597,15 +609,17 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
                     serverTaskClassName, attributes);
         }
 
+        @SuppressWarnings("unchecked")
         protected IClientValidatorTask computeClientValidatorTask(
                 String serverTaskClassName, Attributes attributes) {
 
             if (serverTaskClassName != null) {
                 LOG.debug("Instanciate filter '" + serverTaskClassName + "'.");
 
-                Class clazz;
+                Class<IClientValidatorTask> clazz;
                 try {
-                    clazz = ClassLocator.load(serverTaskClassName, null,
+                    clazz = (Class<IClientValidatorTask>) ClassLocator.load(
+                            serverTaskClassName, null,
                             FacesContext.getCurrentInstance());
 
                 } catch (Throwable th) {
@@ -617,7 +631,7 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
                 }
 
                 try {
-                    return (IClientValidatorTask) clazz.newInstance();
+                    return clazz.newInstance();
 
                 } catch (Throwable th) {
                     LOG.error("Can not instanciate client validator task '"
@@ -739,6 +753,7 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
             this.id = id;
         }
 
+        @SuppressWarnings("unchecked")
         public Converter getInstance(FacesContext facesContext,
                 UIComponent component) {
 
@@ -765,8 +780,8 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
                 String className = getClassName();
                 if (className != null) {
                     try {
-                        Class<Converter> clazz = ClassLocator.load(className,
-                                null, facesContext);
+                        Class<Converter> clazz = (Class<Converter>) ClassLocator
+                                .load(className, null, facesContext);
                         converter = clazz.newInstance();
 
                         setParameters = true;
@@ -804,7 +819,7 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
                                 + "' className='" + getClassName() + "'.", e);
             }
 
-            Map listProperties = propertyDescriptorsByName(beanInfo);
+            Map<String, PropertyDescriptor> listProperties = propertyDescriptorsByName(beanInfo);
 
             IParametredConverter parametredConverter = null;
 
@@ -813,7 +828,7 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
 
                 String name = parameter.getName();
 
-                PropertyDescriptor propertyDescriptor = (PropertyDescriptor) listProperties
+                PropertyDescriptor propertyDescriptor = listProperties
                         .get(name);
 
                 if (propertyDescriptor != null) {

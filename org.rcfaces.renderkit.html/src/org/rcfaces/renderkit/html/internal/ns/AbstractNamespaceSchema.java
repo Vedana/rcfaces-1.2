@@ -12,7 +12,7 @@ public abstract class AbstractNamespaceSchema implements INamespaceSchema {
 
     public final String name;
 
-    private Map bufferByName = new HashMap();
+    private Map<String, IBuffer> bufferByName = new HashMap<String, IBuffer>();
 
     public AbstractNamespaceSchema(String name) {
         this.name = name;
@@ -33,7 +33,7 @@ public abstract class AbstractNamespaceSchema implements INamespaceSchema {
     }
 
     public IBuffer getBuffer(String resourceName) {
-        return (IBuffer) bufferByName.get(resourceName);
+        return bufferByName.get(resourceName);
     }
 
 }

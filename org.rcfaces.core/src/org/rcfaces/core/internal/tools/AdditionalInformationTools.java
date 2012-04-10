@@ -70,7 +70,7 @@ public class AdditionalInformationTools extends CollectionTools {
                     .setAdditionalInformationValues(values);
         }
 
-        public Class getComponentValuesType(FacesContext facesContext,
+        public Class< ? > getComponentValuesType(FacesContext facesContext,
                 UIComponent component) {
             return ((IAdditionalInformationValuesCapability) component)
                     .getAdditionalInformationValuesType(facesContext);
@@ -78,12 +78,12 @@ public class AdditionalInformationTools extends CollectionTools {
     };
 
     private static final IAdditionalInformationIterator EMPTY_ADDITIONAL_INFORMATION_ITERATOR = new AdditionalInformationListIterator(
-            Collections.EMPTY_LIST);
+            Collections.<AdditionalInformationComponent> emptyList());
 
     public static int getCount(Object additionalInformationValues) {
         IValuesAccessor valuesAccessor = getValuesAccessor(
                 additionalInformationValues, ICheckProvider.class,
-				ADDITIONAL_PROVIDER_VALUES_ACCESSOR, true, true);
+                ADDITIONAL_PROVIDER_VALUES_ACCESSOR, true, true);
 
         if (valuesAccessor == null) {
             return 0;
@@ -95,7 +95,7 @@ public class AdditionalInformationTools extends CollectionTools {
             Object refValue) {
         IValuesAccessor valuesAccessor = getValuesAccessor(
                 additionalInformationValues, ICheckProvider.class,
-				ADDITIONAL_PROVIDER_VALUES_ACCESSOR, true, true);
+                ADDITIONAL_PROVIDER_VALUES_ACCESSOR, true, true);
 
         if (valuesAccessor == null) {
             return null;
@@ -108,7 +108,7 @@ public class AdditionalInformationTools extends CollectionTools {
             Object refValue) {
         IValuesAccessor valuesAccessor = getValuesAccessor(
                 additionalInformationValues, ICheckProvider.class,
-				ADDITIONAL_PROVIDER_VALUES_ACCESSOR, true, true);
+                ADDITIONAL_PROVIDER_VALUES_ACCESSOR, true, true);
 
         if (valuesAccessor == null) {
             return EMPTY_VALUES;
@@ -143,8 +143,8 @@ public class AdditionalInformationTools extends CollectionTools {
 
     public static void showAll(FacesContext facesContext,
             IAdditionalInformationComponent component) {
-		selectAll((UIComponent) component, ADDITIONAL_PROVIDER_VALUES_ACCESSOR,
-				null);
+        selectAll((UIComponent) component, ADDITIONAL_PROVIDER_VALUES_ACCESSOR,
+                null);
     }
 
     public static void hide(FacesContext facesContext,
@@ -179,8 +179,8 @@ public class AdditionalInformationTools extends CollectionTools {
 
     public static IAdditionalInformationIterator listAdditionalInformations(
             UIComponent component) {
-        List list = ComponentIterators.list(component,
-                AdditionalInformationComponent.class);
+        List<AdditionalInformationComponent> list = ComponentIterators.list(
+                component, AdditionalInformationComponent.class);
         if (list.isEmpty()) {
             return EMPTY_ADDITIONAL_INFORMATION_ITERATOR;
         }
@@ -193,16 +193,18 @@ public class AdditionalInformationTools extends CollectionTools {
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
-    private static final class AdditionalInformationListIterator extends
-            ComponentIterators.ComponentListIterator implements
-            IAdditionalInformationIterator {
+    private static final class AdditionalInformationListIterator
+            extends
+            ComponentIterators.ComponentListIterator<AdditionalInformationComponent>
+            implements IAdditionalInformationIterator {
 
-        public AdditionalInformationListIterator(List list) {
+        public AdditionalInformationListIterator(
+                List<AdditionalInformationComponent> list) {
             super(list);
         }
 
         public final AdditionalInformationComponent next() {
-            return (AdditionalInformationComponent) nextComponent();
+            return nextComponent();
         }
 
         public AdditionalInformationComponent[] toArray() {
@@ -210,7 +212,7 @@ public class AdditionalInformationTools extends CollectionTools {
         }
     }
 
-    public static Set additionalInformationValuesToSet(
+    public static Set<Object> additionalInformationValuesToSet(
             FacesContext facesContext,
             IAdditionalInformationComponent component, boolean immutable) {
 
@@ -220,7 +222,7 @@ public class AdditionalInformationTools extends CollectionTools {
 
     public static void setAdditionalInformationValues(
             FacesContext facesContext,
-            IAdditionalInformationComponent component, Set valuesSet) {
+            IAdditionalInformationComponent component, Set<Object> valuesSet) {
 
         setValues((UIComponent) component, ADDITIONAL_PROVIDER_VALUES_ACCESSOR,
                 valuesSet);

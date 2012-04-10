@@ -27,7 +27,7 @@ public class NamespaceConfigurationImpl implements INamespaceConfiguration {
 
     public static final String DEFAULT_COMPONENT = "*";
 
-    private final Map namespacesByURI = new HashMap();
+    private final Map<String, NameSpace> namespacesByURI = new HashMap<String, NameSpace>();
 
     public void addComponent(String componentName) {
         addComponentNS(DEFAULT_NAMESPACE, componentName);
@@ -66,7 +66,7 @@ public class NamespaceConfigurationImpl implements INamespaceConfiguration {
     }
 
     protected NameSpace getNameSpace(String namespaceURI) {
-        NameSpace nameSpace = (NameSpace) namespacesByURI.get(namespaceURI);
+        NameSpace nameSpace = namespacesByURI.get(namespaceURI);
         if (nameSpace != null) {
             return nameSpace;
         }
@@ -78,24 +78,23 @@ public class NamespaceConfigurationImpl implements INamespaceConfiguration {
     }
 
     public NameSpace[] listNamespaces() {
-        Collection cl = namespacesByURI.values();
+        Collection<NameSpace> cl = namespacesByURI.values();
 
-        return (NameSpace[]) cl.toArray(new NameSpace[cl.size()]);
+        return cl.toArray(new NameSpace[cl.size()]);
     }
 
     public static class NameSpace {
 
         private final String uri;
 
-        private final Map componentsByName = new HashMap();
+        private final Map<String, Component> componentsByName = new HashMap<String, Component>();
 
         public NameSpace(String namespaceURI) {
             this.uri = namespaceURI;
         }
 
         public Component getComponent(String componentName) {
-            Component component = (Component) componentsByName
-                    .get(componentName);
+            Component component = componentsByName.get(componentName);
             if (component != null) {
                 return component;
             }
@@ -111,9 +110,9 @@ public class NamespaceConfigurationImpl implements INamespaceConfiguration {
         }
 
         public Component[] listComponents() {
-            Collection cl = componentsByName.values();
+            Collection<Component> cl = componentsByName.values();
 
-            return (Component[]) cl.toArray(new Component[cl.size()]);
+            return cl.toArray(new Component[cl.size()]);
         }
 
     }
@@ -122,7 +121,7 @@ public class NamespaceConfigurationImpl implements INamespaceConfiguration {
 
         private final String name;
 
-        private final Set attributesName = new HashSet();
+        private final Set<String> attributesName = new HashSet<String>();
 
         public Component(String componentName) {
             this.name = componentName;
@@ -141,8 +140,7 @@ public class NamespaceConfigurationImpl implements INamespaceConfiguration {
         }
 
         public String[] listAttributes() {
-            return (String[]) attributesName.toArray(new String[attributesName
-                    .size()]);
+            return attributesName.toArray(new String[attributesName.size()]);
         }
 
     }

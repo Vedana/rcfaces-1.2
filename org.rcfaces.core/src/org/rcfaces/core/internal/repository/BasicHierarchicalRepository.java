@@ -201,8 +201,8 @@ public class BasicHierarchicalRepository extends AbstractRepository implements
 
                 if (contentProviderClassName != null) {
                     try {
-                        Class<IContentProvider> clazz = ClassLocator.load(
-                                contentProviderClassName, null, container);
+                        Class<IContentProvider> clazz = (Class<IContentProvider>) ClassLocator
+                                .load(contentProviderClassName, null, container);
 
                         contentProvider = clazz.newInstance();
 

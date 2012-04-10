@@ -8,7 +8,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -62,7 +61,7 @@ public class NamespaceServlet extends ConfiguredHttpServlet {
 
     private transient NamespaceConfigurationImpl namespaceConfiguration;
 
-    private transient Map schemasByName = new HashMap();
+    private transient Map<String, INamespaceSchema> schemasByName = new HashMap<String, INamespaceSchema>();
 
     private String namespaceServletURL;
 
@@ -134,8 +133,7 @@ public class NamespaceServlet extends ConfiguredHttpServlet {
         String version = url.substring(0, idx);
         String resourceName = url.substring(idx);
 
-        INamespaceSchema namespaceSchema = (INamespaceSchema) schemasByName
-                .get(ns);
+        INamespaceSchema namespaceSchema = schemasByName.get(ns);
         if (namespaceSchema == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND,
                     "Namespace not supported !");
@@ -199,7 +197,7 @@ public class NamespaceServlet extends ConfiguredHttpServlet {
         ConfigurationLoader configurationLoader = ConfigurationLoader
                 .scanRCFacesConfig(facesContext.getExternalContext(), urls);
 
-        Set classes = new HashSet();
+        Set<String> classes = new HashSet<String>();
 
         Digester digester = constructDigester(classes);
 
@@ -207,8 +205,7 @@ public class NamespaceServlet extends ConfiguredHttpServlet {
 
         NamespaceConfigurationImpl configuration = new NamespaceConfigurationImpl();
 
-        for (Iterator it = classes.iterator(); it.hasNext();) {
-            String className = (String) it.next();
+        for (String className : classes) {
 
             processClass(facesContext, classLoaderFallback, configuration,
                     className);
@@ -221,7 +218,7 @@ public class NamespaceServlet extends ConfiguredHttpServlet {
             Object classLoaderFallback, INamespaceConfiguration configuration,
             String className) {
 
-        Class clazz;
+        Class< ? > clazz;
         try {
             clazz = ClassLocator.load(className, classLoaderFallback,
                     facesContext);
@@ -236,7 +233,7 @@ public class NamespaceServlet extends ConfiguredHttpServlet {
         }
 
         try {
-            processObject(clazz, configuration);
+            processObject((Class<INamespaceContributor>) clazz, configuration);
 
         } catch (Exception ex) {
             LOG.error("Can not process object of class '" + className + "'.",
@@ -245,18 +242,16 @@ public class NamespaceServlet extends ConfiguredHttpServlet {
         }
     }
 
-    private void processObject(Class clazz,
+    private void processObject(Class<INamespaceContributor> clazz,
             INamespaceConfiguration configuration)
             throws InstantiationException, IllegalAccessException {
 
-        Object obj = clazz.newInstance();
-
-        INamespaceContributor contributor = (INamespaceContributor) obj;
+        INamespaceContributor contributor = clazz.newInstance();
 
         contributor.declare(configuration);
     }
 
-    private Digester constructDigester(final Set classesName) {
+    private Digester constructDigester(final Set<String> classesName) {
         Digester digester = new Digester();
 
         digester.addRule("faces-config/render-kit/renderer/renderer-class",
@@ -293,11 +288,12 @@ public class NamespaceServlet extends ConfiguredHttpServlet {
         return digester;
     }
 
-    private Map createAccessor() {
-        return new HashMap() {
-            public Object get(Object key) {
-                INamespaceSchema namespaceSchemas = (INamespaceSchema) schemasByName
-                        .get(key);
+    private Map<String, INamespaceSchema> createAccessor() {
+        return new HashMap<String, INamespaceSchema>() {
+            private static final long serialVersionUID = 594142032443254472L;
+
+            public INamespaceSchema get(Object key) {
+                INamespaceSchema namespaceSchemas = schemasByName.get(key);
                 return namespaceSchemas;
             }
         };

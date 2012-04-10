@@ -13,12 +13,12 @@ import javax.faces.convert.ConverterException;
  * @version $Revision$ $Date$
  */
 public class FloatConverter extends AbstractNumberConverter {
-    private static final String REVISION = "$Revision$";
 
     public FloatConverter() {
         setIntegerOnly(false);
     }
 
+    @Override
     public Object getAsObject(FacesContext context, UIComponent component,
             String value) {
 

@@ -22,8 +22,11 @@ public class CheckEvent extends ActionEvent {
     /*
      * (non-Javadoc)
      * 
-     * @see javax.faces.event.FacesEvent#isAppropriateListener(javax.faces.event.FacesListener)
+     * @see
+     * javax.faces.event.FacesEvent#isAppropriateListener(javax.faces.event.
+     * FacesListener)
      */
+    @Override
     public boolean isAppropriateListener(FacesListener listener) {
         return (listener instanceof ICloseListener);
     }
@@ -31,8 +34,11 @@ public class CheckEvent extends ActionEvent {
     /*
      * (non-Javadoc)
      * 
-     * @see javax.faces.event.FacesEvent#processListener(javax.faces.event.FacesListener)
+     * @see
+     * javax.faces.event.FacesEvent#processListener(javax.faces.event.FacesListener
+     * )
      */
+    @Override
     public void processListener(FacesListener listener) {
         ((ICheckListener) listener).processCheck(this);
     }

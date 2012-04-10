@@ -50,6 +50,7 @@ public class ClickEvent extends ActionEvent {
      * javax.faces.event.FacesEvent#isAppropriateListener(javax.faces.event.
      * FacesListener)
      */
+    @Override
     public boolean isAppropriateListener(FacesListener listener) {
         return (listener instanceof IClickListener);
     }
@@ -61,6 +62,7 @@ public class ClickEvent extends ActionEvent {
      * javax.faces.event.FacesEvent#processListener(javax.faces.event.FacesListener
      * )
      */
+    @Override
     public void processListener(FacesListener listener) {
         ((IClickListener) listener).processClick(this);
     }

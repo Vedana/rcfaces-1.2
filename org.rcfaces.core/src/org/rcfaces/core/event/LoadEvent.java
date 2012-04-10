@@ -13,7 +13,6 @@ import javax.faces.event.FacesListener;
  * @version $Revision$ $Date$
  */
 public class LoadEvent extends ActionEvent {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = -1530737844134123632L;
 
@@ -24,8 +23,11 @@ public class LoadEvent extends ActionEvent {
     /*
      * (non-Javadoc)
      * 
-     * @see javax.faces.event.FacesEvent#isAppropriateListener(javax.faces.event.FacesListener)
+     * @see
+     * javax.faces.event.FacesEvent#isAppropriateListener(javax.faces.event.
+     * FacesListener)
      */
+    @Override
     public boolean isAppropriateListener(FacesListener listener) {
         return (listener instanceof ILoadListener);
     }
@@ -33,8 +35,11 @@ public class LoadEvent extends ActionEvent {
     /*
      * (non-Javadoc)
      * 
-     * @see javax.faces.event.FacesEvent#processListener(javax.faces.event.FacesListener)
+     * @see
+     * javax.faces.event.FacesEvent#processListener(javax.faces.event.FacesListener
+     * )
      */
+    @Override
     public void processListener(FacesListener listener) {
         ((ILoadListener) listener).processLoad(this);
     }

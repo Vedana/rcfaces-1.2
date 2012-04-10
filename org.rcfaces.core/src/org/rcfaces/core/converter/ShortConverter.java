@@ -13,12 +13,12 @@ import javax.faces.convert.ConverterException;
  * @version $Revision$ $Date$
  */
 public class ShortConverter extends AbstractNumberConverter {
-    private static final String REVISION = "$Revision$";
 
     public ShortConverter() {
         setIntegerOnly(true);
     }
 
+    @Override
     public Object getAsObject(FacesContext context, UIComponent component,
             String value) {
 

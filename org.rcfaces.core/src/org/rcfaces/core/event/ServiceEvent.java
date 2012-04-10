@@ -29,10 +29,12 @@ public class ServiceEvent extends ActionEvent {
         this.data = data;
     }
 
+    @Override
     public boolean isAppropriateListener(FacesListener listener) {
         return (listener instanceof IServiceEventListener);
     }
 
+    @Override
     public void processListener(FacesListener listener) {
         ((IServiceEventListener) listener).processServiceEvent(this);
     }

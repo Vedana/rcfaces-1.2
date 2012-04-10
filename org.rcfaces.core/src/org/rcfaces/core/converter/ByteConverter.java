@@ -13,13 +13,13 @@ import javax.faces.convert.ConverterException;
  * @version $Revision$ $Date$
  */
 public class ByteConverter extends AbstractNumberConverter {
-    private static final String REVISION = "$Revision$";
 
     public ByteConverter() {
         setIntegerOnly(true);
         setMaxFractionDigits(3);
     }
 
+    @Override
     public Object getAsObject(FacesContext context, UIComponent component,
             String value) {
 

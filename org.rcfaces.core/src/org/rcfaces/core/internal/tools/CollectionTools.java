@@ -493,15 +493,17 @@ public class CollectionTools {
     }
 
     private static Object select(UIComponent component,
-            IValuesAccessor valuesAccessor, Object values, Collection rowDatas) {
+            IValuesAccessor valuesAccessor, Object values,
+            Collection<Object> rowDatas) {
 
         if (values.getClass().isArray()) {
 
             int length = Array.getLength(values);
 
-            List l = null;
+            List<Object> l = null;
 
-            next_data: for (Iterator it = rowDatas.iterator(); it.hasNext();) {
+            next_data: for (Iterator<Object> it = rowDatas.iterator(); it
+                    .hasNext();) {
                 Object rowData = it.next();
 
                 for (int i = 0; i < length; i++) {
@@ -513,7 +515,7 @@ public class CollectionTools {
                 }
 
                 if (l == null) {
-                    l = new ArrayList();
+                    l = new ArrayList<Object>();
 
                 } else if (l.contains(rowData)) {
                     continue;
@@ -526,13 +528,13 @@ public class CollectionTools {
                 return values;
             }
 
-            Class type = values.getClass().getComponentType();
+            Class< ? > type = values.getClass().getComponentType();
 
             Object newValues = Array.newInstance(type, length + l.size());
 
             System.arraycopy(values, 0, newValues, 0, length);
 
-            for (Iterator it = l.iterator(); it.hasNext(); length++) {
+            for (Iterator<Object> it = l.iterator(); it.hasNext(); length++) {
                 Array.set(newValues, length, it.next());
             }
 
@@ -542,7 +544,7 @@ public class CollectionTools {
         }
 
         if (values instanceof String) {
-            Set set = valuesToSet(values, false);
+            Set<Object> set = valuesToSet(values, false);
 
             set.addAll(rowDatas);
 
@@ -558,15 +560,15 @@ public class CollectionTools {
         }
 
         if (values instanceof Collection) {
-            Collection collection = cloneCollection(component, valuesAccessor,
-                    (Collection) values);
+            Collection<Object> collection = cloneCollection(component,
+                    valuesAccessor, (Collection) values);
 
             if (collection instanceof Set) {
                 collection.addAll(rowDatas);
                 return collection;
             }
 
-            for (Iterator it = rowDatas.iterator(); it.hasNext();) {
+            for (Iterator<Object> it = rowDatas.iterator(); it.hasNext();) {
                 Object rowData = it.next();
 
                 if (collection.contains(rowData)) {
@@ -583,8 +585,8 @@ public class CollectionTools {
                 + values);
     }
 
-    private static Collection cloneCollection(UIComponent component,
-            IValuesAccessor valuesAccessor, Collection collection) {
+    private static <T> Collection<T> cloneCollection(UIComponent component,
+            IValuesAccessor valuesAccessor, Collection<T> collection) {
 
         boolean copy = true;
 
@@ -600,8 +602,8 @@ public class CollectionTools {
             Method method = collection.getClass().getMethod("clone",
                     (Class[]) null);
 
-            collection = (Collection) method
-                    .invoke(collection, (Object[]) null);
+            collection = (Collection<T>) method.invoke(collection,
+                    (Object[]) null);
 
         } catch (Throwable th) {
             LOG.info("Can not copy the collection ! ("
@@ -1321,26 +1323,26 @@ public class CollectionTools {
     }
 
     protected static void setValues(UIComponent component,
-            IValuesAccessor valuesAccessor, Collection values) {
+            IValuesAccessor valuesAccessor, Collection<Object> values) {
 
         Object newValues = createNewValues(component, valuesAccessor);
 
         select(component, valuesAccessor, newValues, values);
     }
 
-    protected static Set valuesToSet(UIComponent component,
+    protected static Set<Object> valuesToSet(UIComponent component,
             IValuesAccessor valuesAccessor, boolean immutable) {
         Object value = valuesAccessor.getComponentValues(component);
 
         return valuesToSet(value, immutable);
     }
 
-    public static Set valuesToSet(Object value, boolean immutable) {
+    public static Set<Object> valuesToSet(Object value, boolean immutable) {
         if (value == null) {
             if (immutable == false) {
-                return new OrderedSet();
+                return new OrderedSet<Object>();
             }
-            return Collections.EMPTY_SET;
+            return Collections.emptySet();
         }
 
         if (value.getClass().isArray()) {
@@ -1348,12 +1350,12 @@ public class CollectionTools {
 
             if (length < 1) {
                 if (immutable == false) {
-                    return new OrderedSet();
+                    return new OrderedSet<Object>();
                 }
-                return Collections.EMPTY_SET;
+                return Collections.emptySet();
             }
 
-            Set set = new OrderedSet();
+            Set<Object> set = new OrderedSet<Object>();
 
             for (int i = 0; i < length; i++) {
                 set.add(Array.get(value, i));
@@ -1371,12 +1373,12 @@ public class CollectionTools {
 
             if (ss.length == 0) {
                 if (immutable == false) {
-                    return new OrderedSet();
+                    return new OrderedSet<Object>();
                 }
-                return Collections.EMPTY_SET;
+                return Collections.emptySet();
             }
 
-            Set set = new OrderedSet(Arrays.asList(ss));
+            Set<Object> set = new OrderedSet<Object>(Arrays.<Object> asList(ss));
 
             if (LOG.isDebugEnabled() && immutable) {
                 return Collections.unmodifiableSet(set);
@@ -1387,23 +1389,23 @@ public class CollectionTools {
 
         if (value instanceof Set) {
             if (immutable == false) {
-                return new OrderedSet((Set) value);
+                return new OrderedSet<Object>((Set<Object>) value);
             }
 
             if (LOG.isDebugEnabled() && immutable) {
-                return Collections.unmodifiableSet((Set) value);
+                return Collections.unmodifiableSet((Set<Object>) value);
             }
 
-            return (Set) value;
+            return (Set<Object>) value;
         }
 
         if (value instanceof Collection) {
-            Collection col = (Collection) value;
+            Collection<Object> col = (Collection<Object>) value;
             if (col.isEmpty() && immutable) {
-                return Collections.EMPTY_SET;
+                return Collections.emptySet();
             }
 
-            Set set = new OrderedSet((Collection) value);
+            Set<Object> set = new OrderedSet<Object>(col);
 
             if (LOG.isDebugEnabled() && immutable) {
                 return Collections.unmodifiableSet(set);
@@ -1413,7 +1415,7 @@ public class CollectionTools {
         }
 
         if (immutable == false) {
-            Set set = new OrderedSet();
+            Set<Object> set = new OrderedSet<Object>();
             set.add(value);
 
             return set;

@@ -21,10 +21,10 @@ import org.rcfaces.core.internal.repository.IRepository.IContent;
  * @version $Revision$ $Date$
  */
 public class FilteredContentProvider extends URLContentProvider {
-    private static final String REVISION = "$Revision$";
 
     private static final String CONTENT_DEFAULT_CHARSET = "UTF-8";
 
+    @Override
     public IContent getContent(Object contentReference, Locale locale) {
         return new FilteredURLContent((URL) contentReference, locale);
     }
@@ -41,6 +41,7 @@ public class FilteredContentProvider extends URLContentProvider {
             super(url, locale);
         }
 
+        @Override
         protected InputStream openInputStream(boolean toClose)
                 throws IOException {
             InputStream ins = super.openInputStream(toClose);

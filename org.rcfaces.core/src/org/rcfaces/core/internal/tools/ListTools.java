@@ -24,16 +24,16 @@ import org.rcfaces.core.internal.util.IncompatibleValueException;
  * @version $Revision$ $Date$
  */
 public class ListTools {
-    private static final String REVISION = "$Revision$";
 
     private static final boolean USE_ARRAY_VALUE_FOR_Combo = false;
 
     private static final ISelectItemIterator EMPTY_COMPONENT_ITERATOR = new SelectItemIteratorWrapper(
-            Collections.EMPTY_LIST);
+            Collections.<UISelectItem> emptyList());
 
     public static ISelectItemIterator listItems(ComboComponent component) {
 
-        List list = ComponentIterators.list(component, UISelectItem.class);
+        List<UISelectItem> list = ComponentIterators.list(component,
+                UISelectItem.class);
         if (list.isEmpty()) {
             return EMPTY_COMPONENT_ITERATOR;
         }
@@ -52,7 +52,8 @@ public class ListTools {
         if (value instanceof Object[]) {
             // C'est peut être le cas de la listBox
 
-            List l = listAllSelectedItems(component, (Object[]) value);
+            List<UISelectItem> l = listAllSelectedItems(component,
+                    (Object[]) value);
             if (l == null || l.isEmpty()) {
                 return EMPTY_COMPONENT_ITERATOR;
             }
@@ -76,8 +77,8 @@ public class ListTools {
         return getFirstSelectedItem(component, value);
     }
 
-    private static List listAllSelectedItems(ComboComponent component,
-            Object values[]) {
+    private static List<UISelectItem> listAllSelectedItems(
+            ComboComponent component, Object values[]) {
         if (values == null || values.length < 1) {
             // Aucun ID sélectionné !
             return null;
@@ -89,9 +90,9 @@ public class ListTools {
             return null;
         }
 
-        Set valuesSet = new HashSet(Arrays.asList(values));
+        Set<Object> valuesSet = new HashSet<Object>(Arrays.asList(values));
 
-        List l = null;
+        List<UISelectItem> l = null;
         for (; si.hasNext();) {
             UISelectItem selectItem = si.next();
 
@@ -110,7 +111,7 @@ public class ListTools {
             if (l == null) {
                 int n = Math.min(values.length, si.count());
 
-                l = new ArrayList(n);
+                l = new ArrayList<UISelectItem>(n);
             }
 
             l.add(selectItem);
@@ -167,7 +168,7 @@ public class ListTools {
             return null;
         }
 
-        Set valuesSet = new HashSet(Arrays.asList(values));
+        Set<Object> valuesSet = new HashSet<Object>(Arrays.asList(values));
 
         for (; si.hasNext();) {
             UISelectItem selectItem = si.next();
@@ -193,16 +194,15 @@ public class ListTools {
      * @version $Revision$ $Date$
      */
     private static final class SelectItemIteratorWrapper extends
-            ComponentIterators.ComponentListIterator implements
+            ComponentIterators.ComponentListIterator<UISelectItem> implements
             ISelectItemIterator {
-        private static final String REVISION = "$Revision$";
 
-        public SelectItemIteratorWrapper(List list) {
+        public SelectItemIteratorWrapper(List<UISelectItem> list) {
             super(list);
         }
 
         public final UISelectItem next() {
-            return (UISelectItem) nextComponent();
+            return nextComponent();
         }
 
         public UISelectItem[] toArray() {
@@ -216,16 +216,15 @@ public class ListTools {
      * @version $Revision$ $Date$
      */
     private static final class SelectItemListIterator extends
-            ComponentIterators.ComponentListIterator implements
+            ComponentIterators.ComponentListIterator<UISelectItem> implements
             ISelectItemIterator {
-        private static final String REVISION = "$Revision$";
 
-        public SelectItemListIterator(List list) {
+        public SelectItemListIterator(List<UISelectItem> list) {
             super(list);
         }
 
         public final UISelectItem next() {
-            return (UISelectItem) nextComponent();
+            return nextComponent();
         }
 
         public UISelectItem[] toArray() {
@@ -239,16 +238,15 @@ public class ListTools {
      * @version $Revision$ $Date$
      */
     private static final class SelectItemArrayIterator extends
-            ComponentIterators.ComponentArrayIterator implements
+            ComponentIterators.ComponentArrayIterator<UISelectItem> implements
             ISelectItemIterator {
-        private static final String REVISION = "$Revision$";
 
         public SelectItemArrayIterator(UISelectItem selectItem) {
             super(selectItem);
         }
 
         public final UISelectItem next() {
-            return (UISelectItem) nextComponent();
+            return nextComponent();
         }
 
         public UISelectItem[] toArray() {
@@ -311,7 +309,7 @@ public class ListTools {
             return -1;
         }
 
-        Set valuesSet = new HashSet(Arrays.asList(values));
+        Set<Object> valuesSet = new HashSet<Object>(Arrays.asList(values));
 
         int index = 0;
         for (; si.hasNext(); index++) {
@@ -369,7 +367,7 @@ public class ListTools {
             return;
         }
 
-        Set idsSet = new HashSet(Arrays.asList(ids));
+        Set<String> idsSet = new HashSet<String>(Arrays.asList(ids));
         if (idsSet.remove(item.getId()) == false) {
             // pas de remove ? donc pas de changement !
             return;
@@ -407,7 +405,7 @@ public class ListTools {
             return;
         }
 
-        List l = new ArrayList(si.count());
+        List<String> l = new ArrayList<String>(si.count());
         for (; si.hasNext();) {
             UISelectItem selectItem = si.next();
 
@@ -423,8 +421,8 @@ public class ListTools {
     }
 
     /*
-     * public static int[] listIndexOfAllSelectedItems(ListComponent component) {
-     * return null; }
+     * public static int[] listIndexOfAllSelectedItems(ListComponent component)
+     * { return null; }
      */
     /**
      * 
@@ -448,13 +446,13 @@ public class ListTools {
             return;
         }
 
-        Set ids;
+        Set<Object> ids;
         if (value instanceof Object[]) {
             Object s[] = (Object[]) value;
 
-            ids = new HashSet(Arrays.asList(s));
+            ids = new HashSet<Object>(Arrays.asList(s));
         } else {
-            ids = new HashSet(2);
+            ids = new HashSet<Object>(2);
             ids.add(value);
         }
 
@@ -463,28 +461,30 @@ public class ListTools {
         comboComponent.setValue(ids.toArray());
     }
 
-    public static Set listAllSelectedItemsSet(ComboComponent component) {
+    public static Set<UISelectItem> listAllSelectedItemsSet(
+            ComboComponent component) {
 
         Object value = component.getValue();
         if (value == null) {
-            return Collections.EMPTY_SET;
+            return Collections.emptySet();
         }
 
         if (value instanceof Object[]) {
             // C'est peut �tre le cas de la listBox
 
-            List l = listAllSelectedItems(component, (Object[]) value);
+            List<UISelectItem> l = listAllSelectedItems(component,
+                    (Object[]) value);
             if (l == null) {
-                return Collections.EMPTY_SET;
+                return Collections.emptySet();
             }
-            return new HashSet(l);
+            return new HashSet<UISelectItem>(l);
         }
 
         UISelectItem us = listAllSelectedItems(component, value);
         if (us == null) {
-            return Collections.EMPTY_SET;
+            return Collections.emptySet();
         }
-        Set set = new HashSet(1);
+        Set<UISelectItem> set = new HashSet<UISelectItem>(1);
         set.add(us);
 
         return set;

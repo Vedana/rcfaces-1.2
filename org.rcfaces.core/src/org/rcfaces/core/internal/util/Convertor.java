@@ -28,7 +28,6 @@ import org.rcfaces.core.lang.IAdaptable;
  * @version $Revision$ $Date$
  */
 public final class Convertor {
-    private static final String REVISION = "$Revision$";
 
     // private static final DateFormat dateFormat = new
     // SimpleDateFormat("dd/MM/yyyy", Locale.FRENCH);
@@ -41,7 +40,7 @@ public final class Convertor {
         facesContext.getExternalContext().log(message, th);
     }
 
-    public static Object convert(Object data, Class classRequested)
+    public static Object convert(Object data, Class< ? > classRequested)
             throws FacesException {
 
         if (classRequested == null) {
@@ -63,7 +62,7 @@ public final class Convertor {
                     + classRequested.getName() + "'.", null);
         }
 
-        Class cl = data.getClass();
+        Class< ? > cl = data.getClass();
         if (cl == classRequested || classRequested.isAssignableFrom(cl)) {
             return data;
         }
@@ -109,7 +108,7 @@ public final class Convertor {
     }
 
     private interface ClassConvertor {
-        Object convert(Class cl, Object data);
+        Object convert(Class< ? > cl, Object data);
 
         Object getNullValue();
     }

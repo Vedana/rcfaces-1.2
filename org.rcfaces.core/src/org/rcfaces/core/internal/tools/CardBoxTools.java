@@ -28,7 +28,7 @@ public class CardBoxTools {
     private static final Log LOG = LogFactory.getLog(CardBoxTools.class);
 
     private static final ICardIterator EMPTY_COMPONENT_ITERATOR = new CardListIterator(
-            Collections.EMPTY_LIST);
+            Collections.<CardComponent> emptyList());
 
     public static ICardIterator listCards(CardBoxComponent component) {
         List<CardComponent> list = ComponentIterators.list(component,
@@ -85,14 +85,15 @@ public class CardBoxTools {
     }
 
     private static final class CardListIterator extends
-            ComponentIterators.ComponentListIterator implements ICardIterator {
+            ComponentIterators.ComponentListIterator<CardComponent> implements
+            ICardIterator {
 
-        public CardListIterator(List list) {
+        public CardListIterator(List<CardComponent> list) {
             super(list);
         }
 
         public final CardComponent next() {
-            return (CardComponent) nextComponent();
+            return nextComponent();
         }
 
         public CardComponent[] toArray() {

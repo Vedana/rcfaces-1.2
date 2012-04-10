@@ -15,8 +15,6 @@ import javax.faces.event.FacesListener;
 public class DropEvent extends ActionEvent {
     private static final long serialVersionUID = -2370449431301934100L;
 
-    private static final String REVISION = "$Revision$";
-
     public DropEvent(UIComponent component) {
         super(component);
     }
@@ -28,6 +26,7 @@ public class DropEvent extends ActionEvent {
      * javax.faces.event.FacesEvent#isAppropriateListener(javax.faces.event.
      * FacesListener)
      */
+    @Override
     public boolean isAppropriateListener(FacesListener listener) {
         return (listener instanceof IDropListener);
     }
@@ -39,6 +38,7 @@ public class DropEvent extends ActionEvent {
      * javax.faces.event.FacesEvent#processListener(javax.faces.event.FacesListener
      * )
      */
+    @Override
     public void processListener(FacesListener listener) {
         ((IDropListener) listener).componentDropped(this);
     }

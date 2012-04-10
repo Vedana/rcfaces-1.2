@@ -28,7 +28,6 @@ public final class CachedChildrenList extends AbstractReleasable {
     private static final UIComponent[] UI_COMPONENT_EMPTY_ARRAY = new UIComponent[0];
 
     private static final Iterator EMPTY_ITERATOR = new Iterator() {
-        private static final String REVISION = "$Revision$";
 
         public boolean hasNext() {
             return false;

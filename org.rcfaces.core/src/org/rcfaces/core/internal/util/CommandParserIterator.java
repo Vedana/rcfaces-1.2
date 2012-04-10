@@ -11,13 +11,14 @@ import java.util.List;
 
 import javax.faces.FacesException;
 
+import org.rcfaces.core.internal.util.CommandParserIterator.ICommand;
 import org.rcfaces.core.validator.IParameter;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class CommandParserIterator implements Iterator {
+public class CommandParserIterator implements Iterator<ICommand> {
 
     private static final IParameter[] EMPTY_PARAMETERS = new IParameter[0];
 
@@ -32,7 +33,7 @@ public class CommandParserIterator implements Iterator {
         return iterator.hasNext();
     }
 
-    public Object next() {
+    public ICommand next() {
         return nextCommand();
     }
 

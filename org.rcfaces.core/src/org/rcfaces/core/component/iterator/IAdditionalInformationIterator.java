@@ -12,7 +12,8 @@ import org.rcfaces.core.component.AdditionalInformationComponent;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public interface IAdditionalInformationIterator extends IComponentIterator {
+public interface IAdditionalInformationIterator extends
+        IComponentIterator<AdditionalInformationComponent> {
 
     /**
      * Returns the next AdditionalInformationComponent in the iteration. Calling

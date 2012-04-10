@@ -31,8 +31,6 @@ import org.rcfaces.core.internal.tools.SelectionTools;
  */
 public class SelectItemsContext {
 
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory.getLog(SelectItemsContext.class);
 
     private static final Object OPEN_HAS_CHILD = "HAS CHILD";
@@ -59,7 +57,7 @@ public class SelectItemsContext {
 
     private final ISelectItemNodeWriter selectItemNodeWriter;
 
-    private final List items = new ArrayList(16);
+    private final List<Object> items = new ArrayList<Object>(16);
 
     private final IComponentRenderContext componentContext;
 
@@ -75,11 +73,11 @@ public class SelectItemsContext {
 
     private int preloadedLevelDepth = -1;
 
-    private Set selectionValues = null;
+    private Set<Object> selectionValues = null;
 
-    private Set checkValues = null;
+    private Set<Object> checkValues = null;
 
-    private Set expandValues = null;
+    private Set<Object> expandValues = null;
 
     private boolean expandValuesModified = false;
 
@@ -163,12 +161,12 @@ public class SelectItemsContext {
 
     public final void setValueExpanded(SelectItem item, Object value) {
         if (expandValues == null) {
-            expandValues = new HashSet();
+            expandValues = new HashSet<Object>();
             expandValuesModified = true;
 
         } else if (expandValuesModified == false) {
             expandValuesModified = true;
-            expandValues = new HashSet(expandValues);
+            expandValues = new HashSet<Object>(expandValues);
         }
 
         expandValues.add(value);
@@ -258,7 +256,7 @@ public class SelectItemsContext {
             LOG.trace("POP enter" + " [" + depth + "]");
         }
 
-        for (ListIterator it = items.listIterator(); it.hasNext(); depth++) {
+        for (ListIterator<Object> it = items.listIterator(); it.hasNext(); depth++) {
             UIComponent component = (UIComponent) it.next();
             SelectItem selectItem = (SelectItem) it.next();
             boolean visible = ((Boolean) it.next()).booleanValue();

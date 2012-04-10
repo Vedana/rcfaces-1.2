@@ -15,8 +15,6 @@ import javax.faces.event.FacesListener;
 public class DropCompleteEvent extends ActionEvent {
     private static final long serialVersionUID = 975274504874873948L;
 
-    private static final String REVISION = "$Revision$";
-
     private final String[] types;
 
     private final int effect;
@@ -67,6 +65,7 @@ public class DropCompleteEvent extends ActionEvent {
      * javax.faces.event.FacesEvent#isAppropriateListener(javax.faces.event.
      * FacesListener)
      */
+    @Override
     public boolean isAppropriateListener(FacesListener listener) {
         return (listener instanceof IDropCompleteListener);
     }
@@ -78,6 +77,7 @@ public class DropCompleteEvent extends ActionEvent {
      * javax.faces.event.FacesEvent#processListener(javax.faces.event.FacesListener
      * )
      */
+    @Override
     public void processListener(FacesListener listener) {
         ((IDropCompleteListener) listener).componentCompleteDropped(this);
     }

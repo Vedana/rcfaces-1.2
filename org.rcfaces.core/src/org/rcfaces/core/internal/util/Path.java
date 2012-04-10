@@ -20,30 +20,30 @@ import org.rcfaces.core.internal.lang.StringAppender;
  * @version $Revision$ $Date$
  */
 public class Path implements IPath {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(Path.class);
 
-    private List segments;
+    private final List<String> segments;
 
-    private boolean absolute;
+    private final boolean absolute;
 
-    private Path(List segments, boolean absolute) {
-        this.segments = new ArrayList(segments);
+    private Path(List<String> segments, boolean absolute) {
+        this.segments = new ArrayList<String>(segments);
         this.absolute = absolute;
     }
 
     public Path(String path) {
         StringTokenizer st = new StringTokenizer(path, "/", true);
 
-        segments = new ArrayList(st.countTokens() / 2 + 2);
+        segments = new ArrayList<String>(st.countTokens() / 2 + 2);
 
+        boolean _absolute = false;
         for (; st.hasMoreTokens();) {
             String token = st.nextToken();
 
             if (token.equals("/")) {
                 if (segments.isEmpty()) {
-                    absolute = true;
+                    _absolute = true;
                 }
 
                 continue;
@@ -51,6 +51,8 @@ public class Path implements IPath {
 
             segments.add(token);
         }
+
+        absolute = _absolute;
 
         normalizePath(segments, absolute);
     }
@@ -78,7 +80,7 @@ public class Path implements IPath {
             throw new IndexOutOfBoundsException();
         }
 
-        return (String) segments.get(index);
+        return segments.get(index);
     }
 
     public int segmentCount() {
@@ -86,7 +88,7 @@ public class Path implements IPath {
     }
 
     public String[] segments() {
-        return (String[]) segments.toArray(new String[segments.size()]);
+        return segments.toArray(new String[segments.size()]);
     }
 
     public String lastSegment() {
@@ -95,7 +97,7 @@ public class Path implements IPath {
 
     public IPath uptoSegment(int count) {
         if (count < 1) {
-            return new Path(Collections.EMPTY_LIST, absolute);
+            return new Path(Collections.<String> emptyList(), absolute);
         }
 
         if (count >= segments.size()) {
@@ -110,7 +112,7 @@ public class Path implements IPath {
             return path;
         }
 
-        List l = new ArrayList(segments);
+        List<String> l = new ArrayList<String>(segments);
 
         l.addAll(Arrays.asList(path.segments()));
 
@@ -121,7 +123,7 @@ public class Path implements IPath {
 
     public IPath removeFirstSegments(int count) {
         if (count < 0 || count >= segments.size()) {
-            return new Path(Collections.EMPTY_LIST, absolute);
+            return new Path(Collections.<String> emptyList(), absolute);
         }
 
         return new Path(segments.subList(count, segments.size()), absolute);
@@ -131,6 +133,7 @@ public class Path implements IPath {
         return uptoSegment(segments.size() - count);
     }
 
+    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
@@ -140,6 +143,7 @@ public class Path implements IPath {
         return result;
     }
 
+    @Override
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
@@ -158,11 +162,12 @@ public class Path implements IPath {
         return true;
     }
 
+    @Override
     public String toString() {
         StringAppender sa = new StringAppender(segments.size() * 16);
 
         boolean first = true;
-        for (Iterator it = segments.iterator(); it.hasNext();) {
+        for (Iterator<String> it = segments.iterator(); it.hasNext();) {
             if (first) {
                 first = false;
                 if (absolute) {
@@ -172,15 +177,15 @@ public class Path implements IPath {
                 sa.append('/');
             }
 
-            sa.append((String) it.next());
+            sa.append(it.next());
         }
 
         return sa.toString();
     }
 
-    private static void normalizePath(List segments, boolean absolute) {
+    private static void normalizePath(List<String> segments, boolean absolute) {
         for (int i = 0; i < segments.size();) {
-            String segment = (String) segments.get(i);
+            String segment = segments.get(i);
 
             if (segment.length() == 0 || segment.equals(".")) {
                 segments.remove(i);

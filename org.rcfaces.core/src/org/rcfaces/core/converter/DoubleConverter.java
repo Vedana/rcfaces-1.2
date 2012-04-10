@@ -12,12 +12,12 @@ import javax.faces.context.FacesContext;
  * @version $Revision$ $Date$
  */
 public class DoubleConverter extends AbstractNumberConverter {
-    private static final String REVISION = "$Revision$";
 
     public DoubleConverter() {
         setIntegerOnly(false);
     }
 
+    @Override
     public Object getAsObject(FacesContext context, UIComponent component,
             String value) {
 

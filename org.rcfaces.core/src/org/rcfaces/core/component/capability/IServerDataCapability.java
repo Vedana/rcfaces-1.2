@@ -60,5 +60,5 @@ public interface IServerDataCapability {
      * 
      * @return a map
      */
-    Map getServerDataMap();
+    Map<String, Object> getServerDataMap();
 }

@@ -14,28 +14,30 @@ import javax.faces.event.FacesListener;
  */
 public class CriteriaEvent extends ActionEvent {
 
-	private static final long serialVersionUID = -8778872157368114361L;
+    private static final long serialVersionUID = -8778872157368114361L;
 
-	public CriteriaEvent(UIComponent component) {
-		super(component);
-	}
+    public CriteriaEvent(UIComponent component) {
+        super(component);
+    }
 
-	public boolean isAppropriateListener(FacesListener listener) {
+    @Override
+    public boolean isAppropriateListener(FacesListener listener) {
 
-		if (listener instanceof ICriteriaListener) {
-			return true;
-		}
+        if (listener instanceof ICriteriaListener) {
+            return true;
+        }
 
-		return super.isAppropriateListener(listener);
-	}
+        return super.isAppropriateListener(listener);
+    }
 
-	public void processListener(FacesListener listener) {
-		if (listener instanceof ICriteriaListener) {
-			((ICriteriaListener) listener).processCriteriaChanged(this);
-			return;
-		}
+    @Override
+    public void processListener(FacesListener listener) {
+        if (listener instanceof ICriteriaListener) {
+            ((ICriteriaListener) listener).processCriteriaChanged(this);
+            return;
+        }
 
-		super.processListener(listener);
-	}
+        super.processListener(listener);
+    }
 
 }

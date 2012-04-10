@@ -12,7 +12,6 @@ import javax.faces.event.FacesListener;
  * @version $Revision$ $Date$
  */
 public class MenuEvent extends CameliaEvent {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = -5811470604287524737L;
 
@@ -20,10 +19,12 @@ public class MenuEvent extends CameliaEvent {
         super(component, type);
     }
 
+    @Override
     public boolean isAppropriateListener(FacesListener listener) {
         return (listener instanceof IMenuListener);
     }
 
+    @Override
     public void processListener(FacesListener listener) {
         ((IMenuListener) listener).menuShown(this);
     }

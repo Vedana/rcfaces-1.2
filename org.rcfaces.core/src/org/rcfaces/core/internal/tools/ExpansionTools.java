@@ -70,8 +70,8 @@ public class ExpansionTools extends CollectionTools {
 
     public static int getCount(UIComponent component, Object expandedValues) {
         IValuesAccessor valuesAccessor = getValuesAccessor(expandedValues,
-				IExpansionProvider.class, getValueAccessor(component), true,
-				true);
+                IExpansionProvider.class, getValueAccessor(component), true,
+                true);
 
         if (valuesAccessor == null) {
             return 0;
@@ -83,8 +83,8 @@ public class ExpansionTools extends CollectionTools {
     public static Object[] listValues(UIComponent component,
             Object expandedValues, Object refValue) {
         IValuesAccessor valuesAccessor = getValuesAccessor(expandedValues,
-				IExpansionProvider.class, getValueAccessor(component), true,
-				true);
+                IExpansionProvider.class, getValueAccessor(component), true,
+                true);
 
         if (valuesAccessor == null) {
             return EMPTY_VALUES;
@@ -96,7 +96,7 @@ public class ExpansionTools extends CollectionTools {
     public static Object getAdaptedValues(Object value, boolean useValue) {
         IValuesAccessor valuesAccessor = getValuesAccessor(value,
                 ICheckProvider.class, EXPANSION_PROVIDER_VALUES_ACCESSOR,
-				useValue, true);
+                useValue, true);
 
         if (valuesAccessor == null) {
             return null;
@@ -107,8 +107,8 @@ public class ExpansionTools extends CollectionTools {
 
     public static boolean setAdaptedValues(Object value, Object values) {
         IValuesAccessor valuesAccessor = getValuesAccessor(value,
-				ICheckProvider.class, EXPANSION_PROVIDER_VALUES_ACCESSOR,
-				false, true);
+                ICheckProvider.class, EXPANSION_PROVIDER_VALUES_ACCESSOR,
+                false, true);
 
         if (valuesAccessor == null) {
             return false;
@@ -125,7 +125,7 @@ public class ExpansionTools extends CollectionTools {
 
     public static void expandAll(FacesContext facesContext,
             UIComponent component) {
-		selectAll(component, getValueAccessor(component), null);
+        selectAll(component, getValueAccessor(component), null);
     }
 
     public static void collapse(FacesContext facesContext,
@@ -139,12 +139,12 @@ public class ExpansionTools extends CollectionTools {
     }
 
     public static void setExpansionValues(FacesContext facesContext,
-            UIComponent component, Set valuesSet) {
+            UIComponent component, Set<Object> valuesSet) {
 
         setValues(component, getValueAccessor(component), valuesSet);
     }
 
-    public static Set expansionValuesToSet(FacesContext facesContext,
+    public static Set<Object> expansionValuesToSet(FacesContext facesContext,
             UIComponent component, boolean immutable) {
         return valuesToSet(component, getValueAccessor(component), immutable);
     }

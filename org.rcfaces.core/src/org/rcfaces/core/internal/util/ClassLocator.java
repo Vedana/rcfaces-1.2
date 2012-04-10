@@ -23,7 +23,7 @@ import org.apache.commons.logging.LogFactory;
 public class ClassLocator {
     private static final Log LOG = LogFactory.getLog(ClassLocator.class);
 
-    public static final Class load(String className, Object fallback,
+    public static final Class< ? > load(String className, Object fallback,
             Object context) throws ClassNotFoundException {
 
         ClassNotFoundException thOrigin = null;
@@ -55,9 +55,9 @@ public class ClassLocator {
         }
 
         if (fallback != null) {
-            Class cls;
+            Class< ? > cls;
             if (fallback instanceof Class) {
-                cls = (Class) fallback;
+                cls = (Class< ? >) fallback;
             } else {
                 cls = fallback.getClass();
             }
