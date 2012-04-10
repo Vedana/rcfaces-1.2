@@ -299,7 +299,12 @@ var __members = {
 			for(var name in buttons) {
 				var button=buttons[name];
 				
-				this.f_clearButton(button);
+				try {
+					this.f_clearButton(button);
+					
+				} catch (x) {
+					// Le composant peut ne plus être rattaché !
+				}
 			}
 		}
 		
@@ -327,26 +332,34 @@ var __members = {
 	
 	/**
 	 * @method protected
-	 * @param HTMLElement button
+	 * @param Object button
 	 * @return void
 	 */
 	f_clearButton: function(button) {
-		var img = button.img;
-//		img._over=undefined; // boolean
-//		img._selected=undefined; // boolean
-//		img._className=undefined; // String
-//		img._eventName=undefined; // String
-//		img._name=undefined; // String
-		img._shellDecorator=undefined; // f_shellDecorator		
-		img.onmousedown=null;
-		img.onmouseup=null;
-		img.onmouseover=null;
-		img.onmouseout=null;
+		var img = button._img;
+		if (img) {
+			button._img=undefined;
+			
+	//		img._over=undefined; // boolean
+	//		img._selected=undefined; // boolean
+	//		img._className=undefined; // String
+	//		img._eventName=undefined; // String
+	//		img._name=undefined; // String
+			img._shellDecorator=undefined; // f_shellDecorator		
+			img.onmousedown=null;
+			img.onmouseup=null;
+			img.onmouseover=null;
+			img.onmouseout=null;
+		}
 		
-		var link = button.link;
-		link._shellDecorator=undefined; // f_shellDecorator	
-		link.onclick=undefined;
-//		link._name=undefined; // String		
+		var link = button._link;
+		if (link) {
+			button._link=undefined;
+			
+			link._shellDecorator=undefined; // f_shellDecorator	
+			link.onclick=undefined;
+			//		link._name=undefined; // String		
+		}
 	},
 	/**
 	 * @method public
@@ -551,11 +564,16 @@ var __members = {
 		img._eventName=eventName;
 		img._name=name;
 		
-		if (!this._buttons) {
-			this._buttons=new Object;
+		var buttons=this._buttons;
+		if (!buttons) {
+			buttons=new Object;
+			this._buttons=buttons;
 		}
 		
-		this._buttons[name]={link: link, img: img};
+		buttons[name]={
+			_link: link,
+			_img: img
+		};
 	},
 	/**
 	 * @method hidden
