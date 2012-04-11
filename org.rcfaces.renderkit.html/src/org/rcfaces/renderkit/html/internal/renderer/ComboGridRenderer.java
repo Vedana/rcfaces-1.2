@@ -255,7 +255,7 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
 
         String clientValidatorParameters = constructClientValidatorParameters(
                 htmlWriter, comboGridComponent);
-        if (clientValidatorParameters != null) {
+        if (false && clientValidatorParameters != null) {
             htmlWriter.writeAttributeNS("clientValidator",
                     clientValidatorParameters);
         }
