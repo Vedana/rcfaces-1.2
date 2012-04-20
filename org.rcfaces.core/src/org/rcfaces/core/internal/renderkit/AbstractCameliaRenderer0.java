@@ -19,6 +19,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IPartialRenderingCapability;
 import org.rcfaces.core.internal.RcfacesContext;
+import org.rcfaces.core.internal.renderkit.designer.IDesignerEngine;
 import org.rcfaces.core.internal.tools.AsyncModeTools;
 import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.lang.IAdaptable;
@@ -350,5 +351,31 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
     protected boolean isComponentVisible(
             IComponentRenderContext componentRenderContext) {
         return componentRenderContext.containsAttribute(COMPONENT_HIDDEN) == false;
+    }
+
+    protected final void designerBeginChildren(IComponentWriter writer,
+            String facetName) {
+        IDesignerEngine designerEngine = writer.getComponentRenderContext()
+                .getRenderContext().getProcessContext().getDesignerEngine();
+
+        if (designerEngine == null) {
+            return;
+        }
+
+        designerEngine.beginChildren(writer.getComponentRenderContext()
+                .getComponent(), facetName);
+    }
+
+    protected final void designerEndChildren(IComponentWriter writer,
+            String facetName) {
+        IDesignerEngine designerEngine = writer.getComponentRenderContext()
+                .getRenderContext().getProcessContext().getDesignerEngine();
+
+        if (designerEngine == null) {
+            return;
+        }
+
+        designerEngine.endChildren(writer.getComponentRenderContext()
+                .getComponent(), facetName);
     }
 }

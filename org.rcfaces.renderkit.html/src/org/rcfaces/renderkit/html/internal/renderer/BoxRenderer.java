@@ -35,7 +35,10 @@ import org.rcfaces.renderkit.html.internal.util.TextTypeTools;
 public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
     private static final String HTML_TYPE_PROPERTY = "org.rcfaces.renderkit.html.box.COMPONENT_TYPE";
 
-    public void encodeBegin(IComponentWriter writer) throws WriterException {
+    public final void encodeBegin(IComponentWriter writer)
+            throws WriterException {
+        // Final a cause du designer
+
         super.encodeBegin(writer);
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
@@ -53,32 +56,6 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
         writeComponentAttributes(htmlWriter);
 
         designerBeginChildren(htmlWriter, IDesignerEngine.MAIN_BODY);
-    }
-
-    protected final void designerBeginChildren(IComponentWriter writer,
-            String facetName) {
-        IDesignerEngine designerEngine = writer.getComponentRenderContext()
-                .getRenderContext().getProcessContext().getDesignerEngine();
-
-        if (designerEngine == null) {
-            return;
-        }
-
-        designerEngine.beginChildren(writer.getComponentRenderContext()
-                .getComponent(), facetName);
-    }
-
-    protected final void designerEndChildren(IComponentWriter writer,
-            String facetName) {
-        IDesignerEngine designerEngine = writer.getComponentRenderContext()
-                .getRenderContext().getProcessContext().getDesignerEngine();
-
-        if (designerEngine == null) {
-            return;
-        }
-
-        designerEngine.endChildren(writer.getComponentRenderContext()
-                .getComponent(), facetName);
     }
 
     protected String getMainTagName(IHtmlWriter htmlWriter) {
@@ -135,7 +112,9 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
         setAsyncRenderer(htmlWriter, boxComponent, asyncRender);
     }
 
-    protected void encodeEnd(IComponentWriter writer) throws WriterException {
+    protected final void encodeEnd(IComponentWriter writer)
+            throws WriterException {
+        // Final a cause du designer
 
         designerEndChildren(writer, IDesignerEngine.MAIN_BODY);
 

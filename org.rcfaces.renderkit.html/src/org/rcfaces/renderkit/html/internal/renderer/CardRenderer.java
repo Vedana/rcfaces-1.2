@@ -15,6 +15,7 @@ import org.rcfaces.core.internal.renderkit.IAsyncRenderer;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.renderkit.designer.IDesignerEngine;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
@@ -33,12 +34,10 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  * @version $Revision$ $Date$
  */
 public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final String CARD_SUFFIX = "_card";
 
     private static final IJavaScriptComponentRenderer CARD_JAVASCRIPT_COMPONENT = new IJavaScriptComponentRenderer() {
-        private static final String REVISION = "$Revision$";
 
         public void initializeJavaScript(IJavaScriptWriter javaScriptWriter)
                 throws WriterException {
@@ -61,7 +60,10 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
         }
     };
 
-    protected void encodeBegin(IComponentWriter writer) throws WriterException {
+    protected final void encodeBegin(IComponentWriter writer)
+            throws WriterException {
+        // Final a cause du designer
+
         // super.encodeBegin(writer); // ???
 
         FacesContext facesContext = writer.getComponentRenderContext()
@@ -167,6 +169,8 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
         if (verticalAlignement != null) {
             cssWriter.writeVerticalAlign(verticalAlignement);
         }
+
+        designerBeginChildren(htmlWriter, IDesignerEngine.MAIN_BODY);
     }
 
     protected void writeCardSizes(IHtmlWriter htmlWriter,
@@ -275,6 +279,9 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
     }
 
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
+        // Final a cause du desinger
+        designerEndChildren(writer, IDesignerEngine.MAIN_BODY);
+
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
         htmlWriter.endElement(IHtmlWriter.DIV);

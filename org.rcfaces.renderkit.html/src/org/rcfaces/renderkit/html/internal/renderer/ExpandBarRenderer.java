@@ -19,6 +19,7 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.renderkit.designer.IDesignerEngine;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.core.lang.IContentFamily;
@@ -77,7 +78,10 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
             + UINamingContainer.SEPARATOR_CHAR
             + UINamingContainer.SEPARATOR_CHAR + "image";
 
-    public void encodeBegin(IComponentWriter writer) throws WriterException {
+    public final void encodeBegin(IComponentWriter writer)
+            throws WriterException {
+        // Final a cause du designer
+
         super.encodeBegin(writer);
 
         IComponentRenderContext componentContext = writer
@@ -215,6 +219,8 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
 
         htmlWriter.getJavaScriptEnableMode().enableOnInit();
         // Il faut positionner les hovers en javascript
+
+        designerBeginChildren(htmlWriter, IDesignerEngine.MAIN_BODY);
     }
 
     protected String getHeadId(IHtmlWriter htmlWriter) {
@@ -395,7 +401,12 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
          */
     }
 
-    protected void encodeEnd(IComponentWriter writer) throws WriterException {
+    protected final void encodeEnd(IComponentWriter writer)
+            throws WriterException {
+        // Final a cause du designer
+
+        designerEndChildren(writer, IDesignerEngine.MAIN_BODY);
+
         // IComponentRenderContext componentContext =
         // writer.getComponentRenderContext();
 

@@ -18,6 +18,7 @@ import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
 import org.rcfaces.core.internal.renderkit.border.ITitledBorderRenderer;
+import org.rcfaces.core.internal.renderkit.designer.IDesignerEngine;
 import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
@@ -42,7 +43,10 @@ public class FieldSetRenderer extends AbstractCssRenderer {
             + UINamingContainer.SEPARATOR_CHAR
             + UINamingContainer.SEPARATOR_CHAR + "label";
 
-    public void encodeBegin(IComponentWriter writer) throws WriterException {
+    public final void encodeBegin(IComponentWriter writer)
+            throws WriterException {
+        // Final a cause du designer
+
         super.encodeBegin(writer);
 
         IComponentRenderContext componentContext = writer
@@ -54,6 +58,8 @@ public class FieldSetRenderer extends AbstractCssRenderer {
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
         encodeFieldSetTop(htmlWriter, component);
+
+        designerBeginChildren(writer, IDesignerEngine.MAIN_BODY);
     }
 
     protected void encodeFieldSetTop(IHtmlWriter htmlWriter,
@@ -209,7 +215,10 @@ public class FieldSetRenderer extends AbstractCssRenderer {
         return "rounded";
     }
 
-    protected void encodeEnd(IComponentWriter writer) throws WriterException {
+    protected final void encodeEnd(IComponentWriter writer)
+            throws WriterException {
+        // Final a cause du designer
+        designerEndChildren(writer, IDesignerEngine.MAIN_BODY);
 
         IComponentRenderContext componentContext = writer
                 .getComponentRenderContext();
