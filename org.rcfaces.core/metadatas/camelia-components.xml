@@ -4744,6 +4744,7 @@ Dans le cas d'un mode period !
 	
 	<component id="toolTip" extends="abstractBasic">
 		<implements id="org.rcfaces.core.internal.capability.IAsyncRenderComponent" />
+		<implements id="javax.faces.component.NamingContainer" />
 
 		<capability id="IBackgroundImageCapability" />
 		<capability id="IBorderCapability" />
