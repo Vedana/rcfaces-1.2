@@ -49,7 +49,6 @@ import org.rcfaces.renderkit.html.internal.util.UserAgentTools;
  * @version $Revision$ $Date$
  */
 public class JavaScriptRenderer extends AbstractFilesCollectorRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(JavaScriptRenderer.class);
 
@@ -204,7 +203,7 @@ public class JavaScriptRenderer extends AbstractFilesCollectorRenderer {
             return;
         }
 
-        final List<IFile> files = new ArrayList<IFile>(32);
+        final List<Object> files = new ArrayList<Object>(32);
 
         if (requiredFiles != null) {
             StringTokenizer st = new StringTokenizer(requiredFiles, ",");

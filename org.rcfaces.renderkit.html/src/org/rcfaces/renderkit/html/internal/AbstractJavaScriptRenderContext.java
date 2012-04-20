@@ -45,7 +45,6 @@ import org.rcfaces.renderkit.html.internal.util.JavaScriptTools;
  */
 public abstract class AbstractJavaScriptRenderContext implements
         IJavaScriptRenderContext {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(AbstractJavaScriptRenderContext.class);
@@ -87,7 +86,7 @@ public abstract class AbstractJavaScriptRenderContext implements
 
     private final IJavaScriptRepository repository;
 
-    protected final Set<IFile> waitingRequiredClassesNames = new HashSet<IFile>(
+    protected final Set<Object> waitingRequiredClassesNames = new HashSet<Object>(
             DECLARED_CLASSES_INIT_SIZE);
 
     private final Set<String> declaredClasses;

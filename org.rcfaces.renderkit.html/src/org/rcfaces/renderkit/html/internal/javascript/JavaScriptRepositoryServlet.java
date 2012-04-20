@@ -433,7 +433,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
     protected ISet initializeDefaultSet() {
 
-        List<IFile> mds = new ArrayList<IFile>(8);
+        List<Object> mds = new ArrayList<Object>(8);
 
         IModule modules[] = getHierarchicalRepository().listModules();
 
@@ -457,7 +457,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
         String uri = getSetURI(name);
 
-        mds = Arrays.<IFile> asList(ret);
+        mds = Arrays.<Object> asList(ret);
 
         ISet set = getHierarchicalRepository().declareSet(name, uri,
                 mds.toArray(new IModule[mds.size()]));

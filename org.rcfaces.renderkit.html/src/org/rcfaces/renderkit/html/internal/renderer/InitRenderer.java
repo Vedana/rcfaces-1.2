@@ -68,7 +68,6 @@ import org.rcfaces.renderkit.html.internal.javascript.JavaScriptRepositoryServle
  * @version $Revision$ $Date$
  */
 public class InitRenderer extends AbstractHtmlRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(InitRenderer.class);
 
@@ -590,8 +589,8 @@ public class InitRenderer extends AbstractHtmlRenderer {
     private static synchronized ApplicationParameters getApplicationParameters(
             IHtmlProcessContext htmlProcessContext) {
 
-        Map applicationMap = htmlProcessContext.getFacesContext()
-                .getExternalContext().getApplicationMap();
+        Map<String, Object> applicationMap = htmlProcessContext
+                .getFacesContext().getExternalContext().getApplicationMap();
         ApplicationParameters appParams = (ApplicationParameters) applicationMap
                 .get(APPLICATION_PARAMETERS_PROPERTY);
         if (appParams != null) {
@@ -909,7 +908,8 @@ public class InitRenderer extends AbstractHtmlRenderer {
         }
         jsWriter.write("></\"+\"SCRIPT>");
 
-        List l = Collections.singletonList(MULTI_WINDOW_CLASSLOADER_FILENAME);
+        List<Object> l = Collections
+                .<Object> singletonList(MULTI_WINDOW_CLASSLOADER_FILENAME);
 
         IRepository.IFile files[] = repository.computeFiles(l,
                 IHierarchicalRepository.FILENAME_COLLECTION_TYPE,
@@ -985,7 +985,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
 
         String favoriteImageURL;
 
-        Set clientMessageIdFilter;
+        Set<String> clientMessageIdFilter;
 
         String waiRolesNS;
 
@@ -1179,13 +1179,13 @@ public class InitRenderer extends AbstractHtmlRenderer {
         return new JavaScriptWriterImpl(writer);
     }
 
-    static Set parseClientMessageIdFilter(String filter) {
-        Set set = null;
+    static Set<String> parseClientMessageIdFilter(String filter) {
+        Set<String> set = null;
 
         StringTokenizer st = new StringTokenizer(filter, ", ");
         for (; st.hasMoreTokens();) {
             if (set == null) {
-                set = new HashSet(st.countTokens());
+                set = new HashSet<String>(st.countTokens());
             }
 
             String clientId = st.nextToken();

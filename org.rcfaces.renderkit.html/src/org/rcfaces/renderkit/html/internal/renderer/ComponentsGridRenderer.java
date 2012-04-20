@@ -80,7 +80,8 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
     private static final Log LOG = LogFactory
             .getLog(ComponentsGridRenderer.class);
 
-    private static final Map SORT_ALIASES = new HashMap(2);
+    private static final Map<String, String> SORT_ALIASES = new HashMap<String, String>(
+            2);
     static {
         SORT_ALIASES.put(ISortEventCapability.SORT_SERVER, SORT_SERVER_COMMAND);
     }
@@ -182,12 +183,12 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
             IScriptRenderContext scriptRenderContext,
             ComponentsGridComponent dgc, int rowIndex, int forcedRow,
             ISortedComponent[] sortedComponents, String filterExpression,
-			String showAdditionals, String hideAdditionals,
-			ISelectedCriteria[] criteriaContainers) {
+            String showAdditionals, String hideAdditionals,
+            ISelectedCriteria[] criteriaContainers) {
         return new ComponentsGridRenderContext(processContext,
                 scriptRenderContext, dgc, rowIndex, forcedRow,
                 sortedComponents, filterExpression, showAdditionals,
-				hideAdditionals, criteriaContainers);
+                hideAdditionals, criteriaContainers);
     }
 
     protected void encodeBodyEnd(IHtmlWriter writer,
@@ -216,10 +217,10 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 
         // Dans tous les cas il faut positionner le renderContext !
         ComponentsGridService componentsGridServer = ComponentsGridService
-				.getInstance(facesContext);
-		if (componentsGridServer != null) {
-			componentsGridServer.setupComponent(componentRenderContext);
-		}
+                .getInstance(facesContext);
+        if (componentsGridServer != null) {
+            componentsGridServer.setupComponent(componentRenderContext);
+        }
 
         if (tableContext.isInteractiveShow()) {
             return;
@@ -348,24 +349,22 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 
         int sortTranslations[] = null;
 
-
         DataModel dataModel = componentsGridComponent.getDataModelValue();
 
-		IComponentRefModel componentRefModel = (IComponentRefModel) getAdapter(
-				IComponentRefModel.class, dataModel);
+        IComponentRefModel componentRefModel = getAdapter(
+                IComponentRefModel.class, dataModel);
 
-		if (componentRefModel != null) {
-			componentRefModel
-					.setComponent((UIComponent) componentsGridComponent);
+        if (componentRefModel != null) {
+            componentRefModel.setComponent(componentsGridComponent);
         }
 
         boolean filtred = false;
 
         IFilterProperties filtersMap = gridRenderContext.getFiltersMap();
-		IFiltredModel filtredDataModel = (IFiltredModel) getAdapter(
-				IFiltredModel.class, dataModel);
+        IFiltredModel filtredDataModel = getAdapter(IFiltredModel.class,
+                dataModel);
         if (filtersMap != null) {
-			if (filtredDataModel != null) {
+            if (filtredDataModel != null) {
 
                 filtredDataModel.setFilter(filtersMap);
                 gridRenderContext.updateRowCount();
@@ -377,17 +376,18 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                 gridRenderContext.updateRowCount();
             }
 
-		} else if (filtredDataModel != null) {
+        } else if (filtredDataModel != null) {
 
             filtredDataModel.setFilter(FilterExpressionTools.EMPTY);
             gridRenderContext.updateRowCount();
 
             filtred = true;
         }
-        
-        ISortedComponent sortedComponents[] = gridRenderContext.listSortedComponents();
-		ISortedDataModel sortedDataModel = (ISortedDataModel) getAdapter(
-				ISortedDataModel.class, dataModel, sortedComponents);
+
+        ISortedComponent sortedComponents[] = gridRenderContext
+                .listSortedComponents();
+        ISortedDataModel sortedDataModel = getAdapter(ISortedDataModel.class,
+                dataModel, sortedComponents);
         if (sortedComponents != null && sortedComponents.length > 0) {
 
             if (NOT_SUPPORTED_SERVER_SORT) {
@@ -395,7 +395,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                         "Can not sort dataModel in server side !");
             }
 
-			if (sortedDataModel != null) {
+            if (sortedDataModel != null) {
                 // On delegue au modele, le tri !
 
                 // Nous devons êctre OBLIGATOIREMENT en mode rowValueColumnId
@@ -404,8 +404,8 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                             "Can not sort dataModel without attribute rowValue attribute specified !");
                 }
 
-				sortedDataModel.setSortParameters(componentsGridComponent,
-						sortedComponents);
+                sortedDataModel.setSortParameters(componentsGridComponent,
+                        sortedComponents);
             } else {
                 throw new FacesException(
                         "ComponentsGrid can not be sorted automatically ! (the dataModel must implement ISortedDataModel)");
@@ -414,9 +414,9 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
             // Apres le tri, on connait peu etre la taille
             gridRenderContext.updateRowCount();
 
-		} else if (sortedDataModel != null) {
+        } else if (sortedDataModel != null) {
             // Reset des parametres de tri !
-			sortedDataModel.setSortParameters(componentsGridComponent, null);
+            sortedDataModel.setSortParameters(componentsGridComponent, null);
         }
 
         // Initializer le IRandgeDataModel avant la selection/check/additionnal
@@ -496,7 +496,8 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
             }
         }
 
-        Map varContext = facesContext.getExternalContext().getRequestMap();
+        Map<String, Object> varContext = facesContext.getExternalContext()
+                .getRequestMap();
         String rowCountVar = gridRenderContext.getRowCountVar();
         if (rowCountVar != null) {
             varContext.put(rowCountVar, new Integer(count));
@@ -806,19 +807,18 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
             if (cellHorizontalAligments != null) {
                 String alignment = cellHorizontalAligments[columnIndex];
                 if (alignment != null) {
-                	sa.append(" f_grid_cell_align_").append(alignment);
+                    sa.append(" f_grid_cell_align_").append(alignment);
                 }
             }
 
             htmlWriter.writeClass(sa.toString());
 
-            
             // Accessibility : add scope="row" for the scope column
             String scopeColId = gridRenderContext.getScopeColId();
             if (scopeColId != null && scopeColId.equals(column.getId())) {
-            	htmlWriter.writeAttribute("scope", "row");
+                htmlWriter.writeAttribute("scope", "row");
             }
-            
+
             htmlWriter.endComponent();
 
             htmlWriter.writeln();
@@ -997,7 +997,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         super.encodeEnd(writer);
     }
 
-    protected void addUnlockProperties(Set unlockedProperties) {
+    protected void addUnlockProperties(Set<String> unlockedProperties) {
         super.addUnlockProperties(unlockedProperties);
 
         unlockedProperties.add("selectedItems");
@@ -1022,10 +1022,11 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         if (selectedRows != null || deselectedRows != null) {
             if (rowValueSetted) {
 
-                Set selectedValues = SelectionTools.selectionValuesToSet(
-                        facesContext, componentsGridComponent, false);
+                Set<Object> selectedValues = SelectionTools
+                        .selectionValuesToSet(facesContext,
+                                componentsGridComponent, false);
 
-                Set newSelectedValues = updateSelection(facesContext,
+                Set<Object> newSelectedValues = updateSelection(facesContext,
                         selectedValues, selectedRows, deselectedRows,
                         componentsGridComponent);
 
@@ -1054,8 +1055,8 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         super.decode(context, component, componentData);
     }
 
-    private Set updateSelection(FacesContext facesContext, Set set,
-            String selectedRows, String deselectedRows,
+    private Set<Object> updateSelection(FacesContext facesContext,
+            Set<Object> set, String selectedRows, String deselectedRows,
             ComponentsGridComponent componentsGridComponent) {
 
         if (HtmlTools.ALL_VALUE.equals(deselectedRows)) {
@@ -1063,8 +1064,8 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 
         } else if (set.size() > 0 && deselectedRows != null
                 && deselectedRows.length() > 0) {
-            List deselect = parseValues(facesContext, componentsGridComponent,
-                    deselectedRows);
+            List<Object> deselect = parseValues(facesContext,
+                    componentsGridComponent, deselectedRows);
 
             if (deselect.isEmpty() == false) {
                 set.removeAll(deselect);
@@ -1072,8 +1073,8 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         }
 
         if (selectedRows != null && selectedRows.length() > 0) {
-            List select = parseValues(facesContext, componentsGridComponent,
-                    selectedRows);
+            List<Object> select = parseValues(facesContext,
+                    componentsGridComponent, selectedRows);
 
             if (select.isEmpty() == false) {
                 set.addAll(select);
@@ -1084,22 +1085,22 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         return set;
     }
 
-    public static List parseValues(FacesContext facesContext,
+    public static List<Object> parseValues(FacesContext facesContext,
             ComponentsGridComponent componentsGridComponent, String values) {
         StringTokenizer st = new StringTokenizer(values,
                 HtmlTools.LIST_SEPARATORS);
         if (st.hasMoreTokens() == false) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
 
-        List tokens = new ArrayList(st.countTokens());
+        List<String> tokens = new ArrayList<String>(st.countTokens());
         for (; st.hasMoreTokens();) {
             tokens.add(st.nextToken());
         }
 
         Object vs[] = convertStringsToValues(facesContext,
                 componentsGridComponent,
-                (String[]) tokens.toArray(new String[tokens.size()]));
+                tokens.toArray(new String[tokens.size()]));
 
         return Arrays.asList(vs);
     }
@@ -1143,7 +1144,6 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
      */
     public class ComponentsGridRenderContext extends AbstractGridRenderContext {
 
-
         private boolean rowValueSetted;
 
         private boolean interactiveShow;
@@ -1155,10 +1155,10 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                 ComponentsGridComponent gridComponent, int rowIndex,
                 int forcedRows, ISortedComponent[] sortedComponents,
                 String filterExpression, String showAdditionals,
-				String hideAdditionals, ISelectedCriteria[] criteriaContainers) {
+                String hideAdditionals, ISelectedCriteria[] criteriaContainers) {
             super(processContext, scriptRenderContext, gridComponent, rowIndex,
                     forcedRows, sortedComponents, filterExpression,
-					showAdditionals, hideAdditionals, criteriaContainers);
+                    showAdditionals, hideAdditionals, criteriaContainers);
         }
 
         public ComponentsGridRenderContext(
@@ -1195,7 +1195,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         }
 
         protected String convertAliasCommand(String command) {
-            return (String) SORT_ALIASES.get(command);
+            return SORT_ALIASES.get(command);
         }
 
         public boolean isRowValueSetted() {

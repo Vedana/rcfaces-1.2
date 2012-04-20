@@ -374,7 +374,8 @@ public class KeyLabelRenderer extends AbstractCssRenderer {
     }
 
     public SelectItem[] computeSelectItems(KeyLabelComponent keyLabelComponent,
-            IFilterProperties filterProperties, Map styleClasses) {
+            IFilterProperties filterProperties,
+            Map<SelectItem, String> styleClasses) {
         Object value = keyLabelComponent.getValue();
 
         SelectItem sis[] = convertValue(keyLabelComponent, value,

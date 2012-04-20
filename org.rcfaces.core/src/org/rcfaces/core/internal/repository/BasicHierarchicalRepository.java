@@ -327,12 +327,12 @@ public class BasicHierarchicalRepository extends AbstractRepository implements
         return name;
     }
 
-    public IHierarchicalFile[] computeFiles(Collection<IFile> files,
+    public IHierarchicalFile[] computeFiles(Collection<Object> files,
             int typeOfCollection, IContext context) {
         List<IHierarchicalFile> dependencies = null;
         List<IHierarchicalFile> deps = null;
 
-        for (Iterator<IFile> it = files.iterator(); it.hasNext();) {
+        for (Iterator<Object> it = files.iterator(); it.hasNext();) {
             Object next = it.next();
 
             IHierarchicalFile file = convertType(next, typeOfCollection);

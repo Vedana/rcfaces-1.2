@@ -85,7 +85,7 @@ public class ExternalBoxRenderer extends AbstractCssRenderer implements
             IComponentData componentData) {
         super.decode(context, component, componentData);
 
-        FacesContext facesContext = context.getFacesContext();
+        // FacesContext facesContext = context.getFacesContext();
 
         ExternalBoxComponent externalBoxComponent = (ExternalBoxComponent) component;
 

@@ -101,9 +101,9 @@ public abstract class AbstractGridRenderContext {
     private static final Log LOG = LogFactory
             .getLog(AbstractGridRenderContext.class);
 
-	private static final ISortedComponent[] SORTED_COMPONENT_EMPTY_ARRAY = new ISortedComponent[0];
+    private static final ISortedComponent[] SORTED_COMPONENT_EMPTY_ARRAY = new ISortedComponent[0];
 
-	private static final ISelectedCriteria[] CRITERIA_CONTAINER_EMPTY_ARRAY = new ISelectedCriteria[0];
+    private static final ISelectedCriteria[] CRITERIA_CONTAINER_EMPTY_ARRAY = new ISelectedCriteria[0];
 
     public static final int SERVER_HIDDEN = 1;
 
@@ -151,9 +151,9 @@ public abstract class AbstractGridRenderContext {
 
     private boolean hasTitleColumnImages;
 
-	private ISortedComponent[] sortedComponents;
+    private ISortedComponent[] sortedComponents;
 
-	private ISelectedCriteria[] selectedCriteria;
+    private ISelectedCriteria[] selectedCriteria;
 
     private int rows;
 
@@ -211,7 +211,7 @@ public abstract class AbstractGridRenderContext {
 
     private String rowStyleClasses[];
 
-	private String defaultCellToolTipIds[];
+    private String defaultCellToolTipIds[];
 
     protected int gridWidth;
 
@@ -241,24 +241,25 @@ public abstract class AbstractGridRenderContext {
 
     private String alertLoadingMessage = null;
 
-	private Set<ToolTipComponent> gridToolTips; // #head, #body, #row +
-												// (v:toolTipId) + #cell
-	private String scopeColId = null;
-	
+    private Set<ToolTipComponent> gridToolTips; // #head, #body, #row +
+                                                // (v:toolTipId) + #cell
+
+    private String scopeColId = null;
+
     private AbstractGridRenderContext(IProcessContext processContext,
             IScriptRenderContext scriptRenderContext,
             IGridComponent gridComponent, ISortedComponent sortedComponents[],
-			boolean checkTitleImages, ISelectedCriteria[] criteriaConfigs) {
+            boolean checkTitleImages, ISelectedCriteria[] criteriaConfigs) {
         this.processContext = processContext;
         this.scriptRenderContext = scriptRenderContext;
 
         this.gridComponent = gridComponent;
         this.sortedComponents = sortedComponents;
 
-		if (criteriaConfigs == null) {
-			criteriaConfigs = listCriteriaContainers((UIComponent) gridComponent);
-		}
-		this.selectedCriteria = criteriaConfigs;
+        if (criteriaConfigs == null) {
+            criteriaConfigs = listCriteriaContainers((UIComponent) gridComponent);
+        }
+        this.selectedCriteria = criteriaConfigs;
 
         if (gridComponent instanceof ISizeCapability) {
             computeGridSize((ISizeCapability) gridComponent);
@@ -280,10 +281,10 @@ public abstract class AbstractGridRenderContext {
         if (gridComponent instanceof IDroppableCapability) {
             isDroppable = ((IDroppableCapability) gridComponent).isDroppable();
         }
-        
+
         // Accessibility : get scope column
         scopeColId = findScopeColumnId(gridComponent);
-        
+
         initialize(checkTitleImages);
 
     }
@@ -359,11 +360,11 @@ public abstract class AbstractGridRenderContext {
             }
         }
 
-		// temporaire avant création de la capability tooltip2
+        // temporaire avant création de la capability tooltip2
 
-		if (gridComponent instanceof IToolTipComponent) {
-			gridToolTips = new HashSet<ToolTipComponent>();
-		}
+        if (gridComponent instanceof IToolTipComponent) {
+            gridToolTips = new HashSet<ToolTipComponent>();
+        }
 
         if (gridComponent instanceof IAdditionalInformationComponent) {
             additionalInformations = ((IAdditionalInformationComponent) gridComponent)
@@ -431,7 +432,8 @@ public abstract class AbstractGridRenderContext {
             UIComponent orderedChildren[] = ((IOrderedChildrenCapability) gridComponent)
                     .getOrderedChildren();
             if (orderedChildren != null && orderedChildren.length > 0) {
-                List cs = new ArrayList(orderedChildren.length);
+                List<UIColumn> cs = new ArrayList<UIColumn>(
+                        orderedChildren.length);
 
                 for (int i = 0; i < orderedChildren.length; i++) {
                     UIComponent c = orderedChildren[i];
@@ -440,10 +442,10 @@ public abstract class AbstractGridRenderContext {
                         continue;
                     }
 
-                    cs.add(c);
+                    cs.add((UIColumn) c);
                 }
 
-                columns = (UIColumn[]) cs.toArray(new UIColumn[cs.size()]);
+                columns = cs.toArray(new UIColumn[cs.size()]);
             }
         }
 
@@ -454,7 +456,7 @@ public abstract class AbstractGridRenderContext {
         columnIds = new String[columns.length];
         columnWidths = new String[columns.length];
         columnWidthsInPixel = new int[columns.length];
-		defaultCellToolTipIds = new String[columns.length];
+        defaultCellToolTipIds = new String[columns.length];
 
         FacesContext facesContext = processContext.getFacesContext();
 
@@ -650,13 +652,13 @@ public abstract class AbstractGridRenderContext {
                 }
             }
 
-			if (column instanceof IToolTipComponent) {
-				IToolTipIterator tooltipIterator = ((IToolTipComponent) column)
-						.listToolTips();
-				// TODO
-			}
+            if (column instanceof IToolTipComponent) {
+                IToolTipIterator tooltipIterator = ((IToolTipComponent) column)
+                        .listToolTips();
+                // TODO
+            }
 
-			// cell
+            // cell
 
             if (column instanceof ICellToolTipTextCapability) {
                 String ctt = ((ICellToolTipTextCapability) column)
@@ -884,7 +886,7 @@ public abstract class AbstractGridRenderContext {
                 componentRenderContext.getRenderContext()
                         .getScriptRenderContext(),
                 (IGridComponent) componentRenderContext.getComponent(),
-				computeSortedComponents(componentRenderContext), true, null);
+                computeSortedComponents(componentRenderContext), true, null);
 
         designerMode = componentRenderContext.getRenderContext()
                 .getProcessContext().isDesignerMode();
@@ -897,16 +899,16 @@ public abstract class AbstractGridRenderContext {
         }
     }
 
-	private static ISelectedCriteria[] listCriteriaContainers(
-			UIComponent component) {
+    private static ISelectedCriteria[] listCriteriaContainers(
+            UIComponent component) {
 
-		if (component instanceof ICriteriaManagerCapability) {
-			return CriteriaTools
-					.listSelectedCriteria((ICriteriaManagerCapability) component);
-		}
+        if (component instanceof ICriteriaManagerCapability) {
+            return CriteriaTools
+                    .listSelectedCriteria((ICriteriaManagerCapability) component);
+        }
 
-		return CRITERIA_CONTAINER_EMPTY_ARRAY;
-	}
+        return CRITERIA_CONTAINER_EMPTY_ARRAY;
+    }
 
     private static ISortedComponent[] computeSortedComponents(
             IHtmlComponentRenderContext componentRenderContext) {
@@ -925,10 +927,10 @@ public abstract class AbstractGridRenderContext {
             IScriptRenderContext scriptRenderContext,
             IGridComponent gridComponent, int rowIndex, int forcedRows,
             ISortedComponent sortedComponents[], String filterExpression,
-			String showAdditionals, String hideAdditionals,
-			ISelectedCriteria[] criteriaContainers) {
+            String showAdditionals, String hideAdditionals,
+            ISelectedCriteria[] criteriaContainers) {
         this(processContext, scriptRenderContext, gridComponent,
-				sortedComponents, false, criteriaContainers);
+                sortedComponents, false, criteriaContainers);
 
         this.first = rowIndex;
         this.forcedRows = forcedRows;
@@ -962,9 +964,9 @@ public abstract class AbstractGridRenderContext {
     }
 
     public String getScopeColId() {
-    	return scopeColId;
+        return scopeColId;
     }
-    
+
     public void updateRowCount() {
         rowCount = -2;
     }
@@ -994,9 +996,9 @@ public abstract class AbstractGridRenderContext {
         return sortedComponents;
     }
 
-	public final ISelectedCriteria[] listSelectedCriteria() {
-		return selectedCriteria;
-	}
+    public final ISelectedCriteria[] listSelectedCriteria() {
+        return selectedCriteria;
+    }
 
     public final int getForcedRows() {
         return forcedRows;
@@ -1098,89 +1100,89 @@ public abstract class AbstractGridRenderContext {
         return sa.toString();
     }
 
-	public ToolTipComponent findTooltipByIdOrName(
-			IComponentRenderContext componentRenderContext, UIComponent ref,
-			String name, UIComponent nameContainerRef) {
+    public ToolTipComponent findTooltipByIdOrName(
+            IComponentRenderContext componentRenderContext, UIComponent ref,
+            String name, UIComponent nameContainerRef) {
 
-		FacesContext facesContext = componentRenderContext.getFacesContext();
+        FacesContext facesContext = componentRenderContext.getFacesContext();
 
-		if (ref instanceof IToolTipComponent) {
-			IToolTipIterator it = ((IToolTipComponent) ref).listToolTips();
+        if (ref instanceof IToolTipComponent) {
+            IToolTipIterator it = ((IToolTipComponent) ref).listToolTips();
 
-			for (; it.hasNext();) {
-				ToolTipComponent toolTipComponent = it.next();
+            for (; it.hasNext();) {
+                ToolTipComponent toolTipComponent = it.next();
 
-				if (toolTipComponent.isRendered() == false) {
-					continue;
-				}
+                if (toolTipComponent.isRendered() == false) {
+                    continue;
+                }
 
-				String toolTipId = toolTipComponent.getToolTipId(facesContext);
-				if (name == null) {
-					if (toolTipId == null) {
-						registerTooltip(toolTipComponent);
-						return toolTipComponent;
+                String toolTipId = toolTipComponent.getToolTipId(facesContext);
+                if (name == null) {
+                    if (toolTipId == null) {
+                        registerTooltip(toolTipComponent);
+                        return toolTipComponent;
 
-					}
-					continue;
-				}
+                    }
+                    continue;
+                }
 
-				if (name.equals(toolTipId)) {
-					registerTooltip(toolTipComponent);
-					return toolTipComponent;
-				}
+                if (name.equals(toolTipId)) {
+                    registerTooltip(toolTipComponent);
+                    return toolTipComponent;
+                }
 
-				String toolTipClientId = toolTipComponent
-						.getClientId(facesContext);
-				if (name.equals(toolTipClientId)) {
+                String toolTipClientId = toolTipComponent
+                        .getClientId(facesContext);
+                if (name.equals(toolTipClientId)) {
 
-					registerTooltip(toolTipComponent);
-					return toolTipComponent;
-				}
-			}
-		}
+                    registerTooltip(toolTipComponent);
+                    return toolTipComponent;
+                }
+            }
+        }
 
-		if (name == null || name.length() < 1) {
-			return null;
-		}
+        if (name == null || name.length() < 1) {
+            return null;
+        }
 
-		char start = name.charAt(0);
+        char start = name.charAt(0);
 
-		if (start == '#') {
-			return null;
-		}
+        if (start == '#') {
+            return null;
+        }
 
-		if (start != ':') {
-			if (nameContainerRef == null) {
-				nameContainerRef = ref;
-			}
+        if (start != ':') {
+            if (nameContainerRef == null) {
+                nameContainerRef = ref;
+            }
 
-			String newName = componentRenderContext.getRenderContext()
-					.computeBrotherComponentClientId(nameContainerRef, name);
-			if (newName != null) {
-				name = newName;
-			}
+            String newName = componentRenderContext.getRenderContext()
+                    .computeBrotherComponentClientId(nameContainerRef, name);
+            if (newName != null) {
+                name = newName;
+            }
 
-		}
+        }
 
-		UIComponent comp = componentRenderContext.getFacesContext()
-				.getViewRoot().findComponent(name);
+        UIComponent comp = componentRenderContext.getFacesContext()
+                .getViewRoot().findComponent(name);
 
-		if ((comp instanceof ToolTipComponent) == false) {
-			if (LOG.isInfoEnabled()) {
-				LOG.info("Can not find tooltip associated to clientId '" + name
-						+ "'");
-			}
-			return null;
-		}
+        if ((comp instanceof ToolTipComponent) == false) {
+            if (LOG.isInfoEnabled()) {
+                LOG.info("Can not find tooltip associated to clientId '" + name
+                        + "'");
+            }
+            return null;
+        }
 
-		ToolTipComponent toolTipComponent = (ToolTipComponent) comp;
-		if (toolTipComponent.isRendered() == false) {
-			return null;
-		}
+        ToolTipComponent toolTipComponent = (ToolTipComponent) comp;
+        if (toolTipComponent.isRendered() == false) {
+            return null;
+        }
 
-		registerTooltip(toolTipComponent);
-		return toolTipComponent;
-	}
+        registerTooltip(toolTipComponent);
+        return toolTipComponent;
+    }
 
     public final boolean isCheckable() {
         return checkable;
@@ -1283,9 +1285,9 @@ public abstract class AbstractGridRenderContext {
                 && additionalInformations.length > 0;
     }
 
-	public final Collection<ToolTipComponent> listToolTips() {
-		return gridToolTips;
-	}
+    public final Collection<ToolTipComponent> listToolTips() {
+        return gridToolTips;
+    }
 
     public int getAdditionalInformationCardinality() {
         return additionalInformationCardinality;
@@ -1330,93 +1332,100 @@ public abstract class AbstractGridRenderContext {
         return alertLoadingMessage;
     }
 
-	public boolean hasTooltips() {
-		return gridToolTips != null && gridToolTips.isEmpty() == false;
-	}
+    public boolean hasTooltips() {
+        return gridToolTips != null && gridToolTips.isEmpty() == false;
+    }
 
-	public void registerTooltip(ToolTipComponent tooltipComponent) {
-		gridToolTips.add(tooltipComponent);
+    public void registerTooltip(ToolTipComponent tooltipComponent) {
+        gridToolTips.add(tooltipComponent);
 
-	}
+    }
 
-	// Nous devons CONNAITRE en avance s'il y a des tooltips !
-	public boolean containsTooltips() {
-		if (gridComponent instanceof IToolTipComponent) {
-			if (((IToolTipComponent) gridComponent).listToolTips().hasNext()) {
-				return true;
-			}
-		}
+    // Nous devons CONNAITRE en avance s'il y a des tooltips !
+    public boolean containsTooltips() {
+        if (gridComponent instanceof IToolTipComponent) {
+            if (((IToolTipComponent) gridComponent).listToolTips().hasNext()) {
+                return true;
+            }
+        }
 
-		for (IColumnIterator it = gridComponent.listColumns(); it.hasNext();) {
-			UIColumn column = it.next();
+        for (IColumnIterator it = gridComponent.listColumns(); it.hasNext();) {
+            UIColumn column = it.next();
 
-			if (column instanceof IToolTipComponent) {
-				if (((IToolTipComponent) column).listToolTips().hasNext()) {
-					return true;
-				}
-			}
+            if (column instanceof IToolTipComponent) {
+                if (((IToolTipComponent) column).listToolTips().hasNext()) {
+                    return true;
+                }
+            }
 
-		}
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	/**
-	 * Accessibility : get the column holding the scope="row" attribbute
-	 * @param dg ComponentsGrid component
-	 * @return
-	 */
-	private String findScopeColumnId(IGridComponent grid) {
-		// 1st case : column id attribute is set
-		if (grid instanceof IScopeColumnIdCapability) {
-			String scopeColumnId = ((IScopeColumnIdCapability)grid).getScopeColumnId();
-			
-			if (scopeColumnId != null) {
-				for (IColumnIterator it = grid.listColumns(); it.hasNext();) {
-					UIColumn column = it.next();
-					if (scopeColumnId.equals(column.getId())) {
-						return column.getId();
-					}
-				}
-				// ID not found !!!
-				throw new FacesException("Can not find column '" + scopeColumnId
-						+ "'.");
-			}
-		}
-		
-		// Get first visible column that has a binding
-		for (IColumnIterator it = grid.listColumns(); it.hasNext();) {
-			UIColumn column = it.next();
-			if (column.isRendered()) {
-				// Column must be visible
-				if (column instanceof IVisibilityCapability && !((IVisibilityCapability)column).isVisible()) {
-					continue;
-				}
-				if (isColumnDataBound(column)) {
-					return column.getId();
-				}
-			}
-		}
-		return null;
-	}
+    /**
+     * Accessibility : get the column holding the scope="row" attribbute
+     * 
+     * @param dg
+     *            ComponentsGrid component
+     * @return
+     */
+    private String findScopeColumnId(IGridComponent grid) {
+        // 1st case : column id attribute is set
+        if (grid instanceof IScopeColumnIdCapability) {
+            String scopeColumnId = ((IScopeColumnIdCapability) grid)
+                    .getScopeColumnId();
 
-	/**
-	 * Is column content data-bound ?
-	 * @param column Grid column
-	 * @return true if a column or one of its children is data-bound
-	 */
-	private boolean isColumnDataBound(UIComponent column) {
-		// The column must have a variable content via a Value Expression
-        ValueExpression valueExpression = column.getValueExpression(Properties.VALUE);
+            if (scopeColumnId != null) {
+                for (IColumnIterator it = grid.listColumns(); it.hasNext();) {
+                    UIColumn column = it.next();
+                    if (scopeColumnId.equals(column.getId())) {
+                        return column.getId();
+                    }
+                }
+                // ID not found !!!
+                throw new FacesException("Can not find column '"
+                        + scopeColumnId + "'.");
+            }
+        }
+
+        // Get first visible column that has a binding
+        for (IColumnIterator it = grid.listColumns(); it.hasNext();) {
+            UIColumn column = it.next();
+            if (column.isRendered()) {
+                // Column must be visible
+                if (column instanceof IVisibilityCapability
+                        && !((IVisibilityCapability) column).isVisible()) {
+                    continue;
+                }
+                if (isColumnDataBound(column)) {
+                    return column.getId();
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Is column content data-bound ?
+     * 
+     * @param column
+     *            Grid column
+     * @return true if a column or one of its children is data-bound
+     */
+    private boolean isColumnDataBound(UIComponent column) {
+        // The column must have a variable content via a Value Expression
+        ValueExpression valueExpression = column
+                .getValueExpression(Properties.VALUE);
         if (valueExpression != null) {
-        	return true;
+            return true;
         }
         List<UIComponent> children = column.getChildren();
         for (UIComponent child : children) {
-			if (isColumnDataBound(child)) {
-				return true;
-			}
-		}
+            if (isColumnDataBound(child)) {
+                return true;
+            }
+        }
         return false;
-	}
+    }
 }

@@ -519,7 +519,8 @@ public class HtmlTools {
                 }
             }
             if (old < p) {
-                writer.write(chs, old, p - old);
+                String s = new String(chs, old, p - old);
+                writer.writeText(s);
             }
 
             if (p == chs.length) {

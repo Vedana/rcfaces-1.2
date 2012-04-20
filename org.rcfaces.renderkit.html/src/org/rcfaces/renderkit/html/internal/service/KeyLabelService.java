@@ -220,12 +220,13 @@ public class KeyLabelService extends AbstractHtmlService {
 
         String varId = jsWriter.getComponentVarName();
 
-        jsWriter.write("var ").write(varId).write('=').writeCall("f_core",
-                "GetElementByClientId").writeString(componentId).writeln(");");
+        jsWriter.write("var ").write(varId).write('=')
+                .writeCall("f_core", "GetElementByClientId")
+                .writeString(componentId).writeln(");");
 
         component.setFilterProperties(filterProperties);
 
-        Map styles = new HashMap();
+        Map<SelectItem, String> styles = new HashMap<SelectItem, String>();
         SelectItem sis[] = renderer.computeSelectItems(component,
                 filterProperties, styles);
 
@@ -235,8 +236,7 @@ public class KeyLabelService extends AbstractHtmlService {
             if (first == false) {
                 jsWriter.write(',');
             }
-            if (writeJsItem(jsWriter, component, sis[i], (String) styles
-                    .get(sis[i]))) {
+            if (writeJsItem(jsWriter, component, sis[i], styles.get(sis[i]))) {
                 first = false;
             }
         }

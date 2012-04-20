@@ -24,7 +24,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  */
 public class AbstractCompositeRenderer extends AbstractCssRenderer {
 
-
     private static final int CHAR_SIZE = 8;
 
     public void writeSubInput(IHtmlWriter htmlWriter, String accessKey,
@@ -58,7 +57,8 @@ public class AbstractCompositeRenderer extends AbstractCssRenderer {
     public static void writeSubInput(IHtmlWriter htmlWriter, String className,
             String accessKey, Integer tabIndex, char ch, int length,
             String curValue, boolean disabled, boolean readOnly,
-            boolean writeSize, Map attributes) throws WriterException {
+            boolean writeSize, Map<String, Object> attributes)
+            throws WriterException {
 
         IComponentRenderContext componentRenderContext = htmlWriter
                 .getComponentRenderContext();
@@ -140,10 +140,11 @@ public class AbstractCompositeRenderer extends AbstractCssRenderer {
          */
 
         if (attributes != null) {
-            for (Iterator it = attributes.entrySet().iterator(); it.hasNext();) {
-                Map.Entry entry = (Map.Entry) it.next();
+            for (Iterator<Map.Entry<String, Object>> it = attributes.entrySet()
+                    .iterator(); it.hasNext();) {
+                Map.Entry<String, Object> entry = it.next();
 
-                String attributeName = (String) entry.getKey();
+                String attributeName = entry.getKey();
                 String attributeValue = String.valueOf(entry.getValue());
 
                 htmlWriter.writeAttribute(attributeName, attributeValue);

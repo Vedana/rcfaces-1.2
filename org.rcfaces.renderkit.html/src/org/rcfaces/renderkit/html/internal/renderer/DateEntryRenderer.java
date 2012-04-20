@@ -392,7 +392,7 @@ public class DateEntryRenderer extends AbstractCalendarRenderer implements
 
                 String ns = htmlWriter.getRcfacesNamespace() + ":";
 
-                Map attributes = new HashMap(8);
+                Map<String, Object> attributes = new HashMap<String, Object>(8);
                 if (minValue >= 0) {
                     attributes.put(ns + "min", String.valueOf(minValue));
                 }

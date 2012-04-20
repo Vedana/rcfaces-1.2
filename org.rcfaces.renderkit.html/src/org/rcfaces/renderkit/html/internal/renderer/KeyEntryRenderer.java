@@ -94,7 +94,7 @@ public class KeyEntryRenderer extends DataGridRenderer {
 
         AbstractGridRenderContext gridRenderContext = getGridRenderContext(componentRenderContext);
 
-        Map formatValues = new HashMap();
+        Map<String, String> formatValues = new HashMap<String, String>();
 
         String valueFormat = comboGridComponent.getValueFormat(facesContext);
         if (valueFormat != null) {
@@ -104,13 +104,15 @@ public class KeyEntryRenderer extends DataGridRenderer {
 
         // Si on a déja un toolTipText, on ignore valueFormatTooltip
         if (comboGridComponent.getToolTipText(facesContext) == null) {
-	        String valueFormatTooltip = comboGridComponent.getValueFormatTooltip(facesContext);
-	        if (valueFormatTooltip != null) {
-	            htmlWriter.writeAttributeNS("valueFormatTooltip", valueFormatTooltip);
-	            formatValues.put("valueFormatTooltip", valueFormatTooltip);
-	        }
+            String valueFormatTooltip = comboGridComponent
+                    .getValueFormatTooltip(facesContext);
+            if (valueFormatTooltip != null) {
+                htmlWriter.writeAttributeNS("valueFormatTooltip",
+                        valueFormatTooltip);
+                formatValues.put("valueFormatTooltip", valueFormatTooltip);
+            }
         }
-        
+
         String valueFormatLabel = comboGridComponent
                 .getValueFormatLabel(facesContext);
         if (valueFormatLabel != null) {
@@ -146,7 +148,7 @@ public class KeyEntryRenderer extends DataGridRenderer {
                     formattedValueLabel = (String) formattedValues
                             .get("valueFormatLabel");
                     formattedValueTooltip = (String) formattedValues
-                    		.get("valueFormatTooltip");
+                            .get("valueFormatTooltip");
                 }
 
                 if (formattedValue == null) {
@@ -246,8 +248,8 @@ public class KeyEntryRenderer extends DataGridRenderer {
         }
 
         DataModel dataModel = gridRenderContext.getDataModel();
-        IFiltredModel filtredDataModel = (IFiltredModel) getAdapter(
-                IFiltredModel.class, dataModel);
+        IFiltredModel filtredDataModel = getAdapter(IFiltredModel.class,
+                dataModel);
         if (filtredDataModel != null) {
             htmlWriter.writeAttributeNS("filtred", true);
 
@@ -300,7 +302,7 @@ public class KeyEntryRenderer extends DataGridRenderer {
         }
 
         if (formattedValueTooltip != null) {
-        	htmlWriter.writeTitle(formattedValueTooltip);
+            htmlWriter.writeTitle(formattedValueTooltip);
         }
         htmlWriter.endComponent();
 
@@ -331,11 +333,11 @@ public class KeyEntryRenderer extends DataGridRenderer {
                 });
     }
 
-    protected final Map formatValue(FacesContext facesContext,
+    protected final Map<String, String> formatValue(FacesContext facesContext,
             KeyEntryComponent comboGridComponent, Object rowData,
             Map formatValues) {
 
-        Map columnValues = new HashMap();
+        Map<String, String> columnValues = new HashMap<String, String>();
 
         IColumnIterator it = comboGridComponent.listColumns();
         for (int idx = 0; it.hasNext(); idx++) {
@@ -357,7 +359,7 @@ public class KeyEntryRenderer extends DataGridRenderer {
             columnValues.put(String.valueOf(idx), svalue);
         }
 
-        Map results = new HashMap();
+        Map<String, String> results = new HashMap<String, String>();
         String labelColumnId = comboGridComponent.getLabelColumnId();
         if (formatValues.size() > 0) {
             Iterator iterator = formatValues.entrySet().iterator();
@@ -383,7 +385,8 @@ public class KeyEntryRenderer extends DataGridRenderer {
 
     }
 
-    protected final String formatMessage(String message, Map parameters) {
+    protected final String formatMessage(String message,
+            Map<String, String> parameters) {
         StringAppender ret = new StringAppender(message.length()
                 + parameters.size() * 8);
 
@@ -412,11 +415,11 @@ public class KeyEntryRenderer extends DataGridRenderer {
                 if (p.length() > 0 && Character.isDigit(p.charAt(0))) {
                     int num = Integer.parseInt(p);
                     if (num >= 0 && num < parameters.size()) {
-                        ret.append((String) parameters.get(String.valueOf(num)));
+                        ret.append(parameters.get(String.valueOf(num)));
                     }
 
                 } else if (parameters.containsKey(p)) {
-                    ret.append((String) parameters.get(p));
+                    ret.append(parameters.get(p));
                 }
 
                 pos = idx2 + 1;
@@ -555,8 +558,8 @@ public class KeyEntryRenderer extends DataGridRenderer {
         }
 
         IFilterProperties filtersMap = tableContext.getFiltersMap();
-        IFiltredModel filtredDataModel = (IFiltredModel) getAdapter(
-                IFiltredModel.class, dataModel);
+        IFiltredModel filtredDataModel = getAdapter(IFiltredModel.class,
+                dataModel);
 
         if (filtersMap != null) {
             if (filtredDataModel != null) {
@@ -573,8 +576,8 @@ public class KeyEntryRenderer extends DataGridRenderer {
             tableContext.updateRowCount();
         }
 
-        Map columnValues = new HashMap();
-        List colValues = new ArrayList();
+        Map<String, String> columnValues = new HashMap<String, String>();
+        List<String> colValues = new ArrayList<String>();
 
         String rowId = null;
 
@@ -638,8 +641,7 @@ public class KeyEntryRenderer extends DataGridRenderer {
         for (Iterator it = colValues.iterator(); it.hasNext();) {
             String colId = (String) it.next();
 
-            objWriter.writeProperty(colId).writeString(
-                    (String) columnValues.get(colId));
+            objWriter.writeProperty(colId).writeString(columnValues.get(colId));
         }
 
         objWriter.end().writeln(");");
@@ -690,7 +692,7 @@ public class KeyEntryRenderer extends DataGridRenderer {
         }
     }
 
-    protected void addUnlockProperties(Set unlockedProperties) {
+    protected void addUnlockProperties(Set<String> unlockedProperties) {
         super.addUnlockProperties(unlockedProperties);
 
         unlockedProperties.add("selected");
@@ -711,15 +713,15 @@ public class KeyEntryRenderer extends DataGridRenderer {
 
         DataModel dataModel = comboGridComponent.getDataModelValue();
 
-        IComponentRefModel componentRefModel = (IComponentRefModel) getAdapter(
+        IComponentRefModel componentRefModel = getAdapter(
                 IComponentRefModel.class, dataModel);
 
         if (componentRefModel != null) {
             componentRefModel.setComponent(comboGridComponent);
         }
 
-        IFiltredModel filtredDataModel = (IFiltredModel) getAdapter(
-                IFiltredModel.class, dataModel);
+        IFiltredModel filtredDataModel = getAdapter(IFiltredModel.class,
+                dataModel);
 
         if (filtredDataModel == null) {
             if (false) {
@@ -826,7 +828,8 @@ public class KeyEntryRenderer extends DataGridRenderer {
                 throw new FacesException("Var attribute is null !");
             }
 
-            Map requestMap = facesContext.getExternalContext().getRequestMap();
+            Map<String, Object> requestMap = facesContext.getExternalContext()
+                    .getRequestMap();
             Object oldValue = requestMap.put(var, rowData);
 
             try {
@@ -846,10 +849,10 @@ public class KeyEntryRenderer extends DataGridRenderer {
         super.declare(nameSpaceProperties);
 
         nameSpaceProperties.addAttributes(null, new String[] { "valueFormat",
-                "valueFormatLabel", "valueFormatTooltip", "editable", "readOnly", "disabled",
-                "maxTextLength", "suggestionDelayMs", "suggestionMinChars",
-                "noValueFormatLabel", "forLabel", "forceValidation",
-                "valueColumnId", "labelColumnId", "filtred",
+                "valueFormatLabel", "valueFormatTooltip", "editable",
+                "readOnly", "disabled", "maxTextLength", "suggestionDelayMs",
+                "suggestionMinChars", "noValueFormatLabel", "forLabel",
+                "forceValidation", "valueColumnId", "labelColumnId", "filtred",
                 "filterExpression", "emptyMessage", "emptyDataMessage",
                 "selectedValue", "invalidKey" });
     }

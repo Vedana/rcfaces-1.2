@@ -24,118 +24,96 @@ import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
  * @version $Revision$ $Date$
  */
 public class ImageCriteriaButtonRenderer extends ImageButtonRenderer {
-	private static final String REVISION = "$Revision$";
 
-	private static final Log LOG = LogFactory
-			.getLog(ImageCriteriaButtonRenderer.class);
+    private static final Log LOG = LogFactory
+            .getLog(ImageCriteriaButtonRenderer.class);
 
-	protected String getJavaScriptClassName() {
-		return JavaScriptClasses.IMAGE_CRITERIA_BUTTON;
-	}
+    protected String getJavaScriptClassName() {
+        return JavaScriptClasses.IMAGE_CRITERIA_BUTTON;
+    }
 
-	protected void encodeEnd(IComponentWriter writer) throws WriterException {
-		IComponentRenderContext componentRenderContext = writer
-				.getComponentRenderContext();
-		FacesContext facesContext = componentRenderContext.getFacesContext();
-		ImageCriteriaButtonComponent imageCriteriaButtonComponent = (ImageCriteriaButtonComponent) componentRenderContext
-				.getComponent();
+    protected void encodeEnd(IComponentWriter writer) throws WriterException {
+        IComponentRenderContext componentRenderContext = writer
+                .getComponentRenderContext();
+        FacesContext facesContext = componentRenderContext.getFacesContext();
+        ImageCriteriaButtonComponent imageCriteriaButtonComponent = (ImageCriteriaButtonComponent) componentRenderContext
+                .getComponent();
 
-		imageCriteriaButtonComponent.setDisabled(true);
-		if (imageCriteriaButtonComponent.isHideIfDisabled(facesContext)) {
-			imageCriteriaButtonComponent.setVisible(false);
-		}
+        imageCriteriaButtonComponent.setDisabled(true);
+        if (imageCriteriaButtonComponent.isHideIfDisabled(facesContext)) {
+            imageCriteriaButtonComponent.setVisible(false);
+        }
 
-		/*
-		if (imagePagerButtonComponent.getAlternateText(facesContext) == null) {
-			String type = imagePagerButtonComponent.getType(facesContext);
+        /*
+         * if (imagePagerButtonComponent.getAlternateText(facesContext) == null)
+         * { String type = imagePagerButtonComponent.getType(facesContext);
+         * 
+         * if (type != null) { type = type.trim().toLowerCase(); }
+         * 
+         * if (type != null && type.length() > 0) { String key = null; Object
+         * arguments[] = null; if (Character.isDigit(type.charAt(0))) { try {
+         * int page = Integer.parseInt(type);
+         * 
+         * key = "f_imagePagerButton.INDEX"; arguments = new Integer[] { new
+         * Integer(page) };
+         * 
+         * } catch (NumberFormatException ex) { LOG.debug(ex); } }
+         * 
+         * if (key == null) { if ("prev".equals(type)) { type = "PREVIOUS"; }
+         * 
+         * key = "f_imagePagerButton." + type.toUpperCase(); }
+         * 
+         * if (key != null) { String alt = getResourceBundleValue((IHtmlWriter)
+         * writer, key); if (alt != null) { if (arguments != null) { alt =
+         * MessageFormat.format(alt, arguments); }
+         * 
+         * imagePagerButtonComponent.setAlternateText(alt); } } } }
+         */
 
-			if (type != null) {
-				type = type.trim().toLowerCase();
-			}
+        // Il faut intialiser le bouton au début pour retirer le disabled si
+        // necessaire !
+        ((IHtmlWriter) writer).getJavaScriptEnableMode().enableOnInit();
 
-			if (type != null && type.length() > 0) {
-				String key = null;
-				Object arguments[] = null;
-				if (Character.isDigit(type.charAt(0))) {
-					try {
-						int page = Integer.parseInt(type);
+        super.encodeEnd(writer);
+    }
 
-						key = "f_imagePagerButton.INDEX";
-						arguments = new Integer[] { new Integer(page) };
+    protected IComponentDecorator createComponentDecorator(
+            FacesContext facesContext, UIComponent component) {
 
-					} catch (NumberFormatException ex) {
-						LOG.debug(ex);
-					}
-				}
+        return new PagerImageButtonDecorator((IImageButtonFamilly) component);
+    }
 
-				if (key == null) {
-					if ("prev".equals(type)) {
-						type = "PREVIOUS";
-					}
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    protected class PagerImageButtonDecorator extends ImageButtonDecorator {
 
-					key = "f_imagePagerButton." + type.toUpperCase();
-				}
+        public PagerImageButtonDecorator(IImageButtonFamilly imageButtonFamilly) {
+            super(imageButtonFamilly);
+        }
 
-				if (key != null) {
-					String alt = getResourceBundleValue((IHtmlWriter) writer,
-							key);
-					if (alt != null) {
-						if (arguments != null) {
-							alt = MessageFormat.format(alt, arguments);
-						}
+        protected void encodeAttributes(FacesContext facesContext)
+                throws WriterException {
+            super.encodeAttributes(facesContext);
 
-						imagePagerButtonComponent.setAlternateText(alt);
-					}
-				}
-			}
-		}
-		*/
+            ImagePagerButtonComponent button = (ImagePagerButtonComponent) imageButtonFamilly;
 
-		// Il faut intialiser le bouton au début pour retirer le disabled si
-		// necessaire !
-		((IHtmlWriter) writer).getJavaScriptEnableMode().enableOnInit();
+            String type = button.getType(facesContext);
+            if (type != null) {
+                writer.writeAttribute("v:type", type);
+            }
 
-		super.encodeEnd(writer);
-	}
+            String forProperty = button.getFor(facesContext);
+            if (forProperty != null) {
+                writer.writeAttribute("v:for", forProperty);
+            }
 
-	protected IComponentDecorator createComponentDecorator(
-			FacesContext facesContext, UIComponent component) {
-
-		return new PagerImageButtonDecorator((IImageButtonFamilly) component);
-	}
-
-	/**
-	 * 
-	 * @author Olivier Oeuillot (latest modification by $Author$)
-	 * @version $Revision$ $Date$
-	 */
-	protected class PagerImageButtonDecorator extends ImageButtonDecorator {
-		private static final String REVISION = "$Revision$";
-
-		public PagerImageButtonDecorator(IImageButtonFamilly imageButtonFamilly) {
-			super(imageButtonFamilly);
-		}
-
-		protected void encodeAttributes(FacesContext facesContext)
-				throws WriterException {
-			super.encodeAttributes(facesContext);
-
-			ImagePagerButtonComponent button = (ImagePagerButtonComponent) imageButtonFamilly;
-
-			String type = button.getType(facesContext);
-			if (type != null) {
-				writer.writeAttribute("v:type", type);
-			}
-
-			String forProperty = button.getFor(facesContext);
-			if (forProperty != null) {
-				writer.writeAttribute("v:for", forProperty);
-			}
-
-			boolean hideIfDisabled = button.isHideIfDisabled(facesContext);
-			if (hideIfDisabled) {
-				writer.writeAttribute("v:hideIfDisabled", true);
-			}
-		}
-	}
+            boolean hideIfDisabled = button.isHideIfDisabled(facesContext);
+            if (hideIfDisabled) {
+                writer.writeAttribute("v:hideIfDisabled", true);
+            }
+        }
+    }
 }

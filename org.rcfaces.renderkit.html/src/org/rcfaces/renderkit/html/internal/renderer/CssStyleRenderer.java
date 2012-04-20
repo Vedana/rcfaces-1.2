@@ -44,7 +44,6 @@ import org.rcfaces.renderkit.html.internal.util.UserAgentTools;
  * @version $Revision$ $Date$
  */
 public class CssStyleRenderer extends AbstractFilesCollectorRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(CssStyleRenderer.class);
 
@@ -222,7 +221,8 @@ public class CssStyleRenderer extends AbstractFilesCollectorRenderer {
                 .getHtmlComponentRenderContext().getHtmlRenderContext()
                 .getHtmlProcessContext();
 
-        List sl = new ArrayList(Arrays.asList(sources));
+        List<FileItemSource> sl = new ArrayList<FileItemSource>(
+                Arrays.asList(sources));
 
         if (requiredModules != null) {
             StringTokenizer st = new StringTokenizer(requiredModules, ",");
@@ -255,7 +255,7 @@ public class CssStyleRenderer extends AbstractFilesCollectorRenderer {
 
         }
 
-        return (FileItemSource[]) sl.toArray(new FileItemSource[sl.size()]);
+        return sl.toArray(new FileItemSource[sl.size()]);
     }
 
     public boolean getRendersChildren() {

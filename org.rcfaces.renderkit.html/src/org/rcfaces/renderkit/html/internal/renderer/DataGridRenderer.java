@@ -1907,11 +1907,11 @@ public class DataGridRenderer extends AbstractGridRenderer {
                 }
 
                 if (rowValueColumn != null) {
-                    Set selectedValues = SelectionTools.selectionValuesToSet(
-                            facesContext, (ISelectionComponent) gridComponent,
-                            false);
+                    Set<Object> selectedValues = SelectionTools
+                            .selectionValuesToSet(facesContext,
+                                    (ISelectionComponent) gridComponent, false);
 
-                    Set newSelectedValues = updateValues(facesContext,
+                    Set<Object> newSelectedValues = updateValues(facesContext,
                             rowValueColumn, selectedValues, selectedRows,
                             deselectedRows);
 
@@ -1955,11 +1955,11 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
                 if (rowValueColumn != null) {
 
-                    Set checkedValues = CheckTools.checkValuesToSet(
+                    Set<Object> checkedValues = CheckTools.checkValuesToSet(
                             facesContext, (ICheckComponent) gridComponent,
                             false);
 
-                    Set newCheckedValues = updateValues(facesContext,
+                    Set<Object> newCheckedValues = updateValues(facesContext,
                             rowValueColumn, checkedValues, checkedRows,
                             uncheckedRows);
 
@@ -2002,14 +2002,14 @@ public class DataGridRenderer extends AbstractGridRenderer {
             if (showAdditionalRows != null || hideAdditionalRows != null) {
                 if (rowValueColumn != null) {
 
-                    Set additionalValues = AdditionalInformationTools
+                    Set<Object> additionalValues = AdditionalInformationTools
                             .additionalInformationValuesToSet(
                                     facesContext,
                                     (IAdditionalInformationComponent) gridComponent,
                                     false);
 
-                    Set newAdditionalValues = updateValues(facesContext,
-                            rowValueColumn, additionalValues,
+                    Set<Object> newAdditionalValues = updateValues(
+                            facesContext, rowValueColumn, additionalValues,
                             showAdditionalRows, hideAdditionalRows);
 
                     AdditionalInformationTools.setAdditionalInformationValues(

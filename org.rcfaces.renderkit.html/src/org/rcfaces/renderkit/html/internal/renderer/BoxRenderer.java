@@ -15,6 +15,7 @@ import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.internal.renderkit.IAsyncRenderer;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.renderkit.designer.IDesignerEngine;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
@@ -50,6 +51,34 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
         htmlWriter.startElement(type);
 
         writeComponentAttributes(htmlWriter);
+
+        designerBeginChildren(htmlWriter, IDesignerEngine.MAIN_BODY);
+    }
+
+    protected final void designerBeginChildren(IComponentWriter writer,
+            String facetName) {
+        IDesignerEngine designerEngine = writer.getComponentRenderContext()
+                .getRenderContext().getProcessContext().getDesignerEngine();
+
+        if (designerEngine == null) {
+            return;
+        }
+
+        designerEngine.beginChildren(writer.getComponentRenderContext()
+                .getComponent(), facetName);
+    }
+
+    protected final void designerEndChildren(IComponentWriter writer,
+            String facetName) {
+        IDesignerEngine designerEngine = writer.getComponentRenderContext()
+                .getRenderContext().getProcessContext().getDesignerEngine();
+
+        if (designerEngine == null) {
+            return;
+        }
+
+        designerEngine.endChildren(writer.getComponentRenderContext()
+                .getComponent(), facetName);
     }
 
     protected String getMainTagName(IHtmlWriter htmlWriter) {
@@ -107,6 +136,9 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
     }
 
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
+
+        designerEndChildren(writer, IDesignerEngine.MAIN_BODY);
+
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
         BoxComponent boxComponent = (BoxComponent) htmlWriter
                 .getComponentRenderContext().getComponent();

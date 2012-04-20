@@ -38,7 +38,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  * @version $Revision$ $Date$
  */
 public class ExpandBarRenderer extends AbstractCssRenderer {
-    private static final String REVISION = "$Revision$";
 
     // private static final String COLLAPSED_BUTTON_IMAGE_URL =
     // "expandBar/arrow_collapsed.gif";
@@ -458,7 +457,7 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         }
     }
 
-    protected void addUnlockProperties(Set unlockedProperties) {
+    protected void addUnlockProperties(Set<String> unlockedProperties) {
         super.addUnlockProperties(unlockedProperties);
 
         unlockedProperties.add(Properties.COLLAPSED);
