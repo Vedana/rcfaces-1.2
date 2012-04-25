@@ -47,7 +47,6 @@ import org.rcfaces.renderkit.html.internal.javascript.JavaScriptRepositoryServle
  * @version $Revision$ $Date$
  */
 public class LoadBundleRenderer extends AbstractHtmlRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(LoadBundleRenderer.class);
 
@@ -84,7 +83,7 @@ public class LoadBundleRenderer extends AbstractHtmlRenderer {
         if (side == null) {
             serverSide = DEFAULT_SERVER_SIDE;
             clientSide = DEFAULT_CLIENT_SIDE;
-            
+
         } else {
             StringTokenizer st = new StringTokenizer(side.toLowerCase(), ",");
             for (; st.hasMoreTokens();) {
@@ -107,7 +106,7 @@ public class LoadBundleRenderer extends AbstractHtmlRenderer {
 
         if (serverSide) {
 
-            Map scopeMap = null;
+            Map<String, Object> scopeMap = null;
 
             String scope = loadClientBundleComponent
                     .getServerScope(facesContext);
@@ -158,10 +157,12 @@ public class LoadBundleRenderer extends AbstractHtmlRenderer {
 
             IJavaScriptWriter jsWriter = InitRenderer.openScriptTag(htmlWriter);
 
-            JavaScriptRenderContext.initializeJavaScript(jsWriter, repository, true);
+            JavaScriptRenderContext.initializeJavaScript(jsWriter, repository,
+                    true);
 
-            jsWriter.writeCall("f_resourceBundle", "Load").writeString(
-                    bundleName).write(',').writeString(baseName).write(',');
+            jsWriter.writeCall("f_resourceBundle", "Load")
+                    .writeString(bundleName).write(',').writeString(baseName)
+                    .write(',');
 
             IFile file = bundleRepository.getFileByName(baseName);
 
@@ -189,17 +190,15 @@ public class LoadBundleRenderer extends AbstractHtmlRenderer {
      */
     public static class BundleMap implements Map, StateHolder, Externalizable {
 
-        private static final String REVISION = "$Revision$";
-
         private static final long serialVersionUID = 2827938468480044306L;
 
         private ResourceBundle bundle;
 
-        private List values;
+        private List<String> values;
 
-        private Set keys;
+        private Set<String> keys;
 
-        private Set entrySet;
+        private Set<Map.Entry<String, Object>> entrySet;
 
         private String baseName;
 
@@ -256,12 +255,12 @@ public class LoadBundleRenderer extends AbstractHtmlRenderer {
             return keySet().contains(key);
         }
 
-        public Collection values() {
+        public Collection<String> values() {
             if (values != null) {
                 return values;
             }
 
-            values = new ArrayList(size());
+            values = new ArrayList<String>(size());
             for (Iterator it = keySet().iterator(); it.hasNext();) {
                 String key = (String) it.next();
 
@@ -285,15 +284,14 @@ public class LoadBundleRenderer extends AbstractHtmlRenderer {
                 return entrySet;
             }
 
-            entrySet = new HashSet(size());
+            entrySet = new HashSet<Map.Entry<String, Object>>(size());
 
-            for (Iterator it = keySet().iterator(); it.hasNext();) {
-                final String key = (String) it.next();
+            for (Iterator<String> it = keySet().iterator(); it.hasNext();) {
+                final String key = it.next();
 
-                entrySet.add(new Map.Entry() {
-                    private static final String REVISION = "$Revision$";
+                entrySet.add(new Map.Entry<String, Object>() {
 
-                    public Object getKey() {
+                    public String getKey() {
                         return key;
                     }
 
@@ -303,8 +301,7 @@ public class LoadBundleRenderer extends AbstractHtmlRenderer {
 
                     public Object setValue(Object value) {
                         throw new UnsupportedOperationException(this.getClass()
-                                .getName()
-                                + " UnsupportedOperationException");
+                                .getName() + " UnsupportedOperationException");
                     }
                 });
             }
@@ -312,13 +309,14 @@ public class LoadBundleRenderer extends AbstractHtmlRenderer {
             return entrySet;
         }
 
-        public Set keySet() {
+        public Set<String> keySet() {
             if (keys != null) {
                 return keys;
             }
 
-            keys = new HashSet();
-            for (Enumeration en = bundle.getKeys(); en.hasMoreElements();) {
+            keys = new HashSet<String>();
+            for (Enumeration<String> en = bundle.getKeys(); en
+                    .hasMoreElements();) {
                 keys.add(en.nextElement());
             }
 

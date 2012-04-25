@@ -370,7 +370,11 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
 
             // htmlWriter.flush();
 
+            designerBeginChildren(htmlWriter, HEAD_FACET_NAME);
+
             ComponentTools.encodeRecursive(facesContext, component);
+
+            designerEndChildren(htmlWriter, HEAD_FACET_NAME);
 
             htmlWriter.endElement(IHtmlWriter.DIV);
         }

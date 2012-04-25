@@ -265,7 +265,8 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
 
         int count = listContext.getRowCount();
 
-        Map varContext = facesContext.getExternalContext().getRequestMap();
+        Map<String, Object> varContext = facesContext.getExternalContext()
+                .getRequestMap();
         String rowCountVar = listContext.getRowCountVar();
         if (rowCountVar != null) {
             varContext.put(rowCountVar, new Integer(count));
@@ -380,13 +381,13 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
             return STRING_EMPTY_ARRAY;
         }
 
-        List l = null;
+        List<String> l = null;
         StringTokenizer st = new StringTokenizer(classes, ",");
         for (; st.hasMoreTokens();) {
             String cls = st.nextToken();
 
             if (l == null) {
-                l = new ArrayList(4);
+                l = new ArrayList<String>(4);
             }
 
             l.add(cls);
@@ -396,7 +397,7 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
             return STRING_EMPTY_ARRAY;
         }
 
-        return (String[]) l.toArray(new String[l.size()]);
+        return l.toArray(new String[l.size()]);
     }
 
     /*
@@ -436,7 +437,7 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
         cssWriter.writeMargin(componentsListComponent);
     }
 
-    protected void addUnlockProperties(Set unlockedProperties) {
+    protected void addUnlockProperties(Set<String> unlockedProperties) {
         super.addUnlockProperties(unlockedProperties);
 
         unlockedProperties.add("first");
@@ -542,8 +543,8 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
 
             rowCountVar = componentsListComponent.getRowCountVar(facesContext);
 
-            List children = componentsListComponent.getChildren();
-            List cols = null;
+            List<UIComponent> children = componentsListComponent.getChildren();
+            List<UIColumn> cols = null;
             for (Iterator it = children.iterator(); it.hasNext();) {
                 UIComponent child = (UIComponent) it.next();
 
@@ -552,14 +553,14 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
                 }
 
                 if (cols == null) {
-                    cols = new ArrayList(children.size());
+                    cols = new ArrayList<UIColumn>(children.size());
                 }
 
-                cols.add(child);
+                cols.add((UIColumn) child);
             }
 
             if (cols != null) {
-                columns = (UIColumn[]) cols.toArray(new UIColumn[cols.size()]);
+                columns = cols.toArray(new UIColumn[cols.size()]);
 
             } else {
                 UIColumn column = new UIColumn();

@@ -35,7 +35,8 @@ public class TextEditorImageButtonRenderer extends ImageButtonRenderer {
 
     private static final int TEXT_EDITOR_IMAGE_BUTTON_HEIGHT = 16;
 
-    private static final Map IMAGE_URL_BY_TYPE = new HashMap(24);
+    private static final Map<String, String> IMAGE_URL_BY_TYPE = new HashMap<String, String>(
+            24);
     static {
         IMAGE_URL_BY_TYPE
                 .put(ITextEditorButtonType.BOLD, "textEditor/bold.gif");
@@ -138,7 +139,7 @@ public class TextEditorImageButtonRenderer extends ImageButtonRenderer {
                 .getComponentRenderContext().getComponent())
                 .getType(htmlRenderContext.getFacesContext());
 
-        String imageURL = (String) IMAGE_URL_BY_TYPE.get(type.toLowerCase());
+        String imageURL = IMAGE_URL_BY_TYPE.get(type.toLowerCase());
         if (imageURL == null) {
             return null;
         }

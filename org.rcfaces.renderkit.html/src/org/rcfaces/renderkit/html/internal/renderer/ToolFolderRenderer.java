@@ -114,7 +114,7 @@ public class ToolFolderRenderer extends AbstractCssRenderer {
         childrenList.retainAll(originalChildrenList);
     }
 
-    protected List getChildren(IHtmlWriter htmlWriter) {
+    protected List<UIComponent> getChildren(IHtmlWriter htmlWriter) {
         return htmlWriter.getComponentRenderContext().getComponent()
                 .getChildren();
     }

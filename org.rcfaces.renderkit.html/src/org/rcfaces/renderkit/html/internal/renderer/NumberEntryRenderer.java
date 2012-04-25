@@ -343,7 +343,8 @@ public class NumberEntryRenderer extends AbstractCompositeRenderer {
                 }
 
                 if (nb > 0) {
-                    Map attributes = new HashMap(3);
+                    Map<String, String> attributes = new HashMap<String, String>(
+                            3);
 
                     String ns = htmlWriter.getRcfacesNamespace() + ":";
 

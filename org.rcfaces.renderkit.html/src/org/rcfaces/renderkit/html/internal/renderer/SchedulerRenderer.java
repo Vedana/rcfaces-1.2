@@ -598,7 +598,8 @@ public class SchedulerRenderer extends AbstractCssRenderer {
 
         String var = schedulerComponent.getVar(facesContext);
 
-        Map requestMap = facesContext.getExternalContext().getRequestMap();
+        Map<String, Object> requestMap = facesContext.getExternalContext()
+                .getRequestMap();
 
         List periodClientData = schedulerComponent.getPeriodClientData();
 
@@ -692,7 +693,8 @@ public class SchedulerRenderer extends AbstractCssRenderer {
                         selectable);
 
                 if (periodClientData.isEmpty() == false) {
-                    Map clientDatas = new HashMap(periodClientData.size());
+                    Map<String, String> clientDatas = new HashMap<String, String>(
+                            periodClientData.size());
 
                     for (Iterator it = periodClientData.iterator(); it
                             .hasNext();) {

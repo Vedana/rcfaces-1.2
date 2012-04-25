@@ -24,6 +24,7 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  */
 public class TextAreaRenderer extends AbstractInputRenderer {
 
+    @SuppressWarnings("unused")
     protected void encodeComponent(IHtmlWriter htmlWriter)
             throws WriterException {
 

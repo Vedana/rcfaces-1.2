@@ -532,7 +532,7 @@ public class DateEntryRenderer extends AbstractCalendarRenderer implements
         dateEntryComponent.setSubmittedExternalValue(date);
     }
 
-    protected void addUnlockProperties(Set unlockedProperties) {
+    protected void addUnlockProperties(Set<String> unlockedProperties) {
         super.addUnlockProperties(unlockedProperties);
 
         unlockedProperties.add(Properties.VALUE);

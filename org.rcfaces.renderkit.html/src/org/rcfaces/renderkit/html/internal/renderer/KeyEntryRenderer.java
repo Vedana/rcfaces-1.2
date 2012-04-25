@@ -707,6 +707,7 @@ public class KeyEntryRenderer extends DataGridRenderer {
 
     }
 
+    @SuppressWarnings("unused")
     protected final Object filterValue(FacesContext facesContext,
             KeyEntryComponent comboGridComponent, Object selectedValue,
             String convertedSelectedValue, IFilterProcessor processor) {

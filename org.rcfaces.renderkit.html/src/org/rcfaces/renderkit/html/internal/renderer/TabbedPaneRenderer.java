@@ -36,357 +36,356 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  * @version $Revision$ $Date$
  */
 public class TabbedPaneRenderer extends CardBoxRenderer {
-	private static final String REVISION = "$Revision$";
 
-	protected static final String TITLE_CLASSNAME_SUFFIX = "_title";
+    protected static final String TITLE_CLASSNAME_SUFFIX = "_title";
 
-	protected static final String TITLE_ID_SUFFIX = ""
-			+ UINamingContainer.SEPARATOR_CHAR
-			+ UINamingContainer.SEPARATOR_CHAR + "title";
+    protected static final String TITLE_ID_SUFFIX = ""
+            + UINamingContainer.SEPARATOR_CHAR
+            + UINamingContainer.SEPARATOR_CHAR + "title";
 
-	protected static final String CONTENT_CLASSNAME = "_content";
-
-	protected String getJavaScriptClassName() {
-		return JavaScriptClasses.TABBED_PANE;
-	}
-
-	protected void renderTabHeader(IHtmlWriter htmlWriter)
-			throws WriterException {
+    protected static final String CONTENT_CLASSNAME = "_content";
 
-		IComponentRenderContext componentRenderContext = htmlWriter
-				.getComponentRenderContext();
+    protected String getJavaScriptClassName() {
+        return JavaScriptClasses.TABBED_PANE;
+    }
 
-		TabbedPaneComponent tabbedPaneComponent = (TabbedPaneComponent) componentRenderContext
-				.getComponent();
+    protected void renderTabHeader(IHtmlWriter htmlWriter)
+            throws WriterException {
 
-		FacesContext facesContext = htmlWriter.getComponentRenderContext()
-				.getFacesContext();
+        IComponentRenderContext componentRenderContext = htmlWriter
+                .getComponentRenderContext();
+
+        TabbedPaneComponent tabbedPaneComponent = (TabbedPaneComponent) componentRenderContext
+                .getComponent();
 
-		htmlWriter.startElement(IHtmlWriter.TABLE);
+        FacesContext facesContext = htmlWriter.getComponentRenderContext()
+                .getFacesContext();
 
-		htmlWriter.writeRole(IAccessibilityRoles.TAB);
+        htmlWriter.startElement(IHtmlWriter.TABLE);
 
-		htmlWriter.writeId(getTitleId(htmlWriter));
-		htmlWriter.writeClass(getTitleClassName(htmlWriter));
-		htmlWriter.writeCellPadding(0);
-		htmlWriter.writeCellSpacing(0);
-		htmlWriter.writeln();
+        htmlWriter.writeRole(IAccessibilityRoles.TAB);
 
-		TabComponent tabs[] = null;
+        htmlWriter.writeId(getTitleId(htmlWriter));
+        htmlWriter.writeClass(getTitleClassName(htmlWriter));
+        htmlWriter.writeCellPadding(0);
+        htmlWriter.writeCellSpacing(0);
+        htmlWriter.writeln();
 
-		if (RcfacesContext.isJSF1_2()) {
-			ITabIterator tabsIterator = tabbedPaneComponent.listTabs();
-			List l = new ArrayList(tabsIterator.count());
+        TabComponent tabs[] = null;
 
-			for (; tabsIterator.hasNext();) {
-				TabComponent tabComponent = tabsIterator.next();
+        if (RcfacesContext.isJSF1_2()) {
+            ITabIterator tabsIterator = tabbedPaneComponent.listTabs();
+            List<TabComponent> l = new ArrayList<TabComponent>(
+                    tabsIterator.count());
 
-				if (tabComponent.isRendered() == false) {
-					continue;
-				}
+            for (; tabsIterator.hasNext();) {
+                TabComponent tabComponent = tabsIterator.next();
 
-				if (Boolean.FALSE.equals(tabComponent
-						.getVisibleState(facesContext))) {
-					tabComponent
-							.setHiddenMode(IHiddenModeCapability.SERVER_HIDDEN_MODE);
-					continue;
-				}
+                if (tabComponent.isRendered() == false) {
+                    continue;
+                }
 
-				l.add(tabComponent);
-			}
+                if (Boolean.FALSE.equals(tabComponent
+                        .getVisibleState(facesContext))) {
+                    tabComponent
+                            .setHiddenMode(IHiddenModeCapability.SERVER_HIDDEN_MODE);
+                    continue;
+                }
 
-			tabs = (TabComponent[]) l.toArray(new TabComponent[l.size()]);
+                l.add(tabComponent);
+            }
 
-			setCardBoxJSF12_Generation(htmlWriter.getComponentRenderContext()
-					.getRenderContext());
-		}
+            tabs = l.toArray(new TabComponent[l.size()]);
 
-		htmlWriter.startElement(IHtmlWriter.TR);
-		if (tabs != null) {
-			renderTabbedPaneHeaderTitleTop(htmlWriter, tabs);
-		}
-		htmlWriter.endElement(IHtmlWriter.TR);
+            setCardBoxJSF12_Generation(htmlWriter.getComponentRenderContext()
+                    .getRenderContext());
+        }
 
-		htmlWriter.startElement(IHtmlWriter.TR);
-		if (tabs != null) {
-			renderTabbedPaneHeaderTitleBotom(htmlWriter, tabs);
-		}
-		htmlWriter.endElement(IHtmlWriter.TR);
+        htmlWriter.startElement(IHtmlWriter.TR);
+        if (tabs != null) {
+            renderTabbedPaneHeaderTitleTop(htmlWriter, tabs);
+        }
+        htmlWriter.endElement(IHtmlWriter.TR);
 
-		htmlWriter.endElement(IHtmlWriter.TABLE);
+        htmlWriter.startElement(IHtmlWriter.TR);
+        if (tabs != null) {
+            renderTabbedPaneHeaderTitleBotom(htmlWriter, tabs);
+        }
+        htmlWriter.endElement(IHtmlWriter.TR);
 
-		htmlWriter.startElement(IHtmlWriter.DIV);
-		/*
-		 * String w = tabbedPaneComponent.getWidth(); if (w != null) {
-		 * htmlWriter.writeAttribute("width", w); }
-		 */
-		htmlWriter.writeClass(getContentClassName(htmlWriter));
+        htmlWriter.endElement(IHtmlWriter.TABLE);
 
-		String width = tabbedPaneComponent.getWidth(facesContext);
-		String height = tabbedPaneComponent.getHeight(facesContext);
+        htmlWriter.startElement(IHtmlWriter.DIV);
+        /*
+         * String w = tabbedPaneComponent.getWidth(); if (w != null) {
+         * htmlWriter.writeAttribute("width", w); }
+         */
+        htmlWriter.writeClass(getContentClassName(htmlWriter));
 
-		/*
-		 * if (tabbedPaneComponent.getAsyncRenderMode(facesContext) !=
-		 * IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) { if (width ==
-		 * null || height == null) { throw new FacesException( "TabbedPane '" +
-		 * tabbedPaneComponent.getId() + "' can not have interactiveRender
-		 * enable without settings of attributes width and height !", null); } }
-		 */
+        String width = tabbedPaneComponent.getWidth(facesContext);
+        String height = tabbedPaneComponent.getHeight(facesContext);
 
-		ICssWriter cssWriter = htmlWriter.writeStyle(16);
-		if (width != null) {
-			cssWriter.writeWidth("100%");
-		}
-		if (height != null) {
-			// style += getPixelSize(height, 23) + "px;";
-		}
-	}
+        /*
+         * if (tabbedPaneComponent.getAsyncRenderMode(facesContext) !=
+         * IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) { if (width ==
+         * null || height == null) { throw new FacesException( "TabbedPane '" +
+         * tabbedPaneComponent.getId() + "' can not have interactiveRender
+         * enable without settings of attributes width and height !", null); } }
+         */
 
-	protected String getTitleClassName(IHtmlWriter writer) {
-		return getMainStyleClassName() + TITLE_CLASSNAME_SUFFIX;
-	}
+        ICssWriter cssWriter = htmlWriter.writeStyle(16);
+        if (width != null) {
+            cssWriter.writeWidth("100%");
+        }
+        if (height != null) {
+            // style += getPixelSize(height, 23) + "px;";
+        }
+    }
 
-	protected String getTitleId(IHtmlWriter writer) {
-		return writer.getComponentRenderContext().getComponentClientId()
-				+ TITLE_ID_SUFFIX;
-	}
+    protected String getTitleClassName(IHtmlWriter writer) {
+        return getMainStyleClassName() + TITLE_CLASSNAME_SUFFIX;
+    }
 
-	protected String getContentClassName(IHtmlWriter writer) {
-		return getMainStyleClassName() + CONTENT_CLASSNAME;
-	}
+    protected String getTitleId(IHtmlWriter writer) {
+        return writer.getComponentRenderContext().getComponentClientId()
+                + TITLE_ID_SUFFIX;
+    }
 
-	protected void encodeEnd(IComponentWriter writer) throws WriterException {
+    protected String getContentClassName(IHtmlWriter writer) {
+        return getMainStyleClassName() + CONTENT_CLASSNAME;
+    }
 
-		IHtmlWriter htmlWriter = (IHtmlWriter) writer;
+    protected void encodeEnd(IComponentWriter writer) throws WriterException {
 
-		htmlWriter.endElement(IHtmlWriter.DIV);
+        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-		super.encodeEnd(htmlWriter);
-	}
+        htmlWriter.endElement(IHtmlWriter.DIV);
 
-	protected boolean useComponentIdVarAllocation() {
-		return true;
-	}
+        super.encodeEnd(htmlWriter);
+    }
 
-	protected void renderTabbedPaneHeaderTitleTop(IHtmlWriter htmlWriter,
-			TabComponent tabs[]) throws WriterException {
+    protected boolean useComponentIdVarAllocation() {
+        return true;
+    }
 
-		for (int i = 0; i < tabs.length; i++) {
-			writeTabHeaderTitleTop(htmlWriter, tabs[i], i == 0,
-					(i + 1 < tabs.length) ? tabs[i + 1] : null);
-		}
-	}
+    protected void renderTabbedPaneHeaderTitleTop(IHtmlWriter htmlWriter,
+            TabComponent tabs[]) throws WriterException {
 
-	protected void writeTabHeaderTitleTop(IHtmlWriter htmlWriter,
-			TabComponent tabComponent, boolean first,
-			TabComponent nextTabComponent) throws WriterException {
+        for (int i = 0; i < tabs.length; i++) {
+            writeTabHeaderTitleTop(htmlWriter, tabs[i], i == 0,
+                    (i + 1 < tabs.length) ? tabs[i + 1] : null);
+        }
+    }
 
-		IHtmlRenderContext htmlRenderContext = htmlWriter
-				.getHtmlComponentRenderContext().getHtmlRenderContext();
-		FacesContext facesContext = htmlRenderContext.getFacesContext();
+    protected void writeTabHeaderTitleTop(IHtmlWriter htmlWriter,
+            TabComponent tabComponent, boolean first,
+            TabComponent nextTabComponent) throws WriterException {
 
-		TabbedPaneComponent tabbedPaneComponent = tabComponent.getTabbedPane();
+        IHtmlRenderContext htmlRenderContext = htmlWriter
+                .getHtmlComponentRenderContext().getHtmlRenderContext();
+        FacesContext facesContext = htmlRenderContext.getFacesContext();
 
-		boolean selected = tabbedPaneComponent.getSelectedTab(facesContext) == tabComponent;
+        TabbedPaneComponent tabbedPaneComponent = tabComponent.getTabbedPane();
 
-		String blankImageURL = htmlRenderContext.getHtmlProcessContext()
-				.getStyleSheetURI(BLANK_IMAGE_URL, true);
+        boolean selected = tabbedPaneComponent.getSelectedTab(facesContext) == tabComponent;
 
-		if (first) {
-			htmlWriter.startElement(IHtmlWriter.TD);
+        String blankImageURL = htmlRenderContext.getHtmlProcessContext()
+                .getStyleSheetURI(BLANK_IMAGE_URL, true);
 
-			htmlWriter.startElement(IHtmlWriter.IMG);
+        if (first) {
+            htmlWriter.startElement(IHtmlWriter.TD);
 
-			htmlWriter.writeClass((selected) ? "f_tabbedPane_ttitleLeftA"
-					: "f_tabbedPane_ttitleLeft");
+            htmlWriter.startElement(IHtmlWriter.IMG);
 
-			htmlWriter.writeSrc(blankImageURL);
-			htmlWriter.writeWidth(5);
-			htmlWriter.writeHeight(5);
+            htmlWriter.writeClass((selected) ? "f_tabbedPane_ttitleLeftA"
+                    : "f_tabbedPane_ttitleLeft");
 
-			htmlWriter.endElement(IHtmlWriter.IMG);
+            htmlWriter.writeSrc(blankImageURL);
+            htmlWriter.writeWidth(5);
+            htmlWriter.writeHeight(5);
 
-			htmlWriter.endElement(IHtmlWriter.TD);
-		}
+            htmlWriter.endElement(IHtmlWriter.IMG);
 
-		htmlWriter.startElement(IHtmlWriter.TD);
+            htmlWriter.endElement(IHtmlWriter.TD);
+        }
 
-		htmlWriter.writeClass((selected) ? "f_tabbedPane_ttitleText_selected"
-				: "f_tabbedPane_ttitleText");
-		htmlWriter.endElement(IHtmlWriter.TD);
+        htmlWriter.startElement(IHtmlWriter.TD);
 
-		htmlWriter.startElement(IHtmlWriter.TD);
+        htmlWriter.writeClass((selected) ? "f_tabbedPane_ttitleText_selected"
+                : "f_tabbedPane_ttitleText");
+        htmlWriter.endElement(IHtmlWriter.TD);
 
-		htmlWriter.startElement(IHtmlWriter.IMG);
+        htmlWriter.startElement(IHtmlWriter.TD);
 
-		if (nextTabComponent == null) {
-			htmlWriter.writeClass((selected) ? "f_tabbedPane_ttitleRightA"
-					: "f_tabbedPane_ttitleRight");
+        htmlWriter.startElement(IHtmlWriter.IMG);
 
-		} else if (tabbedPaneComponent.getSelectedTab(facesContext) == nextTabComponent) {
-			htmlWriter.writeClass("f_tabbedPane_ttitleNextR");
+        if (nextTabComponent == null) {
+            htmlWriter.writeClass((selected) ? "f_tabbedPane_ttitleRightA"
+                    : "f_tabbedPane_ttitleRight");
 
-		} else {
-			htmlWriter.writeClass((selected) ? "f_tabbedPane_ttitleNextL"
-					: "f_tabbedPane_ttitleNext");
-		}
-		htmlWriter.writeSrc(blankImageURL);
-		htmlWriter.writeWidth(5);
-		htmlWriter.writeHeight(5);
+        } else if (tabbedPaneComponent.getSelectedTab(facesContext) == nextTabComponent) {
+            htmlWriter.writeClass("f_tabbedPane_ttitleNextR");
 
-		htmlWriter.endElement(IHtmlWriter.IMG);
+        } else {
+            htmlWriter.writeClass((selected) ? "f_tabbedPane_ttitleNextL"
+                    : "f_tabbedPane_ttitleNext");
+        }
+        htmlWriter.writeSrc(blankImageURL);
+        htmlWriter.writeWidth(5);
+        htmlWriter.writeHeight(5);
 
-		htmlWriter.endElement(IHtmlWriter.TD);
-	}
+        htmlWriter.endElement(IHtmlWriter.IMG);
 
-	protected void renderTabbedPaneHeaderTitleBotom(IHtmlWriter htmlWriter,
-			TabComponent tabs[]) throws WriterException {
+        htmlWriter.endElement(IHtmlWriter.TD);
+    }
 
-		for (int i = 0; i < tabs.length; i++) {
-			writeTabHeaderTitleBottom(htmlWriter, tabs[i], i == 0,
-					(i + 1 < tabs.length) ? tabs[i + 1] : null);
-		}
-	}
+    protected void renderTabbedPaneHeaderTitleBotom(IHtmlWriter htmlWriter,
+            TabComponent tabs[]) throws WriterException {
 
-	protected void writeTabHeaderTitleBottom(IHtmlWriter htmlWriter,
-			TabComponent tabComponent, boolean first,
-			TabComponent nextTabComponent) throws WriterException {
+        for (int i = 0; i < tabs.length; i++) {
+            writeTabHeaderTitleBottom(htmlWriter, tabs[i], i == 0,
+                    (i + 1 < tabs.length) ? tabs[i + 1] : null);
+        }
+    }
 
-		IHtmlRenderContext htmlRenderContext = htmlWriter
-				.getHtmlComponentRenderContext().getHtmlRenderContext();
-		FacesContext facesContext = htmlRenderContext.getFacesContext();
+    protected void writeTabHeaderTitleBottom(IHtmlWriter htmlWriter,
+            TabComponent tabComponent, boolean first,
+            TabComponent nextTabComponent) throws WriterException {
 
-		TabbedPaneComponent tabbedPaneComponent = tabComponent.getTabbedPane();
+        IHtmlRenderContext htmlRenderContext = htmlWriter
+                .getHtmlComponentRenderContext().getHtmlRenderContext();
+        FacesContext facesContext = htmlRenderContext.getFacesContext();
 
-		boolean selected = tabbedPaneComponent.getSelectedTab() == tabComponent;
-		boolean disabled = tabComponent.isDisabled(facesContext)
-				| tabbedPaneComponent.isDisabled(facesContext);
+        TabbedPaneComponent tabbedPaneComponent = tabComponent.getTabbedPane();
 
-		if (first) {
-			htmlWriter.startElement(IHtmlWriter.TD);
-			htmlWriter
-					.writeClass((selected) ? "f_tabbedPane_titleLeft_selected"
-							: "f_tabbedPane_titleLeft");
-			htmlWriter.endElement(IHtmlWriter.TD);
-		}
+        boolean selected = tabbedPaneComponent.getSelectedTab() == tabComponent;
+        boolean disabled = tabComponent.isDisabled(facesContext)
+                | tabbedPaneComponent.isDisabled(facesContext);
 
-		htmlWriter.startElement(IHtmlWriter.TD);
+        if (first) {
+            htmlWriter.startElement(IHtmlWriter.TD);
+            htmlWriter
+                    .writeClass((selected) ? "f_tabbedPane_titleLeft_selected"
+                            : "f_tabbedPane_titleLeft");
+            htmlWriter.endElement(IHtmlWriter.TD);
+        }
 
-		if (disabled) {
-			htmlWriter.writeClass("f_tabbedPane_titleText_disabled");
+        htmlWriter.startElement(IHtmlWriter.TD);
 
-		} else if (selected) {
-			htmlWriter.writeClass("f_tabbedPane_titleText_selected");
+        if (disabled) {
+            htmlWriter.writeClass("f_tabbedPane_titleText_disabled");
 
-		} else {
-			htmlWriter.writeClass("f_tabbedPane_titleText");
-		}
+        } else if (selected) {
+            htmlWriter.writeClass("f_tabbedPane_titleText_selected");
 
-		htmlWriter.startElement(IHtmlWriter.A);
+        } else {
+            htmlWriter.writeClass("f_tabbedPane_titleText");
+        }
 
-		String tabId = computeTabInputId(htmlWriter, tabComponent);
-		if (tabId != null) {
-			htmlWriter.writeId(tabId);
-		}
+        htmlWriter.startElement(IHtmlWriter.A);
 
-		htmlWriter.writeHRef(IHtmlWriter.JAVASCRIPT_VOID);
+        String tabId = computeTabInputId(htmlWriter, tabComponent);
+        if (tabId != null) {
+            htmlWriter.writeId(tabId);
+        }
 
-		// AccessKey
-		String accessKey = tabComponent.getAccessKey(facesContext);
-		if (accessKey != null) {
-			htmlWriter.writeAccessKey(accessKey);
-		}
+        htmlWriter.writeHRef(IHtmlWriter.JAVASCRIPT_VOID);
 
-		Integer tabIndex = tabComponent.getTabbedPane().getTabIndex(
-				facesContext);
-		if (tabIndex != null) {
-			htmlWriter.writeTabIndex(tabIndex.intValue());
-		}
+        // AccessKey
+        String accessKey = tabComponent.getAccessKey(facesContext);
+        if (accessKey != null) {
+            htmlWriter.writeAccessKey(accessKey);
+        }
 
-		IContentAccessors contentAccessors = tabComponent
-				.getImageAccessors(facesContext);
+        Integer tabIndex = tabComponent.getTabbedPane().getTabIndex(
+                facesContext);
+        if (tabIndex != null) {
+            htmlWriter.writeTabIndex(tabIndex.intValue());
+        }
 
-		if (contentAccessors instanceof IImageAccessors) {
-			IImageAccessors imageAccessors = (IImageAccessors) contentAccessors;
+        IContentAccessors contentAccessors = tabComponent
+                .getImageAccessors(facesContext);
 
-			String imageURL = null;
+        if (contentAccessors instanceof IImageAccessors) {
+            IImageAccessors imageAccessors = (IImageAccessors) contentAccessors;
 
-			if (disabled || selected) {
-				if (imageAccessors instanceof IStatesImageAccessors) {
-					IStatesImageAccessors statesImageAccessors = (IStatesImageAccessors) imageAccessors;
+            String imageURL = null;
 
-					if (disabled) {
-						IContentAccessor contentAccessor = statesImageAccessors
-								.getDisabledImageAccessor();
-						if (contentAccessor != null) {
-							imageURL = contentAccessor.resolveURL(facesContext,
-									null, null);
-						}
-					} else if (selected) {
-						IContentAccessor contentAccessor = statesImageAccessors
-								.getSelectedImageAccessor();
-						if (contentAccessor != null) {
-							imageURL = contentAccessor.resolveURL(facesContext,
-									null, null);
-						}
-					}
-				}
-			}
+            if (disabled || selected) {
+                if (imageAccessors instanceof IStatesImageAccessors) {
+                    IStatesImageAccessors statesImageAccessors = (IStatesImageAccessors) imageAccessors;
 
-			if (imageURL == null) {
-				IContentAccessor contentAccessor = imageAccessors
-						.getImageAccessor();
+                    if (disabled) {
+                        IContentAccessor contentAccessor = statesImageAccessors
+                                .getDisabledImageAccessor();
+                        if (contentAccessor != null) {
+                            imageURL = contentAccessor.resolveURL(facesContext,
+                                    null, null);
+                        }
+                    } else if (selected) {
+                        IContentAccessor contentAccessor = statesImageAccessors
+                                .getSelectedImageAccessor();
+                        if (contentAccessor != null) {
+                            imageURL = contentAccessor.resolveURL(facesContext,
+                                    null, null);
+                        }
+                    }
+                }
+            }
 
-				if (contentAccessor != null) {
-					imageURL = contentAccessor.resolveURL(facesContext, null,
-							null);
-				}
-			}
+            if (imageURL == null) {
+                IContentAccessor contentAccessor = imageAccessors
+                        .getImageAccessor();
 
-			if (imageURL != null) {
-				htmlWriter.startElement(IHtmlWriter.IMG);
+                if (contentAccessor != null) {
+                    imageURL = contentAccessor.resolveURL(facesContext, null,
+                            null);
+                }
+            }
 
-				htmlWriter.writeSrc(imageURL);
-				htmlWriter.writeAlign("center");
-				htmlWriter.writeBorder(0);
-				htmlWriter.writeClass("f_tabbedPane_titleIcon");
+            if (imageURL != null) {
+                htmlWriter.startElement(IHtmlWriter.IMG);
 
-				htmlWriter.endElement(IHtmlWriter.IMG);
-			}
-		}
+                htmlWriter.writeSrc(imageURL);
+                htmlWriter.writeAlign("center");
+                htmlWriter.writeBorder(0);
+                htmlWriter.writeClass("f_tabbedPane_titleIcon");
 
-		String text = tabComponent.getText(facesContext);
-		if (text != null) {
-			text = ParamUtils.formatMessage(tabComponent, text);
-			HtmlTools.writeSpanAccessKey(htmlWriter, tabComponent, text, true);
-		}
+                htmlWriter.endElement(IHtmlWriter.IMG);
+            }
+        }
 
-		htmlWriter.endElement(IHtmlWriter.A);
+        String text = tabComponent.getText(facesContext);
+        if (text != null) {
+            text = ParamUtils.formatMessage(tabComponent, text);
+            HtmlTools.writeSpanAccessKey(htmlWriter, tabComponent, text, true);
+        }
 
-		htmlWriter.endElement(IHtmlWriter.TD);
+        htmlWriter.endElement(IHtmlWriter.A);
 
-		htmlWriter.startElement(IHtmlWriter.TD);
+        htmlWriter.endElement(IHtmlWriter.TD);
 
-		if (nextTabComponent == null) {
-			htmlWriter
-					.writeClass((selected) ? "f_tabbedPane_titleRight_selected"
-							: "f_tabbedPane_titleRight");
+        htmlWriter.startElement(IHtmlWriter.TD);
 
-		} else if (tabbedPaneComponent.getSelectedTab(facesContext) == nextTabComponent) {
-			htmlWriter.writeClass("f_tabbedPane_titleNext_sright");
+        if (nextTabComponent == null) {
+            htmlWriter
+                    .writeClass((selected) ? "f_tabbedPane_titleRight_selected"
+                            : "f_tabbedPane_titleRight");
 
-		} else {
-			htmlWriter.writeClass((selected) ? "f_tabbedPane_titleNext_sleft"
-					: "f_tabbedPane_titleNext");
-		}
+        } else if (tabbedPaneComponent.getSelectedTab(facesContext) == nextTabComponent) {
+            htmlWriter.writeClass("f_tabbedPane_titleNext_sright");
 
-		htmlWriter.endElement(IHtmlWriter.TD);
-	}
+        } else {
+            htmlWriter.writeClass((selected) ? "f_tabbedPane_titleNext_sleft"
+                    : "f_tabbedPane_titleNext");
+        }
 
-	protected String computeTabInputId(IHtmlWriter htmlWriter,
-			TabComponent tabComponent) {
-		return tabComponent.getClientId(htmlWriter.getComponentRenderContext()
-				.getFacesContext())
-				+ TabRenderer.INPUT_ID_SUFFIX;
-	}
+        htmlWriter.endElement(IHtmlWriter.TD);
+    }
+
+    protected String computeTabInputId(IHtmlWriter htmlWriter,
+            TabComponent tabComponent) {
+        return tabComponent.getClientId(htmlWriter.getComponentRenderContext()
+                .getFacesContext()) + TabRenderer.INPUT_ID_SUFFIX;
+    }
 }

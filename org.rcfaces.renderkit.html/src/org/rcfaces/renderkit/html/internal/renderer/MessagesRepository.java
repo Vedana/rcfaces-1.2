@@ -18,11 +18,10 @@ import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
  * @version $Revision$ $Date$
  */
 public class MessagesRepository {
-    private static final String REVISION = "$Revision$";
 
     private final IJavaScriptRenderContext javascriptRenderContext;
 
-    private List messages = null;
+    private List<Object> messages = null;
 
     public MessagesRepository(IJavaScriptRenderContext javascriptRenderContext) {
         this.javascriptRenderContext = javascriptRenderContext;
@@ -31,7 +30,7 @@ public class MessagesRepository {
     public String allocateFacesMessage(FacesMessage message,
             boolean mustDeclare[]) {
         if (messages != null) {
-            for (Iterator it = messages.iterator(); it.hasNext();) {
+            for (Iterator<Object> it = messages.iterator(); it.hasNext();) {
                 String key = (String) it.next();
                 FacesMessage fm = (FacesMessage) it.next();
 
@@ -43,7 +42,7 @@ public class MessagesRepository {
             }
 
         } else {
-            messages = new ArrayList(8);
+            messages = new ArrayList<Object>(8);
         }
 
         mustDeclare[0] = true;
