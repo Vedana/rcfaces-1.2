@@ -29,369 +29,375 @@ import org.rcfaces.core.internal.util.Delay;
  * @version $Revision$ $Date$
  */
 public class Constants {
-	private static final Log LOG = LogFactory.getLog(Constants.class);
+    private static final Log LOG = LogFactory.getLog(Constants.class);
 
-	private static final String CONSTANT_PREFIX;
-	static {
-		Package _package = Constants.class.getPackage();
+    private static final String CONSTANT_PREFIX;
+    static {
+        Package _package = Constants.class.getPackage();
 
-		String name = _package.getName();
-		if (name.endsWith(".internal")) {
-			name = name.substring(0, name.lastIndexOf('.'));
-		}
+        String name = _package.getName();
+        if (name.endsWith(".internal")) {
+            name = name.substring(0, name.lastIndexOf('.'));
+        }
 
-		CONSTANT_PREFIX = name;
-	}
+        CONSTANT_PREFIX = name;
+    }
 
-	private static final String BUILDER_VERSION = null;
+    private static final String BUILDER_VERSION = null;
 
-	public static final boolean READ_ONLY_COLLECTION_LOCK_ENABLED = true;
+    public static final boolean READ_ONLY_COLLECTION_LOCK_ENABLED = true;
 
-	public static final boolean TEMPLATE_ENGINE_SUPPORT = true;
+    public static final boolean TEMPLATE_ENGINE_SUPPORT = true;
 
-	public static final boolean COMPONENT_DEFAULT_PROPERTIES_SUPPORT = true;
+    public static final boolean COMPONENT_DEFAULT_PROPERTIES_SUPPORT = true;
 
-	public static final boolean RESOURCE_CONTENT_VERSION_SUPPORT = true;
+    public static final boolean RESOURCE_CONTENT_VERSION_SUPPORT = true;
 
-	public static final boolean RESOURCE_CONTENT_PROXY_SUPPORT = true;
+    public static final boolean RESOURCE_CONTENT_PROXY_SUPPORT = true;
 
-	public static final boolean CACHED_COMPONENT_ITERATOR = false;
+    public static final boolean CACHED_COMPONENT_ITERATOR = false;
 
-	public static final boolean STATED_COMPONENT_CHILDREN_LIST = false;
+    public static final boolean STATED_COMPONENT_CHILDREN_LIST = false;
 
-	public static final boolean ENCODE_URI = false;
+    public static final boolean ENCODE_URI = false;
 
-	public static final boolean HASH_SUPPORT = true;
+    public static final boolean HASH_SUPPORT = true;
 
-	public static final boolean ETAG_SUPPORT = true;
+    public static final boolean ETAG_SUPPORT = true;
 
-	public static final boolean GZIP_SUPPORT_DEFAULT_VALUE = true;
+    public static final boolean GZIP_SUPPORT_DEFAULT_VALUE = true;
 
-	public static final boolean MYFACES_INPUT_BROADCAST_BUG = true;
+    public static final boolean MYFACES_INPUT_BROADCAST_BUG = true;
 
-	/**
-	 * Collection can be converted to DataModel (JSF spec extension)
-	 */
-	public static final boolean COLLECTION_DATAMODEL_SUPPORT = true;
+    /**
+     * Collection can be converted to DataModel (JSF spec extension)
+     */
+    public static final boolean COLLECTION_DATAMODEL_SUPPORT = true;
 
-	/**
-	 * Adaptable object can be converted to DataModel (JSF spec extension)
-	 */
-	public static final boolean ADAPTABLE_DATAMODEL_SUPPORT = true;
+    /**
+     * Adaptable object can be converted to DataModel (JSF spec extension)
+     */
+    public static final boolean ADAPTABLE_DATAMODEL_SUPPORT = true;
 
-	public static final long DEFAULT_EXPIRATION_DELAY = Delay.WEEK;
+    public static final long DEFAULT_EXPIRATION_DELAY = Delay.WEEK;
 
-	public static final long DEFAULT_VERSIONED_EXPIRATION_DELAY = Delay.YEAR;
+    public static final long DEFAULT_VERSIONED_EXPIRATION_DELAY = Delay.YEAR;
 
-	public static final int VERSIONED_URI_HASHCODE_MAX_SIZE = 64;
+    public static final int VERSIONED_URI_HASHCODE_MAX_SIZE = 64;
 
-	private static final String RCFACES_VERSION_SYSTEM_PARAMETER = "rcfaces.core.version";
+    private static final String RCFACES_VERSION_SYSTEM_PARAMETER = "rcfaces.core.version";
 
-	public static final String SAVE_STATE_FIELD_MARKER_SYSTEM_PARAMETER = "rcfaces.core.stateFieldMarker";
+    public static final String SAVE_STATE_FIELD_MARKER_SYSTEM_PARAMETER = "rcfaces.core.stateFieldMarker";
 
-	public static final String SAVE_STATE_FIELD_MARKER_PARAMETER = getPackagePrefix()
-			+ ".SAVE_STATE_FIELD_MARKER";
+    public static final String SAVE_STATE_FIELD_MARKER_PARAMETER = getPackagePrefix()
+            + ".SAVE_STATE_FIELD_MARKER";
 
-	public static final boolean CLIENT_LOCALE_SUPPORT_DEFAULT_VALUE = true;
+    public static final boolean CLIENT_LOCALE_SUPPORT_DEFAULT_VALUE = true;
 
-	public static final String[] RESOURCE_VERSION_DIGEST_ALGORITHMS = {
-			"SHA-512", "SHA-256", "SHA-1" };
+    public static final String[] RESOURCE_VERSION_DIGEST_ALGORITHMS = {
+            "SHA-512", "SHA-256", "SHA-1" };
 
-	public static final String[] ETAG_DIGEST_ALGORITHMS = { "SHA-512",
-			"SHA-256", "SHA-1" };
+    public static final String[] ETAG_DIGEST_ALGORITHMS = { "SHA-512",
+            "SHA-256", "SHA-1" };
 
-	public static final String[] SERIALISATION_HASH_ALGORITHMS = { "SHA-512",
-			"SHA-256", "SHA-1" };
+    public static final String[] SERIALISATION_HASH_ALGORITHMS = { "SHA-512",
+            "SHA-256", "SHA-1" };
 
-	public static final String[] HASH_DIGEST_ALGORITHMS = { "MD5" };
+    public static final String[] HASH_DIGEST_ALGORITHMS = { "MD5" };
 
-	public static final boolean BASIC_CONTENT_WEAK_CACHE_ENABLED = true;
+    public static final int LIMITED_MAP_WEAK_CACHE_SIZE = 256;
 
-	public static final int BASIC_CONTENT_CACHE_SIZE = 256;
+    public static final int BASIC_CONTENT_CACHE_SIZE = 256;
 
-	private static final String version;
-	static {
-		if (BUILDER_VERSION != null) {
-			version = BUILDER_VERSION;
+    public static final boolean BASIC_CONTENT_CACHE_SOFT_REFERENCES = true;
 
-		} else {
-			version = searchVersion(Constants.class,
-					RCFACES_VERSION_SYSTEM_PARAMETER, "RCFaces Core");
-		}
+    private static final String version;
+    static {
+        if (BUILDER_VERSION != null) {
+            version = BUILDER_VERSION;
 
-		LOG.info("RCFaces CORE version '" + version + "'");
-	}
+        } else {
+            version = searchVersion(Constants.class,
+                    RCFACES_VERSION_SYSTEM_PARAMETER, "RCFaces Core");
+        }
 
-	private static final IFactory defaultFactory;
+        LOG.info("RCFaces CORE version '" + version + "'");
+    }
 
-	public static final IResourceLoaderFactory IMAGE_LOADER_FACTORY = null;
+    private static final IFactory defaultFactory;
 
-	public static final boolean CACHED_LOCALE_FORMATS = true;
+    public static final IResourceLoaderFactory IMAGE_LOADER_FACTORY = null;
 
-	/**
-	 * <code>false</code> Optimize for CPU <code>true</code>Optimize for Memory
-	 */
-	public static final boolean COMPACTED_PROPERTY_NAME = false;
+    public static final boolean CACHED_LOCALE_FORMATS = true;
 
-	public static final boolean LOCKED_CLIENT_ATTRIBUTES_DEFAULT_VALUE = false;
+    /**
+     * <code>false</code> Optimize for CPU <code>true</code>Optimize for Memory
+     */
+    public static final boolean COMPACTED_PROPERTY_NAME = false;
 
-	private static final String FACELET_CLASSNAME = "com.sun.facelets.Facelet";
+    public static final boolean LOCKED_CLIENT_ATTRIBUTES_DEFAULT_VALUE = false;
 
-	public static final int DEFAULT_ASYNC_MODE = IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE;
+    private static final String FACELET_CLASSNAME = "com.sun.facelets.Facelet";
 
-	public static final int ENABLE_ASYNC_MODE_VALUE = IAsyncRenderModeCapability.BUFFER_ASYNC_RENDER_MODE;
+    public static final int DEFAULT_ASYNC_MODE = IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE;
 
-	public static final boolean FACELETS_SUPPORT = true;
+    public static final int ENABLE_ASYNC_MODE_VALUE = IAsyncRenderModeCapability.BUFFER_ASYNC_RENDER_MODE;
 
-	public static final boolean ADAPT_SELECT_ITEMS = true;
+    public static final boolean FACELETS_SUPPORT = true;
 
-	public static final Locale REPOSITORY_DEFAULT_LOCALE = Locale.ENGLISH;
+    public static final boolean ADAPT_SELECT_ITEMS = true;
 
-	public static final boolean VERIFY_VARIABLE_SYNTAX = false;
+    public static final Locale REPOSITORY_DEFAULT_LOCALE = Locale.ENGLISH;
 
-	private static final boolean VERIFY_IMPLEMENTATION = true;
+    public static final boolean VERIFY_VARIABLE_SYNTAX = false;
 
-	public static final int MINIMUM_GZIP_BUFFER_SIZE = 128;
+    private static final boolean VERIFY_IMPLEMENTATION = true;
 
-	public static final int CONTENT_STORAGE_CACHE_SIZE = 512;
+    public static final int MINIMUM_GZIP_BUFFER_SIZE = 128;
 
-	static {
-		LOG.info("READ_ONLY_COLLECTION_LOCK_ENABLED="
-				+ READ_ONLY_COLLECTION_LOCK_ENABLED);
+    public static final int CONTENT_STORAGE_CACHE_SIZE = 512;
 
-		LOG.info("LOCKED_CLIENT_ATTRIBUTES_DEFAULT_VALUE="
-				+ LOCKED_CLIENT_ATTRIBUTES_DEFAULT_VALUE);
+    public static final boolean CONTENT_STORAGE_CACHE_SOFT_REFERENCES = true;
 
-		LOG.info("TEMPLATE_ENGINE_SUPPORT=" + TEMPLATE_ENGINE_SUPPORT);
+    static {
+        LOG.info("READ_ONLY_COLLECTION_LOCK_ENABLED="
+                + READ_ONLY_COLLECTION_LOCK_ENABLED);
 
-		LOG.info("RESOURCE_CONTENT_VERSION_SUPPORT="
-				+ RESOURCE_CONTENT_VERSION_SUPPORT);
+        LOG.info("LOCKED_CLIENT_ATTRIBUTES_DEFAULT_VALUE="
+                + LOCKED_CLIENT_ATTRIBUTES_DEFAULT_VALUE);
 
-		LOG.info("STATED_COMPONENT_CHILDREN_LIST="
-				+ STATED_COMPONENT_CHILDREN_LIST);
+        LOG.info("TEMPLATE_ENGINE_SUPPORT=" + TEMPLATE_ENGINE_SUPPORT);
 
-		LOG.info("CACHED_COMPONENT_ITERATOR=" + CACHED_COMPONENT_ITERATOR);
+        LOG.info("RESOURCE_CONTENT_VERSION_SUPPORT="
+                + RESOURCE_CONTENT_VERSION_SUPPORT);
 
-		LOG.info("CACHED_LOCALE_FORMATS=" + CACHED_LOCALE_FORMATS);
+        LOG.info("STATED_COMPONENT_CHILDREN_LIST="
+                + STATED_COMPONENT_CHILDREN_LIST);
 
-		LOG.info("COMPACTED_PROPERTY_NAME=" + COMPACTED_PROPERTY_NAME);
+        LOG.info("CACHED_COMPONENT_ITERATOR=" + CACHED_COMPONENT_ITERATOR);
 
-		LOG.info("ETAG_SUPPORT=" + ETAG_SUPPORT + " (algorithms: "
-				+ Arrays.asList(ETAG_DIGEST_ALGORITHMS) + ")");
+        LOG.info("CACHED_LOCALE_FORMATS=" + CACHED_LOCALE_FORMATS);
 
-		LOG.info("HASH_SUPPORT=" + HASH_SUPPORT + " (algorithms: "
-				+ Arrays.asList(HASH_DIGEST_ALGORITHMS) + ")");
+        LOG.info("COMPACTED_PROPERTY_NAME=" + COMPACTED_PROPERTY_NAME);
 
-		LOG.info("SERIALISATION_HASH_ALGORITHMS="
-				+ Arrays.asList(SERIALISATION_HASH_ALGORITHMS));
+        LOG.info("ETAG_SUPPORT=" + ETAG_SUPPORT + " (algorithms: "
+                + Arrays.asList(ETAG_DIGEST_ALGORITHMS) + ")");
 
-		LOG.info("GZIP_SUPPORT_DEFAULT_VALUE=" + GZIP_SUPPORT_DEFAULT_VALUE);
+        LOG.info("HASH_SUPPORT=" + HASH_SUPPORT + " (algorithms: "
+                + Arrays.asList(HASH_DIGEST_ALGORITHMS) + ")");
 
-		LOG.info("DEFAULT_EXPIRATION_DELAY=" + DEFAULT_EXPIRATION_DELAY + " ("
-				+ Delay.format(DEFAULT_EXPIRATION_DELAY) + ")");
+        LOG.info("SERIALISATION_HASH_ALGORITHMS="
+                + Arrays.asList(SERIALISATION_HASH_ALGORITHMS));
 
-		LOG.info("DEFAULT_VERSIONED_EXPIRATION_DELAY="
-				+ DEFAULT_VERSIONED_EXPIRATION_DELAY + " ("
-				+ Delay.format(DEFAULT_VERSIONED_EXPIRATION_DELAY) + ")");
+        LOG.info("GZIP_SUPPORT_DEFAULT_VALUE=" + GZIP_SUPPORT_DEFAULT_VALUE);
 
-		LOG.info("CLIENT_LOCALE_SUPPORT_DEFAULT_VALUE="
-				+ CLIENT_LOCALE_SUPPORT_DEFAULT_VALUE);
+        LOG.info("DEFAULT_EXPIRATION_DELAY=" + DEFAULT_EXPIRATION_DELAY + " ("
+                + Delay.format(DEFAULT_EXPIRATION_DELAY) + ")");
 
-		LOG.info("VERSIONED_URI_HASHCODE_MAX_SIZE="
-				+ VERSIONED_URI_HASHCODE_MAX_SIZE);
+        LOG.info("DEFAULT_VERSIONED_EXPIRATION_DELAY="
+                + DEFAULT_VERSIONED_EXPIRATION_DELAY + " ("
+                + Delay.format(DEFAULT_VERSIONED_EXPIRATION_DELAY) + ")");
 
-		LOG.info("REPOSITORY_DEFAULT_LOCALE=" + REPOSITORY_DEFAULT_LOCALE);
+        LOG.info("CLIENT_LOCALE_SUPPORT_DEFAULT_VALUE="
+                + CLIENT_LOCALE_SUPPORT_DEFAULT_VALUE);
 
-		LOG.info("CONTENT_STORAGE_CACHE_SIZE=" + CONTENT_STORAGE_CACHE_SIZE);
+        LOG.info("VERSIONED_URI_HASHCODE_MAX_SIZE="
+                + VERSIONED_URI_HASHCODE_MAX_SIZE);
 
-		LOG.info("FACELETS_SUPPORT=" + FACELETS_SUPPORT);
+        LOG.info("REPOSITORY_DEFAULT_LOCALE=" + REPOSITORY_DEFAULT_LOCALE);
 
-		switch (DEFAULT_ASYNC_MODE) {
-		case IAsyncRenderModeCapability.TREE_ASYNC_RENDER_MODE:
-			LOG.info("DEFAULT_ASYNC_MODE=tree");
-			break;
+        LOG.info("CONTENT_STORAGE_CACHE_SIZE=" + CONTENT_STORAGE_CACHE_SIZE
+                + "  (soft references=" + CONTENT_STORAGE_CACHE_SOFT_REFERENCES
+                + ")");
 
-		case IAsyncRenderModeCapability.BUFFER_ASYNC_RENDER_MODE:
-			LOG.info("DEFAULT_ASYNC_MODE=buffer");
-			break;
+        LOG.info("FACELETS_SUPPORT=" + FACELETS_SUPPORT);
 
-		default:
-			LOG.info("DEFAULT_ASYNC_MODE=none");
-			break;
-		}
+        switch (DEFAULT_ASYNC_MODE) {
+        case IAsyncRenderModeCapability.TREE_ASYNC_RENDER_MODE:
+            LOG.info("DEFAULT_ASYNC_MODE=tree");
+            break;
 
-		switch (ENABLE_ASYNC_MODE_VALUE) {
-		case IAsyncRenderModeCapability.TREE_ASYNC_RENDER_MODE:
-			LOG.info("ENABLE_ASYNC_MODE_VALUE=tree");
-			break;
+        case IAsyncRenderModeCapability.BUFFER_ASYNC_RENDER_MODE:
+            LOG.info("DEFAULT_ASYNC_MODE=buffer");
+            break;
 
-		case IAsyncRenderModeCapability.BUFFER_ASYNC_RENDER_MODE:
-			LOG.info("ENABLE_ASYNC_MODE_VALUE=buffer");
-			break;
+        default:
+            LOG.info("DEFAULT_ASYNC_MODE=none");
+            break;
+        }
 
-		default:
-			LOG.info("ENABLE_ASYNC_MODE_VALUE=unknown");
-			break;
-		}
+        switch (ENABLE_ASYNC_MODE_VALUE) {
+        case IAsyncRenderModeCapability.TREE_ASYNC_RENDER_MODE:
+            LOG.info("ENABLE_ASYNC_MODE_VALUE=tree");
+            break;
 
-		defaultFactory = ComponentsFactory.getCameliaFactory(null);
-		LOG.info("Default components factory: " + defaultFactory.getName());
-	}
+        case IAsyncRenderModeCapability.BUFFER_ASYNC_RENDER_MODE:
+            LOG.info("ENABLE_ASYNC_MODE_VALUE=buffer");
+            break;
 
-	public static final String getPackagePrefix() {
-		return CONSTANT_PREFIX;
-	}
+        default:
+            LOG.info("ENABLE_ASYNC_MODE_VALUE=unknown");
+            break;
+        }
 
-	public static IFactory getCameliaFactory() {
-		return defaultFactory;
-	}
+        defaultFactory = ComponentsFactory.getCameliaFactory(null);
+        LOG.info("Default components factory: " + defaultFactory.getName());
+    }
 
-	public static String getVersion() {
-		return version;
-	}
+    public static final String getPackagePrefix() {
+        return CONSTANT_PREFIX;
+    }
 
-	public static final String searchVersion(Class clazz,
-			String systemParameter, String versionName) {
+    public static IFactory getCameliaFactory() {
+        return defaultFactory;
+    }
 
-		try {
-			String version = System.getProperty(systemParameter);
-			if (version != null) {
-				if ("now".equalsIgnoreCase(version)) {
-					version = "0." + String.valueOf(System.currentTimeMillis());
+    public static String getVersion() {
+        return version;
+    }
 
-					try {
-						System.setProperty(systemParameter, version);
+    public static final String searchVersion(Class clazz,
+            String systemParameter, String versionName) {
 
-					} catch (Throwable th2) {
-						LOG.debug(th2);
-					}
+        try {
+            String version = System.getProperty(systemParameter);
+            if (version != null) {
+                if ("now".equalsIgnoreCase(version)) {
+                    version = "0." + String.valueOf(System.currentTimeMillis());
 
-					LOG.info(versionName
-							+ " version: DEVELOPMENT MODE (Use fake version: "
-							+ version + ")");
+                    try {
+                        System.setProperty(systemParameter, version);
 
-				} else {
-					LOG.info(versionName + " version setted by property: "
-							+ version);
-				}
+                    } catch (Throwable th2) {
+                        LOG.debug(th2);
+                    }
 
-				return version;
-			}
+                    LOG.info(versionName
+                            + " version: DEVELOPMENT MODE (Use fake version: "
+                            + version + ")");
 
-		} catch (Throwable th) {
-			// Un probleme de sécurité peut-etre !
-			LOG.debug(th);
-		}
+                } else {
+                    LOG.info(versionName + " version setted by property: "
+                            + version);
+                }
 
-		Package clazzPackage = clazz.getPackage();
-		if (clazzPackage != null) {
-			try {
-				String implementationTitle = clazzPackage
-						.getImplementationTitle();
-				if (implementationTitle != null) {
-					verifyImplementationTitle(implementationTitle);
-				}
+                return version;
+            }
 
-				String version = clazzPackage.getImplementationVersion();
-				if (version != null) {
-					LOG.info(versionName + " version: " + version);
+        } catch (Throwable th) {
+            // Un probleme de sécurité peut-etre !
+            LOG.debug(th);
+        }
 
-					return version;
-				}
+        Package clazzPackage = clazz.getPackage();
+        if (clazzPackage != null) {
+            try {
+                String implementationTitle = clazzPackage
+                        .getImplementationTitle();
+                if (implementationTitle != null) {
+                    verifyImplementationTitle(implementationTitle);
+                }
 
-			} catch (Throwable th) {
-				LOG.error(
-						"Can not get " + versionName
-								+ " version by package API ! ("
-								+ clazzPackage.getName() + ")", th);
-			}
-		}
+                String version = clazzPackage.getImplementationVersion();
+                if (version != null) {
+                    LOG.info(versionName + " version: " + version);
 
-		String version = "0." + String.valueOf(System.currentTimeMillis());
-		LOG.error("Version of " + versionName
-				+ " can not be determined ! (Use the fake version: " + version
-				+ ")");
+                    return version;
+                }
 
-		return version;
-	}
+            } catch (Throwable th) {
+                LOG.error(
+                        "Can not get " + versionName
+                                + " version by package API ! ("
+                                + clazzPackage.getName() + ")", th);
+            }
+        }
 
-	private static void verifyImplementationTitle(String implementationTitle) {
-		if (Constants.VERIFY_IMPLEMENTATION == false) {
-			return;
-		}
+        String version = "0." + String.valueOf(System.currentTimeMillis());
+        LOG.error("Version of " + versionName
+                + " can not be determined ! (Use the fake version: " + version
+                + ")");
 
-		LOG.debug("Check for implementation title '" + implementationTitle
-				+ "' uniqueness.");
+        return version;
+    }
 
-		try {
-			Enumeration enumeration = Constants.class.getClassLoader()
-					.getResources("META-INF/MANIFEST.MF");
+    private static void verifyImplementationTitle(String implementationTitle) {
+        if (Constants.VERIFY_IMPLEMENTATION == false) {
+            return;
+        }
 
-			Set resources = new HashSet(2);
+        LOG.debug("Check for implementation title '" + implementationTitle
+                + "' uniqueness.");
 
-			for (; enumeration.hasMoreElements();) {
-				URL url = (URL) enumeration.nextElement();
+        try {
+            Enumeration enumeration = Constants.class.getClassLoader()
+                    .getResources("META-INF/MANIFEST.MF");
 
-				InputStream inputStream = url.openStream();
-				if (inputStream == null) {
-					LOG.debug("No input stream for url '" + url + "'.");
-					continue;
-				}
+            Set resources = new HashSet(2);
 
-				try {
-					Manifest manifest = new Manifest(inputStream);
+            for (; enumeration.hasMoreElements();) {
+                URL url = (URL) enumeration.nextElement();
 
-					String jarImplementationTitle = (String) manifest
-							.getMainAttributes().get(
-									Attributes.Name.IMPLEMENTATION_TITLE);
+                InputStream inputStream = url.openStream();
+                if (inputStream == null) {
+                    LOG.debug("No input stream for url '" + url + "'.");
+                    continue;
+                }
 
-					if (implementationTitle.equals(jarImplementationTitle) == false) {
-						continue;
-					}
+                try {
+                    Manifest manifest = new Manifest(inputStream);
 
-					resources.add(url);
+                    String jarImplementationTitle = (String) manifest
+                            .getMainAttributes().get(
+                                    Attributes.Name.IMPLEMENTATION_TITLE);
 
-					LOG.debug("Implementation title detected '"
-							+ implementationTitle + "' => " + url);
+                    if (implementationTitle.equals(jarImplementationTitle) == false) {
+                        continue;
+                    }
 
-				} catch (IOException ex) {
-					LOG.error("Can not load manifest '" + url + "'", ex);
+                    resources.add(url);
 
-				} finally {
-					try {
-						inputStream.close();
+                    LOG.debug("Implementation title detected '"
+                            + implementationTitle + "' => " + url);
 
-					} catch (IOException ex) {
-						LOG.error(ex);
-					}
-				}
-			}
+                } catch (IOException ex) {
+                    LOG.error("Can not load manifest '" + url + "'", ex);
 
-			LOG.debug("Count of implementation title '" + implementationTitle
-					+ "' = " + resources.size());
+                } finally {
+                    try {
+                        inputStream.close();
 
-			if (resources.size() > 1) {
-				throw new IllegalStateException(
-						"More than one definition of implementation title '"
-								+ implementationTitle + "' !");
-			}
+                    } catch (IOException ex) {
+                        LOG.error(ex);
+                    }
+                }
+            }
 
-		} catch (IOException e) {
-			LOG.error("Can not search manifest for implementation title '"
-					+ implementationTitle + "'.", e);
-		}
-	}
+            LOG.debug("Count of implementation title '" + implementationTitle
+                    + "' = " + resources.size());
 
-	public static final String getBuildId(String version) {
-		StringTokenizer st = new StringTokenizer(version, ".");
-		if (st.countTokens() < 4) {
-			return version;
-		}
+            if (resources.size() > 1) {
+                throw new IllegalStateException(
+                        "More than one definition of implementation title '"
+                                + implementationTitle + "' !");
+            }
 
-		st.nextToken();
-		st.nextToken();
-		st.nextToken();
+        } catch (IOException e) {
+            LOG.error("Can not search manifest for implementation title '"
+                    + implementationTitle + "'.", e);
+        }
+    }
 
-		return st.nextToken("\n\r\t ");
-	}
+    public static final String getBuildId(String version) {
+        StringTokenizer st = new StringTokenizer(version, ".");
+        if (st.countTokens() < 4) {
+            return version;
+        }
+
+        st.nextToken();
+        st.nextToken();
+        st.nextToken();
+
+        return st.nextToken("\n\r\t ");
+    }
 }

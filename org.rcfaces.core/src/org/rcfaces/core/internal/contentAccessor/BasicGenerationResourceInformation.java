@@ -29,8 +29,6 @@ public class BasicGenerationResourceInformation extends AbstractInformation
 
     private static final String COMPONENT_CLIENT_ID_PROPERTY = "org.rcfaces.org.COMPONENT_CLIENT_ID_PROPERTY";
 
-    private transient UIComponent component;
-
     private IFilterProperties filterProperties;
 
     private boolean processAtRequest;
@@ -47,10 +45,6 @@ public class BasicGenerationResourceInformation extends AbstractInformation
     public BasicGenerationResourceInformation(UIComponent component,
             String clientId) {
         setComponent(component, clientId);
-    }
-
-    public UIComponent getComponent() {
-        return component;
     }
 
     public void setComponent(IComponentRenderContext componentRenderContext) {
@@ -76,7 +70,6 @@ public class BasicGenerationResourceInformation extends AbstractInformation
     }
 
     public void setComponent(UIComponent component, String clientId) {
-        this.component = component;
         setComponentClientId(clientId);
     }
 
@@ -96,6 +89,7 @@ public class BasicGenerationResourceInformation extends AbstractInformation
         this.filterProperties = filterProperties;
     }
 
+    @Override
     public void restoreState(FacesContext context, Object state) {
         Object states[] = (Object[]) state;
 
@@ -107,6 +101,7 @@ public class BasicGenerationResourceInformation extends AbstractInformation
         // Pas la peine de traiter processAtRequest !!
     }
 
+    @Override
     public Object saveState(FacesContext context) {
         Object states[] = new Object[2];
 
@@ -167,8 +162,8 @@ public class BasicGenerationResourceInformation extends AbstractInformation
     }
 
     public void setComputeResourceKeyFromGenerationInformation(boolean b) {
-        setAttribute(COMPUTE_RESOURCE_KEY_FROM_GENERATION_INFORMATION, Boolean
-                .valueOf(b));
+        setAttribute(COMPUTE_RESOURCE_KEY_FROM_GENERATION_INFORMATION,
+                Boolean.valueOf(b));
     }
 
     public boolean getComputeResourceKeyFromGenerationInformation() {

@@ -58,8 +58,9 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
 
     private boolean disableCache = false;
 
-    private final LimitedMap registredContentsByGenerationInformation = new LimitedMap(
-            Constants.CONTENT_STORAGE_CACHE_SIZE);
+    private final LimitedMap<IGenerationResourceInformation, Content> registredContentsByGenerationInformation = new LimitedMap<IGenerationResourceInformation, Content>(
+            Constants.CONTENT_STORAGE_CACHE_SIZE,
+            Constants.CONTENT_STORAGE_CACHE_SOFT_REFERENCES);
 
     @Override
     public void startup(FacesContext facesContext) {
@@ -140,7 +141,7 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
         if (disableCache == false) {
             contentEngineId = contentModel.getContentEngineId();
             if (contentEngineId == null) {
-                Content content = (Content) registredContentsByGenerationInformation
+                Content content = registredContentsByGenerationInformation
                         .get(generationInformation);
                 if (content != null) {
                     contentEngineId = content.getContentEngineId();
@@ -547,7 +548,11 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
-    public static class Content implements StateHolder {
+    public static class Content implements StateHolder, Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = -6436030755767342990L;
 
         // private IGenerationResourceInformation generationInformation;
 

@@ -17,23 +17,23 @@ import org.rcfaces.core.model.IContentModel;
  * @version $Revision$ $Date$
  */
 public class BasicContentStorageRepository implements IContentStorageRepository {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(BasicContentStorageRepository.class);
 
     private static int id;
 
-    private final LimitedMap resolvedContentByKey;
+    private final LimitedMap<String, IResolvedContent> resolvedContentByKey;
 
     public BasicContentStorageRepository() {
-        resolvedContentByKey = new LimitedMap(
-                Constants.BASIC_CONTENT_CACHE_SIZE);
+        resolvedContentByKey = new LimitedMap<String, IResolvedContent>(
+                Constants.BASIC_CONTENT_CACHE_SIZE,
+                Constants.BASIC_CONTENT_CACHE_SOFT_REFERENCES);
     }
 
     public IResolvedContent load(String key) {
         synchronized (resolvedContentByKey) {
-            return (IResolvedContent) resolvedContentByKey.get(key);
+            return resolvedContentByKey.get(key);
         }
     }
 
@@ -91,7 +91,7 @@ public class BasicContentStorageRepository implements IContentStorageRepository 
         }
 
         // Il faut creer une clef artificielle ...
-        
+
         int id;
         synchronized (BasicContentStorageRepository.class) {
             id = BasicContentStorageRepository.id++;
