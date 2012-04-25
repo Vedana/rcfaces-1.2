@@ -297,7 +297,6 @@ public class HtmlRenderContext extends AbstractRenderContext implements
      * @version $Revision$ $Date$
      */
     protected static class HtmlWriterImpl extends AbstractHtmlWriter {
-        private static final String REVISION = "$Revision$";
 
         private static final String ENABLE_JAVASCRIPT_PROPERTY = "camelia.html.javascript.enable";
 
