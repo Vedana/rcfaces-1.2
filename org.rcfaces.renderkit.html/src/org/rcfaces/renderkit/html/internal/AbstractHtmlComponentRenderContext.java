@@ -18,8 +18,6 @@ import org.rcfaces.core.internal.renderkit.AbstractComponentRenderContext;
 public abstract class AbstractHtmlComponentRenderContext extends
         AbstractComponentRenderContext implements IHtmlComponentRenderContext {
 
-    private static final String REVISION = "$Revision$";
-
     private static final String CLIENT_DATA_COUNT_PROPERTY_NAME = "org.rcfaces.renderkit.html.CLIENT_DATA_COUNT";
 
     protected AbstractHtmlComponentRenderContext(FacesContext facesContext,
