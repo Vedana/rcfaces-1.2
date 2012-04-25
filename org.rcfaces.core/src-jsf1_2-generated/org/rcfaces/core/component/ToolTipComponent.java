@@ -1,13 +1,14 @@
 package org.rcfaces.core.component;
 
+import javax.faces.component.NamingContainer;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
 import org.rcfaces.core.component.capability.IBackgroundImageCapability;
 import java.lang.String;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.AbstractBasicComponent;
 import org.rcfaces.core.component.capability.ILoadEventCapability;
+import org.rcfaces.core.component.AbstractBasicComponent;
 import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
@@ -29,6 +30,7 @@ public class ToolTipComponent extends AbstractBasicComponent implements
 	IVariableScopeCapability,
 	ILookAndFeelCapability,
 	IStyleClassCapability,
+	NamingContainer,
 	IAsyncRenderComponent {
 
 	private static final Log LOG = LogFactory.getLog(ToolTipComponent.class);
