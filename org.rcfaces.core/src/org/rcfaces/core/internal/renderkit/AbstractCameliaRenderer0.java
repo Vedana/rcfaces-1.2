@@ -284,6 +284,7 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
         return getAdapter(adapter, object, this);
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> T getAdapter(Class<T> adapter, Object object,
             Object params) {
 
@@ -354,7 +355,8 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
     }
 
     protected final void designerBeginChildren(IComponentWriter writer,
-            String facetName) {
+            String facetName) throws WriterException {
+
         IDesignerEngine designerEngine = writer.getComponentRenderContext()
                 .getRenderContext().getProcessContext().getDesignerEngine();
 
@@ -362,17 +364,25 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
             return;
         }
 
+        if (writer instanceof ISgmlWriter) {
+            ((ISgmlWriter) writer).endComponent();
+        }
+
         designerEngine.beginChildren(writer.getComponentRenderContext()
                 .getComponent(), facetName, writer);
     }
 
     protected final void designerEndChildren(IComponentWriter writer,
-            String facetName) {
+            String facetName) throws WriterException {
         IDesignerEngine designerEngine = writer.getComponentRenderContext()
                 .getRenderContext().getProcessContext().getDesignerEngine();
 
         if (designerEngine == null) {
             return;
+        }
+
+        if (writer instanceof ISgmlWriter) {
+            ((ISgmlWriter) writer).endComponent();
         }
 
         designerEngine.endChildren(writer.getComponentRenderContext()
