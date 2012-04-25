@@ -36,7 +36,7 @@ if (window._RCFACES_LEVEL3) {
 		}
 
 		return false;
-	}
+	};
 
 	var _rcfacesGW=function(thiz, evt) {
 		var win;

@@ -28,8 +28,7 @@ import org.rcfaces.core.model.ISortedComponent;
 /**
  * 
  * @author jbmeslin@vedana.com
- * @version
- * 
+ * @version $Revision$ $Date$
  */
 public class GridTools {
 
