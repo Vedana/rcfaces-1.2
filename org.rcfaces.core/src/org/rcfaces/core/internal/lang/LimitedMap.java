@@ -3,108 +3,155 @@
  */
 package org.rcfaces.core.internal.lang;
 
+import java.io.Serializable;
+import java.lang.ref.SoftReference;
+import java.util.Deque;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.util.LinkedListEntry;
 
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class LimitedMap {
-    private static final String REVISION = "$Revision$";
+public class LimitedMap<K, V extends Serializable> {
 
     private static final Log LOG = LogFactory.getLog(LimitedMap.class);
 
     // Il faut un cache des erreurs .... et des autres !
 
-    private final Map caches;
+    private final Map<K, Cache<K, V>> caches;
 
-    private final Map weakCache;
+    private final boolean weakCacheEnabled;
+
+    private SoftReference<Map<K, Cache<K, V>>> weakCacheSoftReference;
 
     private final int maxCacheSize;
 
-    private List cacheList = new LinkedList();
+    private final Deque<Cache<K, V>> cachesOrder = new LinkedListEntry<Cache<K, V>>() {
 
-    public LimitedMap(int maxCacheSize) {
+        private static final long serialVersionUID = 6965443540296248833L;
+
+        @Override
+        protected Entry<Cache<K, V>> createEntry(Cache<K, V> element,
+                Entry<Cache<K, V>> next, Entry<Cache<K, V>> previous) {
+
+            if (element == null) {
+                element = new Cache<K, V>(null, null);
+            }
+
+            element.next = next;
+            element.previous = previous;
+
+            return element;
+        }
+
+    };
+
+    public LimitedMap(int maxCacheSize, boolean weakCacheEnabled) {
         this.maxCacheSize = maxCacheSize;
+        this.weakCacheEnabled = weakCacheEnabled;
 
-        caches = new HashMap(maxCacheSize + 2);
+        caches = new HashMap<K, Cache<K, V>>(maxCacheSize + 2);
 
         LOG.debug("Set max cache size to " + maxCacheSize + ".");
 
-        if (Constants.BASIC_CONTENT_WEAK_CACHE_ENABLED) {
-            weakCache = new WeakHashMap(maxCacheSize);
-            LOG.debug("Create a weak map initialized with size " + maxCacheSize
-                    + ".");
-
-        } else {
-            weakCache = null;
-        }
-
     }
 
-    public synchronized Object get(Object key) {
-        Cache cache = (Cache) caches.get(key);
-        if (cache == null && weakCache != null) {
-            cache = (Cache) weakCache.get(key);
+    public synchronized V get(K key) {
+        Cache<K, V> cache = caches.get(key);
+        if (cache != null) {
+            // On la remet en tete !
+
+            if (cachesOrder.getFirst() != cache) {
+                cachesOrder.remove(cache);
+                cachesOrder.addFirst(cache);
+            }
+
+            return cache.serializable;
         }
 
-        if (cache == null) {
-            return null;
+        if (weakCacheSoftReference != null) {
+            Map<K, Cache<K, V>> weakCache = weakCacheSoftReference.get();
+            if (weakCache != null) {
+                cache = weakCache.get(key);
+                if (cache != null) {
+                    return cache.serializable;
+                }
+            }
         }
 
-        if (cacheList.get(0) != cache) {
-            cacheList.remove(cache);
-            cacheList.add(0, cache);
-        }
-
-        return cache.serializable;
+        return null;
     }
 
-    public synchronized void remove(Object key) {
-        Cache cache = (Cache) caches.remove(key);
+    public synchronized void remove(K key) {
+
+        if (weakCacheSoftReference != null) {
+            Map<K, Cache<K, V>> weakCache = weakCacheSoftReference.get();
+            if (weakCache != null) {
+                weakCache.remove(key);
+            }
+        }
+
+        Cache<K, V> cache = caches.remove(key);
         if (cache == null) {
             return;
         }
-        cacheList.remove(cache);
+
+        cachesOrder.remove(cache);
     }
 
-    public synchronized void put(Object key, Object serializable) {
-        Cache cache = (Cache) caches.get(key);
+    public synchronized void put(K key, V serializable) {
+        Cache<K, V> cache = caches.get(key);
+
         if (cache != null) {
-            cache.serializable = serializable;
+            if (cache.serializable != serializable) {
+                cache.serializable = serializable;
+            }
 
-            cacheList.remove(cache);
-
-        } else {
-            cache = new Cache(key, serializable);
-            caches.put(key, cache);
+            if (cachesOrder.getFirst() != cache) {
+                cachesOrder.remove(cache);
+                cachesOrder.addFirst(cache);
+            }
+            return;
         }
 
-        cacheList.add(0, cache);
+        cache = new Cache<K, V>(key, serializable);
+        caches.put(key, cache);
+        cachesOrder.addFirst(cache);
+
+        // /
 
         int cacheSize = caches.size();
 
         if (LOG.isDebugEnabled()) {
-            LOG
-                    .debug("Register key='" + key + "' cacheSize=" + cacheSize
-                            + ".");
+            LOG.debug("Register key='" + key + "' cacheSize=" + cacheSize + ".");
         }
 
         if (cacheSize > maxCacheSize) {
-            Cache oldest = (Cache) cacheList.remove(cacheSize - 1);
+            Cache<K, V> oldest = cachesOrder.removeLast();
 
             caches.remove(oldest.key);
 
-            if (weakCache != null) {
+            if (weakCacheEnabled && Constants.LIMITED_MAP_WEAK_CACHE_SIZE > 0) {
+                Map<K, Cache<K, V>> weakCache = null;
+                if (weakCacheSoftReference != null) {
+                    weakCache = weakCacheSoftReference.get();
+                }
+                if (weakCache == null) {
+                    weakCache = new WeakHashMap<K, Cache<K, V>>(
+                            Constants.LIMITED_MAP_WEAK_CACHE_SIZE);
+
+                    weakCacheSoftReference = new SoftReference<Map<K, Cache<K, V>>>(
+                            weakCache);
+                }
+
                 weakCache.put(oldest.key, oldest);
             }
 
@@ -123,14 +170,18 @@ public class LimitedMap {
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
-    private static class Cache {
-        private static final String REVISION = "$Revision$";
+    private static class Cache<K, V extends Serializable> extends
+            LinkedListEntry.Entry<Cache<K, V>> {
 
-        final Object key;
+        final K key;
 
-        Object serializable;
+        V serializable;
 
-        public Cache(Object key, Object serializable) {
+        public Cache(K key, V serializable) {
+            super(null, null, null);
+
+            this.element = this;
+
             this.key = key;
             this.serializable = serializable;
         }
