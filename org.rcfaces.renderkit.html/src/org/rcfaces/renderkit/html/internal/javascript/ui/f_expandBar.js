@@ -546,6 +546,41 @@ var __members = {
 		this.f_setCollapsed(false);
 		
 		return this.f_super(arguments);		
+	},
+	f_documentComplete: function() {
+		var sh=this.style.height;
+		if (sh && sh.indexOf("px")>0) {
+			this.f_updateHeight(parseInt(sh, 10));
+		}
+	},
+	f_updateHeight: function(height) {
+		f_core.Assert(typeof (height) == "number",
+				"f_expandBar.f_setHeight: height parameter must be a number ! ("
+						+ height + ")");
+
+		this.style.height = height + "px";
+		
+		var border=f_core.ComputeContentBoxBorderLength(this, "top", "bottom");
+		height-=border;
+		
+		var head=this._head;
+		if (head) {
+			var hh=head.offsetHeight;
+			height-=hh;
+		}
+		
+		var body=this._body;
+		if (body) {
+			body.style.height=height + "px";
+			
+			var content=this._content;
+			if (content && content!=body) {
+				var borderBody=f_core.ComputeContentBoxBorderLength(body, "top", "bottom");
+				height-=borderBody;
+			
+				content.style.height=height+"px";
+			}
+		}
 	}
 };
 

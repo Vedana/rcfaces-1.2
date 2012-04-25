@@ -19,6 +19,9 @@
 	border: 1px solid #CCCCCC;
 	text-align: left;
 	font: 8pt Tahoma, Verdana, Arial, Helvetica, sans-serif;
+
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 .f_expandBar_button {
@@ -32,6 +35,9 @@
 .f_expandBar_body {
 	padding: 0;
 	text-align: left;
+
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 .f_expandBar_body_collapsed {
@@ -77,6 +83,9 @@
 	padding: 2px;
 	text-align: left;
 /*		vertical-align: middle;   PROBLEME SOUS IE */
+
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 .f_expandBar_head_over {
@@ -91,6 +100,10 @@
 .f_expandBar_content {
 	background: white;
 	padding: 2px;
+	position: relative;
+
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 .f_expandBar_content_effect {

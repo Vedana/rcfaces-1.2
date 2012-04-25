@@ -27,7 +27,7 @@ var __statics = {
 	Initializer: function() {
 		f_effect.Declare("slideUp", this);
 	}
-}
+};
 
 var __members = {
 	f_slideUpEffect: function(component, callback) {
@@ -35,6 +35,7 @@ var __members = {
 		
 		if (!component.offsetHeight) {
 			this._current=0;
+			this._componentHeightSetted=component.style.height;
 			
 		} else {
 			this._current=1;
@@ -73,7 +74,11 @@ var __members = {
 		}
 		
 		if (cur>0.9999) {
-			component.style.height="auto";
+			if (this._componentHeightSetted) {
+				component.style.height=this._componentHeightSetted;
+			} else {
+				component.style.height="auto";
+			}
 			component.scrollTop=0;
 			return;
 		}
@@ -84,7 +89,7 @@ var __members = {
 		component.style.height=ch+"px";
 		component.scrollTop=h-ch;
 	}
-}
+};
 
 new f_class("f_slideUpEffect", null, __statics, __members, f_timerEffect);
 
