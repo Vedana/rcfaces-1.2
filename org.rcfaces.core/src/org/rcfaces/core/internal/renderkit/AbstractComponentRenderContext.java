@@ -40,7 +40,7 @@ public abstract class AbstractComponentRenderContext implements
 
         if (PUT_ATTRIBUTES_MAP_INTO_COMPONENT) {
             if (component instanceof ITransientAttributesManager) {
-                attributes = (Map) ((ITransientAttributesManager) component)
+                attributes = (Map<String, Object>) ((ITransientAttributesManager) component)
                         .getTransientAttribute(ATTRIBUTES_MAP);
             }
         }
