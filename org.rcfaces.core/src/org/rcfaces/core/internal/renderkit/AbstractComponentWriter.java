@@ -10,7 +10,6 @@ package org.rcfaces.core.internal.renderkit;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractComponentWriter implements IComponentWriter {
-    private static final String REVISION = "$Revision$";
 
     private final IComponentRenderContext componentRenderContext;
 

@@ -363,7 +363,7 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
         }
 
         designerEngine.beginChildren(writer.getComponentRenderContext()
-                .getComponent(), facetName);
+                .getComponent(), facetName, writer);
     }
 
     protected final void designerEndChildren(IComponentWriter writer,
@@ -376,6 +376,6 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
         }
 
         designerEngine.endChildren(writer.getComponentRenderContext()
-                .getComponent(), facetName);
+                .getComponent(), facetName, writer);
     }
 }
