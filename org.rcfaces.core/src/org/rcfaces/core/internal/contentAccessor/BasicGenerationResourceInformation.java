@@ -76,7 +76,7 @@ public class BasicGenerationResourceInformation extends AbstractInformation
     }
 
     public void setComponent(UIComponent component, String clientId) {
-        this.component = component;
+        // this.component = component;
         setComponentClientId(clientId);
     }
 
@@ -167,8 +167,8 @@ public class BasicGenerationResourceInformation extends AbstractInformation
     }
 
     public void setComputeResourceKeyFromGenerationInformation(boolean b) {
-        setAttribute(COMPUTE_RESOURCE_KEY_FROM_GENERATION_INFORMATION, Boolean
-                .valueOf(b));
+        setAttribute(COMPUTE_RESOURCE_KEY_FROM_GENERATION_INFORMATION,
+                Boolean.valueOf(b));
     }
 
     public boolean getComputeResourceKeyFromGenerationInformation() {
