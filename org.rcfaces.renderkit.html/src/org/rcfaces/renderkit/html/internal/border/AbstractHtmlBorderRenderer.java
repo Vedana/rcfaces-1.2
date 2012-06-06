@@ -11,6 +11,7 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.renderkit.border.AbstractBorderRenderer;
 import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -187,6 +188,7 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
         }
         writer.writeCellPadding(0);
         writer.writeCellSpacing(0);
+        writer.writeRole(IAccessibilityRoles.PRESENTATION);
 
         if (width != null || height != null) {
             ICssWriter cssWriter = writer.writeStyle(64);
@@ -254,11 +256,18 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
         writer.writeWidth(getWestBorderWidth());
         writer.writeHeight(getNorthBorderHeight());
         writer.writeSrc(getBlankImageURL(writer));
+
+        writeAlternateImage(writer);
+
         writer.endElement(IHtmlWriter.IMG);
 
         writer.endElement(IHtmlWriter.TD);
 
         return writer;
+    }
+
+    protected void writeAlternateImage(IHtmlWriter writer) {
+
     }
 
     protected String getWestBorderClassName(IHtmlWriter writer) {
@@ -291,6 +300,8 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
         writer.writeWidth(getEastBorderWidth());
         writer.writeHeight(getNorthBorderHeight());
         writer.writeSrc(getBlankImageURL(writer));
+        writeAlternateImage(writer);
+
         writer.endElement(IHtmlWriter.IMG);
 
         writer.endElement(IHtmlWriter.TD);
