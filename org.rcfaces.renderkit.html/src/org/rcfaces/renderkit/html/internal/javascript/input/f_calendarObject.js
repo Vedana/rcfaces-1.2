@@ -1659,7 +1659,7 @@ var __members = {
 		var button=doc.createElement("a");
 		button.className=className+"_today";
 		button.onclick=f_calendarObject._OnHomeDateClick;
-		button.href=f_core.JAVASCRIPT_VOID;
+		button.href=f_core.CreateJavaScriptVoid0();
 		button._date=this._homeDate;
 		button._calendar=this;
 		
@@ -1709,7 +1709,7 @@ var __members = {
 		
 		var link=doc.createElement("a");
 		link.className=className+"_prevUnit";
-		link.href=f_core.JAVASCRIPT_VOID;
+		link.href=f_core.CreateJavaScriptVoid0();
 		f_core.AppendChild(td, link);
 		unitButtons.push(link);
 		link.onclick=f_calendarObject._OnPrevUnitClick;
@@ -1752,7 +1752,7 @@ var __members = {
 			
 		var link=doc.createElement("a");
 		link.className=className+"_nextUnit";
-		link.href=f_core.JAVASCRIPT_VOID;
+		link.href=f_core.CreateJavaScriptVoid0();
 		f_core.AppendChild(td, link);
 		unitButtons.push(link);
 		link.onclick=f_calendarObject._OnNextUnitClick;
@@ -1812,7 +1812,7 @@ var __members = {
 			var link;
 			if (selectDay) {
 				link=doc.createElement("a");
-				link.href=f_core.JAVASCRIPT_VOID;
+				link.href=f_core.CreateJavaScriptVoid0();
 				link.onclick=f_calendarObject._OnWeekDayClick;
 				link.onkeydown=f_calendarObject._OnWeekDayKey;
 				link._calendar=this;
@@ -1858,7 +1858,7 @@ var __members = {
 					var but=doc.createElement("a");
 					f_core.AppendChild(td, but);
 					but.className=className+"_week";
-					but.href=f_core.JAVASCRIPT_VOID;
+					but.href=f_core.CreateJavaScriptVoid0();
 					this._weekButtons.push(but);
 					but.onclick=f_calendarObject._OnWeekClick;
 					but.onkeydown=f_calendarObject._OnWeekKey;
@@ -1884,7 +1884,7 @@ var __members = {
 			f_core.AppendChild(td, day);
 // C'est une classe utilisateur !
 //			day.className=className+"_day";
-			day.href=f_core.JAVASCRIPT_VOID;
+			day.href=f_core.CreateJavaScriptVoid0();
 			this._dayButtons.push(day);
 			day.onclick=f_calendarObject._OnDayClick;
 			day.onkeydown=f_calendarObject._OnDayKey;
@@ -1930,7 +1930,7 @@ var __members = {
 			var month=doc.createElement("a");
 			f_core.AppendChild(td, month);
 			month.className=className+"_month";
-			month.href=f_core.JAVASCRIPT_VOID;
+			month.href=f_core.CreateJavaScriptVoid0();
 			this._monthButtons.push(month);
 			
 			month.onclick=f_calendarObject._OnMonthClick;
@@ -1970,7 +1970,7 @@ var __members = {
 		var link=doc.createElement("a");
 		link.className=className+"_prevYear";
 		f_core.AppendChild(td, link);
-		link.href=f_core.JAVASCRIPT_VOID;
+		link.href=f_core.CreateJavaScriptVoid0();
 		this._yearButtons.push(link);
 		link.onclick=f_calendarObject._OnPrevYearClick;
 		link.onkeydown=f_calendarObject._OnYearKey;
@@ -1990,7 +1990,7 @@ var __members = {
 		var year=doc.createElement("a");
 		f_core.AppendChild(td, year);
 		year.className=className+"_cursorYearLabel";
-		year.href=f_core.JAVASCRIPT_VOID;
+		year.href=f_core.CreateJavaScriptVoid0();
 		year.onclick=f_calendarObject._OnYearClick;
 		year.onkeydown=f_calendarObject._OnYearKey;		
 		this._yearButtons.push(year);
@@ -2006,7 +2006,7 @@ var __members = {
 		var link=doc.createElement("a");
 		link.className=className+"_nextYear";
 		f_core.AppendChild(td, link);
-		link.href=f_core.JAVASCRIPT_VOID;
+		link.href=f_core.CreateJavaScriptVoid0();
 		this._yearButtons.push(link);
 		link.onclick=f_calendarObject._OnNextYearClick;
 		link.onkeydown=f_calendarObject._OnYearKey;
@@ -2047,7 +2047,7 @@ var __members = {
 		var link=doc.createElement("a");
 		link.className=className+"_prevMonth";
 		f_core.AppendChild(td, link);
-		link.href=f_core.JAVASCRIPT_VOID;
+		link.href=f_core.CreateJavaScriptVoid0();
 		this._monthCursors.push(link);
 		link.onclick=f_calendarObject._OnPrevMonthClick;
 		link.onkeydown=f_calendarObject._OnMonthKey;
@@ -2079,7 +2079,7 @@ var __members = {
 		var link=doc.createElement("a");
 		link.className=className+"_nextMonth";
 		f_core.AppendChild(td, link);
-		link.href=f_core.JAVASCRIPT_VOID;
+		link.href=f_core.CreateJavaScriptVoid0();
 		this._monthCursors.push(link);
 		link.onclick=f_calendarObject._OnNextMonthClick;
 		link.onkeydown=f_calendarObject._OnMonthKey;

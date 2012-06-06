@@ -52,7 +52,7 @@ var __statics = {
 		} else {
 			button=doc.createElement("a");
 			button._index=index;
-			button.href=f_core.JAVASCRIPT_VOID;
+			button.href=f_core.CreateJavaScriptVoid0();
 			button.onclick=f_pager._PositionSelect;
 			button.onkeydown=f_pager._PositionKey;
 			button.f_link=dataPager;
@@ -891,7 +891,7 @@ var __members = {
 			return;
 		}
 		if (tag.tagName.toLowerCase()=="a") {
-			tag.href=f_core.JAVASCRIPT_VOID;
+			tag.href=f_core.CreateJavaScriptVoid0();
 			
 			tag.onclick=f_pager._PositionSelect;
 			tag.f_link=this;

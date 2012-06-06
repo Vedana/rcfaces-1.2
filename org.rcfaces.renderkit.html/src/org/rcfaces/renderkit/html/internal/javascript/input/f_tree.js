@@ -593,7 +593,7 @@ var __members = {
 		focus.onkeydown=f_tree._Link_onkeydown;
 		focus.onkeypress=f_tree._Link_onkeypress;
 		focus.onkeyup=f_tree._Link_onkeyup;
-		focus.href=f_core.JAVASCRIPT_VOID;
+		focus.href=f_core.CreateJavaScriptVoid0();
 		focus._tree=this;
 
 		// Gestion du focus lors du click dans le TREE !
@@ -1903,8 +1903,8 @@ var __members = {
 		} else {
 			suffix+="_leaf";
 		}
-		command.title = alt_title;
-		// command.alt = alt_title; OO: ET LE ALT ???
+		//command.title = alt_title; // OO: C'est une image, il faut positionner le ALT
+		command.alt = alt_title; 
 		
 		if (node._selected) {
 			suffix+="_selected";

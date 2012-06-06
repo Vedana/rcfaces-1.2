@@ -543,7 +543,7 @@ var __members = {
 
 		var link=f_core.CreateElement(parent, "a", {
 			title: tooltip,
-			href: f_core.JAVASCRIPT_VOID
+			href: f_core.CreateJavaScriptVoid0()
 		});
 		link._shellDecorator=this;
 		link.onclick=f_shellDecorator._TitleButton_onclick;

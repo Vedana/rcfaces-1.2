@@ -20,7 +20,7 @@ var __members = {
 		var input=this.f_getInput();
 		if (input.tagName.toLowerCase()=="a") {
 			if (!input.href) {
-				input.href=f_core.JAVASCRIPT_VOID;
+				input.href=f_core.CreateJavaScriptVoid0();
 			}
 		}
 		

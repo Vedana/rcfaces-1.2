@@ -867,7 +867,7 @@ var __members = {
 			f_core.AppendChild(trText, textTitle);
 			
 			textLink=f_core.CreateElement(textTitle, "a", {
-				href: f_core.JAVASCRIPT_VOID
+				href: f_core.CreateJavaScriptVoid0()
 	//			tabIndex: (this._tabIndex)?(this._tabIndex):0  // ????
 			});
 			
