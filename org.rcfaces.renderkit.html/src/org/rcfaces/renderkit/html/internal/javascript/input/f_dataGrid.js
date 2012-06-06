@@ -583,9 +583,10 @@ var __members = {
 						}
 					}
 					
+					var cellType=(col._scopeCol)?"th":"td";
 					if (firstCell) {
 						if (firstCell===true) {
-							td=doc.createElement("td");
+							td=doc.createElement(cellType);
 							f_core.AppendChild(row, td);
 						} else {
 							td=firstCell;
@@ -600,7 +601,7 @@ var __members = {
 						}
 						
 					} else {
-						td=doc.createElement("td");
+						td=doc.createElement(cellType);
 						f_core.AppendChild(row, td);								
 					}
 					
@@ -1591,7 +1592,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setCells2: function(row, configs) {
-		var tds=row.getElementsByTagName("td");
+		var tds=row.cells; //getElementsByTagName("td"); // Parfois ca peut être du TH !
 		var cols=this._columns;
 
 		var images=row._cellImages;

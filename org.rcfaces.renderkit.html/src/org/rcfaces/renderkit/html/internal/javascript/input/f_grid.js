@@ -6,7 +6,8 @@
  * 
  * @class public abstract f_grid extends f_component, fa_disabled, fa_immediate,
  *        fa_pagedComponent, fa_subMenu, fa_commands, fa_selectionManager<String[]>,
- *        fa_scrollPositions, fa_additionalInformationManager, fa_droppable, fa_draggable, fa_autoScroll, fa_aria
+ *        fa_scrollPositions, fa_additionalInformationManager, fa_droppable,
+ *        fa_draggable, fa_autoScroll, fa_aria
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -232,7 +233,7 @@ var __statics = {
 				return target;
 			}
 
-			if (tagName == "td") {
+			if (tagName == "td" || tagName == "th") {
 				continue;
 			}
 
@@ -275,14 +276,16 @@ var __statics = {
 			var sub = f_core.IsPopupButton(evt);
 
 			var selection = fa_selectionManager.ComputeMouseSelection(evt);
-			
+
 			var selectOnMousedown = false;
 			var srcElement = evt.target ? evt.target : evt.srcElement;
-			if (srcElement && this._label && srcElement.tagName == this._label.tagName) {
+			if (srcElement && this._label
+					&& srcElement.tagName == this._label.tagName) {
 				selectOnMousedown = true;
 			}
-		
-			dataGrid.f_moveCursor(this, true, evt, selection, fa_selectionManager.BEGIN_PHASE, selectOnMousedown);
+
+			dataGrid.f_moveCursor(this, true, evt, selection,
+					fa_selectionManager.BEGIN_PHASE, selectOnMousedown);
 
 			// On deplace le cursor avant de donner le focus !
 			dataGrid.f_forceFocus();
@@ -290,11 +293,11 @@ var __statics = {
 			if (sub && this._selected) {
 				var menu = dataGrid.f_getSubMenuById(f_grid._ROW_MENU_ID);
 				if (menu) {
-					if(menu.f_closeAllpopups) {
+					if (menu.f_closeAllpopups) {
 						menu.f_closeAllpopups();
 					}
 				}
-				
+
 			} else if (dataGrid._dragAndDropEngine) {
 				dataGrid._dragRow(evt);
 			}
@@ -305,7 +308,7 @@ var __statics = {
 					+ dataGrid + "' EXITED");
 		}
 	},
-	
+
 	/**
 	 * @method protected static
 	 * @param Event
@@ -344,7 +347,7 @@ var __statics = {
 
 			dataGrid.f_moveCursor(this, true, evt, selection,
 					fa_selectionManager.END_PHASE);
-			
+
 			// On deplace le cursor avant de donner le focus !
 			dataGrid.f_forceFocus();
 
@@ -354,11 +357,11 @@ var __statics = {
 					menu.f_open(evt, {
 						position : f_popup.MOUSE_POSITION
 					});
-				}				
-			} 
-			
+				}
+			}
+
 			return f_core.CancelJsEvent(evt);
-			
+
 		} finally {
 			f_core.Debug(f_grid, "RowMouseUp: mouse up on row of '" + dataGrid
 					+ "' EXITED");
@@ -376,7 +379,7 @@ var __statics = {
 			return true;
 		}
 
-		var target=undefined;
+		var target = undefined;
 		if (evt.target) {
 			target = evt.target;
 
@@ -408,7 +411,7 @@ var __statics = {
 				}
 			}
 
-			if (f_core.GetAttributeNS(target,"class")) {
+			if (f_core.GetAttributeNS(target, "class")) {
 				// Un objet RCFACES !
 
 				f_core.Debug(f_grid, "VerifyTarget: Initialize target='"
@@ -532,14 +535,14 @@ var __statics = {
 
 		var menu = dataGrid.f_getSubMenuById(menuId);
 		if (menu) {
-			if(menu.f_closeAllpopups) {
+			if (menu.f_closeAllpopups) {
 				menu.f_closeAllpopups();
-			}			
+			}
 		}
 
 		return f_core.CancelJsEvent(evt);
 	},
-	
+
 	/**
 	 * @method private static
 	 * @param Event
@@ -903,10 +906,10 @@ var __statics = {
 			return true;
 		}
 
-		if (f_core.GetBooleanAttributeNS(dataGrid,"wheelSelection", true)==false) {
+		if (f_core.GetBooleanAttributeNS(dataGrid, "wheelSelection", true) == false) {
 			return true;
 		}
-		
+
 		var wheel = evt.wheelDelta;
 
 		if (f_core.IsGecko()) {
@@ -1076,26 +1079,27 @@ var __statics = {
 		dataGrid._columnSelected = column;
 		dataGrid._updateTitleStyle(column);
 
-		if (f_core.IsGecko()) {			
+		if (f_core.IsGecko()) {
 			f_grid._TitleReleaseTimer();
 
-			// GROS BUG firefox,  il existe une zone en dessous de la baseline qui n'envoie pas de CLICK !
-			f_grid._TitleClicked=false;
-			f_grid._TitleMouseDownTime=new Date().getTime();
+			// GROS BUG firefox, il existe une zone en dessous de la baseline
+			// qui n'envoie pas de CLICK !
+			f_grid._TitleClicked = false;
+			f_grid._TitleMouseDownTime = new Date().getTime();
 		}
-	
+
 		return true;
 	},
 	/**
 	 * @method private static
 	 * @return void
 	 */
-	_TitleReleaseTimer: function() {
-		var id=f_grid._TitleWaitClickTimerId;
+	_TitleReleaseTimer : function() {
+		var id = f_grid._TitleWaitClickTimerId;
 		if (!id) {
 			return;
 		}
-		f_grid._TitleWaitClickTimerId=undefined;
+		f_grid._TitleWaitClickTimerId = undefined;
 		window.clearTimeout(id);
 	},
 	/**
@@ -1116,8 +1120,8 @@ var __statics = {
 			return false;
 		}
 
-		var ascending=undefined;
-		var cancel=undefined;
+		var ascending = undefined;
+		var cancel = undefined;
 
 		var code = evt.keyCode;
 		switch (code) {
@@ -1204,11 +1208,12 @@ var __statics = {
 			break;
 		}
 
-		if (f_core.IsGecko()) {			
+		if (f_core.IsGecko()) {
 			f_grid._TitleReleaseTimer();
 
-			// GROS BUG firefox,  il existe une zone en dessous de la baseline qui n'envoie pas de CLICK !
-			f_grid._TitleClicked=false;
+			// GROS BUG firefox, il existe une zone en dessous de la baseline
+			// qui n'envoie pas de CLICK !
+			f_grid._TitleClicked = false;
 		}
 
 		if (ascending !== undefined) {
@@ -1254,8 +1259,8 @@ var __statics = {
 
 			window.setTimeout(function() {
 				if (window._rcfacesExiting) {
-	 				return false;
-	 			}
+					return false;
+				}
 
 				var scrollTitleLeft = _dataGrid._scrollTitle.scrollLeft;
 
@@ -1325,17 +1330,18 @@ var __statics = {
 			evt = f_core.GetJsEvent(this);
 		}
 
-		if (f_grid._TitleClicked!==undefined) {
+		if (f_grid._TitleClicked !== undefined) {
 			f_grid._TitleReleaseTimer();
 
-			f_core.Debug(f_grid, "_Title_onClick: already clicked ? =>"+f_grid._TitleClicked);
+			f_core.Debug(f_grid, "_Title_onClick: already clicked ? =>"
+					+ f_grid._TitleClicked);
 
 			if (f_grid._TitleClicked) { // Que Firefox
 				return false;
 			}
-			f_grid._TitleClicked=true;
+			f_grid._TitleClicked = true;
 		}
-		
+
 		f_core.Debug(f_grid, "_Title_onClick: perform event " + evt);
 
 		if (dataGrid.f_getEventLocked(evt, false)) {
@@ -1403,42 +1409,46 @@ var __statics = {
 		dataGrid._columnSelected = undefined;
 
 		dataGrid._updateTitleStyle(column);
-		
+
 		f_grid._TitleReleaseTimer();
 
+		var date = f_grid._TitleMouseDownTime; // Que pour Firefox
+		f_core.Debug(f_grid, "_Title_onMouseUp: date=" + date + "  buttons="
+				+ f_core.GetEvtButton(evt));
 
-		var date=f_grid._TitleMouseDownTime; // Que pour Firefox
-		f_core.Debug(f_grid, "_Title_onMouseUp: date="+date+"  buttons="+f_core.GetEvtButton(evt));
+		if (date && f_core.GetEvtButton(evt) == f_core.LEFT_MOUSE_BUTTON) {
+			var buttons = evt.which;
+			var ctrlKey = evt.ctrlKey;
+			var altKey = evt.altKey;
+			var shiftKey = evt.shiftKey;
+			var metaKey = evt.metaKey;
+			var detail = evt.detail;
 
-		if (date && f_core.GetEvtButton(evt)==f_core.LEFT_MOUSE_BUTTON) {
-			var buttons=evt.which;
-			var ctrlKey=evt.ctrlKey;
-			var altKey=evt.altKey;
-			var shiftKey=evt.shiftKey;
-			var metaKey=evt.metaKey;
-			var detail=evt.detail;
-			
-			var now=new Date().getTime();
-			var delta=now-date;
-			
-			f_core.Debug(f_grid, "_Title_onMouseUp: delta="+delta+", start timeout callback");
+			var now = new Date().getTime();
+			var delta = now - date;
 
-			if (delta<1000) {				
+			f_core.Debug(f_grid, "_Title_onMouseUp: delta=" + delta
+					+ ", start timeout callback");
+
+			if (delta < 1000) {
 				// Il faut que le DOWN et UP se fasse en moins de 1s !
-				f_grid._TitleWaitClickTimerId=window.setTimeout(function() {
+				f_grid._TitleWaitClickTimerId = window.setTimeout(function() {
 					if (window._rcfacesExiting) {
 						return;
 					}
 					if (!f_grid._TitleWaitClickTimerId) {
 						return;
 					}
-					
-					f_core.Debug(f_grid, "_Title_onMouseUp: Timeout callback wake up !");
-				
+
+					f_core.Debug(f_grid,
+							"_Title_onMouseUp: Timeout callback wake up !");
+
 					var doc = dataGrid.ownerDocument;
 					var evt = doc.createEvent('MouseEvents');
-					evt.initMouseEvent('click', true, true, doc.defaultView, detail, 0, 0, 0, 0, ctrlKey, altKey, shiftKey, metaKey, buttons, null);
-					
+					evt.initMouseEvent('click', true, true, doc.defaultView,
+							detail, 0, 0, 0, 0, ctrlKey, altKey, shiftKey,
+							metaKey, buttons, null);
+
 					f_grid._TitleVerifyClick(dataGrid, column, evt);
 				}, 200);
 			}
@@ -1447,14 +1457,16 @@ var __statics = {
 	/**
 	 * @method private static
 	 */
-	_TitleVerifyClick: function(dataGrid, column, evt) {
+	_TitleVerifyClick : function(dataGrid, column, evt) {
 		if (f_grid._TitleClicked) {
-			f_core.Debug(f_grid, "_TitleVerifyClick: ignore verification ... click already performed !");
+			f_core
+					.Debug(f_grid,
+							"_TitleVerifyClick: ignore verification ... click already performed !");
 
 			return false;
 		}
-		f_grid._TitleClicked=true;
-		
+		f_grid._TitleClicked = true;
+
 		f_core.Debug(f_grid, "_TitleVerifyClick: perform verify click !");
 
 		if (column.f_fireEvent(f_event.SELECTION, evt, null, null, dataGrid) === false) {
@@ -1470,7 +1482,7 @@ var __statics = {
 		f_core.Debug(f_grid, "_TitleVerifyClick: call set column sort append="
 				+ append);
 
-		dataGrid.f_setColumnSort(column, undefined, append);		
+		dataGrid.f_setColumnSort(column, undefined, append);
 	},
 	/**
 	 * @method private static
@@ -1559,7 +1571,7 @@ var __statics = {
 		f_core.CancelJsEvent(evt);
 
 		var eventPos = f_core.GetJsEventPosition(evt, doc);
-		dataGrid._dragEventPos=eventPos;
+		dataGrid._dragEventPos = eventPos;
 		var cursorPos = f_core.GetAbsolutePosition(this);
 		dataGrid._dragDeltaX = eventPos.x - cursorPos.x
 				+ dataGrid._scrollTitle.scrollLeft;
@@ -1591,26 +1603,26 @@ var __statics = {
 			if (!column) {
 				return false;
 			}
-	
+
 			var dataGrid = column._dataGrid;
 			if (!evt) {
 				evt = f_core.GetJsEvent(this);
 			}
-	
+
 			var doc = dataGrid.ownerDocument;
-	
+
 			var eventPos = f_core.GetJsEventPosition(evt, doc);
 			var cursorPos = f_core.GetAbsolutePosition(column._cursor);
-	
+
 			var dw = eventPos.x - cursorPos.x
 					+ dataGrid._scrollTitle.scrollLeft - dataGrid._dragDeltaX;
-	
+
 			f_grid._DragCursorMove(dataGrid, column, dw);
-			
+
 		} catch (x) {
 			f_core.Error(f_grid, "_TitleCursorDragMove: exception", x);
 		}
-		
+
 		return f_core.CancelJsEvent(evt);
 	},
 	/**
@@ -1628,27 +1640,27 @@ var __statics = {
 			if (!column) {
 				return;
 			}
-	
+
 			var dataGrid = column._dataGrid;
-	
-			var dw=0;
-			if (dataGrid._dragDeltaX>0) {
-				dw=-f_grid._DRAG_DELTA;
+
+			var dw = 0;
+			if (dataGrid._dragDeltaX > 0) {
+				dw = -f_grid._DRAG_DELTA;
 			} else {
-				//dw=f_grid._DRAG_DELTA;
+				// dw=f_grid._DRAG_DELTA;
 			}
-	
-			f_core.Debug(f_grid, "_DragMoveTimer dw='"+dw+"'");
-			
+
+			f_core.Debug(f_grid, "_DragMoveTimer dw='" + dw + "'");
+
 			if (dw) {
 				f_grid._DragCursorMove(dataGrid, column, dw);
-				
+
 				var cursorPos = f_core
 						.GetAbsolutePosition(f_grid._DragColumn._cursor);
 				dataGrid._dragDeltaX = dataGrid._dragEventPos.x - cursorPos.x
 						+ dataGrid._scrollTitle.scrollLeft;
 			}
-			
+
 		} catch (x) {
 			f_core.Error(f_grid, "_DragMoveTimer: exception", x);
 		}
@@ -1667,106 +1679,107 @@ var __statics = {
 		}
 
 		var head = column._head;
-		var hw =  parseInt (head.style.width);
+		var hw = parseInt(head.style.width);
 		var w = hw + dw;
 
 		f_core.Debug(f_grid, "_DragCursorMove: dw=" + dw + " w=" + w
 				+ " columnOffsetWidth=" + column._col.offsetWidth);
-		
+
 		// document.title="W="+w+"/"+dw;
-	
+
 		if (w < column._minWidth) {
 			w = column._minWidth;
 		}
 		if (w > column._maxWidth) {
 			w = column._maxWidth;
 		}
-	
+
 		dw = w - hw;
-	
+
 		if (dw == 0) {
 			return 0;
 		}
-	
+
 		var tcol = column._tcol;
 		var col = column._col;
 		var tableOffsetWidth = dataGrid._table.offsetWidth;
-	
+
 		var twidth = 0;
 		if (column._ascendingOrder !== undefined) {
 			twidth -= dataGrid._sortPadding;
 		}
-	
+
 		if (false && f_core.IsInternetExplorer()) {
 			// AVANT !
 			if (tableOffsetWidth) {
 				dataGrid._table.style.width = (tableOffsetWidth + dw) + "px";
 			}
-	
+
 			col.style.width = w + "px";
 			head.style.width = w + "px";
-			
-			column._widthSetted=w;
-	
+
+			column._widthSetted = w;
+
 			var bw = w - this._textLeftRightPadding;
 			if (bw < 0) {
 				bw = 0;
 			}
 			column._box.style.width = bw + "px";
-	
+
 			var lw = bw + twidth;
 			if (lw < 0) {
 				lw = 0;
 			}
 			column._label.style.width = lw + "px";
-	
+
 		} else {
 			if (tcol) {
 				// tcol.style.width=w+"px";
 			}
-	
+
 			var cellMargin = 0;
-	
+
 			col.style.width = w + "px"; // Colonne Des données ...
 
-			column._widthSetted=w;  // On desactive le calcul automatique pour cette colonne ...
-			column._widthPercent=undefined;
-			column._widthComputed=undefined;
-		
-			var w1=w - cellMargin;
-			w1=((w1>0)?w1:0);
-			head.style.width = w1+"px";
-			
+			column._widthSetted = w; // On desactive le calcul automatique
+										// pour cette colonne ...
+			column._widthPercent = undefined;
+			column._widthComputed = undefined;
+
+			var w1 = w - cellMargin;
+			w1 = ((w1 > 0) ? w1 : 0);
+			head.style.width = w1 + "px";
+
 			var w2 = w - dataGrid._textLeftRightPadding;
-			w2=((w2>0)?w2:0);
-			column._box.style.width = w2+"px";
-			column._box.style.maxWidth = w2+"px";
-			
-			var w3 = w - dataGrid._textLeftRightPadding	+ twidth;
-			w3=((w3>0)?w3:0);
-			column._label.style.width = w3+"px";
-			column._label.style.maxWidth = w3+"px";
-	
+			w2 = ((w2 > 0) ? w2 : 0);
+			column._box.style.width = w2 + "px";
+			column._box.style.maxWidth = w2 + "px";
+
+			var w3 = w - dataGrid._textLeftRightPadding + twidth;
+			w3 = ((w3 > 0) ? w3 : 0);
+			column._label.style.width = w3 + "px";
+			column._label.style.maxWidth = w3 + "px";
+
 			var totalCols = 0;
 			var columns = dataGrid._columns;
 			for ( var i = 0; i < columns.length; i++) {
 				var cl = columns[i];
-	
+
 				if (!cl._visibility) {
 					continue;
 				}
-	
+
 				f_core.Assert(cl._col,
 						"f_grid._DragCursorMove: Invalid column '" + cl + "'.");
-	
+
 				totalCols += parseInt(cl._col.style.width, 10);
 			}
-	
+
 			dataGrid._table.style.width = (totalCols) + "px";
 		}
-	
-		var scrollTitle=dataGrid._scrollTitle;
-		var scrollBody=dataGrid._scrollBody;
+
+		var scrollTitle = dataGrid._scrollTitle;
+		var scrollBody = dataGrid._scrollBody;
 
 		if (scrollTitle) {
 			var scrollTitleLeft = scrollTitle.scrollLeft;
@@ -1776,20 +1789,20 @@ var __statics = {
 				scrollTitle.scrollLeft = scrollBodyLeft;
 			}
 		}
-		
+
 		f_core.Debug(f_grid, "_DragCursorMove: scrollLeft="
 				+ scrollBody.scrollLeft + " clientWidth="
 				+ scrollBody.clientWidth + " scrollWidth="
 				+ scrollBody.scrollWidth + " offsetWidth="
 				+ scrollBody.offsetWidth);
-		
+
 		if (scrollBody.scrollLeft > 0
 				&& scrollBody.scrollWidth == scrollBody.clientWidth
 						+ scrollBody.scrollLeft) {
 			dataGrid._dragTimerId = f_core.GetWindow(doc).setTimeout(
 					f_grid._DragMoveTimer, f_grid._DRAG_TIMER);
 		}
-		
+
 		return dw;
 	},
 	/**
@@ -1804,42 +1817,42 @@ var __statics = {
 		try {
 			var column = f_grid._DragColumn;
 			if (!column) {
-					// Cela peut survenir si les stops sont enchainés ....
+				// Cela peut survenir si les stops sont enchainés ....
 				return false;
 			}
-		
+
 			var dataGrid = column._dataGrid;
-			
+
 			var doc = dataGrid.ownerDocument;
-			
+
 			if (dataGrid._dragTimerId) {
 				f_core.GetWindow(doc).clearTimeout(dataGrid._dragTimerId);
 				dataGrid._dragTimerId = undefined;
 			}
-			
+
 			f_core.RemoveEventListener(doc, "mousemove",
 					f_grid._TitleCursorDragMove, dataGrid);
 			f_core.RemoveEventListener(doc, "mouseup",
 					f_grid._TitleCursorDragStop, dataGrid);
-			
+
 			doc.body.style.cursor = f_grid._DragOldCursor;
 			f_grid._DragOldCursor = undefined;
-			
+
 			var ths = dataGrid._title.getElementsByTagName("th");
 			for ( var i = 0; i < ths.length; i++) {
 				ths[i].style.cursor = ths[i].oldCursorStyle;
 				ths[i].oldCursorStyle = undefined;
 			}
-			
+
 			column._restoreClass = undefined;
-			
+
 			f_grid._DragColumn = undefined;
 			dataGrid._dragDeltaX = undefined;
-			
+
 		} catch (x) {
 			f_core.Error(f_grid, "_TitleCursorDragStop: exception", x);
 		}
-		
+
 		return true;
 	},
 	/**
@@ -1851,23 +1864,23 @@ var __statics = {
 	 */
 	_SortIndication_onmouseover : function(evt) {
 		var dataGrid = this._dataGrid;
-		
+
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
-		
+
 		if (dataGrid.f_getEventLocked(evt, false)) {
 			return false;
 		}
-		
+
 		if (this._over) {
 			return true;
 		}
-		
+
 		this._over = true;
-		
+
 		dataGrid._updateSortManager();
-		
+
 		return true;
 	},
 	/**
@@ -1879,20 +1892,20 @@ var __statics = {
 	 */
 	_SortIndication_onmouseout : function(evt) {
 		var dataGrid = this._dataGrid;
-		
+
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
-		
+
 		if (!this._over && !this._selected) {
 			return true;
 		}
-		
+
 		this._over = undefined;
 		this._selected = undefined;
-		
+
 		dataGrid._updateSortManager();
-		
+
 		return true;
 	},
 	/**
@@ -1904,19 +1917,19 @@ var __statics = {
 	 */
 	_SortIndication_onmousedown : function(evt) {
 		var dataGrid = this._dataGrid;
-		
+
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
-		
+
 		if (this._selected) {
 			return true;
 		}
-		
+
 		this._selected = true;
-		
+
 		dataGrid._updateSortManager();
-		
+
 		return true;
 	},
 	/**
@@ -1928,24 +1941,37 @@ var __statics = {
 	 */
 	_SortIndication_onmouseup : function(evt) {
 		var dataGrid = this._dataGrid;
-		
+
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
-		
+
 		if (!this._selected) {
 			return true;
 		}
-		
+
 		this._selected = undefined;
-		
+
 		dataGrid._updateSortManager();
-		
-		dataGrid.f_showSortManager(evt);
-		
+
 		return true;
 	},
-	
+	/**
+	 * @method private static
+	 * @param Event
+	 *            evt
+	 * @return Boolean
+	 * @context object:dataGrid
+	 */
+	_SortIndication_onclick : function(evt) {
+		var dataGrid = this._dataGrid;
+
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+
+		dataGrid.f_showSortManager(evt);
+	},
 	/**
 	 * @method hidden static
 	 * @param String
@@ -1972,7 +1998,7 @@ var __statics = {
 			sortManagers = new Object;
 			f_grid._SortManagers = sortManagers;
 		}
-	
+
 		sortManagers[name] = callback;
 	},
 	Finalizer : function() {
@@ -1990,23 +2016,23 @@ var __statics = {
 			if (node.tagName.toLowerCase() != "col") {
 				break;
 			}
-	
+
 			l.push(node);
 		}
-	
+
 		return l;
 	},
-	
+
 	/**
-	 *Return the current ComponetGrid
-	 *
-	 *@method public static 
+	 * Return the current ComponetGrid
+	 * 
+	 * @method public static
 	 * @param f_component
 	 *            component
-	 *@return f_grid
+	 * @return f_grid
 	 */
-	GetGridFromComponent: function(component) {
-		while (!component._dataGrid && component){
+	GetGridFromComponent : function(component) {
+		while (!component._dataGrid && component) {
 			component = component.parentNode;
 		}
 		return component._dataGrid;
@@ -2038,16 +2064,15 @@ var __members = {
 	 * 
 	 * @field protected String
 	 */
-	_additionnalOpenImageURL: undefined,
+	_additionnalOpenImageURL : undefined,
 
 	/**
 	 * 
 	 * 
 	 * @field protected String
 	 */
-	_additionnalCloseImageURL: undefined,
+	_additionnalCloseImageURL : undefined,
 
-	
 	f_grid : function() {
 		this.f_super(arguments);
 
@@ -2060,18 +2085,19 @@ var __members = {
 		this._cellStyleClass = "f_grid_cell";
 		this._rowStyleClass = "f_grid_row";
 
-		this._resizable = f_core.GetBooleanAttributeNS(this,"resizable");
+		this._resizable = f_core.GetBooleanAttributeNS(this, "resizable");
 
-		this._initCursorValue = f_core.GetAttributeNS(this,"cursorValue");
+		this._initCursorValue = f_core.GetAttributeNS(this, "cursorValue");
 
-		this._showValue = f_core.GetAttributeNS(this,"showValue");
+		this._showValue = f_core.GetAttributeNS(this, "showValue");
 
-		this._headerVisible = f_core.GetBooleanAttributeNS(this,"headerVisible", true);
+		this._headerVisible = f_core.GetBooleanAttributeNS(this,
+				"headerVisible", true);
 
-		this._sortManager = f_core.GetAttributeNS(this,"sortManager");
+		this._sortManager = f_core.GetAttributeNS(this, "sortManager");
 
 		this._emptyDataMessage = f_core
-				.GetAttributeNS(this,"emptyDataMessage");
+				.GetAttributeNS(this, "emptyDataMessage");
 		if (this._emptyDataMessage) {
 			this._emptyDataMessageLabel = this.ownerDocument
 					.getElementById(this.id
@@ -2080,7 +2106,7 @@ var __members = {
 					"f_grid.f_grid: Label not found");
 		}
 
-		var rowStyleClass = f_core.GetAttributeNS(this,"rowStyleClass");
+		var rowStyleClass = f_core.GetAttributeNS(this, "rowStyleClass");
 		if (rowStyleClass) {
 			this._rowStyleClasses = rowStyleClass.split(",");
 
@@ -2088,15 +2114,14 @@ var __members = {
 			this._rowStyleClasses = this.f_getDefaultRowStyleClasses();
 		}
 
-		
 		if (this.f_isDraggable()) {
-			this._dragAndDropEngine= f_dragAndDropEngine.Create(this);
+			this._dragAndDropEngine = f_dragAndDropEngine.Create(this);
 		}
 
 		if (this.f_isDroppable()) {
-			this._bodyDroppable=f_core.GetBooleanAttributeNS(this,"bodyDroppable", false);
+			this._bodyDroppable = f_core.GetBooleanAttributeNS(this,
+					"bodyDroppable", false);
 		}
-		
 
 		this._sortPadding = f_core.GetNumberAttributeNS(this, "sortPadding",
 				f_grid._SORT_PADDING);
@@ -2113,7 +2138,7 @@ var __members = {
 
 		if (this._sortManager) {
 			var sortIndicator = this.ownerDocument.createElement("A");
-			sortIndicator.href=f_core.JAVASCRIPT_VOID;
+			sortIndicator.href = f_core.CreateJavaScriptVoid0();
 			sortIndicator.className = "f_grid_sortManager";
 			sortIndicator._dataGrid = this;
 
@@ -2121,10 +2146,11 @@ var __members = {
 			sortIndicator.onmouseout = f_grid._SortIndication_onmouseout;
 			sortIndicator.onmousedown = f_grid._SortIndication_onmousedown;
 			sortIndicator.onmouseup = f_grid._SortIndication_onmouseup;
+			sortIndicator.onclick = f_grid._SortIndication_onclick;
 
 			this._sortIndicator = sortIndicator;
-			
-			if (this.id!=this._scrollBody.id) {
+
+			if (this.id != this._scrollBody.id) {
 				f_core.InsertBefore(this, sortIndicator, this._scrollBody);
 			} else {
 				f_core.AppendChild(this, sortIndicator);
@@ -2140,11 +2166,11 @@ var __members = {
 			var title = resourceBundle.f_get("SORT_CONFIGURATION");
 			img.alt = title;
 			sortIndicator.title = title;
-			
+
 			f_core.AppendChild(sortIndicator, img);
 		}
 
-		var tabIndex = f_core.GetNumberAttributeNS(this,"tabindex", 0);
+		var tabIndex = f_core.GetNumberAttributeNS(this, "tabindex", 0);
 		var focus;
 		if (f_core.IsGecko()) {
 			focus = this.ownerDocument.getElementById(this.id
@@ -2179,7 +2205,7 @@ var __members = {
 			focus.onkeydown = f_grid._Link_onkeydown;
 			focus.onkeypress = f_grid._Link_onkeypress;
 			focus.onkeyup = f_grid._Link_onkeyup;
-			focus.href = f_core.JAVASCRIPT_VOID;
+			focus.href = f_core.AllocateJavaScriptVoid0();
 			focus._dataGrid = this;
 			focus.tabIndex = tabIndex;
 
@@ -2280,9 +2306,9 @@ var __members = {
 			sortIndicator.onmouseup = null;
 		}
 
-		this._dragAndDropEngine=undefined;
-		this._targetDragAndDropEngine=undefined;
-		
+		this._dragAndDropEngine = undefined;
+		this._targetDragAndDropEngine = undefined;
+
 		// this._additionnalOpenImageURL=undefined; // String
 		// this._additionnalCloseImageURL=undefined; // String
 
@@ -2317,7 +2343,7 @@ var __members = {
 		// this._loading=undefined; // Boolean
 		// this._emptyDataMessage=undefined; // String
 		// this._refreshFullUpdateState=undefined; // Boolean
-		
+
 		this._thead = undefined; // HTMLTheadElement
 		this._emptyDataMessageLabel = undefined; // HTMLElement
 
@@ -2452,7 +2478,7 @@ var __members = {
 		// this._initSort=undefined; // Boolean
 		// this._resizable=undefined; // Boolean
 		// this._sortIndexes = undefined; // String
-		
+
 		this.f_super(arguments);
 	},
 	f_getFocusableElement : function() {
@@ -2493,7 +2519,8 @@ var __members = {
 		if (this._loading) {
 			if (showAlert !== false) {
 				if (this._showLoadingAlert === undefined) {
-					var alertLoadingMessage = f_core.GetAttributeNS(this,"alertLoadingMessage");
+					var alertLoadingMessage = f_core.GetAttributeNS(this,
+							"alertLoadingMessage");
 					if (alertLoadingMessage === undefined) {
 						this._showLoadingAlert = true;
 					} else if (alertLoadingMessage == "") {
@@ -2503,7 +2530,7 @@ var __members = {
 						this._alertLoadingMessage = alertLoadingMessage;
 					}
 				}
-				
+
 				if (this._showLoadingAlert !== false) {
 					if (this._alertLoadingMessage === undefined) {
 						var resourceBundle = f_resourceBundle.Get(f_grid);
@@ -2512,7 +2539,7 @@ var __members = {
 					}
 					f_core
 							.Debug(f_grid,
-							"f_getEventLocked: popup error dialog, loading ...");
+									"f_getEventLocked: popup error dialog, loading ...");
 
 					alert(this._alertLoadingMessage);
 				}
@@ -2575,9 +2602,9 @@ var __members = {
 		}
 
 		this.f_setProperty(f_prop.CURSOR, cursorValue);
-		
+
 		if (this._sortIndexes !== undefined) {
-			this.f_setProperty(f_prop.SORT_INDEX, this._sortIndexes);	
+			this.f_setProperty(f_prop.SORT_INDEX, this._sortIndexes);
 		}
 
 		this.f_super(arguments);
@@ -2720,7 +2747,7 @@ var __members = {
 		var menu = this.f_getSubMenuById(f_grid._BODY_MENU_ID);
 		if (menu) {
 			scrollBody.onmousedown = f_grid._BodyMouseDown;
-			scrollBody.onmouseup =  f_grid._BodyMouseUp;// f_grid.FiltredCancelJsEventHandler;
+			scrollBody.onmouseup = f_grid._BodyMouseUp;// f_grid.FiltredCancelJsEventHandler;
 			scrollBody.onclick = f_grid.FiltredCancelJsEventHandler;
 		}
 
@@ -2735,8 +2762,7 @@ var __members = {
 
 		/*
 		 * if (!this.f_isVisible()) {
-		 * this.f_getClass().f_getClassLoader().f_addVisibleComponentListener(this);
-		 *  }
+		 * this.f_getClass().f_getClassLoader().f_addVisibleComponentListener(this); }
 		 */
 	},
 	/**
@@ -2776,7 +2802,7 @@ var __members = {
 		if (this._interactiveShow) {
 			this.f_setFirst(this._first, this._cursor);
 		}
-		
+
 		if (this._thead) {
 			this._thead.style.display = "block";
 		}
@@ -2992,7 +3018,7 @@ var __members = {
 		var labelComponent = column._label;
 
 		if (!labelComponent) {
-			var text=column._text;
+			var text = column._text;
 			return text;
 		}
 
@@ -3075,7 +3101,7 @@ var __members = {
 				}
 
 				if (column._titleToolTipId) {
-					
+
 				}
 
 			} else {
@@ -3157,7 +3183,7 @@ var __members = {
 		var suffix = "";
 		if (this.f_isDisabled()) {
 			suffix = "_disabled"; // +"_disabled"; // La classe par du
-									// .f_grid_disabled
+			// .f_grid_disabled
 
 			if (row._selected) {
 				suffix += "_selected";
@@ -3169,17 +3195,17 @@ var __members = {
 			suffix = "_selected";
 			if (this._focus) {
 				suffix += "_focus";
-				if (this._serviceGridId){
+				if (this._serviceGridId) {
 					var dataGridPopup = f_core
 							.GetElementByClientId(this._serviceGridId);
-					if (dataGridPopup._ariaInput){
+					if (dataGridPopup._ariaInput) {
 						fa_aria.SetElementAriaActiveDescendant(
 								dataGridPopup._ariaInput, row.id);
-					}else {
+					} else {
 						fa_aria.SetElementAriaActiveDescendant(
 								this._scrollBody, row.id);
 					}
-				}else {
+				} else {
 					fa_aria.SetElementAriaActiveDescendant(this._scrollBody,
 							row.id);
 				}
@@ -3208,7 +3234,7 @@ var __members = {
 			if (rowClassName) {
 				cl += " " + rowClassName + suffix;
 			}
-			
+
 		} else if (row._over) {
 			suffix += "_over";
 
@@ -3243,7 +3269,7 @@ var __members = {
 			var buttonClassName = "f_grid_additional_button";
 
 			var additionalAlt = "";
-			var additionalImageURL=null;
+			var additionalImageURL = null;
 
 			var content = row._additionalContent;
 			if (content === false) {
@@ -3254,17 +3280,19 @@ var __members = {
 
 				if (shown) {
 					buttonClassName += " f_grid_additional_button_expanded";
-					additionalAlt = f_resourceBundle.Get(f_grid).f_formatParams("COLLAPSE_BUTTON", {
-						value: row._lineHeader
-					});
-					additionalImageURL=this._additionnalOpenImageURL;
-					
+					additionalAlt = f_resourceBundle.Get(f_grid)
+							.f_formatParams("COLLAPSE_BUTTON", {
+								value : row._lineHeader
+							});
+					additionalImageURL = this._additionnalOpenImageURL;
+
 				} else {
 					buttonClassName += " f_grid_additional_button_collapsed";
-					additionalAlt = f_resourceBundle.Get(f_grid).f_formatParams("EXPAND_BUTTON", {
-						value: row._lineHeader
-					});
-					additionalImageURL=this._additionnalCloseImageURL;
+					additionalAlt = f_resourceBundle.Get(f_grid)
+							.f_formatParams("EXPAND_BUTTON", {
+								value : row._lineHeader
+							});
+					additionalImageURL = this._additionnalCloseImageURL;
 				}
 
 				if (this.f_isDisabled()) {
@@ -3279,7 +3307,7 @@ var __members = {
 				button.title = button.alt = additionalAlt;
 			}
 			if (additionalImageURL) {
-				button.src=additionalImageURL;
+				button.src = additionalImageURL;
 			}
 		}
 	},
@@ -3288,8 +3316,15 @@ var __members = {
 	 */
 	f_updateCellsStyle : function(row, firstOnly) {
 		var td = row.firstChild;
-		for (; td && td.tagName.toLowerCase() != "td"; td = td.nextSibling)
-			;
+		for (; td; td = td.nextSibling) {
+			var tagName =  td.tagName.toLowerCase();
+			if (tagName== "td" || tagName=="th") {
+				break;
+			}
+		}
+		if (!td) {
+			return;
+		}
 
 		if (false && row._selected) { // On généralise le traitement !
 			var className = this._cellStyleClass + " f_grid_cell_selected";
@@ -3360,9 +3395,9 @@ var __members = {
 					className.push(" f_grid_cell_cursor");
 				}
 			}
-			
-			className.push(" f_grid_cell_align_"+col._align);
-			
+
+			className.push(" f_grid_cell_align_" + col._align);
+
 			var sclassName = className.join("");
 
 			if (td.className != sclassName) {
@@ -3373,9 +3408,15 @@ var __members = {
 				break;
 			}
 
-			for (td = td.nextSibling; td && td.tagName.toLowerCase() != "td"; td = td.nextSibling)
-				;
-
+			for (td = td.nextSibling; td; td = td.nextSibling) {
+				var tagName =  td.tagName.toLowerCase();
+				if (tagName== "td" || tagName=="th") {
+					break;
+				}
+			}
+			if (!td) {
+				return;
+			}
 			idx++;
 		}
 	},
@@ -3575,7 +3616,7 @@ var __members = {
 				return null;
 			}
 
-			var r=undefined;
+			var r = undefined;
 			if (indexByValue) {
 				if (rowIndex >= 0 && rowIndex < rows.length) {
 					r = rows[rowIndex];
@@ -3653,7 +3694,7 @@ var __members = {
 
 		return false;
 	},
-	
+
 	/**
 	 * Refresh the structure of the grid.
 	 * 
@@ -3681,11 +3722,12 @@ var __members = {
 	 * 
 	 * @method public
 	 * 
-	 * @param optional Boolean fullUpdate to force rowCount and pager update
+	 * @param optional
+	 *            Boolean fullUpdate to force rowCount and pager update
 	 * 
 	 * @return void
 	 */
-	f_setRefreshFullUpdateState: function(fullUpdate) {
+	f_setRefreshFullUpdateState : function(fullUpdate) {
 		this._refreshFullUpdateState = (fullUpdate !== false);
 	},
 	/**
@@ -3695,7 +3737,7 @@ var __members = {
 	 * 
 	 * @return Boolean
 	 */
-	f_isRefreshFullUpdateState: function() {
+	f_isRefreshFullUpdateState : function() {
 		return this._refreshFullUpdateState === true;
 	},
 	/**
@@ -3772,7 +3814,6 @@ var __members = {
 
 				f_core.VerifyProperties(col);
 			}
-
 
 			var sorterImage = column._sorterImage;
 			if (sorterImage) {
@@ -4124,7 +4165,8 @@ var __members = {
 		if (cfocus) {
 			if (f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_6)) {
 				// pour *vraiment* donner les focus sous IE
-				// genere une exception sous FF : passer par une focntion anonyme ?
+				// genere une exception sous FF : passer par une focntion
+				// anonyme ?
 				window.setTimeout(cfocus.focus, 0);
 			} else {
 				// fonctionnement de base
@@ -4203,7 +4245,7 @@ var __members = {
 		var nextFirst = this._first + this._rows;
 
 		if (!this._paged) { // Rows est défini, mais nous ne sommes pas en mode
-							// page !
+			// page !
 			var waitingRow = this._waitingRow;
 			if (waitingRow) {
 				this._performPagedLoading(evt, nextFirst);
@@ -4680,7 +4722,7 @@ var __members = {
 				+ " ascending=" + ascending + " append=" + append);
 
 		if (this._rows > 0) { // Dans le cas d'un page par page, on revient en
-								// position 0
+			// position 0
 			this._first = 0;
 		}
 
@@ -4847,28 +4889,30 @@ var __members = {
 
 		var suffix = "";
 		var wc = className;
-		var titleAlt = "";
-		var sorterAttributeName="defSorter";
+		var titleAlt = this.f_getColumnName(column);
+		var sorterAttributeName = "defSorter";
 		if (column._ascendingOrder !== undefined) {
 			if (column._ascendingOrder) {
 				suffix = "_ascending";
-				titleAlt = f_resourceBundle.Get(f_grid).f_get("ASCENDING_SORT");
-				sorterAttributeName="ascSorter";
+				titleAlt += " "+f_resourceBundle.Get(f_grid).f_get("ASCENDING_SORT");
+				sorterAttributeName = "ascSorter";
 
 			} else {
 				suffix = "_descending";
-				titleAlt = f_resourceBundle.Get(f_grid).f_get("DESCENDING_SORT");
-				sorterAttributeName="descSorter";
+				titleAlt += " "+f_resourceBundle.Get(f_grid)
+						.f_get("DESCENDING_SORT");
+				sorterAttributeName = "descSorter";
 			}
 			className += " " + className + suffix;
 			stextClassName += " " + stextClassName + suffix;
 
 		} else if (column._method || column._sorter) {
-			titleAlt = f_resourceBundle.Get(f_grid).f_get("NO_SORT");
+			titleAlt += " "+f_resourceBundle.Get(f_grid).f_get("NO_SORT");
 		}
-		
+
 		if (column._sorterImage) {
-			column._sorterImage.src=f_core.GetAttributeNS(this, sorterAttributeName, "");
+			column._sorterImage.src = f_core.GetAttributeNS(this,
+					sorterAttributeName, "");
 		}
 
 		this._updateTitleCellBody(column);
@@ -4893,7 +4937,7 @@ var __members = {
 
 		var image = column._image;
 		if (image) {
-			var imageURL=undefined;
+			var imageURL = undefined;
 
 			if (this.f_isDisabled()) {
 				imageURL = column._titleDisabledImageURL;
@@ -4932,13 +4976,14 @@ var __members = {
 
 			swidth = parseInt(cw, 10);
 		}
-		
-		if (this._textLeftRightPadding===undefined) {
-			this._textLeftRightPadding=f_core.ComputePaddingBoxBorderLength(column._box.parentNode, "left", "right");
-//			alert(this._textLeftRightPadding);
-		}		
 
-		if (this._textLeftRightPadding>0) {
+		if (this._textLeftRightPadding === undefined) {
+			this._textLeftRightPadding = f_core.ComputePaddingBoxBorderLength(
+					column._box.parentNode, "left", "right");
+			// alert(this._textLeftRightPadding);
+		}
+
+		if (this._textLeftRightPadding > 0) {
 			swidth -= this._textLeftRightPadding;
 			if (swidth < 0) {
 				swidth = 0;
@@ -4948,8 +4993,8 @@ var __members = {
 		var box = column._box;
 		var label = column._label;
 
-		var boxStyle=box.style;
-		var sw = (swidth>0?swidth:0) + "px";
+		var boxStyle = box.style;
+		var sw = (swidth > 0 ? swidth : 0) + "px";
 		if (boxStyle.width != sw) {
 			boxStyle.width = sw;
 			boxStyle.maxWidth = sw;
@@ -4962,10 +5007,10 @@ var __members = {
 
 		if (column._ascendingOrder !== undefined) {
 			swidth -= this._sortPadding;
-			sw = (swidth>0?swidth:0) + "px";
+			sw = (swidth > 0 ? swidth : 0) + "px";
 		}
 
-		var labelStyle=label.style;
+		var labelStyle = label.style;
 		if (labelStyle.width != sw) {
 			labelStyle.width = sw;
 			labelStyle.maxWidth = sw;
@@ -5033,11 +5078,11 @@ var __members = {
 						this._performRowsLoading(evt, i);
 
 					} else { // Pour eviter que l'on lance le download, on
-								// attend que ca se stabilise
+						// attend que ca se stabilise
 						this._waitingLoading = true;
 
 						i += Math.floor(this._rows / 2); // On prend une
-															// petite marge ...
+						// petite marge ...
 
 						var self = this;
 						f_core.GetWindow(dataGrid.ownerDocument).setTimeout(
@@ -5059,7 +5104,7 @@ var __members = {
 	 * 
 	 * @return void
 	 */
-	_setSortIndexes: function() {
+	_setSortIndexes : function() {
 		var currentSorts = this._currentSorts;
 		if (!currentSorts || !currentSorts.length) {
 			return;
@@ -5130,10 +5175,10 @@ var __members = {
 
 		// Gestion du scroll horizontal sur FF
 		var scrollLeft = this._scrollBody.scrollLeft;
-		
+
 		if (userSort
 				&& this.f_fireEvent(f_event.SORT, null, currentSorts) === false) {
-			
+
 			this.f_resetScrollLeft(scrollLeft);
 
 			return;
@@ -5149,7 +5194,7 @@ var __members = {
 					+ "\nrows=" + this._rows);
 
 			this.f_setFirst(this._first);
-			
+
 			this.f_resetScrollLeft(scrollLeft);
 
 			return;
@@ -5162,7 +5207,7 @@ var __members = {
 
 		this.f_resetScrollLeft(scrollLeft);
 	},
-	
+
 	/**
 	 * reset the scrollLeft when a column is sorted Firefox only
 	 * 
@@ -5171,15 +5216,15 @@ var __members = {
 	 *            scrollLeft
 	 * @return void
 	 */
-	f_resetScrollLeft: function(scrollLeft){
+	f_resetScrollLeft : function(scrollLeft) {
 		if (scrollLeft == 0 || f_core.IsGecko() == false) {
 			return;
 		}
 		var _datagrid = this;
 		window.setTimeout(function() {
 			if (window._rcfacesExiting) {
- 				return;
- 			}
+				return;
+			}
 
 			if (scrollLeft != _datagrid._scrollBody.scrollLeft) {
 				_datagrid._scrollBody.scrollLeft = scrollLeft;
@@ -5198,10 +5243,10 @@ var __members = {
 	 * @return Object Value of the row
 	 * @deprecated
 	 */
-	f_getRowValueFromCommponent: function(component){
+	f_getRowValueFromCommponent : function(component) {
 		return this.f_getRowValueFromComponent(component);
 	},
-	
+
 	/**
 	 * Return the value of the row which contains the specified component.
 	 * 
@@ -5210,18 +5255,18 @@ var __members = {
 	 *            component Component or HTMLElement
 	 * @return Object Value of the row
 	 */
-	f_getRowValueFromComponent: function(component){
-		while (component && typeof(component._rowIndex)!="number") {
+	f_getRowValueFromComponent : function(component) {
+		while (component && typeof (component._rowIndex) != "number") {
 			component = component.parentNode;
 		}
-		
+
 		if (!component) {
 			return null;
 		}
-		
+
 		return component._index;
 	},
-	
+
 	/**
 	 * Select a row
 	 * 
@@ -5348,19 +5393,19 @@ var __members = {
 
 	fa_listVisibleElements : function(ordered) {
 		if (ordered) {
-			var body=this._table.tBodies[0];
+			var body = this._table.tBodies[0];
 			f_core.Assert(body,
 					"f_grid._sortTable: No body for data table of dataGrid !");
-			
-			var trs=new Array;
-			var childNodes=body.rows;
-			//var idx=0;
-			for(var i=0;i<childNodes.length;i++) {
-				var row=childNodes[i];
-				if (row._index===undefined) {
+
+			var trs = new Array;
+			var childNodes = body.rows;
+			// var idx=0;
+			for ( var i = 0; i < childNodes.length; i++) {
+				var row = childNodes[i];
+				if (row._index === undefined) {
 					continue;
 				}
-				
+
 				trs.push(row);
 			}
 			return trs;
@@ -5402,7 +5447,7 @@ var __members = {
 		this._tbody.style.display = "none";
 
 		this._thead = table.tHead;
-		if (this._thead)  {
+		if (this._thead) {
 			this._thead.style.display = "none";
 		}
 
@@ -5456,7 +5501,7 @@ var __members = {
 		}
 		this._columnsLayoutPerformed = true;
 
-		var heads=undefined;
+		var heads = undefined;
 		var cols;
 
 		var columns = this._columns;
@@ -5501,7 +5546,8 @@ var __members = {
 			head.onmouseout = f_grid._Title_onMouseOut;
 			head.onmousedown = f_grid._Title_onMouseDown;
 			head.onmouseup = f_grid._Title_onMouseUp;
-			head.onclick = f_grid._Title_onClick;
+			// head.onclick = f_grid._Title_onClick; // OO  TODO .... A VERIFIER
+			
 			// head.onbeforeactivate=f_core.CancelJsEventHandler;
 			// head.tabIndex=-1;
 
@@ -5509,8 +5555,8 @@ var __members = {
 			column._head = head;
 
 			if (column._titleToolTipId) {
-				head._toolTipId=column._titleToolTipId;
-				head._toolTipContent=column._titleToolTipContent;
+				head._toolTipId = column._titleToolTipId;
+				head._toolTipContent = column._titleToolTipContent;
 			}
 
 			var box = f_core.GetFirstElementByTagName(head, "div");
@@ -5530,7 +5576,6 @@ var __members = {
 							"f_grid.f_updateColumnsLayout: Invalid structure of header (no Label)");
 			column._label = label;
 
-					
 			if (column._sorter) {
 				// label.onmousedown=f_grid._Title_onMouseDown;
 				// label.onmouseup=f_grid._Title_onMouseUp;
@@ -5539,9 +5584,10 @@ var __members = {
 				label.onclick = f_grid._Title_onClick;
 				label.onkeydown = f_grid._Title_onKeyDown;
 				label._column = column;
-				
-				var tid=label.id.substring(0, label.id.lastIndexOf("::"))+"::sorter";
-				column._sorterImage=document.getElementById(tid);
+
+				var tid = label.id.substring(0, label.id.lastIndexOf("::"))
+						+ "::sorter";
+				column._sorterImage = document.getElementById(tid);
 			}
 
 			if (column._hasImage) {
@@ -5582,7 +5628,7 @@ var __members = {
 		var clientWidth = body.clientWidth;
 		var offsetWidth = body.offsetWidth;
 		var scrollBarWidth = offsetWidth - clientWidth;
-		var verticalScrollBar = (scrollBarWidth>0);
+		var verticalScrollBar = (scrollBarWidth > 0);
 
 		if (scrollBarWidth <= 0) {
 			// Ben si y a pas de scrollbar a droite, on cherche en bas !
@@ -5603,10 +5649,10 @@ var __members = {
 				this._scrollTitle.style.width = swPixel + "px";
 			}
 			body.style.width = swPixel + "px";
-			
-			offsetWidth=swPixel;
+
+			offsetWidth = swPixel;
 			if (verticalScrollBar) {
-				clientWidth=offsetWidth-scrollBarWidth;
+				clientWidth = offsetWidth - scrollBarWidth;
 			}
 		}
 
@@ -5615,44 +5661,44 @@ var __members = {
 		}
 
 		var doc = this.ownerDocument;
-		
+
 		var t0 = new Date().getTime();
 
 		this._titleLayout = true;
 
 		var columns = this._columns;
 
-		var cellBorderLength=1;
-		
+		var cellBorderLength = 1;
+
 		var t1 = new Date().getTime();
 
-	
 		var total = 0; // total des colonnes fixe en px
-		var totalPercent = 0; // total des % 
+		var totalPercent = 0; // total des %
 		var totalZero = 0; // total colone sans taille donnee
 		var colToProcess = new Array();
 		var ci = 0;
 		var webkit = f_core.IsWebkit();
 		var ie = f_core.IsInternetExplorer();
-		for (var i = 0; i < columns.length; i++) {
+		for ( var i = 0; i < columns.length; i++) {
 			var column = columns[i];
 			if (column._visibility === false) {
 				continue;
 			}
-			
+
 			var col = undefined;
 			if (webkit || ie) {
-				//the header column tag col does not have any size. So we get a cell. 
+				// the header column tag col does not have any size. So we get a
+				// cell.
 				var rows = this._rowsPool;
 				if (rows.length > 0) {
-					col = rows[0]._cells[i]; 
+					col = rows[0]._cells[i];
 				}
-			}      
-			
+			}
+
 			if (!col) {
 				col = column._col;
 			}
-			
+
 			if (!col) {
 				break;
 			}
@@ -5662,8 +5708,8 @@ var __members = {
 				colToProcess.push(column);
 				continue;
 			}
-			
-			if (column._widthPercent!==undefined) {
+
+			if (column._widthPercent !== undefined) {
 				totalPercent += column._widthPercent;
 				colToProcess.push(column);
 				continue;
@@ -5672,89 +5718,89 @@ var __members = {
 			if (!column._widthSetted) {
 				var styleWidth = col.style.width;
 				var w = parseInt(styleWidth);
-				if (styleWidth.indexOf("%") > 0){
+				if (styleWidth.indexOf("%") > 0) {
 					totalPercent += w;
-					column._widthPercent=w;
+					column._widthPercent = w;
 					colToProcess.push(column);
 					continue;
 				}
-				
+
 				if (!w) {
-					totalZero ++;
-					column._widthComputed=true;
+					totalZero++;
+					column._widthComputed = true;
 					colToProcess.push(column);
 					continue;
 				}
-				
+
 				if (isNaN(w) || w < 0) {
 					w = 0;
 				}
-	
+
 				column._widthSetted = w;
 			}
-			
-			var w=column._widthSetted;
+
+			var w = column._widthSetted;
 			total += w;
 
-			
-			if (this._textLeftRightPadding===undefined) {
-				this._textLeftRightPadding=f_core.ComputePaddingBoxBorderLength(column._box.parentNode, "left", "right");
-//				alert(this._textLeftRightPadding);
-			}		
+			if (this._textLeftRightPadding === undefined) {
+				this._textLeftRightPadding = f_core
+						.ComputePaddingBoxBorderLength(column._box.parentNode,
+								"left", "right");
+				// alert(this._textLeftRightPadding);
+			}
 
-			
 			var cw = w;
-			if (f_core.IsWebkit(f_core.WEBKIT_SAFARI)) { 
+			if (f_core.IsWebkit(f_core.WEBKIT_SAFARI)) {
 				cw -= this._textLeftRightPadding;
 			}
 			if (cw < 0) {
 				cw = 0;
 			}
 			column._head.style.width = cw + "px";
-			
+
 			this._updateTitleCellBody(column, w);
 		}
 
 		// deuxième tour s il y a pas de donnée pour trident et webkit
 		if (colToProcess.length) {
 
-			var totalNonPx = clientWidth - total; 
+			var totalNonPx = clientWidth - total;
 
-			for(var i=0;i<colToProcess.length;i++) {
+			for ( var i = 0; i < colToProcess.length; i++) {
 				var column = colToProcess[i];
-				
-				column._tempWidth=0;
+
+				column._tempWidth = 0;
 			}
-			
-			if (totalNonPx>0 && totalPercent>0) {			
-				var totalPercent=totalNonPx/100;
-				
-				// On affecte les %				
-				for(var i=0;i<colToProcess.length;i++) {
+
+			if (totalNonPx > 0 && totalPercent > 0) {
+				var totalPercent = totalNonPx / 100;
+
+				// On affecte les %
+				for ( var i = 0; i < colToProcess.length; i++) {
 					var column = colToProcess[i];
-					
+
 					var percent = column._widthPercent;
 					if (!percent) {
 						continue;
 					}
-					
-					var w=Math.floor(percent*totalPercent);
-					
-					if (column._maxWidth && w>column._maxWidth) {
-						w=column._maxWidth;
+
+					var w = Math.floor(percent * totalPercent);
+
+					if (column._maxWidth && w > column._maxWidth) {
+						w = column._maxWidth;
 					}
-					
-					if (totalNonPx<w) {
-						w=totalNonPx;
-					}					
-					
-					column._tempWidth+=w;
-					
-					totalNonPx-=w;
-				}							
+
+					if (totalNonPx < w) {
+						w = totalNonPx;
+					}
+
+					column._tempWidth += w;
+
+					totalNonPx -= w;
+				}
 
 				// On verifie les mins ...
-				for(var i=0;i<colToProcess.length;i++) {
+				for ( var i = 0; i < colToProcess.length; i++) {
 					var column = colToProcess[i];
 
 					var percent = column._widthPercent;
@@ -5767,62 +5813,61 @@ var __members = {
 						continue;
 					}
 
-					var diff=minWidth-column._tempWidth;
+					var diff = minWidth - column._tempWidth;
 
-					if (diff<0) {
+					if (diff < 0) {
 						continue;
 					}
-										
-					if (diff>totalNonPx) {
-						diff=totalNonPx;
+
+					if (diff > totalNonPx) {
+						diff = totalNonPx;
 					}
-					
-					column._tempWidth+=diff;
-					
-					totalNonPx-=diff;
-				}			
+
+					column._tempWidth += diff;
+
+					totalNonPx -= diff;
+				}
 			}
-						
-			if (totalNonPx>0 && totalZero>0) {
-				
-				var cnt=totalZero;
-				
-				// On affecte les colonnes sans taille !			
-				for(var i=0;i<colToProcess.length;i++) {
+
+			if (totalNonPx > 0 && totalZero > 0) {
+
+				var cnt = totalZero;
+
+				// On affecte les colonnes sans taille !
+				for ( var i = 0; i < colToProcess.length; i++) {
 					var column = colToProcess[i];
 
 					if (!column._widthComputed) {
 						continue;
 					}
-					
-					var w=Math.floor(totalNonPx/cnt);
-					
-					if (column._maxWidth && w>column._maxWidth) {
-						w=column._maxWidth;
+
+					var w = Math.floor(totalNonPx / cnt);
+
+					if (column._maxWidth && w > column._maxWidth) {
+						w = column._maxWidth;
 					}
-					
-					if (column._minWidth && w<column._minWidth) {
-						w=column._maxWidth;
+
+					if (column._minWidth && w < column._minWidth) {
+						w = column._maxWidth;
 					}
-					
-					if (totalNonPx<w) {
-						w=totalNonPx;
-					}					
-					
-					column._tempWidth+=w;
-					
-					totalNonPx-=w;
+
+					if (totalNonPx < w) {
+						w = totalNonPx;
+					}
+
+					column._tempWidth += w;
+
+					totalNonPx -= w;
 					cnt--;
-				}							
+				}
 			}
-		
-			
-			for(var i=0;i<colToProcess.length;i++) {
+
+			for ( var i = 0; i < colToProcess.length; i++) {
 				var column = colToProcess[i];
 
 				var w = column._tempWidth;
 				var cw = w;
-				if (f_core.IsWebkit(f_core.WEBKIT_SAFARI)){ 
+				if (f_core.IsWebkit(f_core.WEBKIT_SAFARI)) {
 					cw -= cellMargin;
 				}
 				if (cw < 0) {
@@ -5830,14 +5875,14 @@ var __members = {
 				}
 				column._head.style.width = cw + "px";
 				this._updateTitleCellBody(column, w);
-				column._col.style.width=(cw)+"px";
-				
-				total+=w;
-				
-				f_core.Debug(f_grid, "Total="+total+" w="+w);
-			}							
+				column._col.style.width = (cw) + "px";
+
+				total += w;
+
+				f_core.Debug(f_grid, "Total=" + total + " w=" + w);
+			}
 		}
-		
+
 		var t2 = new Date().getTime();
 
 		if (scrollBarWidth > 0) {
@@ -5847,8 +5892,8 @@ var __members = {
 			}
 			// body.style.height=h+"px";
 		}
-		
-		if (ie && !f_core.GetBooleanAttributeNS(this, "sb", true)) { //ns
+
+		if (ie && !f_core.GetBooleanAttributeNS(this, "sb", true)) { // ns
 			// this._title.style.width=total+"px";
 
 			if (!body.style.width) {
@@ -5861,9 +5906,9 @@ var __members = {
 						+ "px";
 			}
 		} else {
-			//body.style.width = total+"px";
+			// body.style.width = total+"px";
 			if (this._table) {
-				this._table.style.width=total+"px";
+				this._table.style.width = total + "px";
 			}
 		}
 
@@ -6086,26 +6131,26 @@ var __members = {
 	 *            animated
 	 * @return void
 	 */
-	fa_setToolTipVisible: function(tooltip, show, jsEvent) {
+	fa_setToolTipVisible : function(tooltip, show, jsEvent) {
 
 		if (show) {
 			var item = tooltip.f_getElementItem();
 
 			if (!tooltip.f_isContentSpecified()) {
-				var tagName=item.tagName.toUpperCase();
-				
-				if (tagName=="TD" && item.parentNode._index!==undefined) {
+				var tagName = item.tagName.toUpperCase();
+
+				if (tagName == "TD" && item.parentNode._index !== undefined) {
 					this.f_showToolTip(tooltip, jsEvent,
 							f_toolTip.BOTTOM_COMPONENT);
 					return;
 				}
-				if (tagName=="TR" && item._index!=undefined) {
+				if (tagName == "TR" && item._index != undefined) {
 					this.f_showToolTip(tooltip, jsEvent,
 							f_toolTip.BOTTOM_COMPONENT);
 					return;
 				}
 			}
-			
+
 			tooltip.f_show(tooltip.f_getStateId(), jsEvent,
 					f_toolTip.BOTTOM_COMPONENT);
 
@@ -6233,7 +6278,7 @@ var __members = {
 		var self = this;
 
 		request
-				.f_setListener( {
+				.f_setListener({
 					onInit : function(request) {
 						var waiting = additionalRow._waiting;
 						if (!waiting) {
@@ -6383,7 +6428,7 @@ var __members = {
 					+ serializedState);
 			if (!serializedState) {
 				serializedState = ""; // Il faut informer le service que nous
-										// sommes en mode paginé !
+				// sommes en mode paginé !
 			}
 
 			params[f_core.SERIALIZED_DATA] = serializedState;
@@ -6403,7 +6448,7 @@ var __members = {
 	 *            Number toolTipPosition
 	 * @return void
 	 */
-	f_showToolTip: function(tooltip, jsEvent, toolTipPosition) {
+	f_showToolTip : function(tooltip, jsEvent, toolTipPosition) {
 		f_core
 				.Debug(f_grid, "f_showToolTip: show tooltip '" + tooltip.id
 						+ "'");
@@ -6433,7 +6478,7 @@ var __members = {
 	 *            Number toolTipPosition
 	 * @return Boolean
 	 */
-	_loadToolTip: function(tooltip, jsEvent, toolTipPosition) {
+	_loadToolTip : function(tooltip, jsEvent, toolTipPosition) {
 		var tooltipId = tooltip.f_getId();
 		if (!tooltipId) {
 			return false;
@@ -6480,7 +6525,7 @@ var __members = {
 		var self = this;
 		request
 				.f_setListener({
-					onInit: function(request) {
+					onInit : function(request) {
 						tooltip.f_asyncShowWaiting();
 
 						component.f_show(toolTipStateId, jsEvent,
@@ -6489,7 +6534,7 @@ var __members = {
 					/**
 					 * @method public
 					 */
-					onError: function(request, status, text) {
+					onError : function(request, status, text) {
 
 						if (toolTipManager.f_processNextCommand()) {
 							return;
@@ -6512,18 +6557,19 @@ var __members = {
 					/**
 					 * @method public
 					 */
-					onProgress: function(request, content, length, contentType) {
+					onProgress : function(request, content, length, contentType) {
 						if (tooltip.f_getStateId() != toolTipStateId) {
 							// Reset du tooltip !
 							return;
 						}
 
-						tooltip.f_asyncShowMessageWaiting(f_waiting.GetReceivingMessage());
+						tooltip.f_asyncShowMessageWaiting(f_waiting
+								.GetReceivingMessage());
 					},
 					/**
 					 * @method public
 					 */
-					onLoad: function(request, content, contentType) {
+					onLoad : function(request, content, contentType) {
 						if (toolTipManager.f_processNextCommand()) {
 							return;
 						}
@@ -6536,7 +6582,7 @@ var __members = {
 						try {
 							tooltip.f_asyncHideWaiting(true);
 							tooltip.f_asyncDestroyWaiting();
-							
+
 							if (component._removeStyleHeight) {
 								component._removeStyleHeight = null;
 								if (component.style.height == f_waiting.HEIGHT
@@ -6603,7 +6649,7 @@ var __members = {
 											+ responseContentType);
 
 						} finally {
-				 			
+
 						}
 					}
 				});
@@ -6611,10 +6657,10 @@ var __members = {
 		request.f_setRequestHeader("X-Camelia", "grid.toolTip");
 
 		var params = {
-			gridId: this.id,
-			rowValue: row._index,
-			rowIndex: row._rowIndex,
-			toolTipId: tooltipId
+			gridId : this.id,
+			rowValue : row._index,
+			rowIndex : row._rowIndex,
+			toolTipId : tooltipId
 		};
 
 		if (this._paged) {
@@ -6736,9 +6782,11 @@ var __members = {
 			texts.unshift(text.replace(exp, " "));
 		}
 
-		this.setAttribute(f_core._VNS+":sortBreadCrumbsIds", ids.join("|"));
-		this.setAttribute(f_core._VNS+":sortBreadCrumbsIndexes", indexes.join("|"));
-		this.setAttribute(f_core._VNS+":sortBreadCrumbsTexts", texts.join("|"));
+		this.setAttribute(f_core._VNS + ":sortBreadCrumbsIds", ids.join("|"));
+		this.setAttribute(f_core._VNS + ":sortBreadCrumbsIndexes", indexes
+				.join("|"));
+		this.setAttribute(f_core._VNS + ":sortBreadCrumbsTexts", texts
+				.join("|"));
 	},
 	/**
 	 * @method hidden
@@ -6752,7 +6800,7 @@ var __members = {
 
 		var scrollBody = this._scrollBody;
 		if (!scrollBody.offsetHeight) { // Le tableau s'est tassé, on affiche
-										// pas le message !
+			// pas le message !
 			return;
 		}
 
@@ -6839,13 +6887,12 @@ var __members = {
 	 *            target
 	 * @return String Identifier of column or <code>null</code> if not found.
 	 */
-	f_computeColumnIdByElement: function(target) {
+	f_computeColumnIdByElement : function(target) {
 		f_core.Assert(target && target.nodeType == f_core.ELEMENT_NODE,
 				"f_grid.f_computeColumnIdByElement: Invalid target parameter '"
 						+ target + "'.");
 
-
-		var lastCell=undefined;
+		var lastCell = undefined;
 
 		for (; target; target = target.parentNode) {
 			if (target == this || target == this._scrollBody) {
@@ -6902,7 +6949,7 @@ var __members = {
 
 					break;
 				}
-				
+
 				break;
 			}
 		}
@@ -6995,12 +7042,8 @@ var __members = {
 	 * @return void
 	 */
 	f_updateWidth : function(width) {
-		f_core.Assert(typeof (width) == "number",
-				"f_grid.f_setWidth: width parameter must be a number ! ("
-						+ width + ")");
+		this.f_super(arguments, width);
 
-		this.style.width = width + "px";
-		
 		this.f_updateTitle();
 	},
 	/**
@@ -7014,27 +7057,30 @@ var __members = {
 	 * @return void
 	 */
 	f_updateHeight : function(height) {
-		f_core.Assert(typeof (height) == "number", "f_component.f_setHeight: h parameter must be a number ! ("+ height + ")");
+		f_core.Assert(typeof (height) == "number",
+				"f_component.f_setHeight: h parameter must be a number ! ("
+						+ height + ")");
 
 		var oldHeight = this.offsetHeight;
 		var difference = oldHeight - height;
 		this.style.height = height + "px";
-		
-		var scrollBody = this.ownerDocument.getElementById(this.id+ f_grid._DATA_BODY_SCROLL_ID_SUFFIX);
-		if(scrollBody){
+
+		var scrollBody = this.ownerDocument.getElementById(this.id
+				+ f_grid._DATA_BODY_SCROLL_ID_SUFFIX);
+		if (scrollBody) {
 			var oldbody = scrollBody.offsetHeight;
 			height = oldbody - difference;
 			scrollBody.style.height = height + "px";
 		}
 	},
-	
+
 	/**
 	 * select all rows in the current page
 	 * 
 	 * @method public
 	 * @return void
 	 */
-	f_selectAllPage: function() {
+	f_selectAllPage : function() {
 		if (!this._selectable) {
 			return;
 		}
@@ -7042,242 +7088,240 @@ var __members = {
 		var last = 1;
 		var rowCount = this.f_getRowCount();
 		var rows = -1;
-		if(this._rows) {
+		if (this._rows) {
 			rows = this._rows;
 		}
-		if( rowCount > 0 && ((rows > 0 && rowCount < rows) || rows < 0)){
+		if (rowCount > 0 && ((rows > 0 && rowCount < rows) || rows < 0)) {
 			last = rowCount;
-		}else if(rows > 0) {
+		} else if (rows > 0) {
 			last = rows;
-		} 
-		
-		var end = first+last-1;
+		}
+
+		var end = first + last - 1;
 		if (end > rowCount) {
 			end = rowCount - 1; // evite de selectioner des lignes en trop
 		}
-		this._selectRange(this.f_getRow(first),
-				this.f_getRow(end),
+		this._selectRange(this.f_getRow(first), this.f_getRow(end),
 				fa_selectionManager.RANGE_SELECTION);
 	},
-	
+
 	/**
 	 * unSelect all rows in the current page
 	 * 
 	 * @method public
 	 * @return void
 	 */
-	f_unselectAll: function() {
+	f_unselectAll : function() {
 		if (this._selectable) {
 			this.f_setSelection([]);
 		}
 	},
-/**
- * 
+	/**
+	 * 
 	 * @method private
 	 * @param Event
 	 *            jsEvent
 	 * @return Boolean
 	 */
-	_dragRow: function(jsEvent) {
-		var dnd=this._dragAndDropEngine;
+	_dragRow : function(jsEvent) {
+		var dnd = this._dragAndDropEngine;
 		if (!dnd) {
 			return false;
 		}
-		
-		var selection=new Object;
+
+		var selection = new Object;
 		selection._items = new Array;
 		selection._itemsValue = new Array;
 		var itemsDragTypes = new Array;
 		var currentSelection = this._currentSelection;
 		var lastEffects = undefined;
-		
+
 		for ( var i = 0; i < currentSelection.length; i++) {
-			
+
 			var row = currentSelection[i];
-			
-			var dragTypes=row._dragTypes;
-			if (dragTypes===undefined) {
-				dragTypes=this._dragTypes;
+
+			var dragTypes = row._dragTypes;
+			if (dragTypes === undefined) {
+				dragTypes = this._dragTypes;
 			}
-			
-			var dragEffects=row._dragEffects;
-			if (dragEffects===undefined) {
-				dragEffects=this._dragEffects;
+
+			var dragEffects = row._dragEffects;
+			if (dragEffects === undefined) {
+				dragEffects = this._dragEffects;
 			}
 			f_core.Debug(f_grid, "_dragRow: dragEffects=0x" + dragEffects
 					+ " dragTypes='" + dragTypes + "'");
-			
+
 			if (!dragEffects || !dragTypes) {
 				return false;
 			}
-			
-			if(lastEffects){
+
+			if (lastEffects) {
 				lastEffects = dragEffects & lastEffects;
-			}else {
+			} else {
 				lastEffects = dragEffects;
 			}
-			
-			if(itemsDragTypes.length){
+
+			if (itemsDragTypes.length) {
 				itemsDragTypes = f_dragAndDropEngine.ComputeTypes(dragTypes,
 						itemsDragTypes);
-			}else {
+			} else {
 				itemsDragTypes = dragTypes;
 			}
-			
+
 			selection._items[i] = row;
 			selection._itemsValue[i] = this.fa_getElementValue(row);
 		}
-		
+
 		if (!lastEffects) {
 			return false;
 		}
 		if (!itemsDragTypes.length) {
 			return false;
 		}
-		
+
 		selection._dragEffects = lastEffects;
 		selection._dragTypes = itemsDragTypes;
 		selection._itemsElement = currentSelection;
-		var ret=dnd.f_start(jsEvent, selection);
-		
-		f_core.Debug(f_grid, "_dragRow: start returns '"+ret+"'");
-		
+		var ret = dnd.f_start(jsEvent, selection);
+
+		f_core.Debug(f_grid, "_dragRow: start returns '" + ret + "'");
+
 		return ret;
 	},
-	
+
 	/**
-	 * @method public 
+	 * @method public
 	 * @return Array
 	 */
 	f_getDragItems : function(selection) {
 		return selection._items;
 	},
-	
+
 	/**
-	 * @method public 
+	 * @method public
 	 * @return Array
 	 */
 	f_getDragItemsValue : function(selection) {
 		return selection._itemsValue;
 	},
-	
+
 	/**
-	 * @method public 
+	 * @method public
 	 * @return Array
 	 */
 	f_getDragItemsElement : function(selection) {
 		return selection._itemsElement;
 	},
-	
+
 	/**
-	 * @method public 
+	 * @method public
 	 * @return Array
 	 */
 	f_getDragTypes : function(selection) {
 		return selection._dragTypes;
 	},
-	
+
 	/**
-	 * @method public 
+	 * @method public
 	 * @return Number
 	 */
 	f_getDragEffects : function(selection) {
 		return selection._dragEffects;
 	},
-	
-	
-	f_queryDropInfos: function(dragAndDropEngine, jsEvent, element) {
-		this._targetDragAndDropEngine=dragAndDropEngine;
-		
+
+	f_queryDropInfos : function(dragAndDropEngine, jsEvent, element) {
+		this._targetDragAndDropEngine = dragAndDropEngine;
+
 		if (this._scrollBody) {
 			this.fa_installAutoScroll();
 		}
 
-		var found=this._findRowByHTMLElement(element);
+		var found = this._findRowByHTMLElement(element);
 		if (!found) {
 			return null;
 		}
-		
-		var row=found._row;
-		var rowElement=found._rowElement;
-		
-		if (this._bodyDroppable!==true && row==this) {
+
+		var row = found._row;
+		var rowElement = found._rowElement;
+
+		if (this._bodyDroppable !== true && row == this) {
 			return null;
 		}
 
-		var dropTypes=row._dropTypes;
-		if (dropTypes===undefined) {
-			dropTypes=this._dropTypes;
+		var dropTypes = row._dropTypes;
+		if (dropTypes === undefined) {
+			dropTypes = this._dropTypes;
 		}
-		
-		var dropEffects=row._dropEffects;
-		if (dropEffects===undefined) {
-			dropEffects=this._dropEffects;
+
+		var dropEffects = row._dropEffects;
+		if (dropEffects === undefined) {
+			dropEffects = this._dropEffects;
 		}
-		
+
 		if (!dropTypes || !dropEffects) {
 			return null;
 		}
-		
-		var rowValue=this.fa_getElementValue(row);
-		
+
+		var rowValue = this.fa_getElementValue(row);
+
 		return {
-			item: row,
-			itemValue: rowValue,
-			targetItemElement: rowElement,
-			dropTypes: dropTypes,
-			dropEffects: dropEffects		
+			item : row,
+			itemValue : rowValue,
+			targetItemElement : rowElement,
+			dropTypes : dropTypes,
+			dropEffects : dropEffects
 		};
 	},
-	f_overDropInfos: function(dragAndDropEngine, infos) {
-		var row=infos.item;
-		
+	f_overDropInfos : function(dragAndDropEngine, infos) {
+		var row = infos.item;
+
 		row._dndOver = true;
-		this.fa_updateElementStyle(row);	
+		this.fa_updateElementStyle(row);
 	},
-	f_outDropInfos: function(dragAndDropEngine, infos) {
-		var row=infos.item;
-		
+	f_outDropInfos : function(dragAndDropEngine, infos) {
+		var row = infos.item;
+
 		row._dndOver = false;
-		this.fa_updateElementStyle(row);	
+		this.fa_updateElementStyle(row);
 	},
-	f_releaseDropInfos: function() {
-		this._targetDragAndDropEngine=undefined;
+	f_releaseDropInfos : function() {
+		this._targetDragAndDropEngine = undefined;
 
 		this.fa_uninstallAutoScroll();
 	},
-	fa_getLastMousePosition: function() {
+	fa_getLastMousePosition : function() {
 		return this._targetDragAndDropEngine.f_getLastMousePosition();
 	},
-	
-	fa_getScrollableContainer: function() {
+
+	fa_getScrollableContainer : function() {
 		return this._scrollBody;
 	},
-	fa_findAutoOpenElement: function(htmlElement) {
+	fa_findAutoOpenElement : function(htmlElement) {
 		// Recherche un additional !
-		
+
 		if (!this._additionalInformations) {
 			return null;
 		}
-		
-		var found=this._findRowByHTMLElement(htmlElement);
+
+		var found = this._findRowByHTMLElement(htmlElement);
 		if (!found) {
 			return null;
 		}
-		
-		var row=found._row;		
+
+		var row = found._row;
 		if (row == this || !this.f_hasAdditionalElement(row)
 				|| this.fa_isAdditionalElementVisible(row)) {
 			return null;
-		}		
-		
+		}
+
 		return row;
 	},
-	fa_performAutoOpenElement: function(row) {		
+	fa_performAutoOpenElement : function(row) {
 		this.fa_performElementAdditionalInformation(row, true);
 	},
-	fa_isSameAutoOpenElement: function(elt1, elt2) {
-		return elt1._rowIndex==elt2._rowIndex;
+	fa_isSameAutoOpenElement : function(elt1, elt2) {
+		return elt1._rowIndex == elt2._rowIndex;
 	},
 	/**
 	 * @method private
@@ -7285,36 +7329,36 @@ var __members = {
 	 *            element
 	 * @return Object
 	 */
-	_findRowByHTMLElement: function(element) {
-		var row=null;
-		var rowElement=null;
-			
-		for(;element;element=element.parentNode) {
+	_findRowByHTMLElement : function(element) {
+		var row = null;
+		var rowElement = null;
+
+		for (; element; element = element.parentNode) {
 			if (element._rows) {
 				// Racine de l'arbre
-				row=this;
-				rowElement=this;
+				row = this;
+				rowElement = this;
 				break;
 			}
-			
-			if (element._dataGrid==this && element._rowIndex!==undefined) {
-				row=element;
-				rowElement=element;
+
+			if (element._dataGrid == this && element._rowIndex !== undefined) {
+				row = element;
+				rowElement = element;
 				break;
 			}
 		}
-		
+
 		if (!row) {
 			return null;
 		}
-		
+
 		return {
-			_row: row,
-			_rowElement: rowElement
+			_row : row,
+			_rowElement : rowElement
 		};
 	},
-	
-	fa_autoScrollPerformed: function() {
+
+	fa_autoScrollPerformed : function() {
 		if (this._targetDragAndDropEngine) {
 			this._targetDragAndDropEngine.f_updateMousePosition();
 		}
