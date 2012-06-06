@@ -93,6 +93,8 @@ public interface IHtmlWriter extends ISgmlWriter, IHtmlComponentWriter,
 
     IHtmlWriter writeHRef(String url) throws WriterException;
 
+    IHtmlWriter writeHRef_JavascriptVoid0() throws WriterException;
+
     IHtmlWriter writeHttpEquiv(String equiv, String content)
             throws WriterException;
 

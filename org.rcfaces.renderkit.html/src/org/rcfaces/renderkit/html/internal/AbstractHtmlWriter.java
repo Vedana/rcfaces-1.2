@@ -582,6 +582,14 @@ public abstract class AbstractHtmlWriter extends
         return this;
     }
 
+    public IHtmlWriter writeHRef_JavascriptVoid0() throws WriterException {
+        writeURIAttribute("href", "javascript:void("
+                + ((HtmlRenderContext) renderContext).allocateJavaScriptVoid0()
+                + ")");
+
+        return this;
+    }
+
     public IHtmlWriter writeRel(String rel) throws WriterException {
         writeAttribute("rel", rel);
 

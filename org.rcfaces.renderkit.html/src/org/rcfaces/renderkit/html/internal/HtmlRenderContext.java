@@ -74,6 +74,8 @@ public class HtmlRenderContext extends AbstractRenderContext implements
 
     private boolean clientValidation = true;
 
+    private int void0;
+
     public void initialize(FacesContext facesContext) {
         super.initialize(facesContext);
 
@@ -489,6 +491,10 @@ public class HtmlRenderContext extends AbstractRenderContext implements
 
     public boolean isUserAgentVary() {
         return userAgentVary;
+    }
+
+    public int allocateJavaScriptVoid0() {
+        return void0++;
     }
 
 }
