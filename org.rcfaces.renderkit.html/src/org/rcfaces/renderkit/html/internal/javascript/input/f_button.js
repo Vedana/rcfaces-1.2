@@ -43,7 +43,7 @@ var __members = {
 		
 		this.f_super(arguments, type, target);
 	}
-}
+};
 
 new f_class("f_button", {
 	extend: f_input,

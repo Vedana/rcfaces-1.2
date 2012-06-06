@@ -54,7 +54,7 @@ var __statics={
 		f_accelerator._AcceleratorsByFor=undefined;
 	}
 	*/
-}
+};
 
 var __members={
 
@@ -81,10 +81,10 @@ var __members={
 				this.f_initEventAtts(f_accelerator._EVENTS, events);
 			}
 			
-			var forComponent=f_core.GetAttributeNS(this, "for");
+			var forComponentId=f_core.GetAttributeNS(this, "for");
 			
 			if (forComponent) {
-				this._forComponentId=fa_namingContainer.ComputeComponentId(this, forComponent);
+				this._forComponentId=fa_namingContainer.ComputeComponentId(this, forComponentId);
 				this._forItemValue=f_core.GetAttributeNS(this, "forItemValue");
 					
 				this.f_insertEventListenerFirst(f_event.KEYPRESS, this._forListener);
