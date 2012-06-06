@@ -17,7 +17,7 @@ var __statics = {
 			propertyChange: f_event.PROPERTY_CHANGE,
 			user: f_event.USER
 	}
-}
+};
 
 
 var __members = {
@@ -40,7 +40,7 @@ var __members = {
 			}
 		}
 	}
-}
+};
 
 new f_class("f_viewErrorListener", {
 	extend: f_object,
