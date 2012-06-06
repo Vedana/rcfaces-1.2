@@ -15,8 +15,6 @@ import org.apache.commons.logging.LogFactory;
  */
 public class AbstractBufferOperation implements IBufferOperation {
 
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory
             .getLog(AbstractBufferOperation.class);
 

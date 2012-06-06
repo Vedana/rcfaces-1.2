@@ -141,6 +141,7 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
         setWrappedData(this);
     }
 
+    @Override
     public void setInformations(
             IGenerationResourceInformation generationInformation,
             IGeneratedResourceInformation generatedInformation) {

@@ -275,7 +275,7 @@ var __members = {
 				
 				return true;
 			}
-		}
+		};
 	},
 	
 	fa_getMenuScopeName: function(menuItem) {
@@ -297,8 +297,7 @@ var __members = {
 	toString: function() {
 		return "[f_menu id="+this.id+" menuId="+this._menuId+" component="+this._component+"]";
 	}
-}
-
+};
 
 new f_class("f_menu", {
 	extend: f_menuBase,
