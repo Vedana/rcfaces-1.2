@@ -4,7 +4,6 @@
 package org.rcfaces.renderkit.html.internal;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
@@ -217,19 +216,18 @@ public abstract class AbstractJavaScriptRenderer extends
     }
 
     protected static final void appendAttributeEventForm(StringAppender sa,
-            IHtmlWriter htmlWriter, Map listenersByType) {
+            IHtmlWriter htmlWriter, Map<String, FacesListener[]> listenersByType) {
         IRenderContext renderContext = htmlWriter.getComponentRenderContext()
                 .getRenderContext();
 
         IJavaScriptEnableMode javaScriptEnableMode = htmlWriter
                 .getJavaScriptEnableMode();
 
-        for (Iterator it = listenersByType.entrySet().iterator(); it.hasNext();) {
-            Map.Entry entry = (Map.Entry) it.next();
+        for (Map.Entry<String, FacesListener[]> entry : listenersByType
+                .entrySet()) {
+            String listenerType = entry.getKey();
 
-            String listenerType = (String) entry.getKey();
-
-            FacesListener listeners[] = (FacesListener[]) entry.getValue();
+            FacesListener listeners[] = entry.getValue();
 
             boolean submitSupport = true;
             if (ListenerTools.ATTRIBUTE_NAME_SPACE.getValidationEventName()
@@ -270,7 +268,7 @@ public abstract class AbstractJavaScriptRenderer extends
         boolean enableJavascript = false;
 
         boolean hasAction = false;
-        Map listenersByType = null;
+        Map<String, FacesListener[]> listenersByType = null;
         if (encodeEventsInAttributes(writer) == false
                 && htmlRenderContext.getProcessContext().isDesignerMode() == false) {
             // On recherche l'attribut Action

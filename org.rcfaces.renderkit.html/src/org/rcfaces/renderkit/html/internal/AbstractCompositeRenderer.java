@@ -29,7 +29,8 @@ public class AbstractCompositeRenderer extends AbstractCssRenderer {
     public void writeSubInput(IHtmlWriter htmlWriter, String accessKey,
             Integer tabIndex, char ch, int chLength, int length,
             String curValue, boolean disabled, boolean readOnly,
-            boolean writeSize, Map attributes) throws WriterException {
+            boolean writeSize, Map<String, Object> attributes)
+            throws WriterException {
 
         String className = getSubStyleClassName(htmlWriter, ch, chLength);
 

@@ -22,14 +22,13 @@ import org.w3c.dom.Document;
  * @version $Revision$ $Date$
  */
 public class ClientStorage implements IClientStorage, Serializable {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = -4206007717671659424L;
 
-    private static final Iterator EMPTY_ITERATOR = Collections.EMPTY_LIST
-            .iterator();
+    private static final Iterator<String> EMPTY_ITERATOR = Collections
+            .<String> emptyList().iterator();
 
-    private Map values = null;
+    private Map<String, Object> values = null;
 
     // private transient boolean modified = false;
 
@@ -48,14 +47,14 @@ public class ClientStorage implements IClientStorage, Serializable {
         verifyValue(value);
 
         if (values == null) {
-            values = new HashMap();
+            values = new HashMap<String, Object>();
         }
 
         String ret = (String) values.put(name, value);
 
         /*
-         * if (value != ret) { if (value == null || value.equals(ret) == false) {
-         * modified = true; } }
+         * if (value != ret) { if (value == null || value.equals(ret) == false)
+         * { modified = true; } }
          */
 
         return ret;
@@ -79,7 +78,7 @@ public class ClientStorage implements IClientStorage, Serializable {
         return ret;
     }
 
-    public synchronized Iterator listAttributeNames() {
+    public synchronized Iterator<String> listAttributeNames() {
         if (values == null) {
             return EMPTY_ITERATOR;
         }
@@ -103,7 +102,7 @@ public class ClientStorage implements IClientStorage, Serializable {
         return values.isEmpty();
     }
 
-    public Map getInternalMap() {
+    public Map<String, Object> getInternalMap() {
         return values;
     }
 
