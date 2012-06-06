@@ -34,7 +34,6 @@ import org.rcfaces.renderkit.html.internal.javascript.JavaScriptRepositoryServle
  */
 public class JavaScriptResponseWriter extends
         AbstractHtmlComponentRenderContext implements IJavaScriptWriter {
-    private static final String REVISION = "$Revision$";
 
     private final PrintWriter out;
 
@@ -42,7 +41,7 @@ public class JavaScriptResponseWriter extends
 
     private String componentVarName;
 
-    private Map strings;
+    private Map<String, String> strings;
 
     private boolean symbolsInitialized;
 
@@ -90,7 +89,8 @@ public class JavaScriptResponseWriter extends
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter#getComponentVarName()
+     * @see org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter#
+     * getComponentVarName()
      */
     public String getComponentVarName() {
         if (componentVarName != null) {
@@ -105,7 +105,9 @@ public class JavaScriptResponseWriter extends
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter#write(java.lang.String)
+     * @see
+     * org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter#write(java
+     * .lang.String)
      */
     public IJavaScriptWriter write(String string) {
         out.print(string);
@@ -116,7 +118,9 @@ public class JavaScriptResponseWriter extends
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter#writeln(java.lang.String)
+     * @see
+     * org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter#writeln(java
+     * .lang.String)
      */
     public IJavaScriptWriter writeln(String string) {
         out.println(string);
@@ -142,7 +146,8 @@ public class JavaScriptResponseWriter extends
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter#write(char)
+     * @see
+     * org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter#write(char)
      */
     public IJavaScriptWriter write(char c) {
         out.write(c);
@@ -186,8 +191,9 @@ public class JavaScriptResponseWriter extends
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter#writeRaw(char[],
-     *      int, int)
+     * @see
+     * org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter#writeRaw(char
+     * [], int, int)
      */
     public IJavaScriptWriter writeRaw(char[] dst, int pos, int length) {
         out.write(dst, pos, length);
@@ -197,10 +203,10 @@ public class JavaScriptResponseWriter extends
 
     public String allocateString(String string) throws WriterException {
         if (strings == null) {
-            strings = new HashMap(8);
+            strings = new HashMap<String, String>(8);
 
         } else {
-            String varId = (String) strings.get(string);
+            String varId = strings.get(string);
             if (varId != null) {
                 return varId;
             }
@@ -217,7 +223,8 @@ public class JavaScriptResponseWriter extends
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter#getComponentRenderContext()
+     * @see org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter#
+     * getComponentRenderContext()
      */
     public final IHtmlComponentRenderContext getHtmlComponentRenderContext() {
         if (componentRenderContext == null) {
@@ -233,7 +240,9 @@ public class JavaScriptResponseWriter extends
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.IComponentRenderContext#getRenderContext()
+     * @see
+     * org.rcfaces.core.internal.renderkit.IComponentRenderContext#getRenderContext
+     * ()
      */
     public IRenderContext getRenderContext() {
         // Y en a pas !
