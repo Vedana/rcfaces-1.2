@@ -388,4 +388,22 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
         designerEngine.endChildren(writer.getComponentRenderContext()
                 .getComponent(), facetName, writer);
     }
+
+    protected final void designerEditableZone(IComponentWriter writer,
+            String propertyName) throws WriterException {
+
+        IDesignerEngine designerEngine = writer.getComponentRenderContext()
+                .getRenderContext().getProcessContext().getDesignerEngine();
+
+        if (designerEngine == null) {
+            return;
+        }
+
+        if (writer instanceof ISgmlWriter) {
+            ((ISgmlWriter) writer).endComponent();
+        }
+
+        designerEngine.editableZone(writer.getComponentRenderContext()
+                .getComponent(), propertyName, writer);
+    }
 }

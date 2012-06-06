@@ -21,4 +21,9 @@ public interface IDesignerEngine {
 
     void endChildren(UIComponent component, String facetName,
             IComponentWriter writer);
+
+    void editableZone(UIComponent component, String propertyName,
+            IComponentWriter writer);
+
+    void declareCompositeChild(UIComponent component, UIComponent child);
 }
