@@ -37,6 +37,7 @@ public abstract class AbstractReturnValueActionListener extends
         super(expression, partialRendering);
     }
 
+    @Override
     protected void processReturn(FacesContext facesContext,
             MethodExpression binding, FacesEvent event, Object ret) {
         // Pas de traitement de retour !
@@ -54,6 +55,7 @@ public abstract class AbstractReturnValueActionListener extends
         }
     }
 
+    @Override
     protected Exception processException(ELException ex, FacesEvent event) {
         Throwable cause = ex.getCause();
 

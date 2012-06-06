@@ -34,9 +34,9 @@ abstract class AbstractActionListener implements StateHolder,
     private static final Log LOG = LogFactory
             .getLog(AbstractActionListener.class);
 
-    private static final Class[] FACES_PARAMETERS = new Class[] { FacesEvent.class };
+    private static final Class< ? >[] FACES_PARAMETERS = new Class< ? >[] { FacesEvent.class };
 
-    private static final Class[] NO_PARAMETERS = new Class[0];
+    private static final Class< ? >[] NO_PARAMETERS = new Class[0];
 
     private String expression;
 
@@ -304,12 +304,13 @@ abstract class AbstractActionListener implements StateHolder,
                         expression, null, NO_PARAMETERS);
     }
 
-    protected abstract Class[] listParameterClasses();
+    protected abstract Class< ? >[] listParameterClasses();
 
     private MethodExpression getForwardMethodExpression() {
         forwarNameMethodInitialized = true;
 
-        noArgsMethodExpression = new ForwardMethodExpression(expression);
+        noArgsMethodExpression = new ForwardMethodExpression(
+                getForwardName(expression));
         return noArgsMethodExpression;
     }
 
@@ -393,6 +394,7 @@ abstract class AbstractActionListener implements StateHolder,
         facesContext.renderResponse();
     }
 
+    @Override
     public boolean equals(Object object) {
         if (object == null
                 || (object instanceof AbstractActionListener) == false) {
@@ -410,6 +412,7 @@ abstract class AbstractActionListener implements StateHolder,
         return true;
     }
 
+    @Override
     public int hashCode() {
         if (expression == null) {
             return 0;
@@ -431,7 +434,7 @@ abstract class AbstractActionListener implements StateHolder,
 
         ELContext elContext = facesContext.getELContext();
 
-        Class parameters[] = listParameterClasses();
+        Class< ? >[] parameters = listParameterClasses();
 
         RuntimeException firstEx = null;
         try {

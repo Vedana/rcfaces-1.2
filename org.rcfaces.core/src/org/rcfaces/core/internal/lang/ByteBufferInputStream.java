@@ -11,12 +11,11 @@ import java.io.InputStream;
  * @version $Revision$ $Date$
  */
 public final class ByteBufferInputStream extends InputStream {
-    private static final String REVISION = "$Revision$";
 
     /**
      * An array of bytes that was provided by the creator of the stream.
-     * Elements <code>buf[0]</code> through <code>buf[count-1]</code> are
-     * the only bytes that can ever be read from the stream; element
+     * Elements <code>buf[0]</code> through <code>buf[count-1]</code> are the
+     * only bytes that can ever be read from the stream; element
      * <code>buf[pos]</code> is the next byte to be read.
      */
     private byte buf[];
@@ -24,8 +23,8 @@ public final class ByteBufferInputStream extends InputStream {
     /**
      * The index of the next character to read from the input stream buffer.
      * This value should always be nonnegative and not larger than the value of
-     * <code>count</code>. The next byte to be read from the input stream
-     * buffer will be <code>buf[pos]</code>.
+     * <code>count</code>. The next byte to be read from the input stream buffer
+     * will be <code>buf[pos]</code>.
      */
     private int pos;
 
@@ -40,9 +39,9 @@ public final class ByteBufferInputStream extends InputStream {
 
     /**
      * Creates a <code>ByteBufferInputStream</code> so that it uses
-     * <code>buf</code> as its buffer array. The buffer array is not copied.
-     * The initial value of <code>pos</code> is <code>0</code> and the
-     * initial value of <code>count</code> is the length of <code>buf</code>.
+     * <code>buf</code> as its buffer array. The buffer array is not copied. The
+     * initial value of <code>pos</code> is <code>0</code> and the initial value
+     * of <code>count</code> is the length of <code>buf</code>.
      * 
      * @param buf
      *            the input buffer.
@@ -54,11 +53,11 @@ public final class ByteBufferInputStream extends InputStream {
     }
 
     /**
-     * Creates <code>ByteBufferInputStream</code> that uses <code>buf</code>
-     * as its buffer array. The initial value of <code>pos</code> is
-     * <code>offset</code> and the initial value of <code>count</code> is
-     * the minimum of <code>offset+length</code> and <code>buf.length</code>.
-     * The buffer array is not copied. The buffer's mark is set to the specified
+     * Creates <code>ByteBufferInputStream</code> that uses <code>buf</code> as
+     * its buffer array. The initial value of <code>pos</code> is
+     * <code>offset</code> and the initial value of <code>count</code> is the
+     * minimum of <code>offset+length</code> and <code>buf.length</code>. The
+     * buffer array is not copied. The buffer's mark is set to the specified
      * offset.
      * 
      * @param buf
@@ -77,29 +76,30 @@ public final class ByteBufferInputStream extends InputStream {
     /**
      * Reads the next byte of data from this input stream. The value byte is
      * returned as an <code>int</code> in the range <code>0</code> to
-     * <code>255</code>. If no byte is available because the end of the
-     * stream has been reached, the value <code>-1</code> is returned.
+     * <code>255</code>. If no byte is available because the end of the stream
+     * has been reached, the value <code>-1</code> is returned.
      * <p>
      * This <code>read</code> method cannot block.
      * 
      * @return the next byte of data, or <code>-1</code> if the end of the
      *         stream has been reached.
      */
+    @Override
     public int read() {
         return (pos < count) ? (buf[pos++] & 0xff) : -1;
     }
 
     /**
      * Reads up to <code>len</code> bytes of data into an array of bytes from
-     * this input stream. If <code>pos</code> equals <code>count</code>,
-     * then <code>-1</code> is returned to indicate end of file. Otherwise,
-     * the number <code>k</code> of bytes read is equal to the smaller of
+     * this input stream. If <code>pos</code> equals <code>count</code>, then
+     * <code>-1</code> is returned to indicate end of file. Otherwise, the
+     * number <code>k</code> of bytes read is equal to the smaller of
      * <code>len</code> and <code>count-pos</code>. If <code>k</code> is
      * positive, then bytes <code>buf[pos]</code> through
      * <code>buf[pos+k-1]</code> are copied into <code>b[off]</code> through
      * <code>b[off+k-1]</code> in the manner performed by
-     * <code>System.arraycopy</code>. The value <code>k</code> is added
-     * into <code>pos</code> and <code>k</code> is returned.
+     * <code>System.arraycopy</code>. The value <code>k</code> is added into
+     * <code>pos</code> and <code>k</code> is returned.
      * <p>
      * This <code>read</code> method cannot block.
      * 
@@ -113,6 +113,7 @@ public final class ByteBufferInputStream extends InputStream {
      *         <code>-1</code> if there is no more data because the end of the
      *         stream has been reached.
      */
+    @Override
     public int read(byte b[], int off, int len) {
         if (b == null) {
             throw new NullPointerException();
@@ -137,6 +138,7 @@ public final class ByteBufferInputStream extends InputStream {
         return len;
     }
 
+    @Override
     public long skip(long n) {
         if (pos + n > count) {
             n = count - pos;
@@ -148,6 +150,7 @@ public final class ByteBufferInputStream extends InputStream {
         return n;
     }
 
+    @Override
     public int available() {
         return count - pos;
     }
@@ -155,6 +158,7 @@ public final class ByteBufferInputStream extends InputStream {
     public void flush() {
     }
 
+    @Override
     public void close() {
     }
 }

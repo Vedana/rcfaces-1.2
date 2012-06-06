@@ -22,6 +22,7 @@ public abstract class AbstractCameliaRenderer extends AbstractCameliaRenderer0 {
 
     private static final String VARIABLE_SCOPE_PROPERTY = "camelia.VARIABLE_SCOPE";
 
+    @Override
     protected void encodeBegin(IComponentWriter writer) throws WriterException {
         UIComponent component = writer.getComponentRenderContext()
                 .getComponent();
@@ -53,6 +54,7 @@ public abstract class AbstractCameliaRenderer extends AbstractCameliaRenderer0 {
                 VARIABLE_SCOPE_PROPERTY, var);
     }
 
+    @Override
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
 
         String scopeVar = (String) writer.getComponentRenderContext()

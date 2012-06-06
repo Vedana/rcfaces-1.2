@@ -73,10 +73,12 @@ public abstract class AbstractScriptListener implements IScriptListener,
      * 
      * @see java.lang.Object#hashCode()
      */
+    @Override
     public int hashCode() {
         return hashCode;
     }
 
+    @Override
     public boolean equals(Object object) {
         if (object == null
                 || (object instanceof AbstractScriptListener) == false) {
@@ -103,8 +105,8 @@ public abstract class AbstractScriptListener implements IScriptListener,
     /*
      * (non-Javadoc)
      * 
-     * @see javax.faces.component.StateHolder#restoreState(javax.faces.context.FacesContext,
-     *      java.lang.Object)
+     * @see javax.faces.component.StateHolder#restoreState(javax.faces.context.
+     * FacesContext, java.lang.Object)
      */
     public final void restoreState(FacesContext context, Object state) {
         String s[] = (String[]) state;
@@ -117,7 +119,9 @@ public abstract class AbstractScriptListener implements IScriptListener,
     /*
      * (non-Javadoc)
      * 
-     * @see javax.faces.component.StateHolder#saveState(javax.faces.context.FacesContext)
+     * @see
+     * javax.faces.component.StateHolder#saveState(javax.faces.context.FacesContext
+     * )
      */
     public final Object saveState(FacesContext context) {
         return new String[] { scriptType, command };
