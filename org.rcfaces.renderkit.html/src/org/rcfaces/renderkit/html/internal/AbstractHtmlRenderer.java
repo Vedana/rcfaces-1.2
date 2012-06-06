@@ -315,6 +315,8 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
         UIComponent component = writer.getComponentRenderContext()
                 .getComponent();
 
+        writeRole(writer, component);
+
         if (component instanceof IToolTipTextCapability) {
             writeTitle(writer, (IToolTipTextCapability) component);
         }
@@ -362,8 +364,6 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
         }
 
         writeUserInputAttributes(writer, component);
-
-        writeRole(writer, component);
 
         return writer;
     }
