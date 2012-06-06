@@ -152,7 +152,7 @@ var __members = {
 			return;
 		}
 		if (!this.tabIndex) {
-			this._tabIndex = 0;	// Default tabbing   NON ???
+		//	this._tabIndex = 0;	// Default tabbing   NON ???
 		}
 		
 		var input=this.f_getInput();
