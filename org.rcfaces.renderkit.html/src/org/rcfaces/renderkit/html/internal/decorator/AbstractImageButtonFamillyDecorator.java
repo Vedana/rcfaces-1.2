@@ -21,6 +21,7 @@ import org.rcfaces.core.component.capability.ISelectedCapability;
 import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.component.capability.ITextPositionCapability;
+import org.rcfaces.core.component.capability.IToolTipTextCapability;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
 import org.rcfaces.core.image.operation.IDisableOperation;
 import org.rcfaces.core.image.operation.IHoverOperation;
@@ -167,6 +168,12 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             if (imageButtonFamilly instanceof IAlternateTextCapability) {
                 alternateText = ((IAlternateTextCapability) imageButtonFamilly)
                         .getAlternateText();
+
+                if (alternateText == null
+                        && (imageButtonFamilly instanceof IToolTipTextCapability)) {
+                    alternateText = ((IToolTipTextCapability) imageButtonFamilly)
+                            .getToolTipText();
+                }
             }
             tabIndex = imageButtonFamilly.getTabIndex(facesContext);
 
@@ -354,7 +361,9 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
                 } else {
                     // C'est un <a href> !
-                    writer.writeHRef(IHtmlWriter.JAVASCRIPT_VOID);
+                    // On évite d'avoir href="javascript:void(0)" qui se suivent
+                    // car JAWS les merge ....
+                    writer.writeHRef_JavascriptVoid0();
                     writeInputAttributes(writer, false);
 
                     writer.startElement(IHtmlWriter.IMG);
@@ -362,6 +371,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                     writer.writeClass(getImageClassName(htmlBorderWriter));
                     writeImageSrc(writer, imageSrc);
                     writeImageSize(writer, imageButtonFamilly);
+
                     if (alternateText != null) {
                         writer.writeAlt(alternateText);
                     }
@@ -428,21 +438,21 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
     private void writeInputAttributes(IHtmlWriter writer, boolean isInput)
             throws WriterException {
-    	
-    	if (isInput) {
-        	if (disabled) {
-        		writer.writeDisabled();
-        	}
-        	if (tabIndex != null) {	
+
+        if (isInput) {
+            if (disabled) {
+                writer.writeDisabled();
+            }
+            if (tabIndex != null) {
                 writer.writeTabIndex(tabIndex.intValue());
             }
-    	} else {
-        	if (disabled) {
-        		writer.writeTabIndex(-1);
-        	} else if (tabIndex != null) {
+        } else {
+            if (disabled) {
+                writer.writeTabIndex(-1);
+            } else if (tabIndex != null) {
                 writer.writeTabIndex(tabIndex.intValue());
             }
-    	}
+        }
 
         if (accessKey != null) {
             writer.writeAccessKey(accessKey);
@@ -692,7 +702,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
         } else {
             writeInputAttributes(writer, false);
             writeImageAttributes();
-            writer.writeHRef(IHtmlWriter.JAVASCRIPT_VOID);
+            writer.writeHRef_JavascriptVoid0();
 
             String inputId = getInputId(writer, htmlBorderWriter);
             writer.writeId(inputId);
@@ -874,7 +884,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
         if (imageSrc == null) {
             writer.startElement(IHtmlWriter.A);
-            writer.writeHRef(IHtmlWriter.JAVASCRIPT_VOID);
+            writer.writeHRef_JavascriptVoid0();
 
             writer.addSubFocusableComponent(clientId);
             writer.getJavaScriptEnableMode().enableOnFocus();
