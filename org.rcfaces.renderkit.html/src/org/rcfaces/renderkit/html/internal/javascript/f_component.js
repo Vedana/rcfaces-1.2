@@ -161,7 +161,7 @@ var __members = {
 	 */
 	_getSize: function(size) {
 		if (!size) {
-			return null;
+			return undefined;
 		}
 		
 		return parseInt(size, 10);
@@ -172,9 +172,14 @@ var __members = {
 	 * @return void
 	 */
 	f_setX: function(x) {
-		f_core.Assert(typeof(x)=="number", "f_component.f_setX: x parameter must be a number ! ("+x+")");
+		f_core.Assert(typeof(x)=="number" || x===undefined, "f_component.f_setX: x parameter must be a number ! ("+x+")");
 		
-		this.style.left = x+"px";
+
+		if (y===undefined) {
+			this.style.left="auto";
+		} else {
+			this.style.left = x+"px";
+		}
 		this.f_setProperty(f_prop.X,x);
 	},
 	/**
@@ -190,9 +195,13 @@ var __members = {
 	 * @return void
 	 */
 	f_setY: function(y) {
-		f_core.Assert(typeof(y)=="number", "f_component.f_setY: y parameter must be a number ! ("+y+")");
+		f_core.Assert(typeof(y)=="number" || y===undefined, "f_component.f_setY: y parameter must be a number ! ("+y+")");
 
-		this.style.top = y+"px";
+		if (y===undefined) {
+			this.style.top="auto";
+		} else {
+			this.style.top = y+"px";
+		}
 		this.f_setProperty(f_prop.Y,y);
 	},
 	/**
@@ -208,12 +217,12 @@ var __members = {
 	 * Set the width of the component
 	 *
 	 * @method public
-	 * @param Number width Width of the component.
+	 * @param Number width Width of the component.  (undefined value is supported)
 	 * @param hidden Boolean persistence
 	 * @return void
 	 */
 	f_setWidth: function(width, persistence) {
-		f_core.Assert(typeof(width)=="number", "f_component.f_setWidth: w parameter must be a number ! ("+width+")");
+		f_core.Assert(typeof(width)=="number" || width===undefined, "f_component.f_setWidth: w parameter must be a number ! ("+width+")");
 		
 		this.f_updateWidth(width);
 		
@@ -229,6 +238,10 @@ var __members = {
 	 * @return void
 	 */
 	f_updateWidth: function(width) {
+		if (width===undefined) {
+			this.style.width="auto";
+			return;
+		}
 		this.style.width = width+"px";		
 	},
 	/**
@@ -249,7 +262,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setHeight: function(height, persistence) {
-		f_core.Assert(typeof(height)=="number", "f_component.f_setHeight: h parameter must be a number ! ("+height+")");
+		f_core.Assert(typeof(height)=="number" || height===undefined, "f_component.f_setHeight: h parameter must be a number ! ("+height+")");
 
 		this.f_updateHeight(height);
 
@@ -265,6 +278,10 @@ var __members = {
 	 * @return void
 	 */
 	f_updateHeight: function(height) {
+		if (height===undefined) {
+			this.style.height="auto";
+			return;
+		}
 		this.style.height = height+"px";		
 	},
 	/**
