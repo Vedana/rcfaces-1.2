@@ -22,8 +22,12 @@ var __members = {
 	_defaultMenuId: undefined,
 	
 /*
+ * 	f_box: function() {
+ *     this.f_super(arguments);
+ *  },
+ * 
 	f_finalize: function() {
-		this._defaultMenuId=undefined; // String
+		// this._defaultMenuId=undefined; // String
 		
 		this.f_super(arguments);
 	},
