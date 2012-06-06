@@ -51,9 +51,11 @@ var __statics = {
 		
 		return n;
 	}
+
 };
 
 var __members = {
+	
 	f_layoutManager: function() {
 		this._onLayoutIds=new Array();
 	},
@@ -164,9 +166,10 @@ var __members = {
 	 * @return void
 	 */
 	f_layoutComponent: function(component, layoutContext) {
+	
 		var parentComponent=component.offsetParent;
 	
-		var parentSize;
+		var parentSize=undefined;
 		if (layoutContext) {
 			parentSize=layoutContext[parentComponent.id];
 		}
@@ -181,7 +184,7 @@ var __members = {
 	
 		var layout = f_layoutManager._GetNumberAttributeInCache(component, "layout");
 	
-		var componentSize;
+		var componentSize=undefined;
 		if (layout & 0x03) {
 			componentSize=f_core.GetComponentSize(component);
 		}
