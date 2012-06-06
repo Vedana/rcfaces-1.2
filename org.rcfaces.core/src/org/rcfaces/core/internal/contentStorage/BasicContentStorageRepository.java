@@ -87,7 +87,7 @@ public class BasicContentStorageRepository implements IContentStorageRepository 
                 LOG.debug("Generated url='" + url + "' for " + content);
             }
 
-            return url;
+            return url.intern();
         }
 
         // Il faut creer une clef artificielle ...
@@ -117,6 +117,6 @@ public class BasicContentStorageRepository implements IContentStorageRepository 
             LOG.debug("Generated url='" + url + "' for " + content);
         }
 
-        return url;
+        return url.intern();
     }
 }
