@@ -150,6 +150,11 @@ var __members={
 	 * @return String Request identifier.
 	 */
 	f_asyncCall: function(resultCallback, parameter, progressMonitor, contentSizePercent) {
+		
+		if (f_core.DesignerMode) {
+			throw new Error("Designer mode enabled");
+		}
+		
 		var requestId=this._allocateRequestId();
 		
 		this._setRequestState(requestId, f_service.INIT_STATE);
@@ -171,6 +176,11 @@ var __members={
 	 * @return any Result of request.
 	 */
 	f_syncCall: function(parameter, progressMonitor) {
+		
+		if (f_core.DesignerMode) {
+			throw new Error("Designer mode enabled");
+		}
+
 		var requestId=this._allocateRequestId();
 		
 		var subProgressMonitor=undefined;
