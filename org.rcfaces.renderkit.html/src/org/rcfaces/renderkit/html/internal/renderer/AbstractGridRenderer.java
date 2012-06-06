@@ -23,6 +23,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
+import javax.faces.event.FacesListener;
 import javax.faces.model.DataModel;
 
 import org.apache.commons.logging.Log;
@@ -1614,6 +1615,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                 htmlWriter.writeWidth(imageWidth).writeHeight(imageHeight);
             }
 
+            htmlWriter.writeAlt("");
             htmlWriter.endElement(IHtmlElements.IMG);
         }
 
@@ -1622,8 +1624,13 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         htmlWriter.writeId(getTitleDivTextId(htmlWriter, column));
         htmlWriter.writeClass(getTitleDivTextClassName(htmlWriter, column));
 
+        String text = null;
+        if (column instanceof ITextCapability) {
+            text = ((ITextCapability) column).getText();
+        }
+
         if (command) {
-            htmlWriter.writeHRef(IHtmlWriter.JAVASCRIPT_VOID);
+            htmlWriter.writeHRef_JavascriptVoid0();
 
             UIComponent component = htmlWriter.getComponentRenderContext()
                     .getComponent(); // On prend le même TabIndex
@@ -1638,6 +1645,9 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
             if (titleText == null) {
                 titleText = getResourceBundleValue(htmlWriter, "f_grid.NO_SORT");
+                if (text != null) {
+                    titleText = text + " " + titleText;
+                }
             }
 
             htmlWriter.writeTitle(titleText);
@@ -1727,10 +1737,6 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         }
 
         // htmlWriter.startElement(IHtmlElements.SPAN);
-        String text = null;
-        if (column instanceof ITextCapability) {
-            text = ((ITextCapability) column).getText();
-        }
         if (text != null && text.trim().length() > 0) {
             htmlWriter.writeText(text);
 
@@ -2566,8 +2572,9 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             AbstractGridRenderContext tableContext, UIColumn columnComponent,
             int columnIndex) throws WriterException {
 
-        Map listenersByType = ListenerTools.getListenersByType(
-                ListenerTools.ATTRIBUTE_NAME_SPACE, columnComponent);
+        Map<String, FacesListener[]> listenersByType = ListenerTools
+                .getListenersByType(ListenerTools.ATTRIBUTE_NAME_SPACE,
+                        columnComponent);
 
         if (listenersByType.isEmpty() == false) {
             StringAppender sa = new StringAppender(128);
