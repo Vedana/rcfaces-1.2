@@ -5,7 +5,6 @@
 package org.rcfaces.renderkit.html.internal;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.faces.FacesException;
@@ -47,14 +46,12 @@ public class EventsRenderer {
 
     private static final FacesListener DEFAULT_SUBMIT_FACES_LISTENER = new AbstractScriptListener(
             IHtmlRenderContext.JAVASCRIPT_TYPE, DEFAULT_SUBMIT) {
-        private static final String REVISION = "$Revision$";
 
     };
 
     private static final FacesListener[] DEFAULT_SUBMIT_FACES_LISTENERS = new FacesListener[] { DEFAULT_SUBMIT_FACES_LISTENER };
 
     private static final IJavascriptMode ONFOCUS_JAVASCRIPT_ENABLE = new IJavascriptMode() {
-        private static final String REVISION = "$Revision$";
 
         public void enableJavaScriptMode(IJavaScriptEnableMode mode) {
             // mode.enableOnFocus(com);
@@ -65,7 +62,6 @@ public class EventsRenderer {
     };
 
     private static final IJavascriptMode ONINIT_JAVASCRIPT_ENABLE = new IJavascriptMode() {
-        private static final String REVISION = "$Revision$";
 
         public void enableJavaScriptMode(IJavaScriptEnableMode mode) {
             mode.enableOnInit();
@@ -162,17 +158,21 @@ public class EventsRenderer {
 
     }
 
-    public static void encodeEventListeners(IJavaScriptWriter js,
-            String varName, Map listenersByType, String actionListenerType)
-            throws WriterException {
+    public static void encodeEventListeners(IJavaScriptWriter javascriptWriter,
+            String varName, Map<String, FacesListener[]> listenersByType,
+            String actionListenerType) throws WriterException {
+
+        if (javascriptWriter.getComponentRenderContext().getRenderContext()
+                .getProcessContext().isDesignerMode()) {
+            return;
+        }
 
         if (listenersByType.isEmpty() == false) {
-            for (Iterator it = listenersByType.entrySet().iterator(); it
-                    .hasNext();) {
-                Map.Entry entry = (Map.Entry) it.next();
+            for (Map.Entry<String, FacesListener[]> entry : listenersByType
+                    .entrySet()) {
 
-                String listenerType = (String) entry.getKey();
-                FacesListener listeners[] = (FacesListener[]) entry.getValue();
+                String listenerType = entry.getKey();
+                FacesListener listeners[] = entry.getValue();
 
                 boolean submitSupport = true;
                 if (ListenerTools.ATTRIBUTE_NAME_SPACE.getValidationEventName()
@@ -180,15 +180,16 @@ public class EventsRenderer {
                     submitSupport = false;
                 }
 
-                encodeEventListeners(js, varName, listenerType, listeners,
-                        submitSupport);
+                encodeEventListeners(javascriptWriter, varName, listenerType,
+                        listeners, submitSupport);
             }
         }
 
         if (actionListenerType != null) {
             if (listenersByType.containsKey(actionListenerType) == false) {
                 // Il faut provoquer un Submit alors ...
-                encodeJavaScriptEventSubmit(js, varName, actionListenerType);
+                encodeJavaScriptEventSubmit(javascriptWriter, varName,
+                        actionListenerType);
             }
         }
     }

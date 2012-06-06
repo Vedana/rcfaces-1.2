@@ -13,7 +13,6 @@ import org.apache.commons.logging.LogFactory;
  * @version $Revision$ $Date$
  */
 public class Constants {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(Constants.class);
 
@@ -109,9 +108,7 @@ public class Constants {
         LOG.info("CLIENT_NAMING_SEPARATOR_SUPPORT="
                 + CLIENT_NAMING_SEPARATOR_SUPPORT);
 
-        LOG
-                .info("GROUP_NAME_NAMESPACE_SUPPORT="
-                        + GROUP_NAME_NAMESPACE_SUPPORT);
+        LOG.info("GROUP_NAME_NAMESPACE_SUPPORT=" + GROUP_NAME_NAMESPACE_SUPPORT);
 
         LOG.info("NORMALIZE_STYLE_MARGINS=" + NORMALIZE_STYLE_MARGINS);
 
