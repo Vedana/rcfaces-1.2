@@ -293,7 +293,7 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         htmlWriter.startElement(IHtmlWriter.A);
         htmlWriter.writeId(buttonClientId);
         // Il faut le laisser pour le lazy FOCUS
-        htmlWriter.writeHRef(IHtmlWriter.JAVASCRIPT_VOID);
+        htmlWriter.writeHRef_JavascriptVoid0();
         htmlWriter.writeClass(getInputClassName(htmlWriter));
 
         htmlWriter.addSubFocusableComponent(buttonClientId);
@@ -342,6 +342,8 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         }
 
         htmlWriter.startElement(labelType);
+        designerEditableZone(htmlWriter, "text");
+
         htmlWriter.writeId(getLabelId(htmlWriter));
         htmlWriter.writeFor(buttonClientId);
 
