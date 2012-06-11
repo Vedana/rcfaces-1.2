@@ -24,119 +24,121 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  * 
  */
 public class ToolTipRenderer extends AbstractCssRenderer implements
-		IAsyncRenderer {
+        IAsyncRenderer {
 
-	public void encodeBegin(IComponentWriter writer) throws WriterException {
-		super.encodeBegin(writer);
+    public void encodeBegin(IComponentWriter writer) throws WriterException {
+        super.encodeBegin(writer);
 
-		IHtmlWriter htmlWriter = (IHtmlWriter) writer;
+        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-		htmlWriter.startElement(IHtmlWriter.DIV);
+        htmlWriter.startElement(IHtmlWriter.DIV);
 
-		writeComponentAttributes(htmlWriter);
-	}
+        writeComponentAttributes(htmlWriter);
 
-	protected void writeComponentAttributes(IHtmlWriter htmlWriter)
-			throws WriterException {
-		writeHtmlAttributes(htmlWriter);
-		writeJavaScriptAttributes(htmlWriter);
-		writeCssAttributes(htmlWriter);
+        htmlWriter.writeAttribute("aria-live", "polite");
+    }
 
-		IHtmlComponentRenderContext componentRenderContext = htmlWriter
-				.getHtmlComponentRenderContext();
+    protected void writeComponentAttributes(IHtmlWriter htmlWriter)
+            throws WriterException {
+        writeHtmlAttributes(htmlWriter);
+        writeJavaScriptAttributes(htmlWriter);
+        writeCssAttributes(htmlWriter);
 
-		IHtmlRenderContext htmlRenderContext = componentRenderContext
-				.getHtmlRenderContext();
+        IHtmlComponentRenderContext componentRenderContext = htmlWriter
+                .getHtmlComponentRenderContext();
 
-		FacesContext facesContext = componentRenderContext.getFacesContext();
+        IHtmlRenderContext htmlRenderContext = componentRenderContext
+                .getHtmlRenderContext();
 
-		ToolTipComponent tooltipComponent = (ToolTipComponent) componentRenderContext
-				.getComponent();
+        FacesContext facesContext = componentRenderContext.getFacesContext();
 
-		String position = tooltipComponent.getPosition(facesContext);
-		if (position != null && position.length() > 0) {
-			htmlWriter.writeAttribute("v:position", position);
-		}
+        ToolTipComponent tooltipComponent = (ToolTipComponent) componentRenderContext
+                .getComponent();
 
-		String toolTipId = tooltipComponent.getToolTipId(facesContext);
-		if (toolTipId != null && toolTipId.length() > 0) {
-			htmlWriter.writeAttribute("v:toolTipId", toolTipId);
-		}
+        String position = tooltipComponent.getPosition(facesContext);
+        if (position != null && position.length() > 0) {
+            htmlWriter.writeAttribute("v:position", position);
+        }
 
-		int asyncRender = IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE;
+        String toolTipId = tooltipComponent.getToolTipId(facesContext);
+        if (toolTipId != null && toolTipId.length() > 0) {
+            htmlWriter.writeAttribute("v:toolTipId", toolTipId);
+        }
 
-		if (htmlRenderContext.isAsyncRenderEnable()) {
-			asyncRender = htmlRenderContext
-					.getAsyncRenderMode(tooltipComponent);
+        int asyncRender = IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE;
 
-			if (asyncRender != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
-				htmlWriter.writeAttribute("v:asyncRender", true);
+        if (htmlRenderContext.isAsyncRenderEnable()) {
+            asyncRender = htmlRenderContext
+                    .getAsyncRenderMode(tooltipComponent);
 
-				htmlRenderContext.pushInteractiveRenderComponent(htmlWriter,
-						null);
-			}
-		}
+            if (asyncRender != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
+                htmlWriter.writeAttribute("v:asyncRender", true);
 
-		setAsyncRenderer(htmlWriter, tooltipComponent, asyncRender);
+                htmlRenderContext.pushInteractiveRenderComponent(htmlWriter,
+                        null);
+            }
+        }
 
-		if (htmlRenderContext
-				.containsAttribute(ToolTipManagerRenderer.TOOLTIP_MANAGER_DEFINED_PROPERTY) == false) {
-			htmlWriter.enableJavaScript();
-		}
-	}
+        setAsyncRenderer(htmlWriter, tooltipComponent, asyncRender);
 
-	protected void encodeEnd(IComponentWriter writer) throws WriterException {
-		IHtmlWriter htmlWriter = (IHtmlWriter) writer;
-		ToolTipComponent tooltipComponent = (ToolTipComponent) htmlWriter
-				.getComponentRenderContext().getComponent();
+        if (htmlRenderContext
+                .containsAttribute(ToolTipManagerRenderer.TOOLTIP_MANAGER_DEFINED_PROPERTY) == false) {
+            htmlWriter.enableJavaScript();
+        }
+    }
 
-		htmlWriter.endElement(IHtmlWriter.DIV);
+    protected void encodeEnd(IComponentWriter writer) throws WriterException {
+        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
+        ToolTipComponent tooltipComponent = (ToolTipComponent) htmlWriter
+                .getComponentRenderContext().getComponent();
 
-		super.encodeEnd(writer);
-	}
+        htmlWriter.endElement(IHtmlWriter.DIV);
 
-	protected void encodeJavaScript(IJavaScriptWriter jsWriter)
-			throws WriterException {
-		super.encodeJavaScript(jsWriter);
+        super.encodeEnd(writer);
+    }
 
-		jsWriter.setIgnoreComponentInitialization();
+    protected void encodeJavaScript(IJavaScriptWriter jsWriter)
+            throws WriterException {
+        super.encodeJavaScript(jsWriter);
 
-		IHtmlRenderContext htmlRenderContext = jsWriter.getHtmlRenderContext();
+        jsWriter.setIgnoreComponentInitialization();
 
-		if (htmlRenderContext
-				.containsAttribute(ToolTipManagerRenderer.TOOLTIP_MANAGER_DEFINED_PROPERTY) == false) {
-			// Nous sommes en LAZY
+        IHtmlRenderContext htmlRenderContext = jsWriter.getHtmlRenderContext();
 
-			htmlRenderContext.setAttribute(
-					ToolTipManagerRenderer.TOOLTIP_MANAGER_DEFINED_PROPERTY,
-					Boolean.TRUE);
-			jsWriter.writeCall("f_toolTipManager", "Get").writeln(");");
-		}
+        if (htmlRenderContext
+                .containsAttribute(ToolTipManagerRenderer.TOOLTIP_MANAGER_DEFINED_PROPERTY) == false) {
+            // Nous sommes en LAZY
 
-	}
+            htmlRenderContext.setAttribute(
+                    ToolTipManagerRenderer.TOOLTIP_MANAGER_DEFINED_PROPERTY,
+                    Boolean.TRUE);
+            jsWriter.writeCall("f_toolTipManager", "Get").writeln(");");
+        }
 
-	protected boolean sendCompleteComponent(
-			IHtmlComponentRenderContext htmlComponentContext) {
-		return false;
-	}
+    }
 
-	public void addRequiredJavaScriptClassNames(IHtmlWriter writer,
-			IJavaScriptRenderContext javaScriptRenderContext) {
-		super.addRequiredJavaScriptClassNames(writer, javaScriptRenderContext);
+    protected boolean sendCompleteComponent(
+            IHtmlComponentRenderContext htmlComponentContext) {
+        return false;
+    }
 
-		javaScriptRenderContext.appendRequiredClass(JavaScriptClasses.TOOLTIP,
-				"f_toolTipManager");
-	}
+    public void addRequiredJavaScriptClassNames(IHtmlWriter writer,
+            IJavaScriptRenderContext javaScriptRenderContext) {
+        super.addRequiredJavaScriptClassNames(writer, javaScriptRenderContext);
 
-	protected String getJavaScriptClassName() {
-		return JavaScriptClasses.TOOLTIP;
-	}
+        javaScriptRenderContext.appendRequiredClass(JavaScriptClasses.TOOLTIP,
+                "f_toolTipManager");
+    }
 
-	public static void render(IHtmlWriter htmlWriter, ToolTipComponent component)
-			throws WriterException {
-		FacesContext facesContext = htmlWriter.getHtmlComponentRenderContext()
-				.getFacesContext();
+    protected String getJavaScriptClassName() {
+        return JavaScriptClasses.TOOLTIP;
+    }
 
-		ComponentTools.encodeRecursive(facesContext, component);
-	}
+    public static void render(IHtmlWriter htmlWriter, ToolTipComponent component)
+            throws WriterException {
+        FacesContext facesContext = htmlWriter.getHtmlComponentRenderContext()
+                .getFacesContext();
+
+        ComponentTools.encodeRecursive(facesContext, component);
+    }
 }
