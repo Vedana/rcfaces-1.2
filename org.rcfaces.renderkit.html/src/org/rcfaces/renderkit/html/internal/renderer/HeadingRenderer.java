@@ -69,8 +69,16 @@ public class HeadingRenderer extends TextRenderer {
     @Override
     protected void writeAriaLevelAttribute(IHtmlWriter htmlWriter,
             TextComponent textComponent) throws WriterException {
-        int ariaLevel = ((HeadingComponent) textComponent).getLevel(htmlWriter
-                .getComponentRenderContext().getFacesContext());
+        HeadingComponent headingComponent = (HeadingComponent) textComponent;
+
+        FacesContext facesContext = htmlWriter.getComponentRenderContext()
+                .getFacesContext();
+
+        int ariaLevel = headingComponent.getLevel(facesContext);
+
+        if (ariaLevel < 1) {
+            ariaLevel = headingComponent.getAriaLevel(facesContext);
+        }
 
         if (ariaLevel > 0) {
             return;
