@@ -60,7 +60,7 @@ public class RadioButtonRenderer extends AbstractInputRenderer implements
 
         FacesContext facesContext = componentRenderContext.getFacesContext();
 
-        htmlWriter.startElement(IHtmlWriter.LABEL);
+        htmlWriter.startElement(IHtmlWriter.SPAN);
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
@@ -94,7 +94,7 @@ public class RadioButtonRenderer extends AbstractInputRenderer implements
             writeLabel(htmlWriter, radioButton, labelClassName, buttonId);
         }
 
-        htmlWriter.endElement(IHtmlWriter.LABEL);
+        htmlWriter.endElement(IHtmlWriter.SPAN);
 
         htmlWriter.getJavaScriptEnableMode().enableOnFocus();
 
@@ -178,11 +178,14 @@ public class RadioButtonRenderer extends AbstractInputRenderer implements
     protected IHtmlWriter writeLabel(IHtmlWriter htmlWriter,
             RadioButtonComponent button, String className,
             String componentClientId) throws WriterException {
-        htmlWriter.startElement(IHtmlWriter.SPAN);
+        htmlWriter.startElement(IHtmlWriter.LABEL);
 
         htmlWriter.writeId(componentClientId + TEXT_ID_SUFFIX);
         htmlWriter.writeClass(className);
         writeTextDirection(htmlWriter, button);
+
+        String inputId = componentClientId + INPUT_ID_SUFFIX;
+        htmlWriter.writeFor(inputId);
 
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
@@ -193,7 +196,7 @@ public class RadioButtonRenderer extends AbstractInputRenderer implements
         }
         HtmlTools.writeSpanAccessKey(htmlWriter, button, text, true);
 
-        htmlWriter.endElement(IHtmlWriter.SPAN);
+        htmlWriter.endElement(IHtmlWriter.LABEL);
 
         return htmlWriter;
     }

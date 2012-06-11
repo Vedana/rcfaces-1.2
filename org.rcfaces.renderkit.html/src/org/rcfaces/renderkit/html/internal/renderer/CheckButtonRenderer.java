@@ -58,7 +58,7 @@ public class CheckButtonRenderer extends AbstractInputRenderer implements
 
         FacesContext facesContext = componentRenderContext.getFacesContext();
 
-        htmlWriter.startElement(IHtmlWriter.LABEL);
+        htmlWriter.startElement(IHtmlWriter.SPAN);
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
@@ -98,7 +98,7 @@ public class CheckButtonRenderer extends AbstractInputRenderer implements
             writeLabel(htmlWriter, button, className, buttonId);
         }
 
-        htmlWriter.endElement(IHtmlWriter.LABEL);
+        htmlWriter.endElement(IHtmlWriter.SPAN);
 
         htmlWriter.getJavaScriptEnableMode().enableOnFocus();
     }
@@ -121,7 +121,7 @@ public class CheckButtonRenderer extends AbstractInputRenderer implements
         int idx = index.intValue();
 
         if (button.isDisabled() == false) {
-    		//htmlWriter.writeTabIndex(idx);
+            // htmlWriter.writeTabIndex(idx);
         } else {
             htmlWriter.writeTabIndex(-1);
             htmlWriter.writeAttributeNS("tabIndex", idx);
@@ -139,14 +139,14 @@ public class CheckButtonRenderer extends AbstractInputRenderer implements
         htmlWriter.startElement(IHtmlWriter.INPUT);
         htmlWriter.writeId(inputId);
         writeInputAttributes(htmlWriter, inputId);
-        
+
         Integer index = ((ITabIndexCapability) button).getTabIndex();
-        
-    	if (button.isDisabled() == false && index != null) {
-    		 int idx = index.intValue();
-    		htmlWriter.writeTabIndex(idx);
-    	} 
-       
+
+        if (button.isDisabled() == false && index != null) {
+            int idx = index.intValue();
+            htmlWriter.writeTabIndex(idx);
+        }
+
         writeChecked(htmlWriter, button);
 
         htmlWriter.addSubFocusableComponent(inputId);
@@ -197,11 +197,15 @@ public class CheckButtonRenderer extends AbstractInputRenderer implements
     protected IHtmlWriter writeLabel(IHtmlWriter htmlWriter,
             CheckButtonComponent button, String className,
             String componentClientId) throws WriterException {
-        htmlWriter.startElement(IHtmlWriter.SPAN);
+        htmlWriter.startElement(IHtmlWriter.LABEL);
+        designerEditableZone(htmlWriter, "text");
 
         htmlWriter.writeId(componentClientId + TEXT_ID_SUFFIX);
         htmlWriter.writeClass(className + TEXT_STYLECLASS_SUFFIX);
         writeTextDirection(htmlWriter, button);
+
+        String inputId = componentClientId + INPUT_ID_SUFFIX;
+        htmlWriter.writeFor(inputId);
 
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
@@ -213,7 +217,7 @@ public class CheckButtonRenderer extends AbstractInputRenderer implements
 
         HtmlTools.writeSpanAccessKey(htmlWriter, button, text, true);
 
-        htmlWriter.endElement(IHtmlWriter.SPAN);
+        htmlWriter.endElement(IHtmlWriter.LABEL);
 
         return htmlWriter;
     }
