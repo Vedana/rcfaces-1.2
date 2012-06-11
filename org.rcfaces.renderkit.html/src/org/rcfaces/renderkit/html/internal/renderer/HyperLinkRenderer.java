@@ -54,10 +54,10 @@ public class HyperLinkRenderer extends AbstractCssRenderer {
         if (disabled) {
             htmlWriter.writeDisabled();
         }
-		writeFirstTooltipClientId(htmlWriter);
+        writeFirstTooltipClientId(htmlWriter);
 
         // Il faut le laisser pour le lazy FOCUS
-        htmlWriter.writeHRef(IHtmlWriter.JAVASCRIPT_VOID);
+        htmlWriter.writeHRef_JavascriptVoid0();
 
         Object value = getValue(component);
         if (value != null) {

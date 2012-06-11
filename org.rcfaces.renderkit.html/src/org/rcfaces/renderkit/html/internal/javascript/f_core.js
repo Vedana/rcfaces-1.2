@@ -300,6 +300,11 @@ var f_core = {
 	_ResizeHandlers: undefined,
 	
 	/**
+	 * @field private static Number
+	 */
+	_JAVASCRIPT_VOID0: 0,
+	
+	/**
 	 * Throws a message if the expression is true.
 	 *
 	 * @method public static
@@ -6584,7 +6589,7 @@ var f_core = {
 		if (r>=0) {
 			var ps=url.substring(r+1);			
 			
-			var ps=ps.split("&");
+			ps=ps.split("&");
 			for(var i=0;i<ps.length;i++) {
 				var p=ps[i];
 				if (!p) {
@@ -6605,6 +6610,13 @@ var f_core = {
 		}
 	
 		return params;
+	},
+	/**
+	 * @method public
+	 * @return String
+	 */
+	CreateJavaScriptVoid0: function() {
+		return "javascript:void("+(--f_core._JAVASCRIPT_VOID0)+")";
 	},
 	/**
 	 * @method public static

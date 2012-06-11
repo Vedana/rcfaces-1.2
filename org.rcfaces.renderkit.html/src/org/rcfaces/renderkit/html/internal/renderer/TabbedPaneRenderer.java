@@ -289,7 +289,7 @@ public class TabbedPaneRenderer extends CardBoxRenderer {
             htmlWriter.writeId(tabId);
         }
 
-        htmlWriter.writeHRef(IHtmlWriter.JAVASCRIPT_VOID);
+        htmlWriter.writeHRef_JavascriptVoid0();
 
         // AccessKey
         String accessKey = tabComponent.getAccessKey(facesContext);
