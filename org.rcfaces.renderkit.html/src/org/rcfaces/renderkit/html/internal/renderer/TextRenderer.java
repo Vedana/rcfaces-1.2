@@ -58,6 +58,7 @@ public class TextRenderer extends AbstractCssRenderer {
         }
 
         htmlWriter.startElement(element);
+        designerEditableZone(htmlWriter, "text");
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
