@@ -835,6 +835,9 @@ var __members = {
 		}
 		
 		this.f_uiUpdateItemStyle(menuItem);		
+		
+		var value = this.f_getItemValue(menuItem);
+		this.f_fireEvent("itemHover", null, menuItem, value);
 	},
 	/**
 	 * @method protected final
@@ -1205,7 +1208,7 @@ var __members = {
 				
 			}
 			
-			if(!selected){
+			if (!selected){
 				uiItem.removeAttribute(fa_aria.ARIA_SELECTED);
 			}
 			

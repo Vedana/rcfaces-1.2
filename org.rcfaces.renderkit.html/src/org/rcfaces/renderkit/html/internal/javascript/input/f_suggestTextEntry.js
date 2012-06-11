@@ -82,6 +82,13 @@ var __members = {
 			suggestTextEntry._setSuggestion(item._label, item._value, item, jsEvt);
 		});
 
+		menu.f_addEventListener("itemHover", function(evt) {
+			var jsEvt=evt.f_getJsEvent();
+			var item=evt.f_getValue();
+
+			// ACC: suggestTextEntry.f_setText(item._label, true);
+		});
+		
 		this.f_insertEventListenerFirst(f_event.FOCUS, this._onFocus);
 		this.f_insertEventListenerFirst(f_event.BLUR, this._onBlur);
 	},
