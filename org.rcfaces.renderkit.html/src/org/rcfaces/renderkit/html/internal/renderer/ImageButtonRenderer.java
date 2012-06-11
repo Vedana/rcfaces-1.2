@@ -15,7 +15,6 @@ import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
-import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
@@ -79,7 +78,7 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
             }
         }
 
-		htmlWriter.getJavaScriptEnableMode().enableOnOver();
+        htmlWriter.getJavaScriptEnableMode().enableOnOver();
 
         super.encodeEnd(writer);
     }
@@ -119,7 +118,7 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
     }
 
     protected String getWAIRole() {
-        return IAccessibilityRoles.PRESENTATION;
+        return null; // IAccessibilityRoles.PRESENTATION;
     }
 
     protected IHtmlWriter writeUserInputAttributes(IHtmlWriter writer,
@@ -134,7 +133,7 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
      */
     protected class ImageButtonDecorator extends
             AbstractImageButtonFamillyDecorator {
- 
+
         public ImageButtonDecorator(IImageButtonFamilly imageButtonFamilly) {
             super(imageButtonFamilly);
         }
@@ -149,7 +148,7 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
             writeHtmlAttributes(writer);
             writeJavaScriptAttributes(writer);
             writeCssAttributes(writer, cssStyleClasses, ~CSS_FONT_MASK);
-			writeFirstTooltipClientId(writer);
+            writeFirstTooltipClientId(writer);
 
             FacesContext facesContext = writer.getComponentRenderContext()
                     .getFacesContext();

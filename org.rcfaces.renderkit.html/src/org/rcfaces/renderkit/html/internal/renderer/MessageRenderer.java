@@ -18,7 +18,6 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.ContextTools;
 import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
-import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
@@ -37,7 +36,9 @@ public class MessageRenderer extends AbstractCssRenderer {
     // private static final String STYLE_CLASS_PROPERTY = "message.style.class";
 
     protected String getWAIRole() {
-        return IAccessibilityRoles.ALERT;
+        // return IAccessibilityRoles.ALERT; // On ne peut avoir plusieurs role
+        // ALERT en même temps dans une page
+        return null;
     }
 
     protected void encodeBegin(IComponentWriter writer) throws WriterException {
