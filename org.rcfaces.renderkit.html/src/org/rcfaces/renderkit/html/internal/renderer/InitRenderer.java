@@ -1175,6 +1175,9 @@ public class InitRenderer extends AbstractHtmlRenderer {
         if (htmlProcessContext.useMetaContentScriptType() == false) {
             writer.writeType(IHtmlRenderContext.JAVASCRIPT_TYPE);
         }
+        if (htmlProcessContext.isDesignerMode()) {
+            writer.writeAttributeNS("rcfaces", "core");
+        }
 
         return new JavaScriptWriterImpl(writer);
     }
