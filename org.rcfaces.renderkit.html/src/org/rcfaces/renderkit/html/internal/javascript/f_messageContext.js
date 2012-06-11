@@ -171,7 +171,7 @@ var __statics = {
 			}			
 		}
 	}
-}
+};
 
 var __members = {
 	
@@ -255,7 +255,7 @@ var __members = {
 		// On initialize le focusManager pour qu'il réagisse aux messages !
 		f_focusManager.Get(); 
 		
-		f_core.Debug(f_messageContext, "f_performCheckPost: event="+event)
+		f_core.Debug(f_messageContext, "f_performCheckPost: event="+event);
 		
 		this._fireMessageEvent({
 			type: f_messageContext.POST_CHECK_EVENT_TYPE
@@ -671,7 +671,7 @@ var __members = {
 	toString: function() {
 		return "[f_messageContext form='"+((this._form)?this._form.id:'ROOT')+"']";
 	}
-}
+};
 
 new f_class("f_messageContext", {
 	statics: __statics,
