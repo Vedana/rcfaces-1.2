@@ -746,7 +746,13 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 
             UIColumn column = columns[columnIndex];
 
-            htmlWriter.startElement(IHtmlWriter.TD);
+            String cellType = IHtmlWriter.TD;
+            String scopeColId = gridRenderContext.getScopeColId();
+            if (scopeColId != null && scopeColId.equals(column.getId())) {
+                cellType = IHtmlWriter.TH;
+            }
+
+            htmlWriter.startElement(cellType);
 
             if (gridRenderContext.getComponentsGridComponent().isCellTextWrap(
                     htmlWriter.getComponentRenderContext().getFacesContext()) == false) {
@@ -814,7 +820,6 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
             htmlWriter.writeClass(sa.toString());
 
             // Accessibility : add scope="row" for the scope column
-            String scopeColId = gridRenderContext.getScopeColId();
             if (scopeColId != null && scopeColId.equals(column.getId())) {
                 htmlWriter.writeAttribute("scope", "row");
             }
@@ -828,7 +833,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 
             htmlWriter.writeln();
 
-            htmlWriter.endElement(IHtmlWriter.TD);
+            htmlWriter.endElement(cellType);
         }
 
         htmlWriter.endElement(IHtmlWriter.TR);
