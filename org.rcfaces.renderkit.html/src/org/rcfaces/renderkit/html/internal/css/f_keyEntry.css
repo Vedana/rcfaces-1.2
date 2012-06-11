@@ -34,3 +34,8 @@
 	color: #888;
 	font-style: italic;
 }
+
+.f_keyEntry_description {
+	position: absolute;
+	left: -10000px;
+}

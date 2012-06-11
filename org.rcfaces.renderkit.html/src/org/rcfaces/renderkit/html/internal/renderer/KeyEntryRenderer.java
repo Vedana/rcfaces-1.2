@@ -92,6 +92,9 @@ public class KeyEntryRenderer extends DataGridRenderer {
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
 
+        String labelId = computeDescriptionClientId(htmlWriter);
+        htmlWriter.writeAttribute("aria-describedby", labelId);
+
         AbstractGridRenderContext gridRenderContext = getGridRenderContext(componentRenderContext);
 
         Map<String, String> formatValues = new HashMap<String, String>();
@@ -103,7 +106,7 @@ public class KeyEntryRenderer extends DataGridRenderer {
         }
 
         // Si on a déja un toolTipText, on ignore valueFormatTooltip
-        if (comboGridComponent.getToolTipText(facesContext) == null) {
+        if (true || comboGridComponent.getToolTipText(facesContext) == null) {
             String valueFormatTooltip = comboGridComponent
                     .getValueFormatTooltip(facesContext);
             if (valueFormatTooltip != null) {
@@ -308,7 +311,29 @@ public class KeyEntryRenderer extends DataGridRenderer {
 
         htmlWriter.endElement(IHtmlWriter.INPUT);
 
+        writeDescriptionComponent(htmlWriter);
+
         htmlWriter.getJavaScriptEnableMode().enableOnInit();
+    }
+
+    protected String computeDescriptionClientId(IHtmlWriter htmlWriter) {
+        String labelId = htmlWriter.getComponentRenderContext()
+                .getComponentClientId() + "::description";
+        return labelId;
+    }
+
+    protected void writeDescriptionComponent(IHtmlWriter htmlWriter)
+            throws WriterException {
+        String labelId = computeDescriptionClientId(htmlWriter);
+        if (labelId == null) {
+            return;
+        }
+
+        htmlWriter.startElement(IHtmlWriter.LABEL);
+        htmlWriter.writeId(labelId);
+        htmlWriter.writeClass("f_keyEntry_description");
+
+        htmlWriter.endElement(IHtmlWriter.LABEL);
     }
 
     protected boolean needAjaxJavaScriptClasses(IHtmlWriter writer,

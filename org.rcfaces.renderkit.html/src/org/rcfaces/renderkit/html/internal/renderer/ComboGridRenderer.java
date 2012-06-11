@@ -108,7 +108,7 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
 
         // Si on a déja un toolTipText, on ignore valueFormatTooltip
         String valueFormatTooltip = null;
-        if (comboGridComponent.getToolTipText(facesContext) == null) {
+        if (true || comboGridComponent.getToolTipText(facesContext) == null) {
             valueFormatTooltip = comboGridComponent
                     .getValueFormatTooltip(facesContext);
             if (valueFormatTooltip != null) {
@@ -429,6 +429,8 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
         writeInputSubComponent(htmlWriter, formattedValue, colWidth,
                 formattedValueTooltip);
 
+        writeDescriptionComponent(htmlWriter);
+
         htmlWriter.endElement(IHtmlWriter.TD);
 
         htmlWriter.startElement(IHtmlWriter.TD);
@@ -525,6 +527,9 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
 
         htmlWriter.writeId(componentRenderContext.getComponentClientId()
                 + INPUT_ID_SUFFIX);
+
+        String labelId = computeDescriptionClientId(htmlWriter);
+        htmlWriter.writeAttribute("aria-describedby", labelId);
 
         StringAppender sa = new StringAppender(128);
         sa.append(getMainStyleClassName());
