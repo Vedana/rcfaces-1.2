@@ -449,16 +449,19 @@ var __members = {
 	 * @return void
 	 */
 	f_updateTitle: function(rowValues) {
-		var input=this.f_getInput();
-		if (this._valueFormatTooltip != "") {
+		if (this._valueFormatTooltip) {
+			var title="";
+			
 			if (this._keyErrored) {
-				input.title=f_resourceBundle.Get(f_keyEntry).f_formatParams("INVALIDKEY_ERROR_SUMMARY");
-			} else {
-				if (rowValues) {
-					input.title=f_core.FormatMessage(this._valueFormatTooltip,rowValues);
-				} else {
-					input.title=undefined;
-				}
+				title=f_resourceBundle.Get(f_keyEntry).f_formatParams("INVALIDKEY_ERROR_SUMMARY");
+
+			} else if (rowValues) {
+				title=f_core.FormatMessage(this._valueFormatTooltip,rowValues);
+			}
+			
+			var descriptionComponent=this.ownerDocument.getElementById(this.id+"::description");
+			if (descriptionComponent) {
+				f_core.SetTextNode(descriptionComponent, title);
 			}
 		}
 	},
