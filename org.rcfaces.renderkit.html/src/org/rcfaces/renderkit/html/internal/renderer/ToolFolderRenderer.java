@@ -97,11 +97,12 @@ public class ToolFolderRenderer extends AbstractCssRenderer {
         IHtmlWriter htmlWriter = (IHtmlWriter) renderContext
                 .getComponentWriter();
 
-        List childrenList = htmlWriter.getComponentRenderContext()
+        List<UIComponent> childrenList = htmlWriter.getComponentRenderContext()
                 .getComponent().getChildren();
-        List originalChildrenList = new ArrayList(childrenList);
+        List<UIComponent> originalChildrenList = new ArrayList<UIComponent>(
+                childrenList);
 
-        List computedChildrenList = getChildren(htmlWriter);
+        List<UIComponent> computedChildrenList = getChildren(htmlWriter);
 
         for (Iterator it = computedChildrenList.iterator(); it.hasNext();) {
             UIComponent child = (UIComponent) it.next();
