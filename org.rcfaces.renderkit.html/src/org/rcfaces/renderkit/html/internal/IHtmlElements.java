@@ -103,4 +103,6 @@ public interface IHtmlElements {
     // String JAVASCRIPT_VOID = "javascript:void(0)";
 
     String AUTOCOMPLETE_OFF = "off";
+
+    int MAX_HEADING_LEVEL = 6;
 }
