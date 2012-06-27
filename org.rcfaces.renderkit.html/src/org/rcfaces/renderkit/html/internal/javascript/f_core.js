@@ -1540,7 +1540,9 @@ var f_core = {
 		var doc=parent.ownerDocument;
 		
 		var ie=f_core.IsInternetExplorer();
-		
+	
+		var element=undefined;
+
 		for(var i=1;i<arguments.length;) {
 			tagName=arguments[i++];
 			properties=arguments[i++];
@@ -1548,7 +1550,6 @@ var f_core = {
 			f_core.Assert(typeof(tagName)=="string", "f_core.CreateElement: Invalid tagName parameter ("+tagName+")");
 			f_core.Assert(properties===undefined || typeof(properties)=="object", "f_core.CreateElement: Invalid properties parameter ("+properties+")");
 			
-			var element;
 			
 			if (ie && tagName.toLowerCase()=="input" && properties.type && properties.name) {
 				element=doc.createElement("<input name=\""+properties.name+"\" type=\""+properties.type+"\">");
