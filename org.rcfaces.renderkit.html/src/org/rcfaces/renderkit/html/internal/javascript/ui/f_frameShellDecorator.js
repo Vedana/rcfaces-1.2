@@ -15,7 +15,7 @@ var __statics = {
 	 * @field private static final String
 	 */
 	_SHELL_DECORATOR_IDENTIFIER: "frameShellDecorator"
-}
+};
 
 var __members = {
 	
@@ -162,8 +162,11 @@ var __members = {
 			this._iframe=undefined;
 			
 			this.f_finalizeIframe(iframe);
-				
-			iframe.parentNode.removeChild(iframe);
+			
+			window.setTimeout(function() {
+				iframe.parentNode.removeChild(iframe);
+				iframe=undefined;
+			}, 10);
 		}
 
 		this.f_super(arguments);
