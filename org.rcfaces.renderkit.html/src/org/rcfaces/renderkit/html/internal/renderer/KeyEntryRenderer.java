@@ -332,6 +332,7 @@ public class KeyEntryRenderer extends DataGridRenderer {
         htmlWriter.startElement(IHtmlWriter.LABEL);
         htmlWriter.writeId(labelId);
         htmlWriter.writeClass("f_keyEntry_description");
+        htmlWriter.writeAttribute("aria-live", "polite");
 
         htmlWriter.endElement(IHtmlWriter.LABEL);
     }
