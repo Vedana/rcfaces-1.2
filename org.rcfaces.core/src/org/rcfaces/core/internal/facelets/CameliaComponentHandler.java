@@ -56,7 +56,6 @@ public class CameliaComponentHandler extends CameliaComponentHandler0 {
      */
     private static class ListenerAttributeMetaData implements
             IAttributeMetaData {
-        private static final String REVISION = "$Revision$";
 
         private final IListenerType listenerType;
 
