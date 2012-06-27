@@ -52,7 +52,7 @@ var __members = {
 			return;
 		}
 		
-		var critUL=f_core.CreateElement(fragment, "ul", {
+		var critUL=f_core.CreateElement(fragment, "ol", {
 			className: "f_criteriaList_list"			
 		});
 		
