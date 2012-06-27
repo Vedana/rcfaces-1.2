@@ -3,8 +3,6 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
-import javax.faces.context.FacesContext;
-
 import org.rcfaces.core.component.HeadingComponent;
 import org.rcfaces.core.component.TextComponent;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
@@ -12,6 +10,7 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.IHtmlElements;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.util.HeadingTools;
 
 /**
  * 
@@ -28,15 +27,12 @@ public class HeadingRenderer extends TextRenderer {
         HeadingComponent textComponent = (HeadingComponent) componentRenderContext
                 .getComponent();
 
-        FacesContext facesContext = componentRenderContext.getFacesContext();
-
-        int ariaLevel = textComponent.getLevel(facesContext);
-
-        if (ariaLevel < 1) {
-            ariaLevel = textComponent.getAriaLevel();
-        }
+        int ariaLevel = HeadingTools.computeHeadingLevel(textComponent);
 
         if (ariaLevel > 0) {
+            if (ariaLevel > IHtmlElements.MAX_HEADING_LEVEL) {
+                ariaLevel = IHtmlElements.MAX_HEADING_LEVEL;
+            }
             return IHtmlElements.H_BASE + ariaLevel;
         }
 
@@ -53,13 +49,12 @@ public class HeadingRenderer extends TextRenderer {
 
         HeadingComponent headingComponent = (HeadingComponent) htmlWriter
                 .getComponentRenderContext().getComponent();
-        int ariaLevel = headingComponent.getLevel();
-
-        if (ariaLevel < 1) {
-            ariaLevel = headingComponent.getAriaLevel();
-        }
+        int ariaLevel = HeadingTools.computeHeadingLevel(headingComponent);
 
         if (ariaLevel > 0) {
+            if (ariaLevel > IHtmlElements.MAX_HEADING_LEVEL) {
+                ariaLevel = IHtmlElements.MAX_HEADING_LEVEL;
+            }
             cssStyleClasses.addSuffix("_h" + ariaLevel);
         }
 
@@ -71,14 +66,7 @@ public class HeadingRenderer extends TextRenderer {
             TextComponent textComponent) throws WriterException {
         HeadingComponent headingComponent = (HeadingComponent) textComponent;
 
-        FacesContext facesContext = htmlWriter.getComponentRenderContext()
-                .getFacesContext();
-
-        int ariaLevel = headingComponent.getLevel(facesContext);
-
-        if (ariaLevel < 1) {
-            ariaLevel = headingComponent.getAriaLevel(facesContext);
-        }
+        int ariaLevel = HeadingTools.computeHeadingLevel(headingComponent);
 
         if (ariaLevel > 0) {
             return;
