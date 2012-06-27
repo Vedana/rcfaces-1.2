@@ -60,14 +60,18 @@ var __members = {
 	 * @return HTMLElement
 	 */
 	fa_getTabIndexElement: function() {
-		return this.f_getInput();
+		if (this.f_getInput) {
+			return this.f_getInput();
+		}
+		
+		return this;
 	},
 	/**
 	 * 
-	 * @method protected
+	 * @method protected optional abstract
 	 * @return HTMLElement
 	 */
-	f_getInput: f_class.ABSTRACT
+	f_getInput: f_class.OPTIONAL_ABSTRACT
 };
 
 new f_aspect("fa_tabIndex", {
