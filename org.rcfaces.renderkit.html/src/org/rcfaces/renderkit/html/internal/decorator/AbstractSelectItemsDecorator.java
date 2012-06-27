@@ -832,7 +832,8 @@ public abstract class AbstractSelectItemsDecorator extends
         }
 
         throw new WriterException("Illegal uiSelectItems value type ! (class='"
-                + value.getClass() + "')", null, component);
+                + value.getClass() + "' value='" + value + "')", null,
+                component);
 
     }
 
