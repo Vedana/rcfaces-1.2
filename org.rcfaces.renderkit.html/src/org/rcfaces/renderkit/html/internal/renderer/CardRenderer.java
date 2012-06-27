@@ -107,6 +107,7 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
             jsWriter.end();
 
         } else {
+
             htmlWriter.getJavaScriptEnableMode().enableOnInit();
         }
 
@@ -170,7 +171,13 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
             cssWriter.writeVerticalAlign(verticalAlignement);
         }
 
+        encodeSummaryTitleCard(htmlWriter);
+
         designerBeginChildren(htmlWriter, IDesignerEngine.MAIN_BODY);
+    }
+
+    protected void encodeSummaryTitleCard(IHtmlWriter htmlWriter)
+            throws WriterException {
     }
 
     protected void writeCardSizes(IHtmlWriter htmlWriter,

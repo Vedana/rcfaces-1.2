@@ -20,6 +20,7 @@ import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.util.ParamUtils;
+import org.rcfaces.renderkit.html.internal.IHtmlElements;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
@@ -27,6 +28,7 @@ import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 import org.rcfaces.renderkit.html.internal.ISubInputClientIdRenderer;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
+import org.rcfaces.renderkit.html.internal.util.HeadingTools;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -289,6 +291,42 @@ public class TabRenderer extends CardRenderer implements
                         Properties.TEXT, old, text));
             }
         }
+    }
+
+    @Override
+    protected void encodeSummaryTitleCard(IHtmlWriter writer)
+            throws WriterException {
+
+        TabComponent tab = (TabComponent) writer.getComponentRenderContext()
+                .getComponent();
+
+        String text = tab.getText();
+        if (text == null || text.length() == 0) {
+            return;
+        }
+
+        int level = HeadingTools.computeHeadingLevel(tab);
+        if (tab.getTabbedPane().isHeadingZone()) {
+            level--;
+        }
+
+        if (level < 1) {
+            level = 1;
+
+        } else if (level > IHtmlElements.MAX_HEADING_LEVEL) {
+            level = IHtmlElements.MAX_HEADING_LEVEL;
+        }
+
+        String tagName = IHtmlElements.H_BASE + level;
+        writer.writeId(writer.getComponentRenderContext()
+                .getComponentClientId() + "::heading");
+
+        writer.startElement(tagName);
+        writer.writeClass("f_tab_heading");
+        writer.writeText(text);
+
+        writer.endElement(tagName);
+
     }
 
     public String computeSubInputClientId(IRenderContext renderContext,

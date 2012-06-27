@@ -40,6 +40,7 @@ import org.rcfaces.renderkit.html.internal.decorator.ISelectItemNodeWriter;
 import org.rcfaces.renderkit.html.internal.decorator.SubMenuDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.TreeDecorator;
 import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
+import org.rcfaces.renderkit.html.internal.util.HeadingTools;
 
 /**
  * 
@@ -53,6 +54,8 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
     private static final String FOCUS_ID_SUFFIX = "::focus";
 
     private static final String BODY_ID_SUFFIX = "::body";
+
+    private static final boolean LINK_TREE_NODE_FOCUS = true;
 
     protected void encodeBeforeDecorator(IHtmlWriter htmlWriter,
             IComponentDecorator componentDecorator) throws WriterException {
@@ -206,28 +209,73 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
             }
         }
 
-        htmlWriter.startElement(IHtmlWriter.A);
-        htmlWriter.writeId(componentContext.getComponentClientId()
-                + FOCUS_ID_SUFFIX);
-        htmlWriter.writeClass("f_tree_focus");
+        if (LINK_TREE_NODE_FOCUS == true) {
+            // C'est le role TREE
 
-        Integer tabIndex = treeComponent.getTabIndex();
-        if (tabIndex != null) {
-            htmlWriter.writeTabIndex(tabIndex.intValue());
         } else {
-            htmlWriter.writeTabIndex(0);
+            htmlWriter.startElement(IHtmlWriter.A);
+            htmlWriter.writeId(componentContext.getComponentClientId()
+                    + FOCUS_ID_SUFFIX);
+            htmlWriter.writeClass("f_tree_focus");
+
+            Integer tabIndex = treeComponent.getTabIndex();
+            if (tabIndex != null) {
+                htmlWriter.writeTabIndex(tabIndex.intValue());
+            } else {
+                htmlWriter.writeTabIndex(0);
+            }
+            htmlWriter.writeRole(IAccessibilityRoles.TREE);
+            htmlWriter.endElement(IHtmlWriter.A);
         }
-        htmlWriter.writeRole(IAccessibilityRoles.TREE);
-        htmlWriter.endElement(IHtmlWriter.A);
+
+        String caption = treeComponent.getCaption(facesContext);
+        String captionClientId = null;
+        if (caption != null) {
+            String captionComponent = IHtmlWriter.LABEL;
+            int level = HeadingTools.computeHeadingLevel(treeComponent);
+            if (level > 0) {
+                if (level > IHtmlWriter.MAX_HEADING_LEVEL) {
+                    level = IHtmlWriter.MAX_HEADING_LEVEL;
+                }
+
+                captionComponent = IHtmlWriter.H_BASE + level;
+            }
+
+            captionClientId = componentContext.getComponentClientId()
+                    + "::caption";
+
+            htmlWriter.startElement(captionComponent);
+            htmlWriter.writeId(captionClientId);
+            htmlWriter.writeClass(getMainStyleClassName() + "_caption");
+
+            if (IHtmlWriter.LABEL.equals(captionComponent)) {
+                htmlWriter.writeFor(componentContext.getComponentClientId());
+            }
+
+            htmlWriter.writeText(caption);
+            htmlWriter.endElement(captionComponent);
+        }
 
         htmlWriter.startElement(IHtmlWriter.UL);
         htmlWriter.writeId(componentContext.getComponentClientId()
                 + BODY_ID_SUFFIX);
 
+        htmlWriter.writeRole(IAccessibilityRoles.TREE);
+        if (captionClientId != null) {
+            htmlWriter.writeAriaLabelledBy(captionClientId);
+        }
+
         String className = "f_tree_body";
         if (commandImageURL != null) {
             className += " f_tree_commandHasImages";
         }
+        if (treeComponent.isSelectable(facesContext)) {
+            className += " f_tree_selectable";
+        }
+        if (treeComponent.isCheckable(facesContext)) {
+            className += " f_tree_checkable";
+        }
+
         htmlWriter.writeClass(className);
     }
 

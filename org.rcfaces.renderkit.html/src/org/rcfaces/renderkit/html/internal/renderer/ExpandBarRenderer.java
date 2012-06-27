@@ -32,6 +32,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
+import org.rcfaces.renderkit.html.internal.util.HeadingTools;
 
 /**
  * 
@@ -336,8 +337,11 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
 
         String labelType = IHtmlElements.LABEL;
 
-        int ariaLevel = expandBarComponent.getAriaLevel(facesContext);
+        int ariaLevel = HeadingTools.computeHeadingLevel(expandBarComponent);
         if (ariaLevel > 0) {
+            if (ariaLevel > IHtmlElements.MAX_HEADING_LEVEL) {
+                ariaLevel = IHtmlElements.MAX_HEADING_LEVEL;
+            }
             labelType = IHtmlElements.H_BASE + ariaLevel;
         }
 
