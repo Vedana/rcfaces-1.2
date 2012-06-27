@@ -636,7 +636,7 @@ var __statics = {
 		var copy=0;
 		var rows = null;
 		var child = element.firstChild;
-		nextChild: for (; child; child = child.nextSibling) {
+		for (; child; child = child.nextSibling) {
 			switch (child.tagName.toLowerCase()) {
 			case "thead":
 			case "tbody":
