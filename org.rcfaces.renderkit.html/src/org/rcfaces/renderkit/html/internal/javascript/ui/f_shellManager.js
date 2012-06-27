@@ -104,7 +104,7 @@ var __statics = {
 			evt = f_core.GetJsEvent(this);
 		}
      	 			
-		var target;
+		var target=undefined;
 		if (evt.target) {
 			target = evt.target;
 			
@@ -244,7 +244,7 @@ var __statics = {
 	Finalizer: function() {
 		f_shellManager._ShellDecorators=undefined;
 	}
-}
+};
 
 var __members = {
 	f_shellManager: function() {
@@ -346,7 +346,7 @@ var __members = {
 	 * @return void
 	 */
 	_hideScreen: function() {		
-		var backgroundMode;
+		var backgroundMode=undefined;
 		
 		var shells=this._shells;
 		for(var i=0;i<shells.length;i++) {
@@ -643,7 +643,6 @@ var __members = {
 			} catch (x) {
 				f_core.Error(f_shellManager, "f_closeShell: f_destroyDecoration throws exception self="+self, x);
 			}
-
 		}
 		
 		if (shell.f_getStatus()==f_shell.CLOSED_STATUS) {

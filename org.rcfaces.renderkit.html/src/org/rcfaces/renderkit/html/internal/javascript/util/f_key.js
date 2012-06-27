@@ -595,7 +595,7 @@ var __statics = {
 	 * @return Boolean
 	 */
 	_IsComponentEditable: function(evt) {
-		var target;
+		var target=undefined;
 		if (evt.target) {
 			target = evt.target;
 			
@@ -803,7 +803,7 @@ var __statics = {
 		
 		return false;
 	}
-}
+};
 
 new f_class("f_key", {
 	statics: __statics
