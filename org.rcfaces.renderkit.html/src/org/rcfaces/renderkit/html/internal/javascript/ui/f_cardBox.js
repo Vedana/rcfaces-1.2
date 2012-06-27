@@ -122,7 +122,7 @@ var __members={
 		if (f_core.IsDebugEnabled(f_cardBox)) {		
 			card.toString=function() {
 				return "[card id="+this._id+" value="+this._value+" selected="+this._selected+"]";
-			}
+			};
 		}
 				
 		return card;
