@@ -274,7 +274,7 @@ var __members = {
 		if (!this._waitingLoading) {
 			this._first=rowIndex;
 
-			if (this._selectable) {
+			if (this.f_isSelectable()) {
 				var oldCurrentSelection=(this._currentSelection.length);
 				this._currentSelection=new Array;
 				this._lastSelectedElement=undefined;
@@ -453,7 +453,7 @@ var __members = {
 				}
 			}
 			
-			if (this._selectable) {
+			if (this.f_isSelectable()) {
 				row.onmousedown=f_grid.RowMouseDown;
 				row.onmouseup=f_grid.RowMouseUp;
 				row.onclick=f_grid.FiltredCancelJsEventHandler;
@@ -571,7 +571,7 @@ var __members = {
 		var idx=0;
 		row.id=arguments[idx++];
 
-		if (this._selectable) {
+		if (this.f_isSelectable()) {
 			row.onmousedown=f_grid.RowMouseDown;
 			row.onmouseup=f_grid.RowMouseUp;
 			row.onclick=f_core.FiltredCancelJsEventHandler;
@@ -602,7 +602,7 @@ var __members = {
 		row.className=className;
 		row._className=className;
 				
-		if (this._selectable) {
+		if (this.f_isSelectable()) {
 			var selected=false;
 			
 			if (!this._selectionFullState && properties) {
