@@ -641,6 +641,9 @@
 		<implements id="org.rcfaces.core.internal.capability.IAsyncRenderComponent" />
 		<implements id="org.rcfaces.core.component.capability.IAdditionalInformationContainer" />
 
+		<capability id="IHeadingZoneCapability" default="false" />
+		<capability id="IHeadingLevelCapability" />
+
 		<capability id="IPropertyChangeEventCapability" />
 		<capability id="IUserEventCapability" />
 		<capability id="IErrorEventCapability" />
@@ -693,6 +696,10 @@
 	
 	<component id="box" extends="abstractBasic">
 		<implements id="org.rcfaces.core.internal.capability.IAsyncRenderComponent" />
+
+
+		<capability id="IHeadingZoneCapability" default="false" />
+		<capability id="IHeadingLevelCapability" />
 
 		<capability id="IBackgroundImageCapability" />
 		<capability id="IBorderCapability" />
@@ -2540,7 +2547,7 @@ Dans le cas d'un mode period !
 
 	<component id="calendar" extends="abstractCalendar">
 		<capability id="IBorderCapability" />
-		<capability id="ICalendarLayoutCapability" default="ICalendarLayoutCapability.DEFAULT"/>
+		<capability id="ICalendarLayoutCapability" default="ICalendarLayoutCapability.DEFAULT_LAYOUT"/>
 		<capability id="IMultipleSelectCapability" />
 		<capability id="ICalendarModeCapability" /> 
 	
@@ -2588,7 +2595,7 @@ Dans le cas d'un mode period !
 		<capability id="IImageButtonFamilly" />
 		<capability id="IValueChangeEventCapability" />
 		<capability id="IForCapability"/>
-		<capability id="ICalendarLayoutCapability" default="ICalendarLayoutCapability.DEFAULT"/>
+		<capability id="ICalendarLayoutCapability" default="ICalendarLayoutCapability.DEFAULT_LAYOUT"/>
 
 		<attribute id="forValueFormat" type="java.lang.String" />
 
@@ -2622,6 +2629,9 @@ Dans le cas d'un mode period !
 		<implements id="org.rcfaces.core.internal.capability.IAsyncRenderComponent" />
 		
 		<capability id="IExpandEventCapability" />
+
+		<capability id="IHeadingZoneCapability" default="true" />
+		<capability id="IHeadingLevelCapability" />
 
 		<capability id="IAsyncRenderModeCapability" />
 		<capability id="IFontCapability" />
@@ -2719,6 +2729,9 @@ Dans le cas d'un mode period !
 
 	<component id="fieldSet" extends="abstractOutput">
 		<implements id="org.rcfaces.core.internal.capability.IImageAccessorsCapability" />
+
+		<capability id="IHeadingZoneCapability" default="true" />
+		<capability id="IHeadingLevelCapability" />
 
 		<capability id="IFontCapability" />
 <!--		<capability id="IDisabledCapability" /> -->
@@ -3441,7 +3454,7 @@ Dans le cas d'un mode period !
 	</component>
 	
 	<component id="heading" extends="text">
-		<attribute id="level" type="int" required="true" />
+		<capability id="IHeadingLevelCapability" />
 	</component>	
 	
 	<component id="styledText" extends="text">
@@ -3453,6 +3466,9 @@ Dans le cas d'un mode period !
 		<capability id="IPreferencesSettings" />
 		<capability id="IVariableScopeCapability" />	
 		<capability id="IAsyncDecodeModeCapability" />
+
+		<capability id="IHeadingZoneCapability" default="true" />
+		<capability id="IHeadingLevelCapability" />
 
 		<propertyValue>value</propertyValue>
 
@@ -3902,6 +3918,9 @@ Dans le cas d'un mode period !
 		<implements id="org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability" importMethods="false" />
 		<implements id="org.rcfaces.core.internal.capability.ISelectionComponent" importMethods="false" />
 		<implements id="org.rcfaces.core.internal.capability.ICheckComponent" importMethods="false" />
+
+		<capability id="ICaptionCapability"/>
+		<capability id="IHeadingLevelCapability"/>
 	
 		<capability id="IDoubleClickEventCapability" />
 		<capability id="IRequiredCapability" />
@@ -4225,6 +4244,9 @@ Dans le cas d'un mode period !
 
 	<component id="itemsList" extends="abstractInput">
 		<implements id="javax.faces.component.NamingContainer" />
+
+		<capability id="IHeadingZoneCapability" default="false" />
+		<capability id="IHeadingLevelCapability" />
 
 		<capability id="IInitEventCapability" />
 		<capability id="IMouseEventCapability" />
@@ -4771,6 +4793,63 @@ Dans le cas d'un mode period !
 		<attribute id="neighbourThresholdMs" type="int" default="-1" />
 	</component>
 
+	
+	<component id="eventsCollector" extends="cameliaBase" render="false">
+	
+		<field type="String" value="org.rcfaces.EVENTS_LIST" id="EVENTS_LIST_PROPERTY_NAME" modifiers="private static final" />
+	
+		<method id="queueEvent" override="true">
+			<parameter name="event" type="javax.faces.event.FacesEvent" />
+			<code>
+		<![CDATA[
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Queue event '" + event + "'");
+        }
+
+        List<FacesEvent> events = getEventsList(null);
+
+        events.add(event);
+
+        super.queueEvent(event);
+  
+    ]]></code>
+   		</method>
+		<method id="getEventsList" returnType="java.util.List&lt;FacesEvent&gt;" modifier="public static" >
+			<parameter name="facesContext" type="javax.faces.context.FacesContext" />
+			<import>java.util.List</import>
+			<import>java.util.LinkedList</import>
+			<import>java.util.Map</import>
+			<code>
+		<![CDATA[
+
+        if (facesContext == null) {
+            facesContext = FacesContext.getCurrentInstance();
+        }
+
+        Map<String, Object> requestMap = facesContext.getExternalContext()
+                .getRequestMap();
+
+        List<FacesEvent> list = (List<FacesEvent>) requestMap
+                .get(EVENTS_LIST_PROPERTY_NAME);
+        if (list == null) {
+            list = new LinkedList<FacesEvent>();
+            requestMap.put(EVENTS_LIST_PROPERTY_NAME, list);
+        }
+
+        return list;
+
+    ]]></code>
+		</method>
+	</component>
+	
+	<component id="headingZone" extends="cameliaBase">
+
+		<capability id="IHeadingZoneCapability" default="true" />
+		<capability id="IHeadingLevelCapability" />
+	
+		<capability id="ICaptionCapability" />		
+	</component>
 <!--
 	<component id="imagesBar" extends="">
 	</component>	
