@@ -84,6 +84,8 @@ var __statics = {
 			evt = f_core.GetJsEvent(this);
 		}
 		
+		f_core.Debug(f_dataGrid, "_CheckSelect: perform event "+evt);
+		
 		if (dataGrid.f_getEventLocked(evt)) {
 			return false;
 		}
@@ -324,7 +326,7 @@ var __members = {
 	 
 		this._addRowFragment=undefined; // HtmlDocumentFragment
 		
-		this._criteriaEvaluateCallBacks= undefined; // Object
+		this._criteriaEvaluateCallBacks = undefined; // Object
 		
 		// this._labelColumnId=undefined; // String
 		// this._gridUpdadeServiceId=undefined; // String
@@ -346,6 +348,11 @@ var __members = {
 			var input=row._input;
 			if (input && row._cheked!=input.checked) {
 				input.checked=row._checked;
+				
+				var bundleKey=(row._checked)?"UNCHECK_TITLE":"CHECK_TITLE";
+				input.title = f_resourceBundle.Get(f_grid).f_formatParams(bundleKey, {
+					value: row._lineHeader
+				});
 				
 				if (f_core.IsInternetExplorer()) {
 					// Il se peut que le composant ne soit jamais affiché 
@@ -455,7 +462,7 @@ var __members = {
 		row._index=arguments[idx++];
 		row.id=this.id+"::row"+rowIdx;
 		
-		if(this._useInPopup){ // pour aria a revoir
+		if (this._useInPopup){ // pour aria a revoir
 			row.setAttribute("role", "option");
 		}
 		
@@ -463,7 +470,7 @@ var __members = {
 			row.tabIndex=-1; // Pas sous FF car le TR devient focusable
 		}
 		
-		if (this._selectable || this._checkable || this._additionalInformations) {
+		if (this.f_isSelectable() || this.f_isCheckable() || this._additionalInformations) {
 			row.onmousedown=f_grid.RowMouseDown;
 			row.onmouseup=f_grid.RowMouseUp;
 			row.onclick=f_core.CancelJsEventHandler;
@@ -487,7 +494,7 @@ var __members = {
 		
 		var cellClassName=this._cellStyleClass;
 		var selected=false;
-		if (this._selectable) {
+		if (this.f_isSelectable()) {
 			row._selected=false;			
 			
 			if (!this._selectionFullState && properties) {
@@ -502,7 +509,7 @@ var __members = {
 		}
 		
 		var checked=undefined;
-		if (this._checkable) {	
+		if (this.f_isCheckable()) {	
 			if (!this._checkFullState && properties) {
 				checked=properties._checked;
 			}
@@ -623,7 +630,7 @@ var __members = {
 						td.scope = "row";
 					}
 
-					if (this._selectable) {
+					if (this.f_isSelectable()) {
 //						td.onmouseup=f_dataGrid._ReturnFalse;
 //						td.onmousedown=f_dataGrid._ReturnFalse;
 //						td.ondblclick=f_core.CancelJsEventHandler;
@@ -635,7 +642,7 @@ var __members = {
 					
 					var ctrlContainer=td;
 					if (!countTd) {
-						if ((this._additionalInformations || this._checkable) && f_core.IsInternetExplorer()) {
+						if ((this._additionalInformations || this.f_isCheckable()) && f_core.IsInternetExplorer()) {
 							ctrlContainer=doc.createElement("div");
 							if (!cellWrap) {
 								ctrlContainer.noWrap=true;
@@ -670,7 +677,7 @@ var __members = {
 							f_core.AppendChild(ctrlContainer, button);
 						}
 						
-						if (this._checkable) {
+						if (this.f_isCheckable()) {
 							
 							var input=doc.createElement("input");
 							row._input=input;
@@ -687,28 +694,42 @@ var __members = {
 								input.value="CHECKED";
 								input.name=input.id;
 							}
-							
-							if (f_core.IsInternetExplorer()) {
-								input.onmousedown=f_dataGrid._Ie_CheckMouseDown;
-							} else {
-								input.onmousedown=f_dataGrid._CheckMouseButtons;
-							}
-							input.onmouseup=f_dataGrid._CheckMouseButtons;
+
 							input.onclick=f_dataGrid._CheckSelect;							
-							input.onfocus=f_grid.GotFocus;								
 
 							input._row=row;
 							input._dontSerialize=true;
-							input.tabIndex=-1; // -1 car sinon pas de sortie du focus du grid
+							
+							if (this._focusOnInput) {
+								
+								if (!this._inputTabIndex) {
+									input.tabIndex=this.fa_getTabIndex();
+									this._inputTabIndex=input;
+
+								} else {
+									input.tabIndex=-1;
+								}
+								
+								input.onfocus=f_grid._Link_onfocus;
+								input.onblur=f_grid._Link_onblur;							
+								
+							} else {
+								input.tabIndex=-1; // -1 car sinon pas de sortie du focus du grid
+								input.onfocus=f_grid.GotFocus;								
+								
+								if (f_core.IsInternetExplorer()) {
+									input.onmousedown=f_dataGrid._Ie_CheckMouseDown;
+								} else {
+									input.onmousedown=f_dataGrid._CheckMouseButtons;
+								}
+								input.onmouseup=f_dataGrid._CheckMouseButtons;
+							}
+							
 							input.className="f_grid_input";
 							
 							if (this.f_isDisabled()) {
 								input.disabled=true;
 							}
-							
-							input.title = f_resourceBundle.Get(f_grid).f_formatParams("CHECK_TITLE", {
-								value: row._lineHeader
-							});
 
 							f_core.AppendChild(ctrlContainer, input);
 							
@@ -717,6 +738,11 @@ var __members = {
 								input.checked=true;
 								input.defaultChecked=true;
 							}
+							
+							var bundleKey=(checked)?"UNCHECK_TITLE":"CHECK_TITLE";
+							input.title = f_resourceBundle.Get(f_grid).f_formatParams(bundleKey, {
+								value: row._lineHeader
+							});
 						}
 					}
 
@@ -1039,7 +1065,7 @@ var __members = {
 			selection=0;
 		}		
 		
-		var params;
+		var params=undefined;
 		if (params === undefined){
 			params=new Object;
 		}
@@ -1302,6 +1328,12 @@ var __members = {
 
 		this.f_hideEmptyDataMessage();
 		
+		this._oldInputTabIndex=false;
+		if (this._inputTabIndex) {
+			this._inputTabIndex=undefined;
+//			this._oldInputTabIndex=true;
+		}
+		
 		var tbody=this._tbody;
 		
 		var scrollBody=this._scrollBody;
@@ -1332,7 +1364,7 @@ var __members = {
 		if (!this._waitingLoading) {
 			this._first=rowIndex;
 
-			if (this._selectable) {
+			if (this.f_isSelectable()) {
 				var oldCurrentSelection=(this._currentSelection.length);
 				this._currentSelection=new Array;
 				this._lastSelectedElement=undefined;
@@ -1347,7 +1379,7 @@ var __members = {
 					}
 				}
 			}
-			if (this._checkable) {
+			if (this.f_isCheckable()) {
 				var oldCurrentChecks=(this._currentChecks.length);
 				this._currentChecks=new Array;
 				
@@ -1381,6 +1413,7 @@ var __members = {
 		}
 
 		var cursorRow=undefined;
+		
 		var tbody=this._tbody;
 		if (tbody && !this._partialWaiting) {
 			f_core.Assert(tbody.parentNode!=this._table, "f_dataGrid.f_updateNewPage: Tbody has not been detached !");
@@ -1399,9 +1432,19 @@ var __members = {
 				if (index===undefined) {
 					continue;
 				}
+				
 				if (this._first+j==this._waitingIndex) {
 					cursorRow=row;
 					this._waitingIndex=undefined;
+					
+					// On trouve le bon,  on desactive un eventuel prétendant !
+					var oldInputTabIndex=this._inputTabIndex;
+					if (oldInputTabIndex) {
+						oldInputTabIndex.tabIndex=-1;
+					}
+					
+					this._inputTabIndex=row._input;
+					this._inputTabIndex.tabIndex=this.fa_getTabIndex();
 					break;
 				}
 				j++;
@@ -1473,6 +1516,7 @@ var __members = {
 			this._interactiveShow=undefined;
 		}
 
+		f_core.Debug(f_dataGrid, "f_updateNewPage: cursorRow="+cursorRow);
 		if (cursorRow) {
 			this._lastSelectedElement=cursorRow;
 			var selection=this._waitingSelection;
@@ -1483,6 +1527,12 @@ var __members = {
 			}
 
 			this.f_moveCursor(cursorRow, true, null, selection);
+		
+		}
+		if (this._inputTabIndex) {			
+			f_core.Debug(f_dataGrid, "f_updateNewPage: give focus to '"+this._inputTabIndex+"'.");
+
+			f_core.SetFocus(this._inputTabIndex, true);
 		}
 
 		this.f_performPagedComponentInitialized();
@@ -1923,7 +1973,7 @@ var __members = {
 	 * @method public
 	 */
 	f_checkAllPage: function() {
-		if (!this._checkable) {
+		if (!this.f_isCheckable()) {
 			return;
 		}
 		var elts = this.fa_listVisibleElements();
@@ -1940,7 +1990,7 @@ var __members = {
 	 * @method public
 	 */
 	f_uncheckAllPage: function() {
-		if (!this._checkable) {
+		if (!this.f_isCheckable()) {
 			return;
 		}
 		var elts = this.fa_listVisibleElements();
@@ -1956,7 +2006,7 @@ var __members = {
 	 * @method public
 	 */
 	f_uncheckAll: function() {
-		if (this._checkable) {
+		if (this.f_isCheckable()) {
 			this._uncheckAllElements();
 		}
 	},
@@ -2243,8 +2293,48 @@ var __members = {
 		}
 		
 		return this.f_getColumnName(column);
-	}
+	},
 	
+	/**
+	 * @method protected
+	 */
+	fa_showElement : function(row, giveFocus) {
+		this.f_super(arguments, row);
+		
+		if (!giveFocus) {
+			return;
+		}
+		
+		f_core.Debug(f_dataGrid, "fa_showElement: show row '"+row._value+"'  inputTabIndex='"+this._inputTabIndex+"'.");
+		
+		var old=this._inputTabIndex;
+		if (old) { 
+			if (row && row._input==old) {
+				return;
+			}
+			
+			this._inputTabIndex.tabIndex=-1;
+			this._inputTabIndex=undefined;
+		}
+		
+		if (row && row._input) {
+			var input=row._input;
+			
+			input.tabIndex=this.fa_getTabIndex();
+			this._inputTabIndex=input;
+	
+			f_core.Debug(f_dataGrid, "fa_showElement: give focus to "+input);
+
+			f_core.SetFocus(input, true);
+		}
+	},
+	f_getFocusableElement : function() {
+		if (this._inputTabIndex) {
+			return this._inputTabIndex;
+		}
+		
+		return this.f_super(arguments);
+	}
 	
 };
 
