@@ -230,7 +230,7 @@ var __members={
 	f_isIgnoreEditableComponent: function() {
 		return this._ignoreEditableComponent;
 	}
-}
+};
  
 new f_class("f_accelerator", {
 	extend: f_object,
