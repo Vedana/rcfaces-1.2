@@ -102,6 +102,8 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         }
 
         if (textEntryComponent.isRequired()) {
+            htmlWriter.writeAriaRequired(true);
+
             htmlWriter.getJavaScriptEnableMode().enableOnSubmit();
         }
     }

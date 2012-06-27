@@ -69,6 +69,8 @@ public class RadioButtonRenderer extends AbstractInputRenderer implements
         if (radioButton.isRequired()) {
             htmlWriter.writeAttributeNS("required", true);
 
+            htmlWriter.writeAriaRequired(true);
+
             htmlWriter.getJavaScriptEnableMode().enableOnSubmit();
         }
 
