@@ -134,7 +134,7 @@
 	white-space: nowrap;
 }
 
-.f_tree_label_cursor {
+.f_tree_checkable .f_tree_label_cursor {
 	padding: 1px 0 1px 0;
 	border: 1px dotted black;
 }
@@ -158,5 +158,12 @@
 .f_tree_commandHasImages .f_tree_command {
 	background: none !important;
 	background-image: none !important;
+}
+
+.f_tree_caption {
+	position: absolute;
+	left: -10000px;
+	top: -10000px;
+	display: block;
 }
 

@@ -226,3 +226,9 @@
 	margin-right: 4px;
 	vertical-align: middle;
 }
+
+.f_tab_heading {
+	position: absolute;
+	left: -10000px;
+	top: -10000px;
+}
