@@ -17,224 +17,224 @@ import javax.faces.model.SelectItem;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractFilteredCollection<T> implements Collection<T>,
-		IFiltredCollection<T>, IFiltredCollection2<T> {
+        IFiltredCollection<T>, IFiltredCollection2<T> {
 
-	public static final IFiltredCollection EMPTY_FILTERED_COLLECTION = new AbstractFilteredCollection() {
+    public static final IFiltredCollection EMPTY_FILTERED_COLLECTION = new AbstractFilteredCollection() {
 
-		protected boolean accept(IFilterProperties filter, Object selectItem) {
-			return false;
-		}
-	};
+        protected boolean accept(IFilterProperties filter, Object selectItem) {
+            return false;
+        }
+    };
 
-	public static final Collection EMPTY_COLLECTION = (Collection) EMPTY_FILTERED_COLLECTION;
+    public static final Collection EMPTY_COLLECTION = (Collection) EMPTY_FILTERED_COLLECTION;
 
-	protected final Collection<T> collection;
+    protected final Collection<T> collection;
 
-	public AbstractFilteredCollection() {
-		this(Collections.<T> emptyList());
-	}
+    public AbstractFilteredCollection() {
+        this(Collections.<T> emptyList());
+    }
 
-	@SuppressWarnings("unchecked")
-	public AbstractFilteredCollection(SelectItem selecItems[]) {
-		this((Collection<T>) Arrays.asList(selecItems));
-	}
+    @SuppressWarnings("unchecked")
+    public AbstractFilteredCollection(SelectItem selecItems[]) {
+        this((Collection<T>) Arrays.asList(selecItems));
+    }
 
-	public AbstractFilteredCollection(Collection<T> collection) {
-		this.collection = collection;
-	}
+    public AbstractFilteredCollection(Collection<T> collection) {
+        this.collection = collection;
+    }
 
-	/**
-	 * 
-	 * @param filter
-	 * @param selectItem
-	 * @return <code>true</code> if the selectItem is sent to the client.
-	 */
-	protected abstract boolean accept(IFilterProperties filter, T selectItem);
+    /**
+     * 
+     * @param filter
+     * @param selectItem
+     * @return <code>true</code> if the selectItem is sent to the client.
+     */
+    protected abstract boolean accept(IFilterProperties filter, T selectItem);
 
-	public int size() {
-		return collection.size();
-	}
+    public int size() {
+        return collection.size();
+    }
 
-	public boolean add(T o) {
-		return collection.add(o);
-	}
+    public boolean add(T o) {
+        return collection.add(o);
+    }
 
-	public boolean addAll(Collection<? extends T> c) {
-		return collection.addAll(c);
-	}
+    public boolean addAll(Collection< ? extends T> c) {
+        return collection.addAll(c);
+    }
 
-	public void clear() {
-		collection.clear();
-	}
+    public void clear() {
+        collection.clear();
+    }
 
-	public boolean contains(Object o) {
-		return collection.contains(o);
-	}
+    public boolean contains(Object o) {
+        return collection.contains(o);
+    }
 
-	public boolean containsAll(Collection c) {
-		return collection.containsAll(c);
-	}
+    public boolean containsAll(Collection< ? > c) {
+        return collection.containsAll(c);
+    }
 
-	public boolean isEmpty() {
-		return collection.isEmpty();
-	}
+    public boolean isEmpty() {
+        return collection.isEmpty();
+    }
 
-	public Iterator<T> iterator() {
-		return collection.iterator();
-	}
+    public Iterator<T> iterator() {
+        return collection.iterator();
+    }
 
-	public boolean remove(Object o) {
-		return collection.remove(o);
-	}
+    public boolean remove(Object o) {
+        return collection.remove(o);
+    }
 
-	public boolean removeAll(Collection<?> c) {
-		return collection.removeAll(c);
-	}
+    public boolean removeAll(Collection< ? > c) {
+        return collection.removeAll(c);
+    }
 
-	public boolean retainAll(Collection<?> c) {
-		return collection.retainAll(c);
-	}
+    public boolean retainAll(Collection< ? > c) {
+        return collection.retainAll(c);
+    }
 
-	public Object[] toArray() {
-		return collection.toArray();
-	}
+    public Object[] toArray() {
+        return collection.toArray();
+    }
 
-	public <V> V[] toArray(V[] a) {
-		return collection.toArray(a);
-	}
+    public <V> V[] toArray(V[] a) {
+        return collection.toArray(a);
+    }
 
-	public Iterator<T> iterator(IFilterProperties filterProperties,
-			int maxNumberResult) {
-		return new FilteredIterator(filterProperties, maxNumberResult);
-	}
+    public Iterator<T> iterator(IFilterProperties filterProperties,
+            int maxNumberResult) {
+        return new FilteredIterator(filterProperties, maxNumberResult);
+    }
 
-	public Iterator<T> iterator(UIComponent component,
-			IFilterProperties filterProperties, int maxNumberResult) {
-		return new FilteredIterator(component, filterProperties,
-				maxNumberResult);
-	}
+    public Iterator<T> iterator(UIComponent component,
+            IFilterProperties filterProperties, int maxNumberResult) {
+        return new FilteredIterator(component, filterProperties,
+                maxNumberResult);
+    }
 
-	/**
-	 * 
-	 * @author Olivier Oeuillot (latest modification by $Author$)
-	 * @version $Revision$ $Date$
-	 */
-	protected class FilteredIterator implements IFiltredIterator<T> {
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    protected class FilteredIterator implements IFiltredIterator<T> {
 
-		private final IFilterProperties filterProperties;
+        private final IFilterProperties filterProperties;
 
-		private final UIComponent component;
+        private final UIComponent component;
 
-		private int maxResultNumber;
+        private int maxResultNumber;
 
-		private boolean limitTested = false;
+        private boolean limitTested = false;
 
-		private int currentIndex = 0;
+        private int currentIndex = 0;
 
-		private int size;
+        private int size;
 
-		private Iterator<T> iterator;
+        private Iterator<T> iterator;
 
-		private T currentSelectItem;
+        private T currentSelectItem;
 
-		public FilteredIterator(IFilterProperties filterProperties) {
-			this(null, filterProperties, NO_MAXIMUM_RESULT_NUMBER);
-		}
+        public FilteredIterator(IFilterProperties filterProperties) {
+            this(null, filterProperties, NO_MAXIMUM_RESULT_NUMBER);
+        }
 
-		public FilteredIterator(IFilterProperties filterProperties,
-				int maxResultNumber) {
-			this(null, filterProperties, maxResultNumber);
-		}
+        public FilteredIterator(IFilterProperties filterProperties,
+                int maxResultNumber) {
+            this(null, filterProperties, maxResultNumber);
+        }
 
-		public FilteredIterator(UIComponent component,
-				IFilterProperties filterProperties, int maxResultNumber) {
+        public FilteredIterator(UIComponent component,
+                IFilterProperties filterProperties, int maxResultNumber) {
 
-			this.component = component;
-			this.filterProperties = filterProperties;
-			this.maxResultNumber = maxResultNumber;
-			this.size = 0;
+            this.component = component;
+            this.filterProperties = filterProperties;
+            this.maxResultNumber = maxResultNumber;
+            this.size = 0;
 
-			iterator = collection.iterator();
-		}
+            iterator = collection.iterator();
+        }
 
-		public void remove() {
-			iterator.remove();
-		}
+        public void remove() {
+            iterator.remove();
+        }
 
-		public boolean hasNext() {
-			if (iterator == null) {
-				return false;
-			}
-			if (currentSelectItem != null) {
-				return true;
-			}
+        public boolean hasNext() {
+            if (iterator == null) {
+                return false;
+            }
+            if (currentSelectItem != null) {
+                return true;
+            }
 
-			if (maxResultNumber > 0 && currentIndex >= maxResultNumber) {
-				if (limitTested) {
-					return false;
-				}
+            if (maxResultNumber > 0 && currentIndex >= maxResultNumber) {
+                if (limitTested) {
+                    return false;
+                }
 
-				limitTested = true;
+                limitTested = true;
 
-				// La limite est atteinte, mais il en reste peut-etre
-				// d'autres ...
+                // La limite est atteinte, mais il en reste peut-etre
+                // d'autres ...
 
-				for (; iterator.hasNext();) {
-					T selectItem = iterator.next();
-					if (accept(filterProperties, selectItem) == false) {
-						continue;
-					}
+                for (; iterator.hasNext();) {
+                    T selectItem = iterator.next();
+                    if (accept(filterProperties, selectItem) == false) {
+                        continue;
+                    }
 
-					size++;
-					break;
-				}
+                    size++;
+                    break;
+                }
 
-				return false;
-			}
+                return false;
+            }
 
-			for (;;) {
-				if (iterator.hasNext() == false) {
-					iterator = null;
-					return false;
-				}
+            for (;;) {
+                if (iterator.hasNext() == false) {
+                    iterator = null;
+                    return false;
+                }
 
-				T selectItem = iterator.next();
-				if (accept(filterProperties, selectItem) == false) {
-					continue;
-				}
+                T selectItem = iterator.next();
+                if (accept(filterProperties, selectItem) == false) {
+                    continue;
+                }
 
-				currentSelectItem = selectItem;
-				size++;
-				return true;
-			}
-		}
+                currentSelectItem = selectItem;
+                size++;
+                return true;
+            }
+        }
 
-		public T next() {
-			if (currentSelectItem == null) {
-				throw new IllegalStateException("No more selectItems ...");
-			}
+        public T next() {
+            if (currentSelectItem == null) {
+                throw new IllegalStateException("No more selectItems ...");
+            }
 
-			T old = currentSelectItem;
-			currentSelectItem = null;
-			currentIndex++;
+            T old = currentSelectItem;
+            currentSelectItem = null;
+            currentIndex++;
 
-			return old;
-		}
+            return old;
+        }
 
-		public int getSize() {
-			return size;
-		}
+        public int getSize() {
+            return size;
+        }
 
-		public void release() {
-		}
+        public void release() {
+        }
 
-		protected UIComponent getComponent() {
-			if (component == null) {
-				throw new NullPointerException("Component is not known !");
-			}
+        protected UIComponent getComponent() {
+            if (component == null) {
+                throw new NullPointerException("Component is not known !");
+            }
 
-			return component;
-		}
-	}
+            return component;
+        }
+    }
 
 }
