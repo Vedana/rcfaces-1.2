@@ -13,8 +13,13 @@ import java.util.ListIterator;
 import java.util.NoSuchElementException;
 import java.util.Queue;
 
+/**
+ * 
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
+ */
 public class LinkedListEntry<E> extends AbstractSequentialList<E> implements
-        List<E>, Deque<E>, Cloneable, java.io.Serializable {
+        List<E>, Cloneable, java.io.Serializable {
 
     private transient Entry<E> header = createEntry(null, null, null);
 
