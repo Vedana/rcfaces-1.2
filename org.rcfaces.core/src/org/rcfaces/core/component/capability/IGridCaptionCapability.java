@@ -3,20 +3,9 @@
  */
 package org.rcfaces.core.component.capability;
 
-public interface IGridCaptionCapability {
-	/**
-     * 
-     * @return the grid caption
-     */
-    String getCaption();
+public interface IGridCaptionCapability extends ICaptionCapability {
 
     /**
-     * 
-     * @param caption Grid caption
-     */
-    void setCaption(String caption);
-	
-	/**
      * 
      * @return the grid summary
      */
@@ -24,7 +13,8 @@ public interface IGridCaptionCapability {
 
     /**
      * 
-     * @param caption Grid summary
+     * @param caption
+     *            Grid summary
      */
     void setSummary(String summary);
 }
