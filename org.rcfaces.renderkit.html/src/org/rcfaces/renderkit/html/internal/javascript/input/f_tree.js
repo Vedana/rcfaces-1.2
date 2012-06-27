@@ -5,7 +5,7 @@
 /**
  * f_tree
  *
- * @class f_tree extends f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager<String[]>, fa_checkManager, fa_itemClientDatas, fa_scrollPositions, fa_overStyleClass, fa_filterProperties, fa_droppable, fa_draggable, fa_autoScroll, fa_autoOpen
+ * @class f_tree extends f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager<String[]>, fa_checkManager, fa_itemClientDatas, fa_scrollPositions, fa_overStyleClass, fa_filterProperties, fa_droppable, fa_draggable, fa_autoScroll, fa_autoOpen, fa_tabIndex
  * @author olivier Oeuillot
  * @version $REVISION: $
  */
@@ -347,9 +347,13 @@ var __statics = {
 	 * @context object:tree
 	 */
 	_Link_onfocus: function(evt) {
-		f_core.Debug(f_tree, "_Link_onfocus: on focus ");
-
 		var tree=this._tree;
+		if (!tree && this._node) {
+			tree=this._node._tree;
+		}
+
+		f_core.Debug(f_tree, "_Link_onfocus: on focus ");
+		
 		if (!evt) {
 			evt=f_core.GetJsEvent(this);
 		}		
@@ -364,7 +368,7 @@ var __statics = {
 		
 		tree._focus=true;
 		
-		if (tree._selectable) {
+		if (tree.f_isSelectable()) {
 			if (!tree._cursor) {
 				var currentSelection=tree._currentSelection;
 				if (currentSelection.length) {
@@ -395,7 +399,7 @@ var __statics = {
 		
 		if (tree._cursor) {
 			if (!tree._lastFocusDesactivate || new Date().getTime()-tree._lastFocusDesactivate>300) {
-				tree.fa_showElement(tree._cursor);
+				tree.fa_showElement(tree._cursor, true);
 			}
 		}
 
@@ -411,6 +415,9 @@ var __statics = {
 	 */
 	_Link_onblur: function(evt) {
 		var tree=this._tree;
+		if (!tree && this._node) {
+			tree=this._node._tree;
+		}
 		
 		if (!evt) {
 			evt=f_core.GetJsEvent(this);
@@ -427,7 +434,7 @@ var __statics = {
 		
 		tree._focus=undefined;
 	
-		if (tree._selectable) {
+		if (tree.f_isSelectable()) {
 			tree._updateSelectedNodes();
 		}
 
@@ -584,61 +591,68 @@ var __members = {
 				this._body=container;
 			}
 		}
-			
-		var focus=this.ownerDocument.getElementById(this.id+"::focus");
-		this._cfocus=focus;
-
-		focus.onfocus=f_tree._Link_onfocus;
-		focus.onblur=f_tree._Link_onblur;
-		focus.onkeydown=f_tree._Link_onkeydown;
-		focus.onkeypress=f_tree._Link_onkeypress;
-		focus.onkeyup=f_tree._Link_onkeyup;
-		focus.href=f_core.CreateJavaScriptVoid0();
-		focus._tree=this;
 
 		// Gestion du focus lors du click dans le TREE !
 		this.onfocus=f_tree._Link_bodyOnfocus;
 		this.onblur=f_tree._Link_onblur;
 		this._tree=this;
 
-		this.tabIndex=-1;
+		// =2 la marque contient le focus   =1 c'est le label qui devient un lien   =0 ancienne méthode
+		this._treeNodeFocusEnabled=(this.f_isCheckable())?2:1;
 
-		// f_core.InsertBefore(this, focus, this.firstChild);
 		
-		if (f_core.IsInternetExplorer()) {
-			this.hideFocus=true;
+		if (this._treeNodeFocusEnabled) {
+			this.onkeydown=f_tree._Link_onkeydown;
+			this.onkeypress=f_tree._Link_onkeypress;
+			this.onkeyup=f_tree._Link_onkeyup;
 			
-			var self=this;
-			
-			focus.onbeforeactivate=function() {
+		} else {
+			var focus=this.ownerDocument.getElementById(this.id+"::focus");
+			this._cfocus=focus;
 
-				var evt = f_core.GetJsEvent(this);
+			focus.onfocus=f_tree._Link_onfocus;
+			focus.onblur=f_tree._Link_onblur;
+			focus.onkeydown=f_tree._Link_onkeydown;
+			focus.onkeypress=f_tree._Link_onkeypress;
+			focus.onkeyup=f_tree._Link_onkeyup;
+			focus.href=f_core.CreateJavaScriptVoid0();
+			focus._tree=this;
+
+			if (f_core.IsInternetExplorer()) {
+				this.hideFocus=true;
 				
-				evt.cancelBubble=true;
-			};
-
-			focus.onbeforedeactivate=function() {
-
-				self._lastFocusDesactivate=new Date().getTime();
-
-				var evt = f_core.GetJsEvent(this);
+				var self=this;
 				
-				var toElement=evt.toElement;
-				if (toElement==self || !toElement) {
-					// Necessaire pour la scrollBar !
-					return true;
-				}
-			
-				for(;toElement.parentNode;toElement=toElement.parentNode) {
-					if (toElement!=self) {
-						continue;
+				focus.onbeforeactivate=function() {
+	
+					var evt = f_core.GetJsEvent(this);
+					
+					evt.cancelBubble=true;
+				};
+	
+				focus.onbeforedeactivate=function() {
+	
+					self._lastFocusDesactivate=new Date().getTime();
+	
+					var evt = f_core.GetJsEvent(this);
+					
+					var toElement=evt.toElement;
+					if (toElement==self || !toElement) {
+						// Necessaire pour la scrollBar !
+						return true;
+					}
+				
+					for(;toElement.parentNode;toElement=toElement.parentNode) {
+						if (toElement!=self) {
+							continue;
+						}
+						
+						return f_core.CancelJsEvent(evt);
 					}
 					
-					return f_core.CancelJsEvent(evt);
-				}
-				
-				return true;
-			};
+					return true;
+				};
+			}
 		}
 		
 		this.onmousedown=f_tree._BodyMouseDown;
@@ -666,7 +680,10 @@ var __members = {
 		
 		this._cursor=undefined; // HtmlLIElement
 		this._breadCrumbsCursor=undefined; // HtmlLIElement
-		
+
+		// this._treeNodeFocusEnabled=undefined; // Boolean
+		this._treeNodeFocus=undefined; // HtmlElement
+
 //		this._lastKeyDate=undefined; // number
 //		this._lastKey=undefined; // char
 
@@ -834,6 +851,8 @@ var __members = {
 
 			input._node=undefined;
 			input.onclick=null;
+			input.onfocus=null;
+			input.onblur=null;
 			// input.tabIndex=undefined; // string
 			
 			f_core.VerifyProperties(input);			
@@ -864,9 +883,12 @@ var __members = {
 			li._label=undefined;
 
 			label._node=undefined;
+			label.onfocus=null;
+			label.onblur=null;
 
 			f_core.VerifyProperties(label);			
 		}
+		li._focusComponent=undefined;
 
 		f_core.VerifyProperties(li);
 	},
@@ -1010,6 +1032,7 @@ var __members = {
 			li._depth=depth;
 			li._tree=this;
 			li._className="f_tree_parent";
+			li.setAttribute("role", "presentation");
 			li.className=li._className;
 			
 			this._nodesList.push(li);
@@ -1023,7 +1046,6 @@ var __members = {
 				id: this.id+"::node"+nodeIdx,
 				className: "f_tree_depth"+depth,
 				_node: li,
-				role: "treeitem",
 				onmouseover: f_tree._DivNode_mouseOver,
 				onmouseout: f_tree._DivNode_mouseOut,
 				onmousedown: f_tree._DivNode_mouseDown,
@@ -1031,15 +1053,17 @@ var __members = {
 				onclick: f_core.CancelJsEventHandler,
 				ondblclick: f_tree._DivNode_dblClick
 			});
-
-			li._divNode=divNode;
-			fa_aria.SetElementAriaLabelledBy(divNode,this.id+"::node"+nodeIdx+"::label");
-			var dTmp = depth +1;
 			
-			var pos = i+1;
-			fa_aria.SetElementAriaSetsize(divNode, nodes.length);
-			fa_aria.SetElementAriaPosinset(divNode, pos);
-			fa_aria.SetElementAriaLevel(divNode, dTmp);
+			if (this._treeNodeFocusEnabled==0) {
+				divNode.setAttribute("role", "treeitem");
+			} else {
+				divNode.setAttribute("role", "presentation");				
+			}
+
+			
+			li._divNode=divNode;
+			
+			var focusComponent=divNode;
 			
 			var d=depth;
 			if (this._userExpandable) {
@@ -1066,16 +1090,15 @@ var __members = {
 			
 			divNode.style.paddingLeft=(d*f_tree._COMMAND_IMAGE_WIDTH)+"px";
 			
-			if (this._checkable) {
+			if (this.f_isCheckable()) {
 				var input=doc.createElement("input");
 				li._input=input;
 				input._node=li;
-				input.className="f_tree_check";
-				input.tabIndex=-1;
+
+				input.id=this.id+"::input"+nodeIdx;
+				input.className="f_tree_check";				
 				input.onclick=f_tree._NodeInput_mouseClick;
 		
-				input.id=this.id+"::input"+nodeIdx;
-	
 				if (this._checkCardinality==fa_cardinality.ONE_CARDINALITY) {
 					input.type="radio";
 					input.value="CHECKED_"+nodeIdx;
@@ -1086,12 +1109,29 @@ var __members = {
 					input.value="CHECKED";
 					input.name=input.id;
 				}
+				
+				
+				if (this._treeNodeFocusEnabled==2) {
+					input.onfocus=f_tree._Link_onfocus;
+					input.onblur=f_tree._Link_onblur;
+					input.tabIndex=-1;
+					input.setAttribute("role", "treeitem");
+
+
+					if (!this._treeNodeFocus) {
+						this._treeNodeFocus=input;
+						input.tabIndex=this.fa_getTabIndex();
+					}
+				}
+				
+				focusComponent=input;
 
 				f_core.AppendChild(divNode, input);
 			}
 
 			var span=f_core.CreateElement(divNode, "div", {
 				_node: li,
+				role: "presentation",
 				onmouseover: f_tree._NodeLabel_mouseOver,
 				onmouseout: f_tree._NodeLabel_mouseOut				
 			});
@@ -1105,17 +1145,42 @@ var __members = {
 				});
 			}
 			
-			li._label=f_core.CreateElement(span, "label", {
+			var linkType=(this._treeNodeFocusEnabled==1)?"a":"label";
+			var label=f_core.CreateElement(span, linkType, {
 				className: "f_tree_label",
 				id: this.id+"::node"+nodeIdx+"::label",
 				textNode: (node._label)?node._label:null,
-				_node: li				
-			});	
+				tabIndex: -1,
+				href: f_core.CreateJavaScriptVoid0(),
+				_node: li
+			});
+			li._label=label;
 			
-			if (this._selectable) {
+			if (this._treeNodeFocusEnabled==1) {				
+				label.onfocus=f_tree._Link_onfocus;
+				label.onblur=f_tree._Link_onblur;
+				label.setAttribute("role", "treeitem");
+
+				focusComponent=label;
+				
+				if (!this._treeNodeFocus) {
+					this._treeNodeFocus=label;
+					label.tabIndex=this.fa_getTabIndex();
+				}
+				
+			} else {
+				fa_aria.SetElementAriaLabelledBy(focusComponent, label.id);
+			}	
+
+			li._focusComponent=focusComponent;
+			fa_aria.SetElementAriaSetsize(focusComponent, nodes.length);
+			fa_aria.SetElementAriaPosinset(focusComponent, i+1);
+//			fa_aria.SetElementAriaLevel(focusComponent, depth +1); // Pas nécessaire
+	
+			if (this.f_isSelectable()) {
 				this.f_updateElementSelection(li, li._node._selected);
 			}
-			if (this._checkable) {	
+			if (this.f_isCheckable()) {	
 				this.fa_updateElementCheck(li, li._node._checked);
 			}
 				
@@ -1131,7 +1196,7 @@ var __members = {
 				// On peut etre un container sans posseder (encore) d'enfants.
 				
 				var ul=doc.createElement("ul");
-				ul.setAttribute("role", "treegroup");
+				ul.setAttribute("role", "group");
 				ul.style.display="none";
 				ul.className="f_tree_parent";
 
@@ -1166,8 +1231,9 @@ var __members = {
 		if (!domFragment) {
 			container.appendChild(fragment);
 		}
+		
 		if (this._cursor) {
- 			this.fa_showElement(this._cursor); 
+ 			this.fa_showElement(this._cursor, true); 
 		}
 	},
 	/**
@@ -1541,6 +1607,7 @@ var __members = {
 				
 		var li=doc.createElement("li");
 		li.className="f_tree_parent";
+		li.setAttribute("role", "presentation");
 		f_core.AppendChild(fragment, li);
 
 		
@@ -1548,6 +1615,7 @@ var __members = {
 		f_core.AppendChild(li, divNode);
 		divNode.className="f_tree_depth"+(parentDepth+1)+" f_tree_waiting";
 		divNode.style.paddingLeft=(parentDepth*f_tree._COMMAND_IMAGE_WIDTH)+"px";
+		divNode.setAttribute("role", "presentation");
 		
 		var command=doc.createElement("img");
 		f_core.AppendChild(divNode, command);
@@ -1600,8 +1668,31 @@ var __members = {
 		
 		return true;
 	},
-	fa_showElement: function(item) {
+	fa_showElement: function(item, giveFocus) {
 		f_core.Assert(item && item.tagName, "f_tree.fa_showElement: Item parameter must be a LI tag ! ("+item+")");
+		
+		
+		if (giveFocus && this._treeNodeFocusEnabled) {
+			
+			var cfocus=this._treeNodeFocus;
+			if (cfocus) {				
+				if (cfocus==item._focusComponent) {
+					return;
+				}
+					
+				cfocus.tabIndex=-1;
+			}
+			
+			cfocus=item._focusComponent;
+			this._treeNodeFocus=cfocus;
+			cfocus.tabIndex=this.fa_getTabIndex();
+	
+			f_core.Debug(f_tree, "fa_showElement: give focus to "+cfocus);
+
+			f_core.SetFocus(cfocus, true);
+				
+			return;
+		}
 		
 		if (item.offsetTop-this.scrollTop<0) {
 			this.scrollTop=item.offsetTop;
@@ -1647,8 +1738,12 @@ var __members = {
 		var suffixDivNode="";
 		var cursor=this._cursor;
 	
-		if (!cursor && this._cfocus) {
-			this._cfocus.removeAttribute("aria-activedescendant");
+		if (this._cfocus && !cursor) {
+			fa_aria.SetElementAriaActiveDescendant(this._cfocus, null);
+		}
+		
+		if (this._treeNodeFocusEnabled && !node._selected) {
+			fa_aria.SetElementAriaSelected(li._focusComponent, undefined);
 		}
 	
 		if (node._disabled) {
@@ -1659,17 +1754,18 @@ var __members = {
 			suffixLabel+="_disabled";
 			suffixDivNode+="_disabled";
 			
-			if(li==cursor){
+			if (this._cfocus && li==cursor){
 				fa_aria.SetElementAriaActiveDescendant(this._cfocus, li._divNode.id);
 			}
-		
+			
 		} else {
 			if (node._opened) {
 				suffixDivNode+="_opened";
-				fa_aria.SetElementAriaExpanded(li._divNode, true);
+				
+				fa_aria.SetElementAriaExpanded(li._focusComponent, true);
 				
 			} else if (node._container && !node._opened) {
-				fa_aria.SetElementAriaExpanded(li._divNode, false);
+				fa_aria.SetElementAriaExpanded(li._focusComponent, false);
 				
 			} else if (!node._container) {
 				suffixDivNode+="_leaf";
@@ -1687,12 +1783,22 @@ var __members = {
 				
 				if (this._focus) {
 					suffixLabel+="_focus";
-					fa_aria.SetElementAriaActiveDescendant(this._cfocus, li._divNode.id);
+					
+					if (this._cfocus) {
+						fa_aria.SetElementAriaActiveDescendant(this._cfocus, li._divNode.id);
+					}
 				}
-			
+				
+				if (this._treeNodeFocusEnabled) {
+					fa_aria.SetElementAriaSelected(li._focusComponent, true);
+				}
+		
 			} else if (this._focus && li==cursor) {
 				suffixLabel+="_focus";
-				fa_aria.SetElementAriaActiveDescendant(this._cfocus, li._divNode.id);
+				
+				if (this._cfocus) {
+					fa_aria.SetElementAriaActiveDescendant(this._cfocus, li._divNode.id);
+				}
 			}
 			
 			if (li._labelOver) {
@@ -2183,7 +2289,7 @@ var __members = {
 			}
 		}
 
-		if (this._selectable && !this._selectionFullState) {
+		if (this.f_isSelectable() && !this._selectionFullState) {
 			if (args[atts++]) {
 				node._selected=true;
 			}
@@ -2193,7 +2299,7 @@ var __members = {
 			}
 		}
 
-		if (this._checkable && !this._checkFullState) {
+		if (this.f_isCheckable() && !this._checkFullState) {
 			node._checked=!!args[atts++];
 			
 			if (atts>=args.length) {
@@ -2431,7 +2537,13 @@ var __members = {
 			break;
 
 		case f_key.VK_SPACE:
-			if (this._checkable) {
+			if (this.f_isCheckable()) {
+				 if (evt && evt.target && evt.target.tagName.toLowerCase()=="input") {
+					 // L'input gere de lui-meme le click ! donc on fait pas le job 2x
+					 cancel = true;
+					 break;
+				 }
+
 				this.fa_performElementCheck(this._cursor, true, evt);
 				cancel=true;
 				break;
@@ -2442,7 +2554,7 @@ var __members = {
 		case f_key.VK_RETURN:
 		case f_key.VK_ENTER:
 						
-			if (this._cursor && this._selectable) {
+			if (this._cursor && this.f_isSelectable()) {
 				this.f_performElementSelection(this._cursor, true, evt, selection);
 			}
 			cancel=true;
@@ -3954,7 +4066,7 @@ var __members = {
 				// On ne prend pas l'element même !		
 				//nodeElement=element;	 	
 				continue;
-					}
+			}
 					
 			node=li;
 			break;
@@ -4089,7 +4201,7 @@ var __members = {
 
 new f_class("f_tree", {
 	extend: f_component,
-	aspects: [ fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager, fa_checkManager, fa_itemClientDatas, fa_scrollPositions, fa_overStyleClass, fa_filterProperties, fa_droppable, fa_draggable, fa_autoScroll, fa_autoOpen ],
+	aspects: [ fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager, fa_checkManager, fa_itemClientDatas, fa_scrollPositions, fa_overStyleClass, fa_filterProperties, fa_droppable, fa_draggable, fa_autoScroll, fa_autoOpen, fa_tabIndex ],
 	members: __members,
 	statics: __statics
 });

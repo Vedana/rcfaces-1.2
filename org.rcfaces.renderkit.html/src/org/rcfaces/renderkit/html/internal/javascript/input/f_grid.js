@@ -7,7 +7,7 @@
  * @class public abstract f_grid extends f_component, fa_disabled, fa_immediate,
  *        fa_pagedComponent, fa_subMenu, fa_commands, fa_selectionManager<String[]>,
  *        fa_scrollPositions, fa_additionalInformationManager, fa_droppable,
- *        fa_draggable, fa_autoScroll, fa_aria
+ *        fa_draggable, fa_autoScroll, fa_aria, fa_tabIndex
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -529,7 +529,7 @@ var __statics = {
 		var menuId = f_grid._BODY_MENU_ID;
 
 		// S'il y a une seule selection, on bascule en popup de ligne !
-		if (this._selectable && dataGrid._currentSelection.length) {
+		if (this.f_isSelectable() && dataGrid._currentSelection.length) {
 			menuId = f_grid._ROW_MENU_ID;
 		}
 
@@ -579,7 +579,7 @@ var __statics = {
 		var menuId = f_grid._BODY_MENU_ID;
 
 		// S'il y a une seule selection, on bascule en popup de ligne !
-		if (this._selectable && dataGrid._currentSelection.length) {
+		if (this.f_isSelectable() && dataGrid._currentSelection.length) {
 			menuId = f_grid._ROW_MENU_ID;
 		}
 
@@ -633,20 +633,38 @@ var __statics = {
 		f_core.Assert(element && element.tagName.toLowerCase() == "table",
 				"f_grid.ListRows: Invalid table parameter (" + element + ")");
 
+		var copy=0;
 		var rows = null;
 		var child = element.firstChild;
-		for (; child; child = child.nextSibling) {
+		nextChild: for (; child; child = child.nextSibling) {
 			switch (child.tagName.toLowerCase()) {
 			case "thead":
 			case "tbody":
 				if (child.firstChild) {
-					return child.rows;
+					if (copy==0) {
+						var rs=child.rows;
+						if (rs) {
+							copy=1;
+							rows=rs;
+						}
+					} else {
+						if (copy==1) {
+							rows=f_core.PushArguments(null, rows);
+							copy=2;
+						}
+						f_core.PushArguments(rows, child.rows);
+					}
 				}
 				break;
 
 			case "tr":
 				if (!rows) {
 					rows = new Array;
+					copy=2;
+
+				} else if (copy==1) {
+					rows=f_core.PushArguments(null, rows);
+					copy=2;
 				}
 
 				rows.push(child);
@@ -667,6 +685,9 @@ var __statics = {
 	 */
 	_Link_onfocus : function(evt) {
 		var dataGrid = this._dataGrid;
+		if (!dataGrid) {
+			dataGrid=this.parentNode._dataGrid;
+		}
 		try {
 			if (dataGrid._ignoreFocus) {
 				return false;
@@ -693,7 +714,7 @@ var __statics = {
 
 			dataGrid._focus = true;
 
-			if (dataGrid._selectable) {
+			if (dataGrid.f_isSelectable()) {
 				if (!dataGrid._cursor) {
 					var currentSelection = dataGrid._currentSelection;
 					if (currentSelection.length) {
@@ -726,7 +747,7 @@ var __statics = {
 			if (cursor) {
 				dataGrid.fa_updateElementStyle(cursor);
 
-				dataGrid.fa_showElement(cursor);
+				dataGrid.fa_showElement(cursor, true);
 			}
 
 			dataGrid.f_fireEvent(f_event.FOCUS, evt);
@@ -746,6 +767,9 @@ var __statics = {
 	 */
 	_Link_onblur : function(evt) {
 		var dataGrid = this._dataGrid;
+		if (!dataGrid) {
+			dataGrid=this.parentNode._dataGrid;
+		}
 
 		try {
 			if (dataGrid._ignoreFocus) {
@@ -2073,7 +2097,7 @@ var __members = {
 	 */
 	_additionnalCloseImageURL : undefined,
 
-	f_grid : function() {
+	f_grid: function() {
 		this.f_super(arguments);
 
 		this._rowsPool = new Array;
@@ -2170,9 +2194,20 @@ var __members = {
 			f_core.AppendChild(sortIndicator, img);
 		}
 
-		var tabIndex = f_core.GetNumberAttributeNS(this, "tabindex", 0);
+		this._focusOnInput=(!!this.f_isCheckable());
+		
 		var focus;
-		if (f_core.IsGecko()) {
+		
+		if (this._focusOnInput) {
+			var scrollBody=this._scrollBody;
+			
+			// Le focus est positionné dans les INPUTs !
+			scrollBody.onkeydown = f_grid._Link_onkeydown;
+			scrollBody.onkeypress = f_grid._Link_onkeypress;
+			scrollBody.onkeyup = f_grid._Link_onkeyup;
+			scrollBody.tabIndex=-1; // Explicite ... y a des bugs chez firefox !
+			 
+		} else if (f_core.IsGecko()) {
 			focus = this.ownerDocument.getElementById(this.id
 					+ f_grid._DATA_BODY_SCROLL_ID_SUFFIX);
 
@@ -2183,13 +2218,13 @@ var __members = {
 				focus.onkeypress = f_grid._Link_onkeypress;
 				focus.onkeyup = f_grid._Link_onkeyup;
 				focus._dataGrid = this;
-				focus.tabIndex = tabIndex;
+				focus.tabIndex = this.fa_getTabIndex();
 				this._cfocus = focus;
 
 			} else {
 				this.onfocus = f_grid._Link_onfocus;
 				this.onblur = f_grid._Link_onblur;
-				this.tabIndex = tabIndex;
+				this.tabIndex = this.fa_getTabIndex();
 				this._cfocus = this;
 				this._dataGrid = this;
 			}
@@ -2207,7 +2242,7 @@ var __members = {
 			focus.onkeyup = f_grid._Link_onkeyup;
 			focus.href = f_core.AllocateJavaScriptVoid0();
 			focus._dataGrid = this;
-			focus.tabIndex = tabIndex;
+			focus.tabIndex = this.fa_getTabIndex();
 
 			// this.tabIndex=-1;
 
@@ -2308,7 +2343,10 @@ var __members = {
 
 		this._dragAndDropEngine = undefined;
 		this._targetDragAndDropEngine = undefined;
-
+		
+		this._inputTabIndex = undefined; // HTMLInputELement
+		// this._tabIndex=undefined; // Number
+		
 		// this._additionnalOpenImageURL=undefined; // String
 		// this._additionnalCloseImageURL=undefined; // String
 
@@ -2437,6 +2475,9 @@ var __members = {
 			scrollBody.onclick = null;
 			scrollBody.onbeforeactivate = null;
 			scrollBody.onmousewheel = null;
+			scrollBody.onkeydown = null;
+			scrollBody.onkeypress = null;
+			scrollBody.onkeyup = null;
 
 			scrollBody._dataGrid = undefined; // f_dataGrid
 
@@ -3211,7 +3252,7 @@ var __members = {
 				}
 			}
 
-		} else if (this._selectable) {
+		} else if (this.f_isSelectable()) {
 			suffix = "_normal";
 		}
 
@@ -3484,7 +3525,7 @@ var __members = {
 			return true;
 		}
 
-		if (this._selectable) {
+		if (this.f_isSelectable()) {
 			// return false; ??? Je ne sais pas si ca sert encore !
 		}
 
@@ -3889,6 +3930,7 @@ var __members = {
 				input.onclick = null;
 				input.ondblclick = null;
 				input.onfocus = null;
+				input.onblur = null;
 
 				f_core.VerifyProperties(input);
 			}
@@ -4027,7 +4069,13 @@ var __members = {
 			break;
 
 		case f_key.VK_SPACE:
-			if (this._checkable) {
+			if (this.f_isCheckable()) {
+				 if (evt && evt.target && evt.target.tagName.toLowerCase()=="input") {
+					 // L'input gere de lui-meme le click ! donc on fait pas le job 2x
+					 cancel = true;
+					 break;
+				 }
+				
 				var cursor = this._cursor;
 				if (cursor) {
 					this.fa_performElementCheck(cursor, true, evt, !this
@@ -4041,7 +4089,7 @@ var __members = {
 
 		case f_key.VK_RETURN:
 		case f_key.VK_ENTER:
-			if (this._cursor && this._selectable) {
+			if (this._cursor && this.f_isSelectable()) {
 				this.f_performElementSelection(this._cursor, true, evt,
 						selection);
 			}
@@ -4129,7 +4177,7 @@ var __members = {
 	_updateCurrentSelection : function() {
 		var cursorRow = this._cursor;
 
-		if (this._selectable) {
+		if (this.f_isSelectable()) {
 			var currentSelection = this._currentSelection;
 			for ( var i = 0; i < currentSelection.length; i++) {
 				var r = currentSelection[i];
@@ -4149,7 +4197,7 @@ var __members = {
 	 * @method protected
 	 * @return void
 	 */
-	f_forceFocus : function() {
+	f_forceFocus: function() {
 		f_core.Debug(f_grid, "f_forceFocus: force focus=" + this._focus);
 
 		if (this._focus || this._ignoreFocus) {
@@ -4158,10 +4206,14 @@ var __members = {
 
 		var cursor = this._cursor;
 		if (cursor) {
-			this.fa_showElement(cursor);
+			this.fa_showElement(cursor, true);
 		}
 
 		var cfocus = this._cfocus;
+		if (!cfocus && this._inputTabIndex) {
+			cfocus=this._inputTabIndex;
+		}
+		
 		if (cfocus) {
 			if (f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_6)) {
 				// pour *vraiment* donner les focus sous IE
@@ -4188,7 +4240,7 @@ var __members = {
 			return;
 		}
 
-		var cfocus = this._cfocus;
+		var cfocus = this.f_getFocusableElement();
 		if (cfocus && typeof (cfocus.focus) == "function") {
 			cfocus.focus();
 			return true;
@@ -4230,7 +4282,6 @@ var __members = {
 		if (tr) {
 			// Si le CONTROL est appuyé on ne bouge que le curseur !
 			this.f_moveCursor(tr, true, evt, selection);
-
 			return;
 		}
 
@@ -5360,7 +5411,7 @@ var __members = {
 		row._selected = selected;
 	},
 
-	fa_showElement : function(row) {
+	fa_showElement : function(row, giveFocus) {
 		f_core.Assert(row && row.tagName.toLowerCase() == "tr",
 				"f_grid.fa_showElement: Invalid element parameter ! (" + row
 						+ ")");
@@ -5879,7 +5930,7 @@ var __members = {
 
 				total += w;
 
-				f_core.Debug(f_grid, "Total=" + total + " w=" + w);
+//				f_core.Debug(f_grid, "Total=" + total + " w=" + w);
 			}
 		}
 
@@ -7081,7 +7132,7 @@ var __members = {
 	 * @return void
 	 */
 	f_selectAllPage : function() {
-		if (!this._selectable) {
+		if (!this.f_isSelectable()) {
 			return;
 		}
 		var first = this.f_getFirst();
@@ -7112,7 +7163,7 @@ var __members = {
 	 * @return void
 	 */
 	f_unselectAll : function() {
-		if (this._selectable) {
+		if (this.f_isSelectable()) {
 			this.f_setSelection([]);
 		}
 	},
@@ -7370,7 +7421,7 @@ new f_class("f_grid", {
 	aspects : [ fa_disabled, fa_pagedComponent, fa_subMenu, fa_commands,
 			fa_selectionManager, fa_scrollPositions, fa_immediate,
 			fa_additionalInformationManager, fa_droppable, fa_draggable,
-			fa_autoScroll, fa_autoOpen, fa_aria, fa_toolTipContainer ],
+			fa_autoScroll, fa_autoOpen, fa_aria, fa_toolTipContainer, fa_tabIndex ],
 	statics : __statics,
 	members : __members
 });
