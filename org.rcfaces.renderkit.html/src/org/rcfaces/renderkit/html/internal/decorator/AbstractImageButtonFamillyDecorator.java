@@ -666,6 +666,10 @@ public abstract class AbstractImageButtonFamillyDecorator extends
         return "SELECTED";
     }
 
+    protected boolean hasLabel() {
+        return true;
+    }
+
     protected void writeImage() throws WriterException {
 
         if (imageSrc == null) {
@@ -678,7 +682,9 @@ public abstract class AbstractImageButtonFamillyDecorator extends
         if (disabled) {
             writer.writeAriaDisabled(disabled);
         }
-        writer.writeAriaLabelledBy(getTextId(writer, htmlBorderWriter));
+        if (text != null) {
+            writer.writeAriaLabelledBy(getTextId(writer, htmlBorderWriter));
+        }
 
         if (IHtmlWriter.INPUT.equals(inputElement)) {
             writeInputAttributes(writer, true);
