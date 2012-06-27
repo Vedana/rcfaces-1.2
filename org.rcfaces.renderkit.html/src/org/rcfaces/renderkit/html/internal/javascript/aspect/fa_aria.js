@@ -72,6 +72,10 @@ var __statics = {
 		 */
 		SetElementAriaExpanded: function(element, expanded) {
 			f_core.Assert(element && element.nodeType == f_core.ELEMENT_NODE, "fa_aria.SetElementAriaExpanded: invalid element parameter ("+element+")." );
+			if (expanded===undefined) {
+				element.removeAttribute(fa_aria.ARIA_EXPANDED);
+				return;
+			}
 			element.setAttribute(fa_aria.ARIA_EXPANDED, expanded);
 		},
 		
@@ -83,6 +87,11 @@ var __statics = {
 		 */
 		SetElementAriaSelected: function(element, selected) {
 			f_core.Assert(element && element.nodeType == f_core.ELEMENT_NODE, "fa_aria.SetElementAriaSelected: invalid element parameter ("+element+")." );
+			
+			if (selected===undefined) {
+				element.removeAttribute(fa_aria.ARIA_SELECTED);
+				return;
+			}
 			element.setAttribute(fa_aria.ARIA_SELECTED, selected);
 		},
 		
@@ -94,6 +103,11 @@ var __statics = {
 		 */
 		SetElementAriaActiveDescendant: function(element, activeId) {
 			f_core.Assert(element && element.nodeType == f_core.ELEMENT_NODE, "fa_aria.SetElementAriaActiveDescendant: invalid element parameter ("+element+")." );
+			
+			if (activeId===null) {
+				element.removeAttribute(fa_aria.ARIA_ACTIVEDESCENDANT);
+				return;
+			}
 			element.setAttribute(fa_aria.ARIA_ACTIVEDESCENDANT, activeId);
 		},
 		
