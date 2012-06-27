@@ -110,6 +110,8 @@ public interface IHtmlWriter extends ISgmlWriter, IHtmlComponentWriter,
 
     IHtmlWriter writeAutoComplete(String mode) throws WriterException;
 
+    IHtmlWriter writeAriaRequired(boolean required) throws WriterException;
+
     IHtmlWriter writeAriaDisabled(boolean disabled) throws WriterException;
 
     IHtmlWriter writeAriaSelected(boolean selected) throws WriterException;
