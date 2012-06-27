@@ -768,10 +768,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * @return number format
 	 */
 	public String getNumberFormat(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.NUMBER_FORMAT, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.NUMBER_FORMAT, facesContext);
 	}
 
 	/**
@@ -807,10 +804,7 @@ return s;
 	 * @return step
 	 */
 	public String getIntegerStep(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.INTEGER_STEP, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.INTEGER_STEP, facesContext);
 	}
 
 	/**
@@ -844,10 +838,7 @@ return s;
 	 * Experimental Do not use.
 	 */
 	public String getFractionStep(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.FRACTION_STEP, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.FRACTION_STEP, facesContext);
 	}
 
 	/**

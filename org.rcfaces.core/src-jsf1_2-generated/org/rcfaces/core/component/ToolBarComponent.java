@@ -148,10 +148,7 @@ public class ToolBarComponent extends AbstractBasicComponent implements
 	}
 
 	public String getSeparatorImageURL(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.SEPARATOR_IMAGE_URL, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.SEPARATOR_IMAGE_URL, facesContext);
 	}
 
 	public void setSeparatorImageURL(String separatorImageURL) {
@@ -211,10 +208,7 @@ return s;
 	}
 
 	public String getSeparatorAlternateText(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.SEPARATOR_ALTERNATE_TEXT, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.SEPARATOR_ALTERNATE_TEXT, facesContext);
 	}
 
 	public void setSeparatorAlternateText(String separatorAlternateText) {
@@ -234,10 +228,7 @@ return s;
 	}
 
 	public String getControlImageURL(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.CONTROL_IMAGE_URL, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.CONTROL_IMAGE_URL, facesContext);
 	}
 
 	public void setControlImageURL(String controlImageURL) {
@@ -297,10 +288,7 @@ return s;
 	}
 
 	public String getControlAlternateText(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.CONTROL_ALTERNATE_TEXT, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.CONTROL_ALTERNATE_TEXT, facesContext);
 	}
 
 	public void setControlAlternateText(String controlAlternateText) {

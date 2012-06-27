@@ -376,10 +376,7 @@ public class KeyEntryComponent extends AbstractGridComponent implements
 	 * @return variable name
 	 */
 	public String getRowCountVar(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.ROW_COUNT_VAR, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.ROW_COUNT_VAR, facesContext);
 	}
 
 	/**
@@ -415,10 +412,7 @@ return s;
 	 * @return variable name
 	 */
 	public String getRowIndexVar(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.ROW_INDEX_VAR, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.ROW_INDEX_VAR, facesContext);
 	}
 
 	/**
@@ -446,10 +440,7 @@ return s;
 	}
 
 	public String getValueColumnId(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.VALUE_COLUMN_ID, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.VALUE_COLUMN_ID, facesContext);
 	}
 
 	public void setValueColumnId(String valueColumnId) {
@@ -469,10 +460,7 @@ return s;
 	}
 
 	public String getLabelColumnId(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.LABEL_COLUMN_ID, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.LABEL_COLUMN_ID, facesContext);
 	}
 
 	public void setLabelColumnId(String labelColumnId) {
@@ -512,10 +500,7 @@ return s;
 	}
 
 	public String getValueFormat(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.VALUE_FORMAT, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.VALUE_FORMAT, facesContext);
 	}
 
 	public void setValueFormat(String valueFormat) {
@@ -535,10 +520,7 @@ return s;
 	}
 
 	public String getValueFormatTooltip(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.VALUE_FORMAT_TOOLTIP, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.VALUE_FORMAT_TOOLTIP, facesContext);
 	}
 
 	public void setValueFormatTooltip(String valueFormatTooltip) {
@@ -578,10 +560,7 @@ return s;
 	}
 
 	public String getForLabel(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.FOR_LABEL, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.FOR_LABEL, facesContext);
 	}
 
 	public void setForLabel(String forLabel) {
@@ -601,10 +580,7 @@ return s;
 	}
 
 	public String getValueFormatLabel(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.VALUE_FORMAT_LABEL, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.VALUE_FORMAT_LABEL, facesContext);
 	}
 
 	public void setValueFormatLabel(String valueFormatLabel) {
@@ -624,10 +600,7 @@ return s;
 	}
 
 	public String getNoValueFormatLabel(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.NO_VALUE_FORMAT_LABEL, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.NO_VALUE_FORMAT_LABEL, facesContext);
 	}
 
 	public void setNoValueFormatLabel(String noValueFormatLabel) {

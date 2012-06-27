@@ -18,6 +18,8 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 
 	private static final Log LOG=LogFactory.getLog(BoxTag.class);
 
+	private ValueExpression headingZone;
+	private ValueExpression headingLevel;
 	private ValueExpression backgroundImageHorizontalPosition;
 	private ValueExpression backgroundImageHorizontalRepeat;
 	private ValueExpression backgroundImageURL;
@@ -42,6 +44,14 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 	private ValueExpression verticalScroll;
 	public String getComponentType() {
 		return BoxComponent.COMPONENT_TYPE;
+	}
+
+	public void setHeadingZone(ValueExpression headingZone) {
+		this.headingZone = headingZone;
+	}
+
+	public void setHeadingLevel(ValueExpression headingLevel) {
+		this.headingLevel = headingLevel;
 	}
 
 	public void setBackgroundImageHorizontalPosition(ValueExpression backgroundImageHorizontalPosition) {
@@ -137,6 +147,8 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 			if (BoxComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
+			LOG.debug("  headingZone='"+headingZone+"'");
+			LOG.debug("  headingLevel='"+headingLevel+"'");
 			LOG.debug("  backgroundImageHorizontalPosition='"+backgroundImageHorizontalPosition+"'");
 			LOG.debug("  backgroundImageHorizontalRepeat='"+backgroundImageHorizontalRepeat+"'");
 			LOG.debug("  backgroundImageURL='"+backgroundImageURL+"'");
@@ -165,6 +177,24 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 
 		BoxComponent component = (BoxComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
+
+		if (headingZone != null) {
+			if (headingZone.isLiteralText()==false) {
+				component.setValueExpression(Properties.HEADING_ZONE, headingZone);
+
+			} else {
+				component.setHeadingZone(getBool(headingZone.getExpressionString()));
+			}
+		}
+
+		if (headingLevel != null) {
+			if (headingLevel.isLiteralText()==false) {
+				component.setValueExpression(Properties.HEADING_LEVEL, headingLevel);
+
+			} else {
+				component.setHeadingLevel(headingLevel.getExpressionString());
+			}
+		}
 
 		if (backgroundImageHorizontalPosition != null) {
 			if (backgroundImageHorizontalPosition.isLiteralText()==false) {
@@ -336,6 +366,8 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 	}
 
 	public void release() {
+		headingZone = null;
+		headingLevel = null;
 		backgroundImageHorizontalPosition = null;
 		backgroundImageHorizontalRepeat = null;
 		backgroundImageURL = null;

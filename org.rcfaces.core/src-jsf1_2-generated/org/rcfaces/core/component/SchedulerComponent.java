@@ -607,10 +607,7 @@ public class SchedulerComponent extends CameliaBaseComponent implements
 	}
 
 	public String getPeriodLabel(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.PERIOD_LABEL, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.PERIOD_LABEL, facesContext);
 	}
 
 	public void setPeriodLabel(String periodLabel) {
@@ -630,10 +627,7 @@ return s;
 	}
 
 	public String getPeriodStyle(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.PERIOD_STYLE, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.PERIOD_STYLE, facesContext);
 	}
 
 	public void setPeriodStyle(String periodStyle) {
@@ -673,10 +667,7 @@ return s;
 	}
 
 	public String getPeriodToolTip(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.PERIOD_TOOL_TIP, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.PERIOD_TOOL_TIP, facesContext);
 	}
 
 	public void setPeriodToolTip(String periodToolTip) {
@@ -696,10 +687,7 @@ return s;
 	}
 
 	public String getPeriodValue(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.PERIOD_VALUE, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.PERIOD_VALUE, facesContext);
 	}
 
 	public void setPeriodValue(String periodValue) {
@@ -719,10 +707,7 @@ return s;
 	}
 
 	public String getPeriodType(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.PERIOD_TYPE, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.PERIOD_TYPE, facesContext);
 	}
 
 	public void setPeriodType(String periodType) {
@@ -742,10 +727,7 @@ return s;
 	}
 
 	public String getVar(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.VAR, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.VAR, facesContext);
 	}
 
 	public void setVar(String var) {

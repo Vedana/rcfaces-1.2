@@ -3437,6 +3437,14 @@ TODO
 		<component-class>org.rcfaces.core.component.ToolTipManagerComponent</component-class>
 	</component>
 	<component>
+		<component-type>org.rcfaces.core.eventsCollector</component-type>
+		<component-class>org.rcfaces.core.component.EventsCollectorComponent</component-class>
+	</component>
+	<component>
+		<component-type>org.rcfaces.core.headingZone</component-type>
+		<component-class>org.rcfaces.core.component.HeadingZoneComponent</component-class>
+	</component>
+	<component>
 		<component-type>javax.faces.HtmlOutputText</component-type>
 		<component-class>org.rcfaces.core.internal.component.AsyncHtmlOutputText</component-class>
 	</component>

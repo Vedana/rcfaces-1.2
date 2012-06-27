@@ -840,10 +840,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	}
 
 	public String getTimeFormat(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.TIME_FORMAT, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.TIME_FORMAT, facesContext);
 	}
 
 	public void setTimeFormat(String timeFormat) {
@@ -871,10 +868,7 @@ return s;
 	 * @return step used
 	 */
 	public String getHourStep(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.HOUR_STEP, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.HOUR_STEP, facesContext);
 	}
 
 	/**
@@ -910,10 +904,7 @@ return s;
 	 * @return step
 	 */
 	public String getMinuteStep(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.MINUTE_STEP, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.MINUTE_STEP, facesContext);
 	}
 
 	/**
@@ -949,10 +940,7 @@ return s;
 	 * @return step
 	 */
 	public String getSecondStep(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.SECOND_STEP, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.SECOND_STEP, facesContext);
 	}
 
 	/**
@@ -988,10 +976,7 @@ return s;
 	 * @return step
 	 */
 	public String getMillisStep(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.MILLIS_STEP, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.MILLIS_STEP, facesContext);
 	}
 
 	/**

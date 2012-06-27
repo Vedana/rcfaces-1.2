@@ -18,6 +18,7 @@ import org.rcfaces.core.internal.util.ComponentIterators;
 import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import org.rcfaces.core.component.capability.IExpandEventCapability;
+import org.rcfaces.core.component.capability.IHeadingLevelCapability;
 import org.rcfaces.core.internal.capability.ICheckComponent;
 import org.rcfaces.core.component.capability.IDroppableCapability;
 import org.rcfaces.core.internal.capability.ISelectionComponent;
@@ -35,6 +36,7 @@ import org.rcfaces.core.component.capability.IShowValueCapability;
 import org.rcfaces.core.component.capability.IDropCompleteEventCapability;
 import org.rcfaces.core.component.capability.IFilterCapability;
 import java.util.Arrays;
+import org.rcfaces.core.component.capability.ICaptionCapability;
 import org.rcfaces.core.component.capability.IMenuCapability;
 import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
@@ -142,6 +144,8 @@ import org.rcfaces.core.component.AbstractInputComponent;
  * </table>
  */
 public class TreeComponent extends AbstractInputComponent implements 
+	ICaptionCapability,
+	IHeadingLevelCapability,
 	IDoubleClickEventCapability,
 	IRequiredCapability,
 	IScrollableCapability,
@@ -182,7 +186,7 @@ public class TreeComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"checkListener","preloadedLevelDepth","selectionCardinality","droppable","defaultDisabledLeafImageURL","dragListener","dragTypes","checkable","checkCardinality","dropListener","dropEffects","overStyleClass","loadListener","checkedValues","selectionListener","defaultLeafImageURL","showValue","verticalScrollPosition","defaultSelectedLeafImageURL","cursorValue","border","required","clientSelectionFullState","preSelectionListener","bodyDroppable","defaultCollapsedImageURL","defaultExpandedImageURL","filterProperties","defaultDisabledImageURL","defaultImageURL","dragEffects","clientCheckFullState","expandListener","doubleClickListener","selectedValues","horizontalScrollPosition","dropCompleteListener","dropTypes","expansionUseValue","readOnly","selectable","expandedValues","hideRootExpandSign","defaultSelectedImageURL","defaultExpandedLeafImageURL","draggable","expandable"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"dragListener","dropListener","dropEffects","overStyleClass","loadListener","checkedValues","selectionListener","defaultLeafImageURL","cursorValue","required","border","preSelectionListener","bodyDroppable","defaultCollapsedImageURL","defaultDisabledImageURL","doubleClickListener","expandListener","clientCheckFullState","horizontalScrollPosition","dropCompleteListener","dropTypes","expandedValues","hideRootExpandSign","defaultExpandedLeafImageURL","expandable","checkListener","preloadedLevelDepth","droppable","selectionCardinality","dragTypes","defaultDisabledLeafImageURL","checkCardinality","checkable","showValue","verticalScrollPosition","defaultSelectedLeafImageURL","clientSelectionFullState","headingLevel","filterProperties","defaultExpandedImageURL","defaultImageURL","dragEffects","caption","selectedValues","readOnly","expansionUseValue","selectable","defaultSelectedImageURL","draggable"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="value";
 
@@ -500,6 +504,52 @@ public class TreeComponent extends AbstractInputComponent implements
 								
 				engine.setValue(Properties.EXPANDED_VALUES, expandedValues);
 			
+	}
+
+	public java.lang.String getCaption() {
+		return getCaption(null);
+	}
+
+	/**
+	 * See {@link #getCaption() getCaption()} for more details
+	 */
+	public java.lang.String getCaption(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.CAPTION, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "caption" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isCaptionSetted() {
+		return engine.isPropertySetted(Properties.CAPTION);
+	}
+
+	public void setCaption(java.lang.String caption) {
+		engine.setProperty(Properties.CAPTION, caption);
+	}
+
+	public java.lang.String getHeadingLevel() {
+		return getHeadingLevel(null);
+	}
+
+	/**
+	 * See {@link #getHeadingLevel() getHeadingLevel()} for more details
+	 */
+	public java.lang.String getHeadingLevel(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.HEADING_LEVEL, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "headingLevel" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHeadingLevelSetted() {
+		return engine.isPropertySetted(Properties.HEADING_LEVEL);
+	}
+
+	public void setHeadingLevel(java.lang.String headingLevel) {
+		engine.setProperty(Properties.HEADING_LEVEL, headingLevel);
 	}
 
 	public final void addDoubleClickListener(org.rcfaces.core.event.IDoubleClickListener listener) {
@@ -1261,10 +1311,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * @return image url
 	 */
 	public String getDefaultImageURL(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.DEFAULT_IMAGE_URL, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.DEFAULT_IMAGE_URL, facesContext);
 	}
 
 	/**
@@ -1300,10 +1347,7 @@ return s;
 	 * @return selected image url
 	 */
 	public String getDefaultSelectedImageURL(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.DEFAULT_SELECTED_IMAGE_URL, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.DEFAULT_SELECTED_IMAGE_URL, facesContext);
 	}
 
 	/**
@@ -1339,10 +1383,7 @@ return s;
 	 * @return expanded image url
 	 */
 	public String getDefaultExpandedImageURL(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.DEFAULT_EXPANDED_IMAGE_URL, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.DEFAULT_EXPANDED_IMAGE_URL, facesContext);
 	}
 
 	/**
@@ -1370,10 +1411,7 @@ return s;
 	}
 
 	public String getDefaultCollapsedImageURL(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.DEFAULT_COLLAPSED_IMAGE_URL, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.DEFAULT_COLLAPSED_IMAGE_URL, facesContext);
 	}
 
 	public void setDefaultCollapsedImageURL(String defaultCollapsedImageURL) {
@@ -1401,10 +1439,7 @@ return s;
 	 * @return disabled image url
 	 */
 	public String getDefaultDisabledImageURL(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.DEFAULT_DISABLED_IMAGE_URL, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.DEFAULT_DISABLED_IMAGE_URL, facesContext);
 	}
 
 	/**
@@ -1440,10 +1475,7 @@ return s;
 	 * @return leaf image url
 	 */
 	public String getDefaultLeafImageURL(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.DEFAULT_LEAF_IMAGE_URL, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.DEFAULT_LEAF_IMAGE_URL, facesContext);
 	}
 
 	/**
@@ -1471,10 +1503,7 @@ return s;
 	}
 
 	public String getDefaultSelectedLeafImageURL(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.DEFAULT_SELECTED_LEAF_IMAGE_URL, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.DEFAULT_SELECTED_LEAF_IMAGE_URL, facesContext);
 	}
 
 	public void setDefaultSelectedLeafImageURL(String defaultSelectedLeafImageURL) {
@@ -1494,10 +1523,7 @@ return s;
 	}
 
 	public String getDefaultExpandedLeafImageURL(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.DEFAULT_EXPANDED_LEAF_IMAGE_URL, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.DEFAULT_EXPANDED_LEAF_IMAGE_URL, facesContext);
 	}
 
 	public void setDefaultExpandedLeafImageURL(String defaultExpandedLeafImageURL) {
@@ -1517,10 +1543,7 @@ return s;
 	}
 
 	public String getDefaultDisabledLeafImageURL(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.DEFAULT_DISABLED_LEAF_IMAGE_URL, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.DEFAULT_DISABLED_LEAF_IMAGE_URL, facesContext);
 	}
 
 	public void setDefaultDisabledLeafImageURL(String defaultDisabledLeafImageURL) {

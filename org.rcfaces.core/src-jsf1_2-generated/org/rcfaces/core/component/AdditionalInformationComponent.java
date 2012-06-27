@@ -10,6 +10,7 @@ import org.rcfaces.core.component.capability.ILoadEventCapability;
 import org.rcfaces.core.internal.tools.MarginTools;
 import org.rcfaces.core.component.IMenuComponent;
 import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.capability.IHeadingLevelCapability;
 import java.util.Set;
 import org.rcfaces.core.component.capability.IInitEventCapability;
 import org.rcfaces.core.component.capability.IBackgroundImageCapability;
@@ -21,6 +22,7 @@ import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
 import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.capability.IHeightCapability;
 import org.rcfaces.core.internal.component.CameliaColumnComponent;
+import org.rcfaces.core.component.capability.IHeadingZoneCapability;
 import org.rcfaces.core.component.capability.IErrorEventCapability;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
 import javax.el.ValueExpression;
@@ -32,6 +34,8 @@ import org.rcfaces.core.component.capability.IMenuCapability;
 import org.rcfaces.core.component.capability.IMarginCapability;
 
 public class AdditionalInformationComponent extends CameliaColumnComponent implements 
+	IHeadingZoneCapability,
+	IHeadingLevelCapability,
 	IPropertyChangeEventCapability,
 	IUserEventCapability,
 	IErrorEventCapability,
@@ -56,7 +60,7 @@ public class AdditionalInformationComponent extends CameliaColumnComponent imple
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaColumnComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"backgroundColor","marginLeft","errorListener","backgroundImageVerticalPosition","propertyChangeListener","backgroundImageHorizontalPosition","loadListener","ariaLevel","height","mouseOverListener","scopeValue","backgroundImageURL","foregroundColor","waiRole","mouseOutListener","lookId","backgroundImageVerticalRepeat","userEventListener","marginTop","marginRight","styleClass","backgroundImageHorizontalRepeat","ariaLabel","initListener","marginBottom","scopeSaveValue","scopeVar","margins"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"backgroundColor","marginLeft","errorListener","backgroundImageVerticalPosition","propertyChangeListener","loadListener","backgroundImageHorizontalPosition","ariaLevel","height","mouseOverListener","scopeValue","backgroundImageURL","headingZone","waiRole","foregroundColor","mouseOutListener","lookId","headingLevel","backgroundImageVerticalRepeat","userEventListener","marginTop","marginRight","styleClass","backgroundImageHorizontalRepeat","ariaLabel","initListener","marginBottom","scopeSaveValue","scopeVar","margins"}));
 	}
 
 	public AdditionalInformationComponent() {
@@ -73,6 +77,52 @@ public class AdditionalInformationComponent extends CameliaColumnComponent imple
 
 				MarginTools.setMargins(this, margins);
 			
+	}
+
+	public boolean isHeadingZone() {
+		return isHeadingZone(null);
+	}
+
+	/**
+	 * See {@link #isHeadingZone() isHeadingZone()} for more details
+	 */
+	public boolean isHeadingZone(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.HEADING_ZONE, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "headingZone" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHeadingZoneSetted() {
+		return engine.isPropertySetted(Properties.HEADING_ZONE);
+	}
+
+	public void setHeadingZone(boolean headingZone) {
+		engine.setProperty(Properties.HEADING_ZONE, headingZone);
+	}
+
+	public java.lang.String getHeadingLevel() {
+		return getHeadingLevel(null);
+	}
+
+	/**
+	 * See {@link #getHeadingLevel() getHeadingLevel()} for more details
+	 */
+	public java.lang.String getHeadingLevel(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.HEADING_LEVEL, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "headingLevel" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHeadingLevelSetted() {
+		return engine.isPropertySetted(Properties.HEADING_LEVEL);
+	}
+
+	public void setHeadingLevel(java.lang.String headingLevel) {
+		engine.setProperty(Properties.HEADING_LEVEL, headingLevel);
 	}
 
 	public final void addPropertyChangeListener(org.rcfaces.core.event.IPropertyChangeListener listener) {

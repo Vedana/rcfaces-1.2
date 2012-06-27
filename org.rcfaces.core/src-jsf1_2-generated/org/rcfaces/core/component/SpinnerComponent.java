@@ -172,10 +172,7 @@ public class SpinnerComponent extends TextEntryComponent {
 	}
 
 	public String getStep(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.STEP, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.STEP, facesContext);
 	}
 
 	public void setStep(String step) {

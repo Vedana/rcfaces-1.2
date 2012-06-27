@@ -803,10 +803,7 @@ public class ComboGridComponent extends KeyEntryComponent implements
 	}
 
 	public String getPagerStyleClass(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.PAGER_STYLE_CLASS, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.PAGER_STYLE_CLASS, facesContext);
 	}
 
 	public void setPagerStyleClass(String pagerStyleClass) {
@@ -826,10 +823,7 @@ return s;
 	}
 
 	public String getPagerLookId(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.PAGER_LOOK_ID, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.PAGER_LOOK_ID, facesContext);
 	}
 
 	public void setPagerLookId(String pagerLookId) {
@@ -849,10 +843,7 @@ return s;
 	}
 
 	public String getPopupStyleClass(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.POPUP_STYLE_CLASS, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.POPUP_STYLE_CLASS, facesContext);
 	}
 
 	public void setPopupStyleClass(String popupStyleClass) {
@@ -872,10 +863,7 @@ return s;
 	}
 
 	public String getGridStyleClass(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.GRID_STYLE_CLASS, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.GRID_STYLE_CLASS, facesContext);
 	}
 
 	public void setGridStyleClass(String gridStyleClass) {
@@ -895,10 +883,7 @@ return s;
 	}
 
 	public String getGridLookId(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.GRID_LOOK_ID, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.GRID_LOOK_ID, facesContext);
 	}
 
 	public void setGridLookId(String gridLookId) {

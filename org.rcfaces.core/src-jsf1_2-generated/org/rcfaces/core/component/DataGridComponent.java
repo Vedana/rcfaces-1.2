@@ -1743,29 +1743,6 @@ public class DataGridComponent extends AbstractDataComponent implements
 		engine.setProperty(Properties.SCOPE_COLUMN_ID, scopeColumnId);
 	}
 
-	public java.lang.String getCaption() {
-		return getCaption(null);
-	}
-
-	/**
-	 * See {@link #getCaption() getCaption()} for more details
-	 */
-	public java.lang.String getCaption(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.CAPTION, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "caption" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isCaptionSetted() {
-		return engine.isPropertySetted(Properties.CAPTION);
-	}
-
-	public void setCaption(java.lang.String caption) {
-		engine.setProperty(Properties.CAPTION, caption);
-	}
-
 	public java.lang.String getSummary() {
 		return getSummary(null);
 	}
@@ -1787,6 +1764,29 @@ public class DataGridComponent extends AbstractDataComponent implements
 
 	public void setSummary(java.lang.String summary) {
 		engine.setProperty(Properties.SUMMARY, summary);
+	}
+
+	public java.lang.String getCaption() {
+		return getCaption(null);
+	}
+
+	/**
+	 * See {@link #getCaption() getCaption()} for more details
+	 */
+	public java.lang.String getCaption(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.CAPTION, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "caption" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isCaptionSetted() {
+		return engine.isPropertySetted(Properties.CAPTION);
+	}
+
+	public void setCaption(java.lang.String caption) {
+		engine.setProperty(Properties.CAPTION, caption);
 	}
 
 	public String[] getRowDragTypes() {
@@ -1902,10 +1902,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 	 * @return column id
 	 */
 	public String getRowValueColumnId(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.ROW_VALUE_COLUMN_ID, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.ROW_VALUE_COLUMN_ID, facesContext);
 	}
 
 	/**
@@ -1933,10 +1930,7 @@ return s;
 	}
 
 	public String getRowLabelColumnId(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.ROW_LABEL_COLUMN_ID, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.ROW_LABEL_COLUMN_ID, facesContext);
 	}
 
 	public void setRowLabelColumnId(String rowLabelColumnId) {
@@ -1964,10 +1958,7 @@ return s;
 	 * @return variable name
 	 */
 	public String getRowCountVar(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.ROW_COUNT_VAR, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.ROW_COUNT_VAR, facesContext);
 	}
 
 	/**
@@ -2003,10 +1994,7 @@ return s;
 	 * @return variable name
 	 */
 	public String getRowIndexVar(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.ROW_INDEX_VAR, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.ROW_INDEX_VAR, facesContext);
 	}
 
 	/**

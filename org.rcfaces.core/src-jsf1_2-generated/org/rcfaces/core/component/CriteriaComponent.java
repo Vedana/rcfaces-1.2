@@ -250,10 +250,7 @@ public class CriteriaComponent extends CameliaBaseComponent implements
 	}
 
 	public String getCriteriaTitle(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.CRITERIA_TITLE, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.CRITERIA_TITLE, facesContext);
 	}
 
 	public void setCriteriaTitle(String criteriaTitle) {

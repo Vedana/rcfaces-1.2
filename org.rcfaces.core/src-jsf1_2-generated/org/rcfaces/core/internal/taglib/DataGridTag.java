@@ -61,8 +61,8 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 	private ValueExpression rowToolTipId;
 	private ValueExpression cursorValue;
 	private ValueExpression scopeColumnId;
-	private ValueExpression caption;
 	private ValueExpression summary;
+	private ValueExpression caption;
 	private ValueExpression rowDragTypes;
 	private ValueExpression rowDragEffects;
 	private ValueExpression rowDropTypes;
@@ -252,12 +252,12 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		this.scopeColumnId = scopeColumnId;
 	}
 
-	public void setCaption(ValueExpression caption) {
-		this.caption = caption;
-	}
-
 	public void setSummary(ValueExpression summary) {
 		this.summary = summary;
+	}
+
+	public void setCaption(ValueExpression caption) {
+		this.caption = caption;
 	}
 
 	public void setRowDragTypes(ValueExpression rowDragTypes) {
@@ -352,8 +352,8 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			LOG.debug("  rowToolTipId='"+rowToolTipId+"'");
 			LOG.debug("  cursorValue='"+cursorValue+"'");
 			LOG.debug("  scopeColumnId='"+scopeColumnId+"'");
-			LOG.debug("  caption='"+caption+"'");
 			LOG.debug("  summary='"+summary+"'");
+			LOG.debug("  caption='"+caption+"'");
 			LOG.debug("  rowDragTypes='"+rowDragTypes+"'");
 			LOG.debug("  rowDragEffects='"+rowDragEffects+"'");
 			LOG.debug("  rowDropTypes='"+rowDropTypes+"'");
@@ -707,21 +707,21 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			}
 		}
 
-		if (caption != null) {
-			if (caption.isLiteralText()==false) {
-				component.setValueExpression(Properties.CAPTION, caption);
-
-			} else {
-				component.setCaption(caption.getExpressionString());
-			}
-		}
-
 		if (summary != null) {
 			if (summary.isLiteralText()==false) {
 				component.setValueExpression(Properties.SUMMARY, summary);
 
 			} else {
 				component.setSummary(summary.getExpressionString());
+			}
+		}
+
+		if (caption != null) {
+			if (caption.isLiteralText()==false) {
+				component.setValueExpression(Properties.CAPTION, caption);
+
+			} else {
+				component.setCaption(caption.getExpressionString());
 			}
 		}
 
@@ -873,8 +873,8 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		rowToolTipId = null;
 		cursorValue = null;
 		scopeColumnId = null;
-		caption = null;
 		summary = null;
+		caption = null;
 		rowDragTypes = null;
 		rowDragEffects = null;
 		rowDropTypes = null;

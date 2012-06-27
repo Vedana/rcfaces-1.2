@@ -458,10 +458,7 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 	 * @return value format
 	 */
 	public String getForValueFormat(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.FOR_VALUE_FORMAT, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.FOR_VALUE_FORMAT, facesContext);
 	}
 
 	/**
@@ -529,10 +526,7 @@ return s;
 	 * @return the label used
 	 */
 	public String getHomeDateLabel(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.HOME_DATE_LABEL, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.HOME_DATE_LABEL, facesContext);
 	}
 
 	/**
@@ -560,10 +554,7 @@ return s;
 	}
 
 	public String getPopupStyleClass(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.POPUP_STYLE_CLASS, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.POPUP_STYLE_CLASS, facesContext);
 	}
 
 	public void setPopupStyleClass(String popupStyleClass) {

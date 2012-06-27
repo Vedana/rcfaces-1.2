@@ -272,10 +272,7 @@ public class SubmitWaitComponent extends CameliaBaseComponent implements
 	}
 
 	public String getBackgroundMode(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.BACKGROUND_MODE, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.BACKGROUND_MODE, facesContext);
 	}
 
 	public void setBackgroundMode(String backgroundMode) {

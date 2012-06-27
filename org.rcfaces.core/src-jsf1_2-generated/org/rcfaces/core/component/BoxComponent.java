@@ -13,6 +13,7 @@ import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.internal.converter.AsyncDecodeModeConverter;
 import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.capability.IHeadingLevelCapability;
 import java.util.Set;
 import org.rcfaces.core.component.capability.IInitEventCapability;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
@@ -22,10 +23,11 @@ import org.rcfaces.core.component.capability.IBackgroundImageCapability;
 import java.lang.String;
 import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
+import org.rcfaces.core.component.capability.IHeadingZoneCapability;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
 import javax.el.ValueExpression;
-import org.rcfaces.core.component.capability.IClickEventCapability;
 import java.util.HashSet;
+import org.rcfaces.core.component.capability.IClickEventCapability;
 import org.rcfaces.core.internal.converter.LayoutManagerTypeConverter;
 import java.util.Arrays;
 import org.rcfaces.core.internal.capability.IVariableScopeCapability;
@@ -67,6 +69,8 @@ import org.rcfaces.core.component.capability.IMenuCapability;
  * </table>
  */
 public class BoxComponent extends AbstractBasicComponent implements 
+	IHeadingZoneCapability,
+	IHeadingLevelCapability,
 	IBackgroundImageCapability,
 	IBorderCapability,
 	IMouseEventCapability,
@@ -89,7 +93,7 @@ public class BoxComponent extends AbstractBasicComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractBasicComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"backgroundImageVerticalRepeat","horizontalScroll","backgroundImageVerticalPosition","backgroundImageHorizontalRepeat","doubleClickListener","overStyleClass","type","asyncDecodeMode","asyncRenderMode","backgroundImageHorizontalPosition","loadListener","initListener","scopeSaveValue","scopeVar","mouseOverListener","verticalScroll","clickListener","scopeValue","backgroundImageURL","border","mouseOutListener","layoutType"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headingLevel","backgroundImageVerticalRepeat","horizontalScroll","backgroundImageVerticalPosition","backgroundImageHorizontalRepeat","doubleClickListener","overStyleClass","type","asyncDecodeMode","asyncRenderMode","loadListener","backgroundImageHorizontalPosition","initListener","scopeSaveValue","scopeVar","mouseOverListener","verticalScroll","clickListener","scopeValue","backgroundImageURL","border","headingZone","mouseOutListener","layoutType"}));
 	}
 
 	public BoxComponent() {
@@ -120,6 +124,52 @@ public class BoxComponent extends AbstractBasicComponent implements
 
 			setLayoutType(((Integer)LayoutManagerTypeConverter.SINGLETON.getAsObject(null, this, type)).intValue());
 		
+	}
+
+	public boolean isHeadingZone() {
+		return isHeadingZone(null);
+	}
+
+	/**
+	 * See {@link #isHeadingZone() isHeadingZone()} for more details
+	 */
+	public boolean isHeadingZone(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.HEADING_ZONE, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "headingZone" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHeadingZoneSetted() {
+		return engine.isPropertySetted(Properties.HEADING_ZONE);
+	}
+
+	public void setHeadingZone(boolean headingZone) {
+		engine.setProperty(Properties.HEADING_ZONE, headingZone);
+	}
+
+	public java.lang.String getHeadingLevel() {
+		return getHeadingLevel(null);
+	}
+
+	/**
+	 * See {@link #getHeadingLevel() getHeadingLevel()} for more details
+	 */
+	public java.lang.String getHeadingLevel(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.HEADING_LEVEL, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "headingLevel" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHeadingLevelSetted() {
+		return engine.isPropertySetted(Properties.HEADING_LEVEL);
+	}
+
+	public void setHeadingLevel(java.lang.String headingLevel) {
+		engine.setProperty(Properties.HEADING_LEVEL, headingLevel);
 	}
 
 	public java.lang.String getBackgroundImageHorizontalPosition() {

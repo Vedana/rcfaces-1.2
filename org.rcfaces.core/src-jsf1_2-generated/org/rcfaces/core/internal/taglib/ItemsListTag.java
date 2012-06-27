@@ -18,6 +18,8 @@ public class ItemsListTag extends AbstractInputTag implements Tag {
 
 	private static final Log LOG=LogFactory.getLog(ItemsListTag.class);
 
+	private ValueExpression headingZone;
+	private ValueExpression headingLevel;
 	private ValueExpression doubleClickListeners;
 	private ValueExpression textPosition;
 	private ValueExpression borderType;
@@ -37,6 +39,14 @@ public class ItemsListTag extends AbstractInputTag implements Tag {
 	private ValueExpression itemHiddenMode;
 	public String getComponentType() {
 		return ItemsListComponent.COMPONENT_TYPE;
+	}
+
+	public void setHeadingZone(ValueExpression headingZone) {
+		this.headingZone = headingZone;
+	}
+
+	public void setHeadingLevel(ValueExpression headingLevel) {
+		this.headingLevel = headingLevel;
 	}
 
 	public void setDoubleClickListener(ValueExpression doubleClickListeners) {
@@ -112,6 +122,8 @@ public class ItemsListTag extends AbstractInputTag implements Tag {
 			if (ItemsListComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
+			LOG.debug("  headingZone='"+headingZone+"'");
+			LOG.debug("  headingLevel='"+headingLevel+"'");
 			LOG.debug("  textPosition='"+textPosition+"'");
 			LOG.debug("  borderType='"+borderType+"'");
 			LOG.debug("  checkedValues='"+checkedValues+"'");
@@ -138,6 +150,24 @@ public class ItemsListTag extends AbstractInputTag implements Tag {
 
 		ItemsListComponent component = (ItemsListComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
+
+		if (headingZone != null) {
+			if (headingZone.isLiteralText()==false) {
+				component.setValueExpression(Properties.HEADING_ZONE, headingZone);
+
+			} else {
+				component.setHeadingZone(getBool(headingZone.getExpressionString()));
+			}
+		}
+
+		if (headingLevel != null) {
+			if (headingLevel.isLiteralText()==false) {
+				component.setValueExpression(Properties.HEADING_LEVEL, headingLevel);
+
+			} else {
+				component.setHeadingLevel(headingLevel.getExpressionString());
+			}
+		}
 
 		if (doubleClickListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.DOUBLE_CLICK_LISTENER_TYPE, doubleClickListeners);
@@ -274,6 +304,8 @@ public class ItemsListTag extends AbstractInputTag implements Tag {
 	}
 
 	public void release() {
+		headingZone = null;
+		headingLevel = null;
 		doubleClickListeners = null;
 		textPosition = null;
 		borderType = null;

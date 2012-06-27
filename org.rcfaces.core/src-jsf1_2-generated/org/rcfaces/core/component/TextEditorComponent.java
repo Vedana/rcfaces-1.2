@@ -376,10 +376,7 @@ public class TextEditorComponent extends AbstractInputComponent implements
 	}
 
 	public String getValueMimeType(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.VALUE_MIME_TYPE, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.VALUE_MIME_TYPE, facesContext);
 	}
 
 	public void setValueMimeType(String valueMimeType) {

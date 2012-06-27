@@ -18,6 +18,8 @@ public class AdditionalInformationTag extends CameliaTag implements Tag {
 
 	private static final Log LOG=LogFactory.getLog(AdditionalInformationTag.class);
 
+	private ValueExpression headingZone;
+	private ValueExpression headingLevel;
 	private ValueExpression propertyChangeListeners;
 	private ValueExpression userEventListeners;
 	private ValueExpression errorListeners;
@@ -48,6 +50,14 @@ public class AdditionalInformationTag extends CameliaTag implements Tag {
 	private ValueExpression margins;
 	public String getComponentType() {
 		return AdditionalInformationComponent.COMPONENT_TYPE;
+	}
+
+	public void setHeadingZone(ValueExpression headingZone) {
+		this.headingZone = headingZone;
+	}
+
+	public void setHeadingLevel(ValueExpression headingLevel) {
+		this.headingLevel = headingLevel;
 	}
 
 	public void setPropertyChangeListener(ValueExpression propertyChangeListeners) {
@@ -167,6 +177,8 @@ public class AdditionalInformationTag extends CameliaTag implements Tag {
 			if (AdditionalInformationComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
+			LOG.debug("  headingZone='"+headingZone+"'");
+			LOG.debug("  headingLevel='"+headingLevel+"'");
 			LOG.debug("  ariaLabel='"+ariaLabel+"'");
 			LOG.debug("  ariaLevel='"+ariaLevel+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
@@ -200,6 +212,24 @@ public class AdditionalInformationTag extends CameliaTag implements Tag {
 
 		AdditionalInformationComponent component = (AdditionalInformationComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
+
+		if (headingZone != null) {
+			if (headingZone.isLiteralText()==false) {
+				component.setValueExpression(Properties.HEADING_ZONE, headingZone);
+
+			} else {
+				component.setHeadingZone(getBool(headingZone.getExpressionString()));
+			}
+		}
+
+		if (headingLevel != null) {
+			if (headingLevel.isLiteralText()==false) {
+				component.setValueExpression(Properties.HEADING_LEVEL, headingLevel);
+
+			} else {
+				component.setHeadingLevel(headingLevel.getExpressionString());
+			}
+		}
 
 		if (propertyChangeListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
@@ -418,6 +448,8 @@ public class AdditionalInformationTag extends CameliaTag implements Tag {
 	}
 
 	public void release() {
+		headingZone = null;
+		headingLevel = null;
 		propertyChangeListeners = null;
 		userEventListeners = null;
 		errorListeners = null;

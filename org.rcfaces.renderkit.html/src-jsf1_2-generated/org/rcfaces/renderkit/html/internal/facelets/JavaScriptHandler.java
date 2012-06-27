@@ -17,7 +17,4 @@ public class JavaScriptHandler extends org.rcfaces.core.internal.facelets.Cameli
 		setTextBody(ctx, c);
 	}
 
-	protected void applyNextHandler(FaceletContext ctx, UIComponent c) {
-	}
-
 }

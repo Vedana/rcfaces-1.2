@@ -81,10 +81,7 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * @return base HRef
 	 */
 	public String getBase(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.BASE, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.BASE, facesContext);
 	}
 
 	/**
@@ -112,10 +109,7 @@ return s;
 	}
 
 	public String getDomain(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.DOMAIN, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.DOMAIN, facesContext);
 	}
 
 	public void setDomain(String domain) {
@@ -143,10 +137,7 @@ return s;
 	 * @return title
 	 */
 	public String getTitle(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.TITLE, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.TITLE, facesContext);
 	}
 
 	/**
@@ -182,10 +173,7 @@ return s;
 	 * @return favorite image url
 	 */
 	public String getFavoriteImageURL(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.FAVORITE_IMAGE_URL, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.FAVORITE_IMAGE_URL, facesContext);
 	}
 
 	/**
@@ -221,10 +209,7 @@ return s;
 	 * @return url
 	 */
 	public String getDisabledScriptPageURL(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.DISABLED_SCRIPT_PAGE_URL, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.DISABLED_SCRIPT_PAGE_URL, facesContext);
 	}
 
 	/**
@@ -260,10 +245,7 @@ return s;
 	 * @return true if cookies are disabled
 	 */
 	public String getDisabledCookiesPageURL(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.DISABLED_COOKIES_PAGE_URL, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.DISABLED_COOKIES_PAGE_URL, facesContext);
 	}
 
 	/**
@@ -299,10 +281,7 @@ return s;
 	 * @return url
 	 */
 	public String getInvalidBrowserPageURL(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.INVALID_BROWSER_PAGE_URL, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.INVALID_BROWSER_PAGE_URL, facesContext);
 	}
 
 	/**
@@ -514,10 +493,7 @@ return s;
 	}
 
 	public String getClientMessageIdFilter(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.CLIENT_MESSAGE_ID_FILTER, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.CLIENT_MESSAGE_ID_FILTER, facesContext);
 	}
 
 	public void setClientMessageIdFilter(String clientMessageIdFilter) {
@@ -537,10 +513,7 @@ return s;
 	}
 
 	public String getWaiRolesNS(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.WAI_ROLES_NS, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.WAI_ROLES_NS, facesContext);
 	}
 
 	public void setWaiRolesNS(String waiRolesNS) {

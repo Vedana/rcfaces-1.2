@@ -256,10 +256,7 @@ public class MenuComponent extends CameliaSelectManyComponent implements
 	 * @return menu Id
 	 */
 	public String getMenuId(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.MENU_ID, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.MENU_ID, facesContext);
 	}
 
 	/**

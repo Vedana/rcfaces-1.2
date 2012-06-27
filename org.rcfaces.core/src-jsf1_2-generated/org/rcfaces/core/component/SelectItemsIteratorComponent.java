@@ -135,10 +135,7 @@ public class SelectItemsIteratorComponent extends CameliaItemsComponent implemen
 	}
 
 	public String getVar(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.VAR, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.VAR, facesContext);
 	}
 
 	public void setVar(String var) {
@@ -158,10 +155,7 @@ return s;
 	}
 
 	public String getItemIndexVar(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.ITEM_INDEX_VAR, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.ITEM_INDEX_VAR, facesContext);
 	}
 
 	public void setItemIndexVar(String itemIndexVar) {
@@ -181,10 +175,7 @@ return s;
 	}
 
 	public String getItemLabel(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.ITEM_LABEL, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.ITEM_LABEL, facesContext);
 	}
 
 	public void setItemLabel(String itemLabel) {
@@ -244,10 +235,7 @@ return s;
 	}
 
 	public String getItemDescription(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.ITEM_DESCRIPTION, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.ITEM_DESCRIPTION, facesContext);
 	}
 
 	public void setItemDescription(String itemDescription) {
@@ -267,10 +255,7 @@ return s;
 	}
 
 	public String getItemAccessKey(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.ITEM_ACCESS_KEY, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.ITEM_ACCESS_KEY, facesContext);
 	}
 
 	public void setItemAccessKey(String itemAccessKey) {
@@ -290,10 +275,7 @@ return s;
 	}
 
 	public String getItemAcceleratorKey(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.ITEM_ACCELERATOR_KEY, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.ITEM_ACCELERATOR_KEY, facesContext);
 	}
 
 	public void setItemAcceleratorKey(String itemAcceleratorKey) {
@@ -313,10 +295,7 @@ return s;
 	}
 
 	public String getItemGroupName(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.ITEM_GROUP_NAME, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.ITEM_GROUP_NAME, facesContext);
 	}
 
 	public void setItemGroupName(String itemGroupName) {
@@ -336,10 +315,7 @@ return s;
 	}
 
 	public String getItemInputType(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.ITEM_INPUT_TYPE, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.ITEM_INPUT_TYPE, facesContext);
 	}
 
 	public void setItemInputType(String itemInputType) {
@@ -359,10 +335,7 @@ return s;
 	}
 
 	public String getItemStyleClass(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.ITEM_STYLE_CLASS, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.ITEM_STYLE_CLASS, facesContext);
 	}
 
 	public void setItemStyleClass(String itemStyleClass) {
@@ -382,10 +355,7 @@ return s;
 	}
 
 	public String getItemImageURL(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.ITEM_IMAGE_URL, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.ITEM_IMAGE_URL, facesContext);
 	}
 
 	public void setItemImageURL(String itemImageURL) {
@@ -405,10 +375,7 @@ return s;
 	}
 
 	public String getItemDisabledImageURL(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.ITEM_DISABLED_IMAGE_URL, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.ITEM_DISABLED_IMAGE_URL, facesContext);
 	}
 
 	public void setItemDisabledImageURL(String itemDisabledImageURL) {
@@ -428,10 +395,7 @@ return s;
 	}
 
 	public String getItemHoverImageURL(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.ITEM_HOVER_IMAGE_URL, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.ITEM_HOVER_IMAGE_URL, facesContext);
 	}
 
 	public void setItemHoverImageURL(String itemHoverImageURL) {
@@ -451,10 +415,7 @@ return s;
 	}
 
 	public String getItemSelectedImageURL(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.ITEM_SELECTED_IMAGE_URL, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.ITEM_SELECTED_IMAGE_URL, facesContext);
 	}
 
 	public void setItemSelectedImageURL(String itemSelectedImageURL) {
@@ -474,10 +435,7 @@ return s;
 	}
 
 	public String getItemExpandedImageURL(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.ITEM_EXPANDED_IMAGE_URL, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.ITEM_EXPANDED_IMAGE_URL, facesContext);
 	}
 
 	public void setItemExpandedImageURL(String itemExpandedImageURL) {

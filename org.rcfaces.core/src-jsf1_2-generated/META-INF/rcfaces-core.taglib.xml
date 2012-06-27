@@ -782,6 +782,21 @@
 		</component>
 	</tag>
 	<tag>
+		<tag-name>eventsCollector</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.eventsCollector</component-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>headingZone</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.headingZone</component-type>
+			<renderer-type>org.rcfaces.core.headingZone</renderer-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
 		<tag-name>convertByte</tag-name>
 		<converter>
 			<converter-id>org.rcfaces.Byte</converter-id>

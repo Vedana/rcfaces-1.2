@@ -104,10 +104,7 @@ public class JavaScriptComponent extends CameliaBaseComponent implements
 	 * @return url
 	 */
 	public String getSrc(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.SRC, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.SRC, facesContext);
 	}
 
 	/**
@@ -143,10 +140,7 @@ return s;
 	 * @return charset
 	 */
 	public String getSrcCharSet(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.SRC_CHAR_SET, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.SRC_CHAR_SET, facesContext);
 	}
 
 	/**
@@ -182,10 +176,7 @@ return s;
 	 * @return list of javascript files
 	 */
 	public String getRequiredFiles(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.REQUIRED_FILES, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.REQUIRED_FILES, facesContext);
 	}
 
 	/**
@@ -221,10 +212,7 @@ return s;
 	 * @return list of javascript classes
 	 */
 	public String getRequiredClasses(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.REQUIRED_CLASSES, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.REQUIRED_CLASSES, facesContext);
 	}
 
 	/**
@@ -252,10 +240,7 @@ return s;
 	}
 
 	public String getRequiredModules(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.REQUIRED_MODULES, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.REQUIRED_MODULES, facesContext);
 	}
 
 	public void setRequiredModules(String requiredModules) {
@@ -275,10 +260,7 @@ return s;
 	}
 
 	public String getRequiredSets(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.REQUIRED_SETS, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.REQUIRED_SETS, facesContext);
 	}
 
 	public void setRequiredSets(String requiredSets) {

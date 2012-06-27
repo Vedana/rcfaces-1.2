@@ -562,7 +562,7 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 	 * See {@link #isClosable() isClosable()} for more details
 	 */
 	public boolean isClosable(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.CLOSABLE, false, facesContext);
+		return engine.getBoolProperty(Properties.CLOSABLE, true, facesContext);
 	}
 
 	/**
@@ -718,10 +718,7 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 	}
 
 	public String getViewURL(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.VIEW_URL, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.VIEW_URL, facesContext);
 	}
 
 	public void setViewURL(String viewURL) {
@@ -741,10 +738,7 @@ return s;
 	}
 
 	public String getShellDecoratorName(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.SHELL_DECORATOR_NAME, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.SHELL_DECORATOR_NAME, facesContext);
 	}
 
 	public void setShellDecoratorName(String shellDecoratorName) {

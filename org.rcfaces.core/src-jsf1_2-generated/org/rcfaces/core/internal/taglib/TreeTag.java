@@ -18,6 +18,8 @@ public class TreeTag extends AbstractInputTag implements Tag {
 
 	private static final Log LOG=LogFactory.getLog(TreeTag.class);
 
+	private ValueExpression caption;
+	private ValueExpression headingLevel;
 	private ValueExpression doubleClickListeners;
 	private ValueExpression required;
 	private ValueExpression horizontalScrollPosition;
@@ -67,6 +69,14 @@ public class TreeTag extends AbstractInputTag implements Tag {
 	private ValueExpression expansionUseValue;
 	public String getComponentType() {
 		return TreeComponent.COMPONENT_TYPE;
+	}
+
+	public void setCaption(ValueExpression caption) {
+		this.caption = caption;
+	}
+
+	public void setHeadingLevel(ValueExpression headingLevel) {
+		this.headingLevel = headingLevel;
 	}
 
 	public void setDoubleClickListener(ValueExpression doubleClickListeners) {
@@ -262,6 +272,8 @@ public class TreeTag extends AbstractInputTag implements Tag {
 			if (TreeComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
+			LOG.debug("  caption='"+caption+"'");
+			LOG.debug("  headingLevel='"+headingLevel+"'");
 			LOG.debug("  required='"+required+"'");
 			LOG.debug("  horizontalScrollPosition='"+horizontalScrollPosition+"'");
 			LOG.debug("  verticalScrollPosition='"+verticalScrollPosition+"'");
@@ -312,6 +324,24 @@ public class TreeTag extends AbstractInputTag implements Tag {
 
 		TreeComponent component = (TreeComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
+
+		if (caption != null) {
+			if (caption.isLiteralText()==false) {
+				component.setValueExpression(Properties.CAPTION, caption);
+
+			} else {
+				component.setCaption(caption.getExpressionString());
+			}
+		}
+
+		if (headingLevel != null) {
+			if (headingLevel.isLiteralText()==false) {
+				component.setValueExpression(Properties.HEADING_LEVEL, headingLevel);
+
+			} else {
+				component.setHeadingLevel(headingLevel.getExpressionString());
+			}
+		}
 
 		if (doubleClickListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.DOUBLE_CLICK_LISTENER_TYPE, doubleClickListeners);
@@ -678,6 +708,8 @@ public class TreeTag extends AbstractInputTag implements Tag {
 	}
 
 	public void release() {
+		caption = null;
+		headingLevel = null;
 		doubleClickListeners = null;
 		required = null;
 		horizontalScrollPosition = null;

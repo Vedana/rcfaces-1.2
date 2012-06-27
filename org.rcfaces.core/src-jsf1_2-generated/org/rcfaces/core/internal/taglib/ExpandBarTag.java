@@ -19,6 +19,8 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 	private static final Log LOG=LogFactory.getLog(ExpandBarTag.class);
 
 	private ValueExpression expandListeners;
+	private ValueExpression headingZone;
+	private ValueExpression headingLevel;
 	private ValueExpression asyncRenderMode;
 	private ValueExpression fontBold;
 	private ValueExpression fontItalic;
@@ -52,6 +54,14 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 
 	public void setExpandListener(ValueExpression expandListeners) {
 		this.expandListeners = expandListeners;
+	}
+
+	public void setHeadingZone(ValueExpression headingZone) {
+		this.headingZone = headingZone;
+	}
+
+	public void setHeadingLevel(ValueExpression headingLevel) {
+		this.headingLevel = headingLevel;
 	}
 
 	public void setAsyncRenderMode(ValueExpression asyncRenderMode) {
@@ -167,6 +177,8 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 			if (ExpandBarComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
+			LOG.debug("  headingZone='"+headingZone+"'");
+			LOG.debug("  headingLevel='"+headingLevel+"'");
 			LOG.debug("  asyncRenderMode='"+asyncRenderMode+"'");
 			LOG.debug("  fontBold='"+fontBold+"'");
 			LOG.debug("  fontItalic='"+fontItalic+"'");
@@ -205,6 +217,24 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 
 		if (expandListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.EXPAND_LISTENER_TYPE, expandListeners);
+		}
+
+		if (headingZone != null) {
+			if (headingZone.isLiteralText()==false) {
+				component.setValueExpression(Properties.HEADING_ZONE, headingZone);
+
+			} else {
+				component.setHeadingZone(getBool(headingZone.getExpressionString()));
+			}
+		}
+
+		if (headingLevel != null) {
+			if (headingLevel.isLiteralText()==false) {
+				component.setValueExpression(Properties.HEADING_LEVEL, headingLevel);
+
+			} else {
+				component.setHeadingLevel(headingLevel.getExpressionString());
+			}
 		}
 
 		if (asyncRenderMode != null) {
@@ -433,6 +463,8 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 
 	public void release() {
 		expandListeners = null;
+		headingZone = null;
+		headingLevel = null;
 		asyncRenderMode = null;
 		fontBold = null;
 		fontItalic = null;

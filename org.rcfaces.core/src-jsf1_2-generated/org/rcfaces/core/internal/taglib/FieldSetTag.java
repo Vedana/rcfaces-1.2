@@ -18,6 +18,8 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 
 	private static final Log LOG=LogFactory.getLog(FieldSetTag.class);
 
+	private ValueExpression headingZone;
+	private ValueExpression headingLevel;
 	private ValueExpression fontBold;
 	private ValueExpression fontItalic;
 	private ValueExpression fontName;
@@ -37,6 +39,14 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 	private ValueExpression overStyleClass;
 	public String getComponentType() {
 		return FieldSetComponent.COMPONENT_TYPE;
+	}
+
+	public void setHeadingZone(ValueExpression headingZone) {
+		this.headingZone = headingZone;
+	}
+
+	public void setHeadingLevel(ValueExpression headingLevel) {
+		this.headingLevel = headingLevel;
 	}
 
 	public void setFontBold(ValueExpression fontBold) {
@@ -112,6 +122,8 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 			if (FieldSetComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
+			LOG.debug("  headingZone='"+headingZone+"'");
+			LOG.debug("  headingLevel='"+headingLevel+"'");
 			LOG.debug("  fontBold='"+fontBold+"'");
 			LOG.debug("  fontItalic='"+fontItalic+"'");
 			LOG.debug("  fontName='"+fontName+"'");
@@ -141,6 +153,24 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 
 		FieldSetComponent component = (FieldSetComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
+
+		if (headingZone != null) {
+			if (headingZone.isLiteralText()==false) {
+				component.setValueExpression(Properties.HEADING_ZONE, headingZone);
+
+			} else {
+				component.setHeadingZone(getBool(headingZone.getExpressionString()));
+			}
+		}
+
+		if (headingLevel != null) {
+			if (headingLevel.isLiteralText()==false) {
+				component.setValueExpression(Properties.HEADING_LEVEL, headingLevel);
+
+			} else {
+				component.setHeadingLevel(headingLevel.getExpressionString());
+			}
+		}
 
 		if (fontBold != null) {
 			if (fontBold.isLiteralText()==false) {
@@ -297,6 +327,8 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 	}
 
 	public void release() {
+		headingZone = null;
+		headingLevel = null;
 		fontBold = null;
 		fontItalic = null;
 		fontName = null;

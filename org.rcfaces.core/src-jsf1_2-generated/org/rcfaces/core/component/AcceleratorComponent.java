@@ -112,10 +112,7 @@ public class AcceleratorComponent extends CameliaCommandComponent implements
 	 * @return value to selected
 	 */
 	public String getForItemValue(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.FOR_ITEM_VALUE, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.FOR_ITEM_VALUE, facesContext);
 	}
 
 	/**
@@ -151,10 +148,7 @@ return s;
 	 * @return key
 	 */
 	public String getKeyBinding(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.KEY_BINDING, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.KEY_BINDING, facesContext);
 	}
 
 	/**

@@ -67,10 +67,7 @@ public class ImageCriteriaButtonComponent extends ImageButtonComponent implement
 	 * @return type of data
 	 */
 	public String getType(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.TYPE, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.TYPE, facesContext);
 	}
 
 	/**

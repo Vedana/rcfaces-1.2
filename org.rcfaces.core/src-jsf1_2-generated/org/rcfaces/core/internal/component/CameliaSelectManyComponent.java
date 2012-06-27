@@ -48,8 +48,10 @@ import org.rcfaces.core.internal.component.IInitializationState;
 import org.rcfaces.core.internal.converter.StrategyListenerConverter;
 import org.rcfaces.core.internal.manager.IContainerManager;
 import org.rcfaces.core.internal.manager.ITransientAttributesManager;
+import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
 import org.rcfaces.core.internal.renderkit.IAsyncRenderer;
 import org.rcfaces.core.internal.renderkit.IRendererExtension;
+import org.rcfaces.core.internal.renderkit.designer.IDesignerEngine;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.tools.BindingTools;
 import org.rcfaces.core.event.IValidationListener;
@@ -614,6 +616,17 @@ public abstract class CameliaSelectManyComponent extends javax.faces.component.U
 
 		return true;
     } 
+
+    protected final void designerDeclareCompositeChild(FacesContext facesContext, UIComponent child) {
+
+        IDesignerEngine designerEngine = AbstractProcessContext.getProcessContext(facesContext).getDesignerEngine();
+
+        if (designerEngine == null) {
+            return;
+        }
+
+        designerEngine.declareCompositeChild(this, child);
+    }
 	
     @Override
 	public String toString() {

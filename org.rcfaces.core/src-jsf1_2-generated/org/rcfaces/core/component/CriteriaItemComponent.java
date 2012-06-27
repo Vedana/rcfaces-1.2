@@ -34,10 +34,7 @@ public class CriteriaItemComponent extends SelectItemComponent {
 	}
 
 	public String getLogicalFilter(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.LOGICAL_FILTER, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.LOGICAL_FILTER, facesContext);
 	}
 
 	public void setLogicalFilter(String logicalFilter) {

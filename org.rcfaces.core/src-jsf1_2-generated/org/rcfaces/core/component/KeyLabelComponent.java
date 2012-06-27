@@ -71,10 +71,7 @@ public class KeyLabelComponent extends AbstractOutputComponent implements
 	}
 
 	public String getSelectedStyleClass(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.SELECTED_STYLE_CLASS, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.SELECTED_STYLE_CLASS, facesContext);
 	}
 
 	public void setSelectedStyleClass(String selectedStyleClass) {
@@ -94,10 +91,7 @@ return s;
 	}
 
 	public String getParentsStyleClass(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.PARENTS_STYLE_CLASS, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.PARENTS_STYLE_CLASS, facesContext);
 	}
 
 	public void setParentsStyleClass(String parentsStyleClass) {

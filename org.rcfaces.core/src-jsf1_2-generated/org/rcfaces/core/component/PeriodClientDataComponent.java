@@ -34,10 +34,7 @@ public class PeriodClientDataComponent extends CameliaBaseComponent {
 	}
 
 	public String getName(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.NAME, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.NAME, facesContext);
 	}
 
 	public void setName(String name) {
@@ -57,10 +54,7 @@ return s;
 	}
 
 	public String getValue(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.VALUE, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.VALUE, facesContext);
 	}
 
 	public void setValue(String value) {

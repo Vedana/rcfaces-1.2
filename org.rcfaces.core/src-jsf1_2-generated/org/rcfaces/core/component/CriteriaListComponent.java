@@ -59,10 +59,7 @@ public class CriteriaListComponent extends AbstractBasicComponent implements
 	}
 
 	public String getCriteriaFormat(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.CRITERIA_FORMAT, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.CRITERIA_FORMAT, facesContext);
 	}
 
 	public void setCriteriaFormat(String criteriaFormat) {
@@ -82,10 +79,7 @@ return s;
 	}
 
 	public String getNoCriteriaMessage(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.NO_CRITERIA_MESSAGE, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.NO_CRITERIA_MESSAGE, facesContext);
 	}
 
 	public void setNoCriteriaMessage(String noCriteriaMessage) {

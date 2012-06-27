@@ -106,10 +106,7 @@ public class ExternalBoxComponent extends AbstractOutputComponent implements
 	}
 
 	public String getScrolling(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.SCROLLING, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.SCROLLING, facesContext);
 	}
 
 	public void setScrolling(String scrolling) {
@@ -129,10 +126,7 @@ return s;
 	}
 
 	public String getContentURL(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.CONTENT_URL, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.CONTENT_URL, facesContext);
 	}
 
 	public void setContentURL(String contentURL) {

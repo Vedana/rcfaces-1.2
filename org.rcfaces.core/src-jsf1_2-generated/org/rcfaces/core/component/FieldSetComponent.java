@@ -9,11 +9,13 @@ import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import org.rcfaces.core.component.capability.IBorderTypeCapability;
+import org.rcfaces.core.component.capability.IHeadingZoneCapability;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.ITextAlignmentCapability;
+import javax.el.ValueExpression;
 import java.util.HashSet;
 import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.capability.IHeadingLevelCapability;
 import org.rcfaces.core.component.AbstractOutputComponent;
 import java.util.Set;
 import java.util.Arrays;
@@ -79,6 +81,8 @@ import org.rcfaces.core.component.capability.ITextCapability;
  * </table>
  */
 public class FieldSetComponent extends AbstractOutputComponent implements 
+	IHeadingZoneCapability,
+	IHeadingLevelCapability,
 	IFontCapability,
 	ITextCapability,
 	ITextDirectionCapability,
@@ -97,7 +101,7 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"imageHeight","fontName","text","borderType","fontBold","overStyleClass","fontSize","textDirection","scopeSaveValue","fontItalic","verticalAlignment","fontUnderline","scopeVar","textAlignment","scopeValue","imageURL","imageWidth"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"imageHeight","headingLevel","fontName","text","borderType","fontBold","overStyleClass","fontSize","textDirection","scopeSaveValue","fontItalic","verticalAlignment","fontUnderline","scopeVar","textAlignment","scopeValue","headingZone","imageWidth","imageURL"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="text";
 
@@ -115,6 +119,52 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 
 			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
 		
+	}
+
+	public boolean isHeadingZone() {
+		return isHeadingZone(null);
+	}
+
+	/**
+	 * See {@link #isHeadingZone() isHeadingZone()} for more details
+	 */
+	public boolean isHeadingZone(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.HEADING_ZONE, true, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "headingZone" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHeadingZoneSetted() {
+		return engine.isPropertySetted(Properties.HEADING_ZONE);
+	}
+
+	public void setHeadingZone(boolean headingZone) {
+		engine.setProperty(Properties.HEADING_ZONE, headingZone);
+	}
+
+	public java.lang.String getHeadingLevel() {
+		return getHeadingLevel(null);
+	}
+
+	/**
+	 * See {@link #getHeadingLevel() getHeadingLevel()} for more details
+	 */
+	public java.lang.String getHeadingLevel(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.HEADING_LEVEL, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "headingLevel" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHeadingLevelSetted() {
+		return engine.isPropertySetted(Properties.HEADING_LEVEL);
+	}
+
+	public void setHeadingLevel(java.lang.String headingLevel) {
+		engine.setProperty(Properties.HEADING_LEVEL, headingLevel);
 	}
 
 	public java.lang.Boolean getFontBold() {
