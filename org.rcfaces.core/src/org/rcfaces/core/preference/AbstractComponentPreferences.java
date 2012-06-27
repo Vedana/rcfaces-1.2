@@ -11,7 +11,6 @@ package org.rcfaces.core.preference;
  */
 public abstract class AbstractComponentPreferences implements
         IComponentPreferences {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = -161366892815882804L;
 

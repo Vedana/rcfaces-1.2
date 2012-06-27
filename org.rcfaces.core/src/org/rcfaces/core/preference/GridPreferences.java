@@ -5,7 +5,6 @@
 package org.rcfaces.core.preference;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.faces.FacesException;
@@ -29,8 +28,6 @@ import org.rcfaces.core.model.IFilterProperties;
  */
 public class GridPreferences extends AbstractComponentPreferences {
 
-    private static final String REVISION = "$Revision$";
-
     private static final long serialVersionUID = -1760014871350310345L;
 
     private static final int SAVE_COLUMNS_ORDER = 0x0001;
@@ -52,7 +49,7 @@ public class GridPreferences extends AbstractComponentPreferences {
 
     private int position = -1;
 
-    private Map columnSizes;
+    private Map<String, String> columnSizes;
 
     private IFilterProperties filterProperties;
 
@@ -83,7 +80,8 @@ public class GridPreferences extends AbstractComponentPreferences {
             IColumnIterator dataColumnIterator = gridComponent.listColumns();
 
             if (dataColumnIterator.count() > 0) {
-                Map cols = new HashMap(dataColumnIterator.count());
+                Map<String, IWidthRangeCapability> cols = new HashMap<String, IWidthRangeCapability>(
+                        dataColumnIterator.count());
                 for (; dataColumnIterator.hasNext();) {
                     UIColumn columnComponent = dataColumnIterator.next();
 
@@ -96,17 +94,14 @@ public class GridPreferences extends AbstractComponentPreferences {
                         continue;
                     }
 
-                    cols.put(columnId, columnComponent);
+                    cols.put(columnId, (IWidthRangeCapability) columnComponent);
                 }
 
-                for (Iterator it = columnSizes.entrySet().iterator(); it
-                        .hasNext();) {
-                    Map.Entry entry = (Map.Entry) it.next();
-                    String columnId = (String) entry.getKey();
-                    String columnWidth = (String) entry.getValue();
+                for (Map.Entry<String, String> entry : columnSizes.entrySet()) {
+                    String columnId = entry.getKey();
+                    String columnWidth = entry.getValue();
 
-                    IWidthRangeCapability columnComponent = (IWidthRangeCapability) cols
-                            .get(columnId);
+                    IWidthRangeCapability columnComponent = cols.get(columnId);
                     if (columnId == null) {
                         continue;
                     }
@@ -152,7 +147,8 @@ public class GridPreferences extends AbstractComponentPreferences {
             IColumnIterator dataColumnIterator = gridComponent.listColumns();
 
             if (dataColumnIterator.count() > 0) {
-                columnSizes = new HashMap(dataColumnIterator.count());
+                columnSizes = new HashMap<String, String>(
+                        dataColumnIterator.count());
                 for (; dataColumnIterator.hasNext();) {
                     UIColumn columnComponent = dataColumnIterator.next();
 
@@ -194,13 +190,14 @@ public class GridPreferences extends AbstractComponentPreferences {
                 new Integer(position) };
     }
 
+    @SuppressWarnings("unchecked")
     public void restoreState(FacesContext context, Object state) {
         Object values[] = (Object[]) state;
 
         saveMask = ((Integer) values[0]).intValue();
         columnsOrder = (String) values[1];
         sortedColumnIds = (String) values[2];
-        columnSizes = (Map) values[3];
+        columnSizes = (Map<String, String>) values[3];
         filterProperties = (IFilterProperties) values[4];
         position = ((Integer) values[5]).intValue();
     }
