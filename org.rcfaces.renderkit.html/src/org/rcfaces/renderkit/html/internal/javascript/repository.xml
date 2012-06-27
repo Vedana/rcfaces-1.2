@@ -1105,6 +1105,7 @@
 				<required-class name="fa_pager" />
 				<required-class name="fa_pagedComponent" />
 				<required-class name="f_resourceBundle" />
+				<required-class name="fa_tabIndex" />
 			</class>
 		</file>
 		<file name="input/f_imagePagerButton.js">
@@ -1239,6 +1240,7 @@
 				<required-class name="fa_autoOpen" />
 				<required-class name="fa_immediate" />
 				<required-class name="fa_aria" />
+				<required-class name="fa_tabIndex" />
 		
 				<required-class id="menu" name="f_menu" />
 				
@@ -1353,6 +1355,7 @@
 				<required-class name="fa_draggable" />
 				<required-class name="fa_autoScroll" />
 				<required-class name="fa_autoOpen" />
+				<required-class name="fa_tabIndex" />
 				
 				<required-class name="f_imageRepository" />
 				<required-class name="f_error" />
