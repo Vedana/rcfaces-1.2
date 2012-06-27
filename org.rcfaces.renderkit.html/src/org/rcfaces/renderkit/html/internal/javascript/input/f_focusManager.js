@@ -45,7 +45,7 @@ var __statics={
 	Finalizer: function() {
 		f_focusManager._Instance=undefined; // f_focusManager
 	}
-}
+};
 
 var __members={
 
@@ -252,7 +252,7 @@ var __members={
 		f_core.Debug(f_focusManager, "f_getFocusComponent: activeElement='"+activeElement+"'");
 		
 		if (activeElement) {
-			return this.f_getClassLoader().f_init(activeElement, true, true);
+			return this.f_getClass().f_getClassLoader().f_init(activeElement, true, true);
 		}
 		 
 		return null;
@@ -329,7 +329,7 @@ var __members={
 			return;
 		}
 		
-		var selectedComponentClientId;
+		var selectedComponentClientId=undefined;
 		var selectedSeverity=-1;
 		
 		var clientIds=messageContext.f_listComponentIdsWithMessages(true);
@@ -364,7 +364,7 @@ var __members={
 			this.f_setFocus(selectedComponentClientId);
 		}
 	}
-}
+};
  
 new f_class("f_focusManager", {
 	extend: f_object,
