@@ -651,6 +651,12 @@ public abstract class AbstractHtmlWriter extends
         return this;
     }
 
+    public IHtmlWriter writeAriaRequired(boolean required)
+            throws WriterException {
+        writeAttribute("aria-required", required);
+        return this;
+    }
+
     public IHtmlWriter writeAriaControls(String[] listId)
             throws WriterException {
         if (listId == null || listId.length == 0) {
