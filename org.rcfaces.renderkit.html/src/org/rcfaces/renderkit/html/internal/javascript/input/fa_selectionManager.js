@@ -124,30 +124,11 @@ var __statics = {
 		object._selectionCardinality=cardinality;
 		object._selectionFullState=(selectionFullState)?(new Array):null;
 	}	
-}
+};
+
 var __members = {
 	fa_selectionManager: function() {
-		if (this._selectionCardinality===undefined) {
-			var v_selectionCardinality=f_core.GetNumberAttributeNS(this,"selectionCardinality", undefined);
-	
-			if (v_selectionCardinality===undefined) {
-				return;
-			}
-			this._selectionCardinality=v_selectionCardinality;
-			
-			var clientSelectionFullState=f_core.GetNumberAttributeNS(this,"clientSelectionFullState", fa_clientFullState.NONE_CLIENT_FULL_STATE);
-			if (clientSelectionFullState) {
-				this._clientSelectionFullState=clientSelectionFullState;
-
-				this._selectionFullState=new Array;
-			}
-		}
-		
-		this._selectable=true;
-		
-		this._selectedElementValues=new Array;
-		this._deselectedElementValues=new Array;
-		this._currentSelection=new Array;
+		this.f_isSelectable();
 	},
 	f_finalize: function() {
 		this._currentSelection=undefined; // HtmlElement[]
@@ -164,6 +145,43 @@ var __members = {
 		//	this._selectable=undefined;  // boolean
 		//	this._selectionCardinality=undefined; // boolean
 		//  this._clientSelectionFullState=undefined // boolean
+	},
+	/**
+	 * Returns <code>true</code> is the component is selectable.
+	 * 
+	 * @method public
+	 * @return Boolean <code>true</code> is the component is selectable.
+	 */
+	f_isSelectable: function() {
+		var selectable=this._selectable;
+		if (selectable!==undefined) {
+			return selectable;
+		}
+		
+		if (this._selectionCardinality===undefined) {
+			var v_selectionCardinality=f_core.GetNumberAttributeNS(this,"selectionCardinality", undefined);
+	
+			if (v_selectionCardinality===undefined) {
+				this._selectable=false;
+				return false;
+			}
+			this._selectionCardinality=v_selectionCardinality;
+			
+			var clientSelectionFullState=f_core.GetNumberAttributeNS(this,"clientSelectionFullState", fa_clientFullState.NONE_CLIENT_FULL_STATE);
+			if (clientSelectionFullState) {
+				this._clientSelectionFullState=clientSelectionFullState;
+
+				this._selectionFullState=new Array;
+			}
+		}
+		
+		this._selectable=true;
+		
+		this._selectedElementValues=new Array;
+		this._deselectedElementValues=new Array;
+		this._currentSelection=new Array;
+		
+		return true;
 	},
 	f_serialize: {
 		before: function() {
@@ -221,13 +239,13 @@ var __members = {
 		f_core.Debug(fa_selectionManager, "f_moveCursor: Move cursor to element '"+this.fa_getElementValue(element)+"'"+((selection)?" selection=0x"+selection.toString(16):"")+" disabled="+this.fa_isElementDisabled(element));
 		
 		if (selection) {
-			if (this.f_performElementSelection(element, show, evt, selection, phaseName, selectOnMousedown)) {
+			if (this.f_performElementSelection(element, show, evt, selection, phaseName, selectOnMousedown)===false) {
 				show=false;
 			}
 		}
 		
 		if (show) {
-			this.fa_showElement(element);
+			this.fa_showElement(element, true);
 		}
 		
 		if (!this._selectable) {
@@ -315,7 +333,7 @@ var __members = {
 		}
 		
 		if (show) {
-			this.fa_showElement(element);
+			this.fa_showElement(element, true);
 		}
 	},
 	_deselectElement: function(element, value) {
