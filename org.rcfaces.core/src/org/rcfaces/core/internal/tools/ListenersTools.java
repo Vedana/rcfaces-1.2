@@ -220,7 +220,7 @@ public class ListenersTools {
     };
 
     public static final IListenerType DRAG_LISTENER_TYPE = new AbstractListenerType() {
- 
+
         public void addScriptListener(UIComponent component, String scriptType,
                 String command) {
             IDragEventCapability dragEventCapability = (IDragEventCapability) component;
@@ -1199,6 +1199,6 @@ public class ListenersTools {
     }
 
     public interface IMethodExpressionCreator {
-        MethodExpression create(String expression, Class[] paramTypes);
+        MethodExpression create(String expression, Class< ? >[] paramTypes);
     }
 }

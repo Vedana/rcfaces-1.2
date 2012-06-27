@@ -87,7 +87,7 @@ public class CameliaComponentHandler0 extends ComponentHandler {
                 new ListenersTools.IMethodExpressionCreator() {
 
                     public MethodExpression create(String expression,
-                            Class[] paramTypes) {
+                            Class< ? >[] paramTypes) {
 
                         ExpressionFactory expressionFactory = ctx
                                 .getExpressionFactory();
