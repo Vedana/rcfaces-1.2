@@ -6,6 +6,7 @@ package org.rcfaces.core.internal.contentStorage;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.lang.ILimitedMap;
 import org.rcfaces.core.internal.lang.LimitedMap;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.version.HashCodeTools;
@@ -23,7 +24,7 @@ public class BasicContentStorageRepository implements IContentStorageRepository 
 
     private static int id;
 
-    private final LimitedMap<String, IResolvedContent> resolvedContentByKey;
+    private final ILimitedMap<String, IResolvedContent> resolvedContentByKey;
 
     public BasicContentStorageRepository() {
         resolvedContentByKey = new LimitedMap<String, IResolvedContent>(

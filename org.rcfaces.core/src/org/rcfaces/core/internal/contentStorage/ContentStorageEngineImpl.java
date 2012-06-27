@@ -26,6 +26,8 @@ import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentPath;
 import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
+import org.rcfaces.core.internal.contentStorage.ContentStorageEngineImpl.Content;
+import org.rcfaces.core.internal.lang.ILimitedMap;
 import org.rcfaces.core.internal.lang.LimitedMap;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.lang.IAdaptable;
@@ -58,7 +60,7 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
 
     private boolean disableCache = false;
 
-    private final LimitedMap<IGenerationResourceInformation, Content> registredContentsByGenerationInformation = new LimitedMap<IGenerationResourceInformation, Content>(
+    private final ILimitedMap<IGenerationResourceInformation, Content> registredContentsByGenerationInformation = new LimitedMap<IGenerationResourceInformation, Content>(
             Constants.CONTENT_STORAGE_CACHE_SIZE,
             Constants.CONTENT_STORAGE_CACHE_SOFT_REFERENCES);
 
