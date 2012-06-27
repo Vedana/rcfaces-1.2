@@ -105,6 +105,8 @@ public class Constants {
 
     public static final String[] HASH_DIGEST_ALGORITHMS = { "MD5" };
 
+    public static final boolean BASIC_CONTENT_WEAK_CACHE_ENABLED = true;
+
     public static final int LIMITED_MAP_WEAK_CACHE_SIZE = 256;
 
     public static final int BASIC_CONTENT_CACHE_SIZE = 256;
