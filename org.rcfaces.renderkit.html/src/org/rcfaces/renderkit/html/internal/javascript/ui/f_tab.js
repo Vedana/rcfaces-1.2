@@ -74,6 +74,12 @@ var __members = {
 		if (cardBox) {
 			cardBox.f_setTabText(this, text);
 		}
+		
+		var heading=document.getElementById(this.id+"::heading");
+		if (heading) {
+			f_core.SetTextNode(heading, text);
+		}
+		
 	},
 	/**
 	 * @method public
