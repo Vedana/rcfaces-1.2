@@ -2194,7 +2194,7 @@ var __members = {
 			f_core.AppendChild(sortIndicator, img);
 		}
 
-		this._focusOnInput=(!!this.f_isCheckable());
+		this._focusOnInput=this.f_isCheckable && this.f_isCheckable();
 		
 		var focus;
 		
@@ -4069,7 +4069,7 @@ var __members = {
 			break;
 
 		case f_key.VK_SPACE:
-			if (this.f_isCheckable()) {
+			if (this.f_isCheckable && this.f_isCheckable()) {
 				 if (evt && evt.target && evt.target.tagName.toLowerCase()=="input") {
 					 // L'input gere de lui-meme le click ! donc on fait pas le job 2x
 					 cancel = true;
