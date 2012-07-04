@@ -224,12 +224,12 @@
 	cursor: pointer;
 	vertical-align: middle;
 	line-height: 18px;
-	-moz-user-focus: ignore;
-	-moz-user-select: none;
 	padding: 0;
 	margin: 0 2px 0 0;
 	width: 16px;  // Pour la compatibilité IE
 	height: 16px;  // Pour la compatibilité IE
+	
+	outline: none;
 }
 
 .f_grid_row {
@@ -310,6 +310,7 @@
 	overflow-x: auto;
 	text-align: left;
 	-moz-outline-style: none;
+	-moz-user-focus: ignore;
 
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
