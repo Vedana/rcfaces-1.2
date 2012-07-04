@@ -9,3 +9,9 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$ 
  */
+
+.f_messages_caption {
+	position: absolute;
+	left: -10000px;
+	top: -10000px;
+}
