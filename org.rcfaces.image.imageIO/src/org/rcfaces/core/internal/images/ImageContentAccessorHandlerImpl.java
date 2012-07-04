@@ -175,22 +175,18 @@ public class ImageContentAccessorHandlerImpl extends
         digester.addBeanPropertySetter(
                 "rcfaces-config/image-operations/operation/operation-class",
                 "className");
-        digester
-                .addBeanPropertySetter(
-                        "rcfaces-config/image-operations/operation/operation-force-suffix",
-                        "forceSuffix");
-        digester
-                .addBeanPropertySetter(
-                        "rcfaces-config/image-operations/operation/operation-response-mimeType",
-                        "responseMimeType");
-        digester
-                .addBeanPropertySetter(
-                        "rcfaces-config/image-operations/operation/operation-source-mimeType",
-                        "sourceMimeType");
-        digester
-                .addBeanPropertySetter(
-                        "rcfaces-config/image-operations/operation/operation-encoder-mimeType",
-                        "encoderMimeType");
+        digester.addBeanPropertySetter(
+                "rcfaces-config/image-operations/operation/operation-force-suffix",
+                "forceSuffix");
+        digester.addBeanPropertySetter(
+                "rcfaces-config/image-operations/operation/operation-response-mimeType",
+                "responseMimeType");
+        digester.addBeanPropertySetter(
+                "rcfaces-config/image-operations/operation/operation-source-mimeType",
+                "sourceMimeType");
+        digester.addBeanPropertySetter(
+                "rcfaces-config/image-operations/operation/operation-encoder-mimeType",
+                "encoderMimeType");
 
         digester.addRule(
                 "rcfaces-config/image-resource-adapters/resource-adapter",
@@ -211,52 +207,47 @@ public class ImageContentAccessorHandlerImpl extends
                         addImageResourceAdapter(imageResourceAdapterBean);
                     }
                 });
-        digester
-                .addBeanPropertySetter(
-                        "rcfaces-config/image-resource-adapters/resource-adapter/adapter-id",
-                        "id");
-        digester
-                .addBeanPropertySetter(
-                        "rcfaces-config/image-resource-adapters/resource-adapter/adapter-name",
-                        "name");
-        digester
-                .addBeanPropertySetter(
-                        "rcfaces-config/image-resource-adapters/resource-adapter/adapter-class",
-                        "className");
+        digester.addBeanPropertySetter(
+                "rcfaces-config/image-resource-adapters/resource-adapter/adapter-id",
+                "id");
+        digester.addBeanPropertySetter(
+                "rcfaces-config/image-resource-adapters/resource-adapter/adapter-name",
+                "name");
+        digester.addBeanPropertySetter(
+                "rcfaces-config/image-resource-adapters/resource-adapter/adapter-class",
+                "className");
 
-        digester
-                .addRule(
-                        "rcfaces-config/image-resource-adapters/resource-adapter/content-type",
-                        new Rule() {
-                            private static final String REVISION = "$Revision$";
+        digester.addRule(
+                "rcfaces-config/image-resource-adapters/resource-adapter/content-type",
+                new Rule() {
+                    private static final String REVISION = "$Revision$";
 
-                            public void body(String namespace, String name,
-                                    String text) throws Exception {
+                    public void body(String namespace, String name, String text)
+                            throws Exception {
 
-                                ImageResourceAdapterBean imageResourceAdapterBean = (ImageResourceAdapterBean) super.digester
-                                        .peek();
+                        ImageResourceAdapterBean imageResourceAdapterBean = (ImageResourceAdapterBean) super.digester
+                                .peek();
 
-                                imageResourceAdapterBean.addContentType(text);
-                            }
+                        imageResourceAdapterBean.addContentType(text);
+                    }
 
-                        });
+                });
 
-        digester
-                .addRule(
-                        "rcfaces-config/image-resource-adapters/resource-adapter/suffix",
-                        new Rule() {
-                            private static final String REVISION = "$Revision$";
+        digester.addRule(
+                "rcfaces-config/image-resource-adapters/resource-adapter/suffix",
+                new Rule() {
+                    private static final String REVISION = "$Revision$";
 
-                            public void body(String namespace, String name,
-                                    String text) throws Exception {
+                    public void body(String namespace, String name, String text)
+                            throws Exception {
 
-                                ImageResourceAdapterBean imageResourceAdapterBean = (ImageResourceAdapterBean) super.digester
-                                        .peek();
+                        ImageResourceAdapterBean imageResourceAdapterBean = (ImageResourceAdapterBean) super.digester
+                                .peek();
 
-                                imageResourceAdapterBean.addSuffix(text);
-                            }
+                        imageResourceAdapterBean.addSuffix(text);
+                    }
 
-                        });
+                });
     }
 
     private void declareOperation(OperationBean operationBean) {
@@ -272,9 +263,10 @@ public class ImageContentAccessorHandlerImpl extends
                     FacesContext.getCurrentInstance());
 
         } catch (ClassNotFoundException ex) {
-            LOG.error("Can not load class '" + operationBean.getClassName()
-                    + "' specified by imageOperation id='"
-                    + operationBean.getId() + "'.", ex);
+            LOG.error(
+                    "Can not load class '" + operationBean.getClassName()
+                            + "' specified by imageOperation id='"
+                            + operationBean.getId() + "'.", ex);
 
             return;
         }
@@ -302,9 +294,10 @@ public class ImageContentAccessorHandlerImpl extends
             constructor = clazz.getConstructor((Class[]) null);
 
         } catch (NoSuchMethodException ex) {
-            LOG.error("Can not get constructor for imageOperation id='"
-                    + operationBean.getId() + "' class='"
-                    + operationBean.getClassName() + "'.", ex);
+            LOG.error(
+                    "Can not get constructor for imageOperation id='"
+                            + operationBean.getId() + "' class='"
+                            + operationBean.getClassName() + "'.", ex);
             return;
         }
 
@@ -314,11 +307,12 @@ public class ImageContentAccessorHandlerImpl extends
                     .newInstance((Object[]) null);
 
         } catch (Throwable ex) {
-            LOG.error("Can not instanciate class '"
-                    + operationBean.getClassName()
-                    + "' specified by imageOperation id='"
-                    + operationBean.getId() + "' using constructor '"
-                    + constructor + "'.", ex);
+            LOG.error(
+                    "Can not instanciate class '"
+                            + operationBean.getClassName()
+                            + "' specified by imageOperation id='"
+                            + operationBean.getId() + "' using constructor '"
+                            + constructor + "'.", ex);
             return;
         }
 
@@ -351,11 +345,12 @@ public class ImageContentAccessorHandlerImpl extends
             operation.configure(operationBean.getParameterMap());
 
         } catch (Throwable ex) {
-            LOG.error("Can not configure bean, class '"
-                    + operationBean.getClassName()
-                    + "' specified by imageOperation id='"
-                    + operationBean.getId() + "' using constructor '"
-                    + constructor + "'.", ex);
+            LOG.error(
+                    "Can not configure bean, class '"
+                            + operationBean.getClassName()
+                            + "' specified by imageOperation id='"
+                            + operationBean.getId() + "' using constructor '"
+                            + constructor + "'.", ex);
             return;
         }
 
@@ -367,9 +362,7 @@ public class ImageContentAccessorHandlerImpl extends
                 .get(operationId);
 
         if (LOG.isDebugEnabled()) {
-            LOG
-                    .debug("Operation id='" + operationId + "' => "
-                            + imageOperation);
+            LOG.debug("Operation id='" + operationId + "' => " + imageOperation);
         }
 
         return imageOperation;
@@ -662,7 +655,6 @@ public class ImageContentAccessorHandlerImpl extends
      * @version $Revision$ $Date$
      */
     public static final class OperationBean {
-        private static final String REVISION = "$Revision$";
 
         private String name;
 
@@ -678,13 +670,13 @@ public class ImageContentAccessorHandlerImpl extends
 
         private String encoderMimeType;
 
-        private Map parameters = new HashMap();
+        private Map<String, Object> parameters = new HashMap<String, Object>();
 
         public String getClassName() {
             return className;
         }
 
-        public Map getParameterMap() {
+        public Map<String, Object> getParameterMap() {
             return parameters;
         }
 
@@ -793,8 +785,8 @@ public class ImageContentAccessorHandlerImpl extends
         protected void resolveInstance() {
             Class clazz;
             try {
-                clazz = ClassLocator.load(className, null, FacesContext
-                        .getCurrentInstance());
+                clazz = ClassLocator.load(className, null,
+                        FacesContext.getCurrentInstance());
 
             } catch (Exception ex) {
                 throw new FacesException("Can not load class '" + className

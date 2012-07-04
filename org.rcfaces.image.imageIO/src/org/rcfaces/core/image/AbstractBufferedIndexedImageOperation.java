@@ -24,7 +24,7 @@ public abstract class AbstractBufferedIndexedImageOperation extends
     private static final Log LOG = LogFactory
             .getLog(AbstractBufferedIndexedImageOperation.class);
 
-    public IndexColorModel filter(Map requestParameter, IndexColorModel source,
+    public IndexColorModel filter(Map<String, Object> requestParameter, IndexColorModel source,
             BufferedImage sourceImage) {
         RasterOp imageOperation;
 

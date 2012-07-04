@@ -43,7 +43,6 @@ import org.rcfaces.core.lang.IAdaptable;
  * @version $Revision$ $Date$
  */
 public class ImageAdapterFactory extends ContentAdapterFactory {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(ImageAdapterFactory.class);
 
