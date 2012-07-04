@@ -34,10 +34,7 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getClip(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.CLIP, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.CLIP, facesContext);
 	}
 
 	public void setClip(String clip) {
@@ -57,10 +54,7 @@ return s;
 	}
 
 	public String getClipPath(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.CLIP_PATH, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.CLIP_PATH, facesContext);
 	}
 
 	public void setClipPath(String clipPath) {
@@ -80,10 +74,7 @@ return s;
 	}
 
 	public String getClipRule(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.CLIP_RULE, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.CLIP_RULE, facesContext);
 	}
 
 	public void setClipRule(String clipRule) {
@@ -103,10 +94,7 @@ return s;
 	}
 
 	public String getColor(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.COLOR, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.COLOR, facesContext);
 	}
 
 	public void setColor(String color) {
@@ -126,10 +114,7 @@ return s;
 	}
 
 	public String getDisplay(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.DISPLAY, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.DISPLAY, facesContext);
 	}
 
 	public void setDisplay(String display) {
@@ -149,10 +134,7 @@ return s;
 	}
 
 	public String getFill(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.FILL, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.FILL, facesContext);
 	}
 
 	public void setFill(String fill) {
@@ -172,10 +154,7 @@ return s;
 	}
 
 	public String getFillRule(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.FILL_RULE, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.FILL_RULE, facesContext);
 	}
 
 	public void setFillRule(String fillRule) {
@@ -195,10 +174,7 @@ return s;
 	}
 
 	public String getFillOpacity(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.FILL_OPACITY, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.FILL_OPACITY, facesContext);
 	}
 
 	public void setFillOpacity(String fillOpacity) {
@@ -218,10 +194,7 @@ return s;
 	}
 
 	public String getFontFamily(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.FONT_FAMILY, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.FONT_FAMILY, facesContext);
 	}
 
 	public void setFontFamily(String fontFamily) {
@@ -241,10 +214,7 @@ return s;
 	}
 
 	public String getFontSize(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.FONT_SIZE, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.FONT_SIZE, facesContext);
 	}
 
 	public void setFontSize(String fontSize) {
@@ -264,10 +234,7 @@ return s;
 	}
 
 	public String getFontSizeAdjust(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.FONT_SIZE_ADJUST, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.FONT_SIZE_ADJUST, facesContext);
 	}
 
 	public void setFontSizeAdjust(String fontSizeAdjust) {
@@ -287,10 +254,7 @@ return s;
 	}
 
 	public String getFontStretch(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.FONT_STRETCH, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.FONT_STRETCH, facesContext);
 	}
 
 	public void setFontStretch(String fontStretch) {
@@ -310,10 +274,7 @@ return s;
 	}
 
 	public String getFontStyle(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.FONT_STYLE, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.FONT_STYLE, facesContext);
 	}
 
 	public void setFontStyle(String fontStyle) {
@@ -333,10 +294,7 @@ return s;
 	}
 
 	public String getFontVariant(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.FONT_VARIANT, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.FONT_VARIANT, facesContext);
 	}
 
 	public void setFontVariant(String fontVariant) {
@@ -356,10 +314,7 @@ return s;
 	}
 
 	public String getFontWeight(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.FONT_WEIGHT, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.FONT_WEIGHT, facesContext);
 	}
 
 	public void setFontWeight(String fontWeight) {
@@ -379,10 +334,7 @@ return s;
 	}
 
 	public String getOpacity(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.OPACITY, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.OPACITY, facesContext);
 	}
 
 	public void setOpacity(String opacity) {
@@ -402,10 +354,7 @@ return s;
 	}
 
 	public String getOverflow(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.OVERFLOW, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.OVERFLOW, facesContext);
 	}
 
 	public void setOverflow(String overflow) {
@@ -425,10 +374,7 @@ return s;
 	}
 
 	public String getStopColor(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.STOP_COLOR, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.STOP_COLOR, facesContext);
 	}
 
 	public void setStopColor(String stopColor) {
@@ -448,10 +394,7 @@ return s;
 	}
 
 	public String getStopOpacity(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.STOP_OPACITY, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.STOP_OPACITY, facesContext);
 	}
 
 	public void setStopOpacity(String stopOpacity) {
@@ -471,10 +414,7 @@ return s;
 	}
 
 	public String getStroke(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.STROKE, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.STROKE, facesContext);
 	}
 
 	public void setStroke(String stroke) {
@@ -494,10 +434,7 @@ return s;
 	}
 
 	public String getStrokeDashArray(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.STROKE_DASH_ARRAY, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.STROKE_DASH_ARRAY, facesContext);
 	}
 
 	public void setStrokeDashArray(String strokeDashArray) {
@@ -517,10 +454,7 @@ return s;
 	}
 
 	public String getStrokeDashOffset(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.STROKE_DASH_OFFSET, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.STROKE_DASH_OFFSET, facesContext);
 	}
 
 	public void setStrokeDashOffset(String strokeDashOffset) {
@@ -540,10 +474,7 @@ return s;
 	}
 
 	public String getStrokeLineCap(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.STROKE_LINE_CAP, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.STROKE_LINE_CAP, facesContext);
 	}
 
 	public void setStrokeLineCap(String strokeLineCap) {
@@ -563,10 +494,7 @@ return s;
 	}
 
 	public String getStrokeLineJoin(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.STROKE_LINE_JOIN, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.STROKE_LINE_JOIN, facesContext);
 	}
 
 	public void setStrokeLineJoin(String strokeLineJoin) {
@@ -586,10 +514,7 @@ return s;
 	}
 
 	public String getStrokeMiterLimit(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.STROKE_MITER_LIMIT, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.STROKE_MITER_LIMIT, facesContext);
 	}
 
 	public void setStrokeMiterLimit(String strokeMiterLimit) {
@@ -609,10 +534,7 @@ return s;
 	}
 
 	public String getStrokeOpacity(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.STROKE_OPACITY, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.STROKE_OPACITY, facesContext);
 	}
 
 	public void setStrokeOpacity(String strokeOpacity) {
@@ -632,10 +554,7 @@ return s;
 	}
 
 	public String getStrokeWidth(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.STROKE_WIDTH, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.STROKE_WIDTH, facesContext);
 	}
 
 	public void setStrokeWidth(String strokeWidth) {
@@ -655,10 +574,7 @@ return s;
 	}
 
 	public String getTextAlign(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.TEXT_ALIGN, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.TEXT_ALIGN, facesContext);
 	}
 
 	public void setTextAlign(String textAlign) {
@@ -678,10 +594,7 @@ return s;
 	}
 
 	public String getTextAnchor(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.TEXT_ANCHOR, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.TEXT_ANCHOR, facesContext);
 	}
 
 	public void setTextAnchor(String textAnchor) {
@@ -701,10 +614,7 @@ return s;
 	}
 
 	public String getTextDecoration(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.TEXT_DECORATION, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.TEXT_DECORATION, facesContext);
 	}
 
 	public void setTextDecoration(String textDecoration) {
@@ -724,10 +634,7 @@ return s;
 	}
 
 	public String getTextRendering(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.TEXT_RENDERING, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.TEXT_RENDERING, facesContext);
 	}
 
 	public void setTextRendering(String textRendering) {
@@ -747,10 +654,7 @@ return s;
 	}
 
 	public String getVisibility(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.VISIBILITY, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.VISIBILITY, facesContext);
 	}
 
 	public void setVisibility(String visibility) {
@@ -770,10 +674,7 @@ return s;
 	}
 
 	public String getWordSpacing(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.WORD_SPACING, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.WORD_SPACING, facesContext);
 	}
 
 	public void setWordSpacing(String wordSpacing) {
@@ -793,10 +694,7 @@ return s;
 	}
 
 	public String getWritingMode(javax.faces.context.FacesContext facesContext) {
-		String s = engine.getStringProperty(Properties.WRITING_MODE, facesContext);
-
-
-return s;
+		return engine.getStringProperty(Properties.WRITING_MODE, facesContext);
 	}
 
 	public void setWritingMode(String writingMode) {
