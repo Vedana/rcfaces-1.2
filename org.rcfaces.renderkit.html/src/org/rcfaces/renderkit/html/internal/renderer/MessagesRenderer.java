@@ -73,36 +73,6 @@ public class MessagesRenderer extends AbstractCssRenderer {
         return IAccessibilityRoles.ALERT;
     }
 
-    /*
-     * protected void encodeJavaScript(IJavaScriptWriter js) throws
-     * WriterException { super.encodeJavaScript(js);
-     * 
-     * FacesContext facesContext = js.getFacesContext(); IComponentRenderContext
-     * componentRenderContext = js .getHtmlComponentRenderContext();
-     * MessagesComponent messagesComponent = (MessagesComponent)
-     * componentRenderContext .getComponent();
-     * 
-     * String bundleVar = messagesComponent.getBundleVar(facesContext);
-     * 
-     * boolean globalOnly = messagesComponent.isGlobalOnly();
-     * 
-     * Iterator iterator = facesContext.getMessages(null); Set globals = null;
-     * if (globalOnly == false) { globals = new HashSet(); for (;
-     * iterator.hasNext();) { globals.add(iterator.next()); }
-     * 
-     * iterator = facesContext.getMessages(); }
-     * 
-     * boolean messageGlobal = true;
-     * 
-     * for (; iterator.hasNext();) { FacesMessage facesMessage = (FacesMessage)
-     * iterator.next();
-     * 
-     * if (globals != null) { messageGlobal = globals.contains(facesMessage); }
-     * 
-     * JavaScriptTools.writeMessage(js, facesMessage, null, messageGlobal,
-     * bundleVar); } }
-     */
-
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.MESSAGES;
     }
