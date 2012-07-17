@@ -547,12 +547,17 @@ var __members = {
 		for (var i=0; i < columns.length;i++) {
 			var col=columns[i];
 			var cellText = "";
+			
 			if (col._visibility != null && i !=rowValueColumnIndex) {
 				cellText=arguments[idx++];
+				if (col._scopeCol) {
+					row._lineHeader = cellText;
+				}
+				
+			} else if (col._scopeCol) {
+				row._lineHeader = row._index;
 			}
-			if (col._scopeCol) {
-				row._lineHeader = cellText;
-			}
+
 		}
 		idx = idxBak;
 		
