@@ -3,13 +3,11 @@
  */
 package org.rcfaces.core.model;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 
 import javax.faces.component.UIComponent;
-import javax.faces.model.SelectItem;
 
 /**
  * 
@@ -19,24 +17,23 @@ import javax.faces.model.SelectItem;
 public abstract class AbstractFilteredCollection<T> implements Collection<T>,
         IFiltredCollection<T>, IFiltredCollection2<T> {
 
-    public static final IFiltredCollection EMPTY_FILTERED_COLLECTION = new AbstractFilteredCollection() {
+    public static final IFiltredCollection< ? > EMPTY_FILTERED_COLLECTION = emptyFilteredCollection();
 
-        protected boolean accept(IFilterProperties filter, Object selectItem) {
-            return false;
-        }
-    };
+    public static final Collection< ? > EMPTY_COLLECTION = (Collection< ? >) EMPTY_FILTERED_COLLECTION;
 
-    public static final Collection EMPTY_COLLECTION = (Collection) EMPTY_FILTERED_COLLECTION;
+    public static <T> IFiltredCollection<T> emptyFilteredCollection() {
+        return new AbstractFilteredCollection<T>() {
+            @Override
+            protected boolean accept(IFilterProperties filter, T selectItem) {
+                return false;
+            }
+        };
+    }
 
     protected final Collection<T> collection;
 
     public AbstractFilteredCollection() {
         this(Collections.<T> emptyList());
-    }
-
-    @SuppressWarnings("unchecked")
-    public AbstractFilteredCollection(SelectItem selecItems[]) {
-        this((Collection<T>) Arrays.asList(selecItems));
     }
 
     public AbstractFilteredCollection(Collection<T> collection) {
