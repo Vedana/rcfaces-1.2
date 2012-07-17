@@ -132,6 +132,13 @@
 	padding: 2px 1px 2px 1px;
 	text-decoration: inherit;
 	white-space: nowrap;
+	color: black;
+	text-decoration: none;
+}
+
+.f_tree_label:hover {
+	text-decoration: none;
+	color: black;
 }
 
 .f_tree_checkable .f_tree_label_cursor {
