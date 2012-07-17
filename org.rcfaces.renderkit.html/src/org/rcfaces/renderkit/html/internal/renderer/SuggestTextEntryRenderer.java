@@ -20,6 +20,7 @@ import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.model.IFilterProperties;
+import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.IFilteredItemsRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
@@ -40,6 +41,17 @@ public class SuggestTextEntryRenderer extends TextEntryRenderer implements
             throws WriterException {
 
         super.encodeComponent(htmlWriter);
+
+        /*
+         * htmlWriter.startElement(IHtmlElements.LABEL);
+         * htmlWriter.writeId(htmlWriter.getComponentRenderContext()
+         * .getComponentClientId() + "::ariaLive");
+         * htmlWriter.writeClass("f_suggestTextEntry_live");
+         * htmlWriter.writeAriaLabelledBy(htmlWriter.getComponentRenderContext()
+         * .getComponentClientId()); htmlWriter.writeAttribute("aria-relevant",
+         * "text"); htmlWriter.writeAttribute("aria-live", "polite");
+         * htmlWriter.endElement(IHtmlElements.LABEL);
+         */
 
         htmlWriter.getJavaScriptEnableMode().enableOnFocus();
     }
@@ -114,6 +126,33 @@ public class SuggestTextEntryRenderer extends TextEntryRenderer implements
                     moreResultsMessage);
         }
 
+        String inputFormat = suggestTextEntryComponent
+                .getInputFormat(facesContext);
+        if (inputFormat != null) {
+            htmlWriter.writeAttributeNS("inputFormat", inputFormat);
+        }
+        String labelFormat = suggestTextEntryComponent
+                .getLabelFormat(facesContext);
+        if (labelFormat != null) {
+            htmlWriter.writeAttributeNS("labelFormat", labelFormat);
+        }
+        String descriptionFormat = suggestTextEntryComponent
+                .getDescriptionFormat(facesContext);
+        if (descriptionFormat != null) {
+            htmlWriter.writeAttributeNS("descriptionFormat", descriptionFormat);
+        }
+
+        int popupWidth = suggestTextEntryComponent.getPopupWidth(facesContext);
+        if (popupWidth > 0) {
+            htmlWriter.writeAttributeNS("popupWidth", popupWidth);
+        }
+
+        int popupHeight = suggestTextEntryComponent
+                .getPopupHeight(facesContext);
+        if (popupHeight > 0) {
+            htmlWriter.writeAttributeNS("popupHeight", popupHeight);
+        }
+
         boolean orderedResult = suggestTextEntryComponent
                 .isOrderedItems(facesContext);
 
@@ -165,6 +204,11 @@ public class SuggestTextEntryRenderer extends TextEntryRenderer implements
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.SUGGEST_TEXT_ENTRY;
+    }
+
+    @Override
+    protected String getWAIRole() {
+        return IAccessibilityRoles.COMBOBOX;
     }
 
     protected IComponentDecorator createSuggestionDecorator(
