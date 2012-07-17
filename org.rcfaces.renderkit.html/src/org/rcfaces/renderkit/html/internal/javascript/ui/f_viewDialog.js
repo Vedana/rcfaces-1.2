@@ -218,6 +218,7 @@ var __members = {
 		iframe.frameBorder=0;
 		iframe.style.width=this.f_getWidth();
 		iframe.style.height=this.f_getHeight();
+		iframe.title="";
 		
 		var self=this;
 		if (f_core.IsInternetExplorer()) {
