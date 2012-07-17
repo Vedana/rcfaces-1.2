@@ -1523,6 +1523,7 @@
 				<required-class name="fa_collapsed" />
 				<required-class name="fa_groupName" />
 				<required-class name="fa_overStyleClass" />
+				<required-class name="fa_asyncRender" />
 
 				<required-class id="effect" name="f_effect" />
 
