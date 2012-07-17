@@ -217,7 +217,8 @@ var __statics = {
 			
 			if (dataGridPopup._searchInput) {
 				dataGridPopup._searchInput.focus();
-			}else if (dataGridPopup._input) {
+				
+			} else if (dataGridPopup._input) {
 				dataGridPopup._ariaInput = dataGridPopup._input;
 				dataGridPopup._ariaInput._role = true;
 				dataGridPopup._ariaInput.setAttribute("role", "listbox");
@@ -485,6 +486,7 @@ var __members = {
 			className: tableClassName, 
 			"style": "width:"+width+"px;height:"+height+"px" 
 		});
+		dataGridContainer.setAttribute("role", "presentation");
 		
 		var tBodyContainer=f_core.CreateElement(dataGridContainer, "tbody");		
 		
@@ -512,10 +514,11 @@ var __members = {
 				className: "fa_dataGridPopup_title"
 			});
 			
-			f_core.CreateElement(div, "div", {
+			var plabel = f_core.CreateElement(div, "label", {
 				className: "fa_dataGridPopup_label",
 				textNode: resourceBundle.f_get("SEARCH_LABEL")
 			});
+			plabel.setAttribute("for", this.id+"::dataGridPopup_input");
 			
 			var form=f_core.CreateElement(div,  "form", {
 				className: "fa_dataGridPopup_form"
@@ -525,16 +528,16 @@ var __members = {
 				className: "fa_dataGridPopup_icon",
 				src: f_env.GetBlankImageURL(),
 				name: "searchButton"
-			});	
+			});
 			this._searchIcon=button;
 			button._dataGridPopup=this;
 			button.onclick=fa_dataGridPopup._SearchButton_onclick;
 			
 			var input=f_core.CreateElement(form, "input", {
+				id: this.id+"::dataGridPopup_input",
 				className: "fa_dataGridPopup_input",
 				name: "searchValue",
 				type: "text",
-				role: "listbox",
 				// He oui ! cela semble marcher sur tous les browsers ! (meme Gecko !?)		
 				autocomplete: "off"
 			});
