@@ -12,7 +12,6 @@ import javax.faces.event.FacesListener;
  * @version $Revision$ $Date$
  */
 public class FocusEvent extends CameliaEvent {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = -1451725996824836882L;
 
@@ -23,8 +22,11 @@ public class FocusEvent extends CameliaEvent {
     /*
      * (non-Javadoc)
      * 
-     * @see javax.faces.event.FacesEvent#isAppropriateListener(javax.faces.event.FacesListener)
+     * @see
+     * javax.faces.event.FacesEvent#isAppropriateListener(javax.faces.event.
+     * FacesListener)
      */
+    @Override
     public boolean isAppropriateListener(FacesListener listener) {
         return (listener instanceof IFocusListener);
     }
@@ -32,8 +34,11 @@ public class FocusEvent extends CameliaEvent {
     /*
      * (non-Javadoc)
      * 
-     * @see javax.faces.event.FacesEvent#processListener(javax.faces.event.FacesListener)
+     * @see
+     * javax.faces.event.FacesEvent#processListener(javax.faces.event.FacesListener
+     * )
      */
+    @Override
     public void processListener(FacesListener listener) {
         ((IFocusListener) listener).processFocus(this);
     }

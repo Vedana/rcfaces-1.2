@@ -13,7 +13,6 @@ import javax.faces.event.FacesListener;
  * @version $Revision$ $Date$
  */
 public class SelectionEvent extends ActionEvent implements ITypedEvent {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = 3488075281502266801L;
 
@@ -131,6 +130,7 @@ public class SelectionEvent extends ActionEvent implements ITypedEvent {
         return mouseY;
     }
 
+    @Override
     public boolean isAppropriateListener(FacesListener listener) {
 
         if (listener instanceof ISelectionListener) {
@@ -140,6 +140,7 @@ public class SelectionEvent extends ActionEvent implements ITypedEvent {
         return super.isAppropriateListener(listener);
     }
 
+    @Override
     public void processListener(FacesListener listener) {
         if (listener instanceof ISelectionListener) {
             ((ISelectionListener) listener).componentSelected(this);

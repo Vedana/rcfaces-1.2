@@ -14,13 +14,13 @@ import org.rcfaces.core.component.capability.IAdditionalInformationCardinalityCa
  */
 public class AdditionalInformationCardinalityConverter extends
         CardinalityConverter {
-    private static final String REVISION = "$Revision$";
 
     public static final Converter SINGLETON = new AdditionalInformationCardinalityConverter();
 
     private static final Integer DEFAULT_CARDINALITY = new Integer(
             IAdditionalInformationCardinalityCapability.DEFAULT_CARDINALITY);
 
+    @Override
     protected Object getDefaultCardinality() {
         return DEFAULT_CARDINALITY;
     }

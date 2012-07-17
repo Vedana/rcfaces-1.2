@@ -30,7 +30,6 @@ import org.xml.sax.Attributes;
  * @version $Revision$ $Date$
  */
 public class ProvidersRegistry implements IProvidersRegistry {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(ProvidersRegistry.class);
 
@@ -76,8 +75,8 @@ public class ProvidersRegistry implements IProvidersRegistry {
 
         Class clazz;
         try {
-            clazz = ClassLocator.load(className, null, FacesContext
-                    .getCurrentInstance());
+            clazz = ClassLocator.load(className, null,
+                    FacesContext.getCurrentInstance());
 
         } catch (ClassNotFoundException ex) {
             throw new FacesException("Can not load class '" + className

@@ -21,7 +21,6 @@ import org.rcfaces.core.model.AbstractConverter;
  * @version $Revision$ $Date$
  */
 public class DragDropTypesConverter extends AbstractConverter {
-    private static final String REVISION = "$Revision$";
 
     public static final Converter SINGLETON = new DragDropTypesConverter();
 
@@ -33,7 +32,7 @@ public class DragDropTypesConverter extends AbstractConverter {
 
         StringTokenizer st = new StringTokenizer(value, ",");
 
-        List list = new ArrayList();
+        List<String> list = new ArrayList<String>();
 
         for (; st.hasMoreTokens();) {
             String token = st.nextToken().trim();
@@ -41,7 +40,7 @@ public class DragDropTypesConverter extends AbstractConverter {
             list.add(token);
         }
 
-        return (String[]) list.toArray(new String[list.size()]);
+        return list.toArray(new String[list.size()]);
     }
 
     public String getAsString(FacesContext context, UIComponent component,

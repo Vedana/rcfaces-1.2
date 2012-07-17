@@ -911,7 +911,7 @@ var __members = {
 	
 		return (popup==popupDocument); // On reste bloqué si ce n'est pas le meme
 	}
-}
+};
 
 new f_class("f_menuBar", {
 	extend: f_menuBarBase,

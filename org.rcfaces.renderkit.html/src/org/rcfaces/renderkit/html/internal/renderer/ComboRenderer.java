@@ -34,7 +34,6 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
  */
 public class ComboRenderer extends AbstractSelectItemsRenderer implements
         IFilteredItemsRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final String FILTRED_COLLECTION_PROPERTY = "camelia.combo.filtredCollection";
 

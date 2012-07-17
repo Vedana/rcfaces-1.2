@@ -19,8 +19,8 @@ import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
+@SuppressWarnings("deprecation")
 public class ClientFullStateConverter implements Converter {
-    private static final String REVISION = "$Revision$";
 
     public static final Converter SINGLETON = new ClientFullStateConverter();
 
@@ -37,7 +37,8 @@ public class ClientFullStateConverter implements Converter {
     private static final Integer DEFAULT_CLIENT_FULL_STATE = new Integer(
             IHorizontalTextPositionCapability.DEFAULT_POSITION);
 
-    private static Map FULL_STATES = new HashMap(8);
+    private static Map<String, Integer> FULL_STATES = new HashMap<String, Integer>(
+            8);
     static {
         Integer i = new Integer(
                 IClientFullStateCapability.NONE_CLIENT_FULL_STATE);
@@ -66,7 +67,7 @@ public class ClientFullStateConverter implements Converter {
 
         value = value.toLowerCase();
 
-        Integer i = (Integer) FULL_STATES.get(value);
+        Integer i = FULL_STATES.get(value);
         if (i != null) {
             return i;
         }
@@ -79,18 +80,19 @@ public class ClientFullStateConverter implements Converter {
             Object value) {
 
         if (value == null) {
-            return (String) FULL_STATES.get(DEFAULT_CLIENT_FULL_STATE);
+            value = DEFAULT_CLIENT_FULL_STATE;
         }
 
         if ((value instanceof Integer) == false) {
             throw new IllegalArgumentException("Value must be an Integer !");
         }
 
-        for (Iterator it = FULL_STATES.entrySet().iterator(); it.hasNext();) {
-            Map.Entry entry = (Map.Entry) it.next();
+        for (Iterator<Map.Entry<String, Integer>> it = FULL_STATES.entrySet()
+                .iterator(); it.hasNext();) {
+            Map.Entry<String, Integer> entry = it.next();
 
             if (value.equals(entry.getValue())) {
-                return (String) entry.getKey();
+                return entry.getKey();
             }
         }
 

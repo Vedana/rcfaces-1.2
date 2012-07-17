@@ -126,7 +126,8 @@ var __members = {
 	 * @return HTMLElement
 	 */
 	fa_componentCaptureMenuEvent: f_class.ABSTRACT
-}
+};
+
 new f_aspect("fa_subMenu", {
 	members: __members
 });

@@ -13,8 +13,6 @@ import javax.faces.event.ValueChangeEvent;
  */
 public class PropertyChangeEvent extends ValueChangeEvent {
 
-    private static final String REVISION = "$Revision$";
-
     private static final long serialVersionUID = -4109774105032276791L;
 
     private final String propertyName;
@@ -30,10 +28,12 @@ public class PropertyChangeEvent extends ValueChangeEvent {
         return propertyName;
     }
 
+    @Override
     public boolean isAppropriateListener(FacesListener listener) {
         return (listener instanceof IPropertyChangeListener);
     }
 
+    @Override
     public void processListener(FacesListener listener) {
         ((IPropertyChangeListener) listener).processPropertyChange(this);
     }

@@ -89,7 +89,7 @@ f_classLoader.prototype.f_loadContent = function(component, htmlNode, content, p
 				asyncClassLoader.f_processViewStates(htmlNode);
 			
 				if (processScripts!==false) {
-			asyncClassLoader.f_processScripts(component, htmlNode, scripts);
+					asyncClassLoader.f_processScripts(component, htmlNode, scripts);
 				}
 			} catch (x) {
 				f_core.Error("f_asyncClassLoader", "f_loadContent.timeout: process script exceptions", x);
@@ -185,7 +185,7 @@ f_classLoader.prototype.f_loadAndProcessScripts= function(component, htmlNode) {
 	var scriptNodes=f_core.GetElementsByTagName(htmlNode, "script");
 	
 	this.f_processScripts(component, htmlNode, null, scriptNodes);
-}
+};
 
 /**
  * @method hidden * @param HTMLElement component
@@ -431,7 +431,7 @@ f_classLoader.prototype.f_processScripts = function(component, htmlNode, scripts
 	f_core.Debug("f_asyncClassLoader", "f_processScripts: Run an interactive process");
 	
 	interactiveMode.run();
-}
+};
 
 /**
  * @method private
@@ -526,7 +526,7 @@ f_classLoader.prototype._asyncLoadBundle=function(bundleName) {
 	f_core.Debug("f_asyncClassLoader", "_asyncLoadBundle: Bundles are already waiting, pool this bundle '"+bundleName+"' => "+this._bundlesToLoad);	
 	
 	return true;
-}
+};
 
 /**
  * @method private
@@ -581,7 +581,7 @@ f_classLoader.prototype._asyncBundleLoaded=function(bundleName) {
 			}
 		}
 	}
-}
+};
 
 /**
  * @method private

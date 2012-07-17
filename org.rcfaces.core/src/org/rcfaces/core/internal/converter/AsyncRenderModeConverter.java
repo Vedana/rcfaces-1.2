@@ -22,104 +22,106 @@ import org.rcfaces.core.model.AbstractConverter;
  */
 public class AsyncRenderModeConverter extends AbstractConverter {
 
-	private static final String NONE_ASYNC_RENDER_MODE_NAME = "none";
-	private static final String FALSE_ASYNC_RENDER_MODE_NAME = "false";
+    private static final String NONE_ASYNC_RENDER_MODE_NAME = "none";
 
-	private static final String BUFFER_ASYNC_RENDER_MODE_NAME = "buffer";
+    private static final String FALSE_ASYNC_RENDER_MODE_NAME = "false";
 
-	private static final String TREE_ASYNC_RENDER_MODE_NAME = "tree";
-	private static final String TRUE_ASYNC_RENDER_MODE_NAME = "true";
+    private static final String BUFFER_ASYNC_RENDER_MODE_NAME = "buffer";
 
-	private static final Integer DEFAULT_ASYNC_RENDER_MODE = new Integer(
-			Constants.DEFAULT_ASYNC_MODE);
+    private static final String TREE_ASYNC_RENDER_MODE_NAME = "tree";
 
-	private static final Integer ASYNC_MODE_ENABLE_VALUE = new Integer(
-			Constants.ENABLE_ASYNC_MODE_VALUE);
+    private static final String TRUE_ASYNC_RENDER_MODE_NAME = "true";
 
-	public static final Converter SINGLETON = new AsyncRenderModeConverter();
+    private static final Integer DEFAULT_ASYNC_RENDER_MODE = new Integer(
+            Constants.DEFAULT_ASYNC_MODE);
 
-	private static Map<String, Integer> ASYNC_RENDER_MODES = new HashMap<String, Integer>(
-			8);
-	static {
-		ASYNC_RENDER_MODES.put(NONE_ASYNC_RENDER_MODE_NAME, new Integer(
-				IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE));
-		ASYNC_RENDER_MODES.put(FALSE_ASYNC_RENDER_MODE_NAME, new Integer(
-				IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE));
+    private static final Integer ASYNC_MODE_ENABLE_VALUE = new Integer(
+            Constants.ENABLE_ASYNC_MODE_VALUE);
 
-		ASYNC_RENDER_MODES.put(BUFFER_ASYNC_RENDER_MODE_NAME, new Integer(
-				IAsyncRenderModeCapability.BUFFER_ASYNC_RENDER_MODE));
+    public static final Converter SINGLETON = new AsyncRenderModeConverter();
 
-		ASYNC_RENDER_MODES.put(TREE_ASYNC_RENDER_MODE_NAME, new Integer(
-				IAsyncRenderModeCapability.TREE_ASYNC_RENDER_MODE));
-		ASYNC_RENDER_MODES.put(TRUE_ASYNC_RENDER_MODE_NAME, new Integer(
-				IAsyncRenderModeCapability.TREE_ASYNC_RENDER_MODE));
-	}
+    private static Map<String, Integer> ASYNC_RENDER_MODES = new HashMap<String, Integer>(
+            8);
+    static {
+        ASYNC_RENDER_MODES.put(NONE_ASYNC_RENDER_MODE_NAME, new Integer(
+                IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE));
+        ASYNC_RENDER_MODES.put(FALSE_ASYNC_RENDER_MODE_NAME, new Integer(
+                IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE));
 
-	@SuppressWarnings("unused")
-	public Object getAsObject(FacesContext context, UIComponent component,
-			String value) {
+        ASYNC_RENDER_MODES.put(BUFFER_ASYNC_RENDER_MODE_NAME, new Integer(
+                IAsyncRenderModeCapability.BUFFER_ASYNC_RENDER_MODE));
 
-		if (value == null || value.length() < 1) {
-			return DEFAULT_ASYNC_RENDER_MODE;
-		}
+        ASYNC_RENDER_MODES.put(TREE_ASYNC_RENDER_MODE_NAME, new Integer(
+                IAsyncRenderModeCapability.TREE_ASYNC_RENDER_MODE));
+        ASYNC_RENDER_MODES.put(TRUE_ASYNC_RENDER_MODE_NAME, new Integer(
+                IAsyncRenderModeCapability.TREE_ASYNC_RENDER_MODE));
+    }
 
-		value = value.toLowerCase();
+    @SuppressWarnings("unused")
+    public Object getAsObject(FacesContext context, UIComponent component,
+            String value) {
 
-		Integer i = (Integer) ASYNC_RENDER_MODES.get(value);
-		if (i != null) {
-			return i;
-		}
+        if (value == null || value.length() < 1) {
+            return DEFAULT_ASYNC_RENDER_MODE;
+        }
 
-		if ("default".equalsIgnoreCase(value)) {
-			return DEFAULT_ASYNC_RENDER_MODE;
-		}
+        value = value.toLowerCase();
 
-		if ("enabled".equalsIgnoreCase(value)) {
-			if (Constants.FACELETS_SUPPORT) {
-				return new Integer(AsyncModeTools.getEnableValue(context));
-			}
+        Integer i = ASYNC_RENDER_MODES.get(value);
+        if (i != null) {
+            return i;
+        }
 
-			return ASYNC_MODE_ENABLE_VALUE;
-		}
+        if ("default".equalsIgnoreCase(value)) {
+            return DEFAULT_ASYNC_RENDER_MODE;
+        }
 
-		throw new IllegalArgumentException("Keyword '" + value
-				+ "' is not supported for a async-render type !");
-	}
+        if ("enabled".equalsIgnoreCase(value)) {
+            if (Constants.FACELETS_SUPPORT) {
+                return new Integer(AsyncModeTools.getEnableValue(context));
+            }
 
-	public String getAsString(FacesContext context, UIComponent component,
-			Object value) {
+            return ASYNC_MODE_ENABLE_VALUE;
+        }
 
-		if (value == null) {
-			value = DEFAULT_ASYNC_RENDER_MODE;
-		}
+        throw new IllegalArgumentException("Keyword '" + value
+                + "' is not supported for a async-render type !");
+    }
 
-		if ((value instanceof Integer) == false) {
-			throw new IllegalArgumentException("Value must be an Integer !");
-		}
+    public String getAsString(FacesContext context, UIComponent component,
+            Object value) {
 
-		for (Map.Entry<String, Integer> entry : ASYNC_RENDER_MODES.entrySet()) {
+        if (value == null) {
+            value = DEFAULT_ASYNC_RENDER_MODE;
+        }
 
-			if (value.equals(entry.getValue())) {
-				return entry.getKey();
-			}
-		}
+        if ((value instanceof Integer) == false) {
+            throw new IllegalArgumentException("Value must be an Integer !");
+        }
 
-		throw new IllegalArgumentException("Value '" + value
-				+ "' is not supported for a async-render-mode type !");
-	}
+        for (Map.Entry<String, Integer> entry : ASYNC_RENDER_MODES.entrySet()) {
 
-	public static final String getName(int asyncRenderMode) {
-		switch (asyncRenderMode) {
-		case IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE:
-			return NONE_ASYNC_RENDER_MODE_NAME;
+            if (value.equals(entry.getValue())) {
+                return entry.getKey();
+            }
+        }
 
-		case IAsyncRenderModeCapability.BUFFER_ASYNC_RENDER_MODE:
-			return BUFFER_ASYNC_RENDER_MODE_NAME;
+        throw new IllegalArgumentException("Value '" + value
+                + "' is not supported for a async-render-mode type !");
+    }
 
-		case IAsyncRenderModeCapability.TREE_ASYNC_RENDER_MODE:
-			return TREE_ASYNC_RENDER_MODE_NAME;
-		}
+    public static final String getName(int asyncRenderMode) {
+        switch (asyncRenderMode) {
+        case IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE:
+            return NONE_ASYNC_RENDER_MODE_NAME;
 
-		return null;
-	}
+        case IAsyncRenderModeCapability.BUFFER_ASYNC_RENDER_MODE:
+            return BUFFER_ASYNC_RENDER_MODE_NAME;
+
+        case IAsyncRenderModeCapability.TREE_ASYNC_RENDER_MODE:
+            return TREE_ASYNC_RENDER_MODE_NAME;
+        }
+
+        return null;
+    }
 }

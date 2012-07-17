@@ -26,6 +26,7 @@ public class ValidationEvent extends CameliaEvent {
      * javax.faces.event.FacesEvent#isAppropriateListener(javax.faces.event.
      * FacesListener)
      */
+    @Override
     public boolean isAppropriateListener(FacesListener listener) {
         return (listener instanceof IValidationListener);
     }
@@ -37,6 +38,7 @@ public class ValidationEvent extends CameliaEvent {
      * javax.faces.event.FacesEvent#processListener(javax.faces.event.FacesListener
      * )
      */
+    @Override
     public void processListener(FacesListener listener) {
         ((IValidationListener) listener).processValidationEvent(this);
     }
