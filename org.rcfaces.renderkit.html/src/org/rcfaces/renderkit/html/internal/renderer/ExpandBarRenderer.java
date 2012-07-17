@@ -26,6 +26,7 @@ import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.CssStyleClasses;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
+import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.IHtmlElements;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -222,6 +223,11 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         // Il faut positionner les hovers en javascript
 
         designerBeginChildren(htmlWriter, IDesignerEngine.MAIN_BODY);
+    }
+
+    @Override
+    protected String getWAIRole() {
+        return IAccessibilityRoles.PRESENTATION;
     }
 
     protected String getHeadId(IHtmlWriter htmlWriter) {
