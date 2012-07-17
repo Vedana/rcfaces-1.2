@@ -1159,7 +1159,17 @@ var __statics = {
 		var component=positionInfos.component;	
 		var offsetX=0;
 		var offsetY=0;
-		var offsetWidth;
+		var offsetWidth=popup.offsetWidth;
+		var offsetHeight=popup.offsetHeight;
+		var heightSetted=false;
+		
+		if (positionInfos.popupWidth) {
+			offsetWidth=positionInfos.popupWidth;
+		}
+		if (positionInfos.maxPopupHeight && popup.offsetHeight>positionInfos.maxPopupHeight) {
+			heightSetted=true;
+			offsetHeight=positionInfos.maxPopupHeight;
+		}
 		
 		popup.style.display="block"; // On remet le display block pour pouvoir avoir la taille !
 
@@ -1236,24 +1246,24 @@ var __statics = {
 
 		var absPos=f_core.GetAbsolutePosition(popup.offsetParent);
 
-		f_core.Debug(f_core, "Gecko_openPopup: bw="+bw+" bh="+bh+" absPos.x="+absPos.x+" absPos.y="+absPos.y+" positions.x="+positions.x+" positions.y="+positions.y+" popupWidth="+popup.offsetWidth+" popupHeight="+popup.offsetHeight);
+		f_core.Debug(f_core, "Gecko_openPopup: bw="+bw+" bh="+bh+" absPos.x="+absPos.x+" absPos.y="+absPos.y+" positions.x="+positions.x+" positions.y="+positions.y+" popupWidth="+offsetWidth+" popupHeight="+popup.offsetHeight);
 
-		if (popup.offsetWidth+positions.x+absPos.x>bw) {
-			positions.x=bw-popup.offsetWidth-absPos.x;
+		if (offsetWidth+positions.x+absPos.x>bw) {
+			positions.x=bw-offsetWidth-absPos.x;
 
 			f_core.Debug(f_core, "Gecko_openPopup: change x position to "+positions.x);
 		}
 		
-		
-		if(popup.offsetHeight > bh - scrollPosition.y){
+		if (offsetHeight > bh - scrollPosition.y) {
 			positions.y=0;
 			positions.x=0;
-		}else if (popup.offsetHeight+positions.y+absPos.y>bh) {
+			
+		} else if (offsetHeight+positions.y+absPos.y>bh) {
 			if (component) {
 				var aeAbs = f_core.GetAbsolutePosition(component);
-				positions.y=aeAbs.y-popup.offsetHeight;
-			}else {
-				positions.y=bh-popup.offsetHeight-absPos.y;
+				positions.y=aeAbs.y-offsetHeight;
+			} else {
+				positions.y=bh-offsetHeight-absPos.y;
 			}
 			f_core.Debug(f_core, "Gecko_openPopup: change y position to "+positions.y);
 		} 
@@ -1281,7 +1291,14 @@ var __statics = {
 
 		popupStyle.left=positions.x+"px";
 		popupStyle.top=positions.y+"px";
-	
+		
+		if (positionInfos.popupWidth) {
+			popupStyle.width=offsetWidth+"px";
+		}
+		if (heightSetted) {
+			popupStyle.height=offsetHeight+"px";
+		}
+
 		popupStyle.visibility="inherit";
 	},
 	/**
