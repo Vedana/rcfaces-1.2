@@ -30,8 +30,6 @@ import org.rcfaces.core.internal.resource.IResourceLoaderFactory.IResourceLoader
 public abstract class AbstractBufferOperationContentModel extends
         AbstractOperationContentModel implements IOperationContentLoader {
 
-    private static final String REVISION = "$Revision$";
-
     private static final long serialVersionUID = -7085466442454979874L;
 
     private static final Log LOG = LogFactory
@@ -47,6 +45,7 @@ public abstract class AbstractBufferOperationContentModel extends
                 styleOperation, specifiedResourceKey);
     }
 
+    @Override
     protected IResourceLoaderFactory getResourceLoaderFactory(
             FacesContext facesContext) {
 
@@ -64,6 +63,7 @@ public abstract class AbstractBufferOperationContentModel extends
         return resourceLoaderFactory;
     }
 
+    @Override
     protected IResolvedContent getResolvedContent() {
         return new GZipedResolvedContent(this);
     }

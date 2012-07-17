@@ -32,14 +32,14 @@ import org.rcfaces.core.lang.IAdapterFactory;
  * @version $Revision$ $Date$
  */
 public class ContentAdapterFactory implements IAdapterFactory {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(ContentAdapterFactory.class);
 
     private static final String TEMP_PREFIX = "contentAdapter_";
 
-    protected static final Map suffixByMimeType = new HashMap(8);
+    protected static final Map<String, String> suffixByMimeType = new HashMap<String, String>(
+            8);
 
     protected static final FileNameMap fileNameMap = URLConnection
             .getFileNameMap();
@@ -50,17 +50,17 @@ public class ContentAdapterFactory implements IAdapterFactory {
 
     private long tempFileCounter;
 
-    public Object getAdapter(Object adaptableObject, Class adapterType,
+    public <T> T getAdapter(Object adaptableObject, Class<T> adapterType,
             Object parameter) {
 
         return null;
     }
 
     public static String getSuffixByMimeType(String contentType) {
-        return (String) suffixByMimeType.get(contentType.toLowerCase());
+        return suffixByMimeType.get(contentType.toLowerCase());
     }
 
-    public Class[] getAdapterList() {
+    public Class< ? >[] getAdapterList() {
         return new Class[] { IResolvedContent.class };
     }
 
@@ -110,7 +110,6 @@ public class ContentAdapterFactory implements IAdapterFactory {
      */
     protected class FileResolvedContent extends AbstractResolvedContent
             implements Serializable {
-        private static final String REVISION = "$Revision$";
 
         private static final long serialVersionUID = 2045867975901327708L;
 
@@ -151,10 +150,12 @@ public class ContentAdapterFactory implements IAdapterFactory {
             return contentType;
         }
 
+        @Override
         public String getURLSuffix() {
             return suffix;
         }
 
+        @Override
         public String getResourceKey() {
             if (specifiedResourceKey == null) {
                 return specifiedResourceKey;
@@ -171,22 +172,27 @@ public class ContentAdapterFactory implements IAdapterFactory {
             return new FileInputStream(file);
         }
 
+        @Override
         public long getModificationDate() {
             return lastModificationDate;
         }
 
+        @Override
         public int getLength() {
             return length;
         }
 
+        @Override
         public String getETag() {
             return etag;
         }
 
+        @Override
         public String getHash() {
             return hashCode;
         }
 
+        @Override
         protected void finalize() throws Throwable {
             if (file != null) {
                 try {

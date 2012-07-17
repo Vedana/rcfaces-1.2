@@ -4,6 +4,7 @@
 package org.rcfaces.core.internal.capability;
 
 import javax.faces.context.FacesContext;
+import javax.faces.event.FacesListener;
 
 /**
  * 
@@ -26,6 +27,6 @@ public interface IComponentLifeCycle {
     void renderPhase(FacesContext facesContext);
 
     boolean confirmListenerAppend(FacesContext facesContext,
-            Class facesListenerClass);
+            Class< ? extends FacesListener> facesListenerClass);
 
 }

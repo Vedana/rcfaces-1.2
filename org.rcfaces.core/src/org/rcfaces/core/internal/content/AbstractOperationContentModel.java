@@ -110,7 +110,7 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
 
     private String resourceKey;
 
-    private transient Map filterParameters;
+    private transient Map<String, Object> filterParameters;
 
     private transient IBufferOperation bufferOperation;
 
@@ -161,20 +161,20 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
         }
     }
 
-    public final synchronized Map getFilterParameters() {
+    public final synchronized Map<String, Object> getFilterParameters() {
         if (filterParameters != null) {
             return filterParameters;
         }
 
         if (filterParametersToParse == null
                 || filterParametersToParse.length() < 1) {
-            filterParameters = Collections.EMPTY_MAP;
+            filterParameters = Collections.emptyMap();
             return filterParameters;
         }
 
         StringTokenizer st = new StringTokenizer(filterParametersToParse, ",");
 
-        filterParameters = new HashMap(st.countTokens());
+        filterParameters = new HashMap<String, Object>(st.countTokens());
         int idx = 0;
         for (; st.hasMoreTokens();) {
             String token = st.nextToken().trim();
@@ -200,9 +200,10 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
         return filterParameters;
     }
 
-    public Object getAdapter(Class adapter, Object parameter) {
+    @SuppressWarnings("unchecked")
+    public <T> T getAdapter(Class<T> adapter, Object parameter) {
         if (IResolvedContent.class.equals(adapter)) {
-            return getResolvedContent();
+            return (T) getResolvedContent();
         }
 
         return null;
@@ -379,6 +380,7 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
     protected abstract IResourceLoaderFactory getResourceLoaderFactory(
             FacesContext facesContext);
 
+    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
@@ -393,6 +395,7 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
         return result;
     }
 
+    @Override
     public boolean equals(Object obj) {
         if (this == obj)
             return true;

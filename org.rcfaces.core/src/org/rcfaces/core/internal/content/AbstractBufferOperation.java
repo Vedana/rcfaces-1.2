@@ -28,7 +28,7 @@ public class AbstractBufferOperation implements IBufferOperation {
         this.name = name;
     }
 
-    public void configure(Map configuration) {
+    public void configure(Map<String, Object> configuration) {
     }
 
 }
