@@ -15,9 +15,8 @@ import org.rcfaces.core.event.IDoubleClickListener;
  */
 public class DoubleClickActionListener extends AbstractActionListener implements
         IDoubleClickListener {
-    private static final String REVISION = "$Revision$";
 
-    private static final Class actionParameters[] = { DoubleClickEvent.class };
+    private static final Class< ? >[] actionParameters = { DoubleClickEvent.class };
 
     public DoubleClickActionListener() {
     }
@@ -35,7 +34,8 @@ public class DoubleClickActionListener extends AbstractActionListener implements
         process(event);
     }
 
-    protected Class[] listParameterClasses() {
+    @Override
+    protected Class< ? >[] listParameterClasses() {
         return actionParameters;
     }
 }

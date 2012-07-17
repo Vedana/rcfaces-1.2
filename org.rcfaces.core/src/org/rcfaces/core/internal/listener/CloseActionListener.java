@@ -15,9 +15,8 @@ import org.rcfaces.core.event.ICloseListener;
  */
 public class CloseActionListener extends AbstractActionListener implements
         ICloseListener {
-    private static final String REVISION = "$Revision$";
 
-    private static final Class actionParameters[] = { CloseEvent.class };
+    private static final Class< ? >[] actionParameters = { CloseEvent.class };
 
     public CloseActionListener() {
     }
@@ -34,7 +33,8 @@ public class CloseActionListener extends AbstractActionListener implements
         process(event);
     }
 
-    protected Class[] listParameterClasses() {
+    @Override
+    protected Class< ? >[] listParameterClasses() {
         return actionParameters;
     }
 }

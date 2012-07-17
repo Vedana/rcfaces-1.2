@@ -8,6 +8,7 @@ import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.event.FacesListener;
 import javax.faces.event.ValueChangeListener;
 
 import org.apache.commons.logging.Log;
@@ -108,6 +109,7 @@ import org.rcfaces.core.internal.listener.LoadScriptListener;
 import org.rcfaces.core.internal.listener.MenuScriptListener;
 import org.rcfaces.core.internal.listener.MouseOutScriptListener;
 import org.rcfaces.core.internal.listener.MouseOverScriptListener;
+import org.rcfaces.core.internal.listener.PreSelectionActionListener;
 import org.rcfaces.core.internal.listener.PreSelectionScriptListener;
 import org.rcfaces.core.internal.listener.PropertyChangeActionListener;
 import org.rcfaces.core.internal.listener.PropertyChangeScriptListener;
@@ -150,7 +152,7 @@ public class ListenersTools {
         void addScriptListener(UIComponent component, String scriptType,
                 String expression);
 
-        Class getListenerClass();
+        Class< ? extends FacesListener> getListenerClass();
 
         // void clearListeners(UIComponent component);
     }
@@ -186,7 +188,7 @@ public class ListenersTools {
             return blurActionListener;
         }
 
-        public Class getListenerClass() {
+        public Class< ? extends FacesListener> getListenerClass() {
             return IBlurListener.class;
         }
     };
@@ -214,7 +216,7 @@ public class ListenersTools {
             return criteriaActionListener;
         }
 
-        public Class getListenerClass() {
+        public Class< ? extends FacesListener> getListenerClass() {
             return ICriteriaListener.class;
         }
     };
@@ -235,7 +237,7 @@ public class ListenersTools {
             throw new UnsupportedListenerTypeException("drag");
         }
 
-        public Class getListenerClass() {
+        public Class< ? extends FacesListener> getListenerClass() {
             return IDragListener.class;
         }
     };
@@ -256,7 +258,7 @@ public class ListenersTools {
             throw new UnsupportedListenerTypeException("drop");
         }
 
-        public Class getListenerClass() {
+        public Class< ? extends FacesListener> getListenerClass() {
             return IDropListener.class;
         }
     };
@@ -284,7 +286,7 @@ public class ListenersTools {
             return dropActionListener;
         }
 
-        public Class getListenerClass() {
+        public Class< ? extends FacesListener> getListenerClass() {
             return IDropCompleteListener.class;
         }
     };
@@ -311,7 +313,7 @@ public class ListenersTools {
             return focusActionListener;
         }
 
-        public Class getListenerClass() {
+        public Class< ? extends FacesListener> getListenerClass() {
             return IFocusListener.class;
         }
     };
@@ -338,7 +340,7 @@ public class ListenersTools {
             return loadActionListener;
         }
 
-        public Class getListenerClass() {
+        public Class< ? extends FacesListener> getListenerClass() {
             return ILoadListener.class;
         }
     };
@@ -365,7 +367,7 @@ public class ListenersTools {
             return expandActionListener;
         }
 
-        public Class getListenerClass() {
+        public Class< ? extends FacesListener> getListenerClass() {
             return IExpandListener.class;
         }
     };
@@ -392,7 +394,7 @@ public class ListenersTools {
             return errorActionListener;
         }
 
-        public Class getListenerClass() {
+        public Class< ? extends FacesListener> getListenerClass() {
             return IDropListener.class;
         }
     };
@@ -421,7 +423,7 @@ public class ListenersTools {
             return doubleClickActionListener;
         }
 
-        public Class getListenerClass() {
+        public Class< ? extends FacesListener> getListenerClass() {
             return IDoubleClickListener.class;
         }
     };
@@ -448,7 +450,7 @@ public class ListenersTools {
             return clickActionListener;
         }
 
-        public Class getListenerClass() {
+        public Class< ? extends FacesListener> getListenerClass() {
             return IClickListener.class;
         }
     };
@@ -476,7 +478,7 @@ public class ListenersTools {
             return selectionActionListener;
         }
 
-        public Class getListenerClass() {
+        public Class< ? extends FacesListener> getListenerClass() {
             return ISelectionListener.class;
         }
     };
@@ -505,7 +507,7 @@ public class ListenersTools {
             return additionalInformationActionListener;
         }
 
-        public Class getListenerClass() {
+        public Class< ? extends FacesListener> getListenerClass() {
             return IAdditionalInformationListener.class;
         }
     };
@@ -532,7 +534,7 @@ public class ListenersTools {
             return checkActionListener;
         }
 
-        public Class getListenerClass() {
+        public Class< ? extends FacesListener> getListenerClass() {
             return ICheckListener.class;
         }
     };
@@ -559,7 +561,7 @@ public class ListenersTools {
             return closeActionListener;
         }
 
-        public Class getListenerClass() {
+        public Class< ? extends FacesListener> getListenerClass() {
             return ICloseListener.class;
         }
     };
@@ -587,7 +589,7 @@ public class ListenersTools {
             return changeActionListener;
         }
 
-        public Class getListenerClass() {
+        public Class< ? extends FacesListener> getListenerClass() {
             return ValueChangeListener.class;
         }
     };
@@ -616,7 +618,7 @@ public class ListenersTools {
             return suggestionActionListener;
         }
 
-        public Class getListenerClass() {
+        public Class< ? extends FacesListener> getListenerClass() {
             return ISuggestionListener.class;
         }
     };
@@ -645,7 +647,7 @@ public class ListenersTools {
             return propertyChangeActionListener;
         }
 
-        public Class getListenerClass() {
+        public Class< ? extends FacesListener> getListenerClass() {
             return IPropertyChangeListener.class;
         }
     };
@@ -672,7 +674,7 @@ public class ListenersTools {
             return keyPressActionListener;
         }
 
-        public Class getListenerClass() {
+        public Class< ? extends FacesListener> getListenerClass() {
             return IKeyPressListener.class;
         }
     };
@@ -693,7 +695,7 @@ public class ListenersTools {
             throw new UnsupportedListenerTypeException("keyDown");
         }
 
-        public Class getListenerClass() {
+        public Class< ? extends FacesListener> getListenerClass() {
             return IKeyDownListener.class;
         }
     };
@@ -714,7 +716,7 @@ public class ListenersTools {
             throw new UnsupportedListenerTypeException("keyUp");
         }
 
-        public Class getListenerClass() {
+        public Class< ? extends FacesListener> getListenerClass() {
             return IKeyUpListener.class;
         }
     };
@@ -735,7 +737,7 @@ public class ListenersTools {
             throw new UnsupportedListenerTypeException("init");
         }
 
-        public Class getListenerClass() {
+        public Class< ? extends FacesListener> getListenerClass() {
             return IInitListener.class;
         }
     };
@@ -757,7 +759,7 @@ public class ListenersTools {
             throw new UnsupportedListenerTypeException("mouseOut");
         }
 
-        public Class getListenerClass() {
+        public Class< ? extends FacesListener> getListenerClass() {
             return IMouseOutListener.class;
         }
     };
@@ -779,7 +781,7 @@ public class ListenersTools {
             throw new UnsupportedListenerTypeException("mouseOver");
         }
 
-        public Class getListenerClass() {
+        public Class< ? extends FacesListener> getListenerClass() {
             return IMouseOverListener.class;
         }
     };
@@ -798,10 +800,17 @@ public class ListenersTools {
         public IServerActionListener addActionListener(UIComponent component,
                 Application application, String expression,
                 boolean partialRendering) {
-            throw new UnsupportedListenerTypeException("preSelection");
+            IPreSelectionEventCapability preSelectionEventCapability = (IPreSelectionEventCapability) component;
+
+            PreSelectionActionListener preSelectionActionListener = new PreSelectionActionListener(
+                    expression, partialRendering);
+            preSelectionEventCapability
+                    .addPreSelectionListener(preSelectionActionListener);
+
+            return preSelectionActionListener;
         }
 
-        public Class getListenerClass() {
+        public Class< ? extends FacesListener> getListenerClass() {
             return IPreSelectionListener.class;
         }
     };
@@ -829,7 +838,7 @@ public class ListenersTools {
             return sortActionListener;
         }
 
-        public Class getListenerClass() {
+        public Class< ? extends FacesListener> getListenerClass() {
             return ISortListener.class;
         }
     };
@@ -857,7 +866,7 @@ public class ListenersTools {
             return resetActionListener;
         }
 
-        public Class getListenerClass() {
+        public Class< ? extends FacesListener> getListenerClass() {
             return IResetListener.class;
         }
     };
@@ -886,7 +895,7 @@ public class ListenersTools {
             return validationActionListener;
         }
 
-        public Class getListenerClass() {
+        public Class< ? extends FacesListener> getListenerClass() {
             return IValidationListener.class;
         }
     };
@@ -907,7 +916,7 @@ public class ListenersTools {
             throw new UnsupportedListenerTypeException("menuListener");
         }
 
-        public Class getListenerClass() {
+        public Class< ? extends FacesListener> getListenerClass() {
             return IMenuListener.class;
         }
     };
@@ -936,7 +945,7 @@ public class ListenersTools {
             return userEventActionListener;
         }
 
-        public Class getListenerClass() {
+        public Class< ? extends FacesListener> getListenerClass() {
             return IUserEventListener.class;
         }
     };
@@ -966,7 +975,7 @@ public class ListenersTools {
             return serviceEventActionListener;
         }
 
-        public Class getListenerClass() {
+        public Class< ? extends FacesListener> getListenerClass() {
             return IServiceEventListener.class;
         }
     };

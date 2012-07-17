@@ -15,9 +15,8 @@ import org.rcfaces.core.event.IDropCompleteListener;
  */
 public class DropCompleteActionListener extends AbstractActionListener
         implements IDropCompleteListener {
-    private static final String REVISION = "$Revision$";
 
-    private static final Class actionParameters[] = { DropCompleteEvent.class };
+    private static final Class< ? >[] actionParameters = { DropCompleteEvent.class };
 
     public DropCompleteActionListener(String expression,
             boolean partialRendering) {
@@ -36,7 +35,8 @@ public class DropCompleteActionListener extends AbstractActionListener
         process(event);
     }
 
-    protected Class[] listParameterClasses() {
+    @Override
+    protected Class< ? >[] listParameterClasses() {
         return actionParameters;
     }
 }

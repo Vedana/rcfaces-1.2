@@ -14,35 +14,36 @@ import org.rcfaces.core.event.ICriteriaListener;
  * @version $Revision$ $Date$
  */
 public class CriteriaActionListener extends AbstractActionListener implements
-		ICriteriaListener {
+        ICriteriaListener {
 
-	private static final Class actionParameters[] = { CriteriaEvent.class };
+    private static final Class< ? >[] actionParameters = { CriteriaEvent.class };
 
-	public CriteriaActionListener() {
-		// Pour la déserialisation ...
-	}
+    public CriteriaActionListener() {
+        // Pour la déserialisation ...
+    }
 
-	public CriteriaActionListener(String expression) {
-		super(expression);
-	}
+    public CriteriaActionListener(String expression) {
+        super(expression);
+    }
 
-	public CriteriaActionListener(String expression, boolean partialRendering) {
-		super(expression, partialRendering);
-	}
+    public CriteriaActionListener(String expression, boolean partialRendering) {
+        super(expression, partialRendering);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.rcfaces.core.component.listener.IChangeListener#processChange(org
-	 * .rcfaces.core.component.listener.ChangeEvent)
-	 */
-	public void processCriteriaChanged(CriteriaEvent event)
-			throws AbortProcessingException {
-		process(event);
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.rcfaces.core.component.listener.IChangeListener#processChange(org
+     * .rcfaces.core.component.listener.ChangeEvent)
+     */
+    public void processCriteriaChanged(CriteriaEvent event)
+            throws AbortProcessingException {
+        process(event);
+    }
 
-	protected Class[] listParameterClasses() {
-		return actionParameters;
-	}
+    @Override
+    protected Class< ? >[] listParameterClasses() {
+        return actionParameters;
+    }
 }

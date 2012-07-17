@@ -16,7 +16,7 @@ import org.rcfaces.core.event.IClickListener;
 public class ClickActionListener extends AbstractActionListener implements
         IClickListener {
 
-    private static final Class actionParameters[] = { ClickEvent.class };
+    private static final Class< ? >[] actionParameters = { ClickEvent.class };
 
     public ClickActionListener() {
     }
@@ -33,7 +33,8 @@ public class ClickActionListener extends AbstractActionListener implements
         process(event);
     }
 
-    protected Class[] listParameterClasses() {
+    @Override
+    protected Class< ? >[] listParameterClasses() {
         return actionParameters;
     }
 }

@@ -15,9 +15,8 @@ import org.rcfaces.core.event.IErrorListener;
  */
 public class ErrorActionListener extends AbstractActionListener implements
         IErrorListener {
-    private static final String REVISION = "$Revision$";
 
-    private static final Class actionParameters[] = { ErrorEvent.class };
+    private static final Class< ? >[] actionParameters = { ErrorEvent.class };
 
     public ErrorActionListener() {
     }
@@ -34,7 +33,8 @@ public class ErrorActionListener extends AbstractActionListener implements
         process(event);
     }
 
-    protected Class[] listParameterClasses() {
+    @Override
+    protected Class< ? >[] listParameterClasses() {
         return actionParameters;
     }
 }
