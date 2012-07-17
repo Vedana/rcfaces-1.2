@@ -16,6 +16,8 @@
 	left: 0;
 	top: 0;
 	overflow: visible;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 
 	background-color: white;
 	margin: 0;
