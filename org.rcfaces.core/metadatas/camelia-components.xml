@@ -3075,6 +3075,7 @@ Dans le cas d'un mode period !
 		<capability id="ISeverityStyleClassCapability" />
 		<capability id="ISeverityImagesCapability" />
 	<!--	<capability id="IBundleVarCapability" /> -->
+		<capability id="ICaptionCapability" />		
 		
 		<!--  <attribute id="setFocusIfMessage" type="boolean" />  -->
 		<attribute id="showIfMessage" type="boolean" />
@@ -3103,6 +3104,7 @@ Dans le cas d'un mode period !
 	<component id="messages" extends="abstractMessages">
 		<capability id="ISeverityStyleClassCapability" />	
 		<!-- <capability id="IBundleVarCapability" /> -->
+		<capability id="ICaptionCapability" />		
 
 		<attribute id="showIfMessage" type="boolean" />
 		<attribute id="showActiveComponentMessage" type="boolean" />
@@ -3343,9 +3345,16 @@ Dans le cas d'un mode period !
 		<attribute id="suggestionValue" type="java.lang.Object" />
 		<attribute id="suggestionConverter" type="javax.faces.convert.Converter" />
 		<attribute id="moreResultsMessage" type="java.lang.String" />
-		<attribute id="orderedItems" type="boolean" default="true" />
+		<attribute id="orderedItems" type="boolean" default="false" />
 		<attribute id="showPopupForOneResult" type="boolean" />
 		<attribute id="disableProposals" type="boolean" />
+
+		<attribute id="inputFormat" type="java.lang.String" />
+		<attribute id="labelFormat" type="java.lang.String" />
+		<attribute id="descriptionFormat" type="java.lang.String" />
+
+		<attribute id="popupWidth" type="int"/>
+		<attribute id="popupHeight" type="int"/>
 	
 		<method id="setSuggestionConverter(String)" />
 		<method id="setSuggestionConverter(String,javax.faces.context.FacesContext)" />
