@@ -436,8 +436,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
         return null;
     }
 
-    private void writeInputAttributes(IHtmlWriter writer, boolean isInput)
-            throws WriterException {
+    private void writeInputAttributes(IHtmlWriter writer, boolean isInput) throws WriterException {
 
         if (isInput) {
             if (disabled) {
@@ -456,6 +455,9 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
         if (accessKey != null) {
             writer.writeAccessKey(accessKey);
+        }
+        if (alternateText!=null) {
+            writer.writeTitle(alternateText);
         }
     }
 
