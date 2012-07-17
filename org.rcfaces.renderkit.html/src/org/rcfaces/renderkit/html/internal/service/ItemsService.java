@@ -95,6 +95,8 @@ public class ItemsService extends AbstractHtmlService {
             return;
         }
 
+        String requestId = (String) parameters.get("requestId");
+
         String filterExpression = (String) parameters.get("filterExpression");
 
         ILocalizedComponent localizedComponent = HtmlTools.localizeComponent(
@@ -190,7 +192,7 @@ public class ItemsService extends AbstractHtmlService {
 
                 writeJs(facesContext, printWriter, filterCapability,
                         componentId, filtredItemsRenderer, filterProperties,
-                        maxResultNumber);
+                        maxResultNumber, requestId);
 
             } catch (IOException ex) {
 
@@ -231,7 +233,7 @@ public class ItemsService extends AbstractHtmlService {
     private void writeJs(FacesContext facesContext, PrintWriter printWriter,
             IFilterCapability component, String componentId,
             IFilteredItemsRenderer dgr, IFilterProperties filterProperties,
-            int maxResultNumber) throws IOException {
+            int maxResultNumber, String requestId) throws IOException {
 
         CharArrayWriter cw = null;
         PrintWriter pw = printWriter;
@@ -250,8 +252,18 @@ public class ItemsService extends AbstractHtmlService {
                 .writeString(componentId).writeln(", document);");
 
         try {
+            if (requestId != null) {
+                jsWriter.writeMethodCall("f_startResponse")
+                        .writeString(requestId).writeln(");");
+            }
+
             dgr.encodeFilteredItems(jsWriter, component, filterProperties,
                     maxResultNumber);
+
+            if (requestId != null) {
+                jsWriter.writeMethodCall("f_endResponse")
+                        .writeString(requestId).writeln(");");
+            }
 
             pw.flush();
 
