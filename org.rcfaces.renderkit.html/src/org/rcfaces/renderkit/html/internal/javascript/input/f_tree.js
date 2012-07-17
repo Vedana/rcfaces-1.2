@@ -2009,6 +2009,10 @@ var __members = {
 		} else {
 			suffix+="_leaf";
 		}
+		
+		if (alt_title && li._node._label) {
+			alt_title+=": "+li._node._label;
+		}
 		//command.title = alt_title; // OO: C'est une image, il faut positionner le ALT
 		command.alt = alt_title; 
 		
