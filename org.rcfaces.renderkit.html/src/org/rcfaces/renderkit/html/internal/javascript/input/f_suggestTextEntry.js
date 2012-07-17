@@ -33,6 +33,17 @@ var __statics = {
 };
 
 var __members = {
+		
+	/**
+	 * @field private Number
+	 */
+	_lastRequestId: 0,
+	
+	/**
+	 * @field private Boolean
+	 */
+	_lockResponse: undefined,
+		
 	f_suggestTextEntry: function() {
 		this.f_super(arguments);
 		
@@ -85,8 +96,12 @@ var __members = {
 		menu.f_addEventListener("itemHover", function(evt) {
 			var jsEvt=evt.f_getJsEvent();
 			var item=evt.f_getValue();
+			
+			if (!item) { // Ca peut arriver si c'est l'indicateur de fin de liste !
+				return;
+			}
 
-			// ACC: suggestTextEntry.f_setText(item._label, true);
+			suggestTextEntry._proposeItem(item._label, true);
 		});
 		
 		this.f_insertEventListenerFirst(f_event.FOCUS, this._onFocus);
@@ -395,6 +410,7 @@ var __members = {
 
 		var params=new Object;
 		params.componentId=this.id;
+		params.requestId=(++this._lastRequestId);
 		
 		var text=null;
 		var filterExpression=this.fa_getSerializedPropertiesExpression();
@@ -563,6 +579,10 @@ var __members = {
 	 * @return Object New item.
 	 */
 	f_appendItem: function(label, value, description, imageURL, clientDataName1, clientDataValue1, clientDataName2) {
+		if (this._lockResponse) {
+			return;
+		}
+		
 		var clientDatas=undefined;
 		
 		if (arguments.length>4) {
@@ -584,7 +604,7 @@ var __members = {
 			_clientDatas: clientDatas
 		};
 	
-		return this.f_appendItem(item);	
+		return this.f_appendItem2(item);	
 	},
 	
 	/**
@@ -592,6 +612,10 @@ var __members = {
 	 * @return Object New item.
 	 */
 	f_appendItem2: function(item) {
+		if (this._lockResponse) {
+			return;
+		}
+
 		var results=this._results;
 		if (!results) {
 			results=new Array;
@@ -603,6 +627,32 @@ var __members = {
 		return item;	
 	},
 	
+	/**
+	 * @method hidden
+	 * @param String requestId
+	 * @return void
+	 */
+	f_startResponse: function(requestId) {
+		if (!requestId) {
+			return;
+		}
+		
+		if (parseInt(requestId, 10)==this._lastRequestId) {
+			this._lockResponse=undefined;
+			return;
+		}
+		
+		this._lockResponse=true;
+	},
+
+	/**
+	 * @method hidden
+	 * @param String requestId
+	 * @return void
+	 */
+	f_endResponse: function(requestId) {
+		this._lockResponse=undefined;
+	},
 	/**
 	 * @method hidden
 	 */
@@ -645,12 +695,38 @@ var __members = {
 			this._showPopup(undefined, undefined, text);
 			
 		} else {
-			this.f_showProposal(rs[0]._label, rs[0]._value, rs[0], null);
+			if (!this.f_showProposal(rs[0]._label, rs[0]._value, rs[0], null)) {
+				mightShowPopup=true;
+			}
 		}
 		
 		if (mightShowPopup) {	
 			this._showPopup(undefined, undefined, text);
 		}
+	},
+	/**
+	 * @method protected
+	 * @param String format
+	 * @param Object item
+	 * @return String
+	 */
+	_format: function(format, item) {
+		
+		var st=f_core.FormatMessage(format, null, function(paramName) {
+			var nm="_"+paramName;
+			if (item[nm]!==undefined) {
+				return item[nm];
+			}
+		
+			var cl=item._clientDatas;
+			if (cl && cl[nm]!==undefined) {
+				return cl[nm];
+			}
+			
+			return undefined;
+		});
+		
+		return st;
 	},
 	/**
 	 * @method private
@@ -679,17 +755,29 @@ var __members = {
 			return;
 		}
 		
+		var labelFormat=f_core.GetAttributeNS(this, "labelFormat");
+		var descriptionFormat=f_core.GetAttributeNS(this, "descriptionFormat");
+		
 		var i;
 		for(i=0;i<results.length;i++) {
 			var result=results[i];
 
 			var label=result._label;
 			var description=result._description;
-			if (description) {
-				label+=description;
+
+			if (labelFormat) {
+				label=this._format(labelFormat, result);
 			}
-	
-			var item=menu.f_appendItem(menu, "_result"+i, label, result);
+			
+			if (descriptionFormat) {
+				description=this._format(descriptionFormat, result);
+			}
+
+			var item=menu.f_appendItem2(menu, "_result"+i, {
+				_label: label,
+				_value: result, 
+				_acceleratorKey: description
+			});
 			
 			var imageURL=result._imageURL;
 			if (imageURL) {
@@ -698,7 +786,7 @@ var __members = {
 		}
 		
 		var message=this._moreResultsMessage;
-		if (!complete && message!="") {
+		if (!complete) {
 			if (!message) {
 				message=f_resourceBundle.Get(f_suggestTextEntry).f_get("MORE_RELEVANT_RESULTS");
 			}
@@ -715,10 +803,20 @@ var __members = {
 		if (!f_core.IsInternetExplorer()) {
 			// Probleme de box modele !
 //			params.deltaX=-1;
-			params.deltaY=-1;
-			params.deltaWidth=-4;
+			params.deltaY=-4;
+//			params.deltaWidth=-4;
 		}
 	
+		var pw=f_core.GetNumberAttributeNS(this, "popupWidth", -1);
+		if (pw>0) {
+			params.popupWidth=pw;
+		}
+		
+		var ph=f_core.GetNumberAttributeNS(this, "popupHeight", -1);
+		if (ph>0) {
+			params.maxPopupHeight=ph;
+		}
+		
 		f_core.Debug(f_suggestTextEntry, "_showPopup: open menu :"+menu);
 	
 		menu.f_open(jsEvt, params, autoSelect);
@@ -730,9 +828,14 @@ var __members = {
 	 * @param String proposalValue
 	 * @param hidden Object proposalItem
 	 * @param hidden Event jsEvt
-	 * @return void
+	 * @return Boolean
 	 */
 	f_showProposal: function(proposalLabel, proposalValue, proposalItem, jsEvt) {
+		var inputFormat=f_core.GetAttributeNS(this, "inputFormat");
+		if (inputFormat) {
+			proposalLabel=this._format(inputFormat, proposalItem);
+		}
+		
 		var label=this.f_getText();
 		
 		var labelCS=label;
@@ -744,18 +847,24 @@ var __members = {
 		}
 		
 		if (proposalLabelCS.indexOf(labelCS)) {
-			return;
+			return false;
 		}
 
 		if (this._forceProposal) {
 			var results=this._results;
 			if (results && results.length && results.length==this._rowCount ) {
+				
+
 				// Recherche les caracteres supplementaires !
 				for(var i=label.length+1;i>=0 && i<=proposalLabelCS.length;i++) {
 					var l=proposalLabelCS.substring(0, i);
 					
 					for(var j=0;j<results.length;j++) {
 						var result=results[j]._label;
+						if (inputFormat) {
+							result=this._format(inputFormat, results[j]);
+						}
+						
 						var resultCS=(this._caseSensitive)?result:result.toLowerCase();
 						
 						if (resultCS.indexOf(labelCS)<0) {
@@ -779,16 +888,25 @@ var __members = {
 			}
 		}
 		
-		this._setSuggestion(proposalLabel, proposalValue, proposalItem, jsEvt);
+		this._setSuggestion(proposalLabel, proposalValue, proposalItem, jsEvt, true);
 		
 		this.f_setSelection(new f_textSelection(label.length, proposalLabel.length, proposalLabel.substring(label.length)));
+		
+		return true;
 	},
 	/**
 	 * @method private
 	 */
-	_setSuggestion: function(label, value, item, jsEvt) {
+	_setSuggestion: function(label, value, item, jsEvt, inputAlreadyFormatted) {
 		f_core.Debug(f_suggestTextEntry, "_setSuggestion: label='"+label+"' value='"+value+"' item='"+item+"'.");
 
+		if (!inputAlreadyFormatted) {
+			var inputFormat=f_core.GetAttributeNS(this, "inputFormat");
+			if (inputFormat) {
+				label=this._format(inputFormat, item);
+			}
+		}
+		
 		this.f_setText(label, true);
 		this._setSuggestionValue(value, item, jsEvt);
 		this._lastValue=this.f_getValue();
@@ -830,7 +948,10 @@ var __members = {
 		
 		if (!this._orderedResult) {
 			ret.push.apply(ret, results);
-			return true;
+			
+			var complete=(results.length==this._rowCount);
+			
+			return complete;
 		}
 		
 		if (!this._caseSensitive) {
@@ -1018,6 +1139,33 @@ var __members = {
 	 */
 	f_isDisableProposals: function() {
 		return !!this._disableProposals;
+	},
+	_proposeItem: function(text) {
+		if (true) {
+			return;
+		}
+		
+		/*
+		var tid=this.id+"::ariaLive";
+		
+		var h=document.getElementById(tid);
+		if (h) {
+			h.parentNode.removeChild(h);
+			h=null;
+		}
+		
+		if (!h) {
+			h=f_core.CreateElement(this.parentNode, "LABEL", {
+				id: tid,
+				className: "f_suggestTextEntry_live"
+			});
+			h.setAttribute("aria-live", "polite");
+			//h.setAttribute("aria-relevant", "text");
+			//h.setAttribute("aria-labelledby", this.id);
+		}
+		
+		f_core.SetTextNode(h, text);
+		*/
 	}
 };
 
