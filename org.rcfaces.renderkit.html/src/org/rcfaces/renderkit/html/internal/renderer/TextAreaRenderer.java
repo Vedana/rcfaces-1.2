@@ -117,7 +117,7 @@ public class TextAreaRenderer extends AbstractInputRenderer {
             htmlWriter.writeAttributeNS("ignoreWhenFull", true);
         }
 
-        if (textAreaComponent.isRendered()) {
+        if (textAreaComponent.isRequired()) {
             htmlWriter.writeAriaRequired(true);
         }
     }
