@@ -513,6 +513,8 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
         IComponentRenderContext componentRenderContext = htmlWriter
                 .getComponentRenderContext();
 
+        FacesContext facesContext = componentRenderContext.getFacesContext();
+
         ComboGridComponent comboGridComponent = (ComboGridComponent) componentRenderContext
                 .getComponent();
 
@@ -522,11 +524,16 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
         }
 
         htmlWriter.writeType(IHtmlWriter.TEXT_INPUT_TYPE);
-        htmlWriter.writeRole(IAccessibilityRoles.TEXTBOX);
+        htmlWriter.writeRole(IAccessibilityRoles.COMBOBOX);
         htmlWriter.writeAutoComplete(IHtmlElements.AUTOCOMPLETE_OFF);
 
         htmlWriter.writeId(componentRenderContext.getComponentClientId()
                 + INPUT_ID_SUFFIX);
+
+        String toolTipText = comboGridComponent.getToolTipText(facesContext);
+        if (toolTipText != null) {
+            htmlWriter.writeTitle(toolTipText);
+        }
 
         String labelId = computeDescriptionClientId(htmlWriter);
         htmlWriter.writeAttribute("aria-describedby", labelId);
@@ -536,8 +543,6 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
         sa.append("_input");
 
         String emptyMessage = null;
-
-        FacesContext facesContext = componentRenderContext.getFacesContext();
 
         if (componentRenderContext.containsAttribute(INPUT_ERRORED_PROPERTY)) {
             sa.append(' ').append(getMainStyleClassName())
@@ -674,7 +679,7 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
     }
 
     protected String getWAIRole() {
-        return IAccessibilityRoles.COMBOBOX;
+        return IAccessibilityRoles.PRESENTATION;
     }
 
     /**
