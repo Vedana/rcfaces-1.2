@@ -57,6 +57,7 @@ var __members = {
 
 		iframe.id = this._shell.f_getId()+"::iframe";
 		iframe.name = iframe.id+"::name";
+		iframe.title=""; // De décoration
 	
 		var shell=this._shell;
 		
