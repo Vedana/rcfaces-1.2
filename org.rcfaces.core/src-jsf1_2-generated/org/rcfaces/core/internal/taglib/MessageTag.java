@@ -30,6 +30,7 @@ public class MessageTag extends AbstractMessageTag implements Tag {
 	private ValueExpression infoImageURL;
 	private ValueExpression warnImageURL;
 	private ValueExpression imageURL;
+	private ValueExpression caption;
 	private ValueExpression showIfMessage;
 	private ValueExpression showActiveComponentMessage;
 	public String getComponentType() {
@@ -84,6 +85,10 @@ public class MessageTag extends AbstractMessageTag implements Tag {
 		this.imageURL = imageURL;
 	}
 
+	public void setCaption(ValueExpression caption) {
+		this.caption = caption;
+	}
+
 	public void setShowIfMessage(ValueExpression showIfMessage) {
 		this.showIfMessage = showIfMessage;
 	}
@@ -109,6 +114,7 @@ public class MessageTag extends AbstractMessageTag implements Tag {
 			LOG.debug("  infoImageURL='"+infoImageURL+"'");
 			LOG.debug("  warnImageURL='"+warnImageURL+"'");
 			LOG.debug("  imageURL='"+imageURL+"'");
+			LOG.debug("  caption='"+caption+"'");
 			LOG.debug("  showIfMessage='"+showIfMessage+"'");
 			LOG.debug("  showActiveComponentMessage='"+showActiveComponentMessage+"'");
 		}
@@ -232,6 +238,15 @@ public class MessageTag extends AbstractMessageTag implements Tag {
 			}
 		}
 
+		if (caption != null) {
+			if (caption.isLiteralText()==false) {
+				component.setValueExpression(Properties.CAPTION, caption);
+
+			} else {
+				component.setCaption(caption.getExpressionString());
+			}
+		}
+
 		if (showIfMessage != null) {
 			if (showIfMessage.isLiteralText()==false) {
 				component.setValueExpression(Properties.SHOW_IF_MESSAGE, showIfMessage);
@@ -264,6 +279,7 @@ public class MessageTag extends AbstractMessageTag implements Tag {
 		infoImageURL = null;
 		warnImageURL = null;
 		imageURL = null;
+		caption = null;
 		showIfMessage = null;
 		showActiveComponentMessage = null;
 

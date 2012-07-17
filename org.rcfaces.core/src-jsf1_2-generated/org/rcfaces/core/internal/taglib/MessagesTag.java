@@ -22,6 +22,7 @@ public class MessagesTag extends AbstractMessagesTag implements Tag {
 	private ValueExpression fatalStyleClass;
 	private ValueExpression infoStyleClass;
 	private ValueExpression warnStyleClass;
+	private ValueExpression caption;
 	private ValueExpression showIfMessage;
 	private ValueExpression showActiveComponentMessage;
 	private ValueExpression maxCount;
@@ -45,6 +46,10 @@ public class MessagesTag extends AbstractMessagesTag implements Tag {
 		this.warnStyleClass = warnStyleClass;
 	}
 
+	public void setCaption(ValueExpression caption) {
+		this.caption = caption;
+	}
+
 	public void setShowIfMessage(ValueExpression showIfMessage) {
 		this.showIfMessage = showIfMessage;
 	}
@@ -66,6 +71,7 @@ public class MessagesTag extends AbstractMessagesTag implements Tag {
 			LOG.debug("  fatalStyleClass='"+fatalStyleClass+"'");
 			LOG.debug("  infoStyleClass='"+infoStyleClass+"'");
 			LOG.debug("  warnStyleClass='"+warnStyleClass+"'");
+			LOG.debug("  caption='"+caption+"'");
 			LOG.debug("  showIfMessage='"+showIfMessage+"'");
 			LOG.debug("  showActiveComponentMessage='"+showActiveComponentMessage+"'");
 			LOG.debug("  maxCount='"+maxCount+"'");
@@ -118,6 +124,15 @@ public class MessagesTag extends AbstractMessagesTag implements Tag {
 			}
 		}
 
+		if (caption != null) {
+			if (caption.isLiteralText()==false) {
+				component.setValueExpression(Properties.CAPTION, caption);
+
+			} else {
+				component.setCaption(caption.getExpressionString());
+			}
+		}
+
 		if (showIfMessage != null) {
 			if (showIfMessage.isLiteralText()==false) {
 				component.setValueExpression(Properties.SHOW_IF_MESSAGE, showIfMessage);
@@ -151,6 +166,7 @@ public class MessagesTag extends AbstractMessagesTag implements Tag {
 		fatalStyleClass = null;
 		infoStyleClass = null;
 		warnStyleClass = null;
+		caption = null;
 		showIfMessage = null;
 		showActiveComponentMessage = null;
 		maxCount = null;

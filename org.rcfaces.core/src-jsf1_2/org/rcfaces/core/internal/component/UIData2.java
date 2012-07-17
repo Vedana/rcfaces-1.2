@@ -74,474 +74,490 @@ import org.rcfaces.core.internal.capability.IRCFacesComponent;
 
 public class UIData2 extends UIData0 {
 
-	private static final Log LOG = LogFactory.getLog(UIData2.class);
+    private static final Log LOG = LogFactory.getLog(UIData2.class);
 
-	private static boolean DEBUG_ENABLED = LOG.isDebugEnabled();
+    private static boolean DEBUG_ENABLED = LOG.isDebugEnabled();
 
-	private transient List<int[]> decodedIndexes;
+    private transient List<int[]> decodedIndexes;
 
-	private Map saved = new HashMap();
+    private Map saved = new HashMap();
 
-	private boolean saveCompleteState = true;
+    private boolean saveCompleteState = true;
 
-	private boolean iterateMode;
+    private boolean iterateMode;
 
-	private int iterateModeFirst;
+    private int iterateModeFirst;
 
-	private int iterateModeIndex;
+    private int iterateModeIndex;
 
-	private int iterateModeRows;
+    private int iterateModeRows;
 
-	public UIData2() {
-		// Certains logs sont positionnés APRES !
-		DEBUG_ENABLED = LOG.isDebugEnabled();
-	}
+    public UIData2() {
+        // Certains logs sont positionnés APRES !
+        DEBUG_ENABLED = LOG.isDebugEnabled();
+    }
 
-	public void encodeBegin(FacesContext context) throws IOException {
+    @Override
+    public void encodeBegin(FacesContext context) throws IOException {
 
-		decodedIndexes = null;
+        decodedIndexes = null;
 
-		super.encodeBegin(context);
-	}
+        super.encodeBegin(context);
+    }
 
-	protected void iterate(FacesContext context, PhaseId phaseId) {
-		if (decodedIndexes == null || decodedIndexes.isEmpty()) {
-			super.iterate(context, phaseId);
-			return;
-		}
+    @Override
+    protected void iterate(FacesContext context, PhaseId phaseId) {
+        if (decodedIndexes == null || decodedIndexes.isEmpty()) {
+            super.iterate(context, phaseId);
+            return;
+        }
 
-		if (true) {
-			// super.iterate(context, phaseId);
-			// return;
-		}
+        if (true) {
+            // super.iterate(context, phaseId);
+            // return;
+        }
 
-		iterateModeFirst = 0;
-		iterateModeRows = 0;
-		iterateModeIndex = 0;
+        iterateModeFirst = 0;
+        iterateModeRows = 0;
+        iterateModeIndex = 0;
 
-		for (int[] is : decodedIndexes) {
-			iterateModeRows += is[1];
-		}
+        for (int[] is : decodedIndexes) {
+            iterateModeRows += is[1];
+        }
 
-		iterateMode = true;
-		try {
+        iterateMode = true;
+        try {
 
-			super.iterate(context, phaseId);
+            super.iterate(context, phaseId);
 
-		} finally {
-			iterateMode = false;
-		}
-	}
+        } finally {
+            iterateMode = false;
+        }
+    }
 
-	protected boolean renderColumn(UIColumn column, PhaseId phaseId) {
-		if (column instanceof IAdditionalInformationContainer) {
-			return decodeAdditionalInformation((IAdditionalInformationContainer) column);
-		}
+    @Override
+    protected boolean renderColumn(UIColumn column, PhaseId phaseId) {
+        if (column instanceof IAdditionalInformationContainer) {
+            return decodeAdditionalInformation((IAdditionalInformationContainer) column);
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	public int getFirst() {
-		if (iterateMode == false) {
-			int first = super.getFirst();
+    @Override
+    public int getFirst() {
+        if (iterateMode == false) {
+            int first = super.getFirst();
 
-			if (DEBUG_ENABLED) {
-				LOG.debug("getFirst returns " + first);
-			}
+            if (DEBUG_ENABLED) {
+                LOG.debug("getFirst returns " + first);
+            }
 
-			return first;
-		}
+            return first;
+        }
 
-		if (DEBUG_ENABLED) {
-			LOG.debug("Iterate translate mode: return first="
-					+ iterateModeFirst);
-		}
+        if (DEBUG_ENABLED) {
+            LOG.debug("Iterate translate mode: return first="
+                    + iterateModeFirst);
+        }
 
-		return iterateModeFirst;
-	}
+        return iterateModeFirst;
+    }
 
-	public int getRowCount() {
-		int rowCount = super.getRowCount();
+    @Override
+    public int getRowCount() {
+        int rowCount = super.getRowCount();
 
-		if (DEBUG_ENABLED) {
-			LOG.debug("getRowCount() returns " + rowCount);
-		}
+        if (DEBUG_ENABLED) {
+            LOG.debug("getRowCount() returns " + rowCount);
+        }
 
-		return rowCount;
-	}
+        return rowCount;
+    }
 
-	public int getRowIndex() {
-		int rowIndex = super.getRowIndex();
+    @Override
+    public int getRowIndex() {
+        int rowIndex = super.getRowIndex();
 
-		if (DEBUG_ENABLED) {
-			LOG.debug("getRowIndex() returns " + rowIndex);
-		}
+        if (DEBUG_ENABLED) {
+            LOG.debug("getRowIndex() returns " + rowIndex);
+        }
 
-		return rowIndex;
-	}
+        return rowIndex;
+    }
 
-	public boolean isRowAvailable() {
-		boolean rowAvailable = super.isRowAvailable();
+    @Override
+    public boolean isRowAvailable() {
+        boolean rowAvailable = super.isRowAvailable();
 
-		if (DEBUG_ENABLED) {
-			LOG.debug("isRowAvailable() returns " + rowAvailable);
-		}
+        if (DEBUG_ENABLED) {
+            LOG.debug("isRowAvailable() returns " + rowAvailable);
+        }
 
-		return rowAvailable;
-	}
+        return rowAvailable;
+    }
 
-	public void setFirst(int first) {
+    @Override
+    public void setFirst(int first) {
 
-		if (DEBUG_ENABLED) {
-			LOG.debug("setFirst(" + first + ")");
-		}
+        if (DEBUG_ENABLED) {
+            LOG.debug("setFirst(" + first + ")");
+        }
 
-		super.setFirst(first);
-	}
+        super.setFirst(first);
+    }
 
-	public void setRows(int rows) {
+    @Override
+    public void setRows(int rows) {
 
-		if (DEBUG_ENABLED) {
-			LOG.debug("setRows(" + rows + ")");
-		}
+        if (DEBUG_ENABLED) {
+            LOG.debug("setRows(" + rows + ")");
+        }
 
-		super.setRows(rows);
-	}
+        super.setRows(rows);
+    }
 
-	public int getRows() {
-		if (iterateMode == false) {
-			int rows = super.getRows();
+    @Override
+    public int getRows() {
+        if (iterateMode == false) {
+            int rows = super.getRows();
 
-			if (DEBUG_ENABLED) {
-				LOG.debug("getRows() returns " + rows);
-			}
+            if (DEBUG_ENABLED) {
+                LOG.debug("getRows() returns " + rows);
+            }
 
-			return rows;
-		}
+            return rows;
+        }
 
-		if (DEBUG_ENABLED) {
-			LOG.debug("getRows(): Iterate translate mode returns rows="
-					+ iterateModeRows);
-		}
+        if (DEBUG_ENABLED) {
+            LOG.debug("getRows(): Iterate translate mode returns rows="
+                    + iterateModeRows);
+        }
 
-		return iterateModeRows;
-	}
+        return iterateModeRows;
+    }
 
-	public void setRowIndex(int rowIndex) {
-		if (iterateMode == false || rowIndex < 0) {
+    @Override
+    public void setRowIndex(int rowIndex) {
+        if (iterateMode == false || rowIndex < 0) {
 
-			if (DEBUG_ENABLED) {
-				LOG.debug("setRowIndex(" + rowIndex + ")");
-			}
+            if (DEBUG_ENABLED) {
+                LOG.debug("setRowIndex(" + rowIndex + ")");
+            }
 
-			super.setRowIndex(rowIndex);
-			return;
-		}
+            super.setRowIndex(rowIndex);
+            return;
+        }
 
-		int translatedRowIndex = 0;
-		for (int[] is : decodedIndexes) {
-			if (rowIndex >= is[1]) {
-				rowIndex -= is[1];
-				continue;
-			}
+        int translatedRowIndex = 0;
+        for (int[] is : decodedIndexes) {
+            if (rowIndex >= is[1]) {
+                rowIndex -= is[1];
+                continue;
+            }
 
-			translatedRowIndex = is[0] + rowIndex;
-			break;
-		}
+            translatedRowIndex = is[0] + rowIndex;
+            break;
+        }
+
+        if (DEBUG_ENABLED) {
+            LOG.debug("setRowIndex(" + rowIndex
+                    + ") Iterate translate mode => rowIndex="
+                    + translatedRowIndex);
+        }
 
-		if (DEBUG_ENABLED) {
-			LOG.debug("setRowIndex(" + rowIndex
-					+ ") Iterate translate mode => rowIndex="
-					+ translatedRowIndex);
-		}
+        super.setRowIndex(translatedRowIndex);
+    }
+
+    public void addDecodedIndexes(int first, int rows) {
+
+        if (DEBUG_ENABLED) {
+            LOG.debug("Add decoded indexes first=" + first + " rows=" + rows);
+        }
+
+        if (decodedIndexes == null) {
+            decodedIndexes = new ArrayList<int[]>();
+        }
+
+        if (rows > 0) {
+            decodedIndexes.add(new int[] { first, rows });
+        }
+    }
+
+    @Override
+    public void restoreState(FacesContext context, Object state) {
+        Object states[] = (Object[]) state;
+
+        super.restoreState(context, states[0]);
+
+        Object[] ss = (Object[]) states[1];
+
+        saved = new HashMap(ss.length / 2);
+        if (ss.length > 0) {
+            for (int i = 0; i < ss.length;) {
+                Object key = ss[i++];
+
+                SavedState2 ss2 = new SavedState2();
+                ss2.restoreState(context, ss[i++]);
+
+                saved.put(key, ss2);
+            }
+        }
+
+    }
+
+    @Override
+    public Object saveState(FacesContext context) {
+        Object ret[] = new Object[2];
+
+        ret[0] = super.saveState(context);
+
+        Object ss[] = new Object[saved.size() * 2];
+        ret[1] = ss;
+
+        if (ss.length > 0) {
+            int index = 0;
+            for (Iterator it = saved.entrySet().iterator(); it.hasNext();) {
+                Map.Entry entry = (Map.Entry) it.next();
+
+                ss[index++] = entry.getKey();
+                ss[index++] = ((SavedState2) entry.getValue())
+                        .saveState(context);
+            }
+        }
+
+        return ret;
+    }
+
+    /**
+     * <p>
+     * Restore state information for the specified component and its
+     * descendants.
+     * </p>
+     * 
+     * @param component
+     *            Component for which to restore state information
+     * @param context
+     *            {@link FacesContext} for the current request
+     */
+
+    @Override
+    protected void restoreDescendantState(UIComponent component,
+            FacesContext context) {
+
+        // Reset the client identifier for this component
+        String id = component.getId();
+        component.setId(id); // Forces client id to be reset
+
+        if (component instanceof IRCFacesComponent) {
+            String clientId = component.getClientId(context);
+            SavedState2 state = (SavedState2) saved.get(clientId);
+
+            if (state != null) {
+                IComponentEngine componentEngine = state.getComponentEngine(
+                        context, component);
+                if (componentEngine != null) {
+                    ComponentEngineManager.setComponentEngine(
+                            (IRCFacesComponent) component, componentEngine);
+
+                    if (DEBUG_ENABLED) {
+                        LOG.debug("Restore state of '" + clientId
+                                + "' =>  set componentEngine => " + state);
+                    }
+
+                } else {
+                    if (DEBUG_ENABLED) {
+                        LOG.debug("Restore state of '" + clientId
+                                + "' => no component engine");
+                    }
+                }
+            } else {
+                ComponentEngineManager
+                        .cloneComponentEngine((IRCFacesComponent) component);
 
-		super.setRowIndex(translatedRowIndex);
-	}
+                if (DEBUG_ENABLED) {
+                    LOG.debug("Restore state of '" + clientId
+                            + "' => NO STATE, clone component engine");
+                }
+            }
+        }
+
+        super.restoreDescendantState(component, context);
+    }
+
+    /**
+     * <p>
+     * Save state information for the specified component and its descendants.
+     * </p>
+     * 
+     * @param component
+     *            Component for which to save state information
+     * @param context
+     *            {@link FacesContext} for the current request
+     */
+
+    @Override
+    protected void saveDescendantState(UIComponent component,
+            FacesContext context) {
+
+        super.saveDescendantState(component, context);
+
+        if (isSaveCompleteState()) {
+            if (component instanceof IRCFacesComponent) {
+                IComponentEngine componentEngine = ComponentEngineManager
+                        .getComponentEngine((IRCFacesComponent) component);
 
-	public void addDecodedIndexes(int first, int rows) {
-
-		if (DEBUG_ENABLED) {
-			LOG.debug("Add decoded indexes first=" + first + " rows=" + rows);
-		}
-
-		if (decodedIndexes == null) {
-			decodedIndexes = new ArrayList<int[]>();
-		}
-
-		if (rows > 0) {
-			decodedIndexes.add(new int[] { first, rows });
-		}
-	}
-
-	public void restoreState(FacesContext context, Object state) {
-		Object states[] = (Object[]) state;
-
-		super.restoreState(context, states[0]);
-
-		Object[] ss = (Object[]) states[1];
-
-		saved = new HashMap(ss.length / 2);
-		if (ss.length > 0) {
-			for (int i = 0; i < ss.length;) {
-				Object key = ss[i++];
-
-				SavedState2 ss2 = new SavedState2();
-				ss2.restoreState(context, ss[i++]);
-
-				saved.put(key, ss2);
-			}
-		}
-
-	}
-
-	public Object saveState(FacesContext context) {
-		Object ret[] = new Object[2];
-
-		ret[0] = super.saveState(context);
-
-		Object ss[] = new Object[saved.size() * 2];
-		ret[1] = ss;
-
-		if (ss.length > 0) {
-			int index = 0;
-			for (Iterator it = saved.entrySet().iterator(); it.hasNext();) {
-				Map.Entry entry = (Map.Entry) it.next();
-
-				ss[index++] = entry.getKey();
-				ss[index++] = ((SavedState2) entry.getValue())
-						.saveState(context);
-			}
-		}
-
-		return ret;
-	}
-
-	/**
-	 * <p>
-	 * Restore state information for the specified component and its
-	 * descendants.
-	 * </p>
-	 * 
-	 * @param component
-	 *            Component for which to restore state information
-	 * @param context
-	 *            {@link FacesContext} for the current request
-	 */
-
-	protected void restoreDescendantState(UIComponent component,
-			FacesContext context) {
+                String clientId = component.getClientId(context);
 
-		// Reset the client identifier for this component
-		String id = component.getId();
-		component.setId(id); // Forces client id to be reset
+                SavedState2 state = (SavedState2) saved.get(clientId);
+                if (state == null) {
+                    state = new SavedState2();
+                    saved.put(clientId, state);
+                }
 
-		if (component instanceof IRCFacesComponent) {
-			String clientId = component.getClientId(context);
-			SavedState2 state = (SavedState2) saved.get(clientId);
-
-			if (state != null) {
-				IComponentEngine componentEngine = state.getComponentEngine(
-						context, component);
-				if (componentEngine != null) {
-					ComponentEngineManager.setComponentEngine(
-							(IRCFacesComponent) component, componentEngine);
-
-					if (DEBUG_ENABLED) {
-						LOG.debug("Restore state of '" + clientId
-								+ "' =>  set componentEngine => " + state);
-					}
-
-				} else {
-					if (DEBUG_ENABLED) {
-						LOG.debug("Restore state of '" + clientId
-								+ "' => no component engine");
-					}
-				}
-			} else {
-				ComponentEngineManager
-						.cloneComponentEngine((IRCFacesComponent) component);
-
-				if (DEBUG_ENABLED) {
-					LOG.debug("Restore state of '" + clientId
-							+ "' => NO STATE, clone component engine");
-				}
-			}
-		}
-
-		super.restoreDescendantState(component, context);
-	}
-
-	/**
-	 * <p>
-	 * Save state information for the specified component and its descendants.
-	 * </p>
-	 * 
-	 * @param component
-	 *            Component for which to save state information
-	 * @param context
-	 *            {@link FacesContext} for the current request
-	 */
-
-	protected void saveDescendantState(UIComponent component,
-			FacesContext context) {
-
-		super.saveDescendantState(component, context);
-
-		if (isSaveCompleteState()) {
-			if (component instanceof IRCFacesComponent) {
-				IComponentEngine componentEngine = ComponentEngineManager
-						.getComponentEngine((IRCFacesComponent) component);
-
-				String clientId = component.getClientId(context);
-
-				SavedState2 state = (SavedState2) saved.get(clientId);
-				if (state == null) {
-					state = new SavedState2();
-					saved.put(clientId, state);
-				}
-
-				state.setComponentEngine(componentEngine);
-
-				if (DEBUG_ENABLED) {
-					LOG.debug("Save state of '" + clientId + "' => " + state);
-				}
-			}
-		}
-	}
-
-	public final boolean isSaveCompleteState() {
-		return saveCompleteState;
-	}
-
-	public final void setSaveCompleteState(boolean saveCompleteState) {
-		this.saveCompleteState = saveCompleteState;
-	}
-
-	// Private class to represent saved state information
-	public static class SavedState2 implements Externalizable, StateHolder {
-
-		private IComponentEngine componentEngine;
-
-		private Object serializedComponentEngine;
-
-		public SavedState2() {
-
-		}
-
-		public final IComponentEngine getComponentEngine(
-				FacesContext facesContext, UIComponent component) {
-			if (serializedComponentEngine == null) {
-				return componentEngine;
-			}
-
-			IFactory factory = Constants.getCameliaFactory();
-
-			IComponentEngine componentEngine = factory.createComponentEngine();
-
-			componentEngine.restoreState(facesContext,
-					serializedComponentEngine);
-
-			serializedComponentEngine = null;
-
-			return componentEngine;
-		}
-
-		public final void setComponentEngine(IComponentEngine componentEngine) {
-			this.componentEngine = componentEngine;
-			this.serializedComponentEngine = null;
-		}
-
-		public String toString() {
-			return "componentEngine=" + componentEngine;
-		}
-
-		public void readExternal(ObjectInput in) throws IOException,
-				ClassNotFoundException {
-
-			serializedComponentEngine = in.readObject();
-		}
-
-		public void writeExternal(ObjectOutput out) throws IOException {
-			if (componentEngine != null) {
-				serializedComponentEngine = componentEngine
-						.saveState(FacesContext.getCurrentInstance());
-			}
-
-			out.writeObject(serializedComponentEngine);
-		}
-
-		public Object saveState(FacesContext context) {
-			if (componentEngine != null) {
-				serializedComponentEngine = componentEngine
-						.saveState(FacesContext.getCurrentInstance());
-			}
-
-			return serializedComponentEngine;
-		}
-
-		public void restoreState(FacesContext context, Object state) {
-			serializedComponentEngine = state;
-		}
-
-		public boolean isTransient() {
-			return false;
-		}
-
-		public void setTransient(boolean newTransientValue) {
-		}
-
-	}
-
-	public boolean decodeAdditionalInformation(
-			IAdditionalInformationContainer additionalInformationComponent) {
-		if (decodedIndexes == null) {
-			if (DEBUG_ENABLED) {
-				int rowIndex = getRowIndex();
-
-				LOG.debug("Decode additional #" + rowIndex + " ("
-						+ decodedIndexesToString() + ") => FALSE");
-			}
-			return false;
-		}
-
-		int rowIndex = getRowIndex();
-
-		for (int[] is : decodedIndexes) {
-			if (rowIndex >= is[0] && rowIndex < is[0] + is[1]) {
-				if (DEBUG_ENABLED) {
-					LOG.debug("Decode additional #" + rowIndex + " ("
-							+ decodedIndexesToString() + ") => TRUE");
-				}
-				return true;
-			}
-		}
-
-		if (DEBUG_ENABLED) {
-			LOG.debug("Decode additional #" + rowIndex + " ("
-					+ decodedIndexesToString() + ") => FALSE");
-		}
-
-		return false;
-	}
-
-	private String decodedIndexesToString() {
-		if (decodedIndexes == null) {
-			return "null";
-		}
-
-		if (decodedIndexes.isEmpty()) {
-			return "[]";
-		}
-
-		StringBuffer sb = new StringBuffer();
-
-		for (int is[] : decodedIndexes) {
-			if (sb.length() > 0) {
-				sb.append(',');
-			}
-			sb.append("[" + is[0] + "->" + (is[0] + is[1] - 1) + "]");
-		}
-
-		return sb.toString();
-	}
+                state.setComponentEngine(componentEngine);
+
+                if (DEBUG_ENABLED) {
+                    LOG.debug("Save state of '" + clientId + "' => " + state);
+                }
+            }
+        }
+    }
+
+    public final boolean isSaveCompleteState() {
+        return saveCompleteState;
+    }
+
+    public final void setSaveCompleteState(boolean saveCompleteState) {
+        this.saveCompleteState = saveCompleteState;
+    }
+
+    // Private class to represent saved state information
+    public static class SavedState2 implements Externalizable, StateHolder {
+
+        private IComponentEngine componentEngine;
+
+        private Object serializedComponentEngine;
+
+        public SavedState2() {
+
+        }
+
+        public final IComponentEngine getComponentEngine(
+                FacesContext facesContext, UIComponent component) {
+            if (serializedComponentEngine == null) {
+                return componentEngine;
+            }
+
+            IFactory factory = Constants.getCameliaFactory();
+
+            IComponentEngine componentEngine = factory.createComponentEngine();
+
+            componentEngine.restoreState(facesContext,
+                    serializedComponentEngine);
+
+            serializedComponentEngine = null;
+
+            return componentEngine;
+        }
+
+        public final void setComponentEngine(IComponentEngine componentEngine) {
+            this.componentEngine = componentEngine;
+            this.serializedComponentEngine = null;
+        }
+
+        @Override
+        public String toString() {
+            return "componentEngine=" + componentEngine;
+        }
+
+        public void readExternal(ObjectInput in) throws IOException,
+                ClassNotFoundException {
+
+            serializedComponentEngine = in.readObject();
+        }
+
+        public void writeExternal(ObjectOutput out) throws IOException {
+            if (componentEngine != null) {
+                serializedComponentEngine = componentEngine
+                        .saveState(FacesContext.getCurrentInstance());
+            }
+
+            out.writeObject(serializedComponentEngine);
+        }
+
+        public Object saveState(FacesContext context) {
+            if (componentEngine != null) {
+                serializedComponentEngine = componentEngine
+                        .saveState(FacesContext.getCurrentInstance());
+            }
+
+            return serializedComponentEngine;
+        }
+
+        public void restoreState(FacesContext context, Object state) {
+            serializedComponentEngine = state;
+        }
+
+        public boolean isTransient() {
+            return false;
+        }
+
+        public void setTransient(boolean newTransientValue) {
+        }
+
+    }
+
+    public boolean decodeAdditionalInformation(
+            IAdditionalInformationContainer additionalInformationComponent) {
+        if (decodedIndexes == null) {
+            if (DEBUG_ENABLED) {
+                int rowIndex = getRowIndex();
+
+                LOG.debug("Decode additional #" + rowIndex + " ("
+                        + decodedIndexesToString() + ") => FALSE");
+            }
+            return false;
+        }
+
+        int rowIndex = getRowIndex();
+
+        for (int[] is : decodedIndexes) {
+            if (rowIndex >= is[0] && rowIndex < is[0] + is[1]) {
+                if (DEBUG_ENABLED) {
+                    LOG.debug("Decode additional #" + rowIndex + " ("
+                            + decodedIndexesToString() + ") => TRUE");
+                }
+                return true;
+            }
+        }
+
+        if (DEBUG_ENABLED) {
+            LOG.debug("Decode additional #" + rowIndex + " ("
+                    + decodedIndexesToString() + ") => FALSE");
+        }
+
+        return false;
+    }
+
+    private String decodedIndexesToString() {
+        if (decodedIndexes == null) {
+            return "null";
+        }
+
+        if (decodedIndexes.isEmpty()) {
+            return "[]";
+        }
+
+        StringBuffer sb = new StringBuffer();
+
+        for (int is[] : decodedIndexes) {
+            if (sb.length() > 0) {
+                sb.append(',');
+            }
+            sb.append("[" + is[0] + "->" + (is[0] + is[1] - 1) + "]");
+        }
+
+        return sb.toString();
+    }
 }

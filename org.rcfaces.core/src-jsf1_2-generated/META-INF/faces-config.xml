@@ -2249,6 +2249,26 @@ A string specifying a converter id or a binding to a converter object. This conv
 			<attribute-name>disableProposals</attribute-name>
 			<attribute-class>boolean</attribute-class>
 		</attribute>
+		<attribute>
+			<attribute-name>inputFormat</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>labelFormat</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>descriptionFormat</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>popupWidth</attribute-name>
+			<attribute-class>int</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>popupHeight</attribute-name>
+			<attribute-class>int</attribute-class>
+		</attribute>
 	</component>
 	<component>
 		<description><![CDATA[

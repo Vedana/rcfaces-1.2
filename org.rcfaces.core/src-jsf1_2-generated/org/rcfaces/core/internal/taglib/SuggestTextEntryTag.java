@@ -32,6 +32,11 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 	private ValueExpression orderedItems;
 	private ValueExpression showPopupForOneResult;
 	private ValueExpression disableProposals;
+	private ValueExpression inputFormat;
+	private ValueExpression labelFormat;
+	private ValueExpression descriptionFormat;
+	private ValueExpression popupWidth;
+	private ValueExpression popupHeight;
 	public String getComponentType() {
 		return SuggestTextEntryComponent.COMPONENT_TYPE;
 	}
@@ -92,6 +97,26 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 		this.disableProposals = disableProposals;
 	}
 
+	public void setInputFormat(ValueExpression inputFormat) {
+		this.inputFormat = inputFormat;
+	}
+
+	public void setLabelFormat(ValueExpression labelFormat) {
+		this.labelFormat = labelFormat;
+	}
+
+	public void setDescriptionFormat(ValueExpression descriptionFormat) {
+		this.descriptionFormat = descriptionFormat;
+	}
+
+	public void setPopupWidth(ValueExpression popupWidth) {
+		this.popupWidth = popupWidth;
+	}
+
+	public void setPopupHeight(ValueExpression popupHeight) {
+		this.popupHeight = popupHeight;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (SuggestTextEntryComponent.COMPONENT_TYPE==getComponentType()) {
@@ -109,6 +134,11 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 			LOG.debug("  orderedItems='"+orderedItems+"'");
 			LOG.debug("  showPopupForOneResult='"+showPopupForOneResult+"'");
 			LOG.debug("  disableProposals='"+disableProposals+"'");
+			LOG.debug("  inputFormat='"+inputFormat+"'");
+			LOG.debug("  labelFormat='"+labelFormat+"'");
+			LOG.debug("  descriptionFormat='"+descriptionFormat+"'");
+			LOG.debug("  popupWidth='"+popupWidth+"'");
+			LOG.debug("  popupHeight='"+popupHeight+"'");
 		}
 		if ((uiComponent instanceof SuggestTextEntryComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -237,6 +267,51 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 				component.setDisableProposals(getBool(disableProposals.getExpressionString()));
 			}
 		}
+
+		if (inputFormat != null) {
+			if (inputFormat.isLiteralText()==false) {
+				component.setValueExpression(Properties.INPUT_FORMAT, inputFormat);
+
+			} else {
+				component.setInputFormat(inputFormat.getExpressionString());
+			}
+		}
+
+		if (labelFormat != null) {
+			if (labelFormat.isLiteralText()==false) {
+				component.setValueExpression(Properties.LABEL_FORMAT, labelFormat);
+
+			} else {
+				component.setLabelFormat(labelFormat.getExpressionString());
+			}
+		}
+
+		if (descriptionFormat != null) {
+			if (descriptionFormat.isLiteralText()==false) {
+				component.setValueExpression(Properties.DESCRIPTION_FORMAT, descriptionFormat);
+
+			} else {
+				component.setDescriptionFormat(descriptionFormat.getExpressionString());
+			}
+		}
+
+		if (popupWidth != null) {
+			if (popupWidth.isLiteralText()==false) {
+				component.setValueExpression(Properties.POPUP_WIDTH, popupWidth);
+
+			} else {
+				component.setPopupWidth(getInt(popupWidth.getExpressionString()));
+			}
+		}
+
+		if (popupHeight != null) {
+			if (popupHeight.isLiteralText()==false) {
+				component.setValueExpression(Properties.POPUP_HEIGHT, popupHeight);
+
+			} else {
+				component.setPopupHeight(getInt(popupHeight.getExpressionString()));
+			}
+		}
 	}
 
 	public void release() {
@@ -254,6 +329,11 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 		orderedItems = null;
 		showPopupForOneResult = null;
 		disableProposals = null;
+		inputFormat = null;
+		labelFormat = null;
+		descriptionFormat = null;
+		popupWidth = null;
+		popupHeight = null;
 
 		super.release();
 	}

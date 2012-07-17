@@ -61,7 +61,7 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(TextEntryComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"filterProperties","maxResultNumber","menuListener","suggestionMinChars","caseSensitive","suggestionValue","forceProposal","showPopupForOneResult","suggestionListener","suggestionConverter","disableProposals","orderedItems","suggestionDelayMs","moreResultsMessage"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"filterProperties","maxResultNumber","menuListener","suggestionMinChars","caseSensitive","suggestionValue","descriptionFormat","labelFormat","forceProposal","showPopupForOneResult","suggestionListener","suggestionConverter","popupHeight","disableProposals","orderedItems","inputFormat","suggestionDelayMs","popupWidth","moreResultsMessage"}));
 	}
 
 	public SuggestTextEntryComponent() {
@@ -409,7 +409,7 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	}
 
 	public boolean isOrderedItems(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.ORDERED_ITEMS, true, facesContext);
+		return engine.getBoolProperty(Properties.ORDERED_ITEMS, false, facesContext);
 	}
 
 	public void setOrderedItems(boolean orderedItems) {
@@ -462,6 +462,106 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	 */
 	public boolean isDisableProposalsSetted() {
 		return engine.isPropertySetted(Properties.DISABLE_PROPOSALS);
+	}
+
+	public String getInputFormat() {
+		return getInputFormat(null);
+	}
+
+	public String getInputFormat(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.INPUT_FORMAT, facesContext);
+	}
+
+	public void setInputFormat(String inputFormat) {
+		engine.setProperty(Properties.INPUT_FORMAT, inputFormat);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "inputFormat" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isInputFormatSetted() {
+		return engine.isPropertySetted(Properties.INPUT_FORMAT);
+	}
+
+	public String getLabelFormat() {
+		return getLabelFormat(null);
+	}
+
+	public String getLabelFormat(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.LABEL_FORMAT, facesContext);
+	}
+
+	public void setLabelFormat(String labelFormat) {
+		engine.setProperty(Properties.LABEL_FORMAT, labelFormat);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "labelFormat" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isLabelFormatSetted() {
+		return engine.isPropertySetted(Properties.LABEL_FORMAT);
+	}
+
+	public String getDescriptionFormat() {
+		return getDescriptionFormat(null);
+	}
+
+	public String getDescriptionFormat(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.DESCRIPTION_FORMAT, facesContext);
+	}
+
+	public void setDescriptionFormat(String descriptionFormat) {
+		engine.setProperty(Properties.DESCRIPTION_FORMAT, descriptionFormat);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "descriptionFormat" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isDescriptionFormatSetted() {
+		return engine.isPropertySetted(Properties.DESCRIPTION_FORMAT);
+	}
+
+	public int getPopupWidth() {
+		return getPopupWidth(null);
+	}
+
+	public int getPopupWidth(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.POPUP_WIDTH, 0, facesContext);
+	}
+
+	public void setPopupWidth(int popupWidth) {
+		engine.setProperty(Properties.POPUP_WIDTH, popupWidth);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "popupWidth" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isPopupWidthSetted() {
+		return engine.isPropertySetted(Properties.POPUP_WIDTH);
+	}
+
+	public int getPopupHeight() {
+		return getPopupHeight(null);
+	}
+
+	public int getPopupHeight(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.POPUP_HEIGHT, 0, facesContext);
+	}
+
+	public void setPopupHeight(int popupHeight) {
+		engine.setProperty(Properties.POPUP_HEIGHT, popupHeight);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "popupHeight" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isPopupHeightSetted() {
+		return engine.isPropertySetted(Properties.POPUP_HEIGHT);
 	}
 
 	protected Set getCameliaFields() {
