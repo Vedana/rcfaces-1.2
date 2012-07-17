@@ -5840,9 +5840,12 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static
+	 * @param String message
+	 * @param optional Object parameters
+	 * @param optional Function parameterFunction
 	 * @return String
 	 */
-	FormatMessage: function(message, parameters) {
+	FormatMessage: function(message, parameters, parameterFunction) {
 		f_core.Assert(typeof(message)=="string", "f_core.FormatMessage: Message parameter is invalid '"+message+"'.");
 //		f_core.Assert(parameters instanceof Array, "f_core.FormatMessage: parameters parameter is invalid '"+parameters+"'.");
 		
@@ -5863,16 +5866,29 @@ var f_core = {
 				}
 				
 				ret.push(message.substring(pos, idx));
-				
+
+				var p=message.substring(idx+1, idx2);
+				var found = false;
+
 				if (parameters) {
-					var p=message.substring(idx+1, idx2);
 					var num=parseInt(p, 10);
 					if (!isNaN(num)) { // C'est un nombre
-						if (num>=0 && num<parameters.length) {
+						if (num>=0 && num<parameters.length && parameters[num]!==undefined) {
 							ret.push(parameters[num]);
-						}
-					} else if (parameters[p]) { // C'est une clef
+							found=true;
+						}		
+					} 
+					
+					if (!found && parameters[p]!==undefined) { // C'est une clef
 						ret.push(parameters[p]);
+						found=true;
+					}
+				}
+				if (!found && parameterFunction) {
+					var rf=parameterFunction(p);
+					if (rf!==undefined) {
+						ret.push(rf);
+						found=true;
 					}
 				}
 								
