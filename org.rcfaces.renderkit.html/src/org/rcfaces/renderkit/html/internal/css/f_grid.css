@@ -309,8 +309,8 @@
 	overflow-y: auto;
 	overflow-x: auto;
 	text-align: left;
-	-moz-outline-style: none;
-	-moz-user-focus: ignore;
+	XX-moz-outline-style: none;
+	XX-moz-user-focus: ignore;
 
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
