@@ -1249,7 +1249,7 @@ var f_core = {
 		
 		var rcfacesCleanUpTimeout=win._rcfacesCleanUpTimeout;
 		if (rcfacesCleanUpTimeout) {
-			win._rcfacesCleanUpTimeout=undefined;
+			win._rcfacesCleanUpTimeout=false;
 
 			win.clearTimeout(rcfacesCleanUpTimeout);
 		}
@@ -1812,10 +1812,9 @@ var f_core = {
 				win=f_core.GetWindow(form);
 			}
 
-
 			f_core.Assert(win, "f_core._OnSubmit: Can not identify window !");
-	
-			if (!win._rcfacesSubmitting && f_env.GetCancelExternalSubmit()) {
+			
+			if (win._rcfacesSubmitLocked || (!win._rcfacesSubmitting && f_env.GetCancelExternalSubmit())) {
 				return f_core.CancelJsEvent(evt);
 			}
 			
@@ -1848,9 +1847,10 @@ var f_core = {
 				f_core.InitializeForm(form); 
 			}
 			
+			var immediate=undefined;
 			var currentEvent=win.f_event.GetEvent();
 			if (currentEvent) {						
-				var immediate=currentEvent.f_isImmediate();
+				immediate=currentEvent.f_isImmediate();
 				
 				if (immediate===undefined) {
 					var component=currentEvent.f_getComponent();
@@ -1880,7 +1880,7 @@ var f_core = {
 			if (immediate!==true && f_env.GetCheckValidation()) {
 				f_core.Debug(f_core, "_OnSubmit: Call checkListeners="+ f_env.GetCheckValidation());
 				
-				var valid;
+				var valid=undefined;
 				try {
 					valid = f_core._CallFormCheckListeners(form);
 					
@@ -1922,6 +1922,10 @@ var f_core = {
 			return true;
 					
 		} catch (ex) {
+			if (window.console) {
+				window.console.error("%o", ex);
+			}
+			
 			f_core.Error(f_core, "_OnSubmit: Throws exception", ex);
 			return false;
 				
@@ -1961,8 +1965,8 @@ var f_core = {
 			// Intialize defaul return value
 			var ret = false;
 	
-			var type;
-			var jsEvt;
+			var type=undefined;
+			var jsEvt=undefined;
 			if (typeof(event)=="string") {
 				type=event;	
 				event=f_event.GetEvent();
@@ -1977,7 +1981,7 @@ var f_core = {
 			if (!jsEvt) {
 				jsEvt=(event)?event.f_getJsEvent():null;
 			}
-	
+
 			// Get element from event info if given
 			if (!elt && event) {
 				elt = event.f_getComponent();
@@ -2000,7 +2004,14 @@ var f_core = {
 
 			var doc=form.ownerDocument;
 			var win=f_core.GetWindow(doc);
-			
+
+			if (win._rcfacesSubmitLocked) {
+				if (jsEvt) {
+					f_core.CancelJsEvent(jsEvt);
+				}
+				return false;
+			}
+		
 			if (win.f_event.GetEventLocked(jsEvt, true)) {
 				return false;
 			}
@@ -2064,6 +2075,10 @@ var f_core = {
 				}
 			}
 			
+			if (window.console) {
+				window.console.log("Set input HIDDEN "+id);
+			}
+			
 			// On les effectent quand meme, car cela peut etre le 2eme submit !
 			f_core.SetInputHidden(form, 
 					f_core._COMPONENT, id, 
@@ -2072,7 +2087,7 @@ var f_core = {
 					f_core._ITEM, eventItem, 
 					f_core._DETAIL, eventDetail,
 					f_core._OBJECT_VALUE, eventEncodedValue);
-	
+			
 			// Keep the previous for further restore
 			if (url) {
 				if (!form._rcfacesOldAction) {
@@ -2137,7 +2152,7 @@ var f_core = {
 					f_core.Debug(f_core, "_Submit: Perform post submit  cleanUp="+win._rcfacesCleanUpOnSubmit);
 
 					f_core._PerformPostSubmit(form);
-								
+
 					f_core._DisableSubmit(form);
 					if (win._rcfacesCleanUpOnSubmit!==false) {
 						f_core._BatchExitWindow(win);
@@ -2170,6 +2185,13 @@ var f_core = {
 
 			return true;
 			
+		} catch (x) {
+			// telement critique que l'on passe par la console du navigateur
+			// Pour avoir une petite chance !
+			if (window.console) {
+				window.console.error("%o", x);
+			}
+			
 		} finally {		
 			f_core.Profile(true, "f_core._submit("+url+")");
 		}
@@ -2180,14 +2202,20 @@ var f_core = {
 	 * @return void
 	 */
 	_DisableSubmit: function(form) {
-		f_core.Debug(f_core, "_DisableSubmit: disable forms");
+		f_core.Debug(f_core, "_DisableSubmit: disable forms (locked="+window._rcfacesSubmitLocked+")");
 
+		if (window._rcfacesSubmitLocked) {
+			return;
+		}
+		
+		window._rcfacesSubmitLocked=true;
+		
 		var doc=form.ownerDocument;
 		var forms = doc.forms;
 		for (var i=0; i<forms.length; i++) {
 			var form=forms[i];
 			try {
-				form.action="#";
+				form.action="?__DoubleSubmit=true";
 				
 				form.onsubmit=document._rcfacesDisableSubmit;
 				form.submit=document._rcfacesDisableSubmitReturnFalse;
@@ -2220,6 +2248,10 @@ var f_core = {
 		f_core.Debug(f_core, "_BatchExitWindow: batch Exit window to "+f_core._CLEAN_UP_ON_SUBMIT_DELAY+"ms");
 
 		var _win=win;
+		if (win._rcfacesCleanUpTimeout!==undefined) {
+			return;
+		}
+
 		win._rcfacesCleanUpTimeout=win.setTimeout(function () {
 			var w=_win;
 			_win=null;
@@ -2714,7 +2746,9 @@ var f_core = {
 				f_classLoader.Destroy(event);					
 			}
 		}
-				
+
+		f_core.Debug(f_core, "_CallFormCheckListeners: "+checkListeners.length+" listeners called.");
+			
 		return ret;
 	},
 	/**
@@ -3194,6 +3228,17 @@ var f_core = {
 	 */
 	GetElementById: function(id, document, noCompleteComponent) {
 		return f_core.GetElementByClientId.apply(f_core, arguments);
+	},
+	/**
+	 * Find a child by its identifier. <b>(The naming separator might not be ':')</b>
+	 *
+	 * @method public static
+	 * @param String id  The identifier of the component. (naming separator might not be is ':')
+	 * @return HTMLElement
+	 * @see #GetElementByClientId
+	 */	
+	$: function(clientId) {
+		return f_core.GetElementByClientId(clientId);
 	},
 	/**
 	 * Find a child by its identifier. <b>(The naming separator might not be ':')</b>

@@ -598,7 +598,7 @@ var __members = {
 	 * @return void
 	 */
 	_onReadyStateChange: function() {
-		if (window._rcfacesExiting) {
+		if (window._rcfacesExiting || window._rcfacesSubmitLocked) {
 			return;
 		}
 
@@ -740,7 +740,7 @@ var __members = {
 				return;
 			}
 
-			var responseContentType
+			var responseContentType;
 			try {
 				responseContentType=req.getResponseHeader(f_httpRequest.HTTP_CONTENT_TYPE);
 				
@@ -812,6 +812,10 @@ var __members = {
 	 * @return void
 	 */
 	_callError: function(status, statusText) {
+		if (window._rcfacesExiting) {
+			return;
+		}
+
 		if (this._error) {
 			// Error handler already called
 			return;
@@ -846,7 +850,7 @@ var __members = {
 		}
 		this._acceptType=acceptType;
 	}
-}
+};
 
 new f_class("f_httpRequest", {
 	statics: __statics,
