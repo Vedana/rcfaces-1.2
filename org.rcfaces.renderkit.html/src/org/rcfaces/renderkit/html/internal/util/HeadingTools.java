@@ -10,6 +10,7 @@ import javax.faces.component.UIComponent;
 import org.rcfaces.core.component.capability.IHeadingLevelCapability;
 import org.rcfaces.core.component.capability.IHeadingZoneCapability;
 import org.rcfaces.core.component.capability.IWAIRoleCapability;
+import org.rcfaces.renderkit.html.internal.Constants;
 
 /**
  * 
@@ -106,6 +107,10 @@ public class HeadingTools {
                 return level;
             }
 
+        }
+
+        if (Constants.DISABLE_HEADING_ZONE) {
+            return -1;
         }
 
         return 1;

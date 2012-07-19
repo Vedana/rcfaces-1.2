@@ -13,6 +13,11 @@
  */
 
 var __statics = {
+		
+	/**
+	 * @field private static final Boolean
+	 */
+	_GENERATE_HEADERS_ATTRIBUTE: false,
 
 	/**
 	 * @field hidden static final String

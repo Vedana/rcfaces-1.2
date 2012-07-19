@@ -149,6 +149,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
     private static final Log LOG = LogFactory
             .getLog(AbstractGridRenderer.class);
 
+    protected static final boolean _GENERATE_HEADERS = false;
+
     protected static final String SORT_SERVER_COMMAND = "f_grid.Sort_Server";
 
     private static final String TABLE = "_table";
@@ -1876,7 +1878,11 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             if (gridRenderContext.getColumnState(i) != AbstractGridRenderContext.VISIBLE) {
                 continue;
             }
-            encodeHiddenTitleCol(htmlWriter, dc, gridRenderContext);
+
+            String headerId = htmlWriter.getHtmlComponentRenderContext()
+                    .getComponentClientId() + "::ch" + i;
+
+            encodeHiddenTitleCol(htmlWriter, dc, gridRenderContext, headerId);
         }
         htmlWriter.endElement(IHtmlWriter.TR);
         htmlWriter.endElement(IHtmlWriter.THEAD);
@@ -1894,9 +1900,17 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
      * @throws WriterException
      */
     private void encodeHiddenTitleCol(IHtmlWriter htmlWriter, UIColumn column,
-            AbstractGridRenderContext gridRenderContext) throws WriterException {
+            AbstractGridRenderContext gridRenderContext, String headerId)
+            throws WriterException {
         htmlWriter.startElement(IHtmlWriter.TH);
-        htmlWriter.writeAttribute("scope", "col");
+
+        if (_GENERATE_HEADERS) {
+            if (headerId != null) {
+                htmlWriter.writeId(headerId);
+            }
+        } else {
+            htmlWriter.writeAttribute("scope", "col");
+        }
         String text = null;
         if (column instanceof ITextCapability) {
             text = ((ITextCapability) column).getText();

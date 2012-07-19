@@ -461,6 +461,7 @@ var __members = {
 		var idx=0;
 		row._index=arguments[idx++];
 		row.id=this.id+"::row"+rowIdx;
+		var rowHeaderClientId=this.id+"::rh"+rowIdx;
 		
 		if (this._useInPopup){ // pour aria a revoir
 			row.setAttribute("role", "option");
@@ -579,6 +580,9 @@ var __members = {
 				}
 		
 				if (col._visibility) {
+					if (f_grid._GENERATE_HEADERS_ATTRIBUTE && !col._headersId) {
+						col._headersId=this.id+"::ch"+i;
+					}
 					var cClassName=[cellClassName];					
 					
 					var colStyleClasses=col._cellStyleClasses;		
@@ -595,7 +599,7 @@ var __members = {
 						}
 					}
 					
-					var cellType=(col._scopeCol)?"th":"td";
+					var cellType=(!f_grid._GENERATE_HEADERS_ATTRIBUTE && col._scopeCol)?"th":"td";
 					if (firstCell) {
 						if (firstCell===true) {
 							td=doc.createElement(cellType);
@@ -629,12 +633,18 @@ var __members = {
 
 					td._text=cellText;
 					td.onbeforeactivate=f_core.CancelJsEventHandler;
-					
-
-					if (col._scopeCol) {
-						td.scope = "row";
+										
+					if (f_grid._GENERATE_HEADERS_ATTRIBUTE) {
+						td.headers=rowHeaderClientId+" "+col._headersId;
+						if (col._scopeCol) {
+							td.id=rowHeaderClientId;
+						}
+					} else {
+						if (col._scopeCol) {
+							td.scope="row";
+						}						
 					}
-
+					
 					if (this.f_isSelectable()) {
 //						td.onmouseup=f_dataGrid._ReturnFalse;
 //						td.onmousedown=f_dataGrid._ReturnFalse;
@@ -2121,7 +2131,8 @@ var __members = {
 		 				
 		 			} catch (x) {
 		 				
-	}
+		 			}
+		 			
 					if (dataGrid.f_processNextCommand()) {
 						return;
 					}
