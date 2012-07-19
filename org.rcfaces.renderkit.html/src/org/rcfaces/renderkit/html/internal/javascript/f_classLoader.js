@@ -966,11 +966,13 @@ f_classLoader.prototype = {
 
 		for(var i=0;i<ids.length;i++) {
 			var componentId=ids[i];
-						
+	
+			f_core.Debug(f_classLoader,"_initializeIds["+i+"/"+ids.length+"]: search component '"+componentId+"'.");
+
 			var component=document.getElementById(componentId);
 			if (!component) {
 				// On peut avoir changer de page de componentsGrid / additionnalInformations
-				f_core.Info(f_classLoader,"f_verifyOnMessage["+i+"/"+ids.length+"]: Can not find component '"+componentId+"'.");
+				f_core.Info(f_classLoader,"_initializeIds["+i+"/"+ids.length+"]: Can not find component '"+componentId+"'.");
 				continue;
 			}
 			
@@ -984,20 +986,36 @@ f_classLoader.prototype = {
 				this.f_init(component, false, true);
 				
 			} catch (ex) {
-				f_core.Error(f_classLoader, "f_verifyOnMessage: Can not initialize component '"+componentId+"'.", ex);
+				f_core.Error(f_classLoader, "_initializeIds: Can not initialize component '"+componentId+"'.", ex);
 			}			
 						
 			var onInitComponentListeners=this._onInitComponentListeners;
 			if (onInitComponentListeners) {
-				this._callOnInitComponentListeners(onInitComponentListeners, component);
+				f_core.Debug(f_classLoader,"_initializeIds["+i+"/"+ids.length+"]: Call onInit on component '"+componentId+"'.");
+
+				try {
+					this._callOnInitComponentListeners(onInitComponentListeners, component);
+					
+				} catch (ex) {
+					f_core.Error(f_classLoader, "_initializeIds: Can not call onInit on component '"+componentId+"'.", ex);
+				}	
 			}
 			
 			if (documentComplete) {
 				var documentCompleteFct = component.f_documentComplete;
 				if (documentCompleteFct) {
-					documentCompleteFct.call(component);
+					f_core.Debug(f_classLoader,"_initializeIds["+i+"/"+ids.length+"]: Call documentComplete on component '"+componentId+"'.");
+					
+					try {			
+						documentCompleteFct.call(component);
+				
+					} catch (ex) {
+						f_core.Error(f_classLoader, "_initializeIds: Can not call documentComplete on component '"+componentId+"'.", ex);
+					}			
 				}
 			}			
+
+			f_core.Debug(f_classLoader,"_initializeIds["+i+"/"+ids.length+"]: End of initialization of component '"+componentId+"'.");
 		}
 	},
 	/**
@@ -1058,6 +1076,8 @@ f_classLoader.prototype = {
 		f_core.Debug(f_classLoader, "f_verifyOnSubmit: initialize "+onSubmitIds.length+" components.");
 		
 		this._initializeIds(onSubmitIds);
+		
+		f_core.Debug(f_classLoader, "f_verifyOnSubmit: "+onSubmitIds.length+" components initialized.");
 	},
 	/**
 	 * @method hidden final
