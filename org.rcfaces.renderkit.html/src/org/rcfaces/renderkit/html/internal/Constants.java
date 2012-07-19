@@ -78,6 +78,8 @@ public class Constants {
 
     public static final boolean GENERATE_RCFACES_INIT_TIMER = true;
 
+    public static final boolean DISABLE_HEADING_ZONE = false;
+
     static {
         if (BUILDER_VERSION != null) {
             version = BUILDER_VERSION;
