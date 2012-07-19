@@ -2849,6 +2849,7 @@ Dans le cas d'un mode period !
 		<capability id="IValueLockedCapability" />
 		<capability id="IValidationEventCapability" />			
 		<capability id="IUserEventCapability" />
+		<capability id="IInitEventCapability" />
 
 		<implements id="org.rcfaces.core.internal.manager.IClientDataManager" />
 		<implements id="org.rcfaces.core.internal.manager.IServerDataManager" />
