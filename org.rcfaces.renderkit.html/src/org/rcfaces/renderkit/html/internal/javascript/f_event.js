@@ -224,6 +224,35 @@ var __members = {
 
 		return component.f_findSiblingComponent.apply(component, arguments);
 	},
+	/**
+	 * <p>
+	 * Search for and return the sibling {@link f_component} with an
+	 * <code>id</code> that matches the specified search expression (if any).
+	 * 
+	 * @method public
+	 * @param String... id Identifier of component.
+	 * @return HTMLElement the found {@link f_component}, or <code>null</code>
+	 *         if the component was not found.
+	 * @see #f_findSiblingComponent f_findSiblingComponent(x)
+	 */	
+	$: function(id) {
+		return this.f_findSiblingComponent.apply(this, arguments);
+	},
+	/**
+	 * <p>
+	 * Search for and return the {@link f_component} with an <code>id</code>
+	 * that matches the specified search expression (if any).
+	 * 
+	 * @method public
+	 * @param String...
+	 *            id Identifier of component.
+	 * @return HTMLElement the found {@link f_component}, or <code>null</code>
+	 *         if the component was not found.
+	 * @see #f_findComponent f_findComponent()
+	 */
+	$$: function(id) {
+		return this.f_findComponent.apply(this, arguments);
+	},
 
 	/**
 	 * Prevent the default process of the event.
