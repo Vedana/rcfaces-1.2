@@ -1780,6 +1780,19 @@ var f_core = {
 		return true;
 	},
 	/**
+	 * @method public static
+	 * @context event:evt
+	 */
+	JsfSubmit: function(evt) {
+		if (!evt) {
+			evt = f_core.GetJsEvent(this); //window.event;
+		}
+
+		if (f_env.IsSubmitUntilPageCompleteLocked()) {
+			return f_core.CancelJsEvent(evt);
+		}		
+	},
+	/**
 	 * @method private static
 	 * @context event:evt
 	 */
@@ -2215,7 +2228,7 @@ var f_core = {
 		for (var i=0; i<forms.length; i++) {
 			var form=forms[i];
 			try {
-				form.action="?__DoubleSubmit=true";
+				form.action="javascript:void(0)?__DoubleSubmit=true";
 				
 				form.onsubmit=document._rcfacesDisableSubmit;
 				form.submit=document._rcfacesDisableSubmitReturnFalse;
