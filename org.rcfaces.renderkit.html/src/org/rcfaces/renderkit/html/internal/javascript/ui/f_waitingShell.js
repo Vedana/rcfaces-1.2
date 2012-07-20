@@ -33,7 +33,7 @@ var __statics = {
  		
  		waitingShell.f_open();
 	}
-}
+};
 
 var __members = {
 
