@@ -1,3 +1,109 @@
+f_keyEntry, f_comboGrid, KeyEntryRenderer, ComboGridRenderer:
+Validation du champ coté serveur
+
+HiddenValue:
+Support de l'initListener Javascript
+
+f_classLoader/f_core:
+Tentative de suppression du double submit
+
+f_core/f_event:
+Ajout des méthodes raccourcis "$" et "$$" pour la recherche de composants
+
+f_dataGrid/f_grid/AbstractGridRenderer:
+Ajout de la generation des HEADERS des TD pour les dataGrid
+
+ComboGridRenderer:
+Amélioration du tooltip
+Passe le container en role PRESENTATION
+
+ExpandBarRenderer:
+Passe le container en role PRESENTATION
+
+TextAreaRenderer:
+Correction d'un bug qui associé "rendered" à "required"
+
+f_viewDialog:
+Positionnement du title à ""  (comme la frame technique)
+
+f_frameShellDecorator:
+Le title de la frame technique est ""
+
+f_menuCore:
+Possibilité de spécifier la taille de la popup
+
+fa_dataGridPopup:
+Amelioration de l'accessibilité de la popup de comboGrid
+
+f_tree:
+Amélioration du tooltip de la commande
+
+ItemsService:
+Evite la confusion des requetes
+
+SuggestTextEntryRenderer:
+f_suggestTextEntry:
+Evite la confusion des requetes
+Possibilité de spécifier la taille de la popup
+Gestion des inputFormat, descriptionFormat, labelFormat
+
+PreSelectionListener:
+PreselectionListener traité coté serveur (et non plus QUE coté Javascript)
+
+f_messageContext:
+Ajout d'une méthode pour positionner le focus sur le composant en erreur
+
+f_frameShellDecorator:
+Revision de la finalisation d'une popup afin de pouvoir traiter le code de retour (Fix depuis Firefox 10)
+
+f_focusManager:
+Correction d'un probleme dans le f_getFocusComponent()
+
+fa_checkManager, fa_selectionManager:
+Initialisation de l'état en LAZY et non plus dans le constructeur de l'aspect, 
+ce qui pouvait poser problème lors de la lecture de l'état dans le constructeur de l'objet.
+
+fa_tabIndex.js:
+Généralisation de la gestion du tabIndex par un aspect
+
+fa_aria.js:
+Autorise la suppression d'un attribut aria si la "value" est undefined
+
+RadioButtonRenderer, TextEntryRenderer, TextAreaRenderer:
+Ajout de aria-required  si le champ est requis
+
+ICaptionCapility, IGridCaptionCapability,  v:tree , v:headingZone:
+Ajout de l'interface ICaptionCapability afin de généraliser la notion de Caption
+IGridCaptionCapability hérite de ICaptionCapability
+
+ILimitedMap,  BasicContentStorageRepository, ContentStorageEngineImpl, LimitedMap:
+Generalisation à une interface de la hashmap avec un nombre limité d'entrées
+
+IHeadingLevelCapability, IHeadingZoneCapability,  v:TabbedPane, v:HeadingZone, v:Heading, v:ExpandBar, v:FieldSet, v:CardBox :
+Possibilité de gerer des zones de titre afin de calculer automatiquement le niveau de <Hx>
+
+EventsCollector:
+Système qui autorise l'enregistrement de l'évenement afin de pouvoir être réjoué par un validateur
+
+f_component:
+Le position X,Y,Width,Height peut être undefined en plus de Number
+
+f_service:
+Gestion du mode designer
+
+f_tree, AbstractGridRenderer:
+Correction d'accessibilité
+
+f_input:
+Pas de tabIndex par defaut sur un f_input
+
+f_dataGrid,f_grid:
+Le scope COL est un TH pas un TD
+
+f_tabbedPane, f_calendarObject, f_customButton, f_hyperLink, f_pager, f_tree, f_shellDecorator, AbstractGridRenderer
+Generation d'un Javascript:void(x)
+
+
 f_suggestTextEntry,  SuggestTextEntryRenderer:
 Support du disableProposals
 
