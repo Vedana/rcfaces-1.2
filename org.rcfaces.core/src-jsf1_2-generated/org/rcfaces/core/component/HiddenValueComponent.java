@@ -13,6 +13,7 @@ import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.component.capability.IServerDataCapability;
 import org.apache.commons.logging.Log;
 import java.util.Set;
+import org.rcfaces.core.component.capability.IInitEventCapability;
 import org.rcfaces.core.component.capability.IValueLockedCapability;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.component.CameliaInputComponent;
@@ -53,6 +54,7 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 	IValueLockedCapability,
 	IValidationEventCapability,
 	IUserEventCapability,
+	IInitEventCapability,
 	IClientDataManager,
 	IServerDataManager {
 
@@ -62,7 +64,7 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"immediate","userEventListener","valueLocked","propertyChangeListener","validationListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"immediate","userEventListener","valueLocked","propertyChangeListener","initListener","validationListener"}));
 	}
 
 	public HiddenValueComponent() {
@@ -353,6 +355,18 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 
 	public final javax.faces.event.FacesListener [] listUserEventListeners() {
 		return getFacesListeners(org.rcfaces.core.event.IUserEventListener.class);
+	}
+
+	public final void addInitListener(org.rcfaces.core.event.IInitListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeInitListener(org.rcfaces.core.event.IInitListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listInitListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IInitListener.class);
 	}
 
 	protected Set getCameliaFields() {

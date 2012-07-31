@@ -1,29 +1,36 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.internal.component.Properties;
+import java.util.Map;
+import java.util.Collections;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.IBorderCapability;
+import java.util.HashMap;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.GridTools;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.apache.commons.logging.Log;
+import java.util.Set;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.component.capability.IEditableCapability;
 import java.lang.String;
-import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.AbstractGridComponent;
 import org.rcfaces.core.component.iterator.IColumnIterator;
 import org.rcfaces.core.component.capability.IEmptyDataMessageCapability;
-import org.rcfaces.core.component.capability.IBorderCapability;
-import org.rcfaces.core.component.capability.IRequiredCapability;
 import org.rcfaces.core.component.capability.IEmptyMessageCapability;
-import org.rcfaces.core.internal.tools.GridTools;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.internal.capability.IGridComponent;
-import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.IDisabledCapability;
-import org.rcfaces.core.component.capability.IFilterCapability;
 import java.util.HashSet;
-import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.capability.IFilterCapability;
 import org.rcfaces.core.component.capability.IMaxTextLengthCapability;
 import org.rcfaces.core.model.IFilterProperties;
-import java.util.Set;
 import java.util.Arrays;
+import org.rcfaces.core.internal.manager.IValidationParameters;
 
 public class KeyEntryComponent extends AbstractGridComponent implements 
 	IEmptyMessageCapability,
@@ -36,7 +43,8 @@ public class KeyEntryComponent extends AbstractGridComponent implements
 	IMaxTextLengthCapability,
 	IEditableCapability,
 	IFilterCapability,
-	IGridComponent {
+	IGridComponent,
+	IValidationParameters {
 
 	private static final Log LOG = LogFactory.getLog(KeyEntryComponent.class);
 
@@ -56,6 +64,74 @@ public class KeyEntryComponent extends AbstractGridComponent implements
 		setId(componentId);
 	}
 
+	public int getValidationParametersCount() {
+
+		 
+		 return getValidationParametersCount(null);
+		
+	}
+
+	public boolean isClientSideValidationParameter(String name) {
+
+
+		return isClientSideValidationParameter(name, null);
+		
+	}
+
+	public Map getValidationParametersMap() {
+
+
+		return getValidationParametersMap(null);
+		
+	}
+
+	public void setValidationParameter(String name, ValueExpression value, boolean client) {
+
+
+		setValidationParameterData(name, value, client);
+		
+	}
+
+	public String getValidationParameter(String name) {
+
+
+		 return getValidationParameter(name, null);
+		
+	}
+
+	public Map getClientValidationParametersMap() {
+
+
+		return getClientValidationParametersMap(null);
+		
+	}
+
+	public String removeValidationParameter(String name) {
+
+
+		FacesContext facesContext=getFacesContext();
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "ValidationParameter", false);
+		if (dataMapAccessor==null) {
+			return null;
+		}
+ 
+ 		IDataMapAccessor clientMapAccessor=engine.getDataMapAccessor(facesContext, "ClientValidationParameter", false);
+		if (clientMapAccessor!=null) {
+			clientMapAccessor.removeData(name, facesContext);
+		}
+            
+		return (String)dataMapAccessor.removeData(name, facesContext);
+		
+	}
+
+	public String setValidationParameter(String name, String value, boolean client) {
+
+
+		return (String)setValidationParameterData(name, value, client);
+		
+	}
+
 	public IColumnIterator listColumns() {
 
 
@@ -69,6 +145,142 @@ public class KeyEntryComponent extends AbstractGridComponent implements
 			IFilterProperties filterProperties=(IFilterProperties)FilterPropertiesConverter.SINGLETON.getAsObject(null, this, properties);
 			
 			setFilterProperties(filterProperties);
+		
+	}
+
+	public String getValidationParameter(String name, FacesContext facesContext) {
+
+
+		if (facesContext==null) {
+			facesContext=getFacesContext();
+		}
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "ValidationParameter", false);
+		if (dataMapAccessor==null) {
+			return null;
+		}
+            
+		return (String)dataMapAccessor.getData(name, facesContext);
+		
+	}
+
+	public int getValidationParametersCount(FacesContext facesContext) {
+
+
+		if (facesContext==null) {
+			facesContext=getFacesContext();
+		}
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "ValidationParameter", false);
+		if (dataMapAccessor==null) {
+			return 0;
+		}
+		 
+		return dataMapAccessor.getDataCount();
+		
+	}
+
+	public Map getValidationParametersMap(FacesContext facesContext) {
+
+
+		if (facesContext==null) {
+			facesContext=getFacesContext();
+		}
+		
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "ValidationParameter", false);
+		if (dataMapAccessor==null) {
+			return Collections.EMPTY_MAP;
+		}
+            
+		return dataMapAccessor.getDataMap(facesContext);
+		
+	}
+
+	public Map getClientValidationParametersMap(FacesContext facesContext) {
+
+
+		if (facesContext==null) {
+			facesContext=getFacesContext();
+		}
+		
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "ValidationParameter", false);
+		if (dataMapAccessor==null) {
+			return Collections.EMPTY_MAP;
+		}
+            
+		Map map=dataMapAccessor.getDataMap(facesContext);
+		if (map.isEmpty()) {
+			return Collections.EMPTY_MAP;
+		}
+		
+		IDataMapAccessor clientMapAccessor=engine.getDataMapAccessor(facesContext, "ClientValidationParameter", false);
+		if (clientMapAccessor==null) {
+			if (Constants.READ_ONLY_COLLECTION_LOCK_ENABLED) {
+				map=Collections.unmodifiableMap(map);
+			}
+			return map;
+		}
+		
+		Map client=clientMapAccessor.getDataMap(facesContext);
+		if (client==null || client.isEmpty()) {
+		
+			if (Constants.READ_ONLY_COLLECTION_LOCK_ENABLED) {
+				map=Collections.unmodifiableMap(map);
+			}
+			return map;
+		}
+		
+		Map fmap=new HashMap(map);
+		if (map.keySet().removeAll(client.keySet())==false) {
+			if (Constants.READ_ONLY_COLLECTION_LOCK_ENABLED) {
+				map=Collections.unmodifiableMap(map);
+			}
+			return map;
+		}
+		
+		if (fmap.isEmpty()) {
+			return Collections.EMPTY_MAP;
+		}
+		
+		if (Constants.READ_ONLY_COLLECTION_LOCK_ENABLED) {
+			fmap=Collections.unmodifiableMap(fmap);
+		}
+		
+		return fmap;
+		
+	}
+
+	private Object setValidationParameterData(String name, Object value, boolean client) {
+
+
+		FacesContext facesContext=getFacesContext();
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "ValidationParameter", true);
+		if (client) {
+			// On retire la limitation au niveau client si besoin !
+			IDataMapAccessor clientMapAccessor=engine.getDataMapAccessor(facesContext, "ClientValidationParameter", false);
+			if (clientMapAccessor!=null) {
+				clientMapAccessor.removeData(name, facesContext);
+			}
+		} else {
+			IDataMapAccessor clientMapAccessor=engine.getDataMapAccessor(facesContext, "ClientValidationParameter", true);
+			clientMapAccessor.setData(name, Boolean.FALSE, facesContext);
+		}
+            
+		return dataMapAccessor.setData(name, value, facesContext);
+		
+	}
+
+	public boolean isClientSideValidationParameter(String name, FacesContext facesContext) {
+
+
+		if (facesContext==null) {
+			facesContext=getFacesContext();
+		}
+		
+		IDataMapAccessor clientMapAccessor=engine.getDataMapAccessor(facesContext, "ClientValidationParameter", false);
+		if (clientMapAccessor==null) {
+			return false;
+		}
+		return (clientMapAccessor.getData(name, facesContext)==null);
 		
 	}
 

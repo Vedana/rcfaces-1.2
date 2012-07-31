@@ -23,6 +23,7 @@ public class HiddenValueTag extends CameliaTag implements Tag {
 	private ValueExpression valueLocked;
 	private ValueExpression validationListeners;
 	private ValueExpression userEventListeners;
+	private ValueExpression initListeners;
 	private ValueExpression value;
 	private ValueExpression converter;
 	public String getComponentType() {
@@ -47,6 +48,10 @@ public class HiddenValueTag extends CameliaTag implements Tag {
 
 	public void setUserEventListener(ValueExpression userEventListeners) {
 		this.userEventListeners = userEventListeners;
+	}
+
+	public void setInitListener(ValueExpression initListeners) {
+		this.initListeners = initListeners;
 	}
 
 	public final void setValue(ValueExpression value) {
@@ -107,6 +112,10 @@ public class HiddenValueTag extends CameliaTag implements Tag {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.USER_EVENT_LISTENER_TYPE, userEventListeners);
 		}
 
+		if (initListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.INIT_LISTENER_TYPE, initListeners);
+		}
+
 		if (value != null) {
 			if (value.isLiteralText()==false) {
 				component.setValueExpression(Properties.VALUE, value);
@@ -132,6 +141,7 @@ public class HiddenValueTag extends CameliaTag implements Tag {
 		valueLocked = null;
 		validationListeners = null;
 		userEventListeners = null;
+		initListeners = null;
 		value = null;
 		converter = null;
 
