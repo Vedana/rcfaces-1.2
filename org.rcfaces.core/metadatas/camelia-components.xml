@@ -2082,7 +2082,6 @@
 		<implements id="org.rcfaces.core.component.capability.IOrderedChildrenCapability" properties="orderedChildren" />
 		<implements id="org.rcfaces.core.internal.capability.IAdditionalInformationRangeComponent" importMethods="false" />
 		<implements id="org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability" importMethods="false" />
-		<implements id="org.rcfaces.core.internal.manager.IValidationParameters" />
 		
 		<method id="getComponentValueType" returnType="org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType">
 			<import>org.rcfaces.core.internal.tools.CollectionTools</import>
@@ -2288,14 +2287,6 @@
 				AdditionalInformationTools.hideAll(null, this);
 			</code>
 		</method>
-
-		<method id="getValidationParameter(String,javax.faces.context.FacesContext)" />
-		<method id="getValidationParametersCount(javax.faces.context.FacesContext)" />
-		<method id="setValidationParameter(String,javax.faces.el.ValueBinding, boolean)" />
-		<method id="getValidationParametersMap(javax.faces.context.FacesContext)" />
-		<method id="getClientValidationParametersMap(javax.faces.context.FacesContext)" />
-		<method id="setValidationParameterData(String, Object, boolean)" />
-		<method id="isClientSideValidationParameter(String,javax.faces.context.FacesContext)" />
 		
 	</component>
 	
@@ -2327,6 +2318,8 @@
 
 		<capability id="IFilterCapability"/>
 
+		<implements id="org.rcfaces.core.internal.manager.IValidationParameters" />
+
 		<attribute id="suggestionDelayMs" type="int" />		
 		<attribute id="suggestionMinChars" type="int" />		
 
@@ -2356,6 +2349,14 @@
 		</method>
 		
 		<method id="setFilterProperties(String)" returnType="void" />
+
+		<method id="getValidationParameter(String,javax.faces.context.FacesContext)" />
+		<method id="getValidationParametersCount(javax.faces.context.FacesContext)" />
+		<method id="setValidationParameter(String,javax.faces.el.ValueBinding, boolean)" />
+		<method id="getValidationParametersMap(javax.faces.context.FacesContext)" />
+		<method id="getClientValidationParametersMap(javax.faces.context.FacesContext)" />
+		<method id="setValidationParameterData(String, Object, boolean)" />
+		<method id="isClientSideValidationParameter(String,javax.faces.context.FacesContext)" />
 		
 	</component>
 	
