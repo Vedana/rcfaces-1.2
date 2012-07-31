@@ -82,10 +82,13 @@ var __members = {
 			this._formattedValue=input.value;
 		}
 			
-		this._selectedValue=f_core.GetAttributeNS(this,"selectedValue", "");
+		this._selectedValue=f_core.GetAttributeNS(this, "selectedValue", "");
+		this._keyErrored=f_core.GetBooleanAttributeNS(this, "invalidKey", false);
+
 		this._inputValue=this._selectedValue;
-		if (this._selectedValue) {
-			this._keyErrored=f_core.GetAttributeNS(this,"invalidKey", false);
+		if (!this._selectedValue && this._keyErrored) {
+			this._inputValue=input.value;
+			this._formattedValue="";
 		}
 		
 		this._maxTextLength=f_core.GetNumberAttributeNS(this,"maxTextLength", 0);
@@ -94,7 +97,7 @@ var __members = {
 
 		this._forceValidation=f_core.GetBooleanAttributeNS(this,"forceValidation", false);
 		
-		if(this._forceValidation) {
+		if (this._forceValidation) {
 			this._installCheckListener();
 		}
 		
@@ -167,7 +170,7 @@ var __members = {
 	 */
 	_installCheckListener: function() {
 		var keyEntry=this;
-		var checkListeners={
+		var checkListeners = {
 				
 			f_performCheckValue: function(event) {
 				if (keyEntry._inputValue) {
@@ -225,7 +228,6 @@ var __members = {
 
 		this._checkListeners=checkListeners;
 		f_core.AddCheckListener(this, checkListeners);
-	
 	},
 	
 	/**
@@ -296,6 +298,9 @@ var __members = {
 
 		f_core.Debug(f_keyEntry, "_onCancelDown: Event keyCode="+jsEvt.keyCode);
 
+		var input=this.f_getInput();		
+		var inputValue=input.value;
+
 		switch(jsEvt.keyCode) {
 		case f_key.VK_DOWN:
 		case f_key.VK_UP:
@@ -309,9 +314,6 @@ var __members = {
 
 		case f_key.VK_SPACE:
 			if (jsEvt.ctrlKey) {
-				var input=this.f_getInput();
-				
-				var inputValue=input.value;
 				
 				if (inputValue) {
 					this._verifyKey(inputValue);
@@ -320,7 +322,7 @@ var __members = {
 			}
 		}
 
-		this._inputValue=this.f_getInput().value;
+		this._inputValue=inputValue;
 		this._inputSelection=undefined;
 		
 		return true;
@@ -417,8 +419,14 @@ var __members = {
 	 */
 	f_setValue: function(value) {
 		f_core.Assert(value===null || typeof(value)=="string", "f_keyEntry.f_setValue: Invalid value parameter ("+value+").");
-		f_core.Debug(f_keyEntry, "f_setValue: set input value ='"+value+"'");
 		
+		if (this._inputValue==value) {
+			f_core.Debug(f_keyEntry, "f_setValue: Same input value ='"+value+"', ignores it !");
+			return;
+		}
+
+		f_core.Debug(f_keyEntry, "f_setValue: set input value ='"+value+"'");
+
 		this._selectedValue="";		
 		this._inputValue=value;
 		this._formattedValue="";

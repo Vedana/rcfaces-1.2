@@ -403,6 +403,14 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
                 // La clef est inconnue !
                 htmlWriter.writeAttributeNS("invalidKey", true);
             }
+
+        } else if (formattedValue == null) {
+            String fv = (String) comboGridComponent.getAttributes().get(
+                    INVALID_INPUT_TEXT_PROPERTY);
+            if (fv != null) {
+                htmlWriter.writeAttributeNS("invalidKey", true);
+                formattedValue = fv;
+            }
         }
 
         writePagerMessage(htmlWriter, comboGridComponent);
