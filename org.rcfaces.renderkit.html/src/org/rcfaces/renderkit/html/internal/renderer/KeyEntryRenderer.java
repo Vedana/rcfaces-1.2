@@ -147,7 +147,7 @@ public class KeyEntryRenderer extends DataGridRenderer {
                     && convertedSelectedValue.length() > 0) {
 
                 formattedValues = formatValue(facesContext, keyEntryComponent,
-                        convertedSelectedValue, formatValues);
+                        selectedValue, convertedSelectedValue, formatValues);
                 if (formattedValues != null) {
                     formattedValue = (String) formattedValues
                             .get("valueFormat");
@@ -757,7 +757,7 @@ public class KeyEntryRenderer extends DataGridRenderer {
                             INVALID_INPUT_TEXT_PROPERTY, notVerifiedKey);
                 }
 
-            } else {
+            } else if (keyEntryComponent.isRequired(facesContext)) {
                 errorMessage = keyEntryComponent
                         .getValidationParameter("REQUIRED_ERROR_SUMMARY");
 
