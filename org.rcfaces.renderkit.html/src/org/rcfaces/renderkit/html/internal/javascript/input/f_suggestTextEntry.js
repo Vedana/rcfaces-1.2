@@ -43,6 +43,16 @@ var __members = {
 	 * @field private Boolean
 	 */
 	_lockResponse: undefined,
+	
+	/**
+	 * @field private Boolean
+	 */
+	_requestDisableAutoComplete: undefined,
+	
+	/**
+	 * @field private String
+	 */
+	_requestText: undefined,
 		
 	f_suggestTextEntry: function() {
 		this.f_super(arguments);
@@ -309,9 +319,9 @@ var __members = {
 			delay*=2.0;
 		}
 		
-		if (showPopup || disableAutoComplete) {
+		if (showPopup) {
 			this._lastValue=value;
-			this._onSuggestTimeOut(undefined,disableAutoComplete);
+			this._onSuggestTimeOut(undefined, disableAutoComplete);
 			
 		} else {
 			this._lastValue=value;
@@ -389,6 +399,8 @@ var __members = {
 		p.text=t;
 		p.caseSensitive=this._caseSensitive;
 		
+		this._requestDisableAutoComplete=disableAutoComplete;
+		
 		this.f_setFilterProperties(p);
 	},
 	fa_updateFilterProperties: function() {
@@ -423,6 +435,8 @@ var __members = {
 		if (maxResultNumber>0) {
 			params.maxResultNumber=maxResultNumber;
 		}
+		
+		this._requestText=text;
 
 		this.f_appendCommand(function(suggestTextEntry) {
 			suggestTextEntry._callServer(params, text);
@@ -637,7 +651,7 @@ var __members = {
 			return;
 		}
 		
-		if (parseInt(requestId, 10)==this._lastRequestId) {
+		if (parseInt(requestId, 10)==this._lastRequestId) {			
 			this._lockResponse=undefined;
 			return;
 		}
@@ -651,7 +665,16 @@ var __members = {
 	 * @return void
 	 */
 	f_endResponse: function(requestId) {
-		this._lockResponse=undefined;
+		if (this._lockResponse) {
+			this._lockResponse=undefined;
+			return;
+		}
+			
+		if (!this._canSuggest) {
+			return;
+		}
+
+		this._showProposal(this._requestText, this._requestDisableAutoComplete);		
 	},
 	/**
 	 * @method hidden
@@ -659,13 +682,11 @@ var __members = {
 	f_setRowCount: function(rows) {
 		f_core.Debug(f_suggestTextEntry, "f_setRowCount rows="+rows+" canSuggest="+this._canSuggest);
 		
-		this._rowCount=rows;
-		
-		if (!this._canSuggest) {
+		if (this._lockResponse) {
 			return;
 		}
-
-		this._showProposal();
+		
+		this._rowCount=rows;
 	},
 	/**
 	 * @method private
@@ -795,7 +816,7 @@ var __members = {
 			menu.f_setItemDisabled(item, true);
 		}
 	
-		var params={
+		var params = {
 			component: this.f_getInput(),
 			position: f_popup.BOTTOM_COMPONENT
 		};
@@ -803,7 +824,7 @@ var __members = {
 		if (!f_core.IsInternetExplorer()) {
 			// Probleme de box modele !
 //			params.deltaX=-1;
-			params.deltaY=-4;
+//			params.deltaY=-4;
 //			params.deltaWidth=-4;
 		}
 	
