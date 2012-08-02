@@ -1,3 +1,9 @@
+f_suggestTextEntry:
+Correction du rechargement AJAX intenspectif lors de l'utilisation du BACKSPACE
+
+KeyEntryRenderer:
+Correction d'une regression lors de l'affichage de la clef
+
 f_keyEntry, f_comboGrid, KeyEntryRenderer, ComboGridRenderer:
 Validation du champ coté serveur
 
@@ -11,7 +17,7 @@ f_core/f_event:
 Ajout des méthodes raccourcis "$" et "$$" pour la recherche de composants
 
 f_dataGrid/f_grid/AbstractGridRenderer:
-Ajout de la generation des HEADERS des TD pour les dataGrid
+Ajout de la possibilité de generation des HEADERS des TD pour les dataGrid  (a activer)
 
 ComboGridRenderer:
 Amélioration du tooltip
@@ -21,7 +27,7 @@ ExpandBarRenderer:
 Passe le container en role PRESENTATION
 
 TextAreaRenderer:
-Correction d'un bug qui associé "rendered" à "required"
+Correction d'un bug qui associait "rendered" à "required"
 
 f_viewDialog:
 Positionnement du title à ""  (comme la frame technique)
@@ -102,7 +108,6 @@ Le scope COL est un TH pas un TD
 
 f_tabbedPane, f_calendarObject, f_customButton, f_hyperLink, f_pager, f_tree, f_shellDecorator, AbstractGridRenderer
 Generation d'un Javascript:void(x)
-
 
 f_suggestTextEntry,  SuggestTextEntryRenderer:
 Support du disableProposals
