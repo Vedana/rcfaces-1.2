@@ -214,7 +214,7 @@ var __statics = {
 	GetRowFromEvent : function(eventObject, evt) {
 		var dataGrid = eventObject._dataGrid;
 
-		var target;
+		var target=undefined;
 		if (evt.target) {
 			target = evt.target;
 
@@ -266,10 +266,17 @@ var __statics = {
 			}
 
 			if (dataGrid.f_getEventLocked(evt)) {
+				f_core.Debug(f_grid, "RowMouseDown: event already locked");
 				return false;
 			}
 
 			if (!f_grid.VerifyTarget(evt)) {
+				f_core.Debug(f_grid, "RowMouseDown: invalid target");
+				return true;
+			}
+			
+			if (f_grid.IsTargetButton(evt)) {
+				f_core.Debug(f_grid, "RowMouseDown: button target");
 				return true;
 			}
 
@@ -340,6 +347,11 @@ var __statics = {
 				f_core.Debug(f_grid, "RowMouseUp: invalid target");
 				return true;
 			}
+			
+			if (f_grid.IsTargetButton(evt)) {
+				f_core.Debug(f_grid, "RowMouseUp: button target");
+				return true;
+			}
 
 			if (dataGrid.f_isDisabled()
 					|| (dataGrid.f_isReadOnly && dataGrid.f_isReadOnly())) {
@@ -379,6 +391,41 @@ var __statics = {
 	 * @return Boolean
 	 * @context event:evt
 	 */
+	IsTargetButton: function(evt) {
+		if (this._dataGrid || this._row) {
+			return true;
+		}
+
+		var target = undefined;
+		if (evt.target) {
+			target = evt.target;
+
+		} else if (evt.srcElement) {
+			target = evt.srcElement;
+		}
+
+		if (!target || target.nodeType != f_core.ELEMENT_NODE) {
+			return true;
+		}
+		
+		var tagName = target.tagName;
+		if (tagName) {
+			switch (tagName.toLowerCase()) {
+			case "input":
+			case "select":
+				return true;
+			}
+		}
+		
+		return false;
+	},
+	/**
+	 * @method protected static
+	 * @param Event
+	 *            evt
+	 * @return Boolean
+	 * @context event:evt
+	 */
 	VerifyTarget : function(evt) {
 		if (this._dataGrid || this._row) {
 			return true;
@@ -401,7 +448,7 @@ var __statics = {
 			if (target.nodeType != f_core.ELEMENT_NODE) {
 				return true;
 			}
-
+			
 			if (target._dataGrid || target._row) {
 				return true;
 			}
@@ -5716,7 +5763,7 @@ var __members = {
 			this.f_updateColumnsLayout();
 		}
 
-		var doc = this.ownerDocument;
+		// var doc = this.ownerDocument;
 
 		var t0 = new Date().getTime();
 
@@ -6860,7 +6907,7 @@ var __members = {
 			return;
 		}
 
-		var parent = f_core.GetParentNode(label);
+		var parent = f_core.GetParentNode(label); // Ben si "parent" est utilisé ???
 
 		this._emptyDataMessageShown = true;
 
