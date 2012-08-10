@@ -109,7 +109,7 @@ var __members = {
 				self.f_open();
 			}
 			self=null;
-		}
+		};
 		f_core.AddPostSubmitListener(submitCb);
 	},
 	/**
@@ -220,7 +220,7 @@ var __members = {
 	toString: function() {
 		return "[f_waitingShell]";
 	}
-}
+};
 
 new f_class("f_waitingShell", {
 	extend: f_dialog,
