@@ -734,14 +734,24 @@ var __members = {
 	_format: function(format, item) {
 		
 		var st=f_core.FormatMessage(format, null, function(paramName) {
-			var nm="_"+paramName;
-			if (item[nm]!==undefined) {
-				return item[nm];
+			switch (paramName) {
+			case "label":
+				return item._label;
+				
+			case "value":
+				return item._value;
+				
+			case "description":
+				return item._description;
+			}
+			
+			if (item[paramName]!==undefined) {
+				return item[paramName];
 			}
 		
 			var cl=item._clientDatas;
-			if (cl && cl[nm]!==undefined) {
-				return cl[nm];
+			if (cl && cl[paramName]!==undefined) {
+				return cl[paramName];
 			}
 			
 			return undefined;
