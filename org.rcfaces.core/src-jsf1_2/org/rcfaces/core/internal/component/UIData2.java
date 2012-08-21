@@ -107,7 +107,12 @@ public class UIData2 extends UIData0 {
 
     @Override
     protected void iterate(FacesContext context, PhaseId phaseId) {
+
         if (decodedIndexes == null || decodedIndexes.isEmpty()) {
+            if (DEBUG_ENABLED) {
+                LOG.debug("Iterate default mode for phaseId=" + phaseId);
+            }
+
             super.iterate(context, phaseId);
             return;
         }
@@ -125,9 +130,13 @@ public class UIData2 extends UIData0 {
             iterateModeRows += is[1];
         }
 
+        if (DEBUG_ENABLED) {
+            LOG.debug("Iterate phaseId=" + phaseId + " iterateModeRows="
+                    + iterateModeRows + "  decodedIndexes=" + decodedIndexes);
+        }
+
         iterateMode = true;
         try {
-
             super.iterate(context, phaseId);
 
         } finally {
