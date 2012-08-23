@@ -301,6 +301,7 @@
 	user-select: none;	
 }
 
+/* Fix Firefox 3.6 avec position relative */
 .f_grid_dataBody_scroll {
 	padding: 0;
 	margin: 0;
@@ -314,6 +315,8 @@
 
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
+	
+	position: relative; 
 }
 
 .f_grid_dataTitle_scroll {
