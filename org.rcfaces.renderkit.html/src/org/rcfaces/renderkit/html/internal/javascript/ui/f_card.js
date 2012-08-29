@@ -20,7 +20,7 @@ var __members = {
 		this._cardBox=undefined; // f_cardBox
 
 //		this._value=undefined; // String
-
+		
 		var vcard=this._vcard;
 		if (vcard) {
 			// On efface la trace de cette carte .. 
@@ -92,7 +92,7 @@ var __members = {
 		
 		this.f_super(arguments);
 	}
-}
+};
 
 new f_class("f_card", {
 	extend: f_component,

@@ -370,7 +370,7 @@ var __members = {
 		var url=null;
 		
 		var suffix="";
-		var ignoreFlat;
+		var ignoreFlat=undefined;
 		if (this.f_isDisabled()) {
 			url = this.f_getDisabledImageURL();
 			suffix="_disabled";
