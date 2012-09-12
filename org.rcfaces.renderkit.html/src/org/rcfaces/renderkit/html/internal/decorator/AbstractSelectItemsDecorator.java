@@ -45,8 +45,8 @@ import org.rcfaces.core.lang.IAdaptable;
 import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredCollection;
-import org.rcfaces.core.model.IFiltredCollection2;
 import org.rcfaces.core.model.IFiltredCollection.IFiltredIterator;
+import org.rcfaces.core.model.IFiltredCollection2;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
@@ -386,10 +386,11 @@ public abstract class AbstractSelectItemsDecorator extends
             if (value instanceof ISelectItemGroup) {
                 ISelectItemGroup selectItemGroup = (ISelectItemGroup) value;
 
-                SelectItemGroup sig = new SelectItemGroup(selectItemGroup
-                        .getLabel(), selectItemGroup.getDescription(),
-                        selectItemGroup.isDisabled(), selectItemGroup
-                                .getSelectItems());
+                SelectItemGroup sig = new SelectItemGroup(
+                        selectItemGroup.getLabel(),
+                        selectItemGroup.getDescription(),
+                        selectItemGroup.isDisabled(),
+                        selectItemGroup.getSelectItems());
 
                 sig.setValue(selectItemGroup.getValue());
 
@@ -562,8 +563,10 @@ public abstract class AbstractSelectItemsDecorator extends
                 // En mode Designer ... on reste discret :-)
                 return;
             }
-            throw new WriterException("UISelectItems value is null !", null,
-                    component);
+            throw new WriterException(
+                    "UISelectItems value is null ! (component="
+                            + component.getClientId(getComponentRenderContext()
+                                    .getFacesContext()) + ")", null, component);
         }
 
         if (value instanceof SelectItem) {
@@ -835,8 +838,8 @@ public abstract class AbstractSelectItemsDecorator extends
             Object selectItemValue) {
 
         return ValuesTools.valueToString(selectItemValue, getConverter(),
-                componentContext.getComponent(), componentContext
-                        .getFacesContext());
+                componentContext.getComponent(),
+                componentContext.getFacesContext());
     }
 
     protected Object convertToItemValue(
