@@ -19,6 +19,7 @@ import javax.faces.convert.Converter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.capability.IComponentEngine;
 import org.rcfaces.core.internal.capability.IStateChildrenList;
 
 /**
@@ -26,8 +27,6 @@ import org.rcfaces.core.internal.capability.IStateChildrenList;
  * @version $Revision$ $Date$
  */
 public class BasicComponentEngine extends AbstractComponentEngine {
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory
             .getLog(BasicComponentEngine.class);
 
@@ -37,15 +36,15 @@ public class BasicComponentEngine extends AbstractComponentEngine {
 
     private static final String CONVERTER_ID_PROPERTY = "camalia.converterId";
 
-    static final Class BOOLEAN_CLASS = Boolean.class;
+    static final Class<Boolean> BOOLEAN_CLASS = Boolean.class;
 
-    static final Class STRING_CLASS = String.class;
+    static final Class<String> STRING_CLASS = String.class;
 
-    private static final Class INTEGER_CLASS = Integer.class;
+    private static final Class<Integer> INTEGER_CLASS = Integer.class;
 
     private static final Integer INTEGER_0 = new Integer(0);
 
-    private static final Class DOUBLE_CLASS = Double.class;
+    private static final Class<Double> DOUBLE_CLASS = Double.class;
 
     private static final Double DOUBLE_0 = new Double(0);
 
@@ -61,12 +60,44 @@ public class BasicComponentEngine extends AbstractComponentEngine {
 
     private Map transientAttributes;
 
-    private Map dataAccessorsByName;
+    private Map<String, IDataMapAccessor> dataAccessorsByName;
 
     private IPropertiesManager propertiesManager;
 
     public BasicComponentEngine(IFactory factory) {
         super(factory);
+    }
+
+    protected BasicComponentEngine(BasicComponentEngine original) {
+        this(original.factory);
+
+        if (debugEnabled) {
+            LOG.debug("Clone BasicComponentEngine  source=" + original);
+        }
+
+        if (original.propertiesManager != null) {
+            propertiesManager = original.propertiesManager.copyOriginalState();
+        }
+
+        if (original.dataAccessorsByName != null
+                && original.dataAccessorsByName.isEmpty() == false) {
+
+            dataAccessorsByName = new HashMap<String, IDataMapAccessor>(
+                    DATA_ACCESSORS_INIT_SIZE);
+
+            for (Iterator<Map.Entry<String, IDataMapAccessor>> it = original.dataAccessorsByName
+                    .entrySet().iterator(); it.hasNext();) {
+                Map.Entry<String, IDataMapAccessor> entry = it.next();
+
+                BasicDataAccessor originalDataAccessor = (BasicDataAccessor) entry
+                        .getValue();
+
+                BasicDataAccessor newDataAccessor = (BasicDataAccessor) originalDataAccessor
+                        .copyOriginalState();
+
+                dataAccessorsByName.put(entry.getKey(), newDataAccessor);
+            }
+        }
     }
 
     public final Boolean getBooleanProperty(String propertyName,
@@ -131,25 +162,58 @@ public class BasicComponentEngine extends AbstractComponentEngine {
         return i.doubleValue();
     }
 
+    /**
+     * Ne retourne pas de valeur de l'expression EL
+     * 
+     * @param propertyName
+     * @return
+     */
     final Object getLocalProperty(String propertyName) {
+
+        if (debugEnabled) {
+            LOG.debug("getLocalProperty(\"" + propertyName + "\") ...");
+        }
+
         IPropertiesAccessor propertiesAccessor = getPropertiesAccessor(false);
         if (propertiesAccessor == null) {
+            if (debugEnabled) {
+                LOG.debug("getLocalProperty(\"" + propertyName
+                        + "\") returns null (propertiesAccessor="
+                        + propertiesAccessor + ")");
+            }
             return null;
         }
 
         Object value = propertiesAccessor.getProperty(propertyName);
 
         if (debugEnabled) {
-            LOG
-                    .debug("getLocalProperty(\"" + propertyName
-                            + "\") returns null");
+            LOG.debug("getLocalProperty(\"" + propertyName + "\") returns "
+                    + value + "  (propertiesAccessor=" + propertiesAccessor
+                    + ")");
         }
 
         return value;
     }
 
+    /**
+     * Retourne la valeur de la propriété même si il faut utiliser une EL
+     * 
+     * @param propertyName
+     * @param requestedClass
+     * @param facesContext
+     * @return
+     */
     public final Object getInternalProperty(String propertyName,
             Class requestedClass, FacesContext facesContext) {
+
+        if (debugEnabled) {
+            LOG.debug("getInternalProperty(\""
+                    + propertyName
+                    + "\" ["
+                    + ((requestedClass != null) ? requestedClass.getName()
+                            : "no class") + "]) ... (enableDelta="
+                    + enableDelta + ")");
+        }
 
         Object object = getLocalProperty(propertyName);
         if (object == null) {
@@ -165,13 +229,13 @@ public class BasicComponentEngine extends AbstractComponentEngine {
         }
 
         if (object instanceof ValueExpression) {
-            ValueExpression valueBinding = (ValueExpression) object;
+            ValueExpression valueExpression = (ValueExpression) object;
 
             if (facesContext == null) {
                 facesContext = getFacesContext();
             }
 
-            object = valueBinding.getValue(facesContext.getELContext());
+            object = valueExpression.getValue(facesContext.getELContext());
 
             if (debugEnabled) {
                 LOG.debug("getInternalProperty(\""
@@ -179,7 +243,7 @@ public class BasicComponentEngine extends AbstractComponentEngine {
                         + "\" ["
                         + ((requestedClass != null) ? requestedClass.getName()
                                 : "no class") + "]) returns a value binding ("
-                        + valueBinding + ") => " + object);
+                        + valueExpression + ") => " + object);
             }
             return object;
         }
@@ -205,26 +269,38 @@ public class BasicComponentEngine extends AbstractComponentEngine {
     }
 
     protected final void setInternalProperty(String propertyName, Object value) {
-        IPropertiesAccessor pa = getPropertiesAccessor(true);
 
         if (debugEnabled) {
             LOG.debug("setInternalProperty(\"" + propertyName + "\", " + value
-                    + ")");
+                    + ") ...");
         }
 
+        IPropertiesAccessor pa = getPropertiesAccessor(true);
+
         pa.setProperty(null, propertyName, value);
+
+        if (debugEnabled) {
+            LOG.debug("setInternalProperty(\"" + propertyName + "\", " + value
+                    + ") propertiesAccessor=" + pa);
+        }
     }
 
     protected final void setInternalProperty(String propertyName,
             ValueExpression value) {
-        IPropertiesAccessor pa = getPropertiesAccessor(true);
 
         if (debugEnabled) {
             LOG.debug("setInternalProperty(\"" + propertyName + "\", " + value
-                    + ")");
+                    + ") ...");
         }
 
+        IPropertiesAccessor pa = getPropertiesAccessor(true);
+
         pa.setProperty(null, propertyName, value);
+
+        if (debugEnabled) {
+            LOG.debug("setInternalProperty(\"" + propertyName + "\", " + value
+                    + ") propertiesAccessor=" + pa);
+        }
     }
 
     public final void setProperty(String propertyName, boolean value) {
@@ -297,6 +373,12 @@ public class BasicComponentEngine extends AbstractComponentEngine {
     }
 
     final IPropertiesAccessor getPropertiesAccessor(boolean forceDelta) {
+
+        if (debugEnabled) {
+            LOG.debug("getPropertiesAccessor  enableDelta=" + enableDelta
+                    + " forceDelta=" + forceDelta + " ...");
+        }
+
         if (propertiesManager != null) {
             return propertiesManager.getPropertiesAccessor(enableDelta,
                     forceDelta);
@@ -307,6 +389,12 @@ public class BasicComponentEngine extends AbstractComponentEngine {
         }
 
         propertiesManager = factory.createPropertiesManager(this);
+
+        if (debugEnabled) {
+            LOG.debug("Create propertiesManager='" + propertiesManager
+                    + " for this='" + this + "' enableDelta=" + enableDelta
+                    + " forceDelta=" + forceDelta);
+        }
 
         return propertiesManager.getPropertiesAccessor(enableDelta, forceDelta);
     }
@@ -392,7 +480,9 @@ public class BasicComponentEngine extends AbstractComponentEngine {
     /*
      * (non-Javadoc)
      * 
-     * @see javax.faces.component.StateHolder#saveState(javax.faces.context.FacesContext)
+     * @see
+     * javax.faces.component.StateHolder#saveState(javax.faces.context.FacesContext
+     * )
      */
     public Object saveState(FacesContext context) {
         Object states[] = new Object[3];
@@ -447,8 +537,9 @@ public class BasicComponentEngine extends AbstractComponentEngine {
     /*
      * (non-Javadoc)
      * 
-     * @see javax.faces.component.UIComponent#setValueExpression(java.lang.String,
-     *      javax.faces.el.ValueExpression)
+     * @see
+     * javax.faces.component.UIComponent#setValueExpression(java.lang.String,
+     * javax.faces.el.ValueExpression)
      */
     public final void setValue(String valueName, Object value) {
         setInternalProperty(valueName, value);
@@ -578,12 +669,43 @@ public class BasicComponentEngine extends AbstractComponentEngine {
     }
 
     public boolean isPropertySetted(String propertyName) {
+
+        if (debugEnabled) {
+            LOG.debug("Is property setted '" + propertyName + "' ...");
+        }
+
         IPropertiesAccessor propertiesAccessor = getPropertiesAccessor(false);
         if (propertiesAccessor == null) {
+
+            if (debugEnabled) {
+                LOG.debug("Is property setted '" + propertyName
+                        + "' => FALSE  (propertiesAccessor='"
+                        + propertiesAccessor + "')");
+            }
             return false;
         }
 
-        return propertiesAccessor.isPropertySetted(propertyName);
+        boolean setted = propertiesAccessor.isPropertySetted(propertyName);
+
+        if (debugEnabled) {
+            LOG.debug("Is property setted '" + propertyName + "' => " + setted
+                    + "  (propertiesAccessor='" + propertiesAccessor + "')");
+        }
+
+        return setted;
+    }
+
+    public void processValidation(FacesContext context) {
+
+        if (debugEnabled) {
+            LOG.debug("Process validation, enableDelta=" + enableDelta);
+        }
+
+        if (enableDelta == false) {
+            return;
+        }
+
+        enableDelta = false;
     }
 
     public void processUpdates(FacesContext context) {
@@ -592,16 +714,17 @@ public class BasicComponentEngine extends AbstractComponentEngine {
             LOG.debug("Process update, enableDelta=" + enableDelta);
         }
 
-        if (enableDelta == false) {
-            return;
-        }
-
         enableDelta = false;
+
+        if (enableDelta == true) {
+            throw new FacesException(
+                    "Invalid update state without validation phase !");
+        }
 
         if (dataAccessorsByName != null
                 && dataAccessorsByName.isEmpty() == false) {
-            for (Iterator it = dataAccessorsByName.values().iterator(); it
-                    .hasNext();) {
+            for (Iterator<IDataMapAccessor> it = dataAccessorsByName.values()
+                    .iterator(); it.hasNext();) {
                 BasicDataAccessor dataAccessor = (BasicDataAccessor) it.next();
 
                 dataAccessor.commitDatas(context);
@@ -628,7 +751,6 @@ public class BasicComponentEngine extends AbstractComponentEngine {
      */
     protected class BasicDataAccessor extends BasicPropertiesManager implements
             IDataMapAccessor {
-        private static final String REVISION = "$Revision$";
 
         private final String name;
 
@@ -654,6 +776,21 @@ public class BasicComponentEngine extends AbstractComponentEngine {
                     forceDelta);
         }
 
+        @Override
+        public IPropertiesManager copyOriginalState() {
+            BasicDataAccessor copy = new BasicDataAccessor(name);
+            if (this.propertiesManager != this) {
+                copy.propertiesManager = this.propertiesManager
+                        .copyOriginalState();
+            } else {
+                copy.propertiesManager = copy;
+            }
+            copy.setCameliaFactory(factory);
+            copy.originalPropertiesAccessor = originalPropertiesAccessor;
+
+            return copy;
+        }
+
         protected IPropertiesManager createPropertiesManager() {
             return this;
         }
@@ -662,6 +799,12 @@ public class BasicComponentEngine extends AbstractComponentEngine {
             IPropertiesAccessor propertiesAccessor = getDataPropertiesAccessor(true);
 
             return propertiesAccessor.removeProperty(facesContext, name);
+        }
+
+        public void clearDatas(FacesContext facesContext) {
+            IPropertiesAccessor propertiesAccessor = getDataPropertiesAccessor(true);
+
+            propertiesAccessor.clearProperties(facesContext);
         }
 
         public Object getData(String key, FacesContext facesContext) {
@@ -689,6 +832,24 @@ public class BasicComponentEngine extends AbstractComponentEngine {
             }
 
             return object;
+        }
+
+        public ValueExpression getValueExpression(String key) {
+            IPropertiesAccessor propertiesAccessor = getDataPropertiesAccessor(false);
+            if (propertiesAccessor == null) {
+                return null;
+            }
+
+            Object object = propertiesAccessor.getProperty(key);
+            if (object == null) {
+                return null;
+            }
+
+            if ((object instanceof ValueExpression) == false) {
+                return null;
+            }
+
+            return (ValueExpression) object;
         }
 
         public Object setData(String name, Object value,
@@ -720,12 +881,12 @@ public class BasicComponentEngine extends AbstractComponentEngine {
                 return STRING_EMPTY_ARRAY;
             }
 
-            Collection c = propertiesAccessor.keySet();
+            Collection<String> c = propertiesAccessor.keySet();
             if (c.isEmpty()) {
                 return STRING_EMPTY_ARRAY;
             }
 
-            return (String[]) c.toArray(new String[c.size()]);
+            return c.toArray(new String[c.size()]);
         }
 
         public void restoreDataState(FacesContext context, Object datas) {
@@ -759,13 +920,13 @@ public class BasicComponentEngine extends AbstractComponentEngine {
             propertiesManager.commitManager(context);
         }
 
-        public Map getDataMap(FacesContext facesContext) {
+        public Map<String, Object> getDataMap(FacesContext facesContext) {
             String keys[] = listDataKeys(facesContext);
             if (keys.length < 1) {
-                return Collections.EMPTY_MAP;
+                return Collections.emptyMap();
             }
 
-            Map map = new HashMap(keys.length);
+            Map<String, Object> map = new HashMap<String, Object>(keys.length);
 
             for (int i = 0; i < keys.length; i++) {
                 String key = keys[i];
@@ -782,6 +943,13 @@ public class BasicComponentEngine extends AbstractComponentEngine {
 
     public IStateChildrenList createStateChildrenList() {
         return new BasicStateChildrenList();
+    }
+
+    public IComponentEngine copyOriginalState() {
+
+        BasicComponentEngine newComponentEngine = new BasicComponentEngine(this);
+
+        return newComponentEngine;
     }
 
     public String toString() {
@@ -804,6 +972,20 @@ public class BasicComponentEngine extends AbstractComponentEngine {
                 s += ",";
             }
             s += "converter='" + converter + "'";
+        }
+
+        if (dataAccessorsByName != null
+                && dataAccessorsByName.isEmpty() == false) {
+            for (Iterator it = dataAccessorsByName.entrySet().iterator(); it
+                    .hasNext();) {
+                Map.Entry entry = (Map.Entry) it.next();
+
+                if (s.length() > 0) {
+                    s += ",";
+                }
+                s += "dataAccessor[" + entry.getKey() + "]='"
+                        + entry.getValue() + "'";
+            }
         }
 
         return s;

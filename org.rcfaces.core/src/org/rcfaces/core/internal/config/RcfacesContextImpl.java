@@ -128,8 +128,8 @@ public class RcfacesContextImpl extends RcfacesContext implements
             LOG.info("Designer MODE  detected.");
         }
 
-        facesContext.getExternalContext().getApplicationMap().put(
-                RCFACES_VERSION_PROPERTY, Constants.getVersion());
+        facesContext.getExternalContext().getApplicationMap()
+                .put(RCFACES_VERSION_PROPERTY, Constants.getVersion());
 
         initializeRegistries(null);
 

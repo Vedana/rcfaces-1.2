@@ -448,9 +448,9 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                 // Il faut faire le tri à la main !
 
                 int sortTranslations[] = GridServerSort
-                        .computeSortedTranslation(htmlRenderContext
-                                .getFacesContext(), gridComponent, dataModel,
-                                sortedComponents);
+                        .computeSortedTranslation(
+                                htmlRenderContext.getFacesContext(),
+                                gridComponent, dataModel, sortedComponents);
 
                 if (sortTranslations != null) {
                     translatedRowIndex = sortTranslations[translatedRowIndex];
@@ -575,8 +575,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             }
         }
         if (gridRenderContext.isCheckable()) {
-            htmlWriter.writeAttribute("v:checkCardinality", gridRenderContext
-                    .getCheckCardinality());
+            htmlWriter.writeAttribute("v:checkCardinality",
+                    gridRenderContext.getCheckCardinality());
 
             if (gridRenderContext.getCheckCardinality() == ICardinality.ONEMANY_CARDINALITY) {
                 int checkedCount = ((ICheckProvider) gridComponent)
@@ -1251,8 +1251,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
     protected String getTitleDivTextId(IHtmlWriter htmlWriter, UIColumn column) {
         return column.getClientId(htmlWriter.getComponentRenderContext()
-                .getFacesContext())
-                + TITLE_TTEXT_ID_SUFFIX;
+                .getFacesContext()) + TITLE_TTEXT_ID_SUFFIX;
     }
 
     protected String getTitleDivContainerClassName(IHtmlWriter htmlWriter) {
@@ -1905,6 +1904,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         IGridComponent gridComponent = (IGridComponent) component;
 
         if (component instanceof UIData2) {
+            ((UIData2) component).addDecodedIndexes(0, 0);
+
             String serializedIndexes = componentData
                     .getStringProperty("serializedIndexes");
             if (serializedIndexes != null) {

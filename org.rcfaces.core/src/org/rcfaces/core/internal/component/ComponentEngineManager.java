@@ -191,4 +191,12 @@ class ComponentEngineManager {
         }
     }
 
+    public static void cloneComponentEngine(IRCFacesComponent component) {
+        IComponentEngine componentEngine = getComponentEngine(component);
+
+        IComponentEngine newComponentEngine = componentEngine
+                .copyOriginalState();
+
+        setComponentEngine(component, newComponentEngine);
+    }
 }

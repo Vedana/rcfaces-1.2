@@ -3,6 +3,7 @@
  */
 package org.rcfaces.core.internal.component;
 
+import java.util.Map;
 import java.util.Set;
 
 import javax.el.ValueExpression;
@@ -25,16 +26,21 @@ public interface IPropertiesAccessor {
 
     Object removeProperty(FacesContext context, String name);
 
+    void clearProperties(FacesContext context);
+
     Object saveState(FacesContext context);
 
-    IDeltaPropertiesAccessor restoreState(FacesContext context, Object state);
+    void restoreState(FacesContext context, Object state);
 
     void release();
 
     IDeltaPropertiesAccessor createDeltaPropertiesAccessor();
 
-    Set keySet();
+    Set<String> keySet();
 
     int size();
+
+    void putAll(FacesContext context,
+            Set<Map.Entry<String, Object>> propertiesMapEntry, Object undefined);
 
 }

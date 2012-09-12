@@ -18,15 +18,19 @@ public interface IDataMapAccessor {
 
     Object getData(String name, FacesContext facesContext);
 
+    ValueExpression getValueExpression(String key);
+
     Object setData(String name, Object data, FacesContext facesContext);
 
     void setData(String name, ValueExpression value, FacesContext facesContext);
 
     Object removeData(String name, FacesContext facesContext);
 
+    void clearDatas(FacesContext facesContext);
+
     int getDataCount();
 
     String[] listDataKeys(FacesContext facesContext);
 
-    Map getDataMap(FacesContext facesContext);
+    Map<String, Object> getDataMap(FacesContext facesContext);
 }

@@ -81,4 +81,6 @@ public interface IComponentEngine extends IReleasable,
             FacesContext facesContext);
 
     IStateChildrenList createStateChildrenList();
+
+    IComponentEngine copyOriginalState();
 }

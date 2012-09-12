@@ -23,4 +23,6 @@ public interface IPropertiesManager {
 
     Object saveManagerState(FacesContext context);
 
+    IPropertiesManager copyOriginalState();
+
 }
