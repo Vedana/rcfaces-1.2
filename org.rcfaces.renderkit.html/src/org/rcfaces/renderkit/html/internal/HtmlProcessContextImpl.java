@@ -23,8 +23,6 @@ import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.lang.IContentFamily;
-import org.rcfaces.renderkit.html.internal.agent.ClientBrowserFactory;
-import org.rcfaces.renderkit.html.internal.agent.IClientBrowser;
 import org.rcfaces.renderkit.html.internal.css.ICssConfig;
 import org.rcfaces.renderkit.html.internal.css.StylesheetsServlet;
 

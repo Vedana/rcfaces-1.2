@@ -9,7 +9,6 @@ import java.util.Set;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.lang.IContentFamily;
-import org.rcfaces.renderkit.html.internal.agent.IClientBrowser;
 
 /**
  * 
