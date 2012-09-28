@@ -5,6 +5,8 @@ package org.rcfaces.renderkit.html.internal;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.renderkit.html.internal.agent.IClientBrowser;
+import org.rcfaces.renderkit.html.internal.agent.IUserAgent.BrowserType;
 
 /**
  * 
@@ -138,3 +140,4 @@ class ClientBrowserImpl implements IClientBrowser {
                 + releaseVersion + ", isMobileVersion=" + isMobileVersion
                 + " userAgent='" + userAgent + "']";
     }
+}
