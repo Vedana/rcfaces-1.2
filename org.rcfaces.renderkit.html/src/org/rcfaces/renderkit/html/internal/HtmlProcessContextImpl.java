@@ -23,6 +23,8 @@ import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.lang.IContentFamily;
+import org.rcfaces.renderkit.html.internal.agent.ClientBrowserFactory;
+import org.rcfaces.renderkit.html.internal.agent.IClientBrowser;
 import org.rcfaces.renderkit.html.internal.css.ICssConfig;
 import org.rcfaces.renderkit.html.internal.css.StylesheetsServlet;
 
@@ -38,6 +40,8 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
             .getLog(HtmlProcessContextImpl.class);
 
     private static final String NAMESPACE_URI = "rcfaces.xsd";
+
+    private static final String HTML_ESCAPING_DISABLED_ATTRIBUTE = "org.rcfaces.html.HTML_ESCAPING_DISABLED";
 
     private String styleSheetURI;
 
@@ -66,6 +70,8 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
     private Boolean profilerMode;
 
     private IClientBrowser clientBrowser;
+
+    private boolean htmlEscapingDisabled;
 
     public HtmlProcessContextImpl(FacesContext facesContext) {
         super(facesContext);
@@ -143,6 +149,10 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
             styleSheetURIWithContextPath = externalContext
                     .getRequestContextPath() + styleSheetURI;
         }
+
+        htmlEscapingDisabled = "true".equalsIgnoreCase(facesContext
+                .getExternalContext().getInitParameter(
+                        HTML_ESCAPING_DISABLED_ATTRIBUTE));
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Initialize htmlRenderExternalContext useMetaContentScriptType="
@@ -369,6 +379,10 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
 
     public Set<String> getSystemParametersNames() {
         return systemParametersNames;
+    }
+
+    public boolean isHtmlEscapingDisabled() {
+        return htmlEscapingDisabled;
     }
 
     // public boolean keepDisabledState() {
