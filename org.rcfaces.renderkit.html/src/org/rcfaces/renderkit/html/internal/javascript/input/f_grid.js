@@ -242,6 +242,10 @@ var __statics = {
 				continue;
 			}
 
+			if (tagName == "input" || tagName == "a") {
+				continue;
+			}
+
 			return null;
 		}
 
@@ -767,7 +771,19 @@ var __statics = {
 			dataGrid._focus = true;
 
 			if (dataGrid.f_isSelectable()) {
-				if (!dataGrid._cursor) {
+				if (dataGrid._focusOnInput) {
+					var oldCursor = dataGrid._cursor;
+					
+					var row = f_grid.GetRowFromEvent(dataGrid, evt);
+					if (row) {
+						dataGrid._cursor=row;
+	
+						if (oldCursor) {
+							dataGrid.fa_updateElementStyle(cursor);
+						}
+					}
+					
+				} else if (!dataGrid._cursor) {
 					var currentSelection = dataGrid._currentSelection;
 					if (currentSelection.length) {
 						dataGrid._cursor = currentSelection[0];
@@ -5782,7 +5798,7 @@ var __members = {
 		var ci = 0;
 		var webkit = f_core.IsWebkit();
 		var ie = f_core.IsInternetExplorer();
-		for ( var i = 0; i < columns.length; i++) {
+		for (var i = 0; i < columns.length; i++) {
 			var column = columns[i];
 			if (column._visibility === false) {
 				continue;
