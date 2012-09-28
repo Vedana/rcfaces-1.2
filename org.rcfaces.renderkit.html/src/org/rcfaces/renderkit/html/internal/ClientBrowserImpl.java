@@ -138,5 +138,4 @@ class ClientBrowserImpl implements IClientBrowser {
                 + releaseVersion + ", isMobileVersion=" + isMobileVersion
                 + " userAgent='" + userAgent + "']";
     }
-
 }

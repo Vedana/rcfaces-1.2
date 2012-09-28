@@ -457,7 +457,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
         String uri = getSetURI(name);
 
-        mds = Arrays.<Object> asList(ret);
+        mds = Arrays.<Object> asList((Object[]) ret);
 
         ISet set = getHierarchicalRepository().declareSet(name, uri,
                 mds.toArray(new IModule[mds.size()]));
