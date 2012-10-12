@@ -23,8 +23,8 @@ var __members = {
 
 	/**
 	 * @method public
-	 * @params Object selectedCriteria
-	 * @params Object callback 
+	 * @param Object selectedCriteria
+	 * @param Object callback 
 	 * @return void
 	 */
 	fa_evaluateCriteria: f_class.ABSTRACT,

@@ -34,7 +34,7 @@ var __members = {
 	 * Set the tabIndex, and record in order to synchronise to the server.
 	 *
 	 * @method public
-	 * @param Number New tabIndex
+	 * @param Number set New tabIndex
 	 * @return void
 	 */
 	fa_setTabIndex: function(set) {

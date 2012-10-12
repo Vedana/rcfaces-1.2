@@ -5,7 +5,7 @@
 /**
  * f_criteriaPopupManager class
  * 
- * @class public f_criteriaPopupManager
+ * @class public f_criteriaPopupManager extends Object
  * @author jb.meslin@vedana.com
  * @version $Revision$
  */
