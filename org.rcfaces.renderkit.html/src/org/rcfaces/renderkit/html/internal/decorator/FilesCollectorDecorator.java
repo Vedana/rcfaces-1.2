@@ -15,8 +15,8 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.item.BasicSelectItem;
 import org.rcfaces.core.item.FileItem;
+import org.rcfaces.renderkit.html.internal.agent.UserAgentRuleTools;
 import org.rcfaces.renderkit.html.internal.util.FileItemSource;
-import org.rcfaces.renderkit.html.internal.util.UserAgentTools;
 import org.rcfaces.renderkit.html.item.IUserAgentVaryFileItem;
 
 /**
@@ -64,7 +64,7 @@ public class FilesCollectorDecorator extends AbstractSelectItemsDecorator {
                 if (selectItem instanceof IUserAgentVaryFileItem) {
                     IUserAgentVaryFileItem userAgentVaryFileItem = (IUserAgentVaryFileItem) selectItem;
 
-                    if (UserAgentTools.accept(getComponentRenderContext()
+                    if (UserAgentRuleTools.accept(getComponentRenderContext()
                             .getFacesContext(), userAgentVaryFileItem) == false) {
                         rendered = false;
                     }

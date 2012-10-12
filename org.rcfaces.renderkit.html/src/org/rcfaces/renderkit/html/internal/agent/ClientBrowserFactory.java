@@ -1,19 +1,19 @@
 /*
  * $Id$
  */
-package org.rcfaces.renderkit.html.internal;
+package org.rcfaces.renderkit.html.internal.agent;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
-import org.rcfaces.renderkit.html.internal.agent.IClientBrowser;
 import org.rcfaces.renderkit.html.internal.agent.IUserAgent.BrowserType;
 
 /**
@@ -26,7 +26,12 @@ public class ClientBrowserFactory {
     private static final Log LOG = LogFactory
             .getLog(ClientBrowserFactory.class);
 
+    private static final int CACHE_MAX_SIZE = 1024;
+
+    private static final String CLIENT_BROWSER_PROPERTY = "org.rcfaces.html.CLIENT_BROWSER";
+
     private static final Map<BrowserType, IClientBrowser> USER_AGENTS = new HashMap<IClientBrowser.BrowserType, IClientBrowser>();
+
     static {
         USER_AGENTS.put(BrowserType.UNKNOWN, new ClientBrowserImpl(null,
                 BrowserType.UNKNOWN, 0, 0, 0, "", null));
@@ -51,6 +56,8 @@ public class ClientBrowserFactory {
 
     private static ClientBrowserFactory SINGLETON = new ClientBrowserFactory();
 
+    private final Map<String, IClientBrowser> cachedUserAgents = new HashMap<String, IClientBrowser>();
+
     public static ClientBrowserFactory Get() {
         return SINGLETON;
     }
@@ -60,6 +67,14 @@ public class ClientBrowserFactory {
     }
 
     public IClientBrowser get(FacesContext facesContext) {
+        ExternalContext externalContext = facesContext.getExternalContext();
+        Map<String, Object> sessionMap = externalContext.getSessionMap();
+
+        IClientBrowser clientBrowser = (IClientBrowser) sessionMap
+                .get(CLIENT_BROWSER_PROPERTY);
+        if (clientBrowser != null) {
+            return clientBrowser;
+        }
 
         Map<String, String> requestHeaderMap = facesContext
                 .getExternalContext().getRequestHeaderMap();
@@ -72,7 +87,11 @@ public class ClientBrowserFactory {
                     + "'");
         }
 
-        return getClientBrowserByUserAgent(userAgent);
+        clientBrowser = getClientBrowserByUserAgent(userAgent);
+
+        sessionMap.put(CLIENT_BROWSER_PROPERTY, clientBrowser);
+
+        return clientBrowser;
     }
 
     public IClientBrowser get(HttpServletRequest request) {
@@ -87,7 +106,7 @@ public class ClientBrowserFactory {
         return getClientBrowserByUserAgent(userAgent);
     }
 
-    public IClientBrowser getClientBrowserByUserAgent(String userAgent) {
+    private IClientBrowser getClientBrowserByUserAgent(String userAgent) {
 
         if (userAgent == null) {
 
@@ -98,6 +117,13 @@ public class ClientBrowserFactory {
         }
 
         String ua = userAgent.toLowerCase().trim();
+
+        synchronized (cachedUserAgents) {
+            IClientBrowser clientBrowser = cachedUserAgents.get(ua);
+            if (clientBrowser != null) {
+                return clientBrowser;
+            }
+        }
 
         BrowserType type = BrowserType.UNKNOWN;
         String version = null;
@@ -170,22 +196,22 @@ public class ClientBrowserFactory {
             }
         }
 
-        int major = 0;
-        int minor = 0;
-        int release = 0;
+        Integer major = null;
+        Integer minor = null;
+        Integer release = null;
 
         if (version != null) {
             StringTokenizer st = new StringTokenizer(version, ".");
 
             if (st.hasMoreTokens()) {
                 try {
-                    major = Integer.parseInt(st.nextToken());
+                    major = Integer.valueOf(st.nextToken());
 
                     if (st.hasMoreTokens()) {
-                        minor = Integer.parseInt(st.nextToken());
+                        minor = Integer.valueOf(st.nextToken());
 
                         if (st.hasMoreTokens()) {
-                            release = Integer.parseInt(st.nextToken());
+                            release = Integer.valueOf(st.nextToken());
                         }
                     }
 
@@ -203,6 +229,12 @@ public class ClientBrowserFactory {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Get client browser from userAgent='" + userAgent
                     + "' => " + clientBrowser);
+        }
+
+        synchronized (cachedUserAgents) {
+            if (cachedUserAgents.size() < CACHE_MAX_SIZE) {
+                cachedUserAgents.put(ua, clientBrowser);
+            }
         }
 
         return clientBrowser;

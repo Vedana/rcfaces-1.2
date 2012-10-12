@@ -1,28 +1,16 @@
 /*
  * $Id$
  */
-package org.rcfaces.renderkit.html.internal;
+package org.rcfaces.renderkit.html.internal.agent;
 
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public interface IClientBrowser {
-
-    public enum BrowserType {
-        UNKNOWN, MICROSOFT_INTERNET_EXPLORER, FIREFOX, SAFARI, OPERA, CHROME
-    }
-
-    BrowserType getBrowserType();
+public interface IClientBrowser extends IUserAgent {
 
     String getUserAgent();
-
-    int getMajorVersion();
-
-    int getMinorVersion();
-
-    int getReleaseVersion();
 
     String getBrowserId();
 

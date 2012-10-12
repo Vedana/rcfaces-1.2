@@ -1,12 +1,10 @@
 /*
  * $Id$
  */
-package org.rcfaces.renderkit.html.internal;
+package org.rcfaces.renderkit.html.internal.agent;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.renderkit.html.internal.agent.IClientBrowser;
-import org.rcfaces.renderkit.html.internal.agent.IUserAgent.BrowserType;
 
 /**
  * 
@@ -21,18 +19,18 @@ class ClientBrowserImpl implements IClientBrowser {
 
     private final BrowserType browserType;
 
-    private final int majorVersion;
+    private final Integer majorVersion;
 
-    private final int minorVersion;
+    private final Integer minorVersion;
 
-    private final int releaseVersion;
+    private final Integer releaseVersion;
 
     private final String browserId;
 
     private final Boolean isMobileVersion;
 
     ClientBrowserImpl(String userAgent, BrowserType browserType,
-            int majorVersion, int minorVersion, int releaseVersion,
+            Integer majorVersion, Integer minorVersion, Integer releaseVersion,
             String browserId, Boolean isMobileVersion) {
 
         this.userAgent = userAgent;
@@ -48,15 +46,15 @@ class ClientBrowserImpl implements IClientBrowser {
         return browserType;
     }
 
-    public int getMajorVersion() {
+    public Integer getMajorVersion() {
         return majorVersion;
     }
 
-    public int getMinorVersion() {
+    public Integer getMinorVersion() {
         return minorVersion;
     }
 
-    public int getReleaseVersion() {
+    public Integer getReleaseVersion() {
         return releaseVersion;
     }
 
@@ -90,9 +88,12 @@ class ClientBrowserImpl implements IClientBrowser {
                 + ((browserType == null) ? 0 : browserType.hashCode());
         result = prime * result
                 + ((isMobileVersion == null) ? 0 : isMobileVersion.hashCode());
-        result = prime * result + majorVersion;
-        result = prime * result + minorVersion;
-        result = prime * result + releaseVersion;
+        result = prime * result
+                + ((majorVersion == null) ? 0 : majorVersion.hashCode());
+        result = prime * result
+                + ((minorVersion == null) ? 0 : minorVersion.hashCode());
+        result = prime * result
+                + ((releaseVersion == null) ? 0 : releaseVersion.hashCode());
         result = prime * result
                 + ((userAgent == null) ? 0 : userAgent.hashCode());
         return result;
@@ -119,11 +120,20 @@ class ClientBrowserImpl implements IClientBrowser {
                 return false;
         } else if (!isMobileVersion.equals(other.isMobileVersion))
             return false;
-        if (majorVersion != other.majorVersion)
+        if (majorVersion == null) {
+            if (other.majorVersion != null)
+                return false;
+        } else if (!majorVersion.equals(other.majorVersion))
             return false;
-        if (minorVersion != other.minorVersion)
+        if (minorVersion == null) {
+            if (other.minorVersion != null)
+                return false;
+        } else if (!minorVersion.equals(other.minorVersion))
             return false;
-        if (releaseVersion != other.releaseVersion)
+        if (releaseVersion == null) {
+            if (other.releaseVersion != null)
+                return false;
+        } else if (!releaseVersion.equals(other.releaseVersion))
             return false;
         if (userAgent == null) {
             if (other.userAgent != null)
@@ -133,6 +143,22 @@ class ClientBrowserImpl implements IClientBrowser {
         return true;
     }
 
+    public void textForm(StringBuilder sb) {
+        sb.append(getBrowserType().shortName());
+
+        if (getMajorVersion() != null) {
+            sb.append('/').append(getMajorVersion());
+
+            if (getMinorVersion() != null) {
+                sb.append('.').append(getMinorVersion());
+
+                if (getReleaseVersion() != null) {
+                    sb.append('.').append(getReleaseVersion());
+                }
+            }
+        }
+    }
+
     public String toString() {
         return "[ClientBrowserImpl browserId='" + browserId + "', browserType="
                 + browserType + ", majorVersion=" + majorVersion
@@ -140,4 +166,5 @@ class ClientBrowserImpl implements IClientBrowser {
                 + releaseVersion + ", isMobileVersion=" + isMobileVersion
                 + " userAgent='" + userAgent + "']";
     }
+
 }
