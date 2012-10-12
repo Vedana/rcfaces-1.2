@@ -89,7 +89,7 @@ var __statics={
 	
 		return compositeEntry._onInputBlur(this, evt);		
 	}
-}
+};
 
 var __members={
 
@@ -443,6 +443,6 @@ var __members={
 		
 		return false;
 	}
-}
+};
  
 new f_aspect("fa_compositeEntry", __statics, __members, fa_disabled, fa_readOnly);

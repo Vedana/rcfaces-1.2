@@ -18,7 +18,7 @@ if (!window._rcfacesInitLibraryDate) {
 	window._rcfacesInitLibraryDate=new Date();
 }
 
-var __SYMBOL=function(x) { return x };
+var __SYMBOL=function(x) { return x; };
 
 if (window._RCFACES_LEVEL3) {
 	/**
@@ -39,7 +39,7 @@ if (window._RCFACES_LEVEL3) {
 	};
 
 	var _rcfacesGW=function(thiz, evt) {
-		var win;
+		var win=undefined;
 		if (evt) {
 			if (evt.view) { // Firefox
 				win=evt.view;
@@ -118,5 +118,5 @@ if (window._RCFACES_LEVEL3) {
 		}		
 		
 		throw new Error("RCFaces: Can not identify the rcfaces window !");
-	}
+	};
 }	

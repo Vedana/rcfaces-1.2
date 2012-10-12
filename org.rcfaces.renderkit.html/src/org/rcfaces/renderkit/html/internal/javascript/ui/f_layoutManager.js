@@ -5,7 +5,7 @@
 /**
  * Layout manager
  *
- * @aspect public f_layoutManager
+ * @aspect public f_layoutManager extends Object
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */

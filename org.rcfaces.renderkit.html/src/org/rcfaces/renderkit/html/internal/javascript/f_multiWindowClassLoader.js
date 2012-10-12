@@ -35,7 +35,7 @@ f_multiWindowClassLoader.prototype=new f_classLoader();
  */
 f_multiWindowClassLoader.f_getName=function() {
 	return "f_multiWindowClassLoader";
-}
+};
 
 /**
  * @field private static final Boolean
@@ -53,7 +53,7 @@ if (window._RCFACES_LEVEL3) {
 	f_classLoader.prototype.f_newWindowClassLoader=function(childWindow) {
 	
 		return new f_multiWindowClassLoader(childWindow);
-	}
+	};
 	
 	/**
 	 * @method hidden
@@ -112,7 +112,7 @@ if (window._RCFACES_LEVEL3) {
 		} finally {
 			f_core.Profile(true, "f_core.multiWindow.f_requiresBundles("+cnt+" classes)");	
 		}
-	}
+	};
 	
 	/**
 	 * @method private

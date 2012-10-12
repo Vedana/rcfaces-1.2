@@ -16,7 +16,7 @@ var __statics={
 	 */
 	DEFAULT_TYPE: "default"
 	
-}
+};
 
 var __members={
 
@@ -372,7 +372,7 @@ var __members={
 		return s;
 	}
 	
-}
+};
  
 new f_aspect("fa_compositeNumEntry", {
 	extend: [ fa_compositeEntry ],

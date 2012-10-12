@@ -94,14 +94,14 @@ var __statics = {
 								
 			} else {
 				popup=dateChooser.ownerDocument.createElement("div");
-				popup.className=className
+				popup.className=className;
 	
 				popup.onclick=f_core.CancelJsEventHandlerTrue;
 				popup.onmousedown=f_core.CancelJsEventHandlerTrue;
 	
 				body=popup;
 				
-				var parent=dateChooser;				
+				var parent=dateChooser;	// Le warning WTP est une erreur !		
 				f_core.AppendChild(parent.ownerDocument.body, popup);
 			}
 			dateChooser._popupCalendar=popup;
@@ -321,7 +321,7 @@ var __statics = {
 		var value;
 		if (component.f_getValue) { // si le composant associé est un inputText
 			f_core.Debug(fa_calendarPopup, "_GetDateToComponent: call f_getValue of component '"+component.id+"'.");
-			var value = component.f_getValue();
+			value = component.f_getValue();
 			if (value instanceof Date){
 				return value;
 			}

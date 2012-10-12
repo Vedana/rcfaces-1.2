@@ -471,7 +471,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @param Object[] additional The new additional.
-	 * @return optional Boolean show Show the first new shown element.
+	 * @param optional Boolean show Show the first new shown element.
 	 * @return void
 	 */
 	f_expandAdditionalInformations: function(additional, show) {
@@ -511,7 +511,7 @@ var __members = {
 	 * @method protected abstract
 	 */
 	fa_setAdditionalElementVisible: f_class.ABSTRACT
-}
+};
 
 new f_aspect("fa_additionalInformationManager", {
 	extend: [ fa_itemsManager, fa_clientFullState ],

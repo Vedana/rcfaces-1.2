@@ -63,7 +63,8 @@ var __members = {
 		
 		return this.f_super(arguments, type, evt, item, value, selectionProvider, detail, stage);
 	}
-}
+};
+
 new f_class("f_hyperLink", {
 	extend: f_input,
 	aspects: [ fa_immediate, fa_value ],
