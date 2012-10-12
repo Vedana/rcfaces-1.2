@@ -42,6 +42,8 @@ var __members = {
 	},
 	/**
 	 * @method protected
+	 * @param String groupName
+	 * @param String obj clientId of component, or value of an item
 	 * @return any
 	 */
 	f_deleteFromGroup: function(groupName, obj) {
@@ -54,7 +56,7 @@ var __members = {
 	/**
 	 * @method protected
 	 * @param String groupName
-	 * @param any obj
+	 * @param String obj clientId of component, or value of an item
 	 * @return void
 	 */
 	f_addToGroup: function(groupName, obj) {
@@ -63,6 +65,10 @@ var __members = {
 	},
 	/**
 	 * @method protected
+	 * @param String groupName
+	 * @param String newGroupName
+	 * @param String obj clientId of component, or value of an item
+	 * @return void
 	 */
 	f_changeGroup: function(groupName, newGroupName, obj) {
 		if (groupName) {
@@ -102,7 +108,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @param String groupName
-	 * @param function fct
+	 * @param Function fct
 	 * @return any
 	 */
 	f_mapIntoGroupOfComponents: function(groupName, fct) {
@@ -145,11 +151,19 @@ var __members = {
 		}
 				
 		// Il faut transformer les clientIds en composants !
-		
+
+		var classLoader=this.f_getClassLoader();
+
 		for(var i=0;i<group.length;) {
 			var component = this.ownerDocument.getElementById(group[i]);
 			
 			// He oui en ajax, le composant peut etre introuvable !
+			if (!component) {
+				group.splice(i,1);
+				continue;
+			}
+			
+			component=classLoader.f_init(component);
 			if (!component) {
 				group.splice(i,1);
 				continue;
@@ -205,13 +219,13 @@ var __members = {
 		
 		var group=groups[groupName];		
 			
-		if(!group) {
+		if (!group) {
 			group=new Array;
 			groups[groupName]=group;
 		}
 
 		if (!create || !isNativeRadioElement) {
-			// Les composants ont été enregistré à la construction car ils ne sont pas nativement regroupable par groupes.
+			// Les composants ont été enregistré à la construction car ils ne sont pas nativement regroupables par groupes.
 			return group;
 		}
 
@@ -227,14 +241,14 @@ var __members = {
 			
 			var elementId=element.id;
 
-			var inputSuffixPos=elementId.indexOf(f_checkButton._INPUT_ID_SUFFIX);
+			var inputSuffixPos=elementId.indexOf("::");
 			if (inputSuffixPos>0) {
 				elementId=elementId.substring(0, inputSuffixPos);
 						
 				element=f_core.GetElementByClientId(elementId);
 
 			} else {
-				element = classLoader.f_init(element, false, true);			
+				element = classLoader.f_init(element, false, true);
 			}
 
 			f_core.Debug(fa_groupName, "f_listGroup: Found element id='"+element.id+"' mainId='"+elementId+"' element='"+element+"'.");
