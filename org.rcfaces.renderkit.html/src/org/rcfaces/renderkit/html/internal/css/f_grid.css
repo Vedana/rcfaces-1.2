@@ -468,6 +468,7 @@
 }
 */
 
+.f_grid TH.f_cGrid_cell,
 .f_grid TH.f_grid_cell {
 	font-weight: normal;
 }
