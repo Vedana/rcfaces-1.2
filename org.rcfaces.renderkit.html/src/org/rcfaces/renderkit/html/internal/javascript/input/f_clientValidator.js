@@ -1607,6 +1607,10 @@ var __members = {
 		
 		f_core.AddCheckListener(component, this);	
 		
+		if (component.f_isFocusEventManager && component.f_isFocusEventManager()) {
+			return;
+		}
+		
 		var validator=this;
 		component.f_insertEventListenerFirst(f_event.RESET, function(event) {
 			return validator._onReset(event);
