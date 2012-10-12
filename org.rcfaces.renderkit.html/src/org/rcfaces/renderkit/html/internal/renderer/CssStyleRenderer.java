@@ -30,13 +30,13 @@ import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
+import org.rcfaces.renderkit.html.internal.agent.UserAgentRuleTools;
 import org.rcfaces.renderkit.html.internal.css.ICssConfig;
 import org.rcfaces.renderkit.html.internal.css.StylesheetsServlet;
 import org.rcfaces.renderkit.html.internal.decorator.CssFilesCollectorDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.FilesCollectorDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.util.FileItemSource;
-import org.rcfaces.renderkit.html.internal.util.UserAgentTools;
 
 /**
  * 
@@ -70,7 +70,7 @@ public class CssStyleRenderer extends AbstractFilesCollectorRenderer {
                         "In order to use userAgentVary property, you must declare <v:init userAgentVary=\"true\" ...>");
             }
 
-            if (UserAgentTools.accept(facesContext, cssStyleComponent) == false) {
+            if (UserAgentRuleTools.accept(facesContext, cssStyleComponent) == false) {
                 return;
             }
         }
