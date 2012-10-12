@@ -93,7 +93,7 @@ var __members = {
 		
 		this._maxTextLength=f_core.GetNumberAttributeNS(this,"maxTextLength", 0);
 
-		this._gridStyleClass=f_core.GetNumberAttributeNS(this,"gridStyleClass", 0);
+		this._gridStyleClass=f_core.GetAttributeNS(this,"gridStyleClass");
 
 		this._forceValidation=f_core.GetBooleanAttributeNS(this,"forceValidation", false);
 		
@@ -107,6 +107,10 @@ var __members = {
 		this.f_insertEventListenerFirst(f_event.KEYUP, this.f_onSuggest);
 		this.f_insertEventListenerFirst(f_event.FOCUS, this.f_onFocus);
 		this.f_insertEventListenerFirst(f_event.BLUR, this.f_onBlur);
+				
+		if (window.f_indexedDbEngine) {
+//			this._indexDb=f_indexedDbEngine.FromComponent(this);
+		}
 	},
 
 	f_finalize: function() {
@@ -119,6 +123,13 @@ var __members = {
 		}
 
 		this.f_getInput().onbeforedeactivate=null;
+
+		var indexDb=this._indexDb;
+		if (indexDb) {
+			this._indexDb=undefined; // f_indexedData
+			
+			f_classLoader.Destroy(indexDb);
+		}
 	
 		// this._suggestionDelayMs=undefined;  // number
 		// this._suggestionMinChars=undefined; // number
@@ -484,6 +495,15 @@ var __members = {
 	fa_valueSelected: function(value, label, rowValues, focusNext) {
 		f_core.Debug(f_keyEntry, "fa_valueSelected: value='"+value+"' label='"+label+"'");
 
+		var indexDb=this._indexDb;
+		if (indexDb && !this._indexDbResponse && value!==undefined) {
+			indexDb.f_asyncFillRows([{
+				value: value,
+				label: label,
+				rowValues: rowValues
+			}]);
+		}
+
 		if (this.f_isReadOnly()) {
 			f_core.Debug(f_keyEntry, "fa_valueSelected: no modification readOnly");
 			return;
@@ -548,7 +568,7 @@ var __members = {
 			/* Ca redonne le focus sous IE !!! (donc il doit être egal à undefined pour lors de l'appel ajax de vérification) */	
 			try {
 				f_core.SelectText(input, value.length);
-			}catch (ex){
+			} catch (ex) {
 				f_core.Debug(f_keyEntry, "fa_valueSelected: throws exception ", ex);
 			}
 			
@@ -594,6 +614,8 @@ var __members = {
 			this.setAttribute(f_core._VNS+":notFocusedValue", input.value);
 			
 			input.value=this._inputValue;
+			
+			f_core.Debug(f_keyEntry, "f_onFocus: change inputValue to '"+input.value+"'");
 		}
 		
 		// Il faut tout selectionner car sous IE le focus se repositionne au début		
@@ -675,11 +697,44 @@ var __members = {
 		var inputValue=this._inputValue;
 		this._verifyingKey=inputValue;					
 		this.f_updateInputStyle();		
-				
+			
 		this.f_appendCommand(function(keyEntry) {
-			keyEntry.f_callServer(this._verifyingKey);
+			if (!keyEntry._indexDb) {
+				return keyEntry.f_callServer(key);
+			}
+			keyEntry._requestIndexDb(keyEntry._verifyingKey);
 		});
 		
+	},
+	/**
+	 * @method private
+	 * @param params
+	 * @param text
+	 */
+	_requestIndexDb: function(key) {
+		var indexDb=this._indexDb;
+
+		var self=this;
+		indexDb.f_asyncSearchKey(key, function(state) {
+			if (!state) {
+				return self.f_callServer(key);
+			}
+
+			if (self.f_processNextCommand()) {
+				return;
+			}
+			
+			self._verifyingKey=undefined;		
+			self.f_updateInputStyle();		
+			
+			self._indexDbResponse=true;
+			try {
+				self.fa_valueSelected(state.value, state.label, state.rowValues);
+				
+			} finally {
+				self._indexDbResponse=undefined;
+			}
+		});
 	},
 	/**
 	 * @method protected
@@ -883,6 +938,15 @@ var __members = {
 		}
 		
 		this._installCheckListener();
+	},
+	/**
+	 * Le clientValidateur ne gere pas le focus !
+	 * 
+	 * @method hidden
+	 * @returns true
+	 */
+	f_isFocusEventManager: function() {
+		return true;
 	},
 	/**
 	 * @method hidden
