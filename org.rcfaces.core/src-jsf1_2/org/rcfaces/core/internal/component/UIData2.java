@@ -519,14 +519,14 @@ public class UIData2 extends UIData0 {
 
     public boolean decodeAdditionalInformation(
             IAdditionalInformationContainer additionalInformationComponent) {
-        if (decodedIndexes == null) {
+        if (decodedIndexes == null || decodedIndexes.isEmpty()) {
             if (DEBUG_ENABLED) {
                 int rowIndex = getRowIndex();
 
                 LOG.debug("Decode additional #" + rowIndex + " ("
                         + decodedIndexesToString() + ") => FALSE");
             }
-            return false;
+            return true;
         }
 
         int rowIndex = getRowIndex();
