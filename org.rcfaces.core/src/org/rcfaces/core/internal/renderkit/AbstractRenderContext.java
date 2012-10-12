@@ -35,13 +35,14 @@ public abstract class AbstractRenderContext implements IRenderContext {
 
     private static final int SCOPE_VAR_INITIAL_SIZE = 4;
 
-    private final List stack = new ArrayList(COMPONENT_STACK_INITIAL_DEPTH * 3);
+    private final List<Object> stack = new ArrayList<Object>(
+            COMPONENT_STACK_INITIAL_DEPTH * 3);
 
-    private List scopeVars = null;
+    private List<VarScopeState> scopeVars = null;
 
     private FacesContext facesContext;
 
-    private Map attributes;
+    private Map<String, Object> attributes;
 
     private boolean transientState;
 
@@ -92,7 +93,7 @@ public abstract class AbstractRenderContext implements IRenderContext {
         if (LOG_DEBUG) {
             StringBuffer sb = new StringBuffer();
 
-            for (Iterator it = stack.iterator(); it.hasNext();) {
+            for (Iterator<Object> it = stack.iterator(); it.hasNext();) {
                 it.next();
                 sb.append(" / " + it.next());
                 it.next();
@@ -109,13 +110,13 @@ public abstract class AbstractRenderContext implements IRenderContext {
         String componentClientId = (String) stack.remove(level);
         Object componentContextAttributes = stack.remove(level);
         if (componentContextAttributes != Boolean.FALSE) {
-            releaseMap((Map) componentContextAttributes);
+            releaseMap((Map<String, Object>) componentContextAttributes);
         }
 
         if (LOG_DEBUG) {
             StringBuffer sb = new StringBuffer();
 
-            for (Iterator it = stack.iterator(); it.hasNext();) {
+            for (Iterator<Object> it = stack.iterator(); it.hasNext();) {
                 it.next();
                 sb.append(" / " + it.next());
                 it.next();
@@ -147,7 +148,8 @@ public abstract class AbstractRenderContext implements IRenderContext {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.IRenderContext#getComponentContext()
+     * @see
+     * org.rcfaces.core.internal.renderkit.IRenderContext#getComponentContext()
      */
     public final Object getComponentContextAttribute(String key) {
         int componentContextLevel = getStackLevel() + 2;
@@ -157,7 +159,7 @@ public abstract class AbstractRenderContext implements IRenderContext {
             return null;
         }
 
-        Map map = (Map) object;
+        Map<String, Object> map = (Map<String, Object>) object;
 
         return map.get(key);
     }
@@ -170,7 +172,7 @@ public abstract class AbstractRenderContext implements IRenderContext {
             return false;
         }
 
-        Map map = (Map) object;
+        Map<String, Object> map = (Map<String, Object>) object;
 
         return map.containsKey(key);
     }
@@ -180,11 +182,11 @@ public abstract class AbstractRenderContext implements IRenderContext {
 
         Object object = stack.get(componentContextLevel);
         if (object == Boolean.FALSE) {
-            object = new HashMap();
+            object = new HashMap<String, Object>();
             stack.set(componentContextLevel, object);
         }
 
-        Map map = (Map) object;
+        Map<String, Object> map = (Map<String, Object>) object;
 
         return map.put(key, value);
     }
@@ -197,7 +199,7 @@ public abstract class AbstractRenderContext implements IRenderContext {
             return null;
         }
 
-        Map map = (Map) object;
+        Map<String, Object> map = (Map<String, Object>) object;
 
         return map.remove(key);
     }
@@ -212,7 +214,7 @@ public abstract class AbstractRenderContext implements IRenderContext {
 
     public final Object setAttribute(String key, Object value) {
         if (attributes == null) {
-            attributes = new HashMap();
+            attributes = new HashMap<String, Object>();
         }
 
         return attributes.put(key, value);
@@ -266,7 +268,7 @@ public abstract class AbstractRenderContext implements IRenderContext {
         }
 
         int level = scopeVars.size();
-        VarScopeState scope = (VarScopeState) scopeVars.remove(--level);
+        VarScopeState scope = scopeVars.remove(--level);
 
         if (varName.equals(scope.getVarName()) == false) {
             throw new FacesException("Not the same varName ? (stackVarName="
@@ -288,13 +290,13 @@ public abstract class AbstractRenderContext implements IRenderContext {
         FacesContext facesContext = getFacesContext();
 
         if (scopeVars == null) {
-            scopeVars = new ArrayList(SCOPE_VAR_INITIAL_SIZE);
+            scopeVars = new ArrayList<VarScopeState>(SCOPE_VAR_INITIAL_SIZE);
         }
 
         scopeVars.add(varScopeState);
 
-        facesContext.getExternalContext().getRequestMap().put(
-                varScopeState.getVarName(), varScopeState.getValue());
+        facesContext.getExternalContext().getRequestMap()
+                .put(varScopeState.getVarName(), varScopeState.getValue());
     }
 
     public Object saveState(FacesContext facesContext) {
@@ -305,8 +307,7 @@ public abstract class AbstractRenderContext implements IRenderContext {
         Object sv[] = new Object[scopeVars.size()];
 
         int idx = 0;
-        for (Iterator it = scopeVars.iterator(); it.hasNext();) {
-            VarScopeState varScopeState = (VarScopeState) it.next();
+        for (VarScopeState varScopeState : scopeVars) {
 
             sv[idx++] = varScopeState.saveState(facesContext);
         }
