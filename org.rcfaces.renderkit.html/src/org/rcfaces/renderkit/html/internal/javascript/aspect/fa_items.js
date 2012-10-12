@@ -619,7 +619,7 @@ var __members = {
 			item=this.f_getItemByValue(item, true);
 		}
 
-		this.f_changeGroup(item._groupName, groupName, item);
+		this.f_changeGroup(item._groupName, groupName, item._value);
 		item._groupName = groupName;
 	},
 	/**
