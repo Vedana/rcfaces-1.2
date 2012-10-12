@@ -18,8 +18,6 @@ import org.rcfaces.core.internal.script.IScriptOperationContext;
  * @version $Revision$ $Date$
  */
 public class CompositeScriptsContentOperation extends AbstractScriptOperation {
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory
             .getLog(CompositeScriptsContentOperation.class);
 

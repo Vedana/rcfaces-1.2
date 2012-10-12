@@ -19,7 +19,6 @@ import org.rcfaces.core.provider.AbstractProvider;
  */
 public abstract class AbstractCompositeContentAccessorHandler extends
         AbstractProvider implements ICompositeContentAccessorHandler {
-    private static final String REVISION = "$Revision$";
 
     private static final Set DEFAULT_CHARSETS = new HashSet(8);
     static {

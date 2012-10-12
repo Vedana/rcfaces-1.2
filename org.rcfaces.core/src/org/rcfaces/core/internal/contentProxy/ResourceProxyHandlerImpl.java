@@ -579,7 +579,8 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
 
         digester.addRule("rules/rule", new Rule() {
 
-            public void end(String namespace, String name) throws Exception {
+            @Override
+            public void end(String namespace, String name) {
 
                 String url = infos.get("url");
                 Map attributes = null;
@@ -640,24 +641,21 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
         digester.addRule("rules/rule/pattern", new Rule() {
 
             @Override
-            public void body(String namespace, String name, String text)
-                    throws Exception {
+            public void body(String namespace, String name, String text) {
                 infos.put("pattern", text);
             }
         });
         digester.addRule("rules/rule/regexp", new Rule() {
 
             @Override
-            public void body(String namespace, String name, String text)
-                    throws Exception {
+            public void body(String namespace, String name, String text) {
                 infos.put("regexp", text);
             }
         });
         digester.addRule("rules/rule/url", new Rule() {
 
             @Override
-            public void body(String namespace, String name, String text)
-                    throws Exception {
+            public void body(String namespace, String name, String text) {
                 infos.put("url", text);
             }
         });

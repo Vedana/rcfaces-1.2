@@ -30,7 +30,6 @@ import org.xml.sax.Attributes;
  */
 public class ServicesRegistryImpl extends AbstractRenderKitRegistryImpl
         implements Serializable, PhaseListener, IServicesRegistry {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = -2873554843764179473L;
 
@@ -48,6 +47,7 @@ public class ServicesRegistryImpl extends AbstractRenderKitRegistryImpl
     public ServicesRegistryImpl() {
     }
 
+    @Override
     protected String getApplicationPropertyId() {
         return SERVICE_PROPERTY;
     }
@@ -78,9 +78,9 @@ public class ServicesRegistryImpl extends AbstractRenderKitRegistryImpl
         if (LOG.isDebugEnabled()) {
             FacesContext facesContext = event.getFacesContext();
 
-            Map headers = facesContext.getExternalContext()
+            Map<String, String> headers = facesContext.getExternalContext()
                     .getRequestHeaderMap();
-            String commandId = (String) headers.get(CAMELIA_HEADER);
+            String commandId = headers.get(CAMELIA_HEADER);
 
             LOG.debug("Before phase '" + event.getPhaseId() + "' viewId="
                     + facesContext.getViewRoot() + " commandId=" + commandId);
@@ -94,8 +94,9 @@ public class ServicesRegistryImpl extends AbstractRenderKitRegistryImpl
     public void afterPhase(PhaseEvent event) {
         FacesContext facesContext = event.getFacesContext();
 
-        Map headers = facesContext.getExternalContext().getRequestHeaderMap();
-        String commandId = (String) headers.get(CAMELIA_HEADER);
+        Map<String, String> headers = facesContext.getExternalContext()
+                .getRequestHeaderMap();
+        String commandId = headers.get(CAMELIA_HEADER);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("After phase '" + event.getPhaseId() + "' viewId="
@@ -164,6 +165,7 @@ public class ServicesRegistryImpl extends AbstractRenderKitRegistryImpl
         }
     }
 
+    @Override
     protected AbstractRenderKitRegistryImpl.RenderKit createRenderKit() {
         return new RenderKit();
     }
@@ -174,8 +176,6 @@ public class ServicesRegistryImpl extends AbstractRenderKitRegistryImpl
      * @version $Revision$ $Date$
      */
     public static final class ServiceFacade {
-        private static final String REVISION = "$Revision$";
-
         private String className;
 
         private String id;
@@ -239,7 +239,6 @@ public class ServicesRegistryImpl extends AbstractRenderKitRegistryImpl
      */
     public static class RenderKit extends
             AbstractRenderKitRegistryImpl.RenderKit {
-        private static final String REVISION = "$Revision$";
 
         private final Map serviceFacadeByCommandId;
 
@@ -272,8 +271,8 @@ public class ServicesRegistryImpl extends AbstractRenderKitRegistryImpl
     public void configureRules(Digester digester) {
 
         digester.addRule("rcfaces-config/services/render-kit", new Rule() {
-            private static final String REVISION = "$Revision$";
 
+            @Override
             public void begin(String namespace, String name,
                     Attributes attributes) throws Exception {
 
@@ -284,6 +283,7 @@ public class ServicesRegistryImpl extends AbstractRenderKitRegistryImpl
                 super.digester.push(renderKit);
             }
 
+            @Override
             public void end(String namespace, String name) throws Exception {
                 super.digester.pop();
             }
@@ -297,8 +297,8 @@ public class ServicesRegistryImpl extends AbstractRenderKitRegistryImpl
                 "class", "className");
         digester.addRule("rcfaces-config/services/render-kit/service/command",
                 new Rule() {
-                    private static final String REVISION = "$Revision$";
 
+                    @Override
                     public void begin(String namespace, String name,
                             Attributes attributes) throws Exception {
 

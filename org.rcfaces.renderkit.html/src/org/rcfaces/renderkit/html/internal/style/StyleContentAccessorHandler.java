@@ -51,14 +51,12 @@ import org.rcfaces.renderkit.html.internal.style.CssParserFactory.ICssParser;
 public class StyleContentAccessorHandler extends
         AbstractCompositeContentAccessorHandler implements
         IStyleContentAccessorHandler {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(StyleContentAccessorHandler.class);
 
     private static final String CSS_PARSER_ENABLED = Constants
-            .getPackagePrefix()
-            + ".MERGE_STYLE_FILES";
+            .getPackagePrefix() + ".MERGE_STYLE_FILES";
 
     private static final String VERSION_FILTER_NAME = "version";
 
@@ -151,8 +149,7 @@ public class StyleContentAccessorHandler extends
 
         if (isProviderEnabled(facesContext) == false) {
             if (LOG.isDebugEnabled()) {
-                LOG
-                        .debug("Provider is disabled, return an unsupported content accessor flag");
+                LOG.debug("Provider is disabled, return an unsupported content accessor flag");
             }
 
             return ContentAccessorFactory.UNSUPPORTED_CONTENT_ACCESSOR;
@@ -397,9 +394,7 @@ public class StyleContentAccessorHandler extends
                 .get(operationId);
 
         if (LOG.isDebugEnabled()) {
-            LOG
-                    .debug("Operation id='" + operationId + "' => "
-                            + styleOperation);
+            LOG.debug("Operation id='" + operationId + "' => " + styleOperation);
         }
 
         return styleOperation;

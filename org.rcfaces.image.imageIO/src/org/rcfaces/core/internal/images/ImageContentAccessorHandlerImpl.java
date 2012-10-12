@@ -18,6 +18,7 @@ import java.util.Set;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageWriter;
 
 import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.Rule;
@@ -48,7 +49,6 @@ import org.xml.sax.Attributes;
  */
 public class ImageContentAccessorHandlerImpl extends
         ImageContentAccessorHandler {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(ImageContentAccessorHandlerImpl.class);
@@ -65,7 +65,8 @@ public class ImageContentAccessorHandlerImpl extends
 
     private static final String NO_OPERATION_ID = "noOperation";
 
-    private final Map operationsById = new HashMap(32);
+    private final Map<String, IImageOperation> operationsById = new HashMap<String, IImageOperation>(
+            32);
 
     private final Map validContentTypes = new HashMap(8);
 
@@ -89,6 +90,7 @@ public class ImageContentAccessorHandlerImpl extends
         return "ImageContentAccessorHandler";
     }
 
+    @Override
     public void startup(FacesContext facesContext) {
         super.startup(facesContext);
 
@@ -127,7 +129,7 @@ public class ImageContentAccessorHandlerImpl extends
         }
 
         if (gifWriterEnabled == null) {
-            Iterator it = ImageIO
+            Iterator<ImageWriter> it = ImageIO
                     .getImageWritersByMIMEType(GIFConversionImageOperation.MIME_TYPE);
 
             gifWriterEnabled = Boolean.valueOf(it.hasNext());
@@ -144,6 +146,7 @@ public class ImageContentAccessorHandlerImpl extends
         imageResourceAdaptersList = null;
     }
 
+    @Override
     public void configureRules(Digester digester) {
         super.configureRules(digester);
 
@@ -151,14 +154,15 @@ public class ImageContentAccessorHandlerImpl extends
 
         digester.addRule("rcfaces-config/image-operations/operation",
                 new Rule() {
-                    private static final String REVISION = "$Revision$";
 
+                    @Override
                     public void begin(String namespace, String name,
                             Attributes attributes) throws Exception {
 
                         super.digester.push(new OperationBean());
                     }
 
+                    @Override
                     public void end(String namespace, String name)
                             throws Exception {
                         OperationBean operationBean = (OperationBean) super.digester
@@ -191,14 +195,15 @@ public class ImageContentAccessorHandlerImpl extends
         digester.addRule(
                 "rcfaces-config/image-resource-adapters/resource-adapter",
                 new Rule() {
-                    private static final String REVISION = "$Revision$";
 
+                    @Override
                     public void begin(String namespace, String name,
                             Attributes attributes) throws Exception {
 
                         super.digester.push(new ImageResourceAdapterBean());
                     }
 
+                    @Override
                     public void end(String namespace, String name)
                             throws Exception {
                         ImageResourceAdapterBean imageResourceAdapterBean = (ImageResourceAdapterBean) super.digester
@@ -220,8 +225,8 @@ public class ImageContentAccessorHandlerImpl extends
         digester.addRule(
                 "rcfaces-config/image-resource-adapters/resource-adapter/content-type",
                 new Rule() {
-                    private static final String REVISION = "$Revision$";
 
+                    @Override
                     public void body(String namespace, String name, String text)
                             throws Exception {
 
@@ -236,8 +241,8 @@ public class ImageContentAccessorHandlerImpl extends
         digester.addRule(
                 "rcfaces-config/image-resource-adapters/resource-adapter/suffix",
                 new Rule() {
-                    private static final String REVISION = "$Revision$";
 
+                    @Override
                     public void body(String namespace, String name, String text)
                             throws Exception {
 
@@ -257,9 +262,10 @@ public class ImageContentAccessorHandlerImpl extends
                     + operationBean.getClassName() + "'.");
         }
 
-        Class clazz;
+        Class<IImageOperation> clazz;
         try {
-            clazz = ClassLocator.load(operationBean.getClassName(), null,
+            clazz = (Class<IImageOperation>) ClassLocator.load(
+                    operationBean.getClassName(), null,
                     FacesContext.getCurrentInstance());
 
         } catch (ClassNotFoundException ex) {
@@ -288,7 +294,7 @@ public class ImageContentAccessorHandlerImpl extends
             return;
         }
 
-        Constructor constructor;
+        Constructor<IImageOperation> constructor;
 
         try {
             constructor = clazz.getConstructor((Class[]) null);
@@ -303,8 +309,7 @@ public class ImageContentAccessorHandlerImpl extends
 
         IImageOperation operation;
         try {
-            operation = (IImageOperation) constructor
-                    .newInstance((Object[]) null);
+            operation = constructor.newInstance((Object[]) null);
 
         } catch (Throwable ex) {
             LOG.error(

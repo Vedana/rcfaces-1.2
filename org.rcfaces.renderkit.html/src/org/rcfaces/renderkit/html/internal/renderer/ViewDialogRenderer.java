@@ -4,7 +4,6 @@
 package org.rcfaces.renderkit.html.internal.renderer;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -94,7 +93,7 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
 
         // TODO A refaire en décorator !
         List children = component.getChildren();
-        Map values = null;
+        Map<String, String> values = null;
         for (int i = 0; i < children.size(); i++) {
             if (children.get(i) instanceof UISelectItem) {
                 UISelectItem selectItem = (UISelectItem) children.get(i);
@@ -105,23 +104,22 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
                 }
 
                 if (values == null) {
-                    values = new HashMap(8);
+                    values = new HashMap<String, String>(8);
                 }
-                values.put(selectItem.getItemLabel(), value);
+                values.put(selectItem.getItemLabel(), String.valueOf(value));
             }
         }
 
         if (values != null) {
             StringAppender datas = new StringAppender(values.size() * 64);
-            for (Iterator it = values.entrySet().iterator(); it.hasNext();) {
-                Map.Entry entry = (Map.Entry) it.next();
+            for (Map.Entry<String, String> entry : values.entrySet()) {
 
-                String key = (String) entry.getKey();
+                String key = entry.getKey();
                 if (key == null || key.length() < 1) {
                     continue;
                 }
 
-                String value = (String) entry.getValue();
+                String value = entry.getValue();
                 if (value == null) {
                     continue;
                 }

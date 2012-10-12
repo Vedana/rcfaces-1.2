@@ -15,7 +15,6 @@ import javax.faces.render.Renderer;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractService implements IService {
-    private static final String REVISION = "$Revision$";
 
     // private static final Log LOG = LogFactory.getLog(AbstractService.class);
 

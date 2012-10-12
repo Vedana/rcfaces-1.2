@@ -7,6 +7,8 @@ package org.rcfaces.renderkit.html.internal.renderer;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.HiddenValueComponent;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
@@ -24,7 +26,8 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  * @version $Revision$ $Date$
  */
 public class HiddenValueRenderer extends AbstractJavaScriptRenderer {
-    private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory.getLog(HiddenValueRenderer.class);
 
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
         IComponentRenderContext componentRenderContext = writer

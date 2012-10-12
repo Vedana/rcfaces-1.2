@@ -31,7 +31,6 @@ import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
  */
 public class ScriptOperationContentModel extends
         AbstractBufferOperationContentModel {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(ScriptOperationContentModel.class);
@@ -88,8 +87,8 @@ public class ScriptOperationContentModel extends
         IScriptFile scriptFile = createNewScriptFile(resourceURL);
         try {
             IScriptOperationContext parserContext = new ScriptOperationContext(
-                    contentInfo[0].getCharSet(), contentInfo[0]
-                            .getLastModified());
+                    contentInfo[0].getCharSet(),
+                    contentInfo[0].getLastModified());
 
             String newStyleSheetContent = filter(applicationParameters,
                     resourceLoaderFactory, resourceURL, scriptContent,
@@ -99,9 +98,9 @@ public class ScriptOperationContentModel extends
             String contentType = getContentType() + "; charset="
                     + parserContext.getCharset();
 
-            scriptFile.initialize(contentType, newStyleSheetContent
-                    .getBytes(parserContext.getCharset()), parserContext
-                    .getLastModifiedDate());
+            scriptFile.initialize(contentType,
+                    newStyleSheetContent.getBytes(parserContext.getCharset()),
+                    parserContext.getLastModifiedDate());
 
         } catch (IOException e) {
             LOG.error("Can not create filtred image '" + getResourceURL()

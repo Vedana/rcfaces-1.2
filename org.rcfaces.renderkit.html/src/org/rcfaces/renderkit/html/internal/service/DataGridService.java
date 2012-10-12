@@ -37,9 +37,9 @@ import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
+import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
-import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.renderer.DataGridRenderer;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
 
@@ -169,10 +169,10 @@ public class DataGridService extends AbstractHtmlService {
                 }
             }
 
-			ISelectedCriteria[] criteriaConfigs = null;
-			String criteria_s = (String) parameters.get("criteria");
-			criteriaConfigs = CriteriaTools.computeCriteriaConfigs(facesContext, dgc,
-					criteria_s);
+            ISelectedCriteria[] criteriaConfigs = null;
+            String criteria_s = (String) parameters.get("criteria");
+            criteriaConfigs = CriteriaTools.computeCriteriaConfigs(
+                    facesContext, dgc, criteria_s);
 
             DataGridRenderer dgr = getDataGridRenderer(facesContext, dgc);
             if (dgr == null) {
@@ -200,8 +200,8 @@ public class DataGridService extends AbstractHtmlService {
                     printWriter = response.getWriter();
 
                 } else {
-					ConfiguredHttpServlet.setGzipContentEncoding(
-							(HttpServletResponse) response, true);
+                    ConfiguredHttpServlet.setGzipContentEncoding(
+                            (HttpServletResponse) response, true);
 
                     OutputStream outputStream = response.getOutputStream();
 
@@ -217,7 +217,7 @@ public class DataGridService extends AbstractHtmlService {
                 writeJs(facesContext, printWriter, dgc, dataGridId, dgr,
                         rowIndex, forcedRows, sortedComponents,
                         filterExpression, unknownRowCount, showAdditional,
-						hideAdditional, criteriaConfigs);
+                        hideAdditional, criteriaConfigs);
 
             } catch (IOException ex) {
                 throw new FacesException(
@@ -296,8 +296,8 @@ public class DataGridService extends AbstractHtmlService {
             DataGridRenderer dgr, int rowIndex, int forcedRows,
             ISortedComponent sortedComponents[], String filterExpression,
             boolean unknownRowCount, String showAdditional,
-			String hideAdditional, ISelectedCriteria[] criteriaContainers)
-			throws IOException {
+            String hideAdditional, ISelectedCriteria[] criteriaContainers)
+            throws IOException {
 
         IProcessContext processContext = HtmlProcessContextImpl
                 .getHtmlProcessContext(facesContext);
@@ -313,19 +313,19 @@ public class DataGridService extends AbstractHtmlService {
                 pw, RESPONSE_CHARSET, dgc, componentClientId);
 
         DataGridRenderer.DataGridRenderContext tableContext = dgr
-				.createTableContext(processContext,
-						jsWriter.getJavaScriptRenderContext(), dgc, rowIndex,
+                .createTableContext(processContext,
+                        jsWriter.getJavaScriptRenderContext(), dgc, rowIndex,
                         forcedRows, sortedComponents, filterExpression,
-						showAdditional, hideAdditional, criteriaContainers);
+                        showAdditional, hideAdditional, criteriaContainers);
 
         String varId = jsWriter.getComponentVarName();
 
-		jsWriter.write("var ").write(varId).write('=')
-				.writeCall("f_core", "GetElementByClientId")
-				.writeString(componentClientId).writeln(", document);");
+        jsWriter.write("var ").write(varId).write('=')
+                .writeCall("f_core", "GetElementByClientId")
+                .writeString(componentClientId).writeln(", document);");
 
-		jsWriter.writeMethodCall("f_startNewPage").writeInt(rowIndex)
-				.writeln(");");
+        jsWriter.writeMethodCall("f_startNewPage").writeInt(rowIndex)
+                .writeln(");");
 
         String rowVarId = jsWriter.getJavaScriptRenderContext()
                 .allocateVarName();
@@ -336,15 +336,15 @@ public class DataGridService extends AbstractHtmlService {
 
         jsWriter.writeMethodCall("f_updateNewPage").writeln(");");
 
-		if (hasAdditionalInformations(dgc)) {
+        if (hasAdditionalInformations(dgc)) {
 
-			String viewStateId = saveViewAndReturnStateId(facesContext);
-			if (viewStateId != null) {
-				jsWriter.writeCall("f_classLoader", "ChangeJsfViewId")
-						.write(varId).write(',').writeString(viewStateId)
-						.write(')');
-			}
-		}
+            String viewStateId = saveViewAndReturnStateId(facesContext);
+            if (viewStateId != null) {
+                jsWriter.writeCall("f_classLoader", "ChangeJsfViewId")
+                        .write(varId).write(',').writeString(viewStateId)
+                        .write(')');
+            }
+        }
 
         if (LOG.isTraceEnabled()) {
             pw.flush();
@@ -355,12 +355,12 @@ public class DataGridService extends AbstractHtmlService {
         }
     }
 
-	private boolean hasAdditionalInformations(DataGridComponent dgc) {
-		int count = dgc.listAdditionalInformations().count();
+    private boolean hasAdditionalInformations(DataGridComponent dgc) {
+        int count = dgc.listAdditionalInformations().count();
 
-		if (count > 0) {
-			return true;
-		}
-		return false;
-	}
+        if (count > 0) {
+            return true;
+        }
+        return false;
+    }
 }

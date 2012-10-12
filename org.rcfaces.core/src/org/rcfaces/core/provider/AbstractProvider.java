@@ -14,7 +14,6 @@ import org.apache.commons.digester.Digester;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractProvider implements IProvider {
-    private static final String REVISION = "$Revision$";
 
     public void configureRules(Digester digester) {
     }
@@ -22,6 +21,7 @@ public abstract class AbstractProvider implements IProvider {
     public void startup(FacesContext facesContext) {
     }
 
+    @Override
     public boolean equals(Object obj) {
         if (obj == null || (obj instanceof AbstractProvider) == false) {
             return false;
@@ -30,10 +30,12 @@ public abstract class AbstractProvider implements IProvider {
         return getId().equals(((AbstractProvider) obj).getId());
     }
 
+    @Override
     public int hashCode() {
         return getId().hashCode();
     }
 
+    @Override
     public String toString() {
         return "[AbstractProvider '" + getId() + "']";
     }

@@ -115,6 +115,7 @@ public class RcfacesContextImpl extends RcfacesContext implements
     public RcfacesContextImpl() {
     }
 
+    @Override
     protected void initialize(FacesContext facesContext) {
         if (facesContext == null) {
             facesContext = FacesContext.getCurrentInstance();
@@ -246,7 +247,6 @@ public class RcfacesContextImpl extends RcfacesContext implements
         digester.setUseContextClassLoader(true);
 
         digester.setEntityResolver(new EntityResolver() {
-            private static final String REVISION = "$Revision$";
 
             public InputSource resolveEntity(String string, String string1) {
                 return new InputSource(new CharArrayReader(new char[0]));
@@ -257,7 +257,7 @@ public class RcfacesContextImpl extends RcfacesContext implements
         LOG.debug("Declare configurations rules.");
         configureRules(digester);
 
-        List urls = new ArrayList(32);
+        List<URL> urls = new ArrayList<URL>(32);
 
         LOG.debug("Search configuration files ...");
         for (int i = 0; i < KERNEL_CONFIG_FILENAMES.length; i++) {
@@ -320,7 +320,7 @@ public class RcfacesContextImpl extends RcfacesContext implements
 
     protected void initializeConfigs(FacesContext facesContext) {
 
-        Map applicationMap = facesContext.getExternalContext()
+        Map<String, Object> applicationMap = facesContext.getExternalContext()
                 .getApplicationMap();
 
         applicationVersion = (String) applicationMap
