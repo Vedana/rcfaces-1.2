@@ -446,13 +446,24 @@ public class HtmlTools {
             String accessKey, String text, boolean escapeLF)
             throws WriterException {
 
+        boolean escapeHTML = (writer.getHtmlComponentRenderContext()
+                .getHtmlRenderContext().getHtmlProcessContext()
+                .isHtmlEscapingDisabled() == false);
+
+        return writeAccessKey(writer, accessKey, text, escapeLF, escapeHTML);
+    }
+
+    public static final boolean writeAccessKey(IHtmlWriter writer,
+            String accessKey, String text, boolean escapeLF, boolean escapeHTML)
+            throws WriterException {
+
         if (text == null || text.length() < 1) {
             return false;
         }
 
         if (accessKey == null || accessKey.length() < 1) {
             if (escapeLF) {
-                writeAndEscapeLF(writer, text, NO_ACCESS_KEY);
+                writeAndEscapeLF(writer, text, NO_ACCESS_KEY, escapeHTML);
                 return false;
             }
 
@@ -462,7 +473,7 @@ public class HtmlTools {
         }
 
         if (escapeLF) {
-            writeAndEscapeLF(writer, text, accessKey.charAt(0));
+            writeAndEscapeLF(writer, text, accessKey.charAt(0), escapeHTML);
             return false;
         }
 
@@ -494,7 +505,7 @@ public class HtmlTools {
     }
 
     private static void writeAndEscapeLF(IHtmlWriter writer, String text,
-            char accessKey) throws WriterException {
+            char accessKey, boolean escapeHtml) throws WriterException {
         char chs[] = text.toCharArray();
         int p = 0;
 
@@ -518,6 +529,7 @@ public class HtmlTools {
                     break;
                 }
             }
+
             if (old < p) {
                 String s = new String(chs, old, p - old);
                 writer.writeText(s);
