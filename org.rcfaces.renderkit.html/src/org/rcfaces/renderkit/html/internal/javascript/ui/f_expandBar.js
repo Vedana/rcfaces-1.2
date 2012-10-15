@@ -5,7 +5,7 @@
 /**
  * class f_expandBar
  *
- * @class public f_expandBar extends f_component, fa_disabled, fa_readOnly, fa_collapsed, fa_groupName, fa_overStyleClass
+ * @class public f_expandBar extends f_component, fa_disabled, fa_readOnly, fa_collapsed, fa_groupName, fa_overStyleClass, fa_asyncRender
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -586,7 +586,7 @@ var __members = {
 
 new f_class("f_expandBar", {
 	extend: f_component,
-	aspects: [ fa_disabled, fa_readOnly, fa_collapsed, fa_groupName, fa_overStyleClass ],
+	aspects: [ fa_disabled, fa_readOnly, fa_collapsed, fa_groupName, fa_overStyleClass, fa_asyncRender ],
 	statics: __statics,
 	members: __members
 });
