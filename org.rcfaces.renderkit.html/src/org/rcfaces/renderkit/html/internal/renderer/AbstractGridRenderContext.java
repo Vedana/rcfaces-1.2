@@ -1428,4 +1428,9 @@ public abstract class AbstractGridRenderContext {
         }
         return false;
     }
+
+    public IProcessContext getProcessContext() {
+        return processContext;
+    }
+
 }
