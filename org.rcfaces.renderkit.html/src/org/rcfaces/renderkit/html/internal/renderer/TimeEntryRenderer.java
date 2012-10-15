@@ -337,7 +337,7 @@ public class TimeEntryRenderer extends AbstractCompositeRenderer {
 
                 String ns = htmlWriter.getRcfacesNamespace() + ":";
 
-                Map attributes = new HashMap(8);
+                Map<String, Object> attributes = new HashMap<String, Object>(8);
                 if (minValue >= 0) {
                     attributes.put(ns + "min", String.valueOf(minValue));
                 }
@@ -430,7 +430,7 @@ public class TimeEntryRenderer extends AbstractCompositeRenderer {
         timeEntryComponent.setSubmittedExternalValue(time);
     }
 
-    protected void addUnlockProperties(Set unlockedProperties) {
+    protected void addUnlockProperties(Set<String> unlockedProperties) {
         super.addUnlockProperties(unlockedProperties);
 
         unlockedProperties.add(Properties.VALUE);

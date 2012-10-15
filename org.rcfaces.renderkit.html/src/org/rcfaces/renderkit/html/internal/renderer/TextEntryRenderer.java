@@ -389,14 +389,14 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         IValidationParameters validationCapability = (IValidationParameters) componentRenderContext
                 .getComponent();
 
-        Map parametersMap = validationCapability
+        Map<String, String> parametersMap = validationCapability
                 .getClientValidationParametersMap();
         if (parametersMap.isEmpty() == false) {
             // On travaille avec une copie ... car on fait des removes aprés...
-            parametersMap = new HashMap(parametersMap);
+            parametersMap = new HashMap<String, String>(parametersMap);
         }
 
-        List params = new ArrayList(8);
+        List<String> params = new ArrayList<String>(8);
 
         IClientValidationContext clientValidationContext = ClientValidatorTools
                 .getClientValidationContext(htmlWriter
@@ -450,7 +450,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
                         params.add(name);
 
                         // Les valeurs des parametres sont prioritaires
-                        String value = (String) parametersMap.remove(name);
+                        String value = parametersMap.remove(name);
                         if (value == null) {
                             value = parameter.getValue();
                         }
@@ -462,10 +462,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         }
 
         if (parametersMap.isEmpty() == false) {
-            for (Iterator it = parametersMap.entrySet().iterator(); it
-                    .hasNext();) {
-
-                Map.Entry entry = (Map.Entry) it.next();
+            for (Map.Entry<String, String> entry : parametersMap.entrySet()) {
 
                 params.add(entry.getKey());
                 params.add(entry.getValue());
