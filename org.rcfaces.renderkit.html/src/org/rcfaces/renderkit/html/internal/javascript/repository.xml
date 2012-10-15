@@ -942,6 +942,8 @@
 				<required-class name="f_httpRequest" />
 				<required-class name="f_menu" />
 				<required-class name="f_error" />
+				
+				<required-class id="indexDb" name="f_indexedData" />				
 			</class>
 		</file>
 	</module>
@@ -1267,6 +1269,8 @@
 				<required-class name="fa_criteriaManager" />
 
 				<required-style name="f_dataGrid.css" />
+				
+				<required-class id="indexDb" name="f_indexedData" />				
 			</class>
 		</file>
 			
@@ -1304,6 +1308,8 @@
 				<required-class name="fa_readOnly" />
 				<required-class name="fa_editable" />
 				<required-class name="fa_clientValidatorParameters" />
+				
+				<required-class id="indexDb" name="f_indexedData" />				
 				
 				<required-style name="f_comboGrid.css" />
 			</class>
@@ -1785,6 +1791,20 @@
 			
 	</module>
 
+	<module id="indexedDb">
+	
+		 <file name="db/f_indexedDbEngine.js">
+			<class name="f_indexedDbEngine">
+				<required-class name="f_core" />
+			</class>		
+		 </file>
+			
+		<file name="db/f_indexedData.js">
+			<class name="f_indexedData">
+				<required-class name="f_indexedDbEngine" />
+			</class>
+		</file>			
+	</module>
 <!-- 
 	<module id="partialRendering">
 		<file name="core/f_partialRenderingEngine.js">
