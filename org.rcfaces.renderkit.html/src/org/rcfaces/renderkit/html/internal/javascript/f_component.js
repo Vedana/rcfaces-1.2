@@ -415,7 +415,9 @@ var __members = {
 		
 		this.f_updateVisibility(visible);
 
-		this.f_getClass().f_getClassLoader().fireVisibleEvent(this);
+		if (visible===true) {
+			this.f_getClass().f_getClassLoader().fireVisibleEvent(this);
+		}
 
 		this.f_setProperty(f_prop.VISIBLE, visible);		
 	},
