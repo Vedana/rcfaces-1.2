@@ -22,6 +22,11 @@ var __members = {
 		if (!!this._cellWrap) {
 		//	this.className+=" f_grid_noWrap";
 		}
+		
+		var first=this.f_getFirst();
+		var rows = this.f_getRows();
+		
+		this.f_addSerializedIndexes(first, rows);
 	},
 	/*
 	f_finalize: function() {
@@ -391,6 +396,8 @@ var __members = {
 			this.f_moveCursor(cursorRow, true, null, selection);
 		}
 
+		
+		
 		this.f_performPagedComponentInitialized();
 		
 		if (!this._rowsPool.length) {
@@ -547,7 +554,7 @@ var __members = {
 		f_core.Assert(this._tbody, "f_componentsGrid.f_addRow2: No table body !");
 		
 		var row;
-		var firstCell;
+		var firstCell=undefined;
 		var shadowRows=this._shadowRows;
 		if (shadowRows && shadowRows.length) {
 			row=shadowRows.shift();
@@ -590,7 +597,10 @@ var __members = {
 			row._index=row.id;
 		}
 		row._rowIndex=properties._rowIndex;
-				
+
+		// On a besoin d'envoyer les indexes affichés !
+		this.f_addSerializedIndexes(row._rowIndex, 1);
+	
 		var className=null;
 		
 		if (properties) {
