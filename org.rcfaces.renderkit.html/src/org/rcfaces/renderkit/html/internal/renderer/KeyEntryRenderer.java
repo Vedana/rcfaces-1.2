@@ -40,6 +40,7 @@ import org.rcfaces.core.internal.tools.FilteredDataModel;
 import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.core.lang.FilterPropertiesMap;
+import org.rcfaces.core.model.IClientDataModel;
 import org.rcfaces.core.model.IComponentRefModel;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredModel;
@@ -51,6 +52,7 @@ import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
+import org.rcfaces.renderkit.html.internal.util.ClientDataModelTools;
 
 /**
  * 
@@ -66,6 +68,10 @@ public class KeyEntryRenderer extends DataGridRenderer {
     protected static final String INPUT_ERRORED_PROPERTY = "org.rcfaces.html.COMBO_GRID_ERRORED";
 
     protected static final String INVALID_INPUT_TEXT_PROPERTY = "keyEntry.INVALID_INPUT";
+
+    private static final String CLIENT_DB_ENABLED_PROPERTY = "org.rcfaces.html.CLIENT_DB_ENABLED";
+
+    private static final String DEFAULT_CONTENT_PRIMARY_KEY = "value";
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.KEY_ENTRY;
@@ -253,21 +259,9 @@ public class KeyEntryRenderer extends DataGridRenderer {
         }
 
         DataModel dataModel = gridRenderContext.getDataModel();
-        IFiltredModel filtredDataModel = getAdapter(IFiltredModel.class,
-                dataModel);
-        if (filtredDataModel != null) {
-            htmlWriter.writeAttributeNS("filtred", true);
+        writeFiltredModel(htmlWriter, dataModel, gridRenderContext);
 
-            IFilterProperties filterMap = gridRenderContext.getFiltersMap();
-            if (filterMap != null && filterMap.isEmpty() == false) {
-                String filterExpression = HtmlTools.encodeFilterExpression(
-                        filterMap, componentRenderContext.getRenderContext()
-                                .getProcessContext(), componentRenderContext
-                                .getComponent());
-                htmlWriter.writeAttributeNS("filterExpression",
-                        filterExpression);
-            }
-        }
+        writeClientDataModel(htmlWriter, dataModel, gridRenderContext);
 
         // if (comboGridComponent instanceof IEmptyMessageCapability) {
         String emptyMessage = ((IEmptyMessageCapability) keyEntryComponent)
@@ -324,6 +318,82 @@ public class KeyEntryRenderer extends DataGridRenderer {
         writeDescriptionComponent(htmlWriter);
 
         htmlWriter.getJavaScriptEnableMode().enableOnInit();
+    }
+
+    protected void writeClientDataModel(IHtmlWriter htmlWriter,
+            DataModel dataModel, AbstractGridRenderContext gridRenderContext)
+            throws WriterException {
+        IClientDataModel clientDataModel = getAdapter(IClientDataModel.class,
+                dataModel);
+        if (clientDataModel == null) {
+            return;
+        }
+
+        String contentName = clientDataModel.getContentName();
+        if (contentName == null) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("ContentName() returns NULL, disabled client data model !");
+            }
+            return;
+        }
+        String contentKey = clientDataModel.getContentKey();
+        String contentPK = clientDataModel.getContentPrimaryKey();
+        if (contentPK == null) {
+            contentPK = DEFAULT_CONTENT_PRIMARY_KEY;
+        }
+        int contentRowCount = clientDataModel.getContentRowCount();
+
+        if (contentName == null || contentKey == null || contentPK == null) {
+            LOG.error("IClientDataModel disabled, contentName='"
+                    + contentName
+                    + "' contentKey='"
+                    + contentKey
+                    + "' contentRowCount="
+                    + contentRowCount
+                    + " contentPrimaryKey='"
+                    + contentPK
+                    + "' gridId="
+                    + htmlWriter.getComponentRenderContext()
+                            .getComponentClientId());
+            return;
+        }
+
+        String contentIndex = ClientDataModelTools.format(clientDataModel);
+
+        // htmlWriter.writeAttributeNS("indexedDb", true);
+        htmlWriter.writeAttributeNS("idbName", contentName);
+        htmlWriter.writeAttributeNS("idbKey", contentKey);
+        if (contentRowCount >= 0) {
+            htmlWriter.writeAttributeNS("idbCount", contentRowCount);
+        }
+        htmlWriter.writeAttributeNS("idbPK", contentPK);
+        if (contentIndex != null) {
+            htmlWriter.writeAttributeNS("idbIndex", contentIndex);
+        }
+
+        htmlWriter.getComponentRenderContext().setAttribute(
+                CLIENT_DB_ENABLED_PROPERTY, Boolean.TRUE);
+
+    }
+
+    protected void writeFiltredModel(IHtmlWriter htmlWriter,
+            DataModel dataModel, AbstractGridRenderContext gridRenderContext)
+            throws WriterException {
+        IFiltredModel filtredDataModel = getAdapter(IFiltredModel.class,
+                dataModel);
+        if (filtredDataModel == null) {
+            return;
+        }
+
+        htmlWriter.writeAttributeNS("filtred", true);
+
+        IFilterProperties filterMap = gridRenderContext.getFiltersMap();
+        if (filterMap != null && filterMap.isEmpty() == false) {
+            String filterExpression = HtmlTools.encodeFilterExpression(
+                    filterMap, gridRenderContext.getProcessContext(),
+                    (UIComponent) gridRenderContext.getGridComponent());
+            htmlWriter.writeAttributeNS("filterExpression", filterExpression);
+        }
     }
 
     protected String computeDescriptionClientId(IHtmlWriter htmlWriter) {
@@ -681,6 +751,17 @@ public class KeyEntryRenderer extends DataGridRenderer {
         }
 
         objWriter.end().writeln(");");
+    }
+
+    protected void encodeJavaScript(IJavaScriptWriter writer)
+            throws WriterException {
+        super.encodeJavaScript(writer);
+
+        if (writer.getComponentRenderContext().containsAttribute(
+                CLIENT_DB_ENABLED_PROPERTY)) {
+            writer.getJavaScriptRenderContext().appendRequiredClass(
+                    "f_keyEntry", "indexDb");
+        }
     }
 
     protected void decode(IRequestContext context, UIComponent component,

@@ -74,6 +74,8 @@ import org.rcfaces.core.internal.tools.SelectionTools;
 import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.lang.provider.ICursorProvider;
 import org.rcfaces.core.lang.provider.ISelectionProvider;
+import org.rcfaces.core.model.IClientDataModel;
+import org.rcfaces.core.model.IClientModel.IContentIndex;
 import org.rcfaces.core.model.IComponentRefModel;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredModel;
@@ -95,6 +97,7 @@ import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 import org.rcfaces.renderkit.html.internal.service.DataGridService;
+import org.rcfaces.renderkit.html.internal.util.ClientDataModelTools;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -122,6 +125,12 @@ public class DataGridRenderer extends AbstractGridRenderer {
                 .put(ISortEventCapability.SORT_DATE, "f_dataGrid.Sort_Date");
         SORT_ALIASES.put(ISortEventCapability.SORT_SERVER, SORT_SERVER_COMMAND);
     }
+
+    private static final String CLIENT_DB_ENABLED_PROPERTY = "org.rcfaces.html.CLIENT_DB_ENABLED";
+
+    private static final String CLIENT_DB_REQUIRES_VB_PROPERTY = "org.rcfaces.html.CLIENT_DB_REQUIRES_VB";
+
+    private static final String DEFAULT_CONTENT_PRIMARY_KEY = "value";
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.DATA_GRID;
@@ -1870,6 +1879,91 @@ public class DataGridRenderer extends AbstractGridRenderer {
         if (addOpenImageURL != null && addCloseImageURL != null) {
             htmlWriter.writeAttributeNS("addOpenImageURL", addOpenImageURL);
             htmlWriter.writeAttributeNS("addCloseImageURL", addCloseImageURL);
+        }
+
+        writeClientDataModel(htmlWriter, tableContext.getDataModel(),
+                tableContext);
+    }
+
+    protected void writeClientDataModel(IHtmlWriter htmlWriter,
+            DataModel dataModel, AbstractGridRenderContext gridRenderContext)
+            throws WriterException {
+        IClientDataModel clientDataModel = getAdapter(IClientDataModel.class,
+                dataModel);
+        if (clientDataModel == null) {
+            return;
+        }
+
+        String contentName = clientDataModel.getContentName();
+        if (contentName == null) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("ContentName() returns NULL, disabled client data model !");
+            }
+            return;
+        }
+        String contentKey = clientDataModel.getContentKey();
+        String contentPK = clientDataModel.getContentPrimaryKey();
+        if (contentPK == null) {
+            contentPK = DEFAULT_CONTENT_PRIMARY_KEY;
+        }
+        int contentRowCount = clientDataModel.getContentRowCount();
+
+        if (contentName == null || contentKey == null || contentPK == null) {
+            LOG.error("IClientDataModel disabled, contentName='"
+                    + contentName
+                    + "' contentKey='"
+                    + contentKey
+                    + "' contentRowCount="
+                    + contentRowCount
+                    + " contentPrimaryKey='"
+                    + contentPK
+                    + "' gridId="
+                    + htmlWriter.getComponentRenderContext()
+                            .getComponentClientId());
+            return;
+        }
+
+        String contentIndexesString = ClientDataModelTools
+                .format(clientDataModel);
+
+        // htmlWriter.writeAttributeNS("indexedDb", true);
+        htmlWriter.writeAttributeNS("idbName", contentName);
+        htmlWriter.writeAttributeNS("idbKey", contentKey);
+        if (contentRowCount >= 0) {
+            htmlWriter.writeAttributeNS("idbCount", contentRowCount);
+        }
+        htmlWriter.writeAttributeNS("idbPK", contentPK);
+        if (contentIndexesString != null) {
+            htmlWriter.writeAttributeNS("idbIndex", contentIndexesString);
+        }
+
+        IContentIndex[] contentIndexes = clientDataModel.listContentIndexes();
+        for (IContentIndex contentIndex : contentIndexes) {
+            if (contentIndex.isIgnoreAccent()) {
+
+                htmlWriter.getComponentRenderContext().setAttribute(
+                        CLIENT_DB_REQUIRES_VB_PROPERTY, Boolean.TRUE);
+            }
+        }
+
+        htmlWriter.getComponentRenderContext().setAttribute(
+                CLIENT_DB_ENABLED_PROPERTY, Boolean.TRUE);
+    }
+
+    protected void encodeJavaScript(IJavaScriptWriter writer)
+            throws WriterException {
+        super.encodeJavaScript(writer);
+
+        if (writer.getComponentRenderContext().containsAttribute(
+                CLIENT_DB_ENABLED_PROPERTY)) {
+            writer.getJavaScriptRenderContext().appendRequiredClass(
+                    "f_dataGrid", "indexDb");
+
+            if (writer.getComponentRenderContext().containsAttribute(
+                    CLIENT_DB_REQUIRES_VB_PROPERTY)) {
+                writer.getJavaScriptRenderContext().appendRequiredClass("f_vb",
+                        null);
+            }
         }
     }
 
