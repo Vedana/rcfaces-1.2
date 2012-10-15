@@ -116,6 +116,10 @@ var __members = {
 		
 		this.f_insertEventListenerFirst(f_event.FOCUS, this._onFocus);
 		this.f_insertEventListenerFirst(f_event.BLUR, this._onBlur);
+		
+		if (window.f_indexedDbEngine) {
+			this._indexDb=f_indexedDbEngine.FromComponent(this);
+		}
 	},
 	f_finalize: function() {
 		var timerId=this._timerId;
@@ -126,6 +130,13 @@ var __members = {
 
 		this._results=undefined; //map[]  de string, number
 
+		var indexDb=this._indexDb;
+		if (indexDb) {
+			this._indexDb=undefined; // f_indexedData
+			
+			f_classLoader.Destroy(indexDb);
+		}
+		
 		// this._requestedText=undefined; // string
 		// this._suggestionDelayMs=undefined;  // number
 		// this._maxResultNumber=undefined; // number
@@ -439,7 +450,58 @@ var __members = {
 		this._requestText=text;
 
 		this.f_appendCommand(function(suggestTextEntry) {
-			suggestTextEntry._callServer(params, text);
+			if (!suggestTextEntry._indexDb) {
+				return suggestTextEntry._callServer(params, text);
+			}
+			
+			suggestTextEntry._requestIndexDb(params, text);
+		});
+	},
+	/**
+	 * @method private
+	 * @param params
+	 * @param text
+	 */
+	_requestIndexDb: function(params, text) {
+		var indexDb=this._indexDb;
+	
+		var self=this;
+		indexDb.f_asyncSearch(text, 0, this.f_getMaxResultNumber(), function(state) {
+			if (state===null) {
+				return self._callServer(params, text);
+			}
+
+			if (self.f_processNextCommand()) {
+				return;
+			}
+						
+			self._results=undefined;
+			self._requestedText=text;
+			
+			var requestId=(++this._lastRequestId);
+			
+			self.f_startResponse(requestId);
+			
+			for(var i=0;i<state.length;i++) {
+				var row=state[i];
+				
+				self.f_appendItem2({
+					_value: row.value,
+					_label: row.label,
+					_description: row.description,
+					_imageURL: row.imageURL,
+					_clientDatas: row.clientDatas
+				});
+			}
+			
+			var count=state._resultNumber;
+			if (count===undefined) {
+				count=state.length;
+			}
+			
+			self.f_setRowCount(count);
+			
+			self.f_endResponse(requestId);
 		});
 	},
 	/**
@@ -665,6 +727,32 @@ var __members = {
 	 * @return void
 	 */
 	f_endResponse: function(requestId) {
+		
+		// On enregistre, même si ca nous concerne pas :-)
+		if (this._indexDb && this._results && this._results.length) {
+			this._indexDb.f_asyncFillRows(this._results, function(obj) {
+				var ret = {
+					value: obj._value,
+					label: obj._label,
+					description: obj._description
+				};
+				
+				if (obj._imageURL) {
+					ret.imageURL=obj._imageURL;
+				}
+				
+				if (obj._clientDatas) {
+					ret.clientDatas=obj._clientDatas;
+				}
+				
+				if (obj._disabled) {
+					ret.disabled=obj._disabled;
+				}
+				
+				return ret;
+			});
+		}
+		
 		if (this._lockResponse) {
 			this._lockResponse=undefined;
 			return;

@@ -699,10 +699,12 @@ var __members = {
 		this.f_updateInputStyle();		
 			
 		this.f_appendCommand(function(keyEntry) {
+			var key=keyEntry._verifyingKey;
+			
 			if (!keyEntry._indexDb) {
 				return keyEntry.f_callServer(key);
 			}
-			keyEntry._requestIndexDb(keyEntry._verifyingKey);
+			keyEntry._requestIndexDb(key);
 		});
 		
 	},

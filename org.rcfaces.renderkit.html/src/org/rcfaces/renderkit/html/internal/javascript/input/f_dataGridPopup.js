@@ -69,6 +69,9 @@ var __statics = {
 		}		
 		
 		f_dataGridPopup.CopyProperties(properties, dataGridPopup, f_core._VNS+":rows", f_core._VNS+":rowStyleClass", f_core._VNS+":paged", f_core._VNS+":headerVisible", f_core._VNS+":emptyDataMessage");
+		if (dataGridPopup._indexDb) {
+			f_dataGridPopup.CopyProperties(properties, dataGridPopup, f_core._VNS+":indexedDb", f_core._VNS+":idbName", f_core._VNS+":idbPK", f_core._VNS+":idbKey", f_core._VNS+":idbCount", f_core._VNS+":idbIndex");
+		}
 		
 		var divDataGrid=f_core.CreateElement(parent, "div", properties);
 		

@@ -321,13 +321,24 @@ var __members = {
 		if (!!this._cellWrap) {
 			// this.className+=" f_dataGrid_noWrap";
 		}
+		
+		if (window.f_indexedDbEngine) {
+			this._indexDb=f_indexedDbEngine.FromComponent(this);
+		}
 	},
 	f_finalize: function() {
 	 
 		this._addRowFragment=undefined; // HtmlDocumentFragment
 		
 		this._criteriaEvaluateCallBacks = undefined; // Object
-		
+
+		var indexDb=this._indexDb;
+		if (indexDb) {
+			this._indexDb=undefined; // f_indexedData
+			
+			f_classLoader.Destroy(indexDb);
+		}
+	
 		// this._labelColumnId=undefined; // String
 		// this._gridUpdadeServiceId=undefined; // String
 		// this._serviceGridId=undefined; // String
@@ -415,6 +426,74 @@ var __members = {
 		this._addRowFragment=undefined;
 		
 		f_core.AppendChild(this._tbody, fragment);
+	
+		var rows=this._rowsPool;
+		var columns=this._columns;
+		if (this._indexDb && rows && rows.length) {
+			this._indexDb.f_asyncFillRows(rows, function(row) {
+				var obj = {
+					value: row._index,
+					rowIndex: row._rowIndex
+				};
+				
+				if (row._className) {
+					obj.className=row._className;
+				}
+				if (row._toolTipId) {
+					obj.toolTipId = row._toolTipId;
+				}
+				if (row._toolTipContent) {
+					obj.toolTipContent = row._toolTipContent;
+				} 
+				
+				var columnsValue={};
+				obj.columns=columnsValue;
+				
+				var index=0;
+				var cells=row._cells;
+				for(var i=0;i<columns.length;i++) {
+					var col=columns[i];
+
+					if (col._visibility===null) { /* Hidden coté serveur ! */
+						continue;
+					}
+
+					var objc={};
+					var colId=col._id;
+					if (colId===undefined) {
+						colId=index;
+					}
+					columnsValue[colId]=objc;
+
+					var cell=cells[index];
+
+					var text=cell._text;
+					if (text!==null && text!==undefined) {
+						objc.text=text;
+					}				
+					if (cell._cellStyleClass) {
+						objc.cellStyleClass=cell._cellStyleClass;
+					}
+					if (cell.title) {
+						objc.tooltipText=cell.title;
+					}
+					if (cell._toolTipId) {
+						objc.toolTipId=cell._toolTipId;
+					}
+					if (cell._toolTipContent) {
+						objc.toolTipContent=cell._toolTipContent;
+					}
+					if (cell._imageURL) {
+						objc.imageURL=cell._imageURL;
+					}		
+					
+					index++;
+				}
+				
+				return obj;
+			});
+		}
+
 	},
 	/**
 	 * @method hidden
@@ -443,7 +522,6 @@ var __members = {
 				
 				f_core.AppendChild(fragment, row);
 			}	
-			
 			
 		} else {
 			row=doc.createElement("tr");
@@ -1075,46 +1153,51 @@ var __members = {
 	 * @method protected
 	 */
 	f_callServer: function(firstIndex, length, cursorIndex, selection, partialWaiting, fullUpdate) {
-//		f_core.Assert(!this._loading, "Already loading ....");
-		if (!selection) {
-			selection=0;
-		}		
-		
-		var params=undefined;
-		if (params === undefined){
-			params=new Object;
+		var indexDb=this._indexDb;
+		if (!indexDb || this._sortIndexes || this._additionalInformations || this._selectedCriteria || fullUpdate) {
+			return this._ajaxCallServer(firstIndex, length, cursorIndex, selection, partialWaiting, fullUpdate);
 		}
-		
-		params.gridId=this._serviceGridId;		
-		params.index=firstIndex;
+
+		var rows=-1;
 		if (length>0) {
-			params.rows=length;
-		}
-		if (fullUpdate || this.f_isRefreshFullUpdateState() || this._rowCount<0) { /* && this._rows */			
-	        params.unknownRowCount=true;			
+			rows=length;
 		}
 
-		var orderColumnIndex=this._sortIndexes;
-		if (orderColumnIndex) {
-			params.sortIndex=orderColumnIndex;
-		}
-		
-		var filterExpression=this.fa_getSerializedPropertiesExpression();
-		if (filterExpression) {
-			params.filterExpression=filterExpression;
-		}
-		
-		params.criteria = this._computeSelectedCriteria(this._selectedCriteria);//compute
-		
-		if (this._additionalInformations) {
-			this.fa_serializeAdditionalInformations(params);
-		}
+		var self=this;
+		indexDb.f_asyncSearch(null, firstIndex, rows, function(state) {
+			if (!state) {
+				return self._ajaxCallServer(firstIndex, length, cursorIndex, selection, partialWaiting, fullUpdate);
+			}
 
+			if (self.f_processNextCommand()) {
+				return;
+			}
+			
+			if (self._waitingLoading) {
+				if (self._waitingMode==f_grid.END_WAITING) {
+					self.f_removePagedWait();
+				}
+			}
+		
+			self._indexDbResponse=true;
+			try {
+				
+				
+			} finally {
+				self._indexDbResponse=undefined;
+			}
+		});
+	
+	},
+	/**
+	 * @method private
+	 * @param optional Object params
+	 * @return void
+	 */
+	_prepareNewRows: function(params, cursorIndex, selection, partialWaiting) {
 		this._waitingIndex=cursorIndex;
 		this._waitingSelection=selection;
 		this._partialWaiting=partialWaiting;
-		
-		f_core.Debug(f_dataGrid, "f_callServer: Call server  firstIndex="+firstIndex+" cursorIndex="+cursorIndex+" selection="+selection);
 
 		this.f_hideEmptyDataMessage();
 		
@@ -1135,19 +1218,7 @@ var __members = {
 						
 					params.serializedFirst=this._first;
 					params.serializedRows=this._rows;
-					
-					//var serializedIndexes=this.f_addSerializedIndexes(this._first, this._rows);
-					
-					var serializedIndexes=this.f_listSerializedIndexes();
-					f_core.Debug(f_dataGrid, "f_callServer: serializedIndexes="+serializedIndexes);
-					
-					params[f_prop.SERIALIZED_INDEXES]=serializedIndexes.join(',');
-					
-					this.f_clearSerializedIndexes();					
-					
-//				}
 
-//				if (this._additionalInformations) { // Des AdditionalInformations à effacer ?
 					this._additionalInformationCount=0;
 			
 					var serializedState=this.f_getClass().f_getClassLoader().f_garbageObjects(true, tbody);
@@ -1185,6 +1256,50 @@ var __members = {
 				}
 			}
 		}
+	},
+	_ajaxCallServer: function(firstIndex, length, cursorIndex, selection, partialWaiting, fullUpdate) {
+//		f_core.Assert(!this._loading, "Already loading ....");
+		if (!selection) {
+			selection=0;
+		}
+		
+		var params=undefined;
+		if (params === undefined){
+			params=new Object;
+		}
+		
+		params.gridId=this._serviceGridId;		
+		params.index=firstIndex;
+		if (length>0) {
+			params.rows=length;
+		}
+		if (fullUpdate || this.f_isRefreshFullUpdateState() || this._rowCount<0) { /* && this._rows */			
+	        params.unknownRowCount=true;			
+		}
+
+		var orderColumnIndex=this._sortIndexes;
+		if (orderColumnIndex) {
+			params.sortIndex=orderColumnIndex;
+		}
+		
+		if (this._indexDb && this._indexDb.f_isCompleted()) {
+			params.indexDbCompleted=true;
+		}
+		
+		var filterExpression=this.fa_getSerializedPropertiesExpression();
+		if (filterExpression) {
+			params.filterExpression=filterExpression;
+		}
+		
+		params.criteria = this._computeSelectedCriteria(this._selectedCriteria);//compute
+		
+		if (this._additionalInformations) {
+			this.fa_serializeAdditionalInformations(params);
+		}
+		
+		f_core.Debug(f_dataGrid, "f_callServer: Call server  firstIndex="+firstIndex+" cursorIndex="+cursorIndex+" selection="+selection);
+		
+		this._prepareNewRows(params, cursorIndex, selection, partialWaiting);
 		
 		var waitingObject=(partialWaiting && !length)?this._pagedWaiting:this._waiting;
 
@@ -2084,7 +2199,7 @@ var __members = {
 		this.f_super(arguments, dragAndDropEngine, infos);
 	},
 	
-	fa_evaluateCriteria: function (selectedCriteria, callBack, waitingElement){
+	fa_evaluateCriteria: function (selectedCriteria, callBack, waitingElement) {
 		
 		if (!this._interactive) {
 			return false;
