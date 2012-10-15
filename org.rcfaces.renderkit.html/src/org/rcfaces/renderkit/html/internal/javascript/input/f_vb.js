@@ -1653,6 +1653,24 @@ var __statics = {
 					+ typeof (ret) + "] '" + ret + "'.");
 			return ret;
 		}
+	},
+
+	/**
+	 * @method public static
+	 */
+	RemoveAccents : function(inVal) {
+		var mapper = f_vb._ACCENTS_MAPPER;
+		
+		var ret=inVal;
+
+		for (var i = 0; i < mapper.length;) {
+			var expr = mapper[i++];
+			var code = mapper[i++];
+			
+			ret=ret.replace(expr, String.fromCharCode(code));
+		}
+		
+		return ret;
 	}
 };
 
