@@ -9,7 +9,6 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.ImageCriteriaButtonComponent;
-import org.rcfaces.core.component.ImagePagerButtonComponent;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
@@ -98,7 +97,7 @@ public class ImageCriteriaButtonRenderer extends ImageButtonRenderer {
                 throws WriterException {
             super.encodeAttributes(facesContext);
 
-            ImagePagerButtonComponent button = (ImagePagerButtonComponent) imageButtonFamilly;
+            ImageCriteriaButtonComponent button = (ImageCriteriaButtonComponent) imageButtonFamilly;
 
             String type = button.getType(facesContext);
             if (type != null) {
