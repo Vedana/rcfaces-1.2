@@ -61,20 +61,25 @@ var __statics = {
 	_LocaleName: undefined,
 
 	/**
-	 * @field private static boolean
+	 * @field private static Boolean
 	 */
 	_LockSubmitUntilPageComplete: undefined,
 		
 	/**
-	 * @field hidden static boolean
+	 * @field hidden static Boolean
 	 */
 	_SensitiveCaseTagName: undefined,
 		
 	/**
-	 * @field private static boolean
+	 * @field private static Boolean
 	 */
 	_ClientValidationDisabled: undefined,
-		
+	
+	/**
+	 * @field private static Number
+	 */
+	_EnablePerformanceTiming: undefined,
+
 	/**
 	 * @field private static String
 	 */
@@ -289,6 +294,23 @@ var __statics = {
 		
 		f_core.Debug(f_env, "Enable sensitiveCaseTagName");
 		f_env._SensitiveCaseTagName=true;
+	},
+	
+	/**
+	 * @method public static 
+	 * @param Number features
+	 * @return void
+	 */
+	EnablePerformanceTiming: function(features) {
+		f_env._EnablePerformanceTiming=features;
+	},
+	
+	/**
+	 * @method hidden static 
+	 * @return Number
+	 */
+	GetPerformanceTimingFeatures: function() {
+		return f_env._EnablePerformanceTiming;
 	},
 	
 	/**
