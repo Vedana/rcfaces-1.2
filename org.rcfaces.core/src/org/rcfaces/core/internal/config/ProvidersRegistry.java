@@ -35,7 +35,7 @@ public class ProvidersRegistry implements IProvidersRegistry {
 
     private static final Class[] PARENT_PROVIDER_PARAMETER_TYPES = new Class[] { IProvider.class };
 
-    private final Map providersById = new TreeMap();
+    private final Map<String, ProviderBean> providersById = new TreeMap<String, ProviderBean>();
 
     private Digester digester;
 
@@ -43,8 +43,7 @@ public class ProvidersRegistry implements IProvidersRegistry {
     }
 
     public IProvider getProvider(String providerId) {
-        ProviderBean providerBean = (ProviderBean) providersById
-                .get(providerId);
+        ProviderBean providerBean = providersById.get(providerId);
         if (providerBean == null) {
             return null;
         }
@@ -73,9 +72,9 @@ public class ProvidersRegistry implements IProvidersRegistry {
                     + providerId + "', classname='" + className + "'");
         }
 
-        Class clazz;
+        Class<IProvider> clazz;
         try {
-            clazz = ClassLocator.load(className, null,
+            clazz = (Class<IProvider>) ClassLocator.load(className, null,
                     FacesContext.getCurrentInstance());
 
         } catch (ClassNotFoundException ex) {
@@ -96,7 +95,7 @@ public class ProvidersRegistry implements IProvidersRegistry {
                     + providerId + "') is abstract !");
         }
 
-        Constructor constructor;
+        Constructor<IProvider> constructor;
         Object parameters[];
 
         try {
@@ -135,7 +134,7 @@ public class ProvidersRegistry implements IProvidersRegistry {
 
         IProvider provider;
         try {
-            provider = (IProvider) constructor.newInstance(parameters);
+            provider = constructor.newInstance(parameters);
 
         } catch (Throwable ex) {
             throw new FacesException("Can not instanciate class '" + className
@@ -154,14 +153,15 @@ public class ProvidersRegistry implements IProvidersRegistry {
     public void configureRules(Digester digester) {
 
         digester.addRule("rcfaces-config/providers", new Rule() {
-            private static final String REVISION = "$Revision$";
 
+            @Override
             public void begin(String namespace, String name,
                     Attributes attributes) throws Exception {
 
                 super.digester.push(ProvidersRegistry.this);
             }
 
+            @Override
             public void end(String namespace, String name) throws Exception {
                 super.digester.pop();
             }
@@ -180,8 +180,8 @@ public class ProvidersRegistry implements IProvidersRegistry {
         digester.addRule("rcfaces-config/providers/provider/requires",
                 new Rule() {
 
-                    public void body(String namespace, String name, String text)
-                            throws Exception {
+                    @Override
+                    public void body(String namespace, String name, String text) {
 
                         ProviderBean providerBean = (ProviderBean) super.digester
                                 .peek();
@@ -200,7 +200,6 @@ public class ProvidersRegistry implements IProvidersRegistry {
      * @version $Revision$ $Date$
      */
     public static class ProviderBean {
-        private static final String REVISION = "$Revision$";
 
         private String id;
 
@@ -208,7 +207,7 @@ public class ProvidersRegistry implements IProvidersRegistry {
 
         private String providerId;
 
-        private List requirements;
+        private List<String> requirements;
 
         private IProvider provider;
 
@@ -218,7 +217,7 @@ public class ProvidersRegistry implements IProvidersRegistry {
 
         public void addRequired(String required) {
             if (requirements == null) {
-                requirements = new ArrayList();
+                requirements = new ArrayList<String>();
             }
 
             requirements.add(required);
@@ -228,8 +227,7 @@ public class ProvidersRegistry implements IProvidersRegistry {
             if (requirements == null) {
                 return new String[0]; // Quel est le mieux ?
             }
-            return (String[]) requirements.toArray(new String[requirements
-                    .size()]);
+            return requirements.toArray(new String[requirements.size()]);
         }
 
         public void setProviderId(String providerId) {
@@ -269,10 +267,9 @@ public class ProvidersRegistry implements IProvidersRegistry {
     public void loadProvidersConfiguration(IProvidersConfigurator configurator) {
         Digester digester = new Digester();
 
-        for (Iterator it = providersById.entrySet().iterator(); it.hasNext();) {
-            Map.Entry entry = (Map.Entry) it.next();
+        for (Map.Entry<String, ProviderBean> entry : providersById.entrySet()) {
 
-            ProviderBean providerBean = (ProviderBean) entry.getValue();
+            ProviderBean providerBean = entry.getValue();
             IProvider provider = providerBean.getProvider();
 
             provider.configureRules(digester);
@@ -287,7 +284,7 @@ public class ProvidersRegistry implements IProvidersRegistry {
 
     public void startupProviders(FacesContext facesContext) {
 
-        Set started = new HashSet();
+        Set<String> started = new HashSet<String>();
 
         boolean startedProcess = true;
 
@@ -342,7 +339,7 @@ public class ProvidersRegistry implements IProvidersRegistry {
         }
 
         if (started.size() != providersById.size()) {
-            List l = new ArrayList(providersById.keySet());
+            List<String> l = new ArrayList<String>(providersById.keySet());
             l.removeAll(started);
 
             LOG.error("Providers are failed to startup: " + l);
