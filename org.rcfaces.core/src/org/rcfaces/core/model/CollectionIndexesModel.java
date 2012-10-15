@@ -14,203 +14,205 @@ import java.util.List;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class CollectionIndexesModel extends AbstractIndexesModel implements
-		Serializable, ICommitableObject {
-	private static final long serialVersionUID = -3821092264981658279L;
+public class CollectionIndexesModel<T> extends AbstractIndexesModel implements
+        Serializable, ICommitableObject {
+    private static final long serialVersionUID = -3821092264981658279L;
 
-	protected static final int[] EMPTY_SELECTION = new int[0];
+    protected static final int[] EMPTY_SELECTION = new int[0];
 
-	protected static final int UNKNOWN_INDEX = -1;
+    protected static final int UNKNOWN_INDEX = -1;
 
-	protected final Collection collection;
+    protected final Collection<T> collection;
 
-	protected boolean commited;
+    protected boolean commited;
 
-	public CollectionIndexesModel(Collection collection) {
-		this.collection = collection;
-	}
+    public CollectionIndexesModel(Collection<T> collection) {
+        this.collection = collection;
+    }
 
-	public int getFirstIndex() {
-		if (collection.isEmpty()) {
-			return -1;
-		}
+    public int getFirstIndex() {
+        if (collection.isEmpty()) {
+            return -1;
+        }
 
-		if (collection instanceof List) {
-			return getIndex(((List) collection).get(0));
-		}
+        if (collection instanceof List) {
+            return getIndex(((List<T>) collection).get(0));
+        }
 
-		return getIndex(collection.iterator().next());
-	}
+        return getIndex(collection.iterator().next());
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.rcfaces.core.model.IIndexesModel#listIndexes()
-	 */
-	public final int[] listSortedIndexes() {
-		if (collection.isEmpty()) {
-			return EMPTY_SELECTION;
-		}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.rcfaces.core.model.IIndexesModel#listIndexes()
+     */
+    public final int[] listSortedIndexes() {
+        if (collection.isEmpty()) {
+            return EMPTY_SELECTION;
+        }
 
-		int n[] = new int[collection.size()];
-		int pos = 0;
-		int unknownIndex = getUnknownIndex();
-		for (Iterator it = collection.iterator(); it.hasNext();) {
-			int idx = getIndex(it.next());
+        int n[] = new int[collection.size()];
+        int pos = 0;
+        int unknownIndex = getUnknownIndex();
+        for (Iterator<T> it = collection.iterator(); it.hasNext();) {
+            int idx = getIndex(it.next());
 
-			if (idx == unknownIndex) {
-				continue;
-			}
+            if (idx == unknownIndex) {
+                continue;
+            }
 
-			n[pos++] = idx;
-		}
+            n[pos++] = idx;
+        }
 
-		if (pos == n.length) {
-			if (n.length > 1) {
-				Arrays.sort(n);
-			}
-			return n;
-		}
+        if (pos == n.length) {
+            if (n.length > 1) {
+                Arrays.sort(n);
+            }
+            return n;
+        }
 
-		int n2[] = new int[pos];
+        int n2[] = new int[pos];
 
-		System.arraycopy(n, 0, n2, 0, pos);
+        System.arraycopy(n, 0, n2, 0, pos);
 
-		if (n2.length > 1) {
-			Arrays.sort(n2);
-		}
+        if (n2.length > 1) {
+            Arrays.sort(n2);
+        }
 
-		return n2;
-	}
+        return n2;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.rcfaces.core.model.IIndexesModel#clearIndexes()
-	 */
-	public final void clearIndexes() {
-		if (commited) {
-			throw new IllegalStateException("Already commited indexes model.");
-		}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.rcfaces.core.model.IIndexesModel#clearIndexes()
+     */
+    public final void clearIndexes() {
+        if (commited) {
+            throw new IllegalStateException("Already commited indexes model.");
+        }
 
-		collection.clear();
-	}
+        collection.clear();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.rcfaces.core.model.IIndexesModel#containsIndex(int)
-	 */
-	public final boolean containsIndex(int index) {
-		return collection.contains(getKey(index));
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.rcfaces.core.model.IIndexesModel#containsIndex(int)
+     */
+    public final boolean containsIndex(int index) {
+        return collection.contains(getKey(index));
+    }
 
-	protected int getIndex(Object object) {
-		if (object instanceof Number) {
-			return ((Number) object).intValue();
-		}
+    protected int getIndex(T object) {
+        if (object instanceof Number) {
+            return ((Number) object).intValue();
+        }
 
-		return getUnknownIndex();
-	}
+        return getUnknownIndex();
+    }
 
-	protected Object getKey(int index) {
-		return new Integer(index);
-	}
+    protected T getKey(int index) {
+        T key = (T) new Integer(index);
 
-	protected int getUnknownIndex() {
-		return UNKNOWN_INDEX;
-	}
+        return key;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.rcfaces.core.model.IIndexesModel#addIndex(int)
-	 */
-	public boolean addIndex(int index) {
-		if (commited) {
-			throw new IllegalStateException("Already commited indexes model.");
-		}
+    protected int getUnknownIndex() {
+        return UNKNOWN_INDEX;
+    }
 
-		return collection.add(getKey(index));
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.rcfaces.core.model.IIndexesModel#addIndex(int)
+     */
+    public boolean addIndex(int index) {
+        if (commited) {
+            throw new IllegalStateException("Already commited indexes model.");
+        }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.rcfaces.core.model.IIndexesModel#removeIndex(int)
-	 */
-	public final boolean removeIndex(int index) {
-		if (commited) {
-			throw new IllegalStateException("Already commited indexes model.");
-		}
+        return collection.add(getKey(index));
+    }
 
-		return collection.remove(getKey(index));
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.rcfaces.core.model.IIndexesModel#removeIndex(int)
+     */
+    public final boolean removeIndex(int index) {
+        if (commited) {
+            throw new IllegalStateException("Already commited indexes model.");
+        }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.rcfaces.core.model.IIndexesModel#setIndexes(int[])
-	 */
-	public void setIndexes(int[] indexes) {
-		if (commited) {
-			throw new IllegalStateException("Already commited indexes model.");
-		}
+        return collection.remove(getKey(index));
+    }
 
-		clearIndexes();
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.rcfaces.core.model.IIndexesModel#setIndexes(int[])
+     */
+    public void setIndexes(int[] indexes) {
+        if (commited) {
+            throw new IllegalStateException("Already commited indexes model.");
+        }
 
-		if (indexes == null || indexes.length < 1) {
-			return;
-		}
+        clearIndexes();
 
-		for (int i = 0; i < indexes.length; i++) {
-			int val = indexes[i];
-			if (val < 0) {
-				continue;
-			}
+        if (indexes == null || indexes.length < 1) {
+            return;
+        }
 
-			addIndex(val);
-		}
-	}
+        for (int i = 0; i < indexes.length; i++) {
+            int val = indexes[i];
+            if (val < 0) {
+                continue;
+            }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.rcfaces.core.model.IIndexesModel#countIndexes()
-	 */
-	public int countIndexes() {
-		if (collection.isEmpty()) {
-			return 0;
-		}
+            addIndex(val);
+        }
+    }
 
-		int count = 0;
-		int unknownIndex = getUnknownIndex();
-		for (Iterator it = collection.iterator(); it.hasNext();) {
-			int idx = getIndex(it.next());
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.rcfaces.core.model.IIndexesModel#countIndexes()
+     */
+    public int countIndexes() {
+        if (collection.isEmpty()) {
+            return 0;
+        }
 
-			if (idx == unknownIndex) {
-				continue;
-			}
+        int count = 0;
+        int unknownIndex = getUnknownIndex();
+        for (Iterator<T> it = collection.iterator(); it.hasNext();) {
+            int idx = getIndex(it.next());
 
-			count++;
-		}
+            if (idx == unknownIndex) {
+                continue;
+            }
 
-		return count;
-	}
+            count++;
+        }
 
-	public void commit() {
-		this.commited = true;
+        return count;
+    }
 
-		if (collection instanceof ArrayList) {
-			((ArrayList) collection).trimToSize();
-		}
-	}
+    public void commit() {
+        this.commited = true;
 
-	public boolean isCommited() {
-		return commited;
-	}
+        if (collection instanceof ArrayList) {
+            ((ArrayList<T>) collection).trimToSize();
+        }
+    }
 
-	public IIndexesModel copy() {
-		return new CollectionIndexesModel(collection);
-	}
+    public boolean isCommited() {
+        return commited;
+    }
+
+    public IIndexesModel copy() {
+        return new CollectionIndexesModel<T>(collection);
+    }
 }
