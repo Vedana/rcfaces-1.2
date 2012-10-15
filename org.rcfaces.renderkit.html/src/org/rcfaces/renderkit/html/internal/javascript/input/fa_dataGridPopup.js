@@ -242,10 +242,12 @@ var __statics = {
 			return;
 		}
 		
-		if(dataGridPopup._ariaInput){
+		if (dataGridPopup._ariaInput){
 			dataGridPopup._ariaInput.removeAttribute("aria-activedescendant");
 			if (dataGridPopup._ariaInput._role) {
-				dataGridPopup._ariaInput.setAttribute("role", "textbox");
+				
+				// Le 28/09 Réné demande de remettre le role à combobox  (JAWS ne voit plus rien)
+				dataGridPopup._ariaInput.setAttribute("role", "combobox");
 				dataGridPopup._ariaInput._role = false;
 			}
 		}
