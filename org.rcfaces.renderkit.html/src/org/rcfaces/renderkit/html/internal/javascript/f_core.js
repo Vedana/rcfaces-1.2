@@ -48,6 +48,11 @@ var f_core = {
 	_DETAIL:			"VFC_DETAIL",
 		
 	/**
+	 * @field private static final String
+	 */
+	_PERFORMANCE_TIMING: "RCFACES_TIMING",
+	
+	/**
 	 * @field private static final Number
 	 */
 	_FOCUS_TIMEOUT_DELAY: 50,
@@ -204,19 +209,16 @@ var f_core = {
 	/**
 	 * @field private static final RegExp
 	 */
-	_BLOCK_TAGS: new RegExp(
-		"^(ADDRESS|APPLET|BLOCKQUOTE|BODY|CAPTION|CENTER|COL|COLGROUP|DD|DIR|DIV|" +
+	_BLOCK_TAGS: "^(ADDRESS|APPLET|BLOCKQUOTE|BODY|CAPTION|CENTER|COL|COLGROUP|DD|DIR|DIV|" +
 		"DL|DT|FIELDSET|FORM|FRAME|FRAMESET|H1|H2|H3|H4|H5|H6|HR|IFRAME|LI|MENU|" +
-		"NOSCRIPT|NOFRAMES|OBJECT|OL|P|PRE|TABLE|TBODY|TD|TFOOT|TH|THEAD|TR|UL){1}$", 
-		"i"
-	),
+		"NOSCRIPT|NOFRAMES|OBJECT|OL|P|PRE|TABLE|TBODY|TD|TFOOT|TH|THEAD|TR|UL){1}$",
+
 
 	/**
 	 * @field private static final RegExp
 	 */
-	_FOCUSABLE_TAGS: new RegExp(
-		"^(A|AREA|BUTTON|IFRAME|INPUT|OBJECT|SELECT|TEXTAREA){1}$"
-	),
+	_FOCUSABLE_TAGS: "^(A|AREA|BUTTON|IFRAME|INPUT|OBJECT|SELECT|TEXTAREA){1}$",
+
 	
 	/**
 	 * @field private static final String[]
@@ -303,6 +305,11 @@ var f_core = {
 	 * @field private static Number
 	 */
 	_JAVASCRIPT_VOID0: 0,
+	
+	/**
+	 * @field private static Boolean
+	 */
+	_MainTimingAlreadySent: undefined,
 	
 	/**
 	 * Throws a message if the expression is true.
@@ -415,7 +422,7 @@ var f_core = {
 			}
 	
 			var log=f_log.GetLog(name);
-			var fct;
+			var fct=undefined;
 						
 			if (log) { 
 				switch(level) {
@@ -2092,7 +2099,7 @@ var f_core = {
 				window.console.log("Set input HIDDEN "+id);
 			}
 			
-			// On les effectent quand meme, car cela peut etre le 2eme submit !
+			// On les effecte quand meme, car cela peut etre le 2eme submit !
 			f_core.SetInputHidden(form, 
 					f_core._COMPONENT, id, 
 					f_core._EVENT, type,
@@ -2100,6 +2107,9 @@ var f_core = {
 					f_core._ITEM, eventItem, 
 					f_core._DETAIL, eventDetail,
 					f_core._OBJECT_VALUE, eventEncodedValue);
+
+			
+			f_core._RegisterPerformanceTimingLog(form, url, target);
 			
 			// Keep the previous for further restore
 			if (url) {
@@ -3269,6 +3279,11 @@ var f_core = {
 		if (!doc) {
 			doc=document;
 		}
+		
+		if (id.charAt(0)==':') {
+			id=id.substring(1);
+		}
+		
 		var obj = doc.getElementById(id);
 		var found=obj;
 		
@@ -4671,7 +4686,8 @@ var f_core = {
 		if (!tagName) {
 			return null;
 		}
-		if (f_core._BLOCK_TAGS.test(tagName)) {
+		var regExp=new RegExp(f_core._BLOCK_TAGS, "i");
+		if (regExp.test(tagName)) {
 			return "block";
 		}
 		return "inline";
@@ -5705,8 +5721,8 @@ var f_core = {
 		var utabs = new Array;
 
 		var isIE = f_core.IsInternetExplorer();
-
-		var focusableTags=f_core._FOCUSABLE_TAGS;
+		
+		var focusableTags=new RegExp(f_core._FOCUSABLE_TAGS, "i");
 		// Get thru form elements
 		for (var i=0; i<len; i++) {
 			var elt = elts[i];
@@ -6526,6 +6542,157 @@ var f_core = {
 		
 		
 		return false;		
+	},
+	/**
+	 * @method hidden static
+	 * @return void
+	 */
+	FramePerformanceTimingLog: function(win) {
+		if (win.f_core._MainTimingAlreadySent) {
+			return;
+		}
+		win.f_core._MainTimingAlreadySent=true;
+		
+		var timing=f_core._ConstructPerformanceTimingLog(win, "frame");
+		if (!timing) {
+			return;
+		}
+		
+		var lst=f_core._PerformanceTimingList;
+		if (!lst) {
+			lst=new Array;
+			f_core._PerformanceTimingList=lst;
+		}			 
+		
+		lst.push(timing);
+	},
+	/**
+	 * @method public static
+	 * @return Array
+	 */
+	ListPerformanceTimingLog: function(form, destURL, destTarget) {
+		if (!f_env.GetPerformanceTimingFeatures()) {
+			return [];
+		}
+
+		var lst=f_core._PerformanceTimingList;
+		if (!lst) {
+			lst=new Array;
+		}
+
+		f_core._PerformanceTimingList=undefined;
+
+		if (!f_core._MainTimingAlreadySent) {
+			f_core._MainTimingAlreadySent=true;		
+	
+			var ret=f_core._ConstructPerformanceTimingLog(window, null, form, destURL, destTarget);
+			if (ret) {
+				lst.push(ret);			
+			}
+		}
+		
+		return lst;
+	},
+	/**
+	 * @method private static
+	 * @return void
+	 */
+	_RegisterPerformanceTimingLog: function(form, destURL, destTarget) {
+		if (!f_env.GetPerformanceTimingFeatures()) {
+			return;
+		}
+
+		var lst=f_core.ListPerformanceTimingLog(form, destURL, destTarget);
+		
+		if (!lst || !lst.length) {
+			return;
+		}
+		
+		for(var i=0;i<lst.length;i++) {
+			var timing=lst[i];
+			if (!timing) {
+				continue;
+			}
+		
+			f_core.CreateElement(form, "input", {
+				type: "hidden",
+				name: f_core._PERFORMANCE_TIMING,
+				value: timing
+			});
+		}
+	},
+	
+	/**
+	 * @method private static
+	 * @return String
+	 */
+	_ConstructPerformanceTimingLog: function(win, type, form, destURL, destTarget) {
+
+		var performance=win.performance;
+		if (!performance) {
+			return null;
+		}
+		var timing=performance.timing;
+		if (!timing) {
+			return null;
+		}
+		
+		var features=f_env.GetPerformanceTimingFeatures();
+		
+		var sourceURL=String(win.document.location);
+		var sourceTarget=win.name;
+		
+		if (form) {
+			if (!destURL) {
+				destURL=form.action;
+			}
+			if (!destTarget) {
+				destTarget=form.target;
+			}
+		}
+		
+		if (destTarget==sourceTarget) {
+			destTarget="%";
+		}
+		if (destURL==sourceURL) {
+			destURL="%";
+		}
+		
+		var ps=["clientDate=", String(new Date().getTime()), " sourceURL='", encodeURIComponent(sourceURL),"' "];
+		if (type) {
+			ps.push("pageType='", type, "' ");
+		}
+		
+		if (features & 0x02) {
+			if (sourceTarget) {
+				ps.push("sourceTarget='", encodeURIComponent(sourceTarget),"' ");
+			}
+		}
+		if (features & 0x04) {
+			if (destURL) {
+				ps.push("destURL='", encodeURIComponent(destURL),"' ");
+			}
+			if (features & 0x02) {
+				if (destTarget) {
+					ps.push("destTarget='", encodeURIComponent(destTarget),"' ");
+				}
+			}
+		}
+		if (features & 0x08) {
+			ps.push("agent='", encodeURIComponent(window.navigator.userAgent),"' ");
+		}
+		
+		for(var key in timing) {
+			var t=timing[key];
+			if (!t) {
+				continue;
+			}
+			ps.push(key, "=", String(t), " ");
+		}
+		
+		var ret=ps.join("");
+		
+		return ret;
 	},
 	/**
 	 * @method public static
