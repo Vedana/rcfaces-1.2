@@ -37,6 +37,7 @@ import org.rcfaces.renderkit.html.internal.javascript.JavaScriptRepositoryServle
 import org.rcfaces.renderkit.html.internal.renderer.MessagesRepository;
 import org.rcfaces.renderkit.html.internal.service.LogHtmlService;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptTools;
+import org.rcfaces.renderkit.html.timing.PerformanceTimingProvider;
 
 /**
  * 
@@ -754,6 +755,17 @@ public abstract class AbstractJavaScriptRenderContext implements
         }
 
         writer.writeln(");");
+
+        PerformanceTimingProvider performanceTimingProvider = PerformanceTimingProvider
+                .get(facesContext);
+        if (performanceTimingProvider != null) {
+            int features = performanceTimingProvider
+                    .getClientPerformanceTimingFeatures();
+            if (features > 0) {
+                writer.writeCall("f_env", "EnablePerformanceTiming")
+                        .writeInt(features).writeln(");");
+            }
+        }
 
         String logProperty = (String) initParameter
                 .get(ENABLE_LOG_CLIENT_PARAMETER);
