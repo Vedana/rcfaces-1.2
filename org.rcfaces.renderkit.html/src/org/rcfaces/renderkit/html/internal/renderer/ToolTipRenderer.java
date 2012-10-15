@@ -89,8 +89,8 @@ public class ToolTipRenderer extends AbstractCssRenderer implements
 
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
-        ToolTipComponent tooltipComponent = (ToolTipComponent) htmlWriter
-                .getComponentRenderContext().getComponent();
+        // ToolTipComponent tooltipComponent = (ToolTipComponent)
+        // htmlWriter.getComponentRenderContext().getComponent();
 
         htmlWriter.endElement(IHtmlWriter.DIV);
 
