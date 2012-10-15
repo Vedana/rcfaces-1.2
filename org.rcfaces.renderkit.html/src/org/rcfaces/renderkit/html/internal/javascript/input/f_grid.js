@@ -242,6 +242,10 @@ var __statics = {
 				continue;
 			}
 
+			if (tagName == "input" || tagName == "a") {
+				continue;
+			}
+
 			return null;
 		}
 
@@ -767,7 +771,19 @@ var __statics = {
 			dataGrid._focus = true;
 
 			if (dataGrid.f_isSelectable()) {
-				if (!dataGrid._cursor) {
+				if (dataGrid._focusOnInput) {
+					var oldCursor = dataGrid._cursor;
+					
+					var row = f_grid.GetRowFromEvent(dataGrid, evt);
+					if (row) {
+						dataGrid._cursor=row;
+	
+						if (oldCursor) {
+							dataGrid.fa_updateElementStyle(cursor);
+						}
+					}
+					
+				} else if (!dataGrid._cursor) {
 					var currentSelection = dataGrid._currentSelection;
 					if (currentSelection.length) {
 						dataGrid._cursor = currentSelection[0];
@@ -1146,7 +1162,8 @@ var __statics = {
 
 		// alert("CB="+dataGrid._columnCanBeSorted);
 		if (!dataGrid._columnCanBeSorted || !column._method) {
-			return f_core.CancelJsEvent(evt);
+			// NON on veut pouvoir attraper sur le TitleClick
+			//return f_core.CancelJsEvent(evt);
 		}
 
 		f_core.Debug(f_grid, "_Title_onMouseDown: select column='" + column
@@ -1441,6 +1458,10 @@ var __statics = {
 			return f_core.CancelJsEvent(evt);// On bloque le FOCUS !
 		}
 
+		if (!dataGrid._columnCanBeSorted || !column._method) {
+			return f_core.CancelJsEvent(evt);
+		}
+		
 		var append = (evt.shiftKey);
 
 		f_core.Debug(f_grid, "_Title_onClick: call set column sort append="
@@ -1836,6 +1857,8 @@ var __statics = {
 			column._label.style.width = w3 + "px";
 			column._label.style.maxWidth = w3 + "px";
 
+			f_core.Debug(f_grid, "_DragCursorMove: set head.width="+w1+"  box.w="+w2+"  label.w="+w3+" w="+w+" tlrp="+dataGrid._textLeftRightPadding+" twidth="+twidth);
+
 			var totalCols = 0;
 			var columns = dataGrid._columns;
 			for ( var i = 0; i < columns.length; i++) {
@@ -1852,6 +1875,8 @@ var __statics = {
 			}
 
 			dataGrid._table.style.width = (totalCols) + "px";
+
+			f_core.Debug(f_grid, "_DragCursorMove: set total="+totalCols);
 		}
 
 		var scrollTitle = dataGrid._scrollTitle;
@@ -2756,8 +2781,7 @@ var __members = {
 			}
 
 			// Le nouveau depasse à droite l'ancien
-			serializedIndexes.shift();
-			serializedIndexes.shift();
+			serializedIndexes.splice(i, 2);
 			i -= 2;
 		}
 
@@ -2765,6 +2789,8 @@ var __members = {
 			serializedIndexes.push(nStart, nEnd - nStart);
 		}
 
+		this._serializedIndexes=serializedIndexes;
+		
 		return serializedIndexes;
 	},
 	/**
@@ -2853,10 +2879,10 @@ var __members = {
 
 		this.f_performPagedComponentInitialized();
 
-		/*
-		 * if (!this.f_isVisible()) {
-		 * this.f_getClass().f_getClassLoader().f_addVisibleComponentListener(this); }
-		 */
+		// On a besoin de faire des calculs CSS quand le grid est affiché !
+		if (!this.f_isVisible()) {
+			this.f_getClass().f_getClassLoader().f_addVisibleComponentListener(this); 
+		}
 	},
 	/**
 	 * @method protected
@@ -5782,7 +5808,7 @@ var __members = {
 		var ci = 0;
 		var webkit = f_core.IsWebkit();
 		var ie = f_core.IsInternetExplorer();
-		for ( var i = 0; i < columns.length; i++) {
+		for (var i = 0; i < columns.length; i++) {
 			var column = columns[i];
 			if (column._visibility === false) {
 				continue;
