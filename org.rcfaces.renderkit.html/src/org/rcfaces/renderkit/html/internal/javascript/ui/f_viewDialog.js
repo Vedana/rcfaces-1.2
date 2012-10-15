@@ -287,6 +287,19 @@ var __members = {
 	f_performFrameReady: function(iframe, doc) {
 		f_core.Debug(f_frameShellDecorator, "f_performFrameReady: frame '"+iframe+"' is ready !");
 	},
+
+	f_preDestruction: function() {
+		if (f_env.GetPerformanceTimingFeatures()) {		
+	
+			var iframe=this._iframe;
+			var localWin=iframe.contentWindow;
+			if (localWin.f_core) {			
+				f_core.FramePerformanceTimingLog(localWin);			
+			}
+		}
+		
+		this.f_super(arguments);
+	},
 	
 	/* Plus nécessaire par la redéfinition de  _OnExit 
 	f_preDestruction: function() {
