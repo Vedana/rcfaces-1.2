@@ -592,9 +592,6 @@ var __members = {
 			}
 		}
 
-		// Gestion du focus lors du click dans le TREE !
-		this.onfocus=f_tree._Link_bodyOnfocus;
-		this.onblur=f_tree._Link_onblur;
 		this._tree=this;
 
 		// =2 la marque contient le focus   =1 c'est le label qui devient un lien   =0 ancienne méthode
@@ -654,7 +651,13 @@ var __members = {
 				};
 			}
 		}
-		
+
+		// Gestion du focus lors du click dans le TREE !
+		if (this._cfocus) {
+			this.onfocus=f_tree._Link_bodyOnfocus;
+			this.onblur=f_tree._Link_onblur;
+		}
+
 		this.onmousedown=f_tree._BodyMouseDown;
 		this.onmouseup=f_core.CancelJsEventHandler;
 		this.onclick=f_core.CancelJsEventHandler;
@@ -1703,7 +1706,7 @@ var __members = {
 				if (item.nextSibling) {
 					itemHeight = (item.nextSibling.offsetTop - item.offsetTop)*2 ;
 				} else if (item.parentNode){
-					var parent = item.parentNode;
+					var parent = item.parentNode; // Le warning WTP est une ERREUR
 					while (parent.offsetTop != 0){
 						parent = parent.parentNode;
 					}
@@ -2751,7 +2754,7 @@ var __members = {
 		
 		var lis=this.fa_listVisibleElements();
 		
-		var parent=this;
+		var parent=this; // Le warning WTP est un ERREUR !
 		
 		var i=0;
 		var last=null;
