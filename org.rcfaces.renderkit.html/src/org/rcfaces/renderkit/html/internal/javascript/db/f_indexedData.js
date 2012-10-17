@@ -848,6 +848,8 @@ var __members = {
 			return;
 		}
 
+		var indexedDbEngine = this._indexedDbEngine;
+
 		var transaction = indexedDbEngine.f_startTransaction(this._contentName, false);
 		
 		var objectStore = transaction.objectStore(this._contentName);
