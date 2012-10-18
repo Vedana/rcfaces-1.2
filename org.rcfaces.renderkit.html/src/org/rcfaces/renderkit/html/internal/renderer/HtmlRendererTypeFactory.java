@@ -317,6 +317,10 @@ public class HtmlRendererTypeFactory extends AbstractRendererTypeFactory {
             return userAgentRules.rulesCount() - o.userAgentRules.rulesCount();
         }
 
+        public LookIdRule getNext() {
+            return next;
+        }
+
     }
 
     public static class LookIdRulesBean {
@@ -395,7 +399,17 @@ public class HtmlRendererTypeFactory extends AbstractRendererTypeFactory {
             StringBuilder navigatorsString = new StringBuilder(
                     navigators.size() * 32);
             for (String navigator : navigators) {
-                navigatorsString.append(' ').append(navigator);
+                navigatorsString.append(' ').append(navigator.trim());
+            }
+
+            for (String feature : features) {
+                navigatorsString.append(' ');
+
+                if (feature.startsWith(UserAgentRuleTools.FEATURE_PREFIX) == false) {
+                    navigatorsString.append(UserAgentRuleTools.FEATURE_PREFIX);
+                }
+
+                navigatorsString.append(feature.trim());
             }
 
             IUserAgentRules userAgentRules = UserAgentRuleTools
@@ -454,7 +468,29 @@ public class HtmlRendererTypeFactory extends AbstractRendererTypeFactory {
                 LookIdRule lookIdRule = new LookIdRule(userAgentRules,
                         lookIdRendererType);
 
-                lookIdRules.put(rendererTypeKey, lookIdRule);
+                if (old == null) {
+                    lookIdRules.put(rendererTypeKey, lookIdRule);
+
+                } else if (lookIdRule.compareTo(old) < 0) {
+                    lookIdRule.setNext(old);
+                    lookIdRules.put(rendererTypeKey, lookIdRule);
+
+                } else {
+                    LookIdRule prev = old;
+                    LookIdRule next = old.getNext();
+                    for (; next != null; next = next.getNext()) {
+                        if (lookIdRule.compareTo(next) < 0) {
+                            break;
+                        }
+
+                        prev = next;
+                    }
+
+                    prev.setNext(lookIdRule);
+                    if (next != null) {
+                        lookIdRule.setNext(next);
+                    }
+                }
             }
         }
     }
