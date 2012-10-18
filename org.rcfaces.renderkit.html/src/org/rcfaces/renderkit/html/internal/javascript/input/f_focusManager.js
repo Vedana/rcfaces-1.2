@@ -44,6 +44,110 @@ var __statics={
 	 */
 	Finalizer: function() {
 		f_focusManager._Instance=undefined; // f_focusManager
+	},
+	/**
+	 * @method public static
+	 * @param f_event
+	 *            event
+	 * @param hidden HTMLElement fromComponent
+	 * @return Boolean
+	 */
+	FocusNextRequired: function(event, fromComponent) {
+
+		f_classLoader.Get(window).f_verifyOnSubmit();
+
+		var focusComponent = fromComponent;
+		
+		if (!focusComponent) {
+			var focusManager = f_focusManager.Get();
+			if (focusManager) {
+				focusComponent = focusManager.f_getFocusComponent();
+			}
+	
+			if (!focusComponent) {
+				var component=event.f_getComponent();
+				if (component) {
+					focusComponent = f_core.GetParentForm(component);
+				}
+			}
+			
+			if (!focusComponent) {
+				focusComponent=document.forms[0];
+			}
+		}
+		
+		f_core.Debug(f_focusManager, "FocusNextRequired: focusComponent='"+focusComponent+"'");
+		
+		if (!focusComponent) {
+			return false;
+		}
+
+		var stack = new Array();
+
+		if (fromComponent) {
+			stack.push(fromComponent);
+			
+		} else {
+			var component=focusComponent;
+			for (;;) {
+				var fc = component;
+				for (;;) {
+					if (!fc.nextSibling) {
+						break;
+					}
+					fc = fc.nextSibling;
+	
+					if (fc.nodeType != f_core.ELEMENT_NODE) {
+						continue;
+					}
+	
+					stack.unshift(fc);
+				}
+				component = component.parentNode;
+				if (!component
+						|| component.nodeType != f_core.ELEMENT_NODE
+						|| component.tagName.toLowerCase() == "form") {
+					break;
+				}
+			}
+		}
+		
+		var found = undefined;
+		for (; stack.length;) {
+			var c = stack.pop();
+
+			if (c.f_isRequired && c.f_isRequired()) {
+				found = c;
+				break;
+			}
+
+			var children = c.childNodes;
+			if (!children.length) {
+				continue;
+			}
+
+			for ( var i = 0; i < children.length; i++) {
+				var c = children[i];
+				if (c.nodeType != f_core.ELEMENT_NODE) {
+					continue;
+				}
+
+				stack.unshift(c);
+			}
+		}
+		
+		f_core.Debug(f_focusManager, "FocusNextRequired: found="+found+" fromComponent='"+fromComponent+"'");
+		
+		if (!found && !fromComponent) {
+			f_focusManager.FocusNextRequired(event, f_core.GetParentForm(focusComponent));
+			return false;
+		}
+
+		if (found) {
+			f_core.SetFocus(found, true);
+		}
+
+		return false;
 	}
 };
 
@@ -247,12 +351,12 @@ var __members={
 	 * @return HTMLElement
 	 */
 	f_getFocusComponent: function() {
-		var activeElement=this._getActiveElement();
+		var focusId=this.f_getFocusId();
 		
-		f_core.Debug(f_focusManager, "f_getFocusComponent: activeElement='"+activeElement+"'");
+		f_core.Debug(f_focusManager, "f_getFocusComponent: focusId='"+focusId+"'");
 		
-		if (activeElement) {
-			return this.f_getClass().f_getClassLoader().f_init(activeElement, true, true);
+		if (focusId) {
+			return f_core.GetElementByClientId(focusId);
 		}
 		 
 		return null;
