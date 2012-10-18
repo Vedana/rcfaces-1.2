@@ -40,22 +40,9 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
 public class DateChooserRenderer extends AbstractCalendarRenderer implements
         ICalendarDecoderRenderer {
 
-    private static final boolean USE_CSS_IMAGES = true;
+    private static final String DATE_CHOOSER_IMAGEURL = "dateChooser/dateChooser.gif";
 
-    private static final String DATE_CHOOSER_IMAGEURL;
-
-    private static final String DATE_CHOOSER_DISABLED_IMAGEURL;
-
-    static {
-        if (USE_CSS_IMAGES) {
-            DATE_CHOOSER_IMAGEURL = BLANK_IMAGE_URL;
-            DATE_CHOOSER_DISABLED_IMAGEURL = null;
-
-        } else {
-            DATE_CHOOSER_IMAGEURL = "dateChooser/dateChooser.gif";
-            DATE_CHOOSER_DISABLED_IMAGEURL = "dateChooser/dateChooser_disabled.gif";
-        }
-    }
+    private static final String DATE_CHOOSER_DISABLED_IMAGEURL = "dateChooser/dateChooser_disabled.gif";
 
     private static final int DATE_CHOOSER_WIDTH = 16;
 
@@ -102,15 +89,26 @@ public class DateChooserRenderer extends AbstractCalendarRenderer implements
         IHtmlRenderContext htmlRenderContext = htmlWriter
                 .getHtmlComponentRenderContext().getHtmlRenderContext();
 
+        String imageURL;
+        if (useCssBackgroundImage()) {
+            imageURL = BLANK_IMAGE_URL;
+
+        } else {
+            imageURL = getDateChooserImageURL(htmlWriter);
+        }
+
         return htmlRenderContext.getHtmlProcessContext()
-                .getStyleSheetContentAccessor(DATE_CHOOSER_IMAGEURL,
-                        IContentFamily.IMAGE);
+                .getStyleSheetContentAccessor(imageURL, IContentFamily.IMAGE);
     }
 
-    public IContentAccessor getDateChooserDisabledImageAccessor(
+    protected boolean useCssBackgroundImage() {
+        return true;
+    }
+
+    protected IContentAccessor getDateChooserDisabledImageAccessor(
             IHtmlWriter htmlWriter) {
 
-        if (USE_CSS_IMAGES) {
+        if (useCssBackgroundImage()) {
             return null;
         }
 
@@ -118,8 +116,17 @@ public class DateChooserRenderer extends AbstractCalendarRenderer implements
                 .getHtmlComponentRenderContext().getHtmlRenderContext();
 
         return htmlRenderContext.getHtmlProcessContext()
-                .getStyleSheetContentAccessor(DATE_CHOOSER_DISABLED_IMAGEURL,
+                .getStyleSheetContentAccessor(
+                        getDateChooserDisabledImageURL(htmlWriter),
                         IContentFamily.IMAGE);
+    }
+
+    protected String getDateChooserImageURL(IHtmlWriter htmlWriter) {
+        return DATE_CHOOSER_IMAGEURL;
+    }
+
+    protected String getDateChooserDisabledImageURL(IHtmlWriter htmlWriter) {
+        return DATE_CHOOSER_DISABLED_IMAGEURL;
     }
 
     protected void decode(IRequestContext context, UIComponent component,
@@ -324,7 +331,7 @@ public class DateChooserRenderer extends AbstractCalendarRenderer implements
         }
 
         protected boolean useImageFilterIfNecessery() {
-            return USE_CSS_IMAGES == false;
+            return useCssBackgroundImage();
         }
 
         protected boolean isCompositeComponent() {
