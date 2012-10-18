@@ -779,7 +779,7 @@ var __statics = {
 						dataGrid._cursor=row;
 	
 						if (oldCursor) {
-							dataGrid.fa_updateElementStyle(cursor);
+							dataGrid.fa_updateElementStyle(oldCursor);
 						}
 					}
 					
