@@ -216,7 +216,7 @@ var __members = {
 	f_forceChildVisibility: function(component) {
 		return false;
 	}
-}
+};
 
 new f_class("f_tab", {
 	extend: f_card,

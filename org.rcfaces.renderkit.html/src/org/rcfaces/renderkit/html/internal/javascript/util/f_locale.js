@@ -299,7 +299,7 @@ var __members = {
 	f_formatMessageParams: function(key, params, defaultValue) {
 		return f_resourceBundle.Get(f_locale).f_formatParams(key, params, defaultValue);
 	}
-}
+};
 
 new f_class("f_locale", {
 	statics: __statics,

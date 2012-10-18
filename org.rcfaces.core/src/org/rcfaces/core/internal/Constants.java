@@ -28,6 +28,7 @@ import org.rcfaces.core.internal.util.Delay;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
+@SuppressWarnings("unused")
 public class Constants {
     private static final Log LOG = LogFactory.getLog(Constants.class);
 
@@ -258,7 +259,7 @@ public class Constants {
         return version;
     }
 
-    public static final String searchVersion(Class clazz,
+    public static final String searchVersion(Class< ? > clazz,
             String systemParameter, String versionName) {
 
         try {
@@ -332,13 +333,13 @@ public class Constants {
                 + "' uniqueness.");
 
         try {
-            Enumeration enumeration = Constants.class.getClassLoader()
+            Enumeration<URL> enumeration = Constants.class.getClassLoader()
                     .getResources("META-INF/MANIFEST.MF");
 
-            Set resources = new HashSet(2);
+            Set<URL> resources = new HashSet<URL>(2);
 
             for (; enumeration.hasMoreElements();) {
-                URL url = (URL) enumeration.nextElement();
+                URL url = enumeration.nextElement();
 
                 InputStream inputStream = url.openStream();
                 if (inputStream == null) {

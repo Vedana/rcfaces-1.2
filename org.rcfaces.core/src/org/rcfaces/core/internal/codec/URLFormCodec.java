@@ -21,8 +21,6 @@ import org.rcfaces.core.internal.lang.StringAppender;
  */
 public final class URLFormCodec {
 
-    private static final String REVISION = "$Revision$";
-
     private static final String FORM_DECODER_INPUT_CHARSET = "UTF8";
 
     private static final String FORM_DECODER_UTF8_CHARSET = "UTF8";
@@ -78,8 +76,8 @@ public final class URLFormCodec {
         }
 
         /*
-         * byte buf[]; try { buf = source.getBytes(FORM_DECODER_INPUT_CHARSET); }
-         * catch (UnsupportedEncodingException e) { throw new
+         * byte buf[]; try { buf = source.getBytes(FORM_DECODER_INPUT_CHARSET);
+         * } catch (UnsupportedEncodingException e) { throw new
          * FacesException("Unknown charset '" + FORM_DECODER_INPUT_CHARSET +
          * "'.", e); }
          * 
@@ -169,6 +167,7 @@ public final class URLFormCodec {
         return decodeURL(chs, 0, chs.length);
     }
 
+    @SuppressWarnings("unused")
     public static String decodeURL(char chs[], int offset, int end) {
         if (false) {
             StringAppender sa = new StringAppender(end - offset);
