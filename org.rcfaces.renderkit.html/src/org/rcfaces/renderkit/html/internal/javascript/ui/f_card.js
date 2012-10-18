@@ -91,6 +91,13 @@ var __members = {
 		}	
 		
 		this.f_super(arguments);
+	},
+	/**
+	 * @method public
+	 * @return f_cardBox
+	 */
+	f_getCardBox: function() {
+		return this._cardBox;
 	}
 };
 
