@@ -165,7 +165,7 @@ var __statics = {
 			return f_core.CancelJsEvent(evt);
 		}
 
-		var row = f_grid.GetRowFromEvent(this, evt);
+		var row = f_grid.GetRowFromEvent(this, evt, dataGrid);
 
 		if (!row || row._over) {
 			return;
@@ -191,7 +191,7 @@ var __statics = {
 			evt = f_core.GetJsEvent(this);
 		}
 
-		var row = f_grid.GetRowFromEvent(this, evt);
+		var row = f_grid.GetRowFromEvent(this, evt, dataGrid);
 
 		if (!row || !row._over) {
 			return;
@@ -205,14 +205,14 @@ var __statics = {
 	/**
 	 * @method protected static
 	 * @param HTMLElement
-	 *            eventObject
+	 *            eventThisObject
 	 * @param Event
 	 *            evt
+	 * @param f_grid dataGrid
 	 * @return Boolean
 	 * @context object:dataGrid
 	 */
-	GetRowFromEvent : function(eventObject, evt) {
-		var dataGrid = eventObject._dataGrid;
+	GetRowFromEvent : function(eventThisObject, evt, dataGrid) {
 
 		var target=undefined;
 		if (evt.target) {
@@ -226,15 +226,15 @@ var __statics = {
 			return null;
 		}
 
-		for (; target; target = target.parentNode) {
+		for (; target && (target.nodeType==f_core.ELEMENT_NODE); target = target.parentNode) {
 
-			if (target._dataGrid != dataGrid) {
+			if (target._dataGrid && target._dataGrid != dataGrid) {
 				continue;
 			}
 
 			var tagName = target.tagName.toLowerCase();
 
-			if (tagName == "tr") {
+			if (tagName == "tr" && target._dataGrid) {
 				return target;
 			}
 
@@ -246,7 +246,7 @@ var __statics = {
 				continue;
 			}
 
-			return null;
+			break;
 		}
 
 		return null;
@@ -774,7 +774,7 @@ var __statics = {
 				if (dataGrid._focusOnInput) {
 					var oldCursor = dataGrid._cursor;
 					
-					var row = f_grid.GetRowFromEvent(dataGrid, evt);
+					var row = f_grid.GetRowFromEvent(dataGrid, evt, dataGrid);
 					if (row) {
 						dataGrid._cursor=row;
 	
@@ -2141,6 +2141,12 @@ var __statics = {
 };
 
 var __members = {
+	
+	/**
+	 * @field protected Boolean
+	 */
+	_loading: undefined,
+
 	/**
 	 * @field private Number
 	 */
