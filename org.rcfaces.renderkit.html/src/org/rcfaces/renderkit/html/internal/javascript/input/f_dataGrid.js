@@ -1257,6 +1257,12 @@ var __members = {
 			}
 		}
 	},
+	/**
+	 * @method private
+	 * @param Number firstIndex
+	 * @param Number length
+	 * @param Number cursorIndex
+	 */
 	_ajaxCallServer: function(firstIndex, length, cursorIndex, selection, partialWaiting, fullUpdate) {
 //		f_core.Assert(!this._loading, "Already loading ....");
 		if (!selection) {
@@ -1336,11 +1342,12 @@ var __members = {
 	 				// On continue coute que coute !
 	 				continueProcess=false;
 	 			}	 				
-	 				 				
 	 			 			
 		 		if (continueProcess===false) {
 					dataGrid._loading=undefined;
 	
+					dataGrid.f_clearCommands();
+					
 					if (waitingObject) {
 						waitingObject.f_hide();
 					}
@@ -1369,14 +1376,15 @@ var __members = {
 			 * @method public
 			 */
 	 		onLoad: function(request, content, contentType) {
-				if (!f_classLoader.IsObjectInitialized(dataGrid)) {
-					return;
-				}
-			
+	 			
+ 				if (!f_classLoader.IsObjectInitialized(dataGrid)) {
+ 					return;
+ 				}
+	 				
 				if (dataGrid.f_processNextCommand()) {
 					return;
 				}
-	 				
+	 			
 				try {
 					if (request.f_getStatus()!=f_httpRequest.OK_STATUS) {
 						dataGrid.f_performErrorEvent(request, f_error.INVALID_RESPONSE_SERVICE_ERROR, "Bad http response status ! ("+request.f_getStatusText()+")");
