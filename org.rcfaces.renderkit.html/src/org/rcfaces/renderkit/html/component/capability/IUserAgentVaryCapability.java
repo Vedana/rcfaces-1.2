@@ -18,6 +18,8 @@ public interface IUserAgentVaryCapability {
 
     String FIREFOX_LITE = "fx";
 
+    String FIREFOX_LITE2 = "ff";
+
     String OPERA = "opera";
 
     String SAFARI = "safari";
