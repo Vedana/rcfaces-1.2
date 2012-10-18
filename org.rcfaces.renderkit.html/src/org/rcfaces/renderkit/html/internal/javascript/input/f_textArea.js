@@ -128,10 +128,10 @@ var __statics = {
 			var selectionEnd=selection[1];
 			
 			if (selectionStart>=_maxTextLength) {
-				selectionStart=_maxTextLength
+				selectionStart=_maxTextLength;
 			}
 			if (selectionEnd>=_maxTextLength) {
-				selectionEnd=_maxTextLength
+				selectionEnd=_maxTextLength;
 			}
 			
 			_input.value=value.substring(0, _maxTextLength);
@@ -205,7 +205,7 @@ var __statics = {
 			input.onpaste=null;
 		}
 	}
-}
+};
 
 var __members = {
 	f_textArea: function() {
@@ -237,8 +237,48 @@ var __members = {
 	 */
 	f_getMaxTextLength: function() {
 		return this._maxTextLength;
+	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	fa_updateRequired: function() {
+		this.f_updateStyleClass();
+
+		if (this._requiredInstalled) {
+			return;
+		}
+		
+		this._requiredInstalled=true;
+	
+		this.f_addEventListener(f_event.VALIDATION, this._validate);		
+	},
+	/**
+	 * @method private 
+	 * @param f_event event
+	 * @return Boolean
+	 */
+	_validate: function(event) {
+		if (this.f_isRequired()==false) {
+			return;
+		}
+				
+		var value=this.f_getValue();
+		if (value) {
+			return true;
+		}
+		
+		var message=f_resourceBundle.Get(f_textArea).f_formatParams("REQUIRED_SUMMARY");
+		if (!message) {	
+			message=f_locale.Get().f_formatMessageParams("javax_faces_component_UIInput_REQUIRED", null, "Validation Error: Value is required.");
+		}
+		
+		var messageContext=f_messageContext.Get(event);	
+		messageContext.f_addMessage(this, f_messageObject.SEVERITY_ERROR, message, null);
+		
+		return false;
 	}
-}
+};
 
 new f_class("f_textArea", {
 	extend: f_abstractEntry,
