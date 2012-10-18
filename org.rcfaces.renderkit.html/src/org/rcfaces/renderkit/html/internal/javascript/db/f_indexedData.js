@@ -631,7 +631,7 @@ var __members = {
 		    	return;
 		    }
 		    
-		    result.continue();
+		    result['continue']();
 		};
 		
 		cursorRequest.onerror = function(event) {
@@ -738,7 +738,7 @@ var __members = {
 			    	return;
 			    }
 			    
-			    result.continue();
+			    result['continue']();
 			};
 			
 			cursorRequest.onerror = function(event) {
