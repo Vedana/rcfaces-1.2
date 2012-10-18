@@ -35,7 +35,7 @@ public class UserAgentRuleTools {
 
     private static final String CACHED_USER_AGENTS_PROPERTY = "org.rcfaces.renderkit.html.USER_AGENTS";
 
-    private static final String FEATURE_PREFIX = "@";
+    public static final String FEATURE_PREFIX = "@";
 
     private static final Map<String, BrowserType> AGENT_NAMES = new HashMap<String, BrowserType>();
     static {
@@ -46,6 +46,8 @@ public class UserAgentRuleTools {
 
         AGENT_NAMES.put(IUserAgentVaryCapability.FIREFOX, BrowserType.FIREFOX);
         AGENT_NAMES.put(IUserAgentVaryCapability.FIREFOX_LITE,
+                BrowserType.FIREFOX);
+        AGENT_NAMES.put(IUserAgentVaryCapability.FIREFOX_LITE2,
                 BrowserType.FIREFOX);
 
         AGENT_NAMES.put(IUserAgentVaryCapability.SAFARI, BrowserType.SAFARI);
