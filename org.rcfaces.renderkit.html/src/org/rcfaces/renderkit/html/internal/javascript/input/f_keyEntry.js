@@ -781,6 +781,8 @@ var __members = {
  			 	f_core.Debug(f_keyEntry, "f_callServer.onError: continueProcess="+continueProcess); 			 	
  			 			
 		 		if (continueProcess===false) {
+		 			keyEntry.f_clearCommands();
+
 					keyEntry._loading=undefined;
 					keyEntry._verifyingKey=undefined;		
 					keyEntry.f_updateInputStyle();		
