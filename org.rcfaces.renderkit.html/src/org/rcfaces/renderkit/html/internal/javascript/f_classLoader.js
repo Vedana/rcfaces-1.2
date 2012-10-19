@@ -1327,7 +1327,7 @@ f_classLoader.prototype = {
 			var doc=this._window.document;
 	
 			obj=doc.getElementById(id);
-			if (!obj) {
+			if (false && !obj) { // On recherche plus par le name, trop de risque !
 				var names=doc.getElementsByName(id);
 				if (!names || !names.length) {
 					if (ignoreNotFound) {
@@ -1336,7 +1336,7 @@ f_classLoader.prototype = {
 					throw new Error("Component not found by Id/name '"+id+"'.");
 				}
 				
-				f_core.Assert(names.length!=1, "f_classLoader._init: Too many components associated to name '"+id+"'.");
+				f_core.Assert(names.length==1, "f_classLoader._init: Too many components associated to name '"+id+"'.");
 				
 				obj=names[0];
 				if (f_core.DebugMode) {
@@ -1357,6 +1357,13 @@ f_classLoader.prototype = {
 					} catch (x) {
 					}
 				}
+			}
+			
+			if (!obj) {
+				if (ignoreNotFound) {
+					return null;
+				}
+				throw new Error("Component not found by Id/name '"+id+"'.");
 			}
 		}
 		
@@ -1670,7 +1677,7 @@ f_classLoader.prototype = {
 			this._visibleListeners=visibleListeners;
 		}
 		
-		visibleListeners.f_addElement(component);
+		visibleListeners.f_addElement(component.id);
 		
 		return true;
 	},
@@ -1687,8 +1694,18 @@ f_classLoader.prototype = {
 			return;
 		}
 		
+		var doc=this.f_getDocument();
+	
 		for(var i=0;i<components.length;) {
-			var component=components[i];
+			var componentId=components[i];
+			
+			var component=doc.getElementById(componentId);
+			if (!component) {
+				f_core.Debug(f_classLoader, "fireVisibleEvent["+i+"/"+ids.length+"]: Can not find component '"+componentId+"'.");
+				
+				components.splice(i, 1);
+				continue;
+			}			
 			
 			if (!f_core.IsComponentVisible(component)) {
 				i++;

@@ -235,7 +235,7 @@ var __statics = {
 	 */
 	_KeyGenerator : 0,
 	/**
-	 * @private static
+	 * @method private static
 	 */
 	_ComputeKey : function(obj) {
 		if (obj._menuHashKey) {
@@ -1497,8 +1497,8 @@ var __members = {
 	 * @return Object
 	 */
 	f_getCheckedItemInGroup : function(item) {
-		return this.f_mapIntoGroup(this.f_getItemGroupName(item), function(i) {
-			if (this.f_isItemChecked(i)) {
+		return this.f_mapIntoGroup(this.f_getItemGroupName(item), function(itemValue) {
+			if (this.f_isItemChecked(itemValue)) {
 				return i;
 			}
 		});

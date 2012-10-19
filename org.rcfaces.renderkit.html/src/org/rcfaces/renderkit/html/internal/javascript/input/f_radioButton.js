@@ -68,7 +68,7 @@ var __statics = {
 	 * @param optional String text
 	 * @param optional String styleClass
 	 * @param optional Object[] args
-	 * @return f_radio
+	 * @return f_radioButton
 	 */
 	Create : function(parent, localId, groupName, text, styleClass, args) {
 		
