@@ -250,7 +250,7 @@ var __members = {
 					return;
 				}
 								
-				this._database.createObjectStore(f_indexedDbEngine._RCFACES_OBJECTSTORE, null);
+				self._database.createObjectStore(f_indexedDbEngine._RCFACES_OBJECTSTORE, null);
 			
 				self.f_asyncGetObjectStore(contentName, contentKey, contentRowCount, contentIndex, contentPrimaryKey, func);
 			});
