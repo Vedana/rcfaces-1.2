@@ -1236,7 +1236,8 @@ var __members = {
 		}
 		
 		if (this._cursor) {
- 			this.fa_showElement(this._cursor, true); 
+			// On ne donne pas le focus ! Il peut être ailleurs !
+ 			this.fa_showElement(this._cursor, false); 
 		}
 	},
 	/**
