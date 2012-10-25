@@ -746,6 +746,16 @@ var __members = {
 		}
 	},
 	/**
+	 * @method protected
+	 * @return f_shellDecorator shellDecorator
+	 */
+	f_getShellDecorator: function() {
+		
+		var shellDecorator = this._shellManager.f_getShellDecorator(this);
+		
+		return shellDecorator;
+	},
+	/**
 	 * @method public
 	 * @param f_shellDecorator shellDecorator
 	 * @return void
