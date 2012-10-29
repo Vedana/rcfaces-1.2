@@ -1546,7 +1546,7 @@ var f_core = {
 		
 		var doc=parent.ownerDocument;
 		
-		var ie=f_core.IsInternetExplorer();
+		var ie=f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_6);
 	
 		var element=undefined;
 

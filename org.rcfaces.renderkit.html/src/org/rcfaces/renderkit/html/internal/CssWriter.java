@@ -24,6 +24,10 @@ public class CssWriter extends FastWriter implements ICssWriter {
     protected static final String BACKGROUND_COLOR = "background-color";
 
     protected static final String BORDER_STYLE = "border-style";
+    
+    protected static final String BORDER_LEFT_WIDTH = "border-left-width";
+    
+    protected static final String BORDER_RIGHT_WIDTH = "border-right-width";
 
     protected static final String BOTTOM = "bottom";
 
@@ -590,6 +594,14 @@ public class CssWriter extends FastWriter implements ICssWriter {
     public ICssWriter writeBorderStyle(String borderStyle) {
         return writeProperty(BORDER_STYLE, borderStyle, null);
     }
+    
+    public ICssWriter writeBorderLeftWidth(int borderSizePx) {
+		return writeProperty(BORDER_LEFT_WIDTH, String.valueOf(borderSizePx), PX_UNIT);
+	}
+
+	public ICssWriter writeBorderRightWidth(int borderSizePx) {
+		return writeProperty(BORDER_RIGHT_WIDTH, String.valueOf(borderSizePx), PX_UNIT);
+	}
 
     public ICssWriter writeMargin(String margin) {
         return writeProperty(MARGIN, margin, null);
@@ -613,5 +625,7 @@ public class CssWriter extends FastWriter implements ICssWriter {
     public ICssWriter writeBackgroundColor(String backgroundColor) {
         return writeProperty(BACKGROUND_COLOR, backgroundColor, null);
     }
+
+	
 
 }

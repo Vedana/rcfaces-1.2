@@ -71,7 +71,7 @@ var __members = {
 		
 		var className="f_shellDecorator_frame";
 		if (this.f_isTransparentShell()) {
-			if (f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_6)) {
+			if (f_core.IsInternetExplorer()) {
 				iframe.allowTransparency = true;
 			}
 			className+=" "+className+"_transparent";

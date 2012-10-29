@@ -160,7 +160,7 @@ var __statics = {
 			return false;
 		}
 		
-		return f_core.IsInternetExplorer();
+		return f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_6);
 	},
 	/**
 	 * @method private static
@@ -381,15 +381,19 @@ var __statics = {
 			return true;
 		}
 		
-		doc.addEventListener("mousedown", f_popup._Gecko_OnMouseDown, true);		
-		doc.addEventListener("click", f_popup._Gecko_OnClick, true);		
-		doc.addEventListener("dblclick", f_popup._Gecko_OnClick, true);		
-		doc.addEventListener("blur", f_popup._Gecko_OnBlur, true);
-		doc.addEventListener("focus", f_popup._Gecko_OnFocus, true);
-		doc.addEventListener("keydown", f_popup._OnKeyDownJs, true);
-		doc.addEventListener("keyup", f_popup._OnKeyUpJs, true);
-		doc.addEventListener("keypress", f_popup._OnKeyPressJs, true);		
-		doc.addEventListener("contextmenu", f_popup._Gecko_OnContextMenu, true);
+		f_core.AddEventListener(doc,"mousedown", f_popup._Gecko_OnMouseDown);		
+		f_core.AddEventListener(doc,"click", f_popup._Gecko_OnClick);		
+		f_core.AddEventListener(doc,"dblclick", f_popup._Gecko_OnClick);
+		
+		if(!(f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_7) || f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_8))) {
+			f_core.AddEventListener(doc,"blur", f_popup._Gecko_OnBlur);
+			f_core.AddEventListener(doc,"focus", f_popup._Gecko_OnFocus);
+		}
+		
+		f_core.AddEventListener(doc,"keydown", f_popup._OnKeyDownJs);
+		f_core.AddEventListener(doc,"keyup", f_popup._OnKeyUpJs);
+		f_core.AddEventListener(doc,"keypress", f_popup._OnKeyPressJs);		
+		f_core.AddEventListener(doc,"contextmenu", f_popup._Gecko_OnContextMenu);
 		return true;
 	},
 	/**
@@ -468,16 +472,28 @@ var __statics = {
 			
 			return;
 		}
+		
+		
 
-		doc.removeEventListener("mousedown", f_popup._Gecko_OnMouseDown, true);
-		doc.removeEventListener("click", f_popup._Gecko_OnClick, true);
-		doc.removeEventListener("dblclick", f_popup._Gecko_OnClick, true);
-		doc.removeEventListener("blur", f_popup._Gecko_OnBlur, true);
-		doc.removeEventListener("focus", f_popup._Gecko_OnFocus, true);
-		doc.removeEventListener("keydown", f_popup._OnKeyDownJs, true);
-		doc.removeEventListener("keyup", f_popup._OnKeyUpJs, true);
-		doc.removeEventListener("keypress", f_popup._OnKeyPressJs, true);
-		doc.removeEventListener("contextmenu", f_popup._Gecko_OnContextMenu, true);
+		f_core.RemoveEventListeners(doc,"mousedown", f_popup._Gecko_OnMouseDown);		
+		f_core.RemoveEventListeners(doc,"click", f_popup._Gecko_OnClick);		
+		f_core.RemoveEventListeners(doc,"dblclick", f_popup._Gecko_OnClick);		
+		f_core.RemoveEventListeners(doc,"blur", f_popup._Gecko_OnBlur);
+		f_core.RemoveEventListeners(doc,"focus", f_popup._Gecko_OnFocus);
+		f_core.RemoveEventListeners(doc,"keydown", f_popup._OnKeyDownJs);
+		f_core.RemoveEventListeners(doc,"keyup", f_popup._OnKeyUpJs);
+		f_core.RemoveEventListeners(doc,"keypress", f_popup._OnKeyPressJs);		
+		f_core.RemoveEventListeners(doc,"contextmenu", f_popup._Gecko_OnContextMenu);
+		
+//		doc.removeEventListener("mousedown", f_popup._Gecko_OnMouseDown, true);
+//		doc.removeEventListener("click", f_popup._Gecko_OnClick, true);
+//		doc.removeEventListener("dblclick", f_popup._Gecko_OnClick, true);
+//		doc.removeEventListener("blur", f_popup._Gecko_OnBlur, true);
+//		doc.removeEventListener("focus", f_popup._Gecko_OnFocus, true);
+//		doc.removeEventListener("keydown", f_popup._OnKeyDownJs, true);
+//		doc.removeEventListener("keyup", f_popup._OnKeyUpJs, true);
+//		doc.removeEventListener("keypress", f_popup._OnKeyPressJs, true);
+//		doc.removeEventListener("contextmenu", f_popup._Gecko_OnContextMenu, true);
 	},
 	/**
 	 * @method private static
@@ -500,7 +516,10 @@ var __statics = {
 	 * @context document:this
 	 */
 	_Gecko_OnMouseDown: function(evt) {
-		f_core.Debug(f_popup, "_OnMouseDown on "+this+" target="+evt.target+"/"+evt.target.className+"  popupComponent="+f_popup.Component);
+		
+		var target = evt.target || evt.srcElement;
+		
+		f_core.Debug(f_popup, "_OnMouseDown on "+this+" target="+target+"/"+target.className+"  popupComponent="+f_popup.Component);
 
 		var component=f_popup.Component;
 		if (!component) {
@@ -509,7 +528,7 @@ var __statics = {
 		
 		// Si la target n'est pas dans une popup on ferme !
 		
-		var found=f_popup.IsChildOfDocument(evt.target, evt);
+		var found=f_popup.IsChildOfDocument(target, evt);
 		f_core.Debug(f_popup, "OnMouseDown search parent="+found);
 
 		if (found) {
@@ -632,8 +651,9 @@ var __statics = {
 	 * @return Boolean
 	 * @context document:this
 	 */
-	_Gecko_OnClick: function(evt) {	
-		f_core.Debug(f_popup, "OnClick: click on "+this+" target="+evt.target+"/"+evt.target.className);
+	_Gecko_OnClick: function(evt) {
+		var target = evt.target || evt.srcElement;
+		f_core.Debug(f_popup, "OnClick: click on "+this+" target="+target+"/"+target.className);
 
 		if (!f_popup.Component) {
 			return true;
@@ -650,12 +670,13 @@ var __statics = {
 	 * @context document:this
 	 */
 	_Gecko_OnBlur: function(evt) {	
-		f_core.Debug(f_popup, "OnBlur on "+this+" target="+evt.target+"/"+evt.target.className);
+		var target = evt.target || evt.srcElement;
+		f_core.Debug(f_popup, "OnBlur on "+this+" target="+target+"/"+target.className);
 
 		if (!f_popup.Component) {
 			return;
 		}
-		var found=f_popup.IsChildOfDocument(evt.target, evt);
+		var found=f_popup.IsChildOfDocument(target, evt);
 		f_core.Debug(f_popup, "OnFocus search parent="+found);
 
 		if (found) {
@@ -678,14 +699,14 @@ var __statics = {
 		if (window._rcfacesExiting) {
 			return;
 		}
-		
-		f_core.Debug(f_popup, "_Gecko_OnFocus: on "+this+" target="+evt.target+"/"+evt.target.className);
+		var target = evt.target || evt.srcElement;
+		f_core.Debug(f_popup, "_Gecko_OnFocus: on "+this+" target="+target+"/"+target.className);
 
 		if (!f_popup.Component) {
 			return;
 		}
 		
-		var found=f_popup.IsChildOfDocument(evt.target, evt);
+		var found=f_popup.IsChildOfDocument(target, evt);
 		f_core.Debug(f_popup, "OnFocus search parent="+found);
 
 		if (found) {
@@ -907,43 +928,25 @@ var __statics = {
 	 * @method hidden static 
 	 */	
 	VerifyMouseDown: function(component, jsEvent) {
-		if (f_core.IsGecko() || f_core.IsWebkit()) {
+		var target = jsEvent.target || jsEvent.srcElement;
 			
-			// On a un probleme ! 
-			// Les evenements clicks sont traités par notre composant !
-			var target=jsEvent.target;
-			
-			// Il y a des sous-composants dans le menu 
-			// l'evenement peut provenir de l'un d'eux ... 
-			// dans le doute on recherche dans les parents
-			for(;target;) {
-				if (target._popupObject) {
-					// On laisse tomber ...
-					
-					return true;
-				}
-				target=target.parentNode;
+		// On a un probleme ! 
+		// Les evenements clicks sont traités par notre composant !
+		
+		// Il y a des sous-composants dans le menu 
+		// l'evenement peut provenir de l'un d'eux ... 
+		// dans le doute on recherche dans les parents
+		for(;target;) {
+			if (target._popupObject) {
+				// On laisse tomber ...
+				
+				return true;
 			}
-			
-			return false;
-		}
-
-		if (f_core.IsInternetExplorer()) {
-			var target=jsEvent.srcElement;
-			
-			for(;target;) {
-				if (target._popupObject) {
-					// On laisse tomber ...
-					
-					return true;
-				}
-				target=target.parentNode;
-			}
-			
-			return false;
+			target=target.parentNode;
 		}
 		
-		return true;
+		return false;
+		
 	},
 	/**
 	 * @method hidden static

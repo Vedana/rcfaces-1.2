@@ -123,6 +123,10 @@ public interface ICssWriter {
     ICssWriter writeVerticalAlign(String verticalAlignement);
 
     ICssWriter writeBorderStyle(String borderStyle);
+    
+    ICssWriter writeBorderLeftWidth(int borderSizePx);
+    
+    ICssWriter writeBorderRightWidth(int borderSizePx);
 
     ICssWriter writeMargin(String margin);
 

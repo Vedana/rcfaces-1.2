@@ -211,38 +211,36 @@ var __members = {
 	},
 	
 	f_fillBody: function(base) {
-		var iframe=f_core.CreateElement(base, "iframe");
+		var iframe=f_core.CreateElement(base, "iframe", {
+			frameBorder: 0, //ajouter le frameBorder avant l'ajout au DOM
+			className: "f_viewDialog_frame",
+			title: ""
+		});
 		this._iframe=iframe;
 		
-		iframe.className="f_viewDialog_frame";
-		iframe.frameBorder=0;
 		iframe.style.width=this.f_getWidth();
 		iframe.style.height=this.f_getHeight();
-		iframe.title="";
 		
 		var self=this;
-		if (f_core.IsInternetExplorer()) {
+		if (f_core.IsInternetExplorer() && (!f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_9))) {
 			f_core.Debug(f_viewDialog, "f_fillBody: IE use onreadystatechange ");
-			iframe.onreadystatechange=function() {
+			
+			this._loadFrame = function() {
 				if (window._rcfacesExiting) {
 					return false;
 				}
-
-				f_core.Debug(f_viewDialog, "f_fillBody: on ready state change: "+this+" state="+this.readyState);
-
-				if (this.readyState != "interactive") {
-					return;
-				}	
-				
-				this.onreadystatechange=null;
 				
 				try {
-					self.f_performFrameReady(this, this.contentWindow.document);
+					self.f_performFrameReady(this, iframe.contentWindow.document);
 
 				} catch (x) {					
 					f_core.Error(f_viewDialog, "f_fillBody: f_performFrameReady throws exception.", x);
 				}
 			};
+			
+			f_core.AddEventListener(iframe, "load", this._loadFrame);
+		
+			
 			
 		} else {
 			f_core.Debug(f_viewDialog, "f_fillBody: Firefox use onload ");

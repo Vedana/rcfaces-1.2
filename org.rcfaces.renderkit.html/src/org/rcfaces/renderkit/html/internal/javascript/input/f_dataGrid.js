@@ -1780,7 +1780,9 @@ var __members = {
 	 * @return void
 	 */
 	f_setCells2: function(row, configs) {
-		var tds=row.cells; //getElementsByTagName("td"); // Parfois ca peut être du TH !
+		var tds=row._cells; //getElementsByTagName("td"); // Parfois ca peut être du TH ! 
+		//on utilise _cells car il ya  un bug IE7 avec .cells
+		
 		var cols=this._columns;
 
 		var images=row._cellImages;
@@ -1794,7 +1796,8 @@ var __members = {
 				continue;
 			}
 			
-			var td=tds[argIdx++];
+			var td=tds[i];
+			argIdx++;
 			
 			var properties=configs[i];
 			if (!properties) {

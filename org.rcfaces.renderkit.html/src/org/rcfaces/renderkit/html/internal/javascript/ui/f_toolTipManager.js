@@ -199,23 +199,23 @@ var __members = {
 		this._neighbourThresholdMs = neighbourThresholdMs;
 
 		f_core.AddEventListener(document.body, "mouseover",
-				f_toolTipManager._ElementOver, document.body);
+				f_toolTipManager._ElementOver);
 
 		f_core.AddEventListener(document.body, "mouseout",
-				f_toolTipManager._ElementOut, document.body);
+				f_toolTipManager._ElementOut);
 
 		// Touches
 
 		f_core.AddEventListener(document.body, "keydown",
-				f_toolTipManager._HideToolTip, document.body);
+				f_toolTipManager._HideToolTip);
 
 		// Focus
 		f_core.AddEventListener(document.body, "focus",
-				f_toolTipManager._HideToolTip, document.body);
+				f_toolTipManager._HideToolTip);
 
 		// Clavier
 		f_core.AddEventListener(document.body, "mousedown",
-				f_toolTipManager._HideToolTip, document.body);
+				f_toolTipManager._HideToolTip);
 
 		// f_core.AddEventListener(window, "mouseout",
 		// f_toolTipManager._HideToolTip, window);
@@ -268,8 +268,9 @@ var __members = {
 	 * @return Boolean
 	 */
 	_elementOver: function(evt) {
-
-		var element = evt.target || this._getElementAtPosition(evt);
+		
+		var target = evt.target || evt.srcElement;
+		var element = target || this._getElementAtPosition(evt);
 		var tooltipContainer = this._getToolTipContainerForElement(element);
 
 		var tooltipInfos = null;
