@@ -56,6 +56,7 @@ import org.rcfaces.core.internal.manager.ITransientAttributesManager;
 import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
 import org.rcfaces.core.internal.renderkit.IAsyncRenderer;
 import org.rcfaces.core.internal.renderkit.IRendererExtension;
+import org.rcfaces.core.internal.renderkit.AbstractRendererTypeFactory;
 import org.rcfaces.core.internal.renderkit.designer.IDesignerEngine;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.tools.BindingTools;
@@ -72,10 +73,14 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 
 	protected static final Set<String> CAMELIA_ATTRIBUTES=new HashSet(Arrays.asList(new String[] {"converter","value"}));
 
+	private static final String NULL_RENDERER_TYPE = "##NULL RENDERER##";
+
 	protected transient IComponentEngine engine;
 
 	private transient IStateChildrenList stateChildrenList;
 
+	private transient String rendererType;
+	
 	 private static final Object NULL_VALUE = org.rcfaces.core.internal.tools.ValuesTools.NULL_VALUE;
 
 
@@ -130,24 +135,29 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 
     @Override
 	public final String getRendererType() {
-		String rendererType = super.getRendererType();
-		if (rendererType == null) {
-        	if (LOG.isTraceEnabled()) {
-        		LOG.trace("RendererType is null for component id='"+getId()+"' class='"+getClass()+"'");
-        	}
-			return null;
-		}
-
-		if ((this instanceof ILookAndFeelCapability) == false) {
+		if (rendererType!=null) {
+			if (rendererType == NULL_RENDERER_TYPE) {
+				return null;
+			}
+			
 			return rendererType;
 		}
-
-		String lookId = ((ILookAndFeelCapability) this).getLookId();
-		if (lookId == null) {
-			return rendererType;
+		
+		rendererType = super.getRendererType();
+       	if (LOG.isTraceEnabled()) {
+    		LOG.trace("RendererType is null for component id='"+getId()+"' class='"+getClass()+"'");
 		}
 
-		return rendererType + ":" + lookId;
+		FacesContext facesContext=FacesContext.getCurrentInstance();
+
+		rendererType=AbstractRendererTypeFactory.get(facesContext).computeRendererType(facesContext, this, getFamily(), rendererType);
+ 		if (rendererType == null) {
+            rendererType = NULL_RENDERER_TYPE;
+
+            return null;
+        }
+		
+		return rendererType;
 	}
 
     @Override
@@ -648,7 +658,8 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 		
 		s+=","+engine.toString();
 		
-		s+=",rendererId='"+getRendererType()+"'";
+		// On prend le super, sinon il peut precalculer le rendererType trop tot !
+		s+=",rendererId='"+super.getRendererType()+"'";
 		
 		if (getFamily()!=CameliaComponents.FAMILY) {
 			s+=",family='"+getFamily()+"'";
