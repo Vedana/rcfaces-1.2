@@ -204,19 +204,14 @@ var f_core = {
 	/**
 	 * @field private static final RegExp
 	 */
-	_BLOCK_TAGS: new RegExp(
-		"^(ADDRESS|APPLET|BLOCKQUOTE|BODY|CAPTION|CENTER|COL|COLGROUP|DD|DIR|DIV|" +
+	_BLOCK_TAGS: "^(ADDRESS|APPLET|BLOCKQUOTE|BODY|CAPTION|CENTER|COL|COLGROUP|DD|DIR|DIV|" +
 		"DL|DT|FIELDSET|FORM|FRAME|FRAMESET|H1|H2|H3|H4|H5|H6|HR|IFRAME|LI|MENU|" +
-		"NOSCRIPT|NOFRAMES|OBJECT|OL|P|PRE|TABLE|TBODY|TD|TFOOT|TH|THEAD|TR|UL){1}$", 
-		"i"
-	),
+		"NOSCRIPT|NOFRAMES|OBJECT|OL|P|PRE|TABLE|TBODY|TD|TFOOT|TH|THEAD|TR|UL){1}$",
 
 	/**
 	 * @field private static final RegExp
 	 */
-	_FOCUSABLE_TAGS: new RegExp(
-		"^(A|AREA|BUTTON|IFRAME|INPUT|OBJECT|SELECT|TEXTAREA){1}$"
-	),
+	_FOCUSABLE_TAGS: "^(A|AREA|BUTTON|IFRAME|INPUT|OBJECT|SELECT|TEXTAREA){1}$",
 	
 	/**
 	 * @field private static final String[]
@@ -4671,7 +4666,8 @@ var f_core = {
 		if (!tagName) {
 			return null;
 		}
-		if (f_core._BLOCK_TAGS.test(tagName)) {
+		var regExp=new RegExp(f_core._BLOCK_TAGS, "i");
+		if (regExp.test(tagName)) {
 			return "block";
 		}
 		return "inline";
@@ -5706,7 +5702,7 @@ var f_core = {
 
 		var isIE = f_core.IsInternetExplorer();
 
-		var focusableTags=f_core._FOCUSABLE_TAGS;
+		var focusableTags=new RegExp(f_core._FOCUSABLE_TAGS, "i");
 		// Get thru form elements
 		for (var i=0; i<len; i++) {
 			var elt = elts[i];
