@@ -1617,7 +1617,10 @@ var __members = {
 		 		f_core.Debug(f_clientValidator, "f_installValidator: Construct new validator for component '"+component.id+"' with params='"+this._parameters+"' initialValue='"+componentValue+"'.");
 		*/
 		
-		
+		if (component.f_isFocusEventManager && component.f_isFocusEventManager()) {
+			return;
+		}
+				
 		component.f_insertEventListenerFirst(f_event.FOCUS, f_clientValidator._OnFocus);
 		component.f_insertEventListenerFirst(f_event.BLUR, f_clientValidator._OnBlur);
 	},
