@@ -431,8 +431,9 @@
 	height: auto;
 }
 
+/*position: absolute; pour taille colonne  attention accessibilite*/
 .f_grid_hidden_title {
-	position: absolute;
+	display: none;
 	left: -10000px;
 	top: auto;
 	height: 1px;

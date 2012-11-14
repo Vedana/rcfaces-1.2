@@ -1758,11 +1758,11 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         return SORT_PADDING;
     }
 
-    private int getTextLeftPadding() {
+    protected int getTextLeftPadding() {
         return TEXT_LEFT_PADDING;
     }
 
-    private int getTextRightPadding() {
+    protected int getTextRightPadding() {
         return TEXT_RIGHT_PADDING;
     }
 

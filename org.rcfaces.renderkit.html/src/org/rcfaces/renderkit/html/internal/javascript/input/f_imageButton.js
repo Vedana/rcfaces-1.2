@@ -124,6 +124,7 @@ var __members = {
 		
 		switch(this.tagName.toLowerCase()) {
 		case "input":
+		case "button":
 			// Il faut recuperer le click pour empecher le submit !
 			image=this;
 			break;

@@ -14,7 +14,7 @@ var __statics = {
 	 * @field private static final String
 	 */
 	_MENU_ID: "#popup"
-}
+};
 
 var __members = {
 
