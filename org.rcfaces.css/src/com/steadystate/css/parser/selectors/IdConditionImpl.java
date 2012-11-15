@@ -1,9 +1,7 @@
 /*
- * IdConditionImpl.java
+ * CSS Parser Project
  *
- * Steady State CSS2 Parser
- *
- * Copyright (C) 1999, 2002 Steady State Software Ltd.  All rights reserved.
+ * Copyright (C) 1999-2011 David Schweinsberg.  All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,26 +17,40 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * To contact the authors of the library, write to Steady State Software Ltd.,
- * 49 Littleworth, Wing, Buckinghamshire, LU7 0JX, England
+ * To contact the authors of the library:
  *
- * http://www.steadystate.com/css/
- * mailto:css@steadystate.co.uk
+ * http://cssparser.sourceforge.net/
+ * mailto:davidsch@users.sourceforge.net
  *
- * $Id$
  */
 
 package com.steadystate.css.parser.selectors;
 
 import java.io.Serializable;
-import org.w3c.css.sac.*;
 
-public class IdConditionImpl implements AttributeCondition, Serializable {
+import org.w3c.css.sac.AttributeCondition;
+import org.w3c.css.sac.Condition;
 
-    private String _value;
-    
-    public IdConditionImpl(String value) {
-        _value = value;
+import com.steadystate.css.parser.LocatableImpl;
+
+/**
+ * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
+ */
+public class IdConditionImpl extends LocatableImpl implements AttributeCondition, Serializable {
+
+    private static final long serialVersionUID = 5955662524656167683L;
+
+    private String value_;
+
+    public void setValue(final String value) {
+        this.value_ = value;
+    }
+
+    public IdConditionImpl(final String value) {
+        this.value_ = value;
+    }
+
+    public IdConditionImpl() {
     }
 
     public short getConditionType() {
@@ -58,10 +70,10 @@ public class IdConditionImpl implements AttributeCondition, Serializable {
     }
 
     public String getValue() {
-        return _value;
+        return this.value_;
     }
-    
+
     public String toString() {
-        return "#" + getValue();
+        return "#" + this.getValue();
     }
 }

@@ -1,9 +1,7 @@
 /*
- * OneOfAttributeConditionImpl.java
+ * CSS Parser Project
  *
- * Steady State CSS2 Parser
- *
- * Copyright (C) 1999, 2002 Steady State Software Ltd.  All rights reserved.
+ * Copyright (C) 1999-2011 David Schweinsberg.  All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,30 +17,48 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * To contact the authors of the library, write to Steady State Software Ltd.,
- * 49 Littleworth, Wing, Buckinghamshire, LU7 0JX, England
+ * To contact the authors of the library:
  *
- * http://www.steadystate.com/css/
- * mailto:css@steadystate.co.uk
+ * http://cssparser.sourceforge.net/
+ * mailto:davidsch@users.sourceforge.net
  *
- * $Id$
  */
 
 package com.steadystate.css.parser.selectors;
 
 import java.io.Serializable;
-import org.w3c.css.sac.*;
 
-public class OneOfAttributeConditionImpl implements AttributeCondition, Serializable {
+import org.w3c.css.sac.AttributeCondition;
+import org.w3c.css.sac.Condition;
 
-    private String _localName;
-    private String _value;
-    
-    public OneOfAttributeConditionImpl(String localName, String value) {
-        _localName = localName;
-        _value = value;
+import com.steadystate.css.parser.LocatableImpl;
+
+/**
+ * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
+ */
+public class OneOfAttributeConditionImpl extends LocatableImpl implements AttributeCondition, Serializable {
+
+    private static final long serialVersionUID = -1371164446179830634L;
+
+    private String localName_;
+    private String value_;
+
+    public void setLocalName(final String localName) {
+        localName_ = localName;
     }
-    
+
+    public void setValue(final String value) {
+        value_ = value;
+    }
+
+    public OneOfAttributeConditionImpl(final String localName, final String value) {
+        localName_ = localName;
+        value_ = value;
+    }
+
+    public OneOfAttributeConditionImpl() {
+    }
+
     public short getConditionType() {
         return Condition.SAC_ONE_OF_ATTRIBUTE_CONDITION;
     }
@@ -52,7 +68,7 @@ public class OneOfAttributeConditionImpl implements AttributeCondition, Serializ
     }
 
     public String getLocalName() {
-        return _localName;
+        return localName_;
     }
 
     public boolean getSpecified() {
@@ -60,9 +76,9 @@ public class OneOfAttributeConditionImpl implements AttributeCondition, Serializ
     }
 
     public String getValue() {
-        return _value;
+        return value_;
     }
-    
+
     public String toString() {
         return "[" + getLocalName() + "~=\"" + getValue() + "\"]";
     }

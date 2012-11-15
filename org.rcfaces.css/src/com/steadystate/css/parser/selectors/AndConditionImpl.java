@@ -1,9 +1,7 @@
 /*
- * AndConditionImpl.java
+ * CSS Parser Project
  *
- * Steady State CSS2 Parser
- *
- * Copyright (C) 1999, 2002 Steady State Software Ltd.  All rights reserved.
+ * Copyright (C) 1999-2011 David Schweinsberg.  All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,42 +17,68 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * To contact the authors of the library, write to Steady State Software Ltd.,
- * 49 Littleworth, Wing, Buckinghamshire, LU7 0JX, England
+ * To contact the authors of the library:
  *
- * http://www.steadystate.com/css/
- * mailto:css@steadystate.co.uk
+ * http://cssparser.sourceforge.net/
+ * mailto:davidsch@users.sourceforge.net
  *
- * $Id$
  */
 
 package com.steadystate.css.parser.selectors;
 
 import java.io.Serializable;
-import org.w3c.css.sac.*;
 
-public class AndConditionImpl implements CombinatorCondition, Serializable {
+import org.w3c.css.sac.CombinatorCondition;
+import org.w3c.css.sac.Condition;
 
-    private Condition _c1;
-    private Condition _c2;
+import com.steadystate.css.parser.Locatable;
+import com.steadystate.css.parser.LocatableImpl;
 
-    public AndConditionImpl(Condition c1, Condition c2) {
-        _c1 = c1;
-        _c2 = c2;
+/**
+ *
+ * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
+ */
+public class AndConditionImpl extends LocatableImpl implements CombinatorCondition, Serializable {
+
+    private static final long serialVersionUID = -3180583860092672742L;
+
+    private Condition firstCondition_;
+    private Condition secondCondition_;
+
+    public void setFirstCondition(final Condition c1) {
+        firstCondition_ = c1;
+        if (c1 instanceof Locatable) {
+            setLocator(((Locatable) c1).getLocator());
+        }
+        else if (c1 == null) {
+            setLocator(null);
+        }
     }
-    
+
+    public void setSecondCondition(final Condition c2) {
+        secondCondition_ = c2;
+    }
+
+    public AndConditionImpl(final Condition c1, final Condition c2) {
+        setFirstCondition(c1);
+        setSecondCondition(c2);
+    }
+
+    public AndConditionImpl() {
+    }
+
     public short getConditionType() {
         return Condition.SAC_AND_CONDITION;
     }
 
     public Condition getFirstCondition() {
-        return _c1;
+        return firstCondition_;
     }
 
     public Condition getSecondCondition() {
-        return _c2;
+        return secondCondition_;
     }
-    
+
     public String toString() {
         return getFirstCondition().toString() + getSecondCondition().toString();
     }

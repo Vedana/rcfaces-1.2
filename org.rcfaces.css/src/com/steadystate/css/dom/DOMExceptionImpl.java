@@ -1,9 +1,7 @@
 /*
- * DOMExceptionImpl.java
+ * CSS Parser Project
  *
- * Steady State CSS2 Parser
- *
- * Copyright (C) 1999, 2002 Steady State Software Ltd.  All rights reserved.
+ * Copyright (C) 1999-2011 David Schweinsberg.  All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,29 +17,32 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * To contact the authors of the library, write to Steady State Software Ltd.,
- * 49 Littleworth, Wing, Buckinghamshire, LU7 0JX, England
+ * To contact the authors of the library:
  *
- * http://www.steadystate.com/css/
- * mailto:css@steadystate.co.uk
+ * http://cssparser.sourceforge.net/
+ * mailto:davidsch@users.sourceforge.net
  *
- * $Id$
  */
 
 package com.steadystate.css.dom;
 
-import java.util.*;
-import org.w3c.dom.*;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
-/** 
+import org.w3c.dom.DOMException;
+
+/**
+ * Custom {@link DOMException} extension.
  *
- * @author  David Schweinsberg
- * @version $Release$
+ * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
+ * @author rbri
  */
 public class DOMExceptionImpl extends DOMException {
 
+    private static final long serialVersionUID = 7365733663951145145L;
+
     public static final int SYNTAX_ERROR = 0;
-    public static final int ARRAY_OUT_OF_BOUNDS = 1;
+    public static final int INDEX_OUT_OF_BOUNDS = 1;
     public static final int READ_ONLY_STYLE_SHEET = 2;
     public static final int EXPECTING_UNKNOWN_RULE = 3;
     public static final int EXPECTING_STYLE_RULE = 4;
@@ -60,25 +61,31 @@ public class DOMExceptionImpl extends DOMException {
     public static final int IMPORT_NOT_FIRST = 17;
     public static final int NOT_FOUND = 18;
     public static final int NOT_IMPLEMENTED = 19;
+    public static final int INSERT_BEFORE_IMPORT = 20;
 
-    private static ResourceBundle _exceptionResource =
+    private static ResourceBundle ExceptionResource_ =
         ResourceBundle.getBundle(
             "com.steadystate.css.parser.ExceptionResource",
             Locale.getDefault());
 
-    public DOMExceptionImpl(short code, int messageKey) {
-        super(code, _exceptionResource.getString(keyString(messageKey)));
+    public DOMExceptionImpl(final short code, final int messageKey) {
+        this(code, messageKey, null);
     }
 
-    public DOMExceptionImpl(int code, int messageKey) {
-        super((short) code, _exceptionResource.getString(keyString(messageKey)));
+    public DOMExceptionImpl(final int code, final int messageKey) {
+        this(code, messageKey, null);
     }
 
-    public DOMExceptionImpl(short code, int messageKey, String info) {
-        super(code, _exceptionResource.getString(keyString(messageKey)));
+    public DOMExceptionImpl(final int code, final int messageKey, final String info) {
+        super((short) code, constructMessage(messageKey, info));
     }
 
-    private static String keyString(int key) {
-        return "s" + String.valueOf(key);
+    private static String constructMessage(final int key, final String info) {
+        final String messageKey = "s" + String.valueOf(key);
+        String message = ExceptionResource_.getString(messageKey);
+        if (null != info && info.length() > 0) {
+            message = message + " (" + info + ")";
+        }
+        return message;
     }
 }

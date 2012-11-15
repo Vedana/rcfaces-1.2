@@ -1,9 +1,7 @@
 /*
- * DescendantSelectorImpl.java
+ * CSS Parser Project
  *
- * Steady State CSS2 Parser
- *
- * Copyright (C) 1999, 2002 Steady State Software Ltd.  All rights reserved.
+ * Copyright (C) 1999-2011 David Schweinsberg.  All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,28 +17,54 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * To contact the authors of the library, write to Steady State Software Ltd.,
- * 49 Littleworth, Wing, Buckinghamshire, LU7 0JX, England
+ * To contact the authors of the library:
  *
- * http://www.steadystate.com/css/
- * mailto:css@steadystate.co.uk
+ * http://cssparser.sourceforge.net/
+ * mailto:davidsch@users.sourceforge.net
  *
- * $Id$
  */
 
 package com.steadystate.css.parser.selectors;
 
 import java.io.Serializable;
-import org.w3c.css.sac.*;
 
-public class DescendantSelectorImpl implements DescendantSelector, Serializable {
+import org.w3c.css.sac.DescendantSelector;
+import org.w3c.css.sac.Selector;
+import org.w3c.css.sac.SimpleSelector;
 
-    private Selector _parent;
-    private SimpleSelector _simpleSelector;
+import com.steadystate.css.parser.Locatable;
+import com.steadystate.css.parser.LocatableImpl;
 
-    public DescendantSelectorImpl(Selector parent, SimpleSelector simpleSelector) {
-        _parent = parent;
-        _simpleSelector = simpleSelector;
+/**
+ * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
+ */
+public class DescendantSelectorImpl extends LocatableImpl implements DescendantSelector, Serializable {
+
+    private static final long serialVersionUID = -3620467847449531232L;
+
+    private Selector ancestorSelector_;
+    private SimpleSelector simpleSelector_;
+
+    public void setAncestorSelector(final Selector ancestorSelector) {
+        ancestorSelector_ = ancestorSelector;
+        if (ancestorSelector instanceof Locatable) {
+            setLocator(((Locatable) ancestorSelector).getLocator());
+        }
+        else if (ancestorSelector == null) {
+            setLocator(null);
+        }
+    }
+
+    public void setSimpleSelector(final SimpleSelector simpleSelector) {
+        simpleSelector_ = simpleSelector;
+    }
+
+    public DescendantSelectorImpl(final Selector parent, final SimpleSelector simpleSelector) {
+        setAncestorSelector(parent);
+        setSimpleSelector(simpleSelector);
+    }
+
+    public DescendantSelectorImpl() {
     }
 
     public short getSelectorType() {
@@ -48,13 +72,13 @@ public class DescendantSelectorImpl implements DescendantSelector, Serializable 
     }
 
     public Selector getAncestorSelector() {
-        return _parent;
+        return ancestorSelector_;
     }
 
     public SimpleSelector getSimpleSelector() {
-        return _simpleSelector;
+        return simpleSelector_;
     }
-    
+
     public String toString() {
         return getAncestorSelector().toString() + " " + getSimpleSelector().toString();
     }

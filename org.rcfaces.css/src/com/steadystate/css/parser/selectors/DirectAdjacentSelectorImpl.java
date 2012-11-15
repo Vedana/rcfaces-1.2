@@ -1,9 +1,7 @@
 /*
- * DirectAdjacentSelectorImpl.java
+ * CSS Parser Project
  *
- * Steady State CSS2 Parser
- *
- * Copyright (C) 1999, 2002 Steady State Software Ltd.  All rights reserved.
+ * Copyright (C) 1999-2011 David Schweinsberg.  All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,49 +17,80 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * To contact the authors of the library, write to Steady State Software Ltd.,
- * 49 Littleworth, Wing, Buckinghamshire, LU7 0JX, England
+ * To contact the authors of the library:
  *
- * http://www.steadystate.com/css/
- * mailto:css@steadystate.co.uk
+ * http://cssparser.sourceforge.net/
+ * mailto:davidsch@users.sourceforge.net
  *
- * $Id$
  */
 
 package com.steadystate.css.parser.selectors;
 
 import java.io.Serializable;
-import org.w3c.css.sac.*;
 
-public class DirectAdjacentSelectorImpl implements SiblingSelector, Serializable {
+import org.w3c.css.sac.Selector;
+import org.w3c.css.sac.SiblingSelector;
+import org.w3c.css.sac.SimpleSelector;
 
-    private short _nodeType;
-    private Selector _child;
-    private SimpleSelector _directAdjacent;
+import com.steadystate.css.parser.Locatable;
+import com.steadystate.css.parser.LocatableImpl;
 
-    public DirectAdjacentSelectorImpl(short nodeType, Selector child, SimpleSelector directAdjacent) {
-        _nodeType = nodeType;
-        _child = child;
-        _directAdjacent = directAdjacent;
+/**
+ * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
+ */
+public class DirectAdjacentSelectorImpl extends LocatableImpl implements SiblingSelector, Serializable {
+
+    private static final long serialVersionUID = -7328602345833826516L;
+
+    private short nodeType_;
+    private Selector selector_;  // child
+    private SimpleSelector siblingSelector_; // direct adjacent
+
+    public void setNodeType(final short nodeType) {
+        nodeType_ = nodeType;
+    }
+
+    public void setSelector(final Selector child) {
+        selector_ = child;
+        if (child instanceof Locatable) {
+            setLocator(((Locatable) child).getLocator());
+        }
+        else if (child == null) {
+            setLocator(null);
+        }
+    }
+
+    public void setSiblingSelector(final SimpleSelector directAdjacent) {
+        siblingSelector_ = directAdjacent;
+    }
+
+    public DirectAdjacentSelectorImpl(final short nodeType,
+            final Selector child, final SimpleSelector directAdjacent) {
+        setNodeType(nodeType);
+        setSelector(child);
+        setSiblingSelector(directAdjacent);
+    }
+
+    public DirectAdjacentSelectorImpl() {
     }
 
     public short getNodeType() {
-        return _nodeType;
+        return nodeType_;
     }
-    
+
     public short getSelectorType() {
         return Selector.SAC_DIRECT_ADJACENT_SELECTOR;
     }
 
     public Selector getSelector() {
-        return _child;
+        return selector_;
     }
 
     public SimpleSelector getSiblingSelector() {
-        return _directAdjacent;
+        return siblingSelector_;
     }
-    
+
     public String toString() {
-        return _child.toString() + " + " + _directAdjacent.toString();
+        return selector_.toString() + " + " + siblingSelector_.toString();
     }
 }

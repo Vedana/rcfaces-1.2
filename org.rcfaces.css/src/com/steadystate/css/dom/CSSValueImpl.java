@@ -1,9 +1,7 @@
 /*
- * CSSValueImpl.java
+ * CSS Parser Project
  *
- * Steady State CSS2 Parser
- *
- * Copyright (C) 1999, 2002 Steady State Software Ltd.  All rights reserved.
+ * Copyright (C) 1999-2011 David Schweinsberg.  All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,23 +17,24 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * To contact the authors of the library, write to Steady State Software Ltd.,
- * 49 Littleworth, Wing, Buckinghamshire, LU7 0JX, England
+ * To contact the authors of the library:
  *
- * http://www.steadystate.com/css/
- * mailto:css@steadystate.co.uk
+ * http://cssparser.sourceforge.net/
+ * mailto:davidsch@users.sourceforge.net
  *
- * $Id$
  */
 
 package com.steadystate.css.dom;
 
 import java.io.Serializable;
 import java.io.StringReader;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import org.w3c.css.sac.InputSource;
 import org.w3c.css.sac.LexicalUnit;
+import org.w3c.css.sac.Locator;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.css.CSSPrimitiveValue;
 import org.w3c.dom.css.CSSValue;
@@ -46,66 +45,103 @@ import org.w3c.dom.css.Rect;
 
 import com.steadystate.css.parser.CSSOMParser;
 import com.steadystate.css.parser.LexicalUnitImpl;
+import com.steadystate.css.userdata.UserDataConstants;
+import com.steadystate.css.util.LangUtils;
 
 /**
  * The <code>CSSValueImpl</code> class can represent either a
- * <code>CSSPrimitiveValue</code> or a <code>CSSValueList</code> so that the
- * type can successfully change when using <code>setCssText</code>.
- * 
- * TO DO: Float unit conversions, A means of checking valid primitive types for
- * properties
- * 
- * @author David Schweinsberg
- * @version $Release$
+ * <code>CSSPrimitiveValue</code> or a <code>CSSValueList</code> so that
+ * the type can successfully change when using <code>setCssText</code>.
+ *
+ * TODO:
+ * Float unit conversions,
+ * A means of checking valid primitive types for properties
+ *
+ * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
  */
-public class CSSValueImpl implements CSSPrimitiveValue, CSSValueList,
-        Serializable {
+public class CSSValueImpl extends CSSOMObjectImpl implements CSSPrimitiveValue, CSSValueList, Serializable {
 
-    private Object _value = null;
+    private static final long serialVersionUID = 406281136418322579L;
+
+    private Object value_;
+
+    public Object getValue() {
+        return value_;
+    }
+
+    public void setValue(final Object value) {
+        value_ = value;
+    }
 
     /**
      * Constructor
      */
-    public CSSValueImpl(LexicalUnit value, boolean forcePrimitive) {
-        if (value.getParameters() != null) {
+    public CSSValueImpl(final LexicalUnit value, final boolean forcePrimitive) {
+        LexicalUnit parameters = null;
+        try {
+            parameters = value.getParameters();
+        }
+        catch (final IllegalStateException e) {
+            // Batik SAC parser throws IllegalStateException in some cases
+        }
+
+        if (!forcePrimitive && (value.getNextLexicalUnit() != null)) {
+            value_ = getValues(value);
+        }
+        else if (parameters != null) {
             if (value.getLexicalUnitType() == LexicalUnit.SAC_RECT_FUNCTION) {
                 // Rect
-                _value = new RectImpl(value.getParameters());
-            } else if (value.getLexicalUnitType() == LexicalUnit.SAC_RGBCOLOR) {
+                value_ = new RectImpl(value.getParameters());
+            }
+            else if (value.getLexicalUnitType() == LexicalUnit.SAC_RGBCOLOR) {
                 // RGBColor
-                _value = new RGBColorImpl(value.getParameters());
-            } else if (value.getLexicalUnitType() == LexicalUnit.SAC_COUNTER_FUNCTION) {
-                // Counter
-                _value = new CounterImpl(false, value.getParameters());
-            } else if (value.getLexicalUnitType() == LexicalUnit.SAC_COUNTERS_FUNCTION) {
-                // Counter
-                _value = new CounterImpl(true, value.getParameters());
-            } else {
-                _value = value;
+                value_ = new RGBColorImpl(value.getParameters());
             }
-        } else if (forcePrimitive || (value.getNextLexicalUnit() == null)) {
-
+            else if (value.getLexicalUnitType() == LexicalUnit.SAC_COUNTER_FUNCTION) {
+                // Counter
+                value_ = new CounterImpl(false, value.getParameters());
+            }
+            else if (value.getLexicalUnitType() == LexicalUnit.SAC_COUNTERS_FUNCTION) {
+                // Counter
+                value_ = new CounterImpl(true, value.getParameters());
+            }
+            else {
+                value_ = value;
+            }
+        }
+        else {
             // We need to be a CSSPrimitiveValue
-            _value = value;
-        } else {
-
-            // We need to be a CSSValueList
-            // Values in an "expr" can be seperated by "operator"s, which are
-            // either '/' or ',' - ignore these operators
-            Vector v = new Vector();
-            LexicalUnit lu = value;
-            while (lu != null) {
-                if ((lu.getLexicalUnitType() != LexicalUnit.SAC_OPERATOR_COMMA)
-                        && (lu.getLexicalUnitType() != LexicalUnit.SAC_OPERATOR_SLASH)) {
-                    v.addElement(new CSSValueImpl(lu, true));
-                }
-                lu = lu.getNextLexicalUnit();
+            value_ = value;
+        }
+        if (value instanceof LexicalUnitImpl) {
+            final Locator locator = ((LexicalUnitImpl) value).getLocator();
+            if (locator != null) {
+                setUserData(UserDataConstants.KEY_LOCATOR, locator);
             }
-            _value = v;
         }
     }
 
-    public CSSValueImpl(LexicalUnit value) {
+    public CSSValueImpl() {
+        super();
+    }
+
+    private List<CSSValueImpl> getValues(final LexicalUnit value) {
+        // We need to be a CSSValueList
+        // Values in an "expr" can be seperated by "operator"s, which are
+        // either '/' or ',' - ignore these operators
+        final List<CSSValueImpl> values = new ArrayList<CSSValueImpl>();
+        LexicalUnit lu = value;
+        while (lu != null) {
+            if ((lu.getLexicalUnitType() != LexicalUnit.SAC_OPERATOR_COMMA)
+                && (lu.getLexicalUnitType() != LexicalUnit.SAC_OPERATOR_SLASH)) {
+                values.add(new CSSValueImpl(lu, true));
+            }
+            lu = lu.getNextLexicalUnit();
+        }
+        return values;
+    }
+
+    public CSSValueImpl(final LexicalUnit value) {
         this(value, false);
     }
 
@@ -114,229 +150,272 @@ public class CSSValueImpl implements CSSPrimitiveValue, CSSValueList,
 
             // Create the string from the LexicalUnits so we include the correct
             // operators in the string
-            StringBuffer sb = new StringBuffer();
-            Vector v = (Vector) _value;
-            LexicalUnit lu = (LexicalUnit) ((CSSValueImpl) v.elementAt(0))._value;
-            while (lu != null) {
-                sb.append(lu.toString());
+            final StringBuilder sb = new StringBuilder();
+            final List<?> list = (List<?>) value_;
+            final Iterator<?> it = list.iterator();
+            while (it.hasNext()) {
+                final Object o = it.next();
+                final CSSValueImpl cssValue = (CSSValueImpl) o;
+                if (cssValue.value_ instanceof LexicalUnit) {
+                    LexicalUnit lu = (LexicalUnit) cssValue.value_;
+                    if (lu != null) {
+                        sb.append(lu.toString());
 
-                // Step to the next lexical unit, determining what spacing we
-                // need to put around the operators
-                LexicalUnit prev = lu;
-                lu = lu.getNextLexicalUnit();
-                if ((lu != null)
-                        && (lu.getLexicalUnitType() != LexicalUnit.SAC_OPERATOR_COMMA)
-                        && (lu.getLexicalUnitType() != LexicalUnit.SAC_OPERATOR_SLASH)
-                        && (prev.getLexicalUnitType() != LexicalUnit.SAC_OPERATOR_SLASH)) {
+                        // Step to the next lexical unit, determining what spacing we
+                        // need to put around the operators
+                        final LexicalUnit prev = lu;
+                        lu = lu.getNextLexicalUnit();
+                        if ((lu != null)
+                                && ((lu.getLexicalUnitType() == LexicalUnit.SAC_OPERATOR_COMMA)
+                                || (lu.getLexicalUnitType() == LexicalUnit.SAC_OPERATOR_SLASH)
+                                || (prev.getLexicalUnitType() == LexicalUnit.SAC_OPERATOR_SLASH)
+                            )) {
+                            sb.append(lu.toString());
+                        }
+                    }
+                }
+                else {
+                    sb.append(o);
+                }
+                if (it.hasNext()) {
                     sb.append(" ");
                 }
             }
             return sb.toString();
-        } else {
-            return _value.toString();
         }
+        return value_ != null ? value_.toString() : "";
     }
 
-    public void setCssText(String cssText) throws DOMException {
+    public void setCssText(final String cssText) throws DOMException {
         try {
-            InputSource is = new InputSource(new StringReader(cssText));
-            CSSOMParser parser = new CSSOMParser();
-            CSSValueImpl v2 = (CSSValueImpl) parser.parsePropertyValue(is);
-            _value = v2._value;
-        } catch (Exception e) {
-            throw new DOMExceptionImpl(DOMException.SYNTAX_ERR,
-                    DOMExceptionImpl.SYNTAX_ERROR, e.getMessage());
+            final InputSource is = new InputSource(new StringReader(cssText));
+            final CSSOMParser parser = new CSSOMParser();
+            final CSSValueImpl v2 = (CSSValueImpl) parser.parsePropertyValue(is);
+            value_ = v2.value_;
+            setUserDataMap(v2.getUserDataMap());
+        }
+        catch (final Exception e) {
+            throw new DOMExceptionImpl(
+                DOMException.SYNTAX_ERR,
+                DOMExceptionImpl.SYNTAX_ERROR,
+                e.getMessage());
         }
     }
 
     public short getCssValueType() {
-        return (_value instanceof Vector) ? CSS_VALUE_LIST
-                : CSS_PRIMITIVE_VALUE;
+        if (value_ instanceof List) {
+            return CSS_VALUE_LIST;
+        }
+        if ((value_ instanceof LexicalUnit)
+                && (((LexicalUnit) value_).getLexicalUnitType() == LexicalUnit.SAC_INHERIT)) {
+            return CSS_INHERIT;
+        }
+        return CSS_PRIMITIVE_VALUE;
     }
 
     public short getPrimitiveType() {
-        if (_value instanceof LexicalUnit) {
-            LexicalUnit lu = (LexicalUnit) _value;
+        if (value_ instanceof LexicalUnit) {
+            final LexicalUnit lu = (LexicalUnit) value_;
             switch (lu.getLexicalUnitType()) {
-            case LexicalUnit.SAC_INHERIT:
-                return CSS_IDENT;
-            case LexicalUnit.SAC_INTEGER:
-            case LexicalUnit.SAC_REAL:
-                return CSS_NUMBER;
-            case LexicalUnit.SAC_EM:
-                return CSS_EMS;
-            case LexicalUnit.SAC_EX:
-                return CSS_EXS;
-            case LexicalUnit.SAC_PIXEL:
-                return CSS_PX;
-            case LexicalUnit.SAC_INCH:
-                return CSS_IN;
-            case LexicalUnit.SAC_CENTIMETER:
-                return CSS_CM;
-            case LexicalUnit.SAC_MILLIMETER:
-                return CSS_MM;
-            case LexicalUnit.SAC_POINT:
-                return CSS_PT;
-            case LexicalUnit.SAC_PICA:
-                return CSS_PC;
-            case LexicalUnit.SAC_PERCENTAGE:
-                return CSS_PERCENTAGE;
-            case LexicalUnit.SAC_URI:
-                return CSS_URI;
-                // case LexicalUnit.SAC_COUNTER_FUNCTION:
-                // case LexicalUnit.SAC_COUNTERS_FUNCTION:
-                // return CSS_COUNTER;
-                // case LexicalUnit.SAC_RGBCOLOR:
-                // return CSS_RGBCOLOR;
-            case LexicalUnit.SAC_DEGREE:
-                return CSS_DEG;
-            case LexicalUnit.SAC_GRADIAN:
-                return CSS_GRAD;
-            case LexicalUnit.SAC_RADIAN:
-                return CSS_RAD;
-            case LexicalUnit.SAC_MILLISECOND:
-                return CSS_MS;
-            case LexicalUnit.SAC_SECOND:
-                return CSS_S;
-            case LexicalUnit.SAC_HERTZ:
-                return CSS_KHZ;
-            case LexicalUnit.SAC_KILOHERTZ:
-                return CSS_HZ;
-            case LexicalUnit.SAC_IDENT:
-                return CSS_IDENT;
-            case LexicalUnit.SAC_STRING_VALUE:
-                return CSS_STRING;
-            case LexicalUnit.SAC_ATTR:
-                return CSS_ATTR;
-                // case LexicalUnit.SAC_RECT_FUNCTION:
-                // return CSS_RECT;
-            case LexicalUnit.SAC_UNICODERANGE:
-            case LexicalUnit.SAC_SUB_EXPRESSION:
-            case LexicalUnit.SAC_FUNCTION:
-                return CSS_STRING;
-            case LexicalUnit.SAC_DIMENSION:
-                return CSS_DIMENSION;
+                case LexicalUnit.SAC_INHERIT:
+                    return CSS_IDENT;
+                case LexicalUnit.SAC_INTEGER:
+                case LexicalUnit.SAC_REAL:
+                    return CSS_NUMBER;
+                case LexicalUnit.SAC_EM:
+                    return CSS_EMS;
+                case LexicalUnit.SAC_EX:
+                    return CSS_EXS;
+                case LexicalUnit.SAC_PIXEL:
+                    return CSS_PX;
+                case LexicalUnit.SAC_INCH:
+                    return CSS_IN;
+                case LexicalUnit.SAC_CENTIMETER:
+                    return CSS_CM;
+                case LexicalUnit.SAC_MILLIMETER:
+                    return CSS_MM;
+                case LexicalUnit.SAC_POINT:
+                    return CSS_PT;
+                case LexicalUnit.SAC_PICA:
+                    return CSS_PC;
+                case LexicalUnit.SAC_PERCENTAGE:
+                    return CSS_PERCENTAGE;
+                case LexicalUnit.SAC_URI:
+                    return CSS_URI;
+    //            case LexicalUnit.SAC_COUNTER_FUNCTION:
+    //            case LexicalUnit.SAC_COUNTERS_FUNCTION:
+    //                return CSS_COUNTER;
+    //            case LexicalUnit.SAC_RGBCOLOR:
+    //                return CSS_RGBCOLOR;
+                case LexicalUnit.SAC_DEGREE:
+                    return CSS_DEG;
+                case LexicalUnit.SAC_GRADIAN:
+                    return CSS_GRAD;
+                case LexicalUnit.SAC_RADIAN:
+                    return CSS_RAD;
+                case LexicalUnit.SAC_MILLISECOND:
+                    return CSS_MS;
+                case LexicalUnit.SAC_SECOND:
+                    return CSS_S;
+                case LexicalUnit.SAC_HERTZ:
+                    return CSS_KHZ;
+                case LexicalUnit.SAC_KILOHERTZ:
+                    return CSS_HZ;
+                case LexicalUnit.SAC_IDENT:
+                    return CSS_IDENT;
+                case LexicalUnit.SAC_STRING_VALUE:
+                    return CSS_STRING;
+                case LexicalUnit.SAC_ATTR:
+                    return CSS_ATTR;
+    //            case LexicalUnit.SAC_RECT_FUNCTION:
+    //                return CSS_RECT;
+                case LexicalUnit.SAC_UNICODERANGE:
+                case LexicalUnit.SAC_SUB_EXPRESSION:
+                case LexicalUnit.SAC_FUNCTION:
+                    return CSS_STRING;
+                case LexicalUnit.SAC_DIMENSION:
+                    return CSS_DIMENSION;
             }
-        } else if (_value instanceof RectImpl) {
+        }
+        else if (value_ instanceof RectImpl) {
             return CSS_RECT;
-        } else if (_value instanceof RGBColorImpl) {
+        }
+        else if (value_ instanceof RGBColorImpl) {
             return CSS_RGBCOLOR;
-        } else if (_value instanceof CounterImpl) {
+        }
+        else if (value_ instanceof CounterImpl) {
             return CSS_COUNTER;
         }
         return CSS_UNKNOWN;
     }
 
-    public void setFloatValue(short unitType, float floatValue)
-            throws DOMException {
-        _value = LexicalUnitImpl.createNumber(null, floatValue);
+    public void setFloatValue(final short unitType, final float floatValue) throws DOMException {
+        value_ = LexicalUnitImpl.createNumber(null, floatValue);
     }
 
-    public float getFloatValue(short unitType) throws DOMException {
-        if (_value instanceof LexicalUnit) {
-            LexicalUnit lu = (LexicalUnit) _value;
+    public float getFloatValue(final short unitType) throws DOMException {
+        if (value_ instanceof LexicalUnit) {
+            final LexicalUnit lu = (LexicalUnit) value_;
             return lu.getFloatValue();
         }
-        throw new DOMExceptionImpl(DOMException.INVALID_ACCESS_ERR,
-                DOMExceptionImpl.FLOAT_ERROR);
+        throw new DOMExceptionImpl(
+            DOMException.INVALID_ACCESS_ERR,
+            DOMExceptionImpl.FLOAT_ERROR);
 
         // We need to attempt a conversion
         // return 0;
     }
 
-    public void setStringValue(short stringType, String stringValue)
-            throws DOMException {
-
-        LexicalUnitImpl cur = (LexicalUnitImpl) _value;
-
+    public void setStringValue(final short stringType, final String stringValue) throws DOMException {
         switch (stringType) {
-        case CSS_STRING:
-            _value = LexicalUnitImpl.createString(null, stringValue);
-            break;
-        case CSS_URI:
-            _value = LexicalUnitImpl.createURI(null, stringValue);
-            break;
-        case CSS_IDENT:
-            _value = LexicalUnitImpl.createIdent(null, stringValue);
-            break;
-        case CSS_ATTR:
-            // _value = LexicalUnitImpl.createAttr(null, stringValue);
-            // break;
-            throw new DOMExceptionImpl(DOMException.NOT_SUPPORTED_ERR,
+            case CSS_STRING:
+                value_ = LexicalUnitImpl.createString(null, stringValue);
+                break;
+            case CSS_URI:
+                value_ = LexicalUnitImpl.createURI(null, stringValue);
+                break;
+            case CSS_IDENT:
+                value_ = LexicalUnitImpl.createIdent(null, stringValue);
+                break;
+            case CSS_ATTR:
+    //            _value = LexicalUnitImpl.createAttr(null, stringValue);
+    //            break;
+                throw new DOMExceptionImpl(
+                    DOMException.NOT_SUPPORTED_ERR,
                     DOMExceptionImpl.NOT_IMPLEMENTED);
-        default:
-            throw new DOMExceptionImpl(DOMException.INVALID_ACCESS_ERR,
+            default:
+                throw new DOMExceptionImpl(
+                    DOMException.INVALID_ACCESS_ERR,
                     DOMExceptionImpl.STRING_ERROR);
         }
-
-        LexicalUnitImpl prev = (LexicalUnitImpl) cur.getPreviousLexicalUnit();
-        if (prev != null) {
-            prev.setNextLexicalUnit((LexicalUnit) _value);
-            ((LexicalUnitImpl) _value).setPreviousLexicalUnit(prev);
-        }
-
-        LexicalUnitImpl next = (LexicalUnitImpl) cur.getNextLexicalUnit();
-        if (next != null) {
-            next.setPreviousLexicalUnit((LexicalUnit) _value);
-            ((LexicalUnitImpl) _value).setNextLexicalUnit(next);
-        }
-
     }
 
     /**
      * TODO: return a value for a list type
      */
     public String getStringValue() throws DOMException {
-        if (_value instanceof LexicalUnit) {
-            LexicalUnit lu = (LexicalUnit) _value;
+        if (value_ instanceof LexicalUnit) {
+            final LexicalUnit lu = (LexicalUnit) value_;
             if ((lu.getLexicalUnitType() == LexicalUnit.SAC_IDENT)
-                    || (lu.getLexicalUnitType() == LexicalUnit.SAC_STRING_VALUE)
-                    || (lu.getLexicalUnitType() == LexicalUnit.SAC_URI)
-                    || (lu.getLexicalUnitType() == LexicalUnit.SAC_ATTR)) {
+                || (lu.getLexicalUnitType() == LexicalUnit.SAC_STRING_VALUE)
+                || (lu.getLexicalUnitType() == LexicalUnit.SAC_URI)
+                || (lu.getLexicalUnitType() == LexicalUnit.SAC_INHERIT)) {
                 return lu.getStringValue();
             }
-        } else if (_value instanceof Vector) {
+            else if (lu.getLexicalUnitType() == LexicalUnit.SAC_ATTR) {
+                return lu.getParameters().getStringValue();
+            }
+        }
+        else if (value_ instanceof List) {
             return null;
         }
 
-        throw new DOMExceptionImpl(DOMException.INVALID_ACCESS_ERR,
-                DOMExceptionImpl.STRING_ERROR);
+        throw new DOMExceptionImpl(
+            DOMException.INVALID_ACCESS_ERR,
+            DOMExceptionImpl.STRING_ERROR);
     }
 
     public Counter getCounterValue() throws DOMException {
-        if ((_value instanceof Counter) == false) {
-            throw new DOMExceptionImpl(DOMException.INVALID_ACCESS_ERR,
-                    DOMExceptionImpl.COUNTER_ERROR);
+        if ((value_ instanceof Counter) == false) {
+            throw new DOMExceptionImpl(
+                DOMException.INVALID_ACCESS_ERR,
+                DOMExceptionImpl.COUNTER_ERROR);
         }
-        return (Counter) _value;
+        return (Counter) value_;
     }
 
     public Rect getRectValue() throws DOMException {
-        if ((_value instanceof Rect) == false) {
-            throw new DOMExceptionImpl(DOMException.INVALID_ACCESS_ERR,
-                    DOMExceptionImpl.RECT_ERROR);
+        if ((value_ instanceof Rect) == false) {
+            throw new DOMExceptionImpl(
+                DOMException.INVALID_ACCESS_ERR,
+                DOMExceptionImpl.RECT_ERROR);
         }
-        return (Rect) _value;
+        return (Rect) value_;
     }
 
     public RGBColor getRGBColorValue() throws DOMException {
-        if ((_value instanceof RGBColor) == false) {
-            throw new DOMExceptionImpl(DOMException.INVALID_ACCESS_ERR,
-                    DOMExceptionImpl.RGBCOLOR_ERROR);
+        if ((value_ instanceof RGBColor) == false) {
+            throw new DOMExceptionImpl(
+                DOMException.INVALID_ACCESS_ERR,
+                DOMExceptionImpl.RGBCOLOR_ERROR);
         }
-        return (RGBColor) _value;
+        return (RGBColor) value_;
     }
 
     public int getLength() {
-        return (_value instanceof Vector) ? ((Vector) _value).size() : 0;
+        return (value_ instanceof List) ? ((List) value_).size() : 0;
     }
 
-    public CSSValue item(int index) {
-        return (_value instanceof Vector) ? ((CSSValue) ((Vector) _value)
-                .elementAt(index)) : null;
+    public CSSValue item(final int index) {
+        return (value_ instanceof List)
+            ? ((CSSValue) ((List) value_).get(index))
+            : null;
     }
 
     public String toString() {
         return getCssText();
     }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof CSSValue)) {
+            return false;
+        }
+        final CSSValue cv = (CSSValue) obj;
+        // TODO to be improved!
+        return super.equals(obj)
+            && (getCssValueType() == cv.getCssValueType())
+            && LangUtils.equals(getCssText(), cv.getCssText());
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = super.hashCode();
+        hash = LangUtils.hashCode(hash, value_);
+        return hash;
+    }
+
 }

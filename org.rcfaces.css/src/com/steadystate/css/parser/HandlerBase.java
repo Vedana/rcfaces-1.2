@@ -1,9 +1,7 @@
 /*
- * HandlerBase.java
+ * CSS Parser Project
  *
- * Steady State CSS2 Parser
- *
- * Copyright (C) 1999, 2002 Steady State Software Ltd.  All rights reserved.
+ * Copyright (C) 1999-2011 David Schweinsberg.  All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,104 +17,164 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * To contact the authors of the library, write to Steady State Software Ltd.,
- * 49 Littleworth, Wing, Buckinghamshire, LU7 0JX, England
+ * To contact the authors of the library:
  *
- * http://www.steadystate.com/css/
- * mailto:css@steadystate.co.uk
+ * http://cssparser.sourceforge.net/
+ * mailto:davidsch@users.sourceforge.net
  *
- * $Id$
  */
 
 package com.steadystate.css.parser;
 
-import org.w3c.css.sac.*;
+import org.w3c.css.sac.CSSException;
+import org.w3c.css.sac.CSSParseException;
+import org.w3c.css.sac.ErrorHandler;
+import org.w3c.css.sac.InputSource;
+import org.w3c.css.sac.LexicalUnit;
+import org.w3c.css.sac.Locator;
+import org.w3c.css.sac.SACMediaList;
+import org.w3c.css.sac.SelectorList;
 
-public class HandlerBase implements DocumentHandler, ErrorHandler {
+import com.steadystate.css.sac.DocumentHandlerExt;
 
-    public void startDocument(InputSource source)
-        throws CSSException {
-    }
-    
-    public void endDocument(InputSource source) throws CSSException {
-    }
+/**
+ * Empty implementation of the DocumentHandlerExt interface.
+ */
+public class HandlerBase implements DocumentHandlerExt, ErrorHandler {
 
-    public void comment(String text) throws CSSException {
-    }
-
-    public void ignorableAtRule(String atRule) throws CSSException {
-    }
-
-    public void namespaceDeclaration(String prefix, String uri)
-	    throws CSSException {
-    }
-
-    public void importStyle(String uri, SACMediaList media, 
-			String defaultNamespaceURI)
-	    throws CSSException {
+    @Override
+    public void startDocument(final InputSource source) throws CSSException {
     }
 
-    public void startMedia(SACMediaList media) throws CSSException {
+    @Override
+    public void endDocument(final InputSource source) throws CSSException {
     }
 
-    public void endMedia(SACMediaList media) throws CSSException {
+    @Override
+    public void comment(final String text) throws CSSException {
     }
 
-    public void startPage(String name, String pseudo_page) throws CSSException {
+    @Override
+    public void ignorableAtRule(final String atRule) throws CSSException {
     }
 
-    public void endPage(String name, String pseudo_page) throws CSSException {
+    @Override
+    public void ignorableAtRule(final String atRule, final Locator locator)
+            throws CSSException {
     }
 
+    @Override
+    public void namespaceDeclaration(final String prefix, final String uri)
+            throws CSSException {
+    }
+
+    @Override
+    public void importStyle(final String uri, final SACMediaList media,
+            final String defaultNamespaceURI) throws CSSException {
+    }
+
+    @Override
+    public void importStyle(final String uri, final SACMediaList media,
+            final String defaultNamespaceURI, final Locator locator)
+            throws CSSException {
+    }
+
+    @Override
+    public void startMedia(final SACMediaList media) throws CSSException {
+    }
+
+    @Override
+    public void startMedia(final SACMediaList media, final Locator locator)
+            throws CSSException {
+    }
+
+    @Override
+    public void endMedia(final SACMediaList media) throws CSSException {
+    }
+
+    @Override
+    public void startPage(final String name, final String pseudoPage)
+            throws CSSException {
+    }
+
+    @Override
+    public void startPage(final String name, final String pseudoPage,
+            final Locator locator) throws CSSException {
+    }
+
+    @Override
+    public void endPage(final String name, final String pseudoPage)
+            throws CSSException {
+    }
+
+    @Override
     public void startFontFace() throws CSSException {
     }
 
+    @Override
+    public void startFontFace(final Locator locator) throws CSSException {
+    }
+
+    @Override
     public void endFontFace() throws CSSException {
     }
 
-    public void startSelector(SelectorList selectors) throws CSSException {
+    @Override
+    public void startSelector(final SelectorList selectors) throws CSSException {
     }
 
-    public void endSelector(SelectorList selectors) throws CSSException {
+    @Override
+    public void startSelector(final SelectorList selectors,
+            final Locator locator) throws CSSException {
     }
 
-    public void property(String name, LexicalUnit value, boolean important)
-        throws CSSException {
+    @Override
+    public void endSelector(final SelectorList selectors) throws CSSException {
     }
 
-    public void warning(CSSParseException exception) throws CSSException {
-        StringBuffer sb = new StringBuffer();
-        sb.append(exception.getURI())
-            .append(" [")
-            .append(exception.getLineNumber())
-            .append(":")
-            .append(exception.getColumnNumber())
-            .append("] ")
-            .append(exception.getMessage());
+    @Override
+    public void property(final String name, final LexicalUnit value,
+            final boolean important) throws CSSException {
+    }
+
+    @Override
+    public void property(final String name, final LexicalUnit value,
+            final boolean important, final Locator locator) {
+    }
+
+    @Override
+    public void charset(final String characterEncoding, final Locator locator)
+            throws CSSException {
+    }
+
+    @Override
+    public void warning(final CSSParseException exception) throws CSSException {
+        final StringBuilder sb = new StringBuilder();
+        sb.append(exception.getURI()).append(" [")
+                .append(exception.getLineNumber()).append(":")
+                .append(exception.getColumnNumber()).append("] ")
+                .append(exception.getMessage());
         System.err.println(sb.toString());
     }
 
-    public void error(CSSParseException exception) throws CSSException {
-        StringBuffer sb = new StringBuffer();
-        sb.append(exception.getURI())
-            .append(" [")
-            .append(exception.getLineNumber())
-            .append(":")
-            .append(exception.getColumnNumber())
-            .append("] ")
-            .append(exception.getMessage());
+    @Override
+    public void error(final CSSParseException exception) throws CSSException {
+        final StringBuilder sb = new StringBuilder();
+        sb.append(exception.getURI()).append(" [")
+                .append(exception.getLineNumber()).append(":")
+                .append(exception.getColumnNumber()).append("] ")
+                .append(exception.getMessage());
         System.err.println(sb.toString());
     }
 
-    public void fatalError(CSSParseException exception) throws CSSException {
-        StringBuffer sb = new StringBuffer();
-        sb.append(exception.getURI())
-            .append(" [")
-            .append(exception.getLineNumber())
-            .append(":")
-            .append(exception.getColumnNumber())
-            .append("] ")
-            .append(exception.getMessage());
+    @Override
+    public void fatalError(final CSSParseException exception)
+            throws CSSException {
+        final StringBuilder sb = new StringBuilder();
+        sb.append(exception.getURI()).append(" [")
+                .append(exception.getLineNumber()).append(":")
+                .append(exception.getColumnNumber()).append("] ")
+                .append(exception.getMessage());
         System.err.println(sb.toString());
     }
 }

@@ -1,9 +1,7 @@
 /*
- * SelectorListImpl.java
+ * CSS Parser Project
  *
- * Steady State CSS2 Parser
- *
- * Copyright (C) 1999, 2002 Steady State Software Ltd.  All rights reserved.
+ * Copyright (C) 1999-2011 David Schweinsberg.  All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,47 +17,61 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * To contact the authors of the library, write to Steady State Software Ltd.,
- * 49 Littleworth, Wing, Buckinghamshire, LU7 0JX, England
+ * To contact the authors of the library:
  *
- * http://www.steadystate.com/css/
- * mailto:css@steadystate.co.uk
+ * http://cssparser.sourceforge.net/
+ * mailto:davidsch@users.sourceforge.net
  *
- * $Id$
  */
 
 package com.steadystate.css.parser;
 
 import java.io.Serializable;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.w3c.css.sac.Selector;
 import org.w3c.css.sac.SelectorList;
 
-public class SelectorListImpl implements SelectorList, Serializable {
+/**
+ * Implementation of {@link SelectorList}.
+ * 
+ * @author <a href="mailto:davidsch@users.sourceforge.net">David
+ *         Schweinsberg</a>
+ */
+public class SelectorListImpl extends LocatableImpl implements SelectorList,
+        Serializable {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 3536609312777739854L;
+    private static final long serialVersionUID = 7313376916207026333L;
 
-    private Vector _selectors = new Vector(10, 10);
+    private List<Selector> selectors_ = new ArrayList<Selector>(10);
 
+    public List<Selector> getSelectors() {
+        return selectors_;
+    }
+
+    public void setSelectors(final List<Selector> selectors) {
+        selectors_ = selectors;
+    }
+
+    @Override
     public int getLength() {
-        return _selectors.size();
+        return selectors_.size();
     }
 
-    public Selector item(int index) {
-        return (Selector) _selectors.elementAt(index);
+    @Override
+    public Selector item(final int index) {
+        return selectors_.get(index);
     }
 
-    public void add(Selector sel) {
-        _selectors.addElement(sel);
+    public void add(final Selector sel) {
+        selectors_.add(sel);
     }
 
+    @Override
     public String toString() {
-        StringBuffer sb = new StringBuffer();
-        int len = getLength();
+        final StringBuilder sb = new StringBuilder();
+        final int len = getLength();
         for (int i = 0; i < len; i++) {
             sb.append(item(i).toString());
             if (i < len - 1) {

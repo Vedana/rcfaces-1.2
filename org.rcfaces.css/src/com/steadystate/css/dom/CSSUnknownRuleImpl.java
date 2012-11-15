@@ -1,9 +1,7 @@
 /*
- * CSSUnknownRuleImpl.java
+ * CSS Parser Project
  *
- * Steady State CSS2 Parser
- *
- * Copyright (C) 1999, 2002 Steady State Software Ltd.  All rights reserved.
+ * Copyright (C) 1999-2011 David Schweinsberg.  All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,41 +17,54 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * To contact the authors of the library, write to Steady State Software Ltd.,
- * 49 Littleworth, Wing, Buckinghamshire, LU7 0JX, England
+ * To contact the authors of the library:
  *
- * http://www.steadystate.com/css/
- * mailto:css@steadystate.co.uk
+ * http://cssparser.sourceforge.net/
+ * mailto:davidsch@users.sourceforge.net
  *
- * $Id$
  */
 
 package com.steadystate.css.dom;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.io.StringReader;
-import org.w3c.dom.*;
-import org.w3c.dom.css.*;
 
-/*
+import org.w3c.dom.DOMException;
+import org.w3c.dom.css.CSSRule;
+import org.w3c.dom.css.CSSUnknownRule;
+
+import com.steadystate.css.util.LangUtils;
+
+/**
+ * Implementation of {@link CSSUnknownRule}.
  *
- * @author  David Schweinsberg
- * @version $Release$
+ * TODO: Reinstate setCssText
+ *
+ * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
  */
-public class CSSUnknownRuleImpl implements CSSUnknownRule, Serializable {
+public class CSSUnknownRuleImpl extends AbstractCSSRuleImpl implements CSSUnknownRule, Serializable {
 
-    CSSStyleSheetImpl _parentStyleSheet = null;
-    CSSRule _parentRule = null;
-    String _text = null;
+    private static final long serialVersionUID = -268104019127675990L;
+
+    private String text_;
+
+    public String getText() {
+        return text_;
+    }
+
+    public void setText(final String text) {
+        text_ = text;
+    }
 
     public CSSUnknownRuleImpl(
-            CSSStyleSheetImpl parentStyleSheet,
-            CSSRule parentRule,
-            String text) {
-        _parentStyleSheet = parentStyleSheet;
-        _parentRule = parentRule;
-        _text = text;
+            final CSSStyleSheetImpl parentStyleSheet,
+            final CSSRule parentRule,
+            final String text) {
+        super(parentStyleSheet, parentRule);
+        text_ = text;
+    }
+
+    public CSSUnknownRuleImpl() {
+        super();
     }
 
     public short getType() {
@@ -61,10 +72,10 @@ public class CSSUnknownRuleImpl implements CSSUnknownRule, Serializable {
     }
 
     public String getCssText() {
-        return _text;
+        return text_;
     }
 
-    public void setCssText(String cssText) throws DOMException {
+    public void setCssText(final String cssText) throws DOMException {
 /*
         if( _parentStyleSheet != null && _parentStyleSheet.isReadOnly() )
         throw new DOMExceptionImpl(
@@ -106,15 +117,37 @@ public class CSSUnknownRuleImpl implements CSSUnknownRule, Serializable {
 */
     }
 
-    public CSSStyleSheet getParentStyleSheet() {
-        return _parentStyleSheet;
-    }
+    // There's no need to override the methods from AbstractCSSRuleImpl
+//    public CSSStyleSheet getParentStyleSheet() {
+//        return parentStyleSheet;
+//    }
+//
+//    public CSSRule getParentRule() {
+//        return parentRule;
+//    }
 
-    public CSSRule getParentRule() {
-        return _parentRule;
-    }
-    
     public String toString() {
         return getCssText();
     }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof CSSUnknownRule)) {
+            return false;
+        }
+        final CSSUnknownRule cur = (CSSUnknownRule) obj;
+        return super.equals(obj)
+            && LangUtils.equals(getCssText(), cur.getCssText());
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = super.hashCode();
+        hash = LangUtils.hashCode(hash, text_);
+        return hash;
+    }
+
 }

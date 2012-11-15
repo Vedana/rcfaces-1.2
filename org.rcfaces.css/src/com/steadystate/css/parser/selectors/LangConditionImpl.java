@@ -1,9 +1,7 @@
 /*
- * LangConditionImpl.java
+ * CSS Parser Project
  *
- * Steady State CSS2 Parser
- *
- * Copyright (C) 1999, 2002 Steady State Software Ltd.  All rights reserved.
+ * Copyright (C) 1999-2011 David Schweinsberg.  All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,31 +17,41 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * To contact the authors of the library, write to Steady State Software Ltd.,
- * 49 Littleworth, Wing, Buckinghamshire, LU7 0JX, England
+ * To contact the authors of the library:
  *
- * http://www.steadystate.com/css/
- * mailto:css@steadystate.co.uk
+ * http://cssparser.sourceforge.net/
+ * mailto:davidsch@users.sourceforge.net
  *
- * $Id$
  */
 
 package com.steadystate.css.parser.selectors;
 
 import java.io.Serializable;
-import org.w3c.css.sac.*;
 
-/** 
+import org.w3c.css.sac.Condition;
+import org.w3c.css.sac.LangCondition;
+
+import com.steadystate.css.parser.LocatableImpl;
+
+/**
  *
- * @author  David Schweinsberg
- * @version $Release$
+ * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
  */
-public class LangConditionImpl implements LangCondition, Serializable {
+public class LangConditionImpl extends LocatableImpl implements LangCondition, Serializable {
 
-    private String _lang;
+    private static final long serialVersionUID = 1701599531953055387L;
 
-    public LangConditionImpl(String lang) {
-        _lang = lang;
+    private String lang_;
+
+    public void setLang(final String lang) {
+        lang_ = lang;
+    }
+
+    public LangConditionImpl(final String lang) {
+        lang_ = lang;
+    }
+
+    public LangConditionImpl() {
     }
 
     public short getConditionType() {
@@ -51,9 +59,9 @@ public class LangConditionImpl implements LangCondition, Serializable {
     }
 
     public String getLang() {
-        return _lang;
+        return lang_;
     }
-    
+
     public String toString() {
         return ":lang(" + getLang() + ")";
     }

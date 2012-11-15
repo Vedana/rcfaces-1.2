@@ -1,9 +1,7 @@
 /*
- * SACMediaListImpl.java
+ * CSS Parser Project
  *
- * Steady State CSS2 Parser
- *
- * Copyright (C) 1999, 2002 Steady State Software Ltd.  All rights reserved.
+ * Copyright (C) 1999-2011 David Schweinsberg.  All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,39 +17,47 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * To contact the authors of the library, write to Steady State Software Ltd.,
- * 49 Littleworth, Wing, Buckinghamshire, LU7 0JX, England
+ * To contact the authors of the library:
  *
- * http://www.steadystate.com/css/
- * mailto:css@steadystate.co.uk
+ * http://cssparser.sourceforge.net/
+ * mailto:davidsch@users.sourceforge.net
  *
- * $Id$
  */
-
 package com.steadystate.css.parser;
 
-import java.util.*;
-import org.w3c.css.sac.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class SACMediaListImpl implements SACMediaList {
+import org.w3c.css.sac.SACMediaList;
 
-    private Vector _selectors = new Vector(10, 10);
+/**
+ * Implementation of {@link SACMediaList}.
+ * 
+ * @author <a href="mailto:davidsch@users.sourceforge.net">David
+ *         Schweinsberg</a>
+ */
+public class SACMediaListImpl extends LocatableImpl implements SACMediaList {
 
+    private final List<String> media_ = new ArrayList<String>(10);
+
+    @Override
     public int getLength() {
-        return _selectors.size();
+        return media_.size();
     }
 
-    public String item(int index) {
-        return (String) _selectors.elementAt(index);
+    @Override
+    public String item(final int index) {
+        return media_.get(index);
     }
 
-    public void add(String s) {
-        _selectors.addElement(s);
+    public void add(final String s) {
+        media_.add(s);
     }
-    
+
+    @Override
     public String toString() {
-        StringBuffer sb = new StringBuffer();
-        int len = getLength();
+        final StringBuilder sb = new StringBuilder();
+        final int len = getLength();
         for (int i = 0; i < len; i++) {
             sb.append(item(i));
             if (i < len - 1) {

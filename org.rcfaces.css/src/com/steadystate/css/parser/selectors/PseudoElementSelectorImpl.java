@@ -1,9 +1,7 @@
 /*
- * PseudoElementSelectorImpl.java
+ * CSS Parser Project
  *
- * Steady State CSS2 Parser
- *
- * Copyright (C) 1999, 2002 Steady State Software Ltd.  All rights reserved.
+ * Copyright (C) 1999-2011 David Schweinsberg.  All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,13 +17,11 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * To contact the authors of the library, write to Steady State Software Ltd.,
- * 49 Littleworth, Wing, Buckinghamshire, LU7 0JX, England
+ * To contact the authors of the library:
  *
- * http://www.steadystate.com/css/
- * mailto:css@steadystate.co.uk
+ * http://cssparser.sourceforge.net/
+ * mailto:davidsch@users.sourceforge.net
  *
- * $Id$
  */
 
 package com.steadystate.css.parser.selectors;
@@ -35,14 +31,27 @@ import java.io.Serializable;
 import org.w3c.css.sac.ElementSelector;
 import org.w3c.css.sac.Selector;
 
-public class PseudoElementSelectorImpl implements ElementSelector, Serializable {
+import com.steadystate.css.parser.LocatableImpl;
 
-    private static final long serialVersionUID = -1502134052768742290L;
+/**
+ *
+ * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
+ */
+public class PseudoElementSelectorImpl extends LocatableImpl implements ElementSelector, Serializable {
 
-    private final String _localName;
+    private static final long serialVersionUID = 2913936296006875268L;
 
-    public PseudoElementSelectorImpl(String localName) {
-        _localName = localName;
+    private String localName_;
+
+    public void setLocaleName(final String localName) {
+        localName_ = localName;
+    }
+
+    public PseudoElementSelectorImpl(final String localName) {
+        localName_ = localName;
+    }
+
+    public PseudoElementSelectorImpl() {
     }
 
     public short getSelectorType() {
@@ -54,6 +63,10 @@ public class PseudoElementSelectorImpl implements ElementSelector, Serializable 
     }
 
     public String getLocalName() {
-        return _localName;
+        return localName_;
+    }
+
+    public String toString() {
+        return localName_;
     }
 }

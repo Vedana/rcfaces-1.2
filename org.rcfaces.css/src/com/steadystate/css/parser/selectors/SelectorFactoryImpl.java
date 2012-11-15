@@ -1,9 +1,7 @@
 /*
- * SelectorFactoryImpl.java
+ * CSS Parser Project
  *
- * Steady State CSS2 Parser
- *
- * Copyright (C) 1999, 2002 Steady State Software Ltd.  All rights reserved.
+ * Copyright (C) 1999-2011 David Schweinsberg.  All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,23 +17,37 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * To contact the authors of the library, write to Steady State Software Ltd.,
- * 49 Littleworth, Wing, Buckinghamshire, LU7 0JX, England
+ * To contact the authors of the library:
  *
- * http://www.steadystate.com/css/
- * mailto:css@steadystate.co.uk
+ * http://cssparser.sourceforge.net/
+ * mailto:davidsch@users.sourceforge.net
  *
- * $Id$
  */
 
 package com.steadystate.css.parser.selectors;
 
-import org.w3c.css.sac.*;
+import org.w3c.css.sac.CSSException;
+import org.w3c.css.sac.CharacterDataSelector;
+import org.w3c.css.sac.Condition;
+import org.w3c.css.sac.ConditionalSelector;
+import org.w3c.css.sac.DescendantSelector;
+import org.w3c.css.sac.ElementSelector;
+import org.w3c.css.sac.NegativeSelector;
+import org.w3c.css.sac.ProcessingInstructionSelector;
+import org.w3c.css.sac.Selector;
+import org.w3c.css.sac.SelectorFactory;
+import org.w3c.css.sac.SiblingSelector;
+import org.w3c.css.sac.SimpleSelector;
 
+/**
+ *
+ * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
+ */
 public class SelectorFactoryImpl implements SelectorFactory {
 
     public ConditionalSelector createConditionalSelector(
-            SimpleSelector selector, Condition condition) throws CSSException {
+        final SimpleSelector selector,
+        final Condition condition) throws CSSException {
         return new ConditionalSelectorImpl(selector, condition);
     }
 
@@ -47,61 +59,62 @@ public class SelectorFactoryImpl implements SelectorFactory {
         throw new CSSException(CSSException.SAC_NOT_SUPPORTED_ERR);
     }
 
-    public NegativeSelector createNegativeSelector(SimpleSelector selector)
-            throws CSSException {
+    public NegativeSelector createNegativeSelector(final SimpleSelector selector) throws CSSException {
         throw new CSSException(CSSException.SAC_NOT_SUPPORTED_ERR);
     }
 
-    public ElementSelector createElementSelector(String namespaceURI,
-            String localName) throws CSSException {
+    public ElementSelector createElementSelector(final String namespaceURI, final String localName)
+        throws CSSException {
         if (namespaceURI != null) {
             throw new CSSException(CSSException.SAC_NOT_SUPPORTED_ERR);
-        } else {
-            return new ElementSelectorImpl(localName);
         }
+        return new ElementSelectorImpl(localName);
     }
 
-    public CharacterDataSelector createTextNodeSelector(String data)
-            throws CSSException {
+    public CharacterDataSelector createTextNodeSelector(final String data) throws CSSException {
         throw new CSSException(CSSException.SAC_NOT_SUPPORTED_ERR);
     }
 
-    public CharacterDataSelector createCDataSectionSelector(String data)
-            throws CSSException {
+    public CharacterDataSelector createCDataSectionSelector(final String data)
+        throws CSSException {
         throw new CSSException(CSSException.SAC_NOT_SUPPORTED_ERR);
     }
 
     public ProcessingInstructionSelector createProcessingInstructionSelector(
-            String target, String data) throws CSSException {
+        final String target,
+        final String data) throws CSSException {
         throw new CSSException(CSSException.SAC_NOT_SUPPORTED_ERR);
     }
 
-    public CharacterDataSelector createCommentSelector(String data)
-            throws CSSException {
+    public CharacterDataSelector createCommentSelector(final String data) throws CSSException {
         throw new CSSException(CSSException.SAC_NOT_SUPPORTED_ERR);
     }
 
-    public ElementSelector createPseudoElementSelector(String namespaceURI,
-            String pseudoName) throws CSSException {
+    public ElementSelector createPseudoElementSelector(
+        final String namespaceURI,
+        final String pseudoName) throws CSSException {
         if (namespaceURI != null) {
             throw new CSSException(CSSException.SAC_NOT_SUPPORTED_ERR);
         }
-        
         return new PseudoElementSelectorImpl(pseudoName);
     }
 
-    public DescendantSelector createDescendantSelector(Selector parent,
-            SimpleSelector descendant) throws CSSException {
+    public DescendantSelector createDescendantSelector(
+        final Selector parent,
+        final SimpleSelector descendant) throws CSSException {
         return new DescendantSelectorImpl(parent, descendant);
     }
 
-    public DescendantSelector createChildSelector(Selector parent,
-            SimpleSelector child) throws CSSException {
+    public DescendantSelector createChildSelector(
+        final Selector parent,
+        final SimpleSelector child) throws CSSException {
         return new ChildSelectorImpl(parent, child);
     }
 
-    public SiblingSelector createDirectAdjacentSelector(short nodeType,
-            Selector child, SimpleSelector directAdjacent) throws CSSException {
+    public SiblingSelector createDirectAdjacentSelector(
+        final short nodeType,
+        final Selector child,
+        final SimpleSelector directAdjacent) throws CSSException {
         return new DirectAdjacentSelectorImpl(nodeType, child, directAdjacent);
     }
 }

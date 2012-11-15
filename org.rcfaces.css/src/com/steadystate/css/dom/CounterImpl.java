@@ -1,9 +1,7 @@
 /*
- * CounterImpl.java
+ * CSS Parser Project
  *
- * Steady State CSS2 Parser
- *
- * Copyright (C) 1999, 2002 Steady State Software Ltd.  All rights reserved.
+ * Copyright (C) 1999-2011 David Schweinsberg.  All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,75 +17,116 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * To contact the authors of the library, write to Steady State Software Ltd.,
- * 49 Littleworth, Wing, Buckinghamshire, LU7 0JX, England
+ * To contact the authors of the library:
  *
- * http://www.steadystate.com/css/
- * mailto:css@steadystate.co.uk
+ * http://cssparser.sourceforge.net/
+ * mailto:davidsch@users.sourceforge.net
  *
- * $Id$
  */
- 
+
 package com.steadystate.css.dom;
 
 import java.io.Serializable;
-import org.w3c.dom.css.*;
-import org.w3c.css.sac.*;
 
-/** 
+import org.w3c.css.sac.LexicalUnit;
+import org.w3c.dom.DOMException;
+import org.w3c.dom.css.Counter;
+
+/**
+ * Implementation of {@link Counter}.
  *
- * @author  David Schweinsberg
- * @version $Release$
+ * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
  */
 public class CounterImpl implements Counter, Serializable {
 
-    private String _identifier;
-    private String _listStyle;
-    private String _separator;
-    
-    /** Creates new CounterImpl */
-    public CounterImpl(boolean separatorSpecified, LexicalUnit lu) {
+    private static final long serialVersionUID = 7996279151817598904L;
+
+    private String identifier_;
+    private String listStyle_;
+    private String separator_;
+
+    public void setIdentifier(final String identifier) {
+        identifier_ = identifier;
+    }
+
+    public void setListStyle(final String listStyle) {
+        listStyle_ = listStyle;
+    }
+
+    public void setSeparator(final String separator) {
+        separator_ = separator;
+    }
+
+    /**
+     * Creates new CounterImpl
+     */
+    public CounterImpl(final boolean separatorSpecified, final LexicalUnit lu) throws DOMException {
         LexicalUnit next = lu;
-        _identifier = next.getStringValue();
-        next = next.getNextLexicalUnit();
-        if (separatorSpecified && (next != null)) {
-            next = next.getNextLexicalUnit();
-            _separator = next.getStringValue();
-            next = next.getNextLexicalUnit();
-        }
+        this.identifier_ = next.getStringValue();
+        next = next.getNextLexicalUnit();   // ','
         if (next != null) {
-            _listStyle = next.getStringValue();
+            if (next.getLexicalUnitType() != LexicalUnit.SAC_OPERATOR_COMMA) {
+                // error
+                throw new DOMException(DOMException.SYNTAX_ERR,
+                    "Counter parameters must be separated by ','.");
+            }
             next = next.getNextLexicalUnit();
+            if (separatorSpecified && (next != null)) {
+                separator_ = next.getStringValue();
+                next = next.getNextLexicalUnit();   // ','
+                if (next != null) {
+                    if (next.getLexicalUnitType() != LexicalUnit.SAC_OPERATOR_COMMA) {
+                        // error
+                        throw new DOMException(DOMException.SYNTAX_ERR,
+                            "Counter parameters must be separated by ','.");
+                    }
+                    next = next.getNextLexicalUnit();
+                }
+            }
+            if (next != null) {
+                this.listStyle_ = next.getStringValue();
+                next = next.getNextLexicalUnit();
+                if (next != null) {
+                    // error
+                    throw new DOMException(DOMException.SYNTAX_ERR,
+                        "Too many parameters for counter function.");
+                }
+            }
         }
+    }
+
+    public CounterImpl() {
+        super();
     }
 
     public String getIdentifier() {
-        return _identifier;
+        return identifier_;
     }
 
     public String getListStyle() {
-        return _listStyle;
+        return listStyle_;
     }
 
     public String getSeparator() {
-        return _separator;
+        return separator_;
     }
-    
+
     public String toString() {
-        StringBuffer sb = new StringBuffer();
-        if (_separator == null) {
+        final StringBuilder sb = new StringBuilder();
+        if (this.separator_ == null) {
             // This is a 'counter()' function
             sb.append("counter(");
-        } else {
+        }
+        else {
             // This is a 'counters()' function
             sb.append("counters(");
         }
-        sb.append(_identifier);
-        if (_separator != null) {
-            sb.append(", \"").append(_separator).append("\"");
+        sb.append(identifier_);
+        if (separator_ != null) {
+            sb.append(", \"").append(this.separator_).append("\"");
         }
-        if (_listStyle != null) {
-            sb.append(", ").append(_listStyle);
+        if (listStyle_ != null) {
+            sb.append(", ").append(this.listStyle_);
         }
         sb.append(")");
         return sb.toString();

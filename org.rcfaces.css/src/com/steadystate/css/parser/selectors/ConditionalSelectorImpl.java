@@ -1,9 +1,7 @@
 /*
- * ConditionalSelectorImpl.java
+ * CSS Parser Project
  *
- * Steady State CSS2 Parser
- *
- * Copyright (C) 1999, 2002 Steady State Software Ltd.  All rights reserved.
+ * Copyright (C) 1999-2011 David Schweinsberg.  All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,13 +17,11 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * To contact the authors of the library, write to Steady State Software Ltd.,
- * 49 Littleworth, Wing, Buckinghamshire, LU7 0JX, England
+ * To contact the authors of the library:
  *
- * http://www.steadystate.com/css/
- * mailto:css@steadystate.co.uk
+ * http://cssparser.sourceforge.net/
+ * mailto:davidsch@users.sourceforge.net
  *
- * $Id$
  */
 
 package com.steadystate.css.parser.selectors;
@@ -34,20 +30,54 @@ import java.io.Serializable;
 
 import org.w3c.css.sac.Condition;
 import org.w3c.css.sac.ConditionalSelector;
+import org.w3c.css.sac.ElementSelector;
 import org.w3c.css.sac.Selector;
 import org.w3c.css.sac.SimpleSelector;
 
-public class ConditionalSelectorImpl implements ConditionalSelector,
-        Serializable {
+import com.steadystate.css.parser.Locatable;
+import com.steadystate.css.parser.LocatableImpl;
 
-    private SimpleSelector _simpleSelector;
+/**
+ * 
+ * @author <a href="mailto:davidsch@users.sourceforge.net">David
+ *         Schweinsberg</a>
+ */
+public class ConditionalSelectorImpl extends LocatableImpl implements
+        ConditionalSelector, Serializable {
 
-    private Condition _condition;
+    private static final long serialVersionUID = 7217145899707580586L;
 
-    public ConditionalSelectorImpl(SimpleSelector simpleSelector,
-            Condition condition) {
-        _simpleSelector = simpleSelector;
-        _condition = condition;
+    private SimpleSelector simpleSelector_;
+
+    private Condition condition_;
+
+    public void setSimpleSelector(final SimpleSelector simpleSelector) {
+        simpleSelector_ = simpleSelector;
+        if (simpleSelector instanceof Locatable) {
+            setLocator(((Locatable) simpleSelector).getLocator());
+        } else if (simpleSelector == null) {
+            setLocator(null);
+        }
+    }
+
+    public void setCondition(final Condition condition) {
+        condition_ = condition;
+        if (getLocator() == null) {
+            if (condition instanceof Locatable) {
+                setLocator(((Locatable) condition).getLocator());
+            } else if (condition == null) {
+                setLocator(null);
+            }
+        }
+    }
+
+    public ConditionalSelectorImpl(final SimpleSelector simpleSelector,
+            final Condition condition) {
+        setSimpleSelector(simpleSelector);
+        setCondition(condition);
+    }
+
+    public ConditionalSelectorImpl() {
     }
 
     public short getSelectorType() {
@@ -55,21 +85,20 @@ public class ConditionalSelectorImpl implements ConditionalSelector,
     }
 
     public SimpleSelector getSimpleSelector() {
-        return _simpleSelector;
+        return simpleSelector_;
     }
 
     public Condition getCondition() {
-        return _condition;
+        return condition_;
     }
 
     public String toString() {
-        String selector = _simpleSelector.toString();
-        String condition = _condition.toString();
-
-        if (condition.length() > 0 && "*".equals(selector)) {
-            return condition;
+        if (simpleSelector_.getSelectorType() == Selector.SAC_ELEMENT_NODE_SELECTOR
+                && condition_ != null) {
+            if (((ElementSelector) simpleSelector_).getLocalName() == null) {
+                return condition_.toString();
+            }
         }
-
-        return selector + condition;
+        return simpleSelector_.toString() + condition_.toString();
     }
 }
