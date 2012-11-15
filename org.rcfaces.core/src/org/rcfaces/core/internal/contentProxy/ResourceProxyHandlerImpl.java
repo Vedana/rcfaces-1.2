@@ -81,6 +81,8 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
 
     private static final String DISABLED_URL = "disabled";
 
+    private static final String PATTERN_RULE_PROPERTY = "org.rcfaces.proxy.PATTERN_RULES";
+
     private IPatternRule defaultRule;
 
     private IPatternRule rules[];
@@ -258,14 +260,23 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     protected String computeProxyedURL(FacesContext facesContext,
             IContentAccessor contentAccessor,
             IGeneratedResourceInformation[] contentInformationRef,
             IPatternRule rule, String url) {
 
-        Map requestMap = facesContext.getExternalContext().getRequestMap();
+        Map<String, Object> requestMap = facesContext.getExternalContext()
+                .getRequestMap();
 
-        String baseURL = (String) requestMap.get(rule);
+        Map<IPatternRule, String> rulesRequestMap = (Map<IPatternRule, String>) requestMap
+                .get(PATTERN_RULE_PROPERTY);
+        if (rulesRequestMap == null) {
+            rulesRequestMap = new HashMap<ResourceProxyHandlerImpl.IPatternRule, String>();
+            requestMap.put(PATTERN_RULE_PROPERTY, rulesRequestMap);
+        }
+
+        String baseURL = rulesRequestMap.get(rule);
 
         if (baseURL == NO_BASE_URL_STRING) {
             return null;
@@ -278,12 +289,12 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
             baseURL = computeRequestURLBase(facesContext, contentAccessor,
                     contentInformationRef, rule);
             if (baseURL == null) {
-                requestMap.put(rule, NO_BASE_URL_STRING);
+                rulesRequestMap.put(rule, NO_BASE_URL_STRING);
 
                 return null;
             }
             if (baseURL == DISABLED_URL) {
-                requestMap.put(rule, DISABLED_URL);
+                rulesRequestMap.put(rule, DISABLED_URL);
 
                 return baseURL;
             }
@@ -291,7 +302,7 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
                 baseURL = baseURL.substring(0, baseURL.length() - 1);
             }
 
-            requestMap.put(rule, baseURL);
+            rulesRequestMap.put(rule, baseURL);
         }
 
         StringAppender sa = new StringAppender(baseURL, url.length() + 2);
@@ -515,8 +526,6 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
         });
 
         replaceMap.put(CONTEXT_PATH_KEYWORD, new IKeywordValue() {
-            private static final String REVISION = "$Revision$";
-
             public String getValue(FacesContext facesContext, String keyword) {
                 String requestContextPath = facesContext.getExternalContext()
                         .getRequestContextPath();
@@ -583,7 +592,7 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
             public void end(String namespace, String name) {
 
                 String url = infos.get("url");
-                Map attributes = null;
+                Map<String, Object> attributes = null;
                 String pattern = infos.get("pattern");
                 String regexp = infos.get("regexp");
                 infos.clear();
@@ -680,7 +689,7 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
 
         String getBaseURI();
 
-        Map listAttributes();
+        Map<String, Object> listAttributes();
 
         boolean acceptURL(String url);
     }
@@ -693,13 +702,14 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
     protected static abstract class AbstractPatternRule implements IPatternRule {
         protected final String baseURI;
 
-        protected final Map attributes;
+        protected final Map<String, Object> attributes;
 
-        public AbstractPatternRule(String baseURI, Map attributes) {
+        public AbstractPatternRule(String baseURI,
+                Map<String, Object> attributes) {
             this.baseURI = baseURI;
 
             if (attributes == null) {
-                attributes = Collections.EMPTY_MAP;
+                attributes = Collections.emptyMap();
             }
             this.attributes = attributes;
         }
@@ -708,14 +718,47 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
             return baseURI;
         }
 
-        public Map listAttributes() {
+        public Map<String, Object> listAttributes() {
             return attributes;
         }
 
         @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result
+                    + ((attributes == null) ? 0 : attributes.hashCode());
+            result = prime * result
+                    + ((baseURI == null) ? 0 : baseURI.hashCode());
+            return result;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            AbstractPatternRule other = (AbstractPatternRule) obj;
+            if (attributes == null) {
+                if (other.attributes != null)
+                    return false;
+            } else if (!attributes.equals(other.attributes))
+                return false;
+            if (baseURI == null) {
+                if (other.baseURI != null)
+                    return false;
+            } else if (!baseURI.equals(other.baseURI))
+                return false;
+            return true;
+        }
+
+        @Override
         public String toString() {
-            return "[Rule baseURI='" + baseURI + "' attributes='" + attributes
-                    + "']";
+            return "[AbstractPatternRule baseURI='" + baseURI
+                    + "' attributes='" + attributes + "']";
         }
     }
 
@@ -727,7 +770,8 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
     protected static class BasicPatternRule extends AbstractPatternRule {
         protected final String pattern;
 
-        public BasicPatternRule(String baseURI, Map attributes, String pattern) {
+        public BasicPatternRule(String baseURI, Map<String, Object> attributes,
+                String pattern) {
             super(baseURI, attributes);
 
             this.pattern = pattern;
@@ -779,15 +823,44 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
 
         private final String localPattern;
 
-        public StartsWithRule(String baseURI, Map attributes, String pattern) {
+        public StartsWithRule(String baseURI, Map<String, Object> attributes,
+                String pattern) {
             super(baseURI, attributes, pattern);
 
             localPattern = pattern.substring(0, pattern.length() - 1);
         }
 
+        @Override
         public boolean acceptURL(String url) {
             return url.startsWith(localPattern);
         }
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = super.hashCode();
+            result = prime * result
+                    + ((localPattern == null) ? 0 : localPattern.hashCode());
+            return result;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (!super.equals(obj))
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            StartsWithRule other = (StartsWithRule) obj;
+            if (localPattern == null) {
+                if (other.localPattern != null)
+                    return false;
+            } else if (!localPattern.equals(other.localPattern))
+                return false;
+            return true;
+        }
+
     }
 
     /**
@@ -799,15 +872,44 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
 
         private final String localPattern;
 
-        public EndsWithRule(String baseURI, Map attributes, String pattern) {
+        public EndsWithRule(String baseURI, Map<String, Object> attributes,
+                String pattern) {
             super(baseURI, attributes, pattern);
 
             localPattern = pattern.substring(1);
         }
 
+        @Override
         public boolean acceptURL(String url) {
             return url.endsWith(localPattern);
         }
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = super.hashCode();
+            result = prime * result
+                    + ((localPattern == null) ? 0 : localPattern.hashCode());
+            return result;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (!super.equals(obj))
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            EndsWithRule other = (EndsWithRule) obj;
+            if (localPattern == null) {
+                if (other.localPattern != null)
+                    return false;
+            } else if (!localPattern.equals(other.localPattern))
+                return false;
+            return true;
+        }
+
     }
 
     /**
@@ -819,17 +921,46 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
 
         private final Pattern localPattern;
 
-        public RegExpPatternRule(String baseURI, Map attributes, String regex) {
+        public RegExpPatternRule(String baseURI,
+                Map<String, Object> attributes, String regex) {
             super(baseURI, attributes, regex);
 
             localPattern = Pattern.compile(regex);
         }
 
+        @Override
         public boolean acceptURL(String url) {
             Matcher m = localPattern.matcher(url);
 
             return m.matches();
         }
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = super.hashCode();
+            result = prime * result
+                    + ((localPattern == null) ? 0 : localPattern.hashCode());
+            return result;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (!super.equals(obj))
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            RegExpPatternRule other = (RegExpPatternRule) obj;
+            if (localPattern == null) {
+                if (other.localPattern != null)
+                    return false;
+            } else if (!localPattern.equals(other.localPattern))
+                return false;
+            return true;
+        }
+
     }
 
     /**
@@ -839,10 +970,11 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
      */
     protected static class DefaultPatternRule extends BasicPatternRule {
 
-        public DefaultPatternRule(String baseURI, Map attributes) {
+        public DefaultPatternRule(String baseURI, Map<String, Object> attributes) {
             super(baseURI, attributes, "*");
         }
 
+        @Override
         public boolean acceptURL(String url) {
             return true;
         }

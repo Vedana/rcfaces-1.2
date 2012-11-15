@@ -103,6 +103,7 @@ public abstract class AbstractRenderContext implements IRenderContext {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void popComponent(UIComponent component) {
 
         int level = getStackLevel();
@@ -151,6 +152,7 @@ public abstract class AbstractRenderContext implements IRenderContext {
      * @see
      * org.rcfaces.core.internal.renderkit.IRenderContext#getComponentContext()
      */
+    @SuppressWarnings("unchecked")
     public final Object getComponentContextAttribute(String key) {
         int componentContextLevel = getStackLevel() + 2;
 
@@ -164,6 +166,7 @@ public abstract class AbstractRenderContext implements IRenderContext {
         return map.get(key);
     }
 
+    @SuppressWarnings("unchecked")
     public final boolean containsComponentContextAttribute(String key) {
         int componentContextLevel = getStackLevel() + 2;
 
@@ -177,6 +180,7 @@ public abstract class AbstractRenderContext implements IRenderContext {
         return map.containsKey(key);
     }
 
+    @SuppressWarnings("unchecked")
     public final Object setComponentContextAttribute(String key, Object value) {
         int componentContextLevel = getStackLevel() + 2;
 
@@ -191,6 +195,7 @@ public abstract class AbstractRenderContext implements IRenderContext {
         return map.put(key, value);
     }
 
+    @SuppressWarnings("unchecked")
     public final Object removeComponentContextAttribute(String key) {
         int componentContextLevel = getStackLevel() + 2;
 

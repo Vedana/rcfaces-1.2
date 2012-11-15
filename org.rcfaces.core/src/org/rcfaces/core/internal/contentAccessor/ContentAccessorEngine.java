@@ -15,7 +15,6 @@ import org.rcfaces.core.internal.RcfacesContext;
  * @version $Revision$ $Date$
  */
 public class ContentAccessorEngine {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(ContentAccessorEngine.class);

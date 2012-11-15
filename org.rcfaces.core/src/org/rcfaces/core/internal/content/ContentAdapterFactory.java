@@ -131,6 +131,7 @@ public class ContentAdapterFactory implements IAdapterFactory {
 
         private transient File file;
 
+        @SuppressWarnings("unused")
         public FileResolvedContent(String contentType, String suffix,
                 File file, String specifiedResourceKey, long lastModifiedDate) {
             this.file = file;

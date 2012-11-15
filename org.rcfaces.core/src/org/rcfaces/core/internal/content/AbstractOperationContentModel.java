@@ -36,7 +36,6 @@ import org.rcfaces.core.model.BasicContentModel;
  */
 public abstract class AbstractOperationContentModel extends BasicContentModel
         implements Serializable, IResolvedContent, IAdaptable {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = 4218209439999498360L;
 

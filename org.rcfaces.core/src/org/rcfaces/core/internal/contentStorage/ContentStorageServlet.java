@@ -144,7 +144,6 @@ public class ContentStorageServlet extends ConfiguredHttpServlet {
         final IOException exceptionRef[] = new IOException[1];
         RcfacesContext.runIntoFacesContext(getServletContext(), request,
                 response, new Runnable() {
-                    private static final String REVISION = "$Revision$";
 
                     public void run() {
                         try {

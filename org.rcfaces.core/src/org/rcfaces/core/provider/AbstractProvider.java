@@ -7,6 +7,8 @@ package org.rcfaces.core.provider;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.digester.Digester;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * 
@@ -14,6 +16,7 @@ import org.apache.commons.digester.Digester;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractProvider implements IProvider {
+    private static final Log LOG = LogFactory.getLog(AbstractProvider.class);
 
     public void configureRules(Digester digester) {
     }

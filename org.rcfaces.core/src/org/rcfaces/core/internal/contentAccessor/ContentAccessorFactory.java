@@ -21,19 +21,17 @@ import org.rcfaces.core.lang.IContentFamily;
  * @version $Revision$ $Date$
  */
 public class ContentAccessorFactory {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(ContentAccessorFactory.class);
 
     public static final IContentAccessor UNSUPPORTED_CONTENT_ACCESSOR = new IContentAccessor() {
-        private static final String REVISION = "$Revision$";
 
         public Object getAttribute(String attributeName) {
             return null;
         }
 
-        public Map getAttributes() {
+        public Map<String, Object> getAttributes() {
             return null;
         }
 
@@ -85,10 +83,12 @@ public class ContentAccessorFactory {
         public void setPathType(int pathType) {
         }
 
+        @Override
         public boolean equals(Object obj) {
             return obj == this;
         }
 
+        @Override
         public int hashCode() {
             return 0;
         }
@@ -109,12 +109,12 @@ public class ContentAccessorFactory {
     };
 
     private static final IContentProxyHandler RESOURCE_CONTENT_PROXY_HANDLER = new AbstractContentProxyHandler() {
-        private static final String REVISION = "$Revision$";
 
         public String getId() {
             return "ResourceProxyHandler(proxy)";
         }
 
+        @SuppressWarnings("unused")
         public IContentAccessor getProxyedContentAccessor(
                 RcfacesContext rcfacesContext, FacesContext facesContext,
                 IContentAccessor contentAccessor,
@@ -144,6 +144,7 @@ public class ContentAccessorFactory {
             return "ResourceVersionHandler(proxy)";
         }
 
+        @SuppressWarnings("unused")
         public IContentAccessor getVersionedContentAccessor(
                 RcfacesContext rcfacesContext, FacesContext facesContext,
                 IContentAccessor contentAccessor,
@@ -164,6 +165,7 @@ public class ContentAccessorFactory {
                     contentInformation);
         }
 
+        @SuppressWarnings("unused")
         public String getVersionTag(RcfacesContext rcfacesContext,
                 FacesContext facesContext, String relativeUrl,
                 IContentAccessor contentAccessor,
@@ -221,7 +223,6 @@ public class ContentAccessorFactory {
      */
     protected static class SimpleImageAccessor extends BasicContentAccessor
             implements IImageAccessors {
-        private static final String REVISION = "$Revision$";
 
         public SimpleImageAccessor(FacesContext facesContext, Object url,
                 IContentFamily contentType,

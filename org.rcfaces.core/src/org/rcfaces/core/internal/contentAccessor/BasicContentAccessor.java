@@ -13,7 +13,6 @@ import org.rcfaces.core.lang.IContentFamily;
  * @version $Revision$ $Date$
  */
 public class BasicContentAccessor extends AbstractContentAccessor {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(BasicContentAccessor.class);
@@ -92,10 +91,11 @@ public class BasicContentAccessor extends AbstractContentAccessor {
         return cp.getPath();
     }
 
+    @Override
     public String toString() {
-        return "[AbstractContentAccessor contentType=" + getContentFamily()
+        return "[BasicContentAccessor contentType=" + getContentFamily()
                 + " pathType="
-                + BasicContentPath.getPathTypeName(getPathType())
+                + AbstractContentPath.getPathTypeName(getPathType())
                 + " versionHandler=" + getContentVersionHandler()
                 + " content='" + value + "' root=" + getParentAccessor() + "]";
     }
