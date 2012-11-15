@@ -351,6 +351,13 @@ var __members = {
 		if (!iframe) {
 			return;
 		}
+		
+		var doc=iframe.contentWindow.document;
+		var next=f_core.GetNextFocusableComponent(doc.body);		
+		if (next) {
+			f_core.SetFocus(next, true);
+			return;
+		}
 
 		iframe.contentWindow.focus();
 		this._shell.f_setFocus();
@@ -396,8 +403,7 @@ var __members = {
 			iframe.style.height=h+"px";
 		}		
 	}
-}
-
+};
 
 new f_class("f_frameShellDecorator", {
 	extend: f_shellDecorator,

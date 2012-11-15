@@ -229,7 +229,7 @@ var __members = {
 				if (window._rcfacesExiting) {
 					return false;
 				}
-				
+
 				try {
 					self.f_performFrameReady(this, iframe.contentWindow.document);
 
@@ -284,6 +284,30 @@ var __members = {
 	 */
 	f_performFrameReady: function(iframe, doc) {
 		f_core.Debug(f_frameShellDecorator, "f_performFrameReady: frame '"+iframe+"' is ready !");
+		
+		var component=f_focusManager.Get().f_getFocusComponent();
+		if (!component) {
+			return;
+		}
+		
+		var shellDecorator=this.f_getShellDecorator();
+		if (!shellDecorator) {
+			return;
+		}
+		
+		try {
+			if (shellDecorator.f_isIntoShell(component)) {
+				return false;
+			}
+			
+			var comp=f_core.GetNextFocusableComponent(iframe.contentWindow.document.body);
+			if (comp) {
+				f_core.SetFocus(comp, true);
+			}
+		
+		} catch (ex) {
+			f_core.Error(f_viewDialog, "f_performFrameReady: Try to identify a focus component", ex);
+		}
 	},
 
 	f_preDestruction: function() {
