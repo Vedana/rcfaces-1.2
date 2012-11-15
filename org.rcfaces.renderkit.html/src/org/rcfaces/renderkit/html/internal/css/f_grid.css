@@ -226,14 +226,14 @@
 	line-height: 18px;
 	padding: 0;
 	margin: 0 2px 0 0;
-	width: 16px;  // Pour la compatibilité IE
-	height: 16px;  // Pour la compatibilité IE
+	width: 16px;  /* Pour la compatibilité IE */
+	height: 16px;  /* Pour la compatibilité IE */
 	
 	outline: none;
 }
 
 .f_grid_row {
-//	xxxheight: 20px;
+/*	xxxheight: 20px; */
 }
 
 .f_grid_row_even, 
@@ -362,8 +362,8 @@
 	cursor: pointer;
 	vertical-align: middle;
 	line-height: 18px;
-	width: 16px;  // Pour la compatibilité IE
-	height: 16px;  // Pour la compatibilité IE	
+	width: 16px;  /* Pour la compatibilité IE */
+	height: 16px;  /* Pour la compatibilité IE */	
 }
 
 .f_grid_additional_button_expanded {
@@ -383,7 +383,7 @@
 }
 
 .f_grid_additionalRow {
-//	xxxvertical-align: top;
+/*	xxxvertical-align: top;  */
 }
 
 .f_grid_additional_button_no_content {
@@ -431,9 +431,9 @@
 	height: auto;
 }
 
-/*position: absolute; pour taille colonne  attention accessibilite*/
 .f_grid_hidden_title {
-	display: none;
+	display: none;  /* pour taille colonne  attention accessibilite*/
+	position: absolute;
 	left: -10000px;
 	top: auto;
 	height: 1px;

@@ -11,7 +11,6 @@
  */
 
 .f_cGrid_row {
-	xxx-moz-user-select: text;
 }
 
 .f_grid_row_selected .f_cGrid_cell {
@@ -33,7 +32,7 @@
 	overflow: hidden;
 	background-color: inherit;
 	
-	// Et oui ! Sinon sous firefox les champs INPUTs peuvent se superposer/anhiler 
+	/* Et oui ! Sinon sous firefox les champs INPUTs peuvent se superposer/anhiler */ 
 	position: relative;
 }
 
