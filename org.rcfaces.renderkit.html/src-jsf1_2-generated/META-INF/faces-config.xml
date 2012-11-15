@@ -197,6 +197,10 @@ A string value sprecifying the charset associated to the "src" files.
 			<attribute-name>mergeStyles</attribute-name>
 			<attribute-class>boolean</attribute-class>
 		</attribute>
+		<attribute>
+			<attribute-name>processRules</attribute-name>
+			<attribute-class>boolean</attribute-class>
+		</attribute>
 	</component>
 	<component>
 		<description><![CDATA[

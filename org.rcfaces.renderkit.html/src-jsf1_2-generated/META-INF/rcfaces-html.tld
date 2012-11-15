@@ -416,6 +416,13 @@ A string value sprecifying the charset associated to the "src" files.
 				<type>boolean</type>
 			</deferred-value>
 		</attribute>
+		<attribute>
+			<name>processRules</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
+			</deferred-value>
+		</attribute>
 	</tag>
 	<tag>
 		<description><![CDATA[

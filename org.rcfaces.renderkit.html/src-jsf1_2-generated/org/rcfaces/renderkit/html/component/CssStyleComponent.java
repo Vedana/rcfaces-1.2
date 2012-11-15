@@ -24,7 +24,7 @@ public class CssStyleComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"srcCharSet","requiredModules","text","requiredSets","userAgent","mergeStyles","src"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"srcCharSet","requiredModules","text","requiredSets","userAgent","processRules","mergeStyles","src"}));
 	}
 
 	public CssStyleComponent() {
@@ -212,6 +212,26 @@ public class CssStyleComponent extends CameliaBaseComponent implements
 	 */
 	public boolean isMergeStylesSetted() {
 		return engine.isPropertySetted(Properties.MERGE_STYLES);
+	}
+
+	public boolean isProcessRules() {
+		return isProcessRules(null);
+	}
+
+	public boolean isProcessRules(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.PROCESS_RULES, false, facesContext);
+	}
+
+	public void setProcessRules(boolean processRules) {
+		engine.setProperty(Properties.PROCESS_RULES, processRules);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "processRules" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isProcessRulesSetted() {
+		return engine.isPropertySetted(Properties.PROCESS_RULES);
 	}
 
 	protected Set getCameliaFields() {

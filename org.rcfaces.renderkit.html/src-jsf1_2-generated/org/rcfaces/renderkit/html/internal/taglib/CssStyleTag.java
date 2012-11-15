@@ -28,6 +28,7 @@ public class CssStyleTag extends CameliaTag implements Tag {
 	private ValueExpression requiredModules;
 	private ValueExpression requiredSets;
 	private ValueExpression mergeStyles;
+	private ValueExpression processRules;
 	public String getComponentType() {
 		return CssStyleComponent.COMPONENT_TYPE;
 	}
@@ -60,6 +61,10 @@ public class CssStyleTag extends CameliaTag implements Tag {
 		this.mergeStyles = mergeStyles;
 	}
 
+	public void setProcessRules(ValueExpression processRules) {
+		this.processRules = processRules;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (CssStyleComponent.COMPONENT_TYPE==getComponentType()) {
@@ -72,6 +77,7 @@ public class CssStyleTag extends CameliaTag implements Tag {
 			LOG.debug("  requiredModules='"+requiredModules+"'");
 			LOG.debug("  requiredSets='"+requiredSets+"'");
 			LOG.debug("  mergeStyles='"+mergeStyles+"'");
+			LOG.debug("  processRules='"+processRules+"'");
 		}
 		if ((uiComponent instanceof CssStyleComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -147,6 +153,15 @@ public class CssStyleTag extends CameliaTag implements Tag {
 				component.setMergeStyles(getBool(mergeStyles.getExpressionString()));
 			}
 		}
+
+		if (processRules != null) {
+			if (processRules.isLiteralText()==false) {
+				component.setValueExpression(Properties.PROCESS_RULES, processRules);
+
+			} else {
+				component.setProcessRules(getBool(processRules.getExpressionString()));
+			}
+		}
 	}
 
 	public void release() {
@@ -157,6 +172,7 @@ public class CssStyleTag extends CameliaTag implements Tag {
 		requiredModules = null;
 		requiredSets = null;
 		mergeStyles = null;
+		processRules = null;
 
 		super.release();
 	}
