@@ -754,7 +754,7 @@
 			</fileset>
 		</copy>
 		
-		<java taskname="processCSS" failonerror="true" jar="lib-generator/rcfaces-css.jar">
+		<java taskname="processCSS" failonerror="true" jar="lib-generator/rcfaces-css.jar" fork="true">
 			<classpath refid="generated.classpath" />
 			<classpath refid="generator.classpath" />
 
