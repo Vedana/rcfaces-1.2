@@ -750,8 +750,15 @@
 		<copy todir="${build.version.path}/bin-${pass.type}">
 			<fileset dir="${build.version.path}/src-${pass.type}">
 				<exclude name="**/*.java" />
+				<exclude name="**/*.css" />
 			</fileset>
 		</copy>
+		
+		<java taskname="processCSS" failonerror="true" jar="lib-generator/rcfaces-css.jar">
+			<arg path="${build.version.path}/bin-${pass.type}/org/rcfaces/renderkit/html/internal/css" />
+			<arg path="${build.version.path}/src-${pass.type}/org/rcfaces/renderkit/html/internal/css" />
+		</java>
+
 
 		<!-- ### le JAR #### -->
 		
