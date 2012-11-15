@@ -37,502 +37,503 @@ import org.xml.sax.Attributes;
  */
 public class HtmlRendererTypeFactory extends AbstractRendererTypeFactory {
 
-	private static final Log LOG = LogFactory
-			.getLog(HtmlRendererTypeFactory.class);
+    private static final Log LOG = LogFactory
+            .getLog(HtmlRendererTypeFactory.class);
 
-	private static final String RENDERKIT_ID = RenderKitFactory.HTML_BASIC_RENDER_KIT;
+    private static final String RENDERKIT_ID = RenderKitFactory.HTML_BASIC_RENDER_KIT;
 
-	private static final String LOOK_ID_CACHE_PROPERTY = "org.rcfaces.html.LOOK_ID_CACHE";
+    private static final String LOOK_ID_CACHE_PROPERTY = "org.rcfaces.html.LOOK_ID_CACHE";
 
-	private static final String NO_LOOKID_RENDERER = "###NONE###";
+    private static final String NO_LOOKID_RENDERER = "###NONE###";
 
-	private static final String LOOK_ID_SEPARATOR = ":";
+    private static final String LOOK_ID_SEPARATOR = ":";
 
-	private static final String USER_AGENT_SEPARATOR = "__";
+    private static final String USER_AGENT_SEPARATOR = "__";
 
-	private final Map<String, IUserAgentRules> featureByName = new HashMap<String, IUserAgentRules>(
-			64);
+    private final Map<String, IUserAgentRules> featureByName = new HashMap<String, IUserAgentRules>(
+            64);
 
-	private final Map<String, LookIdRule> lookIdRulesByName = new HashMap<String, LookIdRule>(
-			128);
+    private final Map<String, LookIdRule> lookIdRulesByName = new HashMap<String, LookIdRule>(
+            128);
 
-	public String getId() {
-		return PREFIX_PROVIDER_ID + getRenderKitId();
-	}
+    public String getId() {
+        return PREFIX_PROVIDER_ID + getRenderKitId();
+    }
 
-	protected String getRenderKitId() {
-		return RENDERKIT_ID;
-	}
+    protected String getRenderKitId() {
+        return RENDERKIT_ID;
+    }
 
-	public HtmlRendererTypeFactory() {
-		LOG.debug("Instanciate HTML renderer type factory.");
-	}
+    public HtmlRendererTypeFactory() {
+        LOG.debug("Instanciate HTML renderer type factory.");
+    }
 
-	private static String constructKey(String componentFamilly,
-			String rendererType, String lookId) {
-		if (lookId != null) {
-			return componentFamilly + "$ " + rendererType + "$ " + lookId;
+    private static String constructKey(String componentFamilly,
+            String rendererType, String lookId) {
+        if (lookId != null) {
+            return componentFamilly + "$ " + rendererType + "$ " + lookId;
 
-		}
-		return componentFamilly + "$ " + rendererType;
-	}
+        }
+        return componentFamilly + "$ " + rendererType;
+    }
 
-	public String computeRendererType(FacesContext facesContext,
-			UIComponent component, String componentFamilly,
-			String baseRendererType) {
+    public String computeRendererType(FacesContext facesContext,
+            UIComponent component, String componentFamilly,
+            String baseRendererType) {
 
-		if (baseRendererType == null) {
-			return null;
-		}
+        if (baseRendererType == null) {
+            return null;
+        }
 
-		String rendererType = baseRendererType;
-		String lookId = null;
+        String rendererType = baseRendererType;
+        String lookId = null;
 
-		if (component instanceof ILookAndFeelCapability) {
-			lookId = ((ILookAndFeelCapability) component).getLookId();
-			if (lookId != null) {
-				rendererType = baseRendererType + LOOK_ID_SEPARATOR + lookId;
-			}
-		}
+        if (component instanceof ILookAndFeelCapability) {
+            lookId = ((ILookAndFeelCapability) component).getLookId();
+            if (lookId != null) {
+                rendererType = baseRendererType + LOOK_ID_SEPARATOR + lookId;
+            }
+        }
 
-		if (lookIdRulesByName == null || lookIdRulesByName.isEmpty()) {
-			return rendererType;
-		}
+        if (lookIdRulesByName == null || lookIdRulesByName.isEmpty()) {
+            return rendererType;
+        }
 
-		ExternalContext externalContext = facesContext.getExternalContext();
+        ExternalContext externalContext = facesContext.getExternalContext();
 
-		Map<String, Object> requestMap = externalContext.getRequestMap();
+        Map<String, Object> requestMap = externalContext.getRequestMap();
 
-		Map<String, String> lookIdCache = (Map<String, String>) requestMap
-				.get(LOOK_ID_CACHE_PROPERTY);
-		if (lookIdCache == null) {
-			lookIdCache = new HashMap<String, String>();
+        Map<String, String> lookIdCache = (Map<String, String>) requestMap
+                .get(LOOK_ID_CACHE_PROPERTY);
+        if (lookIdCache == null) {
+            lookIdCache = new HashMap<String, String>();
 
-			requestMap.put(LOOK_ID_CACHE_PROPERTY, lookIdCache);
-		}
+            requestMap.put(LOOK_ID_CACHE_PROPERTY, lookIdCache);
+        }
 
-		String rendererTypeKey = constructKey(componentFamilly, baseRendererType,
-				lookId);
+        String rendererTypeKey = constructKey(componentFamilly,
+                baseRendererType, lookId);
 
-		String computedRendererType = lookIdCache.get(rendererTypeKey);
-		if (computedRendererType != null) {
-			if (computedRendererType == NO_LOOKID_RENDERER) {
-				return rendererType;
-			}
-			return computedRendererType;
-		}
+        String computedRendererType = lookIdCache.get(rendererTypeKey);
+        if (computedRendererType != null) {
+            if (computedRendererType == NO_LOOKID_RENDERER) {
+                return rendererType;
+            }
+            return computedRendererType;
+        }
 
-		LookIdRule uac = lookIdRulesByName.get(rendererTypeKey);
-		if (uac != null) {
-			IUserAgent userAgent = ClientBrowserFactory.Get().get(facesContext);
+        LookIdRule uac = lookIdRulesByName.get(rendererTypeKey);
+        if (uac != null) {
+            IUserAgent userAgent = ClientBrowserFactory.Get().get(facesContext);
 
-			String agentRendererType = uac.accept(userAgent);
+            String agentRendererType = uac.accept(userAgent);
 
-			if (agentRendererType != null) {
-				rendererType=agentRendererType;
-				
-				lookIdCache.put(rendererTypeKey, agentRendererType);
-				
-			} else {
-				lookIdCache.put(rendererTypeKey, NO_LOOKID_RENDERER);
-			}
+            if (agentRendererType != null) {
+                rendererType = agentRendererType;
 
-		} else {
-			lookIdCache.put(rendererTypeKey, NO_LOOKID_RENDERER);
-		}
+                lookIdCache.put(rendererTypeKey, agentRendererType);
 
-		return rendererType;
-	}
+            } else {
+                lookIdCache.put(rendererTypeKey, NO_LOOKID_RENDERER);
+            }
 
-	@Override
-	public void configureRules(Digester digester) {
-		super.configureRules(digester);
+        } else {
+            lookIdCache.put(rendererTypeKey, NO_LOOKID_RENDERER);
+        }
 
-		RenderKitFactory factory = (RenderKitFactory) FactoryFinder
-				.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-		final FacesContext facesContext = FacesContext.getCurrentInstance();
+        return rendererType;
+    }
 
-		final RenderKit renderKit = factory.getRenderKit(facesContext,
-				getRenderKitId());
+    @Override
+    public void configureRules(Digester digester) {
+        super.configureRules(digester);
 
-		final boolean[] enabled = new boolean[1];
+        RenderKitFactory factory = (RenderKitFactory) FactoryFinder
+                .getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        final FacesContext facesContext = FacesContext.getCurrentInstance();
 
-		digester.addRule("rcfaces-config/features-compatibilities/feature",
-				new Rule() {
+        final RenderKit renderKit = factory.getRenderKit(facesContext,
+                getRenderKitId());
 
-					@Override
-					public void begin(String namespace, String name,
-							Attributes attributes) throws Exception {
+        final boolean[] enabled = new boolean[1];
 
-						FeatureCompatibility featureCompatibility = new FeatureCompatibility();
-						digester.push(featureCompatibility);
-					}
+        digester.addRule("rcfaces-config/features-compatibilities/feature",
+                new Rule() {
 
-					@Override
-					public void end(String namespace, String name)
-							throws Exception {
-						FeatureCompatibility featureCompatibility = (FeatureCompatibility) digester
-								.pop();
+                    @Override
+                    public void begin(String namespace, String name,
+                            Attributes attributes) throws Exception {
 
-						String userAgentRules = featureCompatibility.featureRule;
+                        FeatureCompatibility featureCompatibility = new FeatureCompatibility();
+                        digester.push(featureCompatibility);
+                    }
 
-						IUserAgentRules uars = UserAgentRuleTools
-								.constructUserAgentRules(
-										userAgentRules,
-										true,
-										true,
-										0,
-										HtmlRendererTypeFactory.this.featureByName);
+                    @Override
+                    public void end(String namespace, String name)
+                            throws Exception {
+                        FeatureCompatibility featureCompatibility = (FeatureCompatibility) digester
+                                .pop();
 
-						featureByName.put(featureCompatibility.name, uars);
-					}
+                        String userAgentRules = featureCompatibility.featureRule;
 
-				});
+                        IUserAgentRules uars = UserAgentRuleTools
+                                .constructUserAgentRules(
+                                        userAgentRules,
+                                        true,
+                                        true,
+                                        0,
+                                        HtmlRendererTypeFactory.this.featureByName);
 
-		digester.addBeanPropertySetter(
-				"rcfaces-config/features-compatibilities/feature/feature-name",
-				"name");
+                        featureByName.put(featureCompatibility.name, uars);
+                    }
 
-		digester.addBeanPropertySetter(
-				"rcfaces-config/features-compatibilities/feature/feature-rule",
-				"featureRule");
+                });
 
-		digester.addRule("rcfaces-config/renderKit", new Rule() {
+        digester.addBeanPropertySetter(
+                "rcfaces-config/features-compatibilities/feature/feature-name",
+                "name");
 
-			@Override
-			public void begin(String namespace, String name,
-					Attributes attributes) throws Exception {
-				super.begin(namespace, name, attributes);
+        digester.addBeanPropertySetter(
+                "rcfaces-config/features-compatibilities/feature/feature-rule",
+                "featureRule");
 
-				String id = attributes.getValue("id");
-				if (id == null) {
-					id = RenderKitFactory.HTML_BASIC_RENDER_KIT;
-				}
+        digester.addRule("rcfaces-config/renderKit", new Rule() {
 
-				if (getRenderKitId().equals(id)) {
-					enabled[0] = true;
-				} else {
-					enabled[0] = false;
-				}
-			}
-		});
+            @Override
+            public void begin(String namespace, String name,
+                    Attributes attributes) throws Exception {
+                super.begin(namespace, name, attributes);
 
-		digester.addObjectCreate("rcfaces-config/renderKit/renderer",
-				LookIdRulesBean.class);
+                String id = attributes.getValue("id");
+                if (id == null) {
+                    id = RenderKitFactory.HTML_BASIC_RENDER_KIT;
+                }
 
-		digester.addBeanPropertySetter(
-				"rcfaces-config/renderKit/renderer/priority", "priority");
+                if (getRenderKitId().equals(id)) {
+                    enabled[0] = true;
+                } else {
+                    enabled[0] = false;
+                }
+            }
+        });
 
-		digester.addBeanPropertySetter(
-				"rcfaces-config/renderKit/renderer/renderer-type",
-				"rendererType");
+        digester.addObjectCreate("rcfaces-config/renderKit/renderer",
+                LookIdRulesBean.class);
 
-		digester.addBeanPropertySetter(
-				"rcfaces-config/renderKit/renderer/renderer-class",
-				"rendererClass");
+        digester.addBeanPropertySetter(
+                "rcfaces-config/renderKit/renderer/priority", "priority");
 
-		digester.addBeanPropertySetter(
-				"rcfaces-config/renderKit/renderer/component-family",
-				"componentFamilly");
+        digester.addBeanPropertySetter(
+                "rcfaces-config/renderKit/renderer/renderer-type",
+                "rendererType");
 
-		digester.addBeanPropertySetter(
-				"rcfaces-config/renderKit/renderer/lookId", "lookId");
+        digester.addBeanPropertySetter(
+                "rcfaces-config/renderKit/renderer/renderer-class",
+                "rendererClass");
 
-		digester.addRule("rcfaces-config/renderKit/renderer/rules/navigator",
-				new Rule() {
+        digester.addBeanPropertySetter(
+                "rcfaces-config/renderKit/renderer/component-family",
+                "componentFamilly");
 
-					@Override
-					public void body(String namespace, String name, String text)
-							throws Exception {
-						LookIdRulesBean lookIdRules = (LookIdRulesBean) digester
-								.peek();
+        digester.addBeanPropertySetter(
+                "rcfaces-config/renderKit/renderer/lookId", "lookId");
 
-						lookIdRules.navigators.add(text.trim());
-					}
+        digester.addRule("rcfaces-config/renderKit/renderer/rules/navigator",
+                new Rule() {
 
-				});
+                    @Override
+                    public void body(String namespace, String name, String text)
+                            throws Exception {
+                        LookIdRulesBean lookIdRules = (LookIdRulesBean) digester
+                                .peek();
 
-		digester.addRule("rcfaces-config/renderKit/renderer/rules/feature",
-				new Rule() {
+                        lookIdRules.navigators.add(text.trim());
+                    }
 
-					@Override
-					public void body(String namespace, String name, String text)
-							throws Exception {
-						LookIdRulesBean lookIdRules = (LookIdRulesBean) digester
-								.peek();
+                });
 
-						lookIdRules.features.add(text.trim());
-					}
+        digester.addRule("rcfaces-config/renderKit/renderer/rules/feature",
+                new Rule() {
 
-				});
+                    @Override
+                    public void body(String namespace, String name, String text)
+                            throws Exception {
+                        LookIdRulesBean lookIdRules = (LookIdRulesBean) digester
+                                .peek();
 
-		digester.addRule("rcfaces-config/renderKit/renderer", new Rule() {
+                        lookIdRules.features.add(text.trim());
+                    }
 
-			@Override
-			public void end(String namespace, String name) throws Exception {
-				LookIdRulesBean lookIdRulesBean = (LookIdRulesBean) digester
-						.pop();
+                });
 
-				lookIdRulesBean.commit(facesContext, renderKit,
-						HtmlRendererTypeFactory.this.lookIdRulesByName,
-						HtmlRendererTypeFactory.this.featureByName);
-			}
+        digester.addRule("rcfaces-config/renderKit/renderer", new Rule() {
 
-		});
-	}
+            @Override
+            public void end(String namespace, String name) throws Exception {
+                LookIdRulesBean lookIdRulesBean = (LookIdRulesBean) digester
+                        .peek(); // Le pop est fait par le
+                                 // addObjectCreate("rcfaces-config/renderKit/renderer")
 
-	public static class Navigator {
-		private String navigatorClass;
+                lookIdRulesBean.commit(facesContext, renderKit,
+                        HtmlRendererTypeFactory.this.lookIdRulesByName,
+                        HtmlRendererTypeFactory.this.featureByName);
+            }
 
-		private String navigatorVersion;
-	}
+        });
+    }
 
-	public static class LookIdRule implements Comparable<LookIdRule> {
+    public static class Navigator {
+        private String navigatorClass;
 
-		private final String lookIdRendererType;
+        private String navigatorVersion;
+    }
 
-		private final IUserAgentRules userAgentRules;
+    public static class LookIdRule implements Comparable<LookIdRule> {
 
-		private LookIdRule next;
+        private final String lookIdRendererType;
 
-		public LookIdRule(IUserAgentRules rules, String lookIdRendererType) {
-			this.userAgentRules = rules;
-			this.lookIdRendererType = lookIdRendererType;
-		}
+        private final IUserAgentRules userAgentRules;
 
-		public void setNext(LookIdRule next) {
-			this.next = next;
-		}
+        private LookIdRule next;
 
-		public String accept(IUserAgent proposal) {
-			if (userAgentRules.accepts(proposal)) {
-				return lookIdRendererType;
-			}
+        public LookIdRule(IUserAgentRules rules, String lookIdRendererType) {
+            this.userAgentRules = rules;
+            this.lookIdRendererType = lookIdRendererType;
+        }
 
-			if (next != null) {
-				return next.accept(proposal);
-			}
+        public void setNext(LookIdRule next) {
+            this.next = next;
+        }
 
-			return null;
-		}
+        public String accept(IUserAgent proposal) {
+            if (userAgentRules.accepts(proposal)) {
+                return lookIdRendererType;
+            }
 
-		public int compareTo(LookIdRule o) {
-			return userAgentRules.rulesCount() - o.userAgentRules.rulesCount();
-		}
+            if (next != null) {
+                return next.accept(proposal);
+            }
 
-		public LookIdRule getNext() {
-			return next;
-		}
+            return null;
+        }
 
-	}
+        public int compareTo(LookIdRule o) {
+            return userAgentRules.rulesCount() - o.userAgentRules.rulesCount();
+        }
 
-	public static class LookIdRulesBean {
+        public LookIdRule getNext() {
+            return next;
+        }
 
-		protected final List<String> features = new ArrayList<String>();
+    }
 
-		protected final List<String> navigators = new ArrayList<String>();
+    public static class LookIdRulesBean {
 
-		private String componentFamilly;
+        protected final List<String> features = new ArrayList<String>();
 
-		private String rendererType;
+        protected final List<String> navigators = new ArrayList<String>();
 
-		private String rendererClass;
+        private String componentFamilly;
 
-		private String lookId;
+        private String rendererType;
 
-		private int priority;
+        private String rendererClass;
 
-		public LookIdRulesBean() {
+        private String lookId;
 
-		}
+        private int priority;
 
-		public int getPriority() {
-			return priority;
-		}
+        public LookIdRulesBean() {
 
-		public void setPriority(int priority) {
-			this.priority = priority;
-		}
+        }
 
-		public String getComponentFamilly() {
-			return componentFamilly;
-		}
+        public int getPriority() {
+            return priority;
+        }
 
-		public void setComponentFamilly(String componentFamilly) {
-			this.componentFamilly = componentFamilly;
-		}
+        public void setPriority(int priority) {
+            this.priority = priority;
+        }
 
-		public String getLookId() {
-			return lookId;
-		}
+        public String getComponentFamilly() {
+            return componentFamilly;
+        }
 
-		public void setLookId(String lookId) {
-			this.lookId = lookId;
-		}
+        public void setComponentFamilly(String componentFamilly) {
+            this.componentFamilly = componentFamilly;
+        }
 
-		public String getRendererType() {
-			return rendererType;
-		}
+        public String getLookId() {
+            return lookId;
+        }
 
-		public void setRendererType(String rendererType) {
-			int idx = rendererType.indexOf(':');
-			if (idx >= 0) {
-				lookId = rendererType.substring(idx + 1);
-				rendererType = rendererType.substring(0, idx);
-			}
+        public void setLookId(String lookId) {
+            this.lookId = lookId;
+        }
 
-			this.rendererType = rendererType;
-		}
+        public String getRendererType() {
+            return rendererType;
+        }
 
-		public String getRendererClass() {
-			return rendererClass;
-		}
+        public void setRendererType(String rendererType) {
+            int idx = rendererType.indexOf(':');
+            if (idx >= 0) {
+                lookId = rendererType.substring(idx + 1);
+                rendererType = rendererType.substring(0, idx);
+            }
 
-		public void setRendererClass(String rendererClass) {
-			this.rendererClass = rendererClass;
-		}
+            this.rendererType = rendererType;
+        }
 
-		void commit(FacesContext facesContext, RenderKit renderKit,
-				Map<String, LookIdRule> lookIdRules,
-				Map<String, IUserAgentRules> featuresByName) {
-			if (componentFamilly == null) {
-				throw new FacesException("Component Familly is not defined !");
-			}
-			if (rendererType == null) {
-				throw new FacesException("Renderer Type is not defined !");
-			}
-			if (rendererClass == null) {
-				throw new FacesException("Renderer Class is not defined !");
-			}
+        public String getRendererClass() {
+            return rendererClass;
+        }
 
-			StringBuilder navigatorsString = new StringBuilder(
-					navigators.size() * 32);
-			for (String navigator : navigators) {
-				navigatorsString.append(' ').append(navigator.trim());
-			}
+        public void setRendererClass(String rendererClass) {
+            this.rendererClass = rendererClass;
+        }
 
-			for (String feature : features) {
-				navigatorsString.append(' ');
+        void commit(FacesContext facesContext, RenderKit renderKit,
+                Map<String, LookIdRule> lookIdRules,
+                Map<String, IUserAgentRules> featuresByName) {
+            if (componentFamilly == null) {
+                throw new FacesException("Component Familly is not defined !");
+            }
+            if (rendererType == null) {
+                throw new FacesException("Renderer Type is not defined !");
+            }
+            if (rendererClass == null) {
+                throw new FacesException("Renderer Class is not defined !");
+            }
 
-				if (feature.startsWith(UserAgentRuleTools.FEATURE_PREFIX) == false) {
-					navigatorsString.append(UserAgentRuleTools.FEATURE_PREFIX);
-				}
+            StringBuilder navigatorsString = new StringBuilder(
+                    navigators.size() * 32);
+            for (String navigator : navigators) {
+                navigatorsString.append(' ').append(navigator.trim());
+            }
 
-				navigatorsString.append(feature.trim());
-			}
+            for (String feature : features) {
+                navigatorsString.append(' ');
 
-			IUserAgentRules userAgentRules = UserAgentRuleTools
-					.constructUserAgentRules(navigatorsString.toString(), true,
-							true, priority, featuresByName);
+                if (feature.startsWith(UserAgentRuleTools.FEATURE_PREFIX) == false) {
+                    navigatorsString.append(UserAgentRuleTools.FEATURE_PREFIX);
+                }
 
-			String rendererClassName = getRendererClass();
-			Class<Renderer> rendererClass;
-			try {
-				rendererClass = (Class<Renderer>) ClassLocator.load(
-						rendererClassName, this, facesContext);
+                navigatorsString.append(feature.trim());
+            }
 
-			} catch (ClassNotFoundException ex) {
-				LOG.debug("Class of renderer not found '" + rendererClassName
-						+ "'.", ex);
+            IUserAgentRules userAgentRules = UserAgentRuleTools
+                    .constructUserAgentRules(navigatorsString.toString(), true,
+                            true, priority, featuresByName);
 
-				throw new FacesException("Class of renderer not found '"
-						+ rendererClassName + "'.", ex);
-			}
+            String rendererClassName = getRendererClass();
+            Class< ? extends Renderer> rendererClass;
+            try {
+                rendererClass = ClassLocator.load(rendererClassName, this,
+                        facesContext, Renderer.class);
 
-			Renderer renderer;
-			try {
-				renderer = rendererClass.newInstance();
+            } catch (ClassNotFoundException ex) {
+                LOG.debug("Class of renderer not found '" + rendererClassName
+                        + "'.", ex);
 
-			} catch (Exception ex) {
-				if (LOG.isDebugEnabled()) {
-					LOG.debug("Can not instanciate renderer instance. ('"
-							+ rendererClass + "')", ex);
-				}
+                throw new FacesException("Class of renderer not found '"
+                        + rendererClassName + "'.", ex);
+            }
 
-				throw new FacesException(
-						"Can not instanciate renderer instance. ('"
-								+ rendererClass + "')", ex);
-			}
+            Renderer renderer;
+            try {
+                renderer = rendererClass.newInstance();
 
-			StringBuilder sb = new StringBuilder(256);
-			sb.append(getRendererType());
-			if (lookId != null) {
-				sb.append(LOOK_ID_SEPARATOR).append(lookId);
-			}
-			if (userAgentRules.rulesCount() > 0) {
-				userAgentRules.textForm(sb, USER_AGENT_SEPARATOR);
-			}
+            } catch (Exception ex) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Can not instanciate renderer instance. ('"
+                            + rendererClass + "')", ex);
+                }
 
-			String lookIdRendererType = sb.toString();
+                throw new FacesException(
+                        "Can not instanciate renderer instance. ('"
+                                + rendererClass + "')", ex);
+            }
 
-			renderKit.addRenderer(getComponentFamilly(), lookIdRendererType,
-					renderer);
+            StringBuilder sb = new StringBuilder(256);
+            sb.append(getRendererType());
+            if (lookId != null) {
+                sb.append(LOOK_ID_SEPARATOR).append(lookId);
+            }
+            if (userAgentRules.rulesCount() > 0) {
+                userAgentRules.textForm(sb, USER_AGENT_SEPARATOR);
+            }
 
-			if (userAgentRules.rulesCount() > 0) {
+            String lookIdRendererType = sb.toString();
 
-				String rendererTypeKey = constructKey(componentFamilly,
-						rendererType, lookId);
-				LookIdRule old = lookIdRules.get(rendererTypeKey);
+            renderKit.addRenderer(getComponentFamilly(), lookIdRendererType,
+                    renderer);
 
-				LookIdRule lookIdRule = new LookIdRule(userAgentRules,
-						lookIdRendererType);
+            if (userAgentRules.rulesCount() > 0) {
 
-				if (old == null) {
-					lookIdRules.put(rendererTypeKey, lookIdRule);
+                String rendererTypeKey = constructKey(componentFamilly,
+                        rendererType, lookId);
+                LookIdRule old = lookIdRules.get(rendererTypeKey);
 
-				} else if (lookIdRule.compareTo(old) < 0) {
-					lookIdRule.setNext(old);
-					lookIdRules.put(rendererTypeKey, lookIdRule);
+                LookIdRule lookIdRule = new LookIdRule(userAgentRules,
+                        lookIdRendererType);
 
-				} else {
-					LookIdRule prev = old;
-					LookIdRule next = old.getNext();
-					for (; next != null; next = next.getNext()) {
-						if (lookIdRule.compareTo(next) < 0) {
-							break;
-						}
+                if (old == null) {
+                    lookIdRules.put(rendererTypeKey, lookIdRule);
 
-						prev = next;
-					}
+                } else if (lookIdRule.compareTo(old) < 0) {
+                    lookIdRule.setNext(old);
+                    lookIdRules.put(rendererTypeKey, lookIdRule);
 
-					prev.setNext(lookIdRule);
-					if (next != null) {
-						lookIdRule.setNext(next);
-					}
-				}
-			}
-		}
-	}
+                } else {
+                    LookIdRule prev = old;
+                    LookIdRule next = old.getNext();
+                    for (; next != null; next = next.getNext()) {
+                        if (lookIdRule.compareTo(next) < 0) {
+                            break;
+                        }
 
-	/**
-	 * 
-	 * @author Olivier Oeuillot (latest modification by $Author$)
-	 * @version $Revision$ $Date$
-	 */
-	public static class FeatureCompatibility {
-		private String name;
+                        prev = next;
+                    }
 
-		private String featureRule;
+                    prev.setNext(lookIdRule);
+                    if (next != null) {
+                        lookIdRule.setNext(next);
+                    }
+                }
+            }
+        }
+    }
 
-		public void setFeatureRule(String userAgentRules) {
-			this.featureRule = userAgentRules;
-		}
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    public static class FeatureCompatibility {
+        private String name;
 
-		public void setName(String name) {
-			this.name = name;
-		}
+        private String featureRule;
 
-		public String getFeatureRule() {
-			return featureRule;
-		}
+        public void setFeatureRule(String userAgentRules) {
+            this.featureRule = userAgentRules;
+        }
 
-		public String getName() {
-			return name;
-		}
+        public void setName(String name) {
+            this.name = name;
+        }
 
-	}
+        public String getFeatureRule() {
+            return featureRule;
+        }
 
-	public Map<String, IUserAgentRules> listFeaturesByNames() {
-		return featureByName;
-	}
+        public String getName() {
+            return name;
+        }
+
+    }
+
+    public Map<String, IUserAgentRules> listFeaturesByNames() {
+        return featureByName;
+    }
 }
