@@ -15,16 +15,17 @@ import com.sun.facelets.tag.TagConfig;
  * @version $Revision$ $Date$
  */
 public class SelectionListenerHandler extends AbstractListenerHandler {
-    private static final String REVISION = "$Revision$";
 
     public SelectionListenerHandler(TagConfig config) {
         super(config);
     }
 
+    @Override
     protected void addListener(Object listener, UIComponent component) {
         SelectionListenerTag.addSelectionListener(listener, component);
     }
 
+    @Override
     protected String getListenerName() {
         return "selection";
     }

@@ -25,8 +25,6 @@ import org.rcfaces.core.internal.service.log.LogService.ILogger;
  * @version $Revision$ $Date$
  */
 public class CommonsLogger implements ILogger {
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory.getLog(CommonsLogger.class);
 
     private static final String DEFAULT_LOG_LEVEL_PARAMETER = Constants
@@ -118,12 +116,13 @@ public class CommonsLogger implements ILogger {
         return (filters != null);
     }
 
+    @SuppressWarnings("unchecked")
     protected IFilter[] loadFilters(FacesContext facesContext) {
 
-        Map initParameters = facesContext.getExternalContext()
+        Map<String, Object> initParameters = facesContext.getExternalContext()
                 .getInitParameterMap();
 
-        List l = new ArrayList();
+        List<LogService.Filter> l = new ArrayList<LogService.Filter>();
 
         String level = (String) initParameters.get(DEFAULT_LOG_LEVEL_PARAMETER);
         if (level != null) {
@@ -159,6 +158,6 @@ public class CommonsLogger implements ILogger {
             return LogService.EMPTY_FILTERS;
         }
 
-        return (IFilter[]) l.toArray(new IFilter[l.size()]);
+        return l.toArray(new IFilter[l.size()]);
     }
 }

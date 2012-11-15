@@ -59,7 +59,7 @@ public class ExpansionTools extends CollectionTools {
             ((IExpandedValuesCapability) component).setExpandedValues(values);
         }
 
-        public Class getComponentValuesType(FacesContext facesContext,
+        public Class< ? > getComponentValuesType(FacesContext facesContext,
                 UIComponent component) {
 
             return ((IExpandedValuesCapability) component)

@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -40,9 +39,9 @@ public class ConfigurationLoader {
 
     private static final String FACES_CONFIG_INIT_PARAMETER = "javax.faces.CONFIG_FILES";
 
-    private final List urls;
+    private final List<URL> urls;
 
-    private ConfigurationLoader(List urls) {
+    private ConfigurationLoader(List<URL> urls) {
         this.urls = urls;
     }
 
@@ -52,8 +51,7 @@ public class ConfigurationLoader {
             return;
         }
 
-        for (Iterator it = urls.iterator(); it.hasNext();) {
-            URL url = (URL) it.next();
+        for (URL url : urls) {
 
             InputStream inputStream;
             try {
@@ -100,20 +98,20 @@ public class ConfigurationLoader {
 
     public static ConfigurationLoader scanConfigurationURLs(
             ExternalContext externalContext, String resourceName,
-            String resourceNameInitParameter, List urls) {
+            String resourceNameInitParameter, List<URL> urls) {
 
         if (urls == null) {
             urls = Collections.emptyList();
         }
 
-        urls = new ArrayList(urls);
+        urls = new ArrayList<URL>(urls);
 
         ClassLoader contextClassLoader = Thread.currentThread()
                 .getContextClassLoader();
         if (contextClassLoader != null) {
             String metaInfResourceName = "META-INF/" + resourceName;
 
-            Enumeration enumeration = null;
+            Enumeration<URL> enumeration = null;
             try {
                 enumeration = contextClassLoader
                         .getResources(metaInfResourceName);
@@ -125,7 +123,7 @@ public class ConfigurationLoader {
 
             if (enumeration != null) {
                 for (; enumeration.hasMoreElements();) {
-                    URL url = (URL) enumeration.nextElement();
+                    URL url = enumeration.nextElement();
 
                     if (urls.contains(url)) {
                         continue;
@@ -154,7 +152,7 @@ public class ConfigurationLoader {
 
         StringTokenizer st = new StringTokenizer(configFilenames, ",;\t \r\n");
 
-        Set alreadyLoaded = new HashSet();
+        Set<String> alreadyLoaded = new HashSet<String>();
 
         for (; st.hasMoreTokens();) {
             String filename = st.nextToken();
@@ -167,9 +165,12 @@ public class ConfigurationLoader {
                     + resourceNameInitParameter + "' detected : '" + filename
                     + "'.");
 
-            URL url = contextClassLoader.getResource(filename);
+            URL url = null;
+            if (contextClassLoader != null) {
+                url = contextClassLoader.getResource(filename);
+            }
 
-            if (url == null) {
+            if (url == null && externalContext != null) {
                 try {
                     url = externalContext.getResource(filename);
 
@@ -198,14 +199,14 @@ public class ConfigurationLoader {
     }
 
     public static ConfigurationLoader scanFacesConfig(
-            ExternalContext externalContext, List urls) {
+            ExternalContext externalContext, List<URL> urls) {
 
         return scanConfigurationURLs(externalContext,
                 FACES_CONFIG_RESOURCE_NAME, FACES_CONFIG_INIT_PARAMETER, urls);
     }
 
     public static ConfigurationLoader scanRCFacesConfig(
-            ExternalContext externalContext, List urls) {
+            ExternalContext externalContext, List<URL> urls) {
 
         return scanConfigurationURLs(externalContext, RCFACES_CONFIG_FILENAME,
                 RCFACES_CONFIG_INIT_PARAMETER, urls);

@@ -15,17 +15,18 @@ import com.sun.facelets.tag.TagConfig;
  * @version $Revision$ $Date$
  */
 public class PropertyChangeListenerHandler extends AbstractListenerHandler {
-    private static final String REVISION = "$Revision$";
 
     public PropertyChangeListenerHandler(TagConfig config) {
         super(config);
     }
 
+    @Override
     protected void addListener(Object listener, UIComponent component) {
         PropertyChangeListenerTag
                 .addPropertyChangeListener(listener, component);
     }
 
+    @Override
     protected String getListenerName() {
         return "propertyChange";
     }

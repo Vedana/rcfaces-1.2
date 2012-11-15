@@ -68,7 +68,8 @@ public class ImageContentAccessorHandlerImpl extends
     private final Map<String, IImageOperation> operationsById = new HashMap<String, IImageOperation>(
             32);
 
-    private final Map validContentTypes = new HashMap(8);
+    private final Map<String, Boolean> validContentTypes = new HashMap<String, Boolean>(
+            8);
 
     private final FileNameMap fileNameMap;
 
@@ -78,7 +79,7 @@ public class ImageContentAccessorHandlerImpl extends
 
     private Boolean gifWriterEnabled;
 
-    private List imageResourceAdaptersList;
+    private List<ImageResourceAdapterBean> imageResourceAdaptersList;
 
     private ImageResourceAdapterBean imageResourceAdapters[];
 
@@ -139,7 +140,7 @@ public class ImageContentAccessorHandlerImpl extends
         }
 
         if (imageResourceAdaptersList.size() > 0) {
-            imageResourceAdapters = (ImageResourceAdapterBean[]) imageResourceAdaptersList
+            imageResourceAdapters = imageResourceAdaptersList
                     .toArray(new ImageResourceAdapterBean[imageResourceAdaptersList
                             .size()]);
         }
@@ -150,7 +151,7 @@ public class ImageContentAccessorHandlerImpl extends
     public void configureRules(Digester digester) {
         super.configureRules(digester);
 
-        imageResourceAdaptersList = new ArrayList();
+        imageResourceAdaptersList = new ArrayList<ImageResourceAdapterBean>();
 
         digester.addRule("rcfaces-config/image-operations/operation",
                 new Rule() {
@@ -262,11 +263,10 @@ public class ImageContentAccessorHandlerImpl extends
                     + operationBean.getClassName() + "'.");
         }
 
-        Class<IImageOperation> clazz;
+        Class< ? extends IImageOperation> clazz;
         try {
-            clazz = (Class<IImageOperation>) ClassLocator.load(
-                    operationBean.getClassName(), null,
-                    FacesContext.getCurrentInstance());
+            clazz = ClassLocator.load(operationBean.getClassName(), null,
+                    FacesContext.getCurrentInstance(), IImageOperation.class);
 
         } catch (ClassNotFoundException ex) {
             LOG.error(
@@ -294,7 +294,7 @@ public class ImageContentAccessorHandlerImpl extends
             return;
         }
 
-        Constructor<IImageOperation> constructor;
+        Constructor< ? extends IImageOperation> constructor;
 
         try {
             constructor = clazz.getConstructor((Class[]) null);
@@ -362,9 +362,9 @@ public class ImageContentAccessorHandlerImpl extends
         operationsById.put(operationBean.getId(), operation);
     }
 
+    @Override
     public IImageOperation getImageOperation(String operationId) {
-        IImageOperation imageOperation = (IImageOperation) operationsById
-                .get(operationId);
+        IImageOperation imageOperation = operationsById.get(operationId);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Operation id='" + operationId + "' => " + imageOperation);
@@ -373,6 +373,7 @@ public class ImageContentAccessorHandlerImpl extends
         return imageOperation;
     }
 
+    @Override
     public IContentAccessor formatImageURL(FacesContext facesContext,
             IContentAccessor contentAccessor,
             IGeneratedImageInformation generatedImageInformation,
@@ -524,6 +525,7 @@ public class ImageContentAccessorHandlerImpl extends
         return newContentAccessor;
     }
 
+    @Override
     public String getMimeType(String url) {
         int idx = url.lastIndexOf('/');
         if (idx >= 0) {
@@ -561,10 +563,12 @@ public class ImageContentAccessorHandlerImpl extends
         return null;
     }
 
+    @Override
     public boolean isProviderEnabled() {
         return contentAccessorAvailable;
     }
 
+    @Override
     public int getValidContenType(String contentType) {
         IImageResourceAdapter imageResourceAdapters[] = listImageResourceAdapters(
                 contentType, null);
@@ -574,10 +578,11 @@ public class ImageContentAccessorHandlerImpl extends
 
         Boolean valid;
         synchronized (validContentTypes) {
-            valid = (Boolean) validContentTypes.get(contentType);
+            valid = validContentTypes.get(contentType);
 
             if (valid == null) {
-                Iterator it = ImageIO.getImageWritersByMIMEType(contentType);
+                Iterator<ImageWriter> it = ImageIO
+                        .getImageWritersByMIMEType(contentType);
                 valid = (it.hasNext()) ? Boolean.TRUE : Boolean.FALSE;
 
                 validContentTypes.put(contentType, valid);
@@ -591,6 +596,7 @@ public class ImageContentAccessorHandlerImpl extends
         return NO_VALIDATION;
     }
 
+    @Override
     protected boolean isOperationSupported(String operationId,
             IContentAccessor imageContentAccessor) {
 
@@ -616,6 +622,7 @@ public class ImageContentAccessorHandlerImpl extends
         imageResourceAdaptersList.add(imageResourceAdapterBean);
     }
 
+    @Override
     public IImageResourceAdapter[] listImageResourceAdapters(
             String contentType, String suffix) {
 
@@ -623,7 +630,7 @@ public class ImageContentAccessorHandlerImpl extends
             return IMAGE_RESOURCE_ADAPTER_EMPTY_ARRAY;
         }
 
-        List ret = null;
+        List<IImageResourceAdapter> ret = null;
 
         for (int i = 0; i < imageResourceAdapters.length; i++) {
             ImageResourceAdapterBean imageResourceAdapterBean = imageResourceAdapters[i];
@@ -640,7 +647,7 @@ public class ImageContentAccessorHandlerImpl extends
             }
 
             if (ret == null) {
-                ret = new ArrayList();
+                ret = new ArrayList<IImageResourceAdapter>();
             }
 
             ret.add(imageResourceAdapter);
@@ -650,8 +657,7 @@ public class ImageContentAccessorHandlerImpl extends
             return IMAGE_RESOURCE_ADAPTER_EMPTY_ARRAY;
         }
 
-        return (IImageResourceAdapter[]) ret
-                .toArray(new IImageResourceAdapter[ret.size()]);
+        return ret.toArray(new IImageResourceAdapter[ret.size()]);
     }
 
     /**
@@ -749,9 +755,9 @@ public class ImageContentAccessorHandlerImpl extends
 
         private String className;
 
-        private Set contentTypes;
+        private Set<String> contentTypes;
 
-        private Set suffixes;
+        private Set<String> suffixes;
 
         private IImageResourceAdapter imageResourceAdapter;
 
@@ -788,21 +794,16 @@ public class ImageContentAccessorHandlerImpl extends
         }
 
         protected void resolveInstance() {
-            Class clazz;
+            Class< ? extends IImageResourceAdapter> clazz;
             try {
                 clazz = ClassLocator.load(className, null,
-                        FacesContext.getCurrentInstance());
+                        FacesContext.getCurrentInstance(),
+                        IImageResourceAdapter.class);
 
             } catch (Exception ex) {
                 throw new FacesException("Can not load class '" + className
                         + "' specified by imageAdapter id='" + getId() + "'.",
                         ex);
-            }
-
-            if (IImageResourceAdapter.class.isAssignableFrom(clazz) == false) {
-                throw new FacesException("Class '" + getClassName()
-                        + "' specified by imageAdapter id='" + getId()
-                        + "' must implement interface 'IImageResourceAdapter'.");
             }
 
             if ((clazz.getModifiers() & Modifier.ABSTRACT) > 0) {
@@ -812,8 +813,7 @@ public class ImageContentAccessorHandlerImpl extends
             }
 
             try {
-                imageResourceAdapter = (IImageResourceAdapter) clazz
-                        .newInstance();
+                imageResourceAdapter = clazz.newInstance();
 
             } catch (Exception ex) {
                 throw new FacesException("Can not load class '" + className
@@ -830,7 +830,7 @@ public class ImageContentAccessorHandlerImpl extends
             }
 
             if (suffixes == null) {
-                suffixes = new HashSet();
+                suffixes = new HashSet<String>();
             }
 
             suffixes.add(suffix.toLowerCase().trim());
@@ -850,7 +850,7 @@ public class ImageContentAccessorHandlerImpl extends
             }
 
             if (contentTypes == null) {
-                contentTypes = new HashSet();
+                contentTypes = new HashSet<String>();
             }
 
             contentTypes.add(contentType);

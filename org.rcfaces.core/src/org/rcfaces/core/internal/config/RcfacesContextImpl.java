@@ -86,7 +86,8 @@ public class RcfacesContextImpl extends RcfacesContext implements
 
     private transient BorderRenderersRegistryImpl borderRenderersRegistry;
 
-    private final Map attributes = new HashMap(32);
+    private final Map<String, Serializable> attributes = new HashMap<String, Serializable>(
+            32);
 
     private transient IContentVersionHandler contentVersionHandler;
 
@@ -145,20 +146,21 @@ public class RcfacesContextImpl extends RcfacesContext implements
             LOG.debug("Ignore clientValidators registry (designer mode)");
 
         } else {
-            LOG.debug("Initialize service registry");
+            LOG.debug("Initializing service registry");
             servicesRegistry = createServicesRegistry();
 
-            LOG.debug("Initialize clientValidators registry");
+            LOG.debug("Initializing clientValidators registry");
             clientValidatorsRegistry = createClientValidatorsRegistry();
         }
 
-        LOG.debug("Initialize border renderers registry");
+        LOG.debug("Initializing border renderers registry");
         borderRenderersRegistry = createBorderRenderersRegistry();
 
-        LOG.debug("Initialize providers registry");
+        LOG.debug("Initializing providers registry");
         providersRegistry = createProvidersRegistry();
     }
 
+    @Override
     public final IServicesRegistry getServicesRegistry() {
         return servicesRegistry;
     }
@@ -169,9 +171,9 @@ public class RcfacesContextImpl extends RcfacesContext implements
         LifecycleFactory lifecycleFactory = (LifecycleFactory) FactoryFinder
                 .getFactory(FactoryFinder.LIFECYCLE_FACTORY);
 
-        Iterator it = lifecycleFactory.getLifecycleIds();
+        Iterator<String> it = lifecycleFactory.getLifecycleIds();
         for (; it.hasNext();) {
-            String lifecycleId = (String) it.next();
+            String lifecycleId = it.next();
 
             Lifecycle lifecycle = lifecycleFactory.getLifecycle(lifecycleId);
 
@@ -204,6 +206,7 @@ public class RcfacesContextImpl extends RcfacesContext implements
         return services;
     }
 
+    @Override
     public final IClientValidatorsRegistry getClientValidatorsRegistry() {
         return clientValidatorsRegistry;
     }
@@ -212,6 +215,7 @@ public class RcfacesContextImpl extends RcfacesContext implements
         return new ClientValidatorsRegistryImpl();
     }
 
+    @Override
     public final IProvidersRegistry getProvidersRegistry() {
         return providersRegistry;
     }
@@ -220,6 +224,7 @@ public class RcfacesContextImpl extends RcfacesContext implements
         return new ProvidersRegistry();
     }
 
+    @Override
     public final IBorderRenderersRegistry getBorderRenderersRegistry() {
         return borderRenderersRegistry;
     }
@@ -229,15 +234,15 @@ public class RcfacesContextImpl extends RcfacesContext implements
     }
 
     public final Serializable setAttribute(String property, Serializable value) {
-        return (Serializable) attributes.put(property, value);
+        return attributes.put(property, value);
     }
 
     public final Serializable getAttribute(String property) {
-        return (Serializable) attributes.get(property);
+        return attributes.get(property);
     }
 
     public final Serializable removeAttribute(String property) {
-        return (Serializable) attributes.remove(property);
+        return attributes.remove(property);
     }
 
     private void loadConfigs(FacesContext facesContext) {
@@ -350,23 +355,28 @@ public class RcfacesContextImpl extends RcfacesContext implements
         LOG.debug("Initialize all configs: done.");
     }
 
+    @Override
     public final String getApplicationVersion() {
         return applicationVersion;
     }
 
+    @Override
     public void setDefaultContentVersionHandler(
             IContentVersionHandler contentVersionHandler) {
         this.contentVersionHandler = contentVersionHandler;
     }
 
+    @Override
     public final IContentVersionHandler getDefaultContentVersionHandler() {
         return contentVersionHandler;
     }
 
+    @Override
     public IContentProxyHandler getDefaultContentProxyHandler() {
         return contentProxyHandler;
     }
 
+    @Override
     public void setDefaultContentProxyHandler(
             IContentProxyHandler contentProxyHandler) {
         this.contentProxyHandler = contentProxyHandler;
@@ -380,71 +390,87 @@ public class RcfacesContextImpl extends RcfacesContext implements
         // On ne serialize rien !
     }
 
+    @Override
     public IAdapterManager getAdapterManager() {
         return adapterManager;
     }
 
+    @Override
     public void setAdapterManager(IAdapterManager adapterManager) {
         this.adapterManager = adapterManager;
     }
 
+    @Override
     public boolean isDesignerMode() {
         return designerMode;
     }
 
+    @Override
     public IContentAccessorRegistry getContentAccessorRegistry() {
         return contentAccessorRegistry;
     }
 
+    @Override
     public void setContentAccessorRegistry(
             IContentAccessorRegistry contentAccessorRegistry) {
         this.contentAccessorRegistry = contentAccessorRegistry;
     }
 
+    @Override
     public IResourceVersionHandler getResourceVersionHandler() {
         return resourceVersionHandler;
     }
 
+    @Override
     public void setResourceVersionHandler(
             IResourceVersionHandler resourceVersionHandler) {
         this.resourceVersionHandler = resourceVersionHandler;
     }
 
+    @Override
     public IContentStorageEngine getContentStorageEngine() {
         return indirectContentRepository;
     }
 
+    @Override
     public void setContentStorageEngine(
             IContentStorageEngine indirectContentRepository) {
         this.indirectContentRepository = indirectContentRepository;
     }
 
+    @Override
     public IResourceProxyHandler getResourceProxyHandler() {
         return resourceProxyHandler;
     }
 
+    @Override
     public void setResourceProxyHandler(
             IResourceProxyHandler resourceProxyHandler) {
         this.resourceProxyHandler = resourceProxyHandler;
     }
 
+    @Override
     public IDocumentBuilderProvider getDocumentBuilderProvider() {
         return documentBuilderProvider;
     }
 
+    @Override
     public void setDocumentBuilderProvider(
             IDocumentBuilderProvider documentBuilderProvider) {
         this.documentBuilderProvider = documentBuilderProvider;
     }
 
+    @Override
     public IRepositoryManager getRepositoryManager() {
         return repositoryManager;
     }
 
+    @Override
     public void setRepositoryManager(IRepositoryManager repositoryManager) {
         this.repositoryManager = repositoryManager;
     }
 
+    @Override
     public int getListenerManagerStrategy() {
         return listenerManagerStrategy;
     }

@@ -7,10 +7,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -28,7 +26,7 @@ public class StringList {
     private static final char STRING_DEFAULT_SEPARATOR = ',';
 
     private static final char STRING_DEFAULT_ESCAPE = '\\';
-    
+
     private static final String STRING_DEFAULT_NULL = "##null##";
 
     public static String[] parseTokensList(String value) {
@@ -37,18 +35,18 @@ public class StringList {
             return null;
         }
         if (value.length() < 1) {
-            return new String[] { /*value*/ };
+            return new String[] { /* value */};
         }
 
         char chs[] = value.toCharArray();
 
-        List l = null;
+        List<String> l = null;
 
         StringAppender sa = new StringAppender(32);
 
         for (int i = 0; i < chs.length; i++) {
             char c = chs[i];
-            
+
             if (c == STRING_DEFAULT_ESCAPE) {
                 i++;
                 if (i == chs.length) {
@@ -60,15 +58,15 @@ public class StringList {
 
             if (c == STRING_DEFAULT_SEPARATOR) {
                 if (l == null) {
-                    l = new ArrayList(value.length() / 8 + 1);
+                    l = new ArrayList<String>(value.length() / 8 + 1);
                 }
-                
+
                 if (STRING_DEFAULT_NULL.equals(sa.toString().trim())) {
-                   l.add(null);
-                   sa.setLength(0);
-                   continue;
-               }
-                
+                    l.add(null);
+                    sa.setLength(0);
+                    continue;
+                }
+
                 l.add(sa.toString().trim());
 
                 sa.setLength(0);
@@ -77,22 +75,22 @@ public class StringList {
 
             sa.append(chs[i]);
         }
-        
+
         if (STRING_DEFAULT_NULL.equals(sa.toString().trim())) {
-        	if (l == null) {
-                return  new String[] { null };
+            if (l == null) {
+                return new String[] { null };
             }
             l.add(null);
-            return (String[]) l.toArray(new String[l.size()]);
+            return l.toArray(new String[l.size()]);
         }
-        
+
         if (l == null) {
             return new String[] { sa.toString().trim() };
         }
 
         l.add(sa.toString());
 
-        return (String[]) l.toArray(new String[l.size()]);
+        return l.toArray(new String[l.size()]);
     }
 
     public static int countTokens(String value) {
@@ -149,15 +147,14 @@ public class StringList {
         return sa.toString().trim();
     }
 
-    public static String joinTokens(Collection collection) {
+    public static String joinTokens(Collection<String> collection) {
         StringAppender sa = new StringAppender(collection.size() * 16);
 
-        for (Iterator it = collection.iterator(); it.hasNext();) {
-            String token = (String) it.next();
+        for (String token : collection) {
             if (token == null) {
-            	token = STRING_DEFAULT_NULL;
+                token = STRING_DEFAULT_NULL;
             }
-            
+
             if (sa.length() > 0) {
                 sa.append(STRING_DEFAULT_SEPARATOR);
             }
@@ -178,18 +175,18 @@ public class StringList {
         return sa.toString();
     }
 
-    public static Map parseTokensMap(String value) {
+    public static Map<String, String> parseTokensMap(String value) {
 
         if (value == null) {
             return null;
         }
         if (value.length() < 1) {
-            return Collections.EMPTY_MAP;
+            return Collections.emptyMap();
         }
 
         char chs[] = value.toCharArray();
 
-        Map map = new HashMap();
+        Map<String, String> map = new HashMap<String, String>();
 
         StringAppender sa = new StringAppender(32);
         String key = null;
@@ -240,13 +237,12 @@ public class StringList {
         return map;
     }
 
-    public static String joinTokens(Map collection) {
+    public static String joinTokens(Map<String, String> collection) {
         StringAppender sa = new StringAppender(collection.size() * 32);
 
-        for (Iterator it = collection.entrySet().iterator(); it.hasNext();) {
-            Map.Entry entry = (Entry) it.next();
-            String token = (String) entry.getKey();
-            String value = (String) entry.getValue();
+        for (Map.Entry<String, String> entry : collection.entrySet()) {
+            String token = entry.getKey();
+            String value = entry.getValue();
 
             if (sa.length() > 0) {
                 sa.append(STRING_DEFAULT_SEPARATOR);

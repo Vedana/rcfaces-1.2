@@ -23,12 +23,12 @@ import com.sun.facelets.tag.jsf.ConvertHandler;
  * @version $Revision$ $Date$
  */
 public abstract class CameliaConverterHandler extends ConvertHandler {
-    private static final String REVISION = "$Revision$";
 
     private final TagAttribute localeAttribute;
 
     private final TagAttribute defaultNumberAttribute;
 
+    @SuppressWarnings("deprecation")
     public CameliaConverterHandler(TagConfig config) {
         super(config);
 
@@ -36,13 +36,15 @@ public abstract class CameliaConverterHandler extends ConvertHandler {
         this.defaultNumberAttribute = this.getAttribute("defaultNumber");
     }
 
+    @Override
     protected Converter createConverter(FaceletContext ctx) {
-        return ctx.getFacesContext().getApplication().createConverter(
-                getConverterId());
+        return ctx.getFacesContext().getApplication()
+                .createConverter(getConverterId());
     }
 
     protected abstract String getConverterId();
 
+    @Override
     protected void setAttributes(FaceletContext ctx, Object converter) {
         super.setAttributes(ctx, converter);
 
@@ -53,8 +55,8 @@ public abstract class CameliaConverterHandler extends ConvertHandler {
                 locale = (Locale) localeValue;
 
             } else if (localeValue instanceof String) {
-                locale = (Locale) LocaleConverter.SINGLETON.getAsObject(ctx
-                        .getFacesContext(), null, (String) localeValue);
+                locale = (Locale) LocaleConverter.SINGLETON.getAsObject(
+                        ctx.getFacesContext(), null, (String) localeValue);
             }
 
             if (locale != null) {
@@ -75,8 +77,9 @@ public abstract class CameliaConverterHandler extends ConvertHandler {
         }
     }
 
+    @Override
     protected MetaRuleset createMetaRuleset(Class type) {
-        return super.createMetaRuleset(type).ignore("locale").ignore(
-                "defaultNumber");
+        return super.createMetaRuleset(type).ignore("locale")
+                .ignore("defaultNumber");
     }
 }

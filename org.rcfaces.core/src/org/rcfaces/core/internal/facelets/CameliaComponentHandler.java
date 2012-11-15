@@ -67,6 +67,7 @@ public class CameliaComponentHandler extends CameliaComponentHandler0 {
                 final IListenerType defaultListenerType, String attributeName,
                 final TagAttribute tagAttribute) {
             Metadata metadata = new Metadata() {
+                @Override
                 public void applyMetadata(final FaceletContext ctx,
                         Object instance) {
                     ListenersTools.parseListener(ctx.getFacesContext(),
@@ -75,7 +76,8 @@ public class CameliaComponentHandler extends CameliaComponentHandler0 {
                             new ListenersTools.IMethodExpressionCreator() {
 
                                 public MethodExpression create(
-                                        String expression, Class[] paramTypes) {
+                                        String expression,
+                                        Class< ? >[] paramTypes) {
 
                                     ExpressionFactory expressionFactory = ctx
                                             .getExpressionFactory();
@@ -96,16 +98,16 @@ public class CameliaComponentHandler extends CameliaComponentHandler0 {
         }
     }
 
-    private static final Class[] ENUMERATION_PARAMETERS = new Class[] { String.class };
+    private static final Class< ? >[] ENUMERATION_PARAMETERS = new Class[] { String.class };
 
     private static IAttributeMetaData ENUMERATION_ATTRIBUTE_METADATA = new IAttributeMetaData() {
-        private static final String REVISION = "$Revision$";
 
         public Metadata processAttribute(final String expression,
                 IListenerType defaultListenerType, final String attributeName,
                 TagAttribute tagAttribute) {
 
             Metadata metadata = new Metadata() {
+                @Override
                 public void applyMetadata(FaceletContext ctx, Object instance) {
                     try {
                         String setterMethodName = "set"
@@ -133,7 +135,8 @@ public class CameliaComponentHandler extends CameliaComponentHandler0 {
         }
     };
 
-    private static final Map ATTRIBUTES_METADATA = new HashMap(32);
+    private static final Map<String, IAttributeMetaData> ATTRIBUTES_METADATA = new HashMap<String, IAttributeMetaData>(
+            32);
     static {
         ATTRIBUTES_METADATA.put("blurListener", new ListenerAttributeMetaData(
                 ListenersTools.BLUR_LISTENER_TYPE));
@@ -215,6 +218,7 @@ public class CameliaComponentHandler extends CameliaComponentHandler0 {
                     final IListenerType defaultListenerType,
                     String attributeName, final TagAttribute tagAttribute) {
                 return new Metadata() {
+                    @Override
                     public void applyMetadata(FaceletContext ctx,
                             Object instance) {
 
@@ -274,6 +278,7 @@ public class CameliaComponentHandler extends CameliaComponentHandler0 {
         super(config);
     }
 
+    @Override
     protected MetaRuleset createMetaRuleset(Class type) {
         MetaRuleset metaRuleset = super.createMetaRuleset(type);
 
@@ -288,9 +293,9 @@ public class CameliaComponentHandler extends CameliaComponentHandler0 {
 
     protected final void setTextBody(FaceletContext ctx, UIComponent c) {
         StringAppender content = null;
-        Iterator iter = findNextByType(TextHandler.class);
+        Iterator<TextHandler> iter = findNextByType(TextHandler.class);
         while (iter.hasNext()) {
-            TextHandler text = (TextHandler) iter.next();
+            TextHandler text = iter.next();
 
             if (content == null) {
                 content = new StringAppender();
@@ -316,6 +321,7 @@ public class CameliaComponentHandler extends CameliaComponentHandler0 {
             this.defaultListenerType = defaultListenerType;
         }
 
+        @Override
         public Metadata applyRule(String name, TagAttribute attribute,
                 MetadataTarget meta) {
 
@@ -331,7 +337,7 @@ public class CameliaComponentHandler extends CameliaComponentHandler0 {
                 return null;
             }
 
-            IAttributeMetaData attributeMetaData = (IAttributeMetaData) ATTRIBUTES_METADATA
+            IAttributeMetaData attributeMetaData = ATTRIBUTES_METADATA
                     .get(name);
 
             if (attributeMetaData == null) {

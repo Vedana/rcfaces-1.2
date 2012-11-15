@@ -129,8 +129,7 @@ public class CriteriaTools extends CollectionTools {
             configs.add(selectedCriteria);
         }
 
-        return (ISelectedCriteria[]) configs
-                .toArray(new ISelectedCriteria[configs.size()]);
+        return configs.toArray(new ISelectedCriteria[configs.size()]);
     }
 
     public static ICriteriaManagerCapability getCriteriaManager(
@@ -158,8 +157,8 @@ public class CriteriaTools extends CollectionTools {
             }
         }
 
-        return (ICriteriaConfiguration[]) configurations
-                .toArray(new ICriteriaConfiguration[configurations.size()]);
+        return configurations.toArray(new ICriteriaConfiguration[configurations
+                .size()]);
     }
 
     public static ICriteriaConfiguration getFirstCriteriaConfiguration(
@@ -232,13 +231,13 @@ public class CriteriaTools extends CollectionTools {
             Object dataValue = valueHolder.getValue();
 
             // dataValue = ((String) dataValue).replaceAll(",", "");
-//            if (dataValue != null) {
-                Converter converter = valueHolder.getConverter();
-                if (converter != null) {
-                    dataValue = converter.getAsString(facesContext,
-                            (UIComponent) container, dataValue);
-                }
-//            }
+            // if (dataValue != null) {
+            Converter converter = valueHolder.getConverter();
+            if (converter != null) {
+                dataValue = converter.getAsString(facesContext,
+                        (UIComponent) container, dataValue);
+            }
+            // }
 
             return dataValue;
         }
@@ -332,8 +331,8 @@ public class CriteriaTools extends CollectionTools {
         for (; st.hasMoreTokens();) {
             String stringValue = URLDecoder.decode(st.nextToken(),
                     DEFAULT_ENCODE_CHARSET);
-            
-            if (DEFAULT_NULL_VALUE.equals(stringValue) ) {
+
+            if (DEFAULT_NULL_VALUE.equals(stringValue)) {
                 stringValue = null;
             }
 

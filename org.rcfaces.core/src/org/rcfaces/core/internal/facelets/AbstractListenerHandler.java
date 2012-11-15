@@ -50,7 +50,7 @@ public abstract class AbstractListenerHandler extends TagHandler {
                     "Type of listener is null or empty");
         }
 
-        Class listenerClass;
+        Class< ? > listenerClass;
         try {
             listenerClass = ClassLocator.load(type, this, facesContext);
 

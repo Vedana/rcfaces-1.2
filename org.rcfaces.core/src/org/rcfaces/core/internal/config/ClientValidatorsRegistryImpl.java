@@ -609,18 +609,17 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
                     serverTaskClassName, attributes);
         }
 
-        @SuppressWarnings("unchecked")
         protected IClientValidatorTask computeClientValidatorTask(
                 String serverTaskClassName, Attributes attributes) {
 
             if (serverTaskClassName != null) {
                 LOG.debug("Instanciate filter '" + serverTaskClassName + "'.");
 
-                Class<IClientValidatorTask> clazz;
+                Class< ? extends IClientValidatorTask> clazz;
                 try {
-                    clazz = (Class<IClientValidatorTask>) ClassLocator.load(
-                            serverTaskClassName, null,
-                            FacesContext.getCurrentInstance());
+                    clazz = ClassLocator.load(serverTaskClassName, null,
+                            FacesContext.getCurrentInstance(),
+                            IClientValidatorTask.class);
 
                 } catch (Throwable th) {
                     LOG.error("Can not load client validator task class '"
@@ -753,7 +752,6 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
             this.id = id;
         }
 
-        @SuppressWarnings("unchecked")
         public Converter getInstance(FacesContext facesContext,
                 UIComponent component) {
 
@@ -780,8 +778,8 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
                 String className = getClassName();
                 if (className != null) {
                     try {
-                        Class<Converter> clazz = (Class<Converter>) ClassLocator
-                                .load(className, null, facesContext);
+                        Class< ? extends Converter> clazz = ClassLocator.load(
+                                className, null, facesContext, Converter.class);
                         converter = clazz.newInstance();
 
                         setParameters = true;

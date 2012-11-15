@@ -23,8 +23,6 @@ import org.rcfaces.core.internal.service.log.LogService.IFilter;
  */
 class Log4jLogger implements LogService.ILogger {
 
-    private static final String REVISION = "$Revision$";
-
     private IFilter filters[];
 
     public void logException(FacesContext facesContext, UIViewRoot viewRoot,
@@ -43,17 +41,18 @@ class Log4jLogger implements LogService.ILogger {
                 message, exception));
     }
 
+    @SuppressWarnings("unchecked")
     public synchronized IFilter[] listFilters(FacesContext facesContext) {
         if (filters != null) {
             return filters;
         }
 
-        List l = null;
+        List<LogService.Filter> l = null;
 
-        Enumeration loggers = LogManager.getCurrentLoggers();
+        Enumeration<Logger> loggers = LogManager.getCurrentLoggers();
 
         for (; loggers.hasMoreElements();) {
-            Logger logger = (Logger) loggers.nextElement();
+            Logger logger = loggers.nextElement();
 
             String name = logger.getName();
             if (name.startsWith(LogService.PREFIX_LOGGER_NAME) == false) {
@@ -68,7 +67,7 @@ class Log4jLogger implements LogService.ILogger {
             int level = convertLevelToInt(logger.getEffectiveLevel());
 
             if (l == null) {
-                l = new ArrayList();
+                l = new ArrayList<LogService.Filter>();
             }
 
             l.add(new LogService.Filter(level, name));
@@ -78,7 +77,7 @@ class Log4jLogger implements LogService.ILogger {
             return LogService.EMPTY_FILTERS;
         }
 
-        return (LogService.Filter[]) l.toArray(new LogService.Filter[l.size()]);
+        return l.toArray(new LogService.Filter[l.size()]);
     }
 
     private static final int convertLevelToInt(Level level) {

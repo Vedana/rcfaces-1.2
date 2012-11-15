@@ -85,10 +85,11 @@ public class ImageAdapterFactory extends ContentAdapterFactory {
         }
     }
 
-    public Object getAdapter(Object adaptableObject, Class adapterType,
+    @Override
+    public <T> T getAdapter(Object adaptableObject, Class<T> adapterType,
             Object parameter) {
         if (adaptableObject instanceof RenderedImage) {
-            return adaptBufferedImage(adaptableObject, parameter);
+            return (T) adaptBufferedImage(adaptableObject, parameter);
         }
 
         if (adaptableObject instanceof RenderedImage[]) {
@@ -98,12 +99,13 @@ public class ImageAdapterFactory extends ContentAdapterFactory {
                 return null;
             }
 
-            return adaptBufferedImage(renderedImages, parameter);
+            return (T) adaptBufferedImage(renderedImages, parameter);
         }
 
         return super.getAdapter(adaptableObject, adapterType, parameter);
     }
 
+    @Override
     protected File getTempFolder() {
         if (tempFolder != null) {
             return tempFolder;
@@ -111,6 +113,7 @@ public class ImageAdapterFactory extends ContentAdapterFactory {
         return super.getTempFolder();
     }
 
+    @Override
     protected String getTempPrefix() {
         return TEMP_PREFIX;
     }
@@ -129,12 +132,12 @@ public class ImageAdapterFactory extends ContentAdapterFactory {
             generatedResourceInformation = ap.getGeneratedResourceInformation();
         }
 
-        Map adapterParametersMap = null;
+        Map<String, Object> adapterParametersMap = null;
         if (adapterParameters instanceof Map) {
-            adapterParametersMap = (Map) adapterParameters;
+            adapterParametersMap = (Map<String, Object>) adapterParameters;
 
         } else if (adapterParametersMap instanceof IAdaptable) {
-            adapterParametersMap = (Map) ((IAdaptable) adapterParameters)
+            adapterParametersMap = (Map<String, Object>) ((IAdaptable) adapterParameters)
                     .getAdapter(Map.class, null);
         }
 
@@ -250,9 +253,10 @@ public class ImageAdapterFactory extends ContentAdapterFactory {
 
         IOException ex = null;
 
-        Iterator it = ImageIO.getImageWritersByMIMEType(encoderMimeType);
+        Iterator<ImageWriter> it = ImageIO
+                .getImageWritersByMIMEType(encoderMimeType);
         if (it.hasNext()) {
-            ImageWriter imageWriter = (ImageWriter) it.next();
+            ImageWriter imageWriter = it.next();
 
             try {
                 return writeBufferedImage(imageWriter, image, imageWriteParam,
@@ -270,7 +274,7 @@ public class ImageAdapterFactory extends ContentAdapterFactory {
         if (encoderMimeType.equals(defaultMimeType) == false) {
             it = ImageIO.getImageWritersByMIMEType(defaultMimeType);
             if (it.hasNext()) {
-                ImageWriter imageWriter = (ImageWriter) it.next();
+                ImageWriter imageWriter = it.next();
 
                 try {
                     return writeBufferedImage(imageWriter, image,

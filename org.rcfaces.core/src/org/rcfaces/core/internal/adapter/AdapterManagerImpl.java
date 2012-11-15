@@ -83,7 +83,6 @@ public class AdapterManagerImpl extends AbstractProvider implements
 
     }
 
-    @SuppressWarnings("unchecked")
     protected void declareAdapter(AdapterBean adapterBean) {
         String adapterClassName = adapterBean.getClassName();
         String factoryClassName = adapterBean.getAdapterFactoryClassName();
@@ -118,10 +117,10 @@ public class AdapterManagerImpl extends AbstractProvider implements
             return;
         }
 
-        Class<IAdapterFactory> factoryClass;
+        Class< ? extends IAdapterFactory> factoryClass;
         try {
-            factoryClass = (Class<IAdapterFactory>) ClassLocator.load(
-                    factoryClassName, this, facesContext);
+            factoryClass = ClassLocator.load(factoryClassName, this,
+                    facesContext, IAdapterFactory.class);
 
         } catch (ClassNotFoundException e) {
             LOG.info("Factory class '" + factoryClassName

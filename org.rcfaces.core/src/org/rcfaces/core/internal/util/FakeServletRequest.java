@@ -21,11 +21,10 @@ import javax.servlet.ServletRequest;
  * @version $Revision$ $Date$
  */
 public class FakeServletRequest implements ServletRequest {
-    private static final String REVISION = "$Revision$";
 
     public static final ServletRequest SINGLETON = new FakeServletRequest();
 
-    private final Map attributes = new HashMap();
+    private final Map<String, Object> attributes = new HashMap<String, Object>();
 
     public void removeAttribute(String arg0) {
         attributes.remove(arg0);
@@ -39,7 +38,7 @@ public class FakeServletRequest implements ServletRequest {
         return attributes.get(arg0);
     }
 
-    public Enumeration getAttributeNames() {
+    public Enumeration<String> getAttributeNames() {
         return Collections.enumeration(attributes.keySet());
     }
 
@@ -83,7 +82,7 @@ public class FakeServletRequest implements ServletRequest {
         return null;
     }
 
-    public Enumeration getLocales() {
+    public Enumeration<Locale> getLocales() {
 
         return null;
     }
@@ -93,12 +92,12 @@ public class FakeServletRequest implements ServletRequest {
         return null;
     }
 
-    public Map getParameterMap() {
+    public Map<String, Object> getParameterMap() {
 
         return null;
     }
 
-    public Enumeration getParameterNames() {
+    public Enumeration<String> getParameterNames() {
 
         return null;
     }

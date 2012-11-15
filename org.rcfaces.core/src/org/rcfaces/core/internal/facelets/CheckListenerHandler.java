@@ -15,16 +15,17 @@ import com.sun.facelets.tag.TagConfig;
  * @version $Revision$ $Date$
  */
 public class CheckListenerHandler extends AbstractListenerHandler {
-    private static final String REVISION = "$Revision$";
 
     public CheckListenerHandler(TagConfig config) {
         super(config);
     }
 
+    @Override
     protected void addListener(Object listener, UIComponent component) {
         CheckListenerTag.addCheckListener(listener, component);
     }
 
+    @Override
     protected String getListenerName() {
         return "check";
     }

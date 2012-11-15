@@ -23,7 +23,6 @@ import org.rcfaces.core.internal.repository.IRepository.IContentProvider;
  * @version $Revision$ $Date$
  */
 public class URLContentProvider implements IContentProvider {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(URLContentProvider.class);
 
@@ -155,9 +154,7 @@ public class URLContentProvider implements IContentProvider {
 
         } catch (IOException ex) {
             if (LOG.isDebugEnabled()) {
-                LOG
-                        .debug("URL '" + contentReference
-                                + "' does not exist !", ex);
+                LOG.debug("URL '" + contentReference + "' does not exist !", ex);
             }
             return false;
         }
@@ -236,18 +233,21 @@ public class URLContentProvider implements IContentProvider {
             return urlConnection;
         }
 
+        @Override
         public long getLastModified() throws IOException {
             URLConnection urlConnection = getURLConnection();
 
             return urlConnection.getLastModified();
         }
 
+        @Override
         public long getLength() throws IOException {
             URLConnection urlConnection = getURLConnection();
 
             return urlConnection.getContentLength();
         }
 
+        @Override
         public void release() {
             if (urlConnection == null || opened) {
                 return;

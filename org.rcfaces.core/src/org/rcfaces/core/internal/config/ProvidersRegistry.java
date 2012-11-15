@@ -33,7 +33,7 @@ public class ProvidersRegistry implements IProvidersRegistry {
 
     private static final Log LOG = LogFactory.getLog(ProvidersRegistry.class);
 
-    private static final Class[] PARENT_PROVIDER_PARAMETER_TYPES = new Class[] { IProvider.class };
+    private static final Class< ? >[] PARENT_PROVIDER_PARAMETER_TYPES = new Class< ? >[] { IProvider.class };
 
     private final Map<String, ProviderBean> providersById = new TreeMap<String, ProviderBean>();
 
@@ -72,10 +72,10 @@ public class ProvidersRegistry implements IProvidersRegistry {
                     + providerId + "', classname='" + className + "'");
         }
 
-        Class<IProvider> clazz;
+        Class< ? extends IProvider> clazz;
         try {
-            clazz = (Class<IProvider>) ClassLocator.load(className, null,
-                    FacesContext.getCurrentInstance());
+            clazz = ClassLocator.load(className, null,
+                    FacesContext.getCurrentInstance(), IProvider.class);
 
         } catch (ClassNotFoundException ex) {
             throw new FacesException("Can not load class '" + className
@@ -95,7 +95,7 @@ public class ProvidersRegistry implements IProvidersRegistry {
                     + providerId + "') is abstract !");
         }
 
-        Constructor<IProvider> constructor;
+        Constructor< ? extends IProvider> constructor;
         Object parameters[];
 
         try {
@@ -291,16 +291,16 @@ public class ProvidersRegistry implements IProvidersRegistry {
         for (; startedProcess;) {
             startedProcess = false;
 
-            next_provider: for (Iterator it = providersById.entrySet()
-                    .iterator(); it.hasNext();) {
-                Map.Entry entry = (Map.Entry) it.next();
+            next_provider: for (Iterator<Map.Entry<String, ProviderBean>> it = providersById
+                    .entrySet().iterator(); it.hasNext();) {
+                Map.Entry<String, ProviderBean> entry = it.next();
 
-                String providerId = (String) entry.getKey();
+                String providerId = entry.getKey();
                 if (started.contains(providerId)) {
                     continue;
                 }
 
-                ProviderBean providerBean = (ProviderBean) entry.getValue();
+                ProviderBean providerBean = entry.getValue();
 
                 String requirements[] = providerBean.listRequirements();
                 for (int i = 0; i < requirements.length; i++) {

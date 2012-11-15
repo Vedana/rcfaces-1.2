@@ -7,7 +7,6 @@ import java.sql.Time;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -20,9 +19,8 @@ import javax.faces.context.FacesContext;
  * @version $Revision$ $Date$
  */
 public class StateHolderTools {
-    private static final String REVISION = "$Revision$";
 
-    private static final Set PRIMITIVE_CLASSES = new HashSet(12);
+    private static final Set<String> PRIMITIVE_CLASSES = new HashSet<String>(12);
     static {
         PRIMITIVE_CLASSES.add(String.class.getName());
         PRIMITIVE_CLASSES.add(Long.class.getName());
@@ -45,7 +43,8 @@ public class StateHolderTools {
         return PRIMITIVE_CLASSES.contains(value.getClass().getName());
     }
 
-    public static final Object saveMap(FacesContext facesContext, Map properties) {
+    public static final Object saveMap(FacesContext facesContext,
+            Map<String, Object> properties) {
 
         if (properties == null || properties.isEmpty()) {
             return null;
@@ -53,8 +52,7 @@ public class StateHolderTools {
 
         Object rets[] = new Object[properties.size() * 2];
         int i = 0;
-        for (Iterator it = properties.entrySet().iterator(); it.hasNext();) {
-            Map.Entry entry = (Map.Entry) it.next();
+        for (Map.Entry<String, Object> entry : properties.entrySet()) {
 
             rets[i++] = entry.getKey();
 
@@ -73,15 +71,16 @@ public class StateHolderTools {
         return rets;
     }
 
-    public static final Map loadMap(FacesContext facesContext, Object state) {
+    public static final Map<String, Object> loadMap(FacesContext facesContext,
+            Object state) {
 
         Object datas[] = (Object[]) state;
 
         if (datas == null || datas.length == 0) {
-            return new HashMap();
+            return new HashMap<String, Object>();
         }
 
-        Map map = new HashMap(datas.length / 2);
+        Map<String, Object> map = new HashMap<String, Object>(datas.length / 2);
 
         for (int i = 0; i < datas.length;) {
             String key = (String) datas[i++];

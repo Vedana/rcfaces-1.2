@@ -49,8 +49,6 @@ import org.rcfaces.core.internal.resource.IResourceLoaderFactory.IResourceLoader
 public class ImageOperationContentModel extends AbstractOperationContentModel
         implements IImageOperationContentModel {
 
-    private static final String REVISION = "$Revision$";
-
     private static final long serialVersionUID = 3641020501370064750L;
 
     private static final Log LOG = LogFactory
@@ -65,6 +63,7 @@ public class ImageOperationContentModel extends AbstractOperationContentModel
                 bufferOperation, specifiedResourceKey);
     }
 
+    @Override
     public void setInformations(
             IGenerationResourceInformation generationInformation,
             IGeneratedResourceInformation generatedInformation) {
@@ -91,6 +90,7 @@ public class ImageOperationContentModel extends AbstractOperationContentModel
         return imageContentAccessorHandler;
     }
 
+    @Override
     protected IBufferOperation createBufferOperation(FacesContext facesContext) {
 
         IImageOperation imageOperation = getImageContentAccessorHandler(
@@ -99,6 +99,7 @@ public class ImageOperationContentModel extends AbstractOperationContentModel
         return imageOperation;
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     protected IFileBuffer createFileBuffer() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -297,7 +298,8 @@ public class ImageOperationContentModel extends AbstractOperationContentModel
         }
 
         try {
-            Iterator it = ImageIO.getImageReadersByMIMEType(sourceContentType);
+            Iterator<ImageReader> it = ImageIO
+                    .getImageReadersByMIMEType(sourceContentType);
 
             if (it.hasNext() == false) {
                 throw new IOException("Can not get codec to read image '"
@@ -305,7 +307,7 @@ public class ImageOperationContentModel extends AbstractOperationContentModel
                         + "')");
             }
 
-            ImageReader imageReader = (ImageReader) it.next();
+            ImageReader imageReader = it.next();
 
             try {
                 ImageInputStream imageInputStream = ImageIO

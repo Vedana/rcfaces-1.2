@@ -176,7 +176,7 @@ public class BorderRenderersRegistryImpl extends AbstractRenderKitRegistryImpl
 
         private String className;
 
-        private Class<IBorderRenderer> borderClass;
+        private Class< ? extends IBorderRenderer> borderClass;
 
         public final String getId() {
             return id;
@@ -202,7 +202,6 @@ public class BorderRenderersRegistryImpl extends AbstractRenderKitRegistryImpl
             this.threadSafe = threadSafe;
         }
 
-        @SuppressWarnings("unchecked")
         public synchronized IBorderRenderer getBorderRenderer(
                 FacesContext facesContext) {
 
@@ -215,8 +214,8 @@ public class BorderRenderersRegistryImpl extends AbstractRenderKitRegistryImpl
                 className = null;
 
                 try {
-                    borderClass = (Class<IBorderRenderer>) ClassLocator.load(
-                            cls, this, facesContext);
+                    borderClass = ClassLocator.load(cls, this, facesContext,
+                            IBorderRenderer.class);
 
                 } catch (Throwable th) {
                     throw new FacesException("Can not load border class '"

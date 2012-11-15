@@ -15,16 +15,17 @@ import com.sun.facelets.tag.TagConfig;
  * @version $Revision$ $Date$
  */
 public class UserEventListenerHandler extends AbstractListenerHandler {
-    private static final String REVISION = "$Revision$";
 
     public UserEventListenerHandler(TagConfig config) {
         super(config);
     }
 
+    @Override
     protected void addListener(Object listener, UIComponent component) {
         UserEventListenerTag.addUserEventListener(listener, component);
     }
 
+    @Override
     protected String getListenerName() {
         return "userEvent";
     }

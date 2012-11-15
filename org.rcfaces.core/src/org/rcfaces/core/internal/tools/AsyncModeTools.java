@@ -56,7 +56,7 @@ public class AsyncModeTools {
     }
 
     private static boolean searchFaceletsProcessor(FacesContext context) {
-        Class cls;
+        Class< ? > cls;
 
         try {
             cls = ClassLocator.load(FACELETS_CLASS_NAME, ComponentTools.class,

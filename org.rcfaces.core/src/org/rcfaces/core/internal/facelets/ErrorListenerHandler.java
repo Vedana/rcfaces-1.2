@@ -15,16 +15,17 @@ import com.sun.facelets.tag.TagConfig;
  * @version $Revision$ $Date$
  */
 public class ErrorListenerHandler extends AbstractListenerHandler {
-    private static final String REVISION = "$Revision$";
 
     public ErrorListenerHandler(TagConfig config) {
         super(config);
     }
 
+    @Override
     protected void addListener(Object listener, UIComponent component) {
         ErrorListenerTag.addErrorListener(listener, component);
     }
 
+    @Override
     protected String getListenerName() {
         return "error";
     }

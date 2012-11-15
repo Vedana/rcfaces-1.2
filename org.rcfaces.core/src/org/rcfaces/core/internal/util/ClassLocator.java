@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 
@@ -22,6 +23,21 @@ import org.apache.commons.logging.LogFactory;
  */
 public class ClassLocator {
     private static final Log LOG = LogFactory.getLog(ClassLocator.class);
+
+    @SuppressWarnings("unchecked")
+    public static final <T> Class< ? extends T> load(String className,
+            Object fallback, Object context, Class<T> clazz)
+            throws ClassNotFoundException {
+
+        Class< ? > clz = load(className, fallback, context);
+
+        if (clazz.isAssignableFrom(clz) == false) {
+            throw new FacesException("Specified Class '" + className
+                    + "' specified must implement '" + clazz.getName() + "'.");
+        }
+
+        return (Class<T>) clz;
+    }
 
     public static final Class< ? > load(String className, Object fallback,
             Object context) throws ClassNotFoundException {

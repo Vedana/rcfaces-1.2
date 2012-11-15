@@ -548,7 +548,7 @@ public class CollectionTools {
 
             set.addAll(rowDatas);
 
-            String newValues = StringList.joinTokens(set);
+            String newValues = StringList.joinTokens((Set) set);
 
             if (newValues.equals(values)) {
                 return values;

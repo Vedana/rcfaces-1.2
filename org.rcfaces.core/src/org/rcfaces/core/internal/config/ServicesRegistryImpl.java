@@ -208,9 +208,10 @@ public class ServicesRegistryImpl extends AbstractRenderKitRegistryImpl
             try {
                 unavailable = true;
 
-                Class clazz = ClassLocator.load(className, this, facesContext);
+                Class< ? extends IService> clazz = ClassLocator.load(className,
+                        this, facesContext, IService.class);
 
-                service = (IService) clazz.newInstance();
+                service = clazz.newInstance();
 
                 service.initialize(facesContext);
 
@@ -240,22 +241,22 @@ public class ServicesRegistryImpl extends AbstractRenderKitRegistryImpl
     public static class RenderKit extends
             AbstractRenderKitRegistryImpl.RenderKit {
 
-        private final Map serviceFacadeByCommandId;
+        private final Map<String, ServiceFacade> serviceFacadeByCommandId;
 
-        private final Map serviceFacadeByServiceId;
+        private final Map<String, ServiceFacade> serviceFacadeByServiceId;
 
         public RenderKit() {
-            serviceFacadeByCommandId = new HashMap(32);
+            serviceFacadeByCommandId = new HashMap<String, ServiceFacade>(32);
 
-            serviceFacadeByServiceId = new HashMap(16);
+            serviceFacadeByServiceId = new HashMap<String, ServiceFacade>(16);
         }
 
         public ServiceFacade getServiceById(String serviceId) {
-            return (ServiceFacade) serviceFacadeByServiceId.get(serviceId);
+            return serviceFacadeByServiceId.get(serviceId);
         }
 
         public ServiceFacade getServiceByCommandId(String commandId) {
-            return (ServiceFacade) serviceFacadeByCommandId.get(commandId);
+            return serviceFacadeByCommandId.get(commandId);
         }
 
         public void addService(ServiceFacade serviceFacade) {
