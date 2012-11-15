@@ -64,11 +64,11 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 	private ValueExpression initListeners;
 	private ValueExpression hiddenMode;
 	private ValueExpression immediate;
-	private ValueExpression margins;
-	private ValueExpression value;
 	private ValueExpression rows;
-	private ValueExpression var;
+	private ValueExpression value;
+	private ValueExpression margins;
 	private ValueExpression first;
+	private ValueExpression var;
 	private ValueExpression saveCompleteState;
 	public void setHelpMessage(ValueExpression helpMessage) {
 		this.helpMessage = helpMessage;
@@ -254,24 +254,24 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 		this.immediate = immediate;
 	}
 
-	public void setMargins(ValueExpression margins) {
-		this.margins = margins;
+	public void setRows(ValueExpression rows) {
+		this.rows = rows;
 	}
 
 	public void setValue(ValueExpression value) {
 		this.value = value;
 	}
 
-	public void setRows(ValueExpression rows) {
-		this.rows = rows;
-	}
-
-	public void setVar(ValueExpression var) {
-		this.var = var;
+	public void setMargins(ValueExpression margins) {
+		this.margins = margins;
 	}
 
 	public void setFirst(ValueExpression first) {
 		this.first = first;
+	}
+
+	public void setVar(ValueExpression var) {
+		this.var = var;
 	}
 
 	public final void setSaveCompleteState(ValueExpression saveCompleteState) {
@@ -313,11 +313,11 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			LOG.debug("  verticalCenter='"+verticalCenter+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  immediate='"+immediate+"'");
-			LOG.debug("  margins='"+margins+"'");
-			LOG.debug("  value='"+value+"'");
 			LOG.debug("  rows='"+rows+"'");
-			LOG.debug("  var='"+var+"'");
+			LOG.debug("  value='"+value+"'");
+			LOG.debug("  margins='"+margins+"'");
 			LOG.debug("  first='"+first+"'");
+			LOG.debug("  var='"+var+"'");
 		}
 		if ((uiComponent instanceof AbstractDataComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -680,11 +680,13 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (margins != null) {
-			if (margins.isLiteralText()==false) {
-				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
+		if (rows != null) {
+			if (rows.isLiteralText()==false) {
+				component.setValueExpression(Properties.ROWS, rows);
+
+			} else {
+				component.setRows(getInt(rows.getExpressionString()));
 			}
-				component.setMargins(margins.getExpressionString());
 		}
 
 		if (value != null) {
@@ -696,12 +698,19 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (rows != null) {
-			if (rows.isLiteralText()==false) {
-				component.setValueExpression(Properties.ROWS, rows);
+		if (margins != null) {
+			if (margins.isLiteralText()==false) {
+				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
+			}
+				component.setMargins(margins.getExpressionString());
+		}
+
+		if (first != null) {
+			if (first.isLiteralText()==false) {
+				component.setValueExpression(Properties.FIRST, first);
 
 			} else {
-				component.setRows(getInt(rows.getExpressionString()));
+				component.setFirst(getInt(first.getExpressionString()));
 			}
 		}
 
@@ -711,15 +720,6 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 
 			} else {
 				component.setVar(var.getExpressionString());
-			}
-		}
-
-		if (first != null) {
-			if (first.isLiteralText()==false) {
-				component.setValueExpression(Properties.FIRST, first);
-
-			} else {
-				component.setFirst(getInt(first.getExpressionString()));
 			}
 		}
 
@@ -780,11 +780,11 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 		initListeners = null;
 		hiddenMode = null;
 		immediate = null;
-		margins = null;
-		value = null;
 		rows = null;
-		var = null;
+		value = null;
+		margins = null;
 		first = null;
+		var = null;
 		saveCompleteState = null;
 
 		super.release();

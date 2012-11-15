@@ -84,7 +84,7 @@ public abstract class AbstractListenerTag extends TagSupport {
             stype = type.getExpressionString();
         }
 
-        Class listenerClass;
+        Class< ? > listenerClass;
         try {
             listenerClass = ClassLocator.load(stype, this, facesContext);
 
