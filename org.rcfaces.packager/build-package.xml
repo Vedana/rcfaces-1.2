@@ -755,9 +755,16 @@
 		</copy>
 		
 		<java taskname="processCSS" failonerror="true" jar="lib-generator/rcfaces-css.jar" fork="true">
-			<classpath refid="generated.classpath" />
-			<classpath refid="generator.classpath" />
-
+			<classpath>
+				<fileset dir="${build-core}/lib">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${pass.build}/lib">
+					<include name="*.jar" />
+				</fileset>
+				<path refid="${pass.classpathId}"/>
+			</classpath>
+	
 			<arg path="${build.version.path}/bin-${pass.type}/org/rcfaces/renderkit/html/internal/css" />
 			<arg path="${build.version.path}/src-${pass.type}/org/rcfaces/renderkit/html/internal/css" />
 		</java>
