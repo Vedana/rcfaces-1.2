@@ -756,6 +756,7 @@
 		
 		<java taskname="processCSS" failonerror="true" classname="org.rcfaces.css.internal.CssSteadyStateParser" fork="true">
 			<classpath>
+				<classpath refid="generator.classpath" />
 				<fileset dir="${build-core}/lib">
 					<include name="*.jar" />
 				</fileset>
@@ -763,8 +764,6 @@
 					<include name="*.jar" />
 				</fileset>
 				<path path="${build.version.path}/bin-core" />
-				<path refid="${pass.classpathId}"/>
-				<path refid="lib-generator/rcfaces-css.jar"/>
 			</classpath>
 	
 			<arg path="${build.version.path}/bin-${pass.type}/org/rcfaces/renderkit/html/internal/css" />
