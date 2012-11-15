@@ -15,7 +15,6 @@ import org.rcfaces.renderkit.html.internal.util.FileItemSource;
  */
 public class FilesCollectorGenerationInformation extends
         BasicGenerationResourceInformation {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(FilesCollectorGenerationInformation.class);

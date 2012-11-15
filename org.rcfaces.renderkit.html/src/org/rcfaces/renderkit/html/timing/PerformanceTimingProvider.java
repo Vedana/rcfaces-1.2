@@ -84,6 +84,7 @@ public class PerformanceTimingProvider extends AbstractProvider {
         return PROVIDER_ID;
     }
 
+    @SuppressWarnings({ "unchecked", "cast" })
     @Override
     public void startup(FacesContext facesContext) {
         super.startup(facesContext);

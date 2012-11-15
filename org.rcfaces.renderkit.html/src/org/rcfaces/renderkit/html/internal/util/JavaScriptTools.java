@@ -26,6 +26,7 @@ public class JavaScriptTools {
 
     private static final Log LOG = LogFactory.getLog(JavaScriptTools.class);
 
+    @SuppressWarnings("unused")
     public static String writeMessage(FacesContext facesContext,
             IJavaScriptWriter js, FacesMessage facesMessage)
             throws WriterException {
