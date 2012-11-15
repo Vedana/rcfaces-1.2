@@ -84,15 +84,18 @@ public class StyleSheetSourceContainer extends SourceContainer {
         String db = defferedBuffer.toString();
         int idx = db.indexOf('\n');
         if (idx > 0) {
-            String firstList = db.substring(0, idx).toLowerCase();
-            if (firstList.startsWith("@charset")) {
+            String firstLine = db.substring(0, idx).toLowerCase().trim();
+            if (firstLine.startsWith("@charset")) {
                 buffer.append(defferedBuffer, idx + 1, defferedBuffer.length()
                         - idx - 1);
+
+                buffer.append('\n');
                 return;
             }
         }
 
         buffer.append(defferedBuffer);
+        buffer.append('\n');
     }
 
     /**
