@@ -51,7 +51,6 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
      * 
      */
     protected static final IFileBuffer INVALID_BUFFERED_FILE = new IFileBuffer() {
-        private static final String REVISION = "$Revision$";
 
         public int getSize() {
             return 0;
@@ -100,6 +99,8 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
         }
 
     };
+
+    private static final int MAX_URL_HASH_LENGTH = 32;
 
     private final String resourceURL;
 
@@ -344,7 +345,8 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
 
         String key = sa2.toString();
 
-        String result = HashCodeTools.computeURLFormat(null, key, key, -1);
+        String result = HashCodeTools.computeURLFormat(null, key, key,
+                MAX_URL_HASH_LENGTH);
 
         sa.append(result);
     }
