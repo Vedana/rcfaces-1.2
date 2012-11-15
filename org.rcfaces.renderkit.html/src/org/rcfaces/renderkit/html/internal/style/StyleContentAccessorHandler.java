@@ -34,6 +34,7 @@ import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.style.Constants;
 import org.rcfaces.core.internal.style.IStyleContentAccessorHandler;
 import org.rcfaces.core.internal.style.IStyleOperation;
+import org.rcfaces.core.internal.style.IStyleParser;
 import org.rcfaces.core.internal.util.PathTypeTools;
 import org.rcfaces.core.internal.version.IResourceVersionHandler;
 import org.rcfaces.core.internal.webapp.ExtendedHttpServlet;
@@ -41,7 +42,6 @@ import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.core.model.IContentModel;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.renderer.IFrameworkResourceGenerationInformation;
-import org.rcfaces.renderkit.html.internal.style.CssParserFactory.ICssParser;
 
 /**
  * 
@@ -55,18 +55,23 @@ public class StyleContentAccessorHandler extends
     private static final Log LOG = LogFactory
             .getLog(StyleContentAccessorHandler.class);
 
+    private static final String CSS_PARSER_SERVICE_ID = "org.rcfaces.css.CSS_PARSER";
+
     private static final String CSS_PARSER_ENABLED = Constants
             .getPackagePrefix() + ".MERGE_STYLE_FILES";
 
     private static final String VERSION_FILTER_NAME = "version";
 
-    private static final String MERGE_FILTER_NAME = "merge";
+    private static final String MERGE_FILTER_NAME = IStyleContentAccessorHandler.MERGE_FILTER_NAME;
 
-    private final Map operationsById = new HashMap(32);
+    private static final String PROCESS_FILTER_NAME = IStyleContentAccessorHandler.PROCESS_FILTER_NAME;
+
+    private final Map<String, IStyleOperation> operationsById = new HashMap<String, IStyleOperation>(
+            32);
 
     private final FileNameMap fileNameMap;
 
-    private ICssParser cssParser = null;
+    private IStyleParser cssParser = null;
 
     private final Object contentAccessorAvailable_LOCK = new Object();
 
@@ -80,6 +85,7 @@ public class StyleContentAccessorHandler extends
         fileNameMap = URLConnection.getFileNameMap();
 
         operationsById.put(MERGE_FILTER_NAME, new MergeLinkedStylesOperation());
+        operationsById.put(PROCESS_FILTER_NAME, new ProcessStylesOperation());
         operationsById.put(VERSION_FILTER_NAME,
                 new VersionLinkedStylesOperation());
     }
@@ -89,10 +95,11 @@ public class StyleContentAccessorHandler extends
 
         rcfacesContext = RcfacesContext.getInstance(facesContext);
 
-        if ("true".equalsIgnoreCase(facesContext.getExternalContext()
-                .getInitParameter(CSS_PARSER_ENABLED))) {
+        if ("false".equalsIgnoreCase(facesContext.getExternalContext()
+                .getInitParameter(CSS_PARSER_ENABLED)) == false) {
 
-            cssParser = CssParserFactory.getCssParser();
+            cssParser = (IStyleParser) rcfacesContext.getProvidersRegistry()
+                    .getProvider(CSS_PARSER_SERVICE_ID);
 
             if (cssParser != null) {
                 ((ContentAccessorsRegistryImpl) rcfacesContext
@@ -100,7 +107,6 @@ public class StyleContentAccessorHandler extends
                         .declareContentAccessorHandler(IContentFamily.STYLE,
                                 this);
             }
-
         }
 
         IResourceVersionHandler resourceVersionHandler = (IResourceVersionHandler) rcfacesContext
@@ -390,8 +396,7 @@ public class StyleContentAccessorHandler extends
     }
 
     public IStyleOperation getStyleOperation(String operationId) {
-        IStyleOperation styleOperation = (IStyleOperation) operationsById
-                .get(operationId);
+        IStyleOperation styleOperation = operationsById.get(operationId);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Operation id='" + operationId + "' => " + styleOperation);

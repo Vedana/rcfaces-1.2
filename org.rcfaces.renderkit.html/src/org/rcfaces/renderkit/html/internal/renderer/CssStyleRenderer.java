@@ -36,6 +36,8 @@ import org.rcfaces.renderkit.html.internal.css.StylesheetsServlet;
 import org.rcfaces.renderkit.html.internal.decorator.CssFilesCollectorDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.FilesCollectorDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
+import org.rcfaces.renderkit.html.internal.style.CssFilesCollectorGenerationInformation;
+import org.rcfaces.renderkit.html.internal.style.CssGenerationInformation;
 import org.rcfaces.renderkit.html.internal.util.FileItemSource;
 
 /**
@@ -97,6 +99,7 @@ public class CssStyleRenderer extends AbstractFilesCollectorRenderer {
         }
 
         boolean mergeStyles = cssStyleComponent.isMergeStyles(facesContext);
+        boolean processRules = cssStyleComponent.isProcessRules(facesContext);
 
         if (src != null || (sources != null && sources.length > 0)) {
 
@@ -124,7 +127,7 @@ public class CssStyleRenderer extends AbstractFilesCollectorRenderer {
 
                     if (sources != null) {
                         generationInformation = new CssFilesCollectorGenerationInformation(
-                                sources, false);
+                                sources, false, processRules);
                     }
                 }
 
@@ -142,18 +145,25 @@ public class CssStyleRenderer extends AbstractFilesCollectorRenderer {
                 srcFiltred = true;
 
                 sources = null;
+
+                processRules = false; // Déjà fait !
             }
 
             if (src != null && srcFiltred == false) {
+                if (processRules) {
+                    src = IStyleContentAccessorHandler.PROCESS_FILTER_NAME
+                            + IContentAccessor.FILTER_SEPARATOR + src;
+                }
+
                 IContentAccessor contentAccessor = ContentAccessorFactory
                         .createFromWebResource(facesContext, src,
                                 IContentFamily.STYLE);
 
-                src = contentAccessor.resolveURL(facesContext, null, null);
+                src = contentAccessor.resolveURL(facesContext, null,
+                        new CssGenerationInformation(processRules));
             }
 
             if (src != null) {
-
                 htmlWriter.startElement(IHtmlWriter.LINK);
                 htmlWriter.writeRel(IHtmlRenderContext.STYLESHEET_REL);
                 if (useMetaContentStyleType == false) {
@@ -182,12 +192,16 @@ public class CssStyleRenderer extends AbstractFilesCollectorRenderer {
                     }
 
                     String itemSrc = source.getSource();
+                    if (srcFiltred == false && processRules) {
+                        itemSrc = IStyleContentAccessorHandler.PROCESS_FILTER_NAME
+                                + IContentAccessor.FILTER_SEPARATOR + itemSrc;
+                    }
                     IContentAccessor contentAccessor = ContentAccessorFactory
                             .createFromWebResource(facesContext, itemSrc,
                                     IContentFamily.STYLE);
 
                     CssFilesCollectorGenerationInformation generation = new CssFilesCollectorGenerationInformation(
-                            null, source.isFrameworkResource());
+                            null, source.isFrameworkResource(), processRules);
 
                     itemSrc = contentAccessor.resolveURL(facesContext, null,
                             generation);
@@ -268,35 +282,6 @@ public class CssStyleRenderer extends AbstractFilesCollectorRenderer {
     protected IComponentDecorator createComponentDecorator(
             FacesContext facesContext, UIComponent component) {
         return new CssFilesCollectorDecorator(component);
-    }
-
-    public static class CssFilesCollectorGenerationInformation extends
-            FilesCollectorGenerationInformation implements
-            IFrameworkResourceGenerationInformation {
-
-        private static final String FRAMEWORK_ATTRIBUTE = "org.rcfaces.FrameworkResource";
-
-        public CssFilesCollectorGenerationInformation(FileItemSource[] sources,
-                boolean frameworkResource) {
-            super(sources);
-
-            if (sources != null && frameworkResource == false) {
-                for (int i = 0; i < sources.length; i++) {
-                    if (sources[i].isFrameworkResource()) {
-                        frameworkResource = true;
-                        break;
-                    }
-                }
-            }
-
-            if (frameworkResource) {
-                setAttribute(FRAMEWORK_ATTRIBUTE, Boolean.TRUE);
-            }
-        }
-
-        public boolean isFrameworkResource() {
-            return Boolean.TRUE.equals(getAttribute(FRAMEWORK_ATTRIBUTE));
-        }
     }
 
 }
