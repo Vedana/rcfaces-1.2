@@ -81,7 +81,7 @@ public class BasicContentStorageRepository implements IContentStorageRepository 
                 }
             }
 
-            String url = sa.toString();
+            String url = sa.toString().replace(':', '$');
             content.setVersioned(true);
 
             if (LOG.isDebugEnabled()) {
