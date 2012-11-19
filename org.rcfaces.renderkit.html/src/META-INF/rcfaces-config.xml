@@ -666,6 +666,11 @@
 			<feature-rule>ie10+ firefox3.6+ chrome10+ safari5.1+ opera11.6+ ios5+ android4+</feature-rule>
 		</feature>
 		<feature>
+			<feature-name>css.repeating-grandients</feature-name>
+			<feature-ref>http://caniuse.com/css-gradients</feature-ref>
+			<feature-rule>ie10+ firefox3.6+ chrome10+ safari5.1+ opera11.6+ ios5+ android4+</feature-rule>
+		</feature>
+		<feature>
 			<feature-name>svg</feature-name>
 			<feature-rule>ie9+ firefox3+ chrome4+ safari3.2+ opera9.0+ ios3.2+ android3+</feature-rule>
 		</feature>
