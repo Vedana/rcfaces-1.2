@@ -13,7 +13,6 @@ import org.rcfaces.core.internal.content.FileBuffer;
  * @version $Revision$ $Date$
  */
 public class StyleSheetFileBuffer extends FileBuffer implements IStyleSheetFile {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(StyleSheetFileBuffer.class);
