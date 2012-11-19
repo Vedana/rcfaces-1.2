@@ -157,11 +157,10 @@ public class CssSteadyStateParser extends CssParserProvider implements
         }
     }
 
-    public void addCssProperty(CssPropertyRule rule) {
-        for (String name : rule.listAgentNames()) {
-            propertyRulesByName.put(name, rule);
-        }
-    }
+    /*
+     * public void addCssProperty(CssPropertyRule rule) { for (String name :
+     * rule.listAgentNames()) { propertyRulesByName.put(name, rule); } }
+     */
 
     @Override
     public String getParserName() {
