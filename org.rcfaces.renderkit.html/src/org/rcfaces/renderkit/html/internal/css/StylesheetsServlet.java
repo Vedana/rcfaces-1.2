@@ -323,13 +323,12 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             return;
         }
 
-        StyleSheetSourceContainer styleSheetSourceContainer = createStyleSheetRepository(modules);
-
         String repositoryVersionSupport = getParameter(REPOSITORY_VERSION_SUPPORT_PARAMETER);
 
         for (Iterator it = modules.iterator(); it.hasNext();) {
+        	
             String moduleName = (String) it.next();
-
+            StyleSheetSourceContainer styleSheetSourceContainer = createStyleSheetRepository(moduleName);	
             String configurationVersion = null;
             if ("false".equalsIgnoreCase(repositoryVersionSupport) == false) {
                 configurationVersion = getParameter(CONFIGURATION_VERSION_PARAMETER
@@ -360,7 +359,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
             ModuleRepository moduleRepository = new ModuleRepository(
                     styleSheetSourceContainer, baseURL, configurationVersion,
-                    modules);
+                     moduleName);//
 
             moduleRepositories.put(moduleName, moduleRepository);
 
@@ -397,11 +396,12 @@ public class StylesheetsServlet extends HtmlModulesServlet {
                                 .getCharSet(), modulesHasAgentVary
                                 .contains(moduleName)));
             }
+            if (noCache == false) {
+                styleSheetSourceContainer.getDefaultContent().getRawBuffer();
+            }
         }
 
-        if (noCache == false) {
-            styleSheetSourceContainer.getDefaultContent().getRawBuffer();
-        }
+       
     }
 
     protected final String getCharset() {
@@ -439,18 +439,18 @@ public class StylesheetsServlet extends HtmlModulesServlet {
         if (noCache) {
             LOG.debug("'noCache' is enable, ignore new repository !");
 
-            return createStyleSheetRepository(mr.listModules());
+            return createStyleSheetRepository(mr.getModule());
         }
 
         return mr.getStyleSheetRepository();
     }
 
     private StyleSheetSourceContainer createStyleSheetRepository(
-            Set<String> modules) throws ServletException {
+            String module) throws ServletException {
 
         /* Pas de version au niveau du container ! */
 
-        return new StyleSheetSourceContainer(getServletConfig(), modules,
+        return new StyleSheetSourceContainer(getServletConfig(), module,
                 getCharset(), hasGZipSupport(), hasEtagSupport(),
                 hasHashSupport(), null);
     }
@@ -1203,13 +1203,13 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
         private final String baseURL;
 
-        private final Set<String> modules;
+        private final String module;
 
         private final String version;
 
         public ModuleRepository(
                 StyleSheetSourceContainer styleSheetSourceContainer,
-                String baseURL, String version, Set<String> modules) {
+                String baseURL, String version, String module) {
             this.version = version;
             this.styleSheetSourceContainer = styleSheetSourceContainer;
 
@@ -1218,15 +1218,15 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             }
 
             this.baseURL = baseURL;
-            this.modules = modules;
+            this.module = module;
         }
 
         public String getVersion() {
             return version;
         }
 
-        public Set<String> listModules() {
-            return modules;
+        public String getModule() {
+            return module;
         }
 
         public StyleSheetSourceContainer getStyleSheetRepository() {

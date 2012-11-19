@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.net.URLConnection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -31,11 +30,11 @@ public class StyleSheetSourceContainer extends SourceContainer {
 
     private static final String CSS_REPOSITORY_TYPE = "css";
 
-    public StyleSheetSourceContainer(ServletConfig config, Set<String> modules,
+    public StyleSheetSourceContainer(ServletConfig config, String module,
             String charSet, boolean canUseGzip, boolean canUseETag,
             boolean canUseHash, String repositoryVersion)
             throws ServletException {
-        super(config, CSS_REPOSITORY_TYPE, modules, charSet, canUseGzip,
+        super(config, CSS_REPOSITORY_TYPE, module, charSet, canUseGzip,
                 canUseETag, canUseHash, EXTERNAL_REPOSITORIES_CONFIG_NAME,
                 repositoryVersion);
     }
