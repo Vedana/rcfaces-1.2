@@ -26,6 +26,7 @@
 .fb_rounded_ctext {
 	padding: 0 1px;
 	-moz-user-select: none;
+	user-select: none;
 }
 
 .fb_rounded .fb_rounded_1 {	

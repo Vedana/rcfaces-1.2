@@ -13,6 +13,7 @@
 .f_calendar {
 	font-family: arial, helvetica;
 	-moz-user-select: none;
+	user-select: none;
 
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
@@ -128,6 +129,7 @@ IMG.f_calendar_nextUnitImg_disabled {
 	color: #9C9C9C;
 	cursor: pointer;
 	-moz-user-focus: none;
+	user-focus: none;
 }
 
 .f_calendar_month_selected,
