@@ -6,6 +6,7 @@ package org.rcfaces.renderkit.html.internal.css;
 
 import java.io.IOException;
 import java.net.URLConnection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -20,6 +21,7 @@ import org.rcfaces.renderkit.html.internal.agent.IClientBrowser;
 import org.xml.sax.Attributes;
 
 /**
+ * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -34,9 +36,9 @@ public class StyleSheetSourceContainer extends SourceContainer {
             String charSet, boolean canUseGzip, boolean canUseETag,
             boolean canUseHash, String repositoryVersion)
             throws ServletException {
-        super(config, CSS_REPOSITORY_TYPE, module, charSet, canUseGzip,
-                canUseETag, canUseHash, EXTERNAL_REPOSITORIES_CONFIG_NAME,
-                repositoryVersion);
+        super(config, CSS_REPOSITORY_TYPE, Collections.singleton(module),
+                charSet, canUseGzip, canUseETag, canUseHash,
+                EXTERNAL_REPOSITORIES_CONFIG_NAME, repositoryVersion);
     }
 
     protected StringAppender preConstructBuffer(

@@ -326,9 +326,9 @@ public class StylesheetsServlet extends HtmlModulesServlet {
         String repositoryVersionSupport = getParameter(REPOSITORY_VERSION_SUPPORT_PARAMETER);
 
         for (Iterator it = modules.iterator(); it.hasNext();) {
-        	
+
             String moduleName = (String) it.next();
-            StyleSheetSourceContainer styleSheetSourceContainer = createStyleSheetRepository(moduleName);	
+            StyleSheetSourceContainer styleSheetSourceContainer = createStyleSheetRepository(moduleName);
             String configurationVersion = null;
             if ("false".equalsIgnoreCase(repositoryVersionSupport) == false) {
                 configurationVersion = getParameter(CONFIGURATION_VERSION_PARAMETER
@@ -359,7 +359,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
             ModuleRepository moduleRepository = new ModuleRepository(
                     styleSheetSourceContainer, baseURL, configurationVersion,
-                     moduleName);//
+                    moduleName);//
 
             moduleRepositories.put(moduleName, moduleRepository);
 
@@ -401,7 +401,6 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             }
         }
 
-       
     }
 
     protected final String getCharset() {
@@ -867,8 +866,6 @@ public class StylesheetsServlet extends HtmlModulesServlet {
      * @version $Revision$ $Date$
      */
     private class NotFoundResponse implements Response {
-        private static final String REVISION = "$Revision$";
-
         private final String message;
 
         public NotFoundResponse(String url) {
@@ -894,8 +891,6 @@ public class StylesheetsServlet extends HtmlModulesServlet {
      * @version $Revision$ $Date$
      */
     private class BytesResponse extends AbstractResponse {
-
-        private static final String REVISION = "$Revision$";
 
         private final byte buffer[];
 
@@ -965,8 +960,6 @@ public class StylesheetsServlet extends HtmlModulesServlet {
      * @version $Revision$ $Date$
      */
     private abstract class AbstractResponse implements Response {
-
-        private static final String REVISION = "$Revision$";
 
         private final String mimeType;
 
@@ -1086,7 +1079,6 @@ public class StylesheetsServlet extends HtmlModulesServlet {
      * @version $Revision$ $Date$
      */
     private class StyleSheetRepositoryResponse extends AbstractResponse {
-        private static final String REVISION = "$Revision$";
 
         private final StyleSheetSourceContainer styleSheetRepository;
 
