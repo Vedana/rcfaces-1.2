@@ -64,7 +64,7 @@ public abstract class SourceContainer {
 
     private final boolean canUseHash;
 
-    private final String module;
+    private final Set<String> modules;
 
     private final String externalRepositoriesPropertyName;
 
@@ -77,7 +77,7 @@ public abstract class SourceContainer {
     // private byte[] sourceBufferExternalGZip = null;
 
     public SourceContainer(ServletConfig config, String repositoryType,
-            String module, String charSet, boolean canUseGzip,
+            Set<String> modules, String charSet, boolean canUseGzip,
             boolean canUseETag, boolean canUseHash,
             String externalRepositoriesPropertyName, String repositoryVersion)
             throws ServletException {
@@ -87,7 +87,7 @@ public abstract class SourceContainer {
         this.canUseETag = canUseETag;
         this.canUseHash = canUseHash;
         this.charSet = charSet;
-        this.module = module;
+        this.modules = modules;
         this.repositoryVersion = repositoryVersion;
         this.externalRepositoriesPropertyName = externalRepositoriesPropertyName;
 
@@ -275,8 +275,8 @@ public abstract class SourceContainer {
 
                     String id = attributes.getValue("id");
 
-                    if (module != null) {
-                        filtred[0] = (id != null && module.equals(id) == false);
+                    if (modules != null) {
+                        filtred[0] = (id != null && modules.contains(id) == false);
 
                     } else {
                         filtred[0] = false;
