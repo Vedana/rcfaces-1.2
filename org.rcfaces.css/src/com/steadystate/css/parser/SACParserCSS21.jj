@@ -494,13 +494,14 @@ void unknownRule() :
 //    [STRING|URI] S* [ medium [ COMMA S* medium]* ]? ';' S*
 //  ;
 //
-void importRule(final boolean nonImportRuleFoundBefore) :
+void importRule(boolean nonImportRuleFoundBefore) :
 {
     Token t;
     SACMediaListImpl ml = new SACMediaListImpl();
     Locator locator;
+    nonImportRuleFoundBefore=false;
 }
-{
+{ 
     try
     {
         {

@@ -36,7 +36,8 @@ public class IE567_OpacityRuleProcessor implements IRuleProcessor {
                 .getFloatValue(CSSPrimitiveValue.CSS_NUMBER);
 
         LexicalUnit lexicalUnit = LexicalUnitImpl.createIdent(null,
-                "alpha(opacity=" + ((int) (lv * 100)) + ")");
+                "progid:DXImageTransform.Microsoft.Alpha(opacity="
+                        + ((int) (lv * 100)) + ")");
 
         CSSValueImpl newValue = new CSSValueImpl(lexicalUnit);
 

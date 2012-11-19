@@ -52,22 +52,34 @@ import com.steadystate.css.util.ThrowCssExceptionErrorHandler;
 
 /**
  * Implementation of {@link CSSStyleSheet}.
- *
- * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
+ * 
+ * @author <a href="mailto:davidsch@users.sourceforge.net">David
+ *         Schweinsberg</a>
  */
 public class CSSStyleSheetImpl implements CSSStyleSheet, Serializable {
 
     private static final long serialVersionUID = -2300541300646796363L;
 
+    private static final boolean DONT_TEST_INSERT = true; // OO Olivier
+
     private boolean disabled_;
+
     private Node ownerNode_;
+
     private StyleSheet parentStyleSheet_;
+
     private String href_;
+
     private String title_;
+
     private MediaList media_;
+
     private CSSRule ownerRule_;
+
     private boolean readOnly_;
+
     private CSSRuleList cssRules_;
+
     private String baseUri_;
 
     public void setMedia(final MediaList media) {
@@ -133,11 +145,12 @@ public class CSSStyleSheetImpl implements CSSStyleSheet, Serializable {
         return cssRules_;
     }
 
-    public int insertRule(final String rule, final int index) throws DOMException {
+    public int insertRule(final String rule, final int index)
+            throws DOMException {
         if (readOnly_) {
             throw new DOMExceptionImpl(
-                DOMException.NO_MODIFICATION_ALLOWED_ERR,
-                DOMExceptionImpl.READ_ONLY_STYLE_SHEET);
+                    DOMException.NO_MODIFICATION_ALLOWED_ERR,
+                    DOMExceptionImpl.READ_ONLY_STYLE_SHEET);
         }
 
         try {
@@ -148,14 +161,14 @@ public class CSSStyleSheetImpl implements CSSStyleSheet, Serializable {
             final CSSRule r = parser.parseRule(is);
 
             if (r == null) {
-                // this should neven happen because of the ThrowCssExceptionErrorHandler
-                throw new DOMExceptionImpl(
-                        DOMException.SYNTAX_ERR,
-                        DOMExceptionImpl.SYNTAX_ERROR,
-                        "Parsing rule '" + rule + "' failed.");
+                // this should neven happen because of the
+                // ThrowCssExceptionErrorHandler
+                throw new DOMExceptionImpl(DOMException.SYNTAX_ERR,
+                        DOMExceptionImpl.SYNTAX_ERROR, "Parsing rule '" + rule
+                                + "' failed.");
             }
 
-            if (getCssRules().getLength() > 0) {
+            if (DONT_TEST_INSERT == false && getCssRules().getLength() > 0) {
                 // We need to check that this type of rule can legally go into
                 // the requested position.
                 int msg = -1;
@@ -164,29 +177,28 @@ public class CSSStyleSheetImpl implements CSSStyleSheet, Serializable {
                     // Index must be 0, and there can be only one charset rule
                     if (index != 0) {
                         msg = DOMExceptionImpl.CHARSET_NOT_FIRST;
-                    }
-                    else if (getCssRules().item(0).getType() == CSSRule.CHARSET_RULE) {
+                    } else if (getCssRules().item(0).getType() == CSSRule.CHARSET_RULE) {
                         msg = DOMExceptionImpl.CHARSET_NOT_UNIQUE;
                     }
-                }
-                else if (r.getType() == CSSRule.IMPORT_RULE) {
+                } else if (r.getType() == CSSRule.IMPORT_RULE) {
                     // Import rules must preceed all other rules (except
                     // charset rules)
                     if (index <= getCssRules().getLength()) {
                         for (int i = 0; i < index; i++) {
                             final int rt = getCssRules().item(i).getType();
-                            if ((rt != CSSRule.CHARSET_RULE) && (rt != CSSRule.IMPORT_RULE)) {
+                            if ((rt != CSSRule.CHARSET_RULE)
+                                    && (rt != CSSRule.IMPORT_RULE)) {
                                 msg = DOMExceptionImpl.IMPORT_NOT_FIRST;
                                 break;
                             }
                         }
                     }
-                }
-                else {
+                } else {
                     if (index <= getCssRules().getLength()) {
                         for (int i = index; i < getCssRules().getLength(); i++) {
                             final int rt = getCssRules().item(i).getType();
-                            if ((rt == CSSRule.CHARSET_RULE) || (rt == CSSRule.IMPORT_RULE)) {
+                            if ((rt == CSSRule.CHARSET_RULE)
+                                    || (rt == CSSRule.IMPORT_RULE)) {
                                 msg = DOMExceptionImpl.INSERT_BEFORE_IMPORT;
                                 break;
                             }
@@ -194,31 +206,23 @@ public class CSSStyleSheetImpl implements CSSStyleSheet, Serializable {
                     }
                 }
                 if (msg > -1) {
-                    throw new DOMExceptionImpl(DOMException.HIERARCHY_REQUEST_ERR, msg);
+                    throw new DOMExceptionImpl(
+                            DOMException.HIERARCHY_REQUEST_ERR, msg);
                 }
             }
 
             // Insert the rule into the list of rules
             ((CSSRuleListImpl) getCssRules()).insert(r, index);
 
-        }
-        catch (final IndexOutOfBoundsException e) {
-            throw new DOMExceptionImpl(
-                DOMException.INDEX_SIZE_ERR,
-                DOMExceptionImpl.INDEX_OUT_OF_BOUNDS,
-                e.getMessage());
-        }
-        catch (final CSSException e) {
-            throw new DOMExceptionImpl(
-                DOMException.SYNTAX_ERR,
-                DOMExceptionImpl.SYNTAX_ERROR,
-                e.getMessage());
-        }
-        catch (final IOException e) {
-            throw new DOMExceptionImpl(
-                DOMException.SYNTAX_ERR,
-                DOMExceptionImpl.SYNTAX_ERROR,
-                e.getMessage());
+        } catch (final IndexOutOfBoundsException e) {
+            throw new DOMExceptionImpl(DOMException.INDEX_SIZE_ERR,
+                    DOMExceptionImpl.INDEX_OUT_OF_BOUNDS, e.getMessage());
+        } catch (final CSSException e) {
+            throw new DOMExceptionImpl(DOMException.SYNTAX_ERR,
+                    DOMExceptionImpl.SYNTAX_ERROR, e.getMessage());
+        } catch (final IOException e) {
+            throw new DOMExceptionImpl(DOMException.SYNTAX_ERR,
+                    DOMExceptionImpl.SYNTAX_ERROR, e.getMessage());
         }
         return index;
     }
@@ -226,18 +230,15 @@ public class CSSStyleSheetImpl implements CSSStyleSheet, Serializable {
     public void deleteRule(final int index) throws DOMException {
         if (readOnly_) {
             throw new DOMExceptionImpl(
-                DOMException.NO_MODIFICATION_ALLOWED_ERR,
-                DOMExceptionImpl.READ_ONLY_STYLE_SHEET);
+                    DOMException.NO_MODIFICATION_ALLOWED_ERR,
+                    DOMExceptionImpl.READ_ONLY_STYLE_SHEET);
         }
 
         try {
             ((CSSRuleListImpl) getCssRules()).delete(index);
-        }
-        catch (final IndexOutOfBoundsException e) {
-            throw new DOMExceptionImpl(
-                DOMException.INDEX_SIZE_ERR,
-                DOMExceptionImpl.INDEX_OUT_OF_BOUNDS,
-                e.getMessage());
+        } catch (final IndexOutOfBoundsException e) {
+            throw new DOMExceptionImpl(DOMException.INDEX_SIZE_ERR,
+                    DOMExceptionImpl.INDEX_OUT_OF_BOUNDS, e.getMessage());
         }
     }
 
@@ -271,8 +272,7 @@ public class CSSStyleSheetImpl implements CSSStyleSheet, Serializable {
             final CSSOMParser parser = new CSSOMParser();
             final SACMediaList sml = parser.parseMedia(source);
             media_ = new MediaListImpl(sml);
-        }
-        catch (final IOException e) {
+        } catch (final IOException e) {
             // TODO handle exception
         }
     }
@@ -303,9 +303,9 @@ public class CSSStyleSheetImpl implements CSSStyleSheet, Serializable {
         eq = eq && LangUtils.equals(getHref(), css.getHref());
         eq = eq && LangUtils.equals(getMedia(), css.getMedia());
         // TODO implement some reasonful equals method for ownerNode
-//        eq = eq && Utils.equals(getOwnerNode(), css.getOwnerNode());
-            // don't use ownerNode and parentStyleSheet in equals()
-            // recursive loop -> stack overflow!
+        // eq = eq && Utils.equals(getOwnerNode(), css.getOwnerNode());
+        // don't use ownerNode and parentStyleSheet in equals()
+        // recursive loop -> stack overflow!
         eq = eq && LangUtils.equals(getTitle(), css.getTitle());
         return eq;
     }
@@ -333,12 +333,13 @@ public class CSSStyleSheetImpl implements CSSStyleSheet, Serializable {
         out.writeObject(href_);
         out.writeObject(media_);
         // TODO ownerNode may not be serializable!
-//        out.writeObject(ownerNode);
+        // out.writeObject(ownerNode);
         out.writeBoolean(readOnly_);
         out.writeObject(title_);
     }
 
-    private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException {
+    private void readObject(final ObjectInputStream in) throws IOException,
+            ClassNotFoundException {
         baseUri_ = (String) in.readObject();
         cssRules_ = (CSSRuleList) in.readObject();
         if (cssRules_ != null) {
@@ -353,16 +354,17 @@ public class CSSStyleSheetImpl implements CSSStyleSheet, Serializable {
         href_ = (String) in.readObject();
         media_ = (MediaList) in.readObject();
         // TODO ownerNode may not be serializable!
-//        ownerNode = (Node) in.readObject();
+        // ownerNode = (Node) in.readObject();
         readOnly_ = in.readBoolean();
         title_ = (String) in.readObject();
     }
 
     /**
      * Imports referenced CSSStyleSheets.
-     *
-     * @param recursive <code>true</code> if the import should be done
-     *   recursively, <code>false</code> otherwise
+     * 
+     * @param recursive
+     *            <code>true</code> if the import should be done recursively,
+     *            <code>false</code> otherwise
      */
     public void importImports(final boolean recursive) throws DOMException {
         for (int i = 0; i < getCssRules().getLength(); i++) {
@@ -370,10 +372,12 @@ public class CSSStyleSheetImpl implements CSSStyleSheet, Serializable {
             if (cssRule.getType() == CSSRule.IMPORT_RULE) {
                 final CSSImportRule cssImportRule = (CSSImportRule) cssRule;
                 try {
-                    final URI importURI = new URI(getBaseUri()).resolve(cssImportRule.getHref());
-                    final CSSStyleSheetImpl importedCSS = (CSSStyleSheetImpl)
-                        new CSSOMParser().parseStyleSheet(new InputSource(
-                            importURI.toString()), null, importURI.toString());
+                    final URI importURI = new URI(getBaseUri())
+                            .resolve(cssImportRule.getHref());
+                    final CSSStyleSheetImpl importedCSS = (CSSStyleSheetImpl) new CSSOMParser()
+                            .parseStyleSheet(
+                                    new InputSource(importURI.toString()),
+                                    null, importURI.toString());
                     if (recursive) {
                         importedCSS.importImports(recursive);
                     }
@@ -381,15 +385,16 @@ public class CSSStyleSheetImpl implements CSSStyleSheet, Serializable {
                     if (mediaList.getLength() == 0) {
                         mediaList.appendMedium("all");
                     }
-                    final CSSMediaRuleImpl cssMediaRule = new CSSMediaRuleImpl(this, null, mediaList);
-                    cssMediaRule.setRuleList((CSSRuleListImpl) importedCSS.getCssRules());
+                    final CSSMediaRuleImpl cssMediaRule = new CSSMediaRuleImpl(
+                            this, null, mediaList);
+                    cssMediaRule.setRuleList((CSSRuleListImpl) importedCSS
+                            .getCssRules());
                     deleteRule(i);
                     ((CSSRuleListImpl) getCssRules()).insert(cssMediaRule, i);
-                }
-                catch (final URISyntaxException e) {
-                    throw new DOMException(DOMException.SYNTAX_ERR, e.getLocalizedMessage());
-                }
-                catch (final IOException e) {
+                } catch (final URISyntaxException e) {
+                    throw new DOMException(DOMException.SYNTAX_ERR,
+                            e.getLocalizedMessage());
+                } catch (final IOException e) {
                     // TODO handle exception
                 }
             }

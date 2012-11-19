@@ -112,5 +112,21 @@
 		<user-agent name="ie" version="5.5" ruleProcessor="org.rcfaces.css.internal.rules.IE567_OpacityRuleProcessor" />
 		<user-agent name="ie" version="8" ruleProcessor="org.rcfaces.css.internal.rules.IE8_OpacityRuleProcessor"/>
 	</css-property>
+	
+	<css-function>
+		<name>linear-gradient</name>
+		<name>repeating-linear-gradient</name>
+
+		<user-agent name="ie" version="10" />
+		<user-agent name="firefox" version="3.6" prefix="-moz-" />
+		<user-agent name="firefox" version="16" />
+		<user-agent name="chrome" version="10" prefix="-webkit-" />
+		<user-agent name="safari" version="5.1" prefix="-webkit-" />
+		<user-agent name="opera" version="11.6" prefix="-o-" />
+		<user-agent name="opera" version="12.1" />
+		<user-agent name="ios" version="5.0" prefix="-webkit-" />
+		<user-agent name="android" version="4.0" prefix="-webkit-" />
+		
+	</css-function>
 
 </css-properties>

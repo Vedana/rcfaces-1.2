@@ -486,6 +486,7 @@ public class CssSteadyStateParser extends CssParserProvider implements
                     }
 
                     CSSRule newRule = ruleList.insert(cssRule.toString());
+                    ruleList.next();
 
                     ((CSSOMObject) newRule).setUserData(IMPORTED_RULE_PROPERTY,
                             cssRule);
@@ -682,6 +683,10 @@ public class CssSteadyStateParser extends CssParserProvider implements
 
         File outputDir = new File(args[0]);
         File inputDir = new File(args[1]);
+
+        if (inputDir.exists() == false) {
+            return;
+        }
 
         final String charset = "UTF-8";
 

@@ -281,10 +281,11 @@ public class SACParserCSS21 extends AbstractSACParser implements Parser, SACPars
 //    [STRING|URI] S* [ medium [ COMMA S* medium]* ]? ';' S*
 //  ;
 //
-  final public void importRule(final boolean nonImportRuleFoundBefore) throws ParseException {
+  final public void importRule(boolean nonImportRuleFoundBefore) throws ParseException {
     Token t;
     SACMediaListImpl ml = new SACMediaListImpl();
     Locator locator;
+    nonImportRuleFoundBefore=false;
     try {
             ParseException e = null;
             if (nonImportRuleFoundBefore)
@@ -1991,11 +1992,6 @@ public class SACParserCSS21 extends AbstractSACParser implements Parser, SACPars
     finally { jj_save(0, xla); }
   }
 
-  private boolean jj_3R_56() {
-    if (jj_scan_token(PLUS)) return true;
-    return false;
-  }
-
   private boolean jj_3R_47() {
     Token xsp;
     xsp = jj_scanpos;
@@ -2067,14 +2063,14 @@ public class SACParserCSS21 extends AbstractSACParser implements Parser, SACPars
     return false;
   }
 
-  private boolean jj_3R_59() {
-    if (jj_scan_token(ASTERISK)) return true;
-    return false;
-  }
-
   private boolean jj_3_1() {
     if (jj_3R_46()) return true;
     if (jj_3R_47()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_59() {
+    if (jj_scan_token(ASTERISK)) return true;
     return false;
   }
 
@@ -2156,6 +2152,11 @@ public class SACParserCSS21 extends AbstractSACParser implements Parser, SACPars
 
   private boolean jj_3R_66() {
     if (jj_scan_token(LSQUARE)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_56() {
+    if (jj_scan_token(PLUS)) return true;
     return false;
   }
 
