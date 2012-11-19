@@ -2323,7 +2323,7 @@ var __members = {
 			focus.onkeydown = f_grid._Link_onkeydown;
 			focus.onkeypress = f_grid._Link_onkeypress;
 			focus.onkeyup = f_grid._Link_onkeyup;
-			focus.href = f_core.CreateJavaScriptVoid0();
+			focus.href = f_core.AllocateJavaScriptVoid0();
 			focus._dataGrid = this;
 			focus.tabIndex = this.fa_getTabIndex();
 
@@ -2929,7 +2929,7 @@ var __members = {
 		}
 
 		if (this._thead) {
-			this._thead.style.display = "none"; //danger accessibilite
+			this._thead.style.display = "block";
 		}
 	},
 	/**
@@ -5103,10 +5103,6 @@ var __members = {
 	 */
 	_updateTitleCellBody : function(column, swidth) {
 
-		if( f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_7)) {
-			return;
-		}
-		
 		if (swidth === undefined) {
 			var cw = column._head.style.width;
 			if (!cw) {
@@ -5768,9 +5764,7 @@ var __members = {
 		var offsetWidth = body.offsetWidth;
 		var scrollBarWidth = offsetWidth - clientWidth;
 		var verticalScrollBar = (scrollBarWidth > 0);
-		
-		var ie = f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_7) ||  f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_6);
-		
+
 		if (scrollBarWidth <= 0) {
 			// Ben si y a pas de scrollbar a droite, on cherche en bas !
 			scrollBarWidth = body.offsetHeight - body.clientHeight;
@@ -5780,7 +5774,6 @@ var __members = {
 			}
 		}
 
-		
 		var sw = this.style.width;
 		if (sw && sw.indexOf("px") > 0) {
 			var swPixel = parseInt(sw);
@@ -5796,25 +5789,31 @@ var __members = {
 			if (verticalScrollBar) {
 				clientWidth = offsetWidth - scrollBarWidth;
 			}
-			
-			if (ie) {
-				this.style.width = swPixel + "px";
-			}
 		}
 
 		if (!this._columnsLayoutPerformed) {
 			this.f_updateColumnsLayout();
 		}
 
+		// var doc = this.ownerDocument;
+
+		var t0 = new Date().getTime();
+
 		this._titleLayout = true;
 
 		var columns = this._columns;
+
+		var cellBorderLength = 1;
+
+		var t1 = new Date().getTime();
 
 		var total = 0; // total des colonnes fixe en px
 		var totalPercent = 0; // total des %
 		var totalZero = 0; // total colone sans taille donnee
 		var colToProcess = new Array();
-		
+		var ci = 0;
+		var webkit = f_core.IsWebkit();
+		var ie = f_core.IsInternetExplorer();
 		for (var i = 0; i < columns.length; i++) {
 			var column = columns[i];
 			if (column._visibility === false) {
@@ -5822,7 +5821,7 @@ var __members = {
 			}
 
 			var col = undefined;
-			if (ie) {
+			if (webkit || ie) {
 				// the header column tag col does not have any size. So we get a
 				// cell.
 				var rows = this._rowsPool;
@@ -5852,22 +5851,8 @@ var __members = {
 			}
 
 			if (!column._widthSetted) {
-				
 				var styleWidth = col.style.width;
-				
-				if (f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_7)) {
-					styleWidth = col.currentStyle.width;
-				}
 				var w = parseInt(styleWidth);
-				
-				if(ie && !isNaN(w) ) {
-					column._borderAndPaddingWidth = 	 f_core.ComputeContentBoxBorderLength(col, "left",
-					"right");
-						//f_core.ComputeIEBoxModelWidth(col);
-					col.style.width = (w-column._borderAndPaddingWidth);
-					column._col.style.width =(w-column._borderAndPaddingWidth);
-				}
-				
 				if (styleWidth.indexOf("%") > 0) {
 					totalPercent += w;
 					column._widthPercent = w;
@@ -5896,23 +5881,18 @@ var __members = {
 				this._textLeftRightPadding = f_core
 						.ComputePaddingBoxBorderLength(column._box.parentNode,
 								"left", "right");
+				// alert(this._textLeftRightPadding);
 			}
 
 			var cw = w;
 			if (f_core.IsWebkit(f_core.WEBKIT_SAFARI)) {
 				cw -= this._textLeftRightPadding;
 			}
-			
-			if (ie){
-				cw-=column._borderAndPaddingWidth;
-			}
-			
 			if (cw < 0) {
 				cw = 0;
 			}
-			
 			column._head.style.width = cw + "px";
-			
+
 			this._updateTitleCellBody(column, w);
 		}
 
@@ -6009,23 +5989,10 @@ var __members = {
 					if (totalNonPx < w) {
 						w = totalNonPx;
 					}
-					
-					var tmpW = w;
-					
-					if(ie) {
-						
-						var currentCell = this._rowsPool[1]._cells[column._index];
-						
-						if (currentCell.currentStyle) {
-							w-= f_core.ComputeContentBoxBorderLength(currentCell, "left",
-							"right");
-							
-						}
-					}
 
 					column._tempWidth += w;
 
-					totalNonPx -= tmpW;
+					totalNonPx -= w;
 					cnt--;
 				}
 			}
@@ -6044,11 +6011,8 @@ var __members = {
 				column._head.style.width = cw + "px";
 				this._updateTitleCellBody(column, w);
 				column._col.style.width = (cw) + "px";
-				column._col.width = cw;
 
 				total += w;
-				
-			
 
 //				f_core.Debug(f_grid, "Total=" + total + " w=" + w);
 			}
