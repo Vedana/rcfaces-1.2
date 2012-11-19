@@ -4,11 +4,9 @@
 package org.rcfaces.renderkit.html.internal.script;
 
 import java.io.IOException;
-import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
 import org.rcfaces.core.internal.script.AbstractScriptOperation;
 import org.rcfaces.core.internal.script.IScriptOperationContext;
 
@@ -25,8 +23,7 @@ public class CompositeScriptsContentOperation extends AbstractScriptOperation {
         setName("Merge script content");
     }
 
-    public String filter(Map applicationParameters,
-            IResourceLoaderFactory resourceLoaderFactory, String scriptURL,
+    public String filter(String scriptURL,
             String scriptContent, IScriptOperationContext operationContext)
             throws IOException {
 
