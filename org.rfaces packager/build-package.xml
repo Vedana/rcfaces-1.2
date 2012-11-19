@@ -766,8 +766,8 @@
 				<path path="${build.version.path}/bin-core" />
 			</classpath>
 	
-			<arg path="${build.version.path}/bin-${pass.type}/org/rcfaces/renderkit/html/internal/css" />
-			<arg path="${build.version.path}/src-${pass.type}/org/rcfaces/renderkit/html/internal/css" />
+			<arg path="${build.version.path}/bin-${pass.type}/org/rcfaces/renderkit/${pass.type}/internal/css" />
+			<arg path="${build.version.path}/src-${pass.type}/org/rcfaces/renderkit/${pass.type}/internal/css" />
 		</java>
 
 
