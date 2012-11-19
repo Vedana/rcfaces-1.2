@@ -15,7 +15,7 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
-import org.rcfaces.core.internal.content.AbstractBufferOperationContentModel;
+import org.rcfaces.core.internal.content.AbstractGzipedBufferOperationContentModel;
 import org.rcfaces.core.internal.content.IBufferOperation;
 import org.rcfaces.core.internal.content.IFileBuffer;
 import org.rcfaces.core.internal.content.IOperationContentLoader;
@@ -25,9 +25,6 @@ import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentPath;
 import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
-import org.rcfaces.core.internal.contentStorage.GZipedResolvedContent;
-import org.rcfaces.core.internal.contentStorage.IGzipedResolvedContent;
-import org.rcfaces.core.internal.contentStorage.IResolvedContent;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
 import org.rcfaces.core.internal.style.IStyleContentAccessorHandler;
@@ -48,7 +45,7 @@ import org.rcfaces.renderkit.html.internal.util.FileItemSource;
  * @version $Revision$ $Date$
  */
 public class CssOperationContentModel extends
-        AbstractBufferOperationContentModel implements IGzipedResolvedContent {
+        AbstractGzipedBufferOperationContentModel {
 
     private static final Log LOG = LogFactory
             .getLog(CssOperationContentModel.class);
@@ -63,13 +60,9 @@ public class CssOperationContentModel extends
 
     private static final int STYLESHEET_BUFFER_INITIAL_SIZE = 8000;
 
-    private final Object GZIPED_LOCK = new Object();
-
     private final IStyleParser cssParser;
 
     private final IResourceVersionHandler resourceVersionHandler;
-
-    private transient volatile GZipedResolvedContent gzipedResolvedContent;
 
     public CssOperationContentModel(String resourceURL, String versionId,
             String operationId, String filterParametersToParse,
@@ -337,16 +330,6 @@ public class CssOperationContentModel extends
 
     protected boolean isMimeTypeValid(String contentType) {
         return STYLE_CONTENT_TYPE.equalsIgnoreCase(contentType);
-    }
-
-    public IResolvedContent getGzipedContent() {
-        synchronized (GZIPED_LOCK) {
-            if (gzipedResolvedContent == null) {
-                gzipedResolvedContent = new GZipedResolvedContent(this);
-            }
-
-            return gzipedResolvedContent;
-        }
     }
 
     /**
