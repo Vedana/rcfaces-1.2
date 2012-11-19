@@ -8,8 +8,7 @@ package org.rcfaces.core.internal.contentStorage;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public interface IGzippedResolvedContent extends IResolvedContent {
-    boolean isGzipped();
+public interface IGzipedResolvedContent extends IResolvedContent {
 
-    IResolvedContent getSource();
+    IResolvedContent getGzipedContent();
 }

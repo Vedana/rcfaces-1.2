@@ -12,8 +12,6 @@ import org.rcfaces.core.internal.lang.StringAppender;
  */
 public abstract class AbstractResolvedContent implements IResolvedContent {
 
-    private static final String REVISION = "$Revision$";
-
     private static final long serialVersionUID = 8947615551118704798L;
 
     private boolean versioned;

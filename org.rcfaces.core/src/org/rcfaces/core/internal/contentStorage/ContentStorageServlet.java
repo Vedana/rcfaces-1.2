@@ -227,12 +227,17 @@ public class ContentStorageServlet extends ConfiguredHttpServlet {
             }
         }
 
-        if (resolvedContent instanceof IGzippedResolvedContent) {
-            IGzippedResolvedContent gzippedResolvedContent = (IGzippedResolvedContent) resolvedContent;
+        if (resolvedContent instanceof IGzipedResolvedContent) {
 
-            if (hasGzipSupport(request) == false
-                    || gzippedResolvedContent.isGzipped() == false) {
-                resolvedContent = gzippedResolvedContent.getSource();
+            if (hasGzipSupport(request)) {
+                IResolvedContent gzipedResolvedContent = ((IGzipedResolvedContent) resolvedContent)
+                        .getGzipedContent();
+
+                if (gzipedResolvedContent != null) {
+                    resolvedContent = gzipedResolvedContent;
+
+                    setGzipContentEncoding(response, true);
+                }
             }
         }
 
@@ -269,10 +274,6 @@ public class ContentStorageServlet extends ConfiguredHttpServlet {
                     return;
                 }
             }
-        }
-
-        if (resolvedContent instanceof IGzippedResolvedContent) {
-            setGzipContentEncoding(response, true);
         }
 
         String contentType = resolvedContent.getContentType();
