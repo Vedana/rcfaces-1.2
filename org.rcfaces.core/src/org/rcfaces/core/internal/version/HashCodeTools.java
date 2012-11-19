@@ -145,7 +145,7 @@ public class HashCodeTools {
             LOG.debug("Compute ETag from url '" + url + "' = '" + etag + "'.");
         }
 
-        etag += ":" + buffer.length;
+        etag += buffer.length;
 
         return etag;
     }
