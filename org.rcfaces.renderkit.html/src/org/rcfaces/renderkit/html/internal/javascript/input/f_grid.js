@@ -5099,7 +5099,7 @@ var __members = {
 	 *            column
 	 * @param optional
 	 *            Number swidth
-	 * @retu_updatern void
+	 * @return void
 	 */
 	_updateTitleCellBody : function(column, swidth) {
 
@@ -5685,8 +5685,8 @@ var __members = {
 			head.onmouseout = f_grid._Title_onMouseOut;
 			head.onmousedown = f_grid._Title_onMouseDown;
 			head.onmouseup = f_grid._Title_onMouseUp;
-			// head.onclick = f_grid._Title_onClick; // OO  TODO .... A VERIFIER
-			
+			head.onclick = f_grid._Title_onClick; // OO  TODO .... A VERIFIER
+											 	 // JBM FIXME .... accessibilite
 			// head.onbeforeactivate=f_core.CancelJsEventHandler;
 			// head.tabIndex=-1;
 
