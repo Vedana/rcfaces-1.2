@@ -89,21 +89,22 @@ var __statics = {
      		// On sait jamais, nous sommes peut etre dans un context foireux ...
      		return true;
      	}
-     	
-     	f_core.Debug(f_shellManager, "_OnFocus: entering on "+this.tagName+"#"+this.id+"."+this.className);
+    	
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+    	
+     	f_core.Debug(f_shellManager, "_OnFocus: entering on "+this.tagName+"#"+this.id+"."+this.className+" event="+evt);
  
  		var shellManager=f_shellManager.Get();
  
  		var shell=shellManager.f_getTopShell();
  		if (!shell) {
  			// Plus de frame visibles ... (on peut être en cours de fermeture ...)
+ 	  		f_core.Info(f_shellManager, "_OnFocus: No top shell ?");
 			return true;
  		}
-     	
-		if (!evt) {
-			evt = f_core.GetJsEvent(this);
-		}
-     	 			
+      	 			
 		var target=undefined;
 		if (evt.target) {
 			target = evt.target;
@@ -118,11 +119,14 @@ var __statics = {
 		}
 
 		var shellDecorator=shellManager.f_getShellDecorator(shell);
+		
 		if (shellDecorator.f_isIntoShell(target)) {
+			f_core.Info(f_shellManager, "_OnFocus: Shell decorator="+shellDecorator+" into shell "+target);
 			return true;
 		}
-     	
-     	shellDecorator.f_setFocus();
+		f_core.Info(f_shellManager, "_OnFocus: Shell decorator="+shellDecorator+" set focus "+target);
+    	
+     	shell.f_setFocus();
      	
      	return f_core.CancelJsEvent(evt);
      },
