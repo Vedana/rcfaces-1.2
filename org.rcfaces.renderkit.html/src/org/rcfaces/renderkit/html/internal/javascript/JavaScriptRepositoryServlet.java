@@ -471,7 +471,6 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
      * @version $Revision$ $Date$
      */
     private class JavaScriptRecord extends HierarchicalRecord {
-        private static final String REVISION = "$Revision$";
 
         protected byte prolog[];
 
