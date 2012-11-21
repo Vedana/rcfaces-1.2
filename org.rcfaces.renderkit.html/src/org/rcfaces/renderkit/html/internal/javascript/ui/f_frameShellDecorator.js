@@ -132,7 +132,8 @@ var __members = {
 	
 				this.onload=null;
 				
-				self.f_prepareFrame(iframe);
+				var doc=f_core.GetFrameDocument(iframe);
+				self.f_prepareFrame(iframe, doc);
 				
 				functionWhenReady.call(window, self, shell);
 			};
