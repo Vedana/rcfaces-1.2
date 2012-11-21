@@ -56,7 +56,7 @@ public class ApplicationVersionServlet extends ConfiguredHttpServlet {
                 applicationVersionURL);
     }
 
-    static String getApplicationVersionURI(Map applicationMap) {
+    static String getApplicationVersionURI(Map<String, Object> applicationMap) {
         return (String) applicationMap.get(APPLICATION_VERSION_URL_PROPERTY);
     }
 
