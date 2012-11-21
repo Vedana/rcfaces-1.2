@@ -5641,41 +5641,21 @@ var f_core = {
 		}
 		
 		return elts;
-	},
-	
+	},	
 	/**
 	 * Recherche du prochain élément vers lequel on peut tabuler
-	 * depuis l'élément courant. Cette recherche s'effectue sur tous les éléments
-	 * du document de type suivant:<br>
-	 *		<b>A,AREA,BUTTON,IFRAME,INPUT,OBJECT,SELECT,TEXTAREA</b>
-	 * <br>
-	 * La tabulation HTML s'effectue dans l'ordre suivant:<br>
-	 * <ol>
-	 *		<li>Elements ayant un tabIndex > 0 dans l'ordre croissant</li>
-	 *		<li>Elements ayant un tabIndex <= 0 dans l'ordre de déclaration
-	 *		<ul><li>a) Sauf pour IE où un tabIndex < 0 est non tabulable</li></ul>
-	 *		</li>
-	 * </ol>
-	 * <br>
-	 * Par ailleurs les particularités suivantes sont à signaler:<br>
-	 * <ul>
-	 *		<li>Sous IE, un composant possède par défaut un tabIndex à 0</li>
-	 *		<li>Sous NS, un composant tabulable a un tabIndex de valeur -1</li>
-	 *		<li>Sous NS, un composant non tabulable a un tabIndex undefined</li>
-	 * </ul>
-	 * <br>
-	 * Deux tableaux sont donc créés pour accueillir les éléments non ordonnés et
-	 * ceux qui le sont. La recherche du suivant rejette les éléments qui ont les
-	 * caractéristiques suivantes:<br>
-	 *		<b>NOT VISIBLE, DISABLED, HIDDEN TYPE, NO FOCUS METHOD</b>
+	 * depuis l'élément courant. 
 	 *
 	 * @method hidden static 
 	 * @param HTMLElement component composant précédent dans l'ordre de tabulation
-	 * @return HTMLElement composant suivant dans l'ordre de tabulation
+	 * @param optional Boolean inverseDirection
+	 * @return HTMLElement composant suivant dans l'ordre de tabulation  (ou un f_component)
 	 */
-	GetNextFocusableComponent: function(component) {
-		f_core.Assert(component && component.nodeType==f_core.ELEMENT_NODE, "f_core.GetNextFocusableComponent: bad parameter type "+component);
-		f_core.Debug(f_core, "GetNextFocusableComponent: entering ("+component+") "+component.nodeType);
+	GetNextFocusableComponent: function(component, inverseDirection) {
+		f_core.Assert(component && component.nodeType==f_core.ELEMENT_NODE, "f_core.GetNextFocusableComponent: invalid component parameter type ("+component+")");
+		f_core.Assert(inverseDirection===undefined || typeof(inverseDirection)=="boolean", "f_core.GetNextFocusableComponent: invalid inverseDirection parameter type ("+inverseDirection+")");
+
+		f_core.Debug(f_core, "GetNextFocusableComponent: entering ("+component+") "+component.nodeType+" inverseDirection="+inverseDirection);
 		
 		var focusableElementFunction=component.f_getFocusableElement;
 		if (typeof(focusableElementFunction)=="function") {
@@ -5690,37 +5670,54 @@ var f_core = {
 			f_core.Debug(f_core, "GetNextFocusableComponent: No elements into document !");
 			return null;
 		}
+		
+		var delta=(inverseDirection!==true)?1:-1;
 
 		function getNextAvailable(tabs, offset) {
-			for(offset++;offset<tabs.length;offset++) {
-				var elt = tabs[offset];
-				var style = elt.style;
+			var tabsLength=tabs.length;
+			for(var i=0;i<tabsLength;i++) {
+				offset=((offset+delta+tabsLength) % tabsLength);
 				
-				if (style) {
-					if (style.visibility == "hidden" || style.display == "none") {
-						continue;
-					}
-				}
-				if (elt.disabled || elt.type == "hidden" || !elt.focus) {
+				var elt = tabs[offset];
+				
+				if (!f_core.IsComponentVisible(elt)) {
 					continue;
 				}
 				
+				if (elt.type == "hidden") {
+					continue;
+				}
+				
+				if (elt.f_isDisabled && elt.f_isDisabled()) {
+					continue;
+				}
+				
+				var id=elt.id;
+				if (id) {
+					var pid=id.lastIndexOf("::");
+					if (pid>0) {
+						id=id.substring(0, pid);
+						
+						var comp=f_core.GetElementByClientId(id, comp.ownerDocument);
+						if (comp) {
+							f_core.Debug(f_core,"GetNextFocusableComponent: component found => "+comp);
+							return comp;
+						}
+					}
+				}
+				
+				f_core.Debug(f_core,"GetNextFocusableComponent: ELEMENT found => "+elt);
 				return elt;
 			}
 			
+			f_core.Debug(f_core,"GetNextFocusableComponent: no component found !");
 			return null;
 		}
 
-		// Initialize prev and next
-		var prev = component.tabIndex;
-		var next = null;
-		var offset = -1;
 
 		// Build tabulation list
 		var itabs = new Array;
-		var utabs = new Array;
-
-		var isIE = f_core.IsInternetExplorer();
+		var iitabs = new Array;
 		
 		var focusableTags=new RegExp(f_core._FOCUSABLE_TAGS, "i");
 		// Get thru form elements
@@ -5728,7 +5725,7 @@ var f_core = {
 			var elt = elts[i];
 			var tagName=elt.tagName;
 			
-			if (!tagName) {
+			if (!tagName || elt.disabled || !elt.focus) {
 				continue;
 			}
 			
@@ -5740,76 +5737,73 @@ var f_core = {
 //			f_core.Debug("f_core", "Focusable element: id="+elt.id + " tagName="+ elt.tagName +" type="+ elt.type + " className="+elt.className);
 			
 			var idx = elt.tabIndex;
-			// Non tab components
-			if (idx === undefined || idx == null || (idx<0 && isIE)) {
+			if (idx === undefined || idx == null || idx<0) {
 				continue;
 			}
 
-			// Unordered tab components
-			if (idx <= 0) {
-				if (elt == component) {
-					offset = utabs.length;
-				}
-				utabs.push(elt);
-				continue;
-			}
-			
 			var ts=itabs[idx];
-			// Ordered tab components
-			// @TODO Ne pas utiliser l'indice du tableau en tant que TAB INDEX
 			if (!ts) {
 				ts=new Array;
 				itabs[idx] = ts;
+				iitabs.push(idx);
 			}
 			ts.push(elt);
 		}
 
-		f_core.Debug(f_core, "GetNextFocusableComponent: utabs.length="+utabs.length+" itabs.length="+itabs.length);
-
-		// Get next form unordered
-		if (prev == undefined || prev == null || (prev<0 && isIE)) {
-		
-			f_core.Debug(f_core, "GetNextFocusableComponent: Search next unordered component. (prev="+prev+")");
-		
-			return getNextAvailable(utabs, -1);
+		if (!iitabs.length) {
+			// Aucun composant focusable ???
+			return null;
 		}
 		
-		// Get next from unordered starting at offset
-		if (prev <= 0) {
-			// Get first accessible unordered
+		f_core.Debug(f_core, "GetNextFocusableComponent: itabs.length="+itabs.length);
 
-			f_core.Debug(f_core, "GetNextFocusableComponent: Get next from unordered starting at offset. (offset="+offset+")");
-			return getNextAvailable(utabs, offset);
+		var otabs;
+		if (iitabs.length>1) {
+			iitabs.sort(function(a,b) {
+				return a - b;
+			});
+			
+			otabs = new Array;	
+			otabs=otabs.concat.apply(otabs, iitabs);
+
+		} else {
+			otabs=itabs[iitabs[0]];
 		}
 		
-		// Get next from ordered starting at offset or
-		// get next from unordered starting at offset -1
-		var otabs = new Array;
-		for (var i=0; i<32768; i++) {
-			var ar = itabs[i];
-			if (!ar) {
-				continue;
+		var offsetComponent = -1;
+		var offsetTabIndex = -1;
+		var componentTabIndex=component.tabIndex;
+		for(var i2=0;i2<otabs.length;i2++) {
+			var elt = otabs[i2];
+			if (elt == component) {
+				offsetComponent = i2;
+				offsetTabIndex=i2;
+				break;
 			}
 			
-			for (var p in ar) {
-				var elt = ar[p];
-				if (elt == component) {
-					offset = otabs.length;
-				}
-				otabs.push(elt);
+			if (componentTabIndex>=0 && elt.tabIndex==componentTabIndex) {
+				offsetTabIndex=i2;
+				componentTabIndex=-1; // On desactive
 			}
 		}
-
-		f_core.Debug(f_core, "GetNextFocusableComponent: Get next from ordered starting at offset. (offset="+offset+")");
-
-		next = getNextAvailable(otabs, offset);
-		if (next) {
-			return next;
-		}
-	
-		f_core.Debug(f_core, "GetNextFocusableComponent: Get next from unordered");
 		
-		return getNextAvailable(utabs, -1);
+		if (offsetComponent<0) {
+			// on a pas retrouvé le composant, peut-etre en cherchant un copain par son tabIndex
+			
+			f_core.Debug(f_core, "GetNextFocusableComponent: Specified component not found. (offsetTabIndex="+offsetTabIndex+")");
+
+			if (offsetTabIndex>=0) {
+				// On prend le premier avec le même TABINDEX
+				return getNextAvailable(otabs, offsetTabIndex-1);
+			}
+			
+			// On prend le premier de la page !
+			return getNextAvailable(otabs, -1);
+		}
+
+		f_core.Debug(f_core, "GetNextFocusableComponent: Get next starting at offset. (offset="+offsetComponent+")");
+
+		return getNextAvailable(otabs, offsetComponent);
 	},
 
 	/**
@@ -6503,6 +6497,48 @@ var f_core = {
 			document.write("<SCRIPT type=\"text/javascript\" charset=\""+charSet+"\" src=\""+url+"\"></SCRIPT>");
 		}		
 	},
+	
+	/**
+	 * @method hidden static
+	 * @param HTMLIFrameElement iframe
+	 * @return Window
+	 */
+	GetFrameWindow: function(iframe) {
+		f_core.Assert(!!iframe, "f_core.GetFrameDocument: Invalid iframe parameter ("+iframe+")");
+
+		var win=iframe.contentWindow;
+		if (win) {
+			return win;
+		}
+		
+		throw new Error("Can not identify window for frame '"+iframe+"'");
+	},
+	
+	/**
+	 * @method hidden static
+	 * @param HTMLIFrameElement iframe
+	 * @return Document
+	 */
+	GetFrameDocument: function(iframe) {
+		f_core.Assert(!!iframe, "f_core.GetFrameDocument: Invalid iframe parameter ("+iframe+")");
+				
+		try {
+			if (iframe.contentDocument) {
+				return iframe.contentDocument;
+			}
+			
+			var win=iframe.contentWindow;
+			if (win && win.document) {
+				return win.document;
+			}
+			
+		} catch (x) {
+			f_core.Error(f_core, "GetFrameDocument: Get document throws error", x);				
+		}
+		
+		throw new Error("Can not identify document for frame '"+iframe+"'");
+	},
+
 	/**
 	 * @method hidden static
 	 * @param HTMLElement component
