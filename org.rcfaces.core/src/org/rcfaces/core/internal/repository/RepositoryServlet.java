@@ -255,8 +255,13 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
             hash = record.getHash();
 
             modificationDate = record.getLastModificationDate();
-            if (modificationDate > 0)
+            if (modificationDate > 0) {
                 modificationDate -= (modificationDate % 1000);
+            }
+
+            if (hasGZipSupport()) {
+                setVaryAcceptEncoding(response);
+            }
 
             if (hasGZipSupport() && hasGzipSupport(request)) {
                 byte jsGZip[] = record.getGZipedBuffer();

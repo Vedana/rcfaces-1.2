@@ -229,6 +229,8 @@ public class ContentStorageServlet extends ConfiguredHttpServlet {
 
         if (resolvedContent instanceof IGzipedResolvedContent) {
 
+            setVaryAcceptEncoding(response);
+
             if (hasGzipSupport(request)) {
                 IResolvedContent gzipedResolvedContent = ((IGzipedResolvedContent) resolvedContent)
                         .getGzipedContent();
@@ -236,7 +238,7 @@ public class ContentStorageServlet extends ConfiguredHttpServlet {
                 if (gzipedResolvedContent != null) {
                     resolvedContent = gzipedResolvedContent;
 
-                    setGzipContentEncoding(response, true);
+                    setGzipContentEncoding(response, false);
                 }
             }
         }

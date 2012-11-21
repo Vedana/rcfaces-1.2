@@ -444,8 +444,8 @@ public class StylesheetsServlet extends HtmlModulesServlet {
         return mr.getStyleSheetRepository();
     }
 
-    private StyleSheetSourceContainer createStyleSheetRepository(
-            String module) throws ServletException {
+    private StyleSheetSourceContainer createStyleSheetRepository(String module)
+            throws ServletException {
 
         /* Pas de version au niveau du container ! */
 
@@ -1038,11 +1038,13 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             if (gzip != null) {
                 if (hasGzipSupport(request)) {
 
-                    setGzipContentEncoding(response, true);
+                    setGzipContentEncoding(response, false);
 
                     buf = gzip;
                 }
             }
+
+            setVaryAcceptEncoding(response);
 
             response.setContentLength(buf.length);
             if (etag != null) {
