@@ -238,6 +238,9 @@ public class HtmlRendererTypeFactory extends AbstractRendererTypeFactory {
         digester.addBeanPropertySetter(
                 "rcfaces-config/renderKit/renderer/lookId", "lookId");
 
+        digester.addBeanPropertySetter(
+                "rcfaces-config/renderKit/renderer/renderer-lookId", "lookId");
+
         digester.addRule("rcfaces-config/renderKit/renderer/rules/navigator",
                 new Rule() {
 
