@@ -529,16 +529,30 @@ var __members = {
 	},
 	
 	/**
+	 *  <p>Set the body of the shell
+	 *  </p>
+	 *
+	 * @method protected
+	 * @param HTMLElement shellBody
+	 * @return void
+	 */
+	f_setBody: function(shellBody) {
+     	f_core.Debug(f_shell, "f_setBody: fill body in "+shellBody);		
+     	
+     	this._shellBody=shellBody;
+	},
+	/**
 	 *  <p>construct the content of the shell 
 	 *  </p>
 	 *
 	 * @method protected
+	 * @param HTMLElement shellBody
 	 * @return void
 	 */
 	f_fillBody: function(shellBody) {
      	f_core.Debug(f_shell, "f_fillBody: fill body in "+shellBody);		
      	
-     	this._shellBody=shellBody;
+     	this.f_setBody(shellBody);
 	},
 
 	/**

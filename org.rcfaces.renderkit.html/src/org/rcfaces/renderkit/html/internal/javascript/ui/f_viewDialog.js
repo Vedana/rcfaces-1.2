@@ -230,8 +230,9 @@ var __members = {
 					return false;
 				}
 
+				var doc=f_core.GetFrameDocument(iframe);
 				try {
-					self.f_performFrameReady(this, iframe.contentWindow.document);
+					self.f_performFrameReady(iframe, doc);
 
 				} catch (x) {					
 					f_core.Error(f_viewDialog, "f_fillBody: f_performFrameReady throws exception.", x);
@@ -239,8 +240,6 @@ var __members = {
 			};
 			
 			f_core.AddEventListener(iframe, "load", this._loadFrame);
-		
-			
 			
 		} else {
 			f_core.Debug(f_viewDialog, "f_fillBody: Firefox use onload ");
@@ -253,8 +252,9 @@ var __members = {
 	
 				this.onload=null;
 				
+				var doc=f_core.GetFrameDocument(this);
 				try {
-					self.f_performFrameReady(this, this.contentWindow.document);
+					self.f_performFrameReady(this, doc);
 
 				} catch (x) {					
 					f_core.Error(f_viewDialog, "f_fillBody: f_performFrameReady throws exception.", x);
@@ -283,7 +283,9 @@ var __members = {
 	 * @return void
 	 */
 	f_performFrameReady: function(iframe, doc) {
-		f_core.Debug(f_frameShellDecorator, "f_performFrameReady: frame '"+iframe+"' is ready !");
+		f_core.Debug(f_frameShellDecorator, "f_performFrameReady: frame '"+iframe+"' is ready ! (doc="+doc+")");
+		
+		this.f_setBody(doc.body);
 		
 		var component=f_focusManager.Get().f_getFocusComponent();
 		if (!component) {
@@ -300,7 +302,7 @@ var __members = {
 				return false;
 			}
 			
-			var comp=f_core.GetNextFocusableComponent(iframe.contentWindow.document.body);
+			var comp=f_core.GetNextFocusableComponent(doc.body);
 			if (comp) {
 				f_core.SetFocus(comp, true);
 			}
@@ -311,12 +313,13 @@ var __members = {
 	},
 
 	f_preDestruction: function() {
-		if (f_env.GetPerformanceTimingFeatures()) {		
-	
+		if (f_env.GetPerformanceTimingFeatures()) {
 			var iframe=this._iframe;
-			var localWin=iframe.contentWindow;
-			if (localWin.f_core) {			
-				f_core.FramePerformanceTimingLog(localWin);			
+			if (iframe) {
+				var localWin=iframe.contentWindow;
+				if (localWin.f_core) {			
+					f_core.FramePerformanceTimingLog(localWin);
+				}
 			}
 		}
 		

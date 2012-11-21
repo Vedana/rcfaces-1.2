@@ -52,13 +52,14 @@ var __members = {
 
 		f_core.Debug(f_frameShellDecorator, "f_createDecoration: create new decoration");
 
+		var shellId=this._shell.f_getId();
 		var iframe = document.createElement("iframe");
+		iframe.id = shellId+"::iframe";
+		iframe.name = shellId+"::fname";			
 		this._iframe=iframe;
 
-		iframe.id = this._shell.f_getId()+"::iframe";
-		iframe.name = iframe.id+"::name";
 		iframe.title=""; // De décoration
-	
+		
 		var shell=this._shell;
 		
 		var shellIdentifier=this.f_registerShell(shell);
@@ -92,29 +93,34 @@ var __members = {
 		}
 		
 		iframe.className=className;
-				
-		var self=this;
 		
-		if (f_core.IsInternetExplorer()) {
+		f_core.InsertBefore(document.body, iframe, document.body.firstChild);
+					
+		var self=this;
+		if (f_core.IsInternetExplorer() && (!f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_9))) {
 			f_core.Debug(f_frameShellDecorator, "f_createDecoration: IE use onreadystatechange ");
-			iframe.onreadystatechange=function() {
+
+			var loadFrame = function() {
 				if (window._rcfacesExiting) {
 					return false;
 				}
-
-				f_core.Debug(f_frameShellDecorator, "f_createDecoration.readyStateChange: decoration created: "+this+" state="+this.readyState);
-
-				if (this.readyState != "interactive") {
-					return;
-				}	
 				
-				this.onreadystatechange=null;
-				
-				self.f_prepareFrame(this);
-				
-				functionWhenReady.call(window, self, shell);
+				var frameWindow=f_core.GetFrameWindow(iframe);				
+				frameWindow.setTimeout(function() {
+					var doc=f_core.GetFrameDocument(iframe);
+					try {
+						self.f_prepareFrame(iframe, doc);
+	
+					} catch (x) {					
+						f_core.Error(f_viewDialog, "f_createDecoration: f_performFrameReady throws exception.", x);
+					}
+					
+					functionWhenReady.call(window, self, shell);
+				}, 100);
 			};
 			
+			f_core.AddEventListener(iframe, "load", loadFrame);
+				
 		} else {
 			f_core.Debug(f_frameShellDecorator, "f_createDecoration: Firefox use onload ");
 			iframe.onload=function() {
@@ -126,19 +132,13 @@ var __members = {
 	
 				this.onload=null;
 				
-				self.f_prepareFrame(this);
+				self.f_prepareFrame(iframe);
 				
 				functionWhenReady.call(window, self, shell);
 			};
 		}
 
 		iframe.src="about:blank";
-		
-		f_core.InsertBefore(document.body, iframe, document.body.firstChild);
-		
-		if (f_core.IsInternetExplorer()) {
-			iframe.src="about:blank";
-		}
 		
 		f_core.Debug(f_frameShellDecorator, "f_createDecoration: wait decoration creation");
 	},
@@ -184,15 +184,15 @@ var __members = {
 		
 		f_core.VerifyProperties(iframe);		
 	},
+	
 	/**
 	 * @method private
 	 * @return void
 	 */
-	f_prepareFrame: function(iframe) {
-		f_core.Debug(f_frameShellDecorator, "f_prepareFrame: decorate frame="+iframe.contentWindow+" document="+iframe.contentWindow.document);
+	f_prepareFrame: function(iframe, shellDocument) {
+		f_core.Debug(f_frameShellDecorator, "f_prepareFrame: decorate document="+shellDocument);
 		
 		var style=this._shell.f_getStyle();		
-		var shellDocument=iframe.contentWindow.document;
 		
 		var body=shellDocument.body;
 		body.topmargin=0;
@@ -286,8 +286,9 @@ var __members = {
 		iframe._initialWidth=width;
 		iframe._initialHeight=height;
 		
+		var doc=f_core.GetFrameDocument(iframe);
 		
-		var table=iframe.contentWindow.document.body; //.firstChild;
+		var table=doc.body; //.firstChild;
 		if (table) {
 			table.style.height = height+"px";
 			table.style.width = width+"px";			
@@ -314,7 +315,7 @@ var __members = {
 			
 		case f_core.ELEMENT_NODE:
 			if (target.tagName.toLowerCase()=="iframe") {
-				targetDocument=target.contentWindow.document;
+				targetDocument=f_core.GetFrameDocument(target);
 				break;
 			}
 
@@ -332,7 +333,7 @@ var __members = {
 			return false;			
 		}
  		
- 		var frameDocument = iframe.contentWindow.document;
+ 		var frameDocument = f_core.GetFrameDocument(iframe);
 
      	if (targetDocument==frameDocument) {
  			f_core.Debug(f_shellManager, "f_isIntoShell: Same document ("+targetDocument.location+"/"+frameDocument.location+")");
@@ -348,18 +349,19 @@ var __members = {
 	 */
 	f_setFocus: function() {
 		var iframe=this._iframe;
-		if (!iframe) {
+		if (!iframe) {s
 			return;
 		}
 		
-		var doc=iframe.contentWindow.document;
-		var next=f_core.GetNextFocusableComponent(doc.body);		
+		var doc=f_core.GetFrameDocument(iframe);
+		var next=f_core.GetNextFocusableComponent(doc.body);	
 		if (next) {
 			f_core.SetFocus(next, true);
 			return;
 		}
 
-		iframe.contentWindow.focus();
+		var win=f_core.GetFrameWindow(iframe);
+		win.focus();
 		this._shell.f_setFocus();
 	},
 	/**
