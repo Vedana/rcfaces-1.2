@@ -381,19 +381,19 @@ var __statics = {
 			return true;
 		}
 		
-		f_core.AddEventListener(doc,"mousedown", f_popup._Gecko_OnMouseDown);		
-		f_core.AddEventListener(doc,"click", f_popup._Gecko_OnClick);		
-		f_core.AddEventListener(doc,"dblclick", f_popup._Gecko_OnClick);
+		f_core.AddEventListener(doc,"mousedown", f_popup._Gecko_OnMouseDown, doc);		
+		f_core.AddEventListener(doc,"click", f_popup._Gecko_OnClick, doc);		
+		f_core.AddEventListener(doc,"dblclick", f_popup._Gecko_OnClick, doc);
 		
 		if(!(f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_7) || f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_8))) {
-			f_core.AddEventListener(doc,"blur", f_popup._Gecko_OnBlur);
-			f_core.AddEventListener(doc,"focus", f_popup._Gecko_OnFocus);
+			f_core.AddEventListener(doc,"blur", f_popup._Gecko_OnBlur, doc);
+			f_core.AddEventListener(doc,"focus", f_popup._Gecko_OnFocus, doc);
 		}
 		
-		f_core.AddEventListener(doc,"keydown", f_popup._OnKeyDownJs);
-		f_core.AddEventListener(doc,"keyup", f_popup._OnKeyUpJs);
-		f_core.AddEventListener(doc,"keypress", f_popup._OnKeyPressJs);		
-		f_core.AddEventListener(doc,"contextmenu", f_popup._Gecko_OnContextMenu);
+		f_core.AddEventListener(doc,"keydown", f_popup._OnKeyDownJs, doc);
+		f_core.AddEventListener(doc,"keyup", f_popup._OnKeyUpJs, doc);
+		f_core.AddEventListener(doc,"keypress", f_popup._OnKeyPressJs, doc);		
+		f_core.AddEventListener(doc,"contextmenu", f_popup._Gecko_OnContextMenu, doc);
 		return true;
 	},
 	/**
@@ -472,28 +472,17 @@ var __statics = {
 			
 			return;
 		}
-		
-		
 
-		f_core.RemoveEventListeners(doc,"mousedown", f_popup._Gecko_OnMouseDown);		
-		f_core.RemoveEventListeners(doc,"click", f_popup._Gecko_OnClick);		
-		f_core.RemoveEventListeners(doc,"dblclick", f_popup._Gecko_OnClick);		
-		f_core.RemoveEventListeners(doc,"blur", f_popup._Gecko_OnBlur);
-		f_core.RemoveEventListeners(doc,"focus", f_popup._Gecko_OnFocus);
-		f_core.RemoveEventListeners(doc,"keydown", f_popup._OnKeyDownJs);
-		f_core.RemoveEventListeners(doc,"keyup", f_popup._OnKeyUpJs);
-		f_core.RemoveEventListeners(doc,"keypress", f_popup._OnKeyPressJs);		
-		f_core.RemoveEventListeners(doc,"contextmenu", f_popup._Gecko_OnContextMenu);
+		f_core.RemoveEventListener(doc,"mousedown", f_popup._Gecko_OnMouseDown, doc);		
+		f_core.RemoveEventListener(doc,"click", f_popup._Gecko_OnClick, doc);		
+		f_core.RemoveEventListener(doc,"dblclick", f_popup._Gecko_OnClick, doc);		
+		f_core.RemoveEventListener(doc,"blur", f_popup._Gecko_OnBlur, doc);
+		f_core.RemoveEventListener(doc,"focus", f_popup._Gecko_OnFocus, doc);
+		f_core.RemoveEventListener(doc,"keydown", f_popup._OnKeyDownJs, doc);
+		f_core.RemoveEventListener(doc,"keyup", f_popup._OnKeyUpJs, doc);
+		f_core.RemoveEventListener(doc,"keypress", f_popup._OnKeyPressJs, doc);		
+		f_core.RemoveEventListener(doc,"contextmenu", f_popup._Gecko_OnContextMenu, doc);
 		
-//		doc.removeEventListener("mousedown", f_popup._Gecko_OnMouseDown, true);
-//		doc.removeEventListener("click", f_popup._Gecko_OnClick, true);
-//		doc.removeEventListener("dblclick", f_popup._Gecko_OnClick, true);
-//		doc.removeEventListener("blur", f_popup._Gecko_OnBlur, true);
-//		doc.removeEventListener("focus", f_popup._Gecko_OnFocus, true);
-//		doc.removeEventListener("keydown", f_popup._OnKeyDownJs, true);
-//		doc.removeEventListener("keyup", f_popup._OnKeyUpJs, true);
-//		doc.removeEventListener("keypress", f_popup._OnKeyPressJs, true);
-//		doc.removeEventListener("contextmenu", f_popup._Gecko_OnContextMenu, true);
 	},
 	/**
 	 * @method private static
