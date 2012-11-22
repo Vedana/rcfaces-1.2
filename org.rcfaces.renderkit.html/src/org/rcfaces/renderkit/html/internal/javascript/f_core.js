@@ -5698,7 +5698,7 @@ var f_core = {
 					if (pid>0) {
 						id=id.substring(0, pid);
 						
-						var comp=f_core.GetElementByClientId(id, comp.ownerDocument);
+						var comp=f_core.GetElementByClientId(id, elt.ownerDocument);
 						if (comp) {
 							f_core.Debug(f_core,"GetNextFocusableComponent: component found => "+comp);
 							return comp;
