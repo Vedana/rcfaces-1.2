@@ -895,7 +895,7 @@ var f_core = {
 		 			capture = capture.body;
 		 		}
 		    	if (capture.setCapture) {
-				    capture.setCapture();
+				    capture.setCapture(false);
 				} else {
 					f_core.Debug(f_core, "AddEventListener: IE : setCapture not available on "+capture+" for "+name+" on "+component+" (id = "+component.id+", tagName="+component.tagName+", nodeType="+component.nodeType+")");
 				}
@@ -3837,18 +3837,18 @@ var f_core = {
 		if (webkit>=0) {
 			var browser =agt.indexOf("chrome");
 			if (browser>=0) {
-				//if (f_core._GetBrowserVersion(agt, "chrome", browser)){ 
+				f_core._ParseBrowserVersion(agt, "chrome", browser); 
 					//if (f_core._browser_major>=10) {			
 						f_core._browser=f_core.WEBKIT_CHROME; 						
 					//}
 				//}
+
 			} else {
-			
 				browser =agt.indexOf("safari");
 				if (browser>=0) {
 					browser = agt.indexOf("version");
 					if (browser>=0) {
-//						if (f_core._GetBrowserVersion(agt,"safari",browser)){
+						f_core._ParseBrowserVersion(agt,"safari",browser);
 //							if (f_core._browser_major>=5) {			
 								f_core._browser=f_core.WEBKIT_SAFARI;
 //							}
@@ -3874,7 +3874,7 @@ var f_core = {
 		 	var firefox=agt.indexOf("firefox");
 		
 			if (firefox>=0) {
-				if (f_core._GetBrowserVersion(agt, "firefox", firefox)){		
+				if (f_core._ParseBrowserVersion(agt, "firefox", firefox)){		
 				
 					f_core.Debug(f_core, "_SearchBrowser: Firefox version: major="+f_core._browser_major+" release="+f_core._browser_release+" minor="+f_core._browser_minor);
 					f_core.IsInternetExplorer=f_core._ReturnsAlwaysFalse;
@@ -3902,7 +3902,14 @@ var f_core = {
 		return false;
 	},
 	
-	_GetBrowserVersion: function(agent, browser, position) {
+	/**
+	 * @method private static
+	 * @param String agent
+	 * @param String browser
+	 * @param Number position
+	 * @return Boolean
+	 */
+	_ParseBrowserVersion: function(agent, browser, position) {
 		
 		if (!position) {
 			return false;
@@ -3922,7 +3929,7 @@ var f_core = {
 					f_core._browser_major=parseInt(vs[0], 10);
 
 				} catch (ex) {
-					f_core.Error(f_core, "_GetBrowserVersion: Can not parse "+browser+" version '"+version+"'.", ex);
+					f_core.Error(f_core, "_ParseBrowserVersion: Can not parse "+browser+" version '"+version+"'.", ex);
 					return false;
 				}
 			}
@@ -3932,7 +3939,7 @@ var f_core = {
 					f_core._browser_release=parseInt(vs[1], 10);
 					
 				} catch (ex) {
-					f_core.Debug(f_core, "_GetBrowserVersion: Can not parse release version ! (release="+vs[1]+")");
+					f_core.Debug(f_core, "_ParseBrowserVersion: Can not parse release version ! (release="+vs[1]+")");
 				}
 			}
 			if (vs.length>2) {	
@@ -3945,7 +3952,7 @@ var f_core = {
 			}
 		}
 
-		f_core.Debug(f_core, "_GetBrowserVersion: "+browser+" version: major="+f_core._browser_major+" release="+f_core._browser_release+" minor="+f_core._browser_minor);
+		f_core.Debug(f_core, "_ParseBrowserVersion: "+browser+" version: major="+f_core._browser_major+" release="+f_core._browser_release+" minor="+f_core._browser_minor);
 
 		return true;
 	},
@@ -3954,14 +3961,14 @@ var f_core = {
 	 * @method static public
 	 * @return Number major.minor  
 	 */
-	GetBrowserMajorVersion: function(){
+	GetBrowserVersion: function(){
 		if (!f_core._browser) {
 			f_core._SearchBrowser();
 		}
 		
 		var version = f_core._browser_major;
 		if (f_core._browser_minor) {
-			version += "."+f_core._browser_minor;
+			version=parseFloat(version + "."+f_core._browser_minor);
 		}
 		
 		return version;
