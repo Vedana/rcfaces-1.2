@@ -581,6 +581,8 @@ var __members = {
 		if (this.f_isSelectable()) {
 			row.onmousedown=f_grid.RowMouseDown;
 			row.onmouseup=f_grid.RowMouseUp;
+			
+			if (row.onclick)
 			row.onclick=f_core.FiltredCancelJsEventHandler;
 			row.ondblclick=f_grid.RowMouseDblClick;
 			row.onfocus=f_grid.GotFocus;
@@ -683,7 +685,7 @@ var __members = {
 				}
 			}
 			td.align=align;
-				
+			cells.push(td);
 			try {
 				this.f_getClass().f_getClassLoader().f_loadContent(this, td, content /*, false*/);
 				

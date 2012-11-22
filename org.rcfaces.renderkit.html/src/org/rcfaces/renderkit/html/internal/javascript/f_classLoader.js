@@ -1875,7 +1875,7 @@ f_classLoader.prototype = {
 		
 		f_class.Clean(toClean);
 		
-		f_core.Debug(f_classLoader, "f_garbageObjects: "+toClean.length+" object(s) garbaged "+(serializableComponentsGarbaged?(") and "+serializableComponentsGarbaged+" objects serializes"):"")+".");
+		f_core.Debug(f_classLoader, "f_garbageObjects: "+toClean.length+" object(s) garbaged ");
 		
 		return serializedForm;
 	},
