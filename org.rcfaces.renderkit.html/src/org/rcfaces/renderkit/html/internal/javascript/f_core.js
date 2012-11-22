@@ -3951,6 +3951,22 @@ var f_core = {
 	},
 	
 	/**
+	 * @method static public
+	 * @return Number major.minor  
+	 */
+	GetBrowserMajorVersion: function(){
+		if (!f_core._browser) {
+			f_core._SearchBrowser();
+		}
+		
+		var version = f_core._browser_major;
+		if (f_core._browser_minor) {
+			version += "."+f_core._browser_minor;
+		}
+		
+		return version;
+	},
+	/**
 	 * @method static hidden
 	 * @pararm Object target
 	 * @return void

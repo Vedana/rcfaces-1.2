@@ -222,7 +222,8 @@ var __members = {
 		iframe.style.height=this.f_getHeight();
 		
 		var self=this;
-		if (f_core.IsInternetExplorer() && (!f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_9))) {
+		var version = f_core.GetBrowserMajorVersion();
+		if (f_core.IsInternetExplorer() && version < 9 ) { //ie 9
 			f_core.Debug(f_viewDialog, "f_fillBody: IE use onreadystatechange ");
 			
 			this._loadFrame = function() {
