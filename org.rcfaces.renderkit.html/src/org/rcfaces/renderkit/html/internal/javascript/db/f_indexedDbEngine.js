@@ -60,6 +60,14 @@ var __statics = {
 			}
 			
 			f_indexedDbEngine._Singleton=s;
+			
+			if (!window.IDBTransaction) {
+				if (window.webkitIDBTransaction) {
+					// Chrome s'amuse ... 
+					window.IDBTransaction = window.webkitIDBTransaction;
+					window.IDBKeyRange = window.webkitIDBKeyRange;
+				}
+			}
 		}
 		
 		return s; 
