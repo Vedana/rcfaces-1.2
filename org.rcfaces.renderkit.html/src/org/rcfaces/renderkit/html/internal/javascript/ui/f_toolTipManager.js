@@ -28,7 +28,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event
 	 *            evt
-	 * @return Boolean
+	 * @return void
 	 * @context event:evt
 	 */
 	_ElementOver: function(evt) {
@@ -47,7 +47,7 @@ var __statics = {
 		var instance = f_toolTipManager.Get();
 
 		try {
-			return instance._elementOver(evt);
+			instance._elementOver(evt);
 
 		} catch (x) {
 			f_core.Error(f_toolTipManager, "_ElementOver: exception", x);
@@ -58,7 +58,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event
 	 *            evt
-	 * @return Boolean
+	 * @return void
 	 * @context event:evt
 	 */
 	_ElementOut: function(evt) {
@@ -76,7 +76,7 @@ var __statics = {
 		var instance = f_toolTipManager.Get();
 
 		try {
-			return instance._elementOut(evt);
+			instance._elementOut(evt);
 
 		} catch (x) {
 			f_core.Error(f_toolTipManager, "_ElementOut: exception", x);
@@ -86,7 +86,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event
 	 *            evt
-	 * @return Boolean
+	 * @return void
 	 * @context event:evt
 	 */
 	_HideToolTip: function(evt) {
@@ -104,7 +104,7 @@ var __statics = {
 		var instance = f_toolTipManager.Get();
 
 		try {
-			return instance._hideToolTipEvent(evt);
+			instance._hideToolTipEvent(evt);
 
 		} catch (x) {
 			f_core.Error(f_toolTipManager, "_HideToolTip: exception", x);
@@ -199,23 +199,23 @@ var __members = {
 		this._neighbourThresholdMs = neighbourThresholdMs;
 
 		f_core.AddEventListener(document.body, "mouseover",
-				f_toolTipManager._ElementOver);
+				f_toolTipManager._ElementOver, document);
 
 		f_core.AddEventListener(document.body, "mouseout",
-				f_toolTipManager._ElementOut);
+				f_toolTipManager._ElementOut, document);
 
 		// Touches
 
 		f_core.AddEventListener(document.body, "keydown",
-				f_toolTipManager._HideToolTip);
+				f_toolTipManager._HideToolTip, document);
 
 		// Focus
 		f_core.AddEventListener(document.body, "focus",
-				f_toolTipManager._HideToolTip);
+				f_toolTipManager._HideToolTip, document);
 
-		// Clavier
+		// Souris
 		f_core.AddEventListener(document.body, "mousedown",
-				f_toolTipManager._HideToolTip);
+				f_toolTipManager._HideToolTip, document);
 
 		// f_core.AddEventListener(window, "mouseout",
 		// f_toolTipManager._HideToolTip, window);
@@ -239,23 +239,23 @@ var __members = {
 			this._listenerInstalled=undefined; 
 			
 			f_core.RemoveEventListener(document.body, "mouseover",
-					f_toolTipManager._ElementOver, document.body);
+					f_toolTipManager._ElementOver, document);
 	
 			f_core.RemoveEventListener(document.body, "mouseout",
-					f_toolTipManager._ElementOut, document.body);
+					f_toolTipManager._ElementOut, document);
 	
 			// Touches
 	
 			f_core.RemoveEventListener(document.body, "keydown",
-					f_toolTipManager._HideToolTip, document.body);
+					f_toolTipManager._HideToolTip, document);
 	
 			// Focus
 			f_core.RemoveEventListener(document.body, "focus",
-					f_toolTipManager._HideToolTip, document.body);
+					f_toolTipManager._HideToolTip, document);
 	
 			// Clavier
 			f_core.RemoveEventListener(document.body, "mousedown",
-					f_toolTipManager._HideToolTip, document.body);
+					f_toolTipManager._HideToolTip, document);
 		}
 		
 		this.f_super(arguments);
@@ -265,7 +265,7 @@ var __members = {
 	 * @method private
 	 * @param Event
 	 *            evt
-	 * @return Boolean
+	 * @return void
 	 */
 	_elementOver: function(evt) {
 		
@@ -298,7 +298,7 @@ var __members = {
 
 			// Le même tooltip que celui qui est déjà affiché !
 			f_core.Debug(f_toolTipManager, "_elementOver: Same TOOLTIP");
-			return true;
+			return;
 		}
 
 		var timerId = this._timerId;
@@ -317,7 +317,7 @@ var __members = {
 
 		if (!tooltipInfos) {
 			// Pas de container de tooltip, rien à faire
-			return true;
+			return;
 		}
 
 		var tooltip = this.f_getToolTipByClientId(tooltipInfos.toolTipClientId,
@@ -325,7 +325,7 @@ var __members = {
 				tooltipInfos.container.ownerDocument);
 		if (!tooltip) {
 			// Pas de tooltip trouvé
-			return true;
+			return;
 		}
 
 		tooltip.f_initialize(tooltipContainer, tooltipInfos.item);
@@ -336,7 +336,7 @@ var __members = {
 		if (this._showDelayMs == 0) {
 			f_core.Debug(f_toolTipManager, "_elementOver: No delay show tooltip "+tooltip.id);
 			this.f_showToolTip(tooltip, evt);
-			return true;
+			return;
 		}
 
 		if (this._neighbourThresholdMs >= 0 && this._lastToolTipClose > 0) {
@@ -345,7 +345,7 @@ var __members = {
 			if (now < this._lastToolTipClose + this._neighbourThresholdMs) {
 				f_core.Debug(f_toolTipManager, "_elementOver: Neighbour show tooltip "+tooltip.id);
 				this.f_showToolTip(tooltip, evt);
-				return true;
+				return;
 			}
 		}
 
@@ -358,7 +358,7 @@ var __members = {
 
 		}, this._showDelayMs);
 
-		return true;
+		return;
 	},
 	/**
 	 * @method protected
@@ -459,7 +459,7 @@ var __members = {
 	 * @method private
 	 * @param Event
 	 *            evt
-	 * @return Boolean
+	 * @return void
 	 */
 	_elementOut: function(evt) {
 	},
@@ -468,7 +468,7 @@ var __members = {
 	 * @method private
 	 * @param Event
 	 *            evt
-	 * @return Boolean
+	 * @return void
 	 */
 	_hideToolTipEvent: function(evt) {
 		var currentTooltip = this._currentTooltip;
