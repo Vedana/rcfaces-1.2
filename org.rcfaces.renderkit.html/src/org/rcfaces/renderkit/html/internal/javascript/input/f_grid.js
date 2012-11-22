@@ -5797,9 +5797,6 @@ var __members = {
 				clientWidth = offsetWidth - scrollBarWidth;
 			}
 			
-			if (ie) {
-				this.style.width = swPixel + "px";
-			}
 		}
 
 		if (!this._columnsLayoutPerformed) {
@@ -5826,7 +5823,7 @@ var __members = {
 				// the header column tag col does not have any size. So we get a
 				// cell.
 				var rows = this._rowsPool;
-				if (rows.length > 0) {
+				if (rows.length > 0 && rows[0]._cells) {
 					col = rows[0]._cells[i];
 				}
 			}
