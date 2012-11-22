@@ -350,7 +350,7 @@ var __members = {
 	 */
 	f_setFocus: function() {
 		var iframe=this._iframe;
-		if (!iframe) {s
+		if (!iframe) {
 			return;
 		}
 		

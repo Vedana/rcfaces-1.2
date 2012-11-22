@@ -223,7 +223,7 @@ var __statics = {
 			if (shellManager._modalStyleInstalled) {
 				shellManager._modalStyleInstalled=undefined;
 				
-				f_core.RemoveEventListener(document, "focus", f_shellManager._OnFocus);
+				f_core.RemoveEventListener(document, "focus", f_shellManager._OnFocus, document);
 			}
 		}
 
@@ -485,7 +485,7 @@ var __members = {
 		}
 		this._modalStyleInstalled=true;
 		
-		f_core.AddEventListener(document, "focus", f_shellManager._OnFocus);
+		f_core.AddEventListener(document, "focus", f_shellManager._OnFocus, document);
 	},
 
 	/**
@@ -501,7 +501,7 @@ var __members = {
 	
 		this._modalStyleInstalled=undefined;
 			
-		f_core.RemoveEventListener(document, "focus", f_shellManager._OnFocus);
+		f_core.RemoveEventListener(document, "focus", f_shellManager._OnFocus, document);
 	},
 	/**
 	 * @method public
