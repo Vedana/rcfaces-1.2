@@ -182,7 +182,7 @@ var __members = {
 			return false;
 		}
 
-		var event;
+		var event=undefined;
 		if (type instanceof f_event) {
 			event = type;
 			type = event.f_getType();
@@ -239,7 +239,7 @@ var __members = {
 			var ret = true;
 			
 			var ier = this._initEventReturns;
-			if(ier){
+			if (ier){
 				var initReturn = ier[type];
 				if (initReturn !== undefined) {
 					event._eventReturn = initReturn;

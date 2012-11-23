@@ -225,7 +225,7 @@ var __members= {
 	 * @method hidden
 	 */
 	f_addActionFirst: function(actions) {
-		var as=this._firsts
+		var as=this._firsts;
 		if (!as) {
 			as = new Array;
 			this._firsts = as;
