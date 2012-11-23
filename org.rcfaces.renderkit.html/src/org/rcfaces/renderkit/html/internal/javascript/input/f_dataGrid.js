@@ -1582,7 +1582,9 @@ var __members = {
 					}
 					
 					this._inputTabIndex=row._input;
-					this._inputTabIndex.tabIndex=this.fa_getTabIndex();
+					if (this._inputTabIndex) {
+						this._inputTabIndex.tabIndex=this.fa_getTabIndex();
+					}
 					break;
 				}
 				j++;

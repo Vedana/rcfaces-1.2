@@ -582,8 +582,9 @@ var __members = {
 			row.onmousedown=f_grid.RowMouseDown;
 			row.onmouseup=f_grid.RowMouseUp;
 			
-			if (row.onclick)
-			row.onclick=f_core.FiltredCancelJsEventHandler;
+			if (row.onclick) { // non implémenté sous IE
+				 row.onclick=f_core.FiltredCancelJsEventHandler;
+			}
 			row.ondblclick=f_grid.RowMouseDblClick;
 			row.onfocus=f_grid.GotFocus;
 		}

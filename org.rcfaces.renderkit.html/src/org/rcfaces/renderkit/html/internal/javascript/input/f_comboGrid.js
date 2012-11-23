@@ -301,16 +301,20 @@ var __members = {
 
 		f_core.Debug(f_comboGrid, "_onCancelDown: Event keyCode="+jsEvt.keyCode);
 
-		switch(jsEvt.keyCode) {
-		case f_key.VK_DOWN:
-		case f_key.VK_UP:
-		case f_key.VK_ENTER:
-		case f_key.VK_RETURN:
-		case f_key.VK_ESPACE:
-			if (this.f_isDataGridPopupOpened()) {
-				return f_core.CancelJsEvent(jsEvt);
+		if (!f_core.IsInternetExplorer()) { // a supprimer quand IE7 8 auront disparu
+		
+			switch(jsEvt.keyCode) {
+			case f_key.VK_DOWN:
+			case f_key.VK_UP:
+			case f_key.VK_ENTER:
+			case f_key.VK_RETURN:
+			case f_key.VK_ESPACE:
+				if (this.f_isDataGridPopupOpened()) {
+					return f_core.CancelJsEvent(jsEvt);
+					
+				}
 			}
-		}
+	}
 		
 		return this.f_super(arguments, evt);
 	},
@@ -329,6 +333,13 @@ var __members = {
 		
 		var menuOpened=this.f_isDataGridPopupOpened();
 		if (menuOpened) {
+			
+			switch(jsEvt.keyCode) { //pb IE 
+				case f_key.VK_DOWN:
+				case f_key.VK_UP:
+					return false;
+			}
+			
 			// Aie aie aie
 			this.f_closePopup(jsEvt);
 			return true;

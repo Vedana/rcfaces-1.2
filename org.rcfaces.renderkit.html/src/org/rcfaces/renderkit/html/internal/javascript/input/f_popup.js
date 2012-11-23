@@ -385,7 +385,8 @@ var __statics = {
 		f_core.AddEventListener(doc,"click", f_popup._Gecko_OnClick, doc);		
 		f_core.AddEventListener(doc,"dblclick", f_popup._Gecko_OnClick, doc);
 		
-		if(!(f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_7) || f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_8))) {
+		if(!f_core.IsInternetExplorer()) {
+			
 			f_core.AddEventListener(doc,"blur", f_popup._Gecko_OnBlur, doc);
 			f_core.AddEventListener(doc,"focus", f_popup._Gecko_OnFocus, doc);
 		}
