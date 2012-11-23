@@ -127,7 +127,11 @@ var __members = {
 		method.apply(console, param);
 		
 		if (event.exception) {
-			console.exception("Exception of previous message", event.exception);
+			if (console.exception) {
+				console.exception("Exception of previous message", event.exception);
+			} else {
+				console.error("Exception of previous message", event.exception);
+			}
 		}
 	}
 };
