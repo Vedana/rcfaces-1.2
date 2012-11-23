@@ -298,7 +298,7 @@ var __members = {
 				+ this._item + "' detail='" + this._detail + "' immediate='"+this._immediate+"' jsEvent='"
 				+ this._jsEvent + "']";
 	}
-}
+};
 
 var __statics = {
 	/**
@@ -763,7 +763,7 @@ var __statics = {
 		if (f_event._EvtLock & f_event.POPUP_LOCK) {
 			if (f_popup.VerifyLock() === false) {
 				// Finalement nous ne sommes plus en LOCK ...
-				// La popup a �t� ferm�e automatiquement par le navigateur ...
+				// La popup a été fermée automatiquement par le navigateur ...
 				currentLock = f_event._EvtLock;
 				if (mask) {
 					currentLock &= ~mask;
@@ -780,7 +780,7 @@ var __statics = {
 					target = jsEvent.srcElement;
 				}
 
-				var ret;
+				var ret=undefined;
 				if (target) {
 					// On recherche si le click se situe dans la popup
 
@@ -856,13 +856,13 @@ var __statics = {
 				if (jsEvent.target) {
 					s += "\ntarget=[" + jsEvent.target.nodeType + "]"
 							+ jsEvent.target.tagName + "#" + jsEvent.target.id
-							+ "." + jsEvent.target.className
+							+ "." + jsEvent.target.className;
 				}
 				if (jsEvent.currentTarget) {
 					s += "\ncurrentTarget=[" + jsEvent.currentTarget.nodeType
 							+ "]" + jsEvent.currentTarget.tagName + "#"
 							+ jsEvent.currentTarget.id + "."
-							+ jsEvent.currentTarget.className
+							+ jsEvent.currentTarget.className;
 				}
 				if (jsEvent.fromElement) {
 					s += "\nfromElement=[" + jsEvent.fromElement.nodeType + "]"
