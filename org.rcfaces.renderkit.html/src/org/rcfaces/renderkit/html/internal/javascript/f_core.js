@@ -3721,20 +3721,20 @@ var f_core = {
 			f_core._SearchBrowser();
 		}
 		
-		var majorVersion=f_core._browser_major;
+		var majorVersion=(typeof(version)=="number")?f_core._browser_major:undefined;
 		
 		switch(f_core._browser) {
 		case f_core.INTERNET_EXPLORER_9:
-			return (!version || version==f_core.INTERNET_EXPLORER_9 || majorVersion==9);
+			return (!version || version==f_core.INTERNET_EXPLORER_9 || majorVersion==version);
 	
 		case f_core.INTERNET_EXPLORER_8:
-			return (!version || version==f_core.INTERNET_EXPLORER_8 || majorVersion==8);
+			return (!version || version==f_core.INTERNET_EXPLORER_8 || majorVersion==version);
 		
 		case f_core.INTERNET_EXPLORER_7:
-			return (!version || version==f_core.INTERNET_EXPLORER_7 || majorVersion==7);
+			return (!version || version==f_core.INTERNET_EXPLORER_7 || majorVersion==version);
 				
 		case f_core.INTERNET_EXPLORER_6:
-			return (!version || version==f_core.INTERNET_EXPLORER_6 || majorVersion==6);
+			return (!version || version==f_core.INTERNET_EXPLORER_6 || majorVersion==version);
 		}
 		
 		return false;
