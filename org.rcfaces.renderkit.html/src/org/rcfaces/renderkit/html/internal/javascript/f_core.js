@@ -3721,7 +3721,7 @@ var f_core = {
 			f_core._SearchBrowser();
 		}
 		
-		if ((typeof(version)=="number") {
+		if (typeof(version)=="number") {
 			if (!f_core.IsInternetExplorer()) {
 				return false;
 			}
