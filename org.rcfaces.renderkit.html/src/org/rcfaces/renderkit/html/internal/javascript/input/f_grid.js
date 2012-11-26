@@ -242,7 +242,7 @@ var __statics = {
 				continue;
 			}
 
-			if (tagName == "input" || tagName == "a") {
+			if (tagName == "input" || tagName == "a" || tagName == "label") {
 				continue;
 			}
 
