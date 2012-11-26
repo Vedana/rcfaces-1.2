@@ -485,7 +485,7 @@ var __members = {
 		}
 		this._modalStyleInstalled=true;
 		
-		if (f_core.IsInternetExplorer(7) || f_core.IsInternetExplorer(f_core.8)) {
+		if (f_core.IsInternetExplorer(7) || f_core.IsInternetExplorer(8)) {
 			f_core.AddEventListener(document, "focus", f_shellManager._OnFocus);
 		} else {
 			f_core.AddEventListener(document, "focus", f_shellManager._OnFocus, document);
