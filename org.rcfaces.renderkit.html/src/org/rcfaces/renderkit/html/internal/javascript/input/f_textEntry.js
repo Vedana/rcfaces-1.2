@@ -94,6 +94,7 @@ var __members = {
 	 */
 	f_performSelectionEvent: function(evt) {
 		if (this.f_isDisabled()) {
+			evt.f_preventDefault();
 			return;
 		}
 		
@@ -114,6 +115,8 @@ var __members = {
 
 		evt.f_preventDefault();
 
+		f_core.Debug(f_textEntry, "f_performSelectionEvent: Fire SELECTION event");
+		
 		this.f_fireEvent(f_event.SELECTION, jsEvent);
 		
 		return false;
