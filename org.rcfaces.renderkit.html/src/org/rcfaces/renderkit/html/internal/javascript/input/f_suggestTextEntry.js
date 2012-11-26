@@ -89,6 +89,7 @@ var __members = {
 		
 		this.f_insertEventListenerFirst(f_event.KEYDOWN, this._onCancelDown);
 		this.f_insertEventListenerFirst(f_event.KEYUP, this._onSuggest);
+		this.f_insertEventListenerFirst(f_event.KEYPRESS, this._onKeyPressSuggest);
 		
 		var menu=this.f_newSubMenu(f_suggestTextEntry._SUGGESTION_MENU_ID);
 		menu.f_setCatchOnlyPopupKeys(true);
@@ -100,11 +101,15 @@ var __members = {
 			//var evtItem=evt.f_getItem();
 			var item=evt.f_getValue();
 	
+			var now=new Date().getTime();
+			//alert("now="+now);
+			suggestTextEntry._selectionDateMs=now;
+			
 			suggestTextEntry._setSuggestion(item._label, item._value, item, jsEvt);
 		});
 
 		menu.f_addEventListener("itemHover", function(evt) {
-			var jsEvt=evt.f_getJsEvent();
+			// var jsEvt=evt.f_getJsEvent();
 			var item=evt.f_getValue();
 			
 			if (!item) { // Ca peut arriver si c'est l'indicateur de fin de liste !
@@ -225,10 +230,31 @@ var __members = {
 		switch(jsEvt.keyCode) {
 		case f_key.VK_DOWN:
 		case f_key.VK_UP:
+			if (f_core.IsInternetExplorer(7) || f_core.IsInternetExplorer(8)) {
+				break;
+			}
 			return f_core.CancelJsEvent(jsEvt);
 		}
 		
 		return true;
+	},
+	_onKeyPressSuggest: function(evt) {
+		var jsEvt=evt.f_getJsEvent();
+		
+		f_core.Debug(f_suggestTextEntry, "_onKeyPressSuggest: event="+jsEvt+" which="+jsEvt.which);
+		if (f_core.IsWebkit()) {
+			// Pas ca sinon lors d'un RETOUR sur le suggest, Firefox ne soumet plus !
+
+			if (jsEvt.which==f_key.VK_ENTER || jsEvt.which==f_key.VK_RETURN) {
+				// Sous Chrome le keypress ENTER genere une soumission !  (le capture ne bloque pas l'evenement)
+				var delta=new Date().getTime()-this._selectionDateMs;
+				if (delta<50) {
+					// On vient de fermer la popup ... on bloque la soumission
+					this._selectionDateMs=undefined;
+					return false;
+				}
+			}
+		}
 	},
 	/**
 	 * @method private
