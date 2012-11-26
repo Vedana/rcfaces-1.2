@@ -612,12 +612,12 @@ var __statics = {
 		var keyCode = jsEvent.keyCode;
 		var charCode = jsEvent.charCode;
 		
-		var keyChar;
+		var keyChar="";
 		
-		if (!charCode) {
+		if (!charCode && keyCode>=32) {
 			keyChar = String.fromCharCode(keyCode);
 
-		} else {
+		} else if (charCode>=32) {
 			keyChar = String.fromCharCode(charCode);
 		}
 		
@@ -629,7 +629,7 @@ var __statics = {
 		
 		if (f_core.IsGecko()) {
 			if (jsEvent.type=="keypress" && jsEvent.which) {
-				keyChar=0; // C'est une touche de fonction !
+				keyChar=undefined; // C'est une touche de fonction !
 				
 			} else if (keyCode<=0) {
 				keyCode=charCode;
@@ -681,17 +681,37 @@ var __statics = {
 		}
 		
 		var mask=0;
-		if (jsEvent.altKey) {
-			mask|=f_key.KF_ALT;
-		}
-		if (jsEvent.ctrlKey) {
-			mask|=f_key.KF_CONTROL;
-		}
-		if (jsEvent.shiftKey) {
-			mask|=f_key.KF_SHIFT;
-		}
-		if (jsEvent.metaKey) {
-			mask|=f_key.KF_META;
+		
+		if (true) {
+			// Pas de gestion du META en tant que tel ! (pour l'instant)
+			
+			if (jsEvent.altKey && jsEvent.ctrlKey) {
+				mask|=f_key.KF_META;
+				
+			} else if (jsEvent.altKey) {
+				mask|=f_key.KF_ALT;
+
+			} else if (jsEvent.ctrlKey) {
+				mask|=f_key.KF_CONTROL;
+			}
+			if (jsEvent.shiftKey) {
+				mask|=f_key.KF_SHIFT;
+			}
+			
+		} else {		
+			// Quand le META sera géré correctement !
+			if (jsEvent.altKey) {
+				mask|=f_key.KF_ALT;
+			}
+			if (jsEvent.ctrlKey) {
+				mask|=f_key.KF_CONTROL;
+			}
+			if (jsEvent.shiftKey) {
+				mask|=f_key.KF_SHIFT;
+			}
+			if (jsEvent.metaKey) {
+				mask|=f_key.KF_META;
+			}
 		}
 		
 		for(var i=0;i<accelerators.length;i++) {
