@@ -3721,20 +3721,26 @@ var f_core = {
 			f_core._SearchBrowser();
 		}
 		
-		var majorVersion=(typeof(version)=="number")?f_core._browser_major:undefined;
+		if ((typeof(version)=="number") {
+			if (!f_core.IsInternetExplorer()) {
+				return false;
+			}
+			
+			return f_core._browser_major==version;
+		}
 		
 		switch(f_core._browser) {
 		case f_core.INTERNET_EXPLORER_9:
-			return (!version || version==f_core.INTERNET_EXPLORER_9 || majorVersion==version);
+			return (!version || version==f_core.INTERNET_EXPLORER_9);
 	
 		case f_core.INTERNET_EXPLORER_8:
-			return (!version || version==f_core.INTERNET_EXPLORER_8 || majorVersion==version);
+			return (!version || version==f_core.INTERNET_EXPLORER_8);
 		
 		case f_core.INTERNET_EXPLORER_7:
-			return (!version || version==f_core.INTERNET_EXPLORER_7 || majorVersion==version);
+			return (!version || version==f_core.INTERNET_EXPLORER_7);
 				
 		case f_core.INTERNET_EXPLORER_6:
-			return (!version || version==f_core.INTERNET_EXPLORER_6 || majorVersion==version);
+			return (!version || version==f_core.INTERNET_EXPLORER_6);
 		}
 		
 		return false;
