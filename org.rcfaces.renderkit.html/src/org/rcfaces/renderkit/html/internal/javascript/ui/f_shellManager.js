@@ -485,7 +485,11 @@ var __members = {
 		}
 		this._modalStyleInstalled=true;
 		
-		f_core.AddEventListener(document, "focus", f_shellManager._OnFocus, document);
+		if (f_core.IsInternetExplorer(7) || f_core.IsInternetExplorer(f_core.8)) {
+			f_core.AddEventListener(document, "focus", f_shellManager._OnFocus);
+		} else {
+			f_core.AddEventListener(document, "focus", f_shellManager._OnFocus, document);
+		}
 	},
 
 	/**
@@ -501,7 +505,11 @@ var __members = {
 	
 		this._modalStyleInstalled=undefined;
 			
-		f_core.RemoveEventListener(document, "focus", f_shellManager._OnFocus, document);
+		if (f_core.IsInternetExplorer(7) || f_core.IsInternetExplorer(8)) {
+			f_core.RemoveEventListener(document, "focus", f_shellManager._OnFocus);
+		} else {
+			f_core.RemoveEventListener(document, "focus", f_shellManager._OnFocus, document);
+		}
 	},
 	/**
 	 * @method public
