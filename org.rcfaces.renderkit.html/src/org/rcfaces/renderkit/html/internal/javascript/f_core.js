@@ -5616,7 +5616,7 @@ var f_core = {
 			return;
 		}
 		
-		if (f_core.IsGecko()) {
+		if (typeof(component.setSelectionRange)=="function") {
 			component.setSelectionRange(start, end);
 			
 			return;
