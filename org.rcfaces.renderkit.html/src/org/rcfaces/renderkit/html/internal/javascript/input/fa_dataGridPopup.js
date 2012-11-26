@@ -920,7 +920,7 @@ var __members = {
 	 * @method private
 	 */
 	_onSuggestTimeOut: function(text) {
-		if (!text) {
+		if (!text && this._searchInput) {
 			text=this._searchInput.value;
 		}
 		
