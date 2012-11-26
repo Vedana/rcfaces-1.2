@@ -105,6 +105,7 @@ var __members = {
 		
 		this.f_insertEventListenerFirst(f_event.KEYDOWN, this.f_onCancelDown);
 		this.f_insertEventListenerFirst(f_event.KEYUP, this.f_onSuggest);
+		this.f_insertEventListenerFirst(f_event.KEYPRESS, this.f_onKeyPress);
 		this.f_insertEventListenerFirst(f_event.FOCUS, this.f_onFocus);
 		this.f_insertEventListenerFirst(f_event.BLUR, this.f_onBlur);
 				
@@ -294,6 +295,13 @@ var __members = {
 		if (input.className!=className) {
 			input.className=className;
 		}		
+	},
+	/**
+	 * @method protected
+	 * @param f_event evt
+	 * @return Boolean
+	 */
+	f_onKeyPress: function(evt) {
 	},
 	/**
 	 * @method protected

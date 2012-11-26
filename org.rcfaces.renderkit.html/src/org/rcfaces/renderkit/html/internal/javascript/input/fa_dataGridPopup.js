@@ -652,6 +652,8 @@ var __members = {
 	f_closeDataGridPopup: function(jsEvent) {
 		f_core.Debug(fa_dataGridPopup, "f_closeDataGridPopup: event="+jsEvent);
 
+		this._closePopupDate=new Date().getTime(); // Pour Webkit !
+		
 		fa_dataGridPopup._ClosePopup(this, jsEvent);
 		
 		var self=this;

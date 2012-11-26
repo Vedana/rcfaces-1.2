@@ -286,7 +286,7 @@ var __members = {
 		f_core.Debug(f_comboGrid, "f_getEventLocked: menuOpened="+this.f_isDataGridPopupOpened()+" mask="+mask+" showAlert="+showAlert);
 
 		return this.f_super(arguments, evt, showAlert, mask);
-	},
+	},	
 	/**
 	 * @method protected
 	 * @param f_event evt
@@ -304,14 +304,12 @@ var __members = {
 		if (!f_core.IsInternetExplorer()) { // a supprimer quand IE7 8 auront disparu
 		
 			switch(jsEvt.keyCode) {
+				
 			case f_key.VK_DOWN:
 			case f_key.VK_UP:
-			case f_key.VK_ENTER:
-			case f_key.VK_RETURN:
 			case f_key.VK_ESPACE:
 				if (this.f_isDataGridPopupOpened()) {
 					return f_core.CancelJsEvent(jsEvt);
-					
 				}
 			}
 	}
@@ -328,8 +326,7 @@ var __members = {
 		if (jsEvt.cancelBubble || this.f_isDisabled()) {
 			f_core.Debug(f_comboGrid, "f_onSuggest: Event has been canceled !");
 			return true;
-		}
-		
+		}		
 		
 		var menuOpened=this.f_isDataGridPopupOpened();
 		if (menuOpened) {
@@ -359,6 +356,32 @@ var __members = {
 		}
 		
 		return ret;
+	},
+
+	/**
+	 * @method protected
+	 * @param f_event evt
+	 * @return Boolean
+	 * @override
+	 */
+	f_onKeyPress: function(evt) {
+		var jsEvt=evt.f_getJsEvent();
+		
+		if (f_core.IsWebkit()) {
+			switch(jsEvt.keyCode) {
+			case f_key.VK_RETURN:
+			case f_key.VK_ENTER:
+				
+				var now=new Date().getTime()-this._closePopupDate;
+				
+				if (now<100) {				
+					return f_core.CancelJsEvent(jsEvt);
+				}
+				break;
+			}
+		}
+		
+		return this.f_super(arguments, evt);
 	},
 
 	/**
