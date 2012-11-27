@@ -20,7 +20,7 @@ public class UserAgentPropertyRule {
 
     private String ruleProcessorClassName;
 
-    private IRuleProcessor ruleProcessor;
+    private IPropertyRuleProcessor ruleProcessor;
 
     public String getPrefix() {
         return prefix;
@@ -55,13 +55,13 @@ public class UserAgentPropertyRule {
     }
 
     @SuppressWarnings("unchecked")
-    public IRuleProcessor getRuleProcessorImpl() {
+    public IPropertyRuleProcessor getRuleProcessorImpl() {
         if (ruleProcessorClassName == null) {
             return ruleProcessor;
         }
 
         try {
-            Class<IRuleProcessor> clazz = (Class<IRuleProcessor>) Class
+            Class<IPropertyRuleProcessor> clazz = (Class<IPropertyRuleProcessor>) Class
                     .forName(getRuleProcessor());
 
             ruleProcessor = clazz.newInstance();

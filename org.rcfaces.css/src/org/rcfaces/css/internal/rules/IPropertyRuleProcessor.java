@@ -3,7 +3,7 @@
  */
 package org.rcfaces.css.internal.rules;
 
-import org.rcfaces.css.internal.CssDeclarationListIterator;
+import org.rcfaces.css.internal.CssPropertyListIterator;
 
 import com.steadystate.css.dom.Property;
 
@@ -12,9 +12,9 @@ import com.steadystate.css.dom.Property;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public interface IRuleProcessor {
+public interface IPropertyRuleProcessor {
 
-    void process(CssDeclarationListIterator declarationList,
+    void process(CssPropertyListIterator declarationList,
             UserAgentPropertyRule ur, Property p);
 
 }

@@ -26,6 +26,7 @@
 package com.steadystate.css.dom;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -33,10 +34,10 @@ import com.steadystate.css.util.LangUtils;
 
 /**
  * Implementation of {@link CSSOMObject}.
- *
+ * 
  * @author koch
  */
-public class CSSOMObjectImpl implements CSSOMObject, Serializable {
+public class CSSOMObjectImpl implements CSSOMObject, Serializable, Cloneable {
 
     private static final long serialVersionUID = 0L;
 
@@ -44,7 +45,7 @@ public class CSSOMObjectImpl implements CSSOMObject, Serializable {
 
     public Map<String, Object> getUserDataMap() {
         if (userDataMap_ == null) {
-            userDataMap_ = new Hashtable<String, Object>();
+            userDataMap_ = new HashMap<String, Object>();
         }
         return userDataMap_;
     }
@@ -82,5 +83,22 @@ public class CSSOMObjectImpl implements CSSOMObject, Serializable {
         int hash = LangUtils.HASH_SEED;
         hash = LangUtils.hashCode(hash, userDataMap_);
         return hash;
+    }
+
+    @Override
+    public Object clone() {
+        CSSOMObjectImpl o;
+        try {
+            o = (CSSOMObjectImpl) super.clone();
+
+        } catch (CloneNotSupportedException ex) {
+            throw new IllegalStateException();
+        }
+
+        if (this.userDataMap_ != null) {
+            o.userDataMap_ = new Hashtable(this.userDataMap_);
+        }
+
+        return o;
     }
 }

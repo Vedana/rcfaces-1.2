@@ -12,13 +12,13 @@ import org.w3c.dom.css.CSSValue;
 import com.steadystate.css.dom.CSSStyleDeclarationImpl;
 import com.steadystate.css.dom.Property;
 
-public class CssDeclarationListIterator {
+public class CssPropertyListIterator {
 
     private final List<Property> properties;
 
     private int position;
 
-    public CssDeclarationListIterator(CSSStyleRule styleRule) {
+    public CssPropertyListIterator(CSSStyleRule styleRule) {
         properties = ((CSSStyleDeclarationImpl) styleRule.getStyle())
                 .getProperties();
     }
@@ -62,12 +62,14 @@ public class CssDeclarationListIterator {
         return properties.toArray(new Property[properties.size()]);
     }
 
-    public Property addProperty(String propertyName, CSSValue value, Property p) {
-        return addProperty(propertyName, value, p.isImportant(), p);
+    public Property addProperty(String propertyName, CSSValue value,
+            Property p, boolean removeSamePropertyName) {
+        return addProperty(propertyName, value, p.isImportant(), p,
+                removeSamePropertyName);
     }
 
     public Property addProperty(String propertyName, CSSValue value,
-            boolean important, Property after) {
+            boolean important, Property after, boolean removeSamePropertyName) {
 
         boolean found = false;
         int position = 0;
@@ -87,9 +89,11 @@ public class CssDeclarationListIterator {
                 continue;
             }
 
-            p.setUserData(CssSteadyStateParser.DELETED_RULE_PROPERTY,
-                    Boolean.TRUE);
-            it.remove();
+            if (removeSamePropertyName) {
+                p.setUserData(CssSteadyStateParser.DELETED_RULE_PROPERTY,
+                        Boolean.TRUE);
+                it.remove();
+            }
         }
 
         if (found == false) {

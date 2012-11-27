@@ -28,8 +28,9 @@ import org.rcfaces.core.internal.style.IStyleParser;
 import org.rcfaces.core.internal.util.IPath;
 import org.rcfaces.core.internal.util.Path;
 import org.rcfaces.core.lang.IContentFamily;
+import org.rcfaces.css.internal.rules.CssFunctionRule;
 import org.rcfaces.css.internal.rules.CssPropertyRule;
-import org.rcfaces.css.internal.rules.IRuleProcessor;
+import org.rcfaces.css.internal.rules.IPropertyRuleProcessor;
 import org.rcfaces.css.internal.rules.UserAgentPropertyRule;
 import org.w3c.css.sac.CSSException;
 import org.w3c.css.sac.CSSParseException;
@@ -38,6 +39,7 @@ import org.w3c.css.sac.DescendantSelector;
 import org.w3c.css.sac.ElementSelector;
 import org.w3c.css.sac.ErrorHandler;
 import org.w3c.css.sac.InputSource;
+import org.w3c.css.sac.LexicalUnit;
 import org.w3c.css.sac.Selector;
 import org.w3c.css.sac.SelectorList;
 import org.w3c.css.sac.SiblingSelector;
@@ -55,8 +57,10 @@ import org.w3c.dom.css.CSSValueList;
 import org.w3c.dom.stylesheets.MediaList;
 
 import com.steadystate.css.dom.CSSOMObject;
+import com.steadystate.css.dom.CSSValueImpl;
 import com.steadystate.css.dom.Property;
 import com.steadystate.css.parser.CSSOMParser;
+import com.steadystate.css.parser.LexicalUnitImpl;
 import com.steadystate.css.parser.selectors.SelectorsRule;
 
 /**
@@ -103,6 +107,8 @@ public class CssSteadyStateParser extends CssParserProvider implements
 
     private final Map<String, CssPropertyRule> propertyRulesByName = new HashMap<String, CssPropertyRule>();
 
+    private final Map<String, CssFunctionRule> functionRulesByName = new HashMap<String, CssFunctionRule>();
+
     public CssSteadyStateParser() {
     }
 
@@ -141,6 +147,21 @@ public class CssSteadyStateParser extends CssParserProvider implements
 
             digester.addSetNext("css-properties/css-property", "addCssProperty");
 
+            digester.addObjectCreate("css-properties/css-function",
+                    CssFunctionRule.class);
+
+            digester.addCallMethod("css-properties/css-function/name",
+                    "addName", 1);
+            digester.addCallParam("css-properties/css-function/name", 0);
+
+            digester.addObjectCreate("css-properties/css-function/user-agent",
+                    UserAgentPropertyRule.class);
+            digester.addSetProperties("css-properties/css-function/user-agent");
+            digester.addSetNext("css-properties/css-function/user-agent",
+                    "addAgent");
+
+            digester.addSetNext("css-properties/css-function", "addCssFunction");
+
             try {
                 digester.parse(ins);
 
@@ -157,10 +178,17 @@ public class CssSteadyStateParser extends CssParserProvider implements
         }
     }
 
-    /*
-     * public void addCssProperty(CssPropertyRule rule) { for (String name :
-     * rule.listAgentNames()) { propertyRulesByName.put(name, rule); } }
-     */
+    public void addCssProperty(CssPropertyRule rule) {
+        for (String name : rule.listAgentNames()) {
+            propertyRulesByName.put(name, rule);
+        }
+    }
+
+    public void addCssFunction(CssFunctionRule rule) {
+        for (String name : rule.listAgentNames()) {
+            functionRulesByName.put(name, rule);
+        }
+    }
 
     @Override
     public String getParserName() {
@@ -316,10 +344,15 @@ public class CssSteadyStateParser extends CssParserProvider implements
                 }
 
                 if (parserContext.isProcessRulesEnabled()) {
-                    CssDeclarationListIterator declarationList = new CssDeclarationListIterator(
-                            styleRule);
+                    if (propertyRulesByName.isEmpty() == false) {
+                        processPropertyRule(styleRule,
+                                new CssPropertyListIterator(styleRule));
+                    }
 
-                    processRule(styleRule, declarationList);
+                    if (functionRulesByName.isEmpty() == false) {
+                        processValueRule(styleRule,
+                                new CssPropertyListIterator(styleRule));
+                    }
                 }
 
                 for (int j = 0; j < declaration.getLength(); j++) {
@@ -637,13 +670,13 @@ public class CssSteadyStateParser extends CssParserProvider implements
         return true;
     }
 
-    private void processRule(CSSStyleRule rule,
-            CssDeclarationListIterator declarationList) {
-
-        Property[] ps = declarationList.toArray();
+    private void processPropertyRule(CSSStyleRule rule,
+            CssPropertyListIterator declarationList) {
 
         // System.out.println("=> " + rule.getSelectorText());
-        for (Property p : ps) {
+        for (; declarationList.hasNext();) {
+            Property p = declarationList.next();
+
             if (p.getUserData(DELETED_RULE_PROPERTY) != null
                     || p.getUserData(VIRTUAL_RULE_PROPERTY) != null) {
                 continue;
@@ -661,18 +694,111 @@ public class CssSteadyStateParser extends CssParserProvider implements
             Set<String> prefixes = new HashSet<String>();
             for (UserAgentPropertyRule ur : cpr.listAgentRules()) {
 
-                IRuleProcessor rp = ur.getRuleProcessorImpl();
+                IPropertyRuleProcessor rp = ur.getRuleProcessorImpl();
                 if (rp != null) {
                     rp.process(declarationList, ur, p);
                     continue;
                 }
 
                 String prefix = ur.getPrefix();
-                if (prefix != null && prefixes.add(prefix) == false) {
-                    declarationList.addProperty(prefix + name, value, p);
+                if (prefix != null && prefixes.add(prefix)) {
+                    declarationList.addProperty(prefix + name, value, p, true);
                     continue;
                 }
             }
+        }
+    }
+
+    private void processValueRule(CSSStyleRule rule,
+            CssPropertyListIterator declarationList) {
+
+        // System.out.println("=> " + rule.getSelectorText());
+        for (; declarationList.hasNext();) {
+            Property p = declarationList.next();
+
+            if (p.getUserData(DELETED_RULE_PROPERTY) != null
+                    || p.getUserData(VIRTUAL_RULE_PROPERTY) != null) {
+                continue;
+            }
+
+            CSSValue value = p.getValue();
+            short valueType = value.getCssValueType();
+
+            if (valueType == CSSValue.CSS_PRIMITIVE_VALUE
+                    || valueType == CSSValue.CSS_VALUE_LIST) {
+                processValue(value, p, declarationList);
+            }
+        }
+    }
+
+    private void processValue(CSSValue value, Property p,
+            CssPropertyListIterator declarationList) {
+        short valueType = value.getCssValueType();
+
+        if (valueType == CSSValue.CSS_VALUE_LIST) {
+            CSSValueList vl = (CSSValueList) value;
+            for (int i = 0; i < vl.getLength(); i++) {
+                CSSValue v = vl.item(i);
+
+                processValue(v, p, declarationList);
+            }
+
+            return;
+        }
+
+        if (valueType != CSSValue.CSS_PRIMITIVE_VALUE) {
+            return;
+        }
+
+        Object v = ((CSSValueImpl) value).getValue();
+        if ((v instanceof LexicalUnit) == false) {
+            return;
+        }
+
+        LexicalUnit lu = (LexicalUnit) v;
+
+        processLexicalUnit(lu, p, declarationList);
+    }
+
+    private void processLexicalUnit(LexicalUnit lu, Property p,
+            CssPropertyListIterator declarationList) {
+
+        if (lu.getLexicalUnitType() == LexicalUnit.SAC_FUNCTION) {
+            String funcName = lu.getFunctionName();
+
+            CssFunctionRule cfr = functionRulesByName.get(funcName);
+            if (cfr != null) {
+                Set<String> prefixes = new HashSet<String>();
+                for (UserAgentPropertyRule ur : cfr.listAgentRules()) {
+
+                    IPropertyRuleProcessor rp = ur.getRuleProcessorImpl();
+                    if (rp != null) {
+                        rp.process(declarationList, ur, p);
+                        continue;
+                    }
+
+                    String prefix = ur.getPrefix();
+                    if (prefix != null && prefixes.add(prefix)) {
+
+                        ((LexicalUnitImpl) lu).setFunctionName(prefix
+                                + funcName);
+
+                        Property newProperty = (Property) p.clone();
+
+                        ((LexicalUnitImpl) lu).setFunctionName(funcName);
+
+                        declarationList.addProperty(p.getName(),
+                                newProperty.getValue(), newProperty, false);
+
+                        continue;
+                    }
+                }
+
+            }
+        }
+
+        if (lu.getNextLexicalUnit() != null) {
+            processLexicalUnit(lu.getNextLexicalUnit(), p, declarationList);
         }
     }
 

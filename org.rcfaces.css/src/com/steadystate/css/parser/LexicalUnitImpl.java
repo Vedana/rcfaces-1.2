@@ -37,7 +37,7 @@ import org.w3c.css.sac.LexicalUnit;
  *         Schweinsberg</a>
  */
 public class LexicalUnitImpl extends LocatableImpl implements LexicalUnit,
-        Serializable {
+        Serializable, Cloneable {
 
     private static final long serialVersionUID = -7260032046960116891L;
 
@@ -346,9 +346,14 @@ public class LexicalUnitImpl extends LocatableImpl implements LexicalUnit,
             sb.append(")");
             break;
         case SAC_RGBCOLOR:
-            sb.append("rgb(");
-            appendParams(sb, parameters_);
-            sb.append(")");
+
+            appendOptimizedRGB(sb, parameters_);
+
+            if (false) {
+                sb.append("rgb(");
+                appendParams(sb, parameters_);
+                sb.append(")");
+            }
             break;
         case SAC_IDENT:
             sb.append(getStringValue());
@@ -392,6 +397,46 @@ public class LexicalUnitImpl extends LocatableImpl implements LexicalUnit,
         }
         toString_ = sb.toString();
         return toString_;
+    }
+
+    private void appendOptimizedRGB(StringBuilder sb, LexicalUnit parameter) {
+        sb.append('#');
+
+        LexicalUnit rlu = parameter;
+        int r = rlu.getIntegerValue();
+
+        LexicalUnit vlu = parameter.getNextLexicalUnit().getNextLexicalUnit();
+        int g = vlu.getIntegerValue();
+
+        LexicalUnit blu = parameter.getNextLexicalUnit().getNextLexicalUnit();
+        int b = blu.getIntegerValue();
+
+        if (isReducing(r) && isReducing(g) && isReducing(b)) {
+            sb.append(Integer.toHexString(r & 0x0f));
+            sb.append(Integer.toHexString(g & 0x0f));
+            sb.append(Integer.toHexString(b & 0x0f));
+            return;
+        }
+        if (r < 0x10) {
+            sb.append('0');
+        }
+        sb.append(Integer.toHexString(r));
+        if (g < 0x10) {
+            sb.append('0');
+        }
+        sb.append(Integer.toHexString(g));
+        if (b < 0x10) {
+            sb.append('0');
+        }
+        sb.append(Integer.toHexString(b));
+
+    }
+
+    private boolean isReducing(int v) {
+        if (((v >> 4) & 0x0f) == (v & 0xf)) {
+            return true;
+        }
+        return false;
     }
 
     public String toDebugString() {
@@ -569,7 +614,7 @@ public class LexicalUnitImpl extends LocatableImpl implements LexicalUnit,
         boolean comma = false;
         while (l != null) {
             if (comma) {
-                sb.append(",");
+                sb.append(" ");
             }
             comma = true;
             sb.append(l.toString());

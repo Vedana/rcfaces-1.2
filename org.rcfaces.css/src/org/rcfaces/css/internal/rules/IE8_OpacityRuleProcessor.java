@@ -3,7 +3,7 @@
  */
 package org.rcfaces.css.internal.rules;
 
-import org.rcfaces.css.internal.CssDeclarationListIterator;
+import org.rcfaces.css.internal.CssPropertyListIterator;
 import org.w3c.css.sac.LexicalUnit;
 import org.w3c.dom.css.CSSPrimitiveValue;
 import org.w3c.dom.css.CSSValue;
@@ -17,10 +17,10 @@ import com.steadystate.css.parser.LexicalUnitImpl;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class IE8_OpacityRuleProcessor implements IRuleProcessor {
+public class IE8_OpacityRuleProcessor implements IPropertyRuleProcessor {
 
     @Override
-    public void process(CssDeclarationListIterator declarationList,
+    public void process(CssPropertyListIterator declarationList,
             UserAgentPropertyRule ur, Property p) {
 
         CSSValue value = p.getValue();
@@ -40,6 +40,7 @@ public class IE8_OpacityRuleProcessor implements IRuleProcessor {
 
         CSSValueImpl newValue = new CSSValueImpl(lexicalUnit);
 
-        declarationList.addProperty("-ms-filter", newValue, p.isImportant(), p);
+        declarationList.addProperty("-ms-filter", newValue, p.isImportant(), p,
+                true);
     }
 }
