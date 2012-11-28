@@ -85,14 +85,14 @@ var __statics = {
      * @context event:evt
      */
 	_OnFocus: function(evt) {
-     	if (window._rcfacesExiting) {
-     		// On sait jamais, nous sommes peut etre dans un context foireux ...
-     		return true;
-     	}
-    	
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
+
+		if (window._rcfacesExiting) {
+     		// On sait jamais, nous sommes peut etre dans un context foireux ...
+     		return true;
+     	}
     	
      	f_core.Debug(f_shellManager, "_OnFocus: entering on "+this.tagName+"#"+this.id+"."+this.className+" event="+evt);
  
@@ -198,6 +198,7 @@ var __statics = {
 	 * @return Boolean Returns <code>true</code> if the shell is found.
 	 */
 	CloseShell: function(object, returnValue) {
+		f_core.Debug(f_shellManager, "CloseShell: Request close shell '"+object+"'  returnValue='"+returnValue+"'");
 		if (object instanceof f_event) {
 			object=object.f_getComponent();
 		}
@@ -223,7 +224,13 @@ var __statics = {
 			if (shellManager._modalStyleInstalled) {
 				shellManager._modalStyleInstalled=undefined;
 				
-				f_core.RemoveEventListener(document, "focus", f_shellManager._OnFocus, document);
+				
+				var capture=document;
+				if (f_core.IsInternetExplorer(7) || f_core.IsInternetExplorer(8)) {
+					capture=undefined;
+				}
+
+				f_core.RemoveEventListener(document, "focus", f_shellManager._OnFocus, capture);
 			}
 		}
 
@@ -302,7 +309,7 @@ var __members = {
 	 * @return void
 	 */
 	f_popShell: function(shell) {
-		f_core.Debug(f_shellManager, "f_pushShell: pop shell '"+shell._id+"'.");
+		f_core.Debug(f_shellManager, "f_popShell: pop shell '"+shell._id+"'.");
 
 		shell.f_setStatus(f_shell.DESTROYING_STATUS);			
 
@@ -485,11 +492,13 @@ var __members = {
 		}
 		this._modalStyleInstalled=true;
 		
+		
+		var capture=document;
 		if (f_core.IsInternetExplorer(7) || f_core.IsInternetExplorer(8)) {
-			f_core.AddEventListener(document, "focus", f_shellManager._OnFocus);
-		} else {
-			f_core.AddEventListener(document, "focus", f_shellManager._OnFocus, document);
+			capture=undefined;
 		}
+
+		f_core.AddEventListener(document, "focus", f_shellManager._OnFocus, capture);
 	},
 
 	/**
@@ -505,11 +514,12 @@ var __members = {
 	
 		this._modalStyleInstalled=undefined;
 			
+		var capture=document;
 		if (f_core.IsInternetExplorer(7) || f_core.IsInternetExplorer(8)) {
-			f_core.RemoveEventListener(document, "focus", f_shellManager._OnFocus);
-		} else {
-			f_core.RemoveEventListener(document, "focus", f_shellManager._OnFocus, document);
+			capture=undefined;
 		}
+
+		f_core.RemoveEventListener(document, "focus", f_shellManager._OnFocus, capture);
 	},
 	/**
 	 * @method public
@@ -624,6 +634,7 @@ var __members = {
 	 * @return void
 	 */
 	f_closeShell: function(shell, showNextShell) {
+		f_core.Debug(f_shellManager, "f_closeShell: Requested close shell '"+shell+"' showNextShell='"+showNextShell+"'");
 		if (shell.f_getStatus() == f_shell.CREATED_STATUS) {
 			shell.f_setStatus(f_shell.DESTROYING_STATUS); // Directement ...
 		}
