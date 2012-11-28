@@ -50,6 +50,8 @@ public class HtmlRendererTypeFactory extends AbstractRendererTypeFactory {
 
     private static final String USER_AGENT_SEPARATOR = "__";
 
+    private final List<LookIdRulesBean> lookIdRulesBeans = new ArrayList<HtmlRendererTypeFactory.LookIdRulesBean>();
+
     private final Map<String, IUserAgentRules> featureByName = new HashMap<String, IUserAgentRules>(
             64);
 
@@ -147,13 +149,6 @@ public class HtmlRendererTypeFactory extends AbstractRendererTypeFactory {
     @Override
     public void configureRules(Digester digester) {
         super.configureRules(digester);
-
-        RenderKitFactory factory = (RenderKitFactory) FactoryFinder
-                .getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-        final FacesContext facesContext = FacesContext.getCurrentInstance();
-
-        final RenderKit renderKit = factory.getRenderKit(facesContext,
-                getRenderKitId());
 
         final boolean[] enabled = new boolean[1];
 
@@ -277,12 +272,28 @@ public class HtmlRendererTypeFactory extends AbstractRendererTypeFactory {
                         .peek(); // Le pop est fait par le
                                  // addObjectCreate("rcfaces-config/renderKit/renderer")
 
-                lookIdRulesBean.commit(facesContext, renderKit,
-                        HtmlRendererTypeFactory.this.lookIdRulesByName,
-                        HtmlRendererTypeFactory.this.featureByName);
+                lookIdRulesBeans.add(lookIdRulesBean);
             }
 
         });
+    }
+
+    @Override
+    public void startup(FacesContext facesContext) {
+        super.startup(facesContext);
+
+        RenderKitFactory factory = (RenderKitFactory) FactoryFinder
+                .getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+
+        RenderKit renderKit = factory.getRenderKit(facesContext,
+                getRenderKitId());
+
+        for (LookIdRulesBean bean : lookIdRulesBeans) {
+            bean.commit(facesContext, renderKit, lookIdRulesByName,
+                    featureByName);
+        }
+
+        lookIdRulesBeans.clear();
     }
 
     public static class Navigator {
