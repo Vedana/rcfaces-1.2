@@ -31,6 +31,7 @@ var __statics = {
 
 		var menu = evt.f_getComponent();
 		var grid = menu.f_getOwnerComponent();
+		var selectedCriteria = undefined;
 
 		if (grid && grid.fa_evaluateCriteria) {
 
@@ -47,7 +48,7 @@ var __statics = {
 				}
 			}
 
-			var selectedCriteria = grid.fa_getSelectedCriteria();
+			selectedCriteria = grid.fa_getSelectedCriteria();
 
 			if (!selectedCriteria) {
 				selectedCriteria = [];
