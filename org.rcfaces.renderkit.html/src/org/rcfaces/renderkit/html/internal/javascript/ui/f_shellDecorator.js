@@ -640,6 +640,8 @@ var __members = {
 			}
 		}
 		
+		f_core.Debug(f_shellDecorator, "_performTitleButton: Perform button '"+button._name+"'");
+		
 		switch(button._name) {
 		case "close":
 			shell.f_close();
