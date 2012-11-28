@@ -645,7 +645,8 @@ public class CssSteadyStateParser extends CssParserProvider implements
         if (parserContext.isVersioningEnabled()) {
             contextRelativePath = parserContext.processVersioning(basePath,
                     contextRelativePath, IContentFamily.IMAGE);
-        } else if (parserContext.isMergeImportsEnabled()) {
+        } else if (parserContext.isMergeImportsEnabled()
+                || parserContext.isProcessRulesEnabled()) {
             // La servlet de merge
             contextRelativePath = new Path("..").append(contextRelativePath);
         }
