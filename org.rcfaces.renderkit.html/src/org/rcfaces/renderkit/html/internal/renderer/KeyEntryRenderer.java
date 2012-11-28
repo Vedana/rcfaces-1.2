@@ -787,6 +787,14 @@ public class KeyEntryRenderer extends DataGridRenderer {
 
                             ValueHolder vh = (ValueHolder) getRowValueColumn(comboGridComponent);
 
+                            if (vh == null) {
+                                throw new FacesException(
+                                        "Can identify the value column of keyEntry '"
+                                                + comboGridComponent
+                                                        .getClientId(facesContext)
+                                                + "'");
+                            }
+
                             return vh.getValue();
                         }
                     });
