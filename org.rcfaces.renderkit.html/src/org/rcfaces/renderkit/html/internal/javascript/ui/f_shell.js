@@ -632,6 +632,8 @@ var __members = {
 	 * @return void
 	 */
 	f_close: function(returnValue) {
+		f_core.Debug(f_shell, "f_close: Request shell close '"+this+"'  returnValue='"+returnValue+"'");
+		
 		if (this.f_getStatus()!=f_shell.OPENED_STATUS) {
 			return;
 		}
