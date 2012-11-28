@@ -23,6 +23,8 @@ public abstract class AbstractRendererTypeFactory extends AbstractProvider
 
     private static final String RENDER_TYPE_FACTORY_PROPERTY = "org.rcface.core.RENDER_TYPE_FACTORY";
 
+    private static final Object APPLICATION_ACCESS_LOCK = new Object();
+
     public static IRenderTypeFactory get() {
         return get(null);
     }
@@ -37,7 +39,7 @@ public abstract class AbstractRendererTypeFactory extends AbstractProvider
         }
 
         ExternalContext externalContext = facesContext.getExternalContext();
-        Map<String, Object> requestMap = externalContext.getRequestMap();
+        Map<String, Object> requestMap = externalContext.getApplicationMap();
 
         AbstractRendererTypeFactory rendererTypeFactory = (AbstractRendererTypeFactory) requestMap
                 .get(RENDER_TYPE_FACTORY_PROPERTY);
@@ -55,13 +57,25 @@ public abstract class AbstractRendererTypeFactory extends AbstractProvider
         String renderKiId = facesContext.getViewRoot().getRenderKitId();
         String providerId = PREFIX_PROVIDER_ID + renderKiId;
 
-        rendererTypeFactory = (AbstractRendererTypeFactory) rcfacesContext
-                .getProvidersRegistry().getProvider(providerId);
+        Map<String, Object> applicationMap = externalContext
+                .getApplicationMap();
 
-        if (rendererTypeFactory == null) {
-            throw new IllegalStateException(
-                    "Can not find rendererTypeFactory for renderKitId '"
-                            + renderKiId + "'.");
+        synchronized (APPLICATION_ACCESS_LOCK) {
+            rendererTypeFactory = (AbstractRendererTypeFactory) applicationMap
+                    .get(RENDER_TYPE_FACTORY_PROPERTY);
+            if (rendererTypeFactory == null) {
+                rendererTypeFactory = (AbstractRendererTypeFactory) rcfacesContext
+                        .getProvidersRegistry().getProvider(providerId);
+
+                if (rendererTypeFactory == null) {
+                    throw new IllegalStateException(
+                            "Can not find rendererTypeFactory for renderKitId '"
+                                    + renderKiId + "'.");
+                }
+            }
+
+            applicationMap.put(RENDER_TYPE_FACTORY_PROPERTY,
+                    rendererTypeFactory);
         }
 
         requestMap.put(RENDER_TYPE_FACTORY_PROPERTY, rendererTypeFactory);
