@@ -2854,7 +2854,7 @@ var f_core = {
 			return false;
 		}
 		
-		var idx=checkListeners.indexOf(component.id);
+		var idx=checkListeners.f_indexOf(component.id);
 		if (idx<0) {
 			return false;
 		}
@@ -2896,7 +2896,7 @@ var f_core = {
 		}	
 		
 		
-		var idx=resetListeners.indexOf(component.id);
+		var idx=resetListeners.f_indexOf(component.id);
 		if (idx<0) {
 			return false;
 		}

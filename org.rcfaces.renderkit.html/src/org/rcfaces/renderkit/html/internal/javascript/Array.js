@@ -117,10 +117,10 @@ Array.prototype.f_contains=function(element) {
  * @param any element Element whose presence in this array is to be tested.
  * @return Number index if this collection contains the specified element
  */
-Array.prototype.indexOf = function(element){ 
+Array.prototype.f_indexOf = function(element){ 
 	
     for(var i=0;i<this.length;i++){  
-        if(this[i]==element){  
+        if(this[i]===element){  
             return i;  
         }  
     }  
