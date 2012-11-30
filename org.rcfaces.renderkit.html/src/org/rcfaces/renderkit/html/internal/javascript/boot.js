@@ -53,13 +53,13 @@ if (window._RCFACES_LEVEL3) {
 				}
 
 			} else if (evt.fromElement) { // IE
-				win=evt.fromElement.ownerDocument.parentWindow;		
+				win=evt.fromElement.ownerDocument.window;		
 
 			} else if (evt.toElement) { // IE
-				win=evt.toElement.ownerDocument.parentWindow;
+				win=evt.toElement.ownerDocument.window;
 
 			} else if (evt.srcElement) { // IE
-				win=evt.srcElement.ownerDocument.parentWindow;
+				win=evt.srcElement.ownerDocument.window;
 			}
 		}
 		
