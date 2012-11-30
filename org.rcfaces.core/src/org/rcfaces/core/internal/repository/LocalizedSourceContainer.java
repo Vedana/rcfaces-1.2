@@ -21,7 +21,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public abstract class LocalizedSourceContainer extends SourceContainer {
+public abstract class LocalizedSourceContainer extends SourceContainer<String> {
 
     private static final Log LOG = LogFactory
             .getLog(LocalizedSourceContainer.class);

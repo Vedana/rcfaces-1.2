@@ -16,4 +16,6 @@ public interface IUserAgentRules {
     int rulesCount();
 
     IUserAgentRules merge(IUserAgentRules featureAgentRules);
+
+    IUserAgent reduce(IUserAgent userAgent);
 }

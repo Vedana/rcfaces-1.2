@@ -23,10 +23,12 @@ public abstract class AbstractRendererTypeFactory extends AbstractProvider
 
     private static final String RENDER_TYPE_FACTORY_PROPERTY = "org.rcface.core.RENDER_TYPE_FACTORY";
 
+    private static final String RENDER_TYPE_FACTORY_PROPERTY_PREFIX = "org.rcface.core.RENDER_TYPE_FACTORY$";
+
     private static final Object APPLICATION_ACCESS_LOCK = new Object();
 
     public static IRenderTypeFactory get() {
-        return get(null);
+        return get((FacesContext) null);
     }
 
     public static IRenderTypeFactory get(FacesContext facesContext) {
@@ -54,15 +56,18 @@ public abstract class AbstractRendererTypeFactory extends AbstractProvider
             throw new IllegalStateException("Can not find RCFaces context");
         }
 
-        String renderKiId = facesContext.getViewRoot().getRenderKitId();
-        String providerId = PREFIX_PROVIDER_ID + renderKiId;
+        String renderKitId = facesContext.getViewRoot().getRenderKitId();
+        String providerId = PREFIX_PROVIDER_ID + renderKitId;
+
+        String applicationRenderKitId = RENDER_TYPE_FACTORY_PROPERTY_PREFIX
+                + renderKitId;
 
         Map<String, Object> applicationMap = externalContext
                 .getApplicationMap();
 
         synchronized (APPLICATION_ACCESS_LOCK) {
             rendererTypeFactory = (AbstractRendererTypeFactory) applicationMap
-                    .get(RENDER_TYPE_FACTORY_PROPERTY);
+                    .get(applicationRenderKitId);
             if (rendererTypeFactory == null) {
                 rendererTypeFactory = (AbstractRendererTypeFactory) rcfacesContext
                         .getProvidersRegistry().getProvider(providerId);
@@ -70,15 +75,24 @@ public abstract class AbstractRendererTypeFactory extends AbstractProvider
                 if (rendererTypeFactory == null) {
                     throw new IllegalStateException(
                             "Can not find rendererTypeFactory for renderKitId '"
-                                    + renderKiId + "'.");
+                                    + renderKitId + "'.");
                 }
             }
 
-            applicationMap.put(RENDER_TYPE_FACTORY_PROPERTY,
-                    rendererTypeFactory);
+            applicationMap.put(applicationRenderKitId, rendererTypeFactory);
         }
 
         requestMap.put(RENDER_TYPE_FACTORY_PROPERTY, rendererTypeFactory);
+
+        return rendererTypeFactory;
+    }
+
+    public static IRenderTypeFactory get(RcfacesContext rcfacesContext,
+            String renderKitId) {
+        String providerId = PREFIX_PROVIDER_ID + renderKitId;
+
+        AbstractRendererTypeFactory rendererTypeFactory = (AbstractRendererTypeFactory) rcfacesContext
+                .getProvidersRegistry().getProvider(providerId);
 
         return rendererTypeFactory;
     }

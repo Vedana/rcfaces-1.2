@@ -78,8 +78,8 @@ public class UserAgentRuleTools {
 
     public static IUserAgentRules constructUserAgentRules(String expression,
             boolean acceptMore, boolean acceptNot, int priority,
-            Map<String, IUserAgentRules> aliases) {
-        return new AgentRules(expression, acceptMore, acceptNot, aliases);
+            Map<String, IUserAgentRules> featuresByName) {
+        return new AgentRules(expression, acceptMore, acceptNot, featuresByName);
     }
 
     @SuppressWarnings("unchecked")
@@ -93,6 +93,10 @@ public class UserAgentRuleTools {
         }
 
         userAgentText = userAgentText.trim();
+
+        if (facesContext == null) {
+            facesContext = FacesContext.getCurrentInstance();
+        }
 
         ExternalContext externalContext = facesContext.getExternalContext();
 
@@ -380,7 +384,16 @@ public class UserAgentRuleTools {
             }
         }
 
-        private Map<BrowserType, List<AgentRule>> intercept(
+        public IUserAgentRules merge(IUserAgentRules other) {
+            AgentRules o = (AgentRules) other;
+
+            Map<BrowserType, List<AgentRule>> map = intercept(
+                    rulesByBrowserType, o.rulesByBrowserType);
+
+            return new AgentRules(map);
+        }
+
+        private static Map<BrowserType, List<AgentRule>> intercept(
                 Map<BrowserType, List<AgentRule>> map1,
                 Map<BrowserType, List<AgentRule>> map2) {
             Map<BrowserType, List<AgentRule>> ret = new HashMap<IUserAgent.BrowserType, List<AgentRule>>();
@@ -410,17 +423,8 @@ public class UserAgentRuleTools {
             return ret;
         }
 
-        public IUserAgentRules merge(IUserAgentRules other) {
-            AgentRules o = (AgentRules) other;
-
-            Map<BrowserType, List<AgentRule>> map = intercept(
-                    rulesByBrowserType, o.rulesByBrowserType);
-
-            return new AgentRules(map);
-        }
-
-        private List<AgentRule> interceptAgentRuleList(List<AgentRule> l1,
-                List<AgentRule> l2) {
+        private static List<AgentRule> interceptAgentRuleList(
+                List<AgentRule> l1, List<AgentRule> l2) {
 
             List<AgentRule> accepted = new ArrayList<UserAgentRuleTools.AgentRule>(
                     l1.size() + l2.size());
@@ -459,6 +463,90 @@ public class UserAgentRuleTools {
             return count;
         }
 
+        public IUserAgent reduce(IUserAgent userAgent) {
+            List<AgentRule> ars = rulesByBrowserType.get(userAgent
+                    .getBrowserType());
+
+            if (ars == null || ars.isEmpty()) {
+                return null;
+            }
+
+            Integer uMajor = userAgent.getMajorVersion();
+            Integer uMinor = userAgent.getMinorVersion();
+            Integer uRelease = userAgent.getReleaseVersion();
+
+            for (AgentRule ar : ars) {
+                Integer aMajor = ar.getMajorVersion();
+                if (aMajor == null) {
+                    // On prend tous les majors !
+                    return ar;
+                }
+                if (aMajor.equals(uMajor) == false) {
+                    // Cela ne nous concerne pas !
+                    continue;
+                }
+
+                // Le Major est le même
+
+                Integer aMinor = ar.getMinorVersion();
+                if (aMinor == null) {
+                    // On prend tous les Minors !
+                    return ar;
+                }
+                if (aMinor.equals(uMinor) == false) {
+                    // Cela ne nous concerne pas !
+                    continue;
+                }
+
+                // Le Major et le Minor sont le mêmes
+
+                Integer aRelease = ar.getReleaseVersion();
+                if (aRelease == null) {
+                    // On prend tous les Releases !
+                    return ar;
+                }
+                if (aRelease.equals(uRelease) == false) {
+                    // Cela ne nous concerne pas !
+                    continue;
+                }
+
+                return userAgent;
+            }
+
+            return null;
+        }
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime
+                    * result
+                    + ((rulesByBrowserType == null) ? 0 : rulesByBrowserType
+                            .hashCode());
+            result = prime * result + rulesCount;
+            return result;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            AgentRules other = (AgentRules) obj;
+            if (rulesCount != other.rulesCount)
+                return false;
+            if (rulesByBrowserType == null) {
+                if (other.rulesByBrowserType != null)
+                    return false;
+            } else if (!rulesByBrowserType.equals(other.rulesByBrowserType))
+                return false;
+            return true;
+        }
+
         @Override
         public String toString() {
             StringBuilder builder = new StringBuilder();
@@ -467,6 +555,7 @@ public class UserAgentRuleTools {
                     .append(rulesCount).append("']");
             return builder.toString();
         }
+
     }
 
     private static class AgentRule implements IUserAgent, Comparable<AgentRule> {

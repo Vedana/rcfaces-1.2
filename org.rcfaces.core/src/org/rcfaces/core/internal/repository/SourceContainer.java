@@ -44,15 +44,13 @@ import org.xml.sax.InputSource;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public abstract class SourceContainer {
+public abstract class SourceContainer<T> {
 
     private static final Log LOG = LogFactory.getLog(SourceContainer.class);
 
     protected static final String EXTERNAL_REPOSITORIES_CONFIG_NAME = "external.repositories";
 
     private static final int BUFFER_INITIAL_SIZE = 16000;
-
-    private static final String NO_PARAMETER = "~#NO_PARAMETER#~";
 
     private final ServletConfig servletConfig;
 
@@ -72,7 +70,7 @@ public abstract class SourceContainer {
 
     private final String repositoryType;
 
-    private final Map<String, IParameterizedContent> contentByParameters = new HashMap<String, IParameterizedContent>();
+    private final Map<T, IParameterizedContent<T>> contentByParameters = new HashMap<T, IParameterizedContent<T>>();
 
     // private byte[] sourceBufferExternalGZip = null;
 
@@ -110,6 +108,8 @@ public abstract class SourceContainer {
         return canUseHash;
     }
 
+    protected abstract T noParameter();
+
     protected StringAppender postConstructBuffer(
             BasicParameterizedContent parameterizedBuffer, StringAppender buffer) {
 
@@ -132,6 +132,11 @@ public abstract class SourceContainer {
 
     public String getVersion() {
         return repositoryVersion;
+    }
+
+    protected RcfacesContext getRcfacesContext() {
+        return RcfacesContext.getInstance(servletConfig.getServletContext(),
+                null, null);
     }
 
     protected URL getURL(String path) {
@@ -394,20 +399,19 @@ public abstract class SourceContainer {
         servletConfig.getServletContext().log(message, th);
     }
 
-    public IParameterizedContent getDefaultContent() throws ServletException {
-        return getContent(NO_PARAMETER);
+    public IParameterizedContent<T> getDefaultContent() throws ServletException {
+        return getContent(noParameter());
     }
 
-    public IParameterizedContent getContent(String parameter)
+    public IParameterizedContent<T> getContent(T parameter)
             throws ServletException {
 
-        IParameterizedContent parameterizedContent;
+        IParameterizedContent<T> parameterizedContent;
         synchronized (contentByParameters) {
             parameterizedContent = contentByParameters.get(parameter);
 
             if (parameterizedContent == null) {
-                parameterizedContent = createParameterizedContent((parameter != NO_PARAMETER) ? parameter
-                        : null);
+                parameterizedContent = createParameterizedContent(parameter);
 
                 contentByParameters.put(parameter, parameterizedContent);
             }
@@ -418,7 +422,7 @@ public abstract class SourceContainer {
         return parameterizedContent;
     }
 
-    protected IParameterizedContent createParameterizedContent(String parameter) {
+    protected IParameterizedContent<T> createParameterizedContent(T parameter) {
         return new BasicParameterizedContent(parameter);
     }
 
@@ -452,9 +456,9 @@ public abstract class SourceContainer {
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
-    public interface IParameterizedContent {
+    public interface IParameterizedContent<T> {
 
-        SourceContainer getContainer();
+        SourceContainer<T> getContainer();
 
         void initialize() throws ServletException;
 
@@ -474,8 +478,9 @@ public abstract class SourceContainer {
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
-    protected class BasicParameterizedContent implements IParameterizedContent {
-        protected final String parameter;
+    protected class BasicParameterizedContent implements
+            IParameterizedContent<T> {
+        protected final T parameter;
 
         private boolean initialized;
 
@@ -491,7 +496,7 @@ public abstract class SourceContainer {
 
         private String hash = null;
 
-        public BasicParameterizedContent(String parameter) {
+        public BasicParameterizedContent(T parameter) {
             this.parameter = parameter;
         }
 
@@ -519,7 +524,7 @@ public abstract class SourceContainer {
             buffer = null;
         }
 
-        public SourceContainer getContainer() {
+        public SourceContainer<T> getContainer() {
             return SourceContainer.this;
         }
 
@@ -712,8 +717,7 @@ public abstract class SourceContainer {
 
         protected void addRepositoryFiles() throws ServletException {
 
-            RcfacesContext rcfacesContext = RcfacesContext.getInstance(
-                    servletConfig.getServletContext(), null, null);
+            RcfacesContext rcfacesContext = getRcfacesContext();
 
             String repositoriesPaths[] = rcfacesContext.getRepositoryManager()
                     .listRepositoryLocations(repositoryType);

@@ -14,6 +14,8 @@ public interface IClientBrowser extends IUserAgent {
 
     String getBrowserId();
 
+    String getBrowserIdAndVersion();
+
     /**
      * 
      * @return Boolean if mobile version is determined, or <code>null</code> if

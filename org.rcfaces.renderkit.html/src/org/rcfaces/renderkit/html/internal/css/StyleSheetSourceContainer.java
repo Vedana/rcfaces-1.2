@@ -15,9 +15,14 @@ import javax.servlet.ServletException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.lang.StringAppender;
+import org.rcfaces.core.internal.renderkit.AbstractRendererTypeFactory;
 import org.rcfaces.core.internal.repository.SourceContainer;
-import org.rcfaces.renderkit.html.internal.agent.IClientBrowser;
+import org.rcfaces.renderkit.html.internal.agent.IUserAgent;
+import org.rcfaces.renderkit.html.internal.agent.IUserAgentRules;
+import org.rcfaces.renderkit.html.internal.agent.UserAgentRuleTools;
+import org.rcfaces.renderkit.html.internal.renderer.HtmlRendererTypeFactory;
 import org.xml.sax.Attributes;
 
 /**
@@ -25,20 +30,51 @@ import org.xml.sax.Attributes;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class StyleSheetSourceContainer extends SourceContainer {
+public class StyleSheetSourceContainer extends SourceContainer<IUserAgent> {
 
     private static final Log LOG = LogFactory
             .getLog(StyleSheetSourceContainer.class);
 
     private static final String CSS_REPOSITORY_TYPE = "css";
 
+    private static final IUserAgent NO_PARAMETER = new IUserAgent() {
+
+        public BrowserType getBrowserType() {
+            throw new IllegalStateException("NO PARAMETER");
+        }
+
+        public Integer getMajorVersion() {
+            throw new IllegalStateException("NO PARAMETER");
+        }
+
+        public Integer getMinorVersion() {
+            throw new IllegalStateException("NO PARAMETER");
+        }
+
+        public Integer getReleaseVersion() {
+            throw new IllegalStateException("NO PARAMETER");
+        }
+
+        public void textForm(StringBuilder sb) {
+            throw new IllegalStateException("NO PARAMETER");
+        }
+
+    };
+
+    private final HtmlRendererTypeFactory factory;
+
     public StyleSheetSourceContainer(ServletConfig config, String module,
             String charSet, boolean canUseGzip, boolean canUseETag,
-            boolean canUseHash, String repositoryVersion)
+            boolean canUseHash, String repositoryVersion, String renderKitId)
             throws ServletException {
         super(config, CSS_REPOSITORY_TYPE, Collections.singleton(module),
                 charSet, canUseGzip, canUseETag, canUseHash,
                 EXTERNAL_REPOSITORIES_CONFIG_NAME, repositoryVersion);
+
+        RcfacesContext rcfacesContext = getRcfacesContext();
+
+        factory = (HtmlRendererTypeFactory) AbstractRendererTypeFactory.get(
+                rcfacesContext, renderKitId);
     }
 
     protected StringAppender preConstructBuffer(
@@ -49,9 +85,9 @@ public class StyleSheetSourceContainer extends SourceContainer {
         return buffer;
     }
 
-    public IParameterizedContent getContent(IClientBrowser clientBrowser)
-            throws ServletException {
-        return getContent(clientBrowser.getBrowserId());
+    @Override
+    protected IUserAgent noParameter() {
+        return NO_PARAMETER;
     }
 
     protected SourceFile createSourceFile(String baseDirectory, String body,
@@ -65,7 +101,10 @@ public class StyleSheetSourceContainer extends SourceContainer {
 
         String ua = attributes.getValue("userAgent");
         if (ua != null) {
-            sf.setUserAgent(ua);
+            IUserAgentRules userAgentRules = UserAgentRuleTools
+                    .constructUserAgentRules(ua, true, true, 0,
+                            factory.listFeaturesByNames());
+            sf.setUserAgent(userAgentRules);
         }
 
         return sf;
@@ -105,24 +144,25 @@ public class StyleSheetSourceContainer extends SourceContainer {
      * @version $Revision$ $Date$
      */
     protected class UserAgentSourceFile extends SourceFile {
-        private String userAgent;
+        private IUserAgentRules userAgent;
 
-        public String getUserAgent() {
+        public IUserAgentRules getUserAgent() {
             return userAgent;
         }
 
-        public void setUserAgent(String userAgent) {
+        public void setUserAgent(IUserAgentRules userAgent) {
             this.userAgent = userAgent;
         }
 
         public String toString() {
             return "[UserAgentSourceFile fileName='" + getFileName()
-                    + "' userAgent='" + getUserAgent() + "']";
+                    + "' userAgentRules='" + getUserAgent() + "']";
         }
 
     }
 
-    protected IParameterizedContent createParameterizedContent(String parameter) {
+    protected IParameterizedContent<IUserAgent> createParameterizedContent(
+            IUserAgent parameter) {
         return new UserAgentContent(parameter);
     }
 
@@ -133,7 +173,7 @@ public class StyleSheetSourceContainer extends SourceContainer {
      */
     protected class UserAgentContent extends BasicParameterizedContent {
 
-        public UserAgentContent(String parameter) {
+        public UserAgentContent(IUserAgent parameter) {
             super(parameter);
         }
 
@@ -141,16 +181,28 @@ public class StyleSheetSourceContainer extends SourceContainer {
 
             List<SourceFile> l = super.filterFiles(files);
 
-            if (parameter == null) {
+            if (parameter == noParameter()) {
+                for (Iterator it = l.iterator(); it.hasNext();) {
+                    UserAgentSourceFile sf = (UserAgentSourceFile) it.next();
+
+                    IUserAgentRules ua = sf.getUserAgent();
+
+                    if (ua == null) {
+                        continue;
+                    }
+
+                    it.remove();
+                }
+
                 return l;
             }
 
             for (Iterator it = l.iterator(); it.hasNext();) {
                 UserAgentSourceFile sf = (UserAgentSourceFile) it.next();
 
-                String ua = sf.getUserAgent();
+                IUserAgentRules ua = sf.getUserAgent();
 
-                if (ua == null || parameter.equals(ua)) {
+                if (ua == null || ua.accepts(parameter)) {
                     continue;
                 }
 

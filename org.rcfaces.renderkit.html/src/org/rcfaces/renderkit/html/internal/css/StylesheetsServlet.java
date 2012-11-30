@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -18,6 +19,7 @@ import java.util.Set;
 import java.util.zip.GZIPOutputStream;
 
 import javax.faces.FacesException;
+import javax.faces.render.RenderKitFactory;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +33,7 @@ import org.rcfaces.core.internal.Globals;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.codec.SourceFilter;
 import org.rcfaces.core.internal.lang.ByteBufferOutputStream;
+import org.rcfaces.core.internal.renderkit.AbstractRendererTypeFactory;
 import org.rcfaces.core.internal.repository.SourceContainer.IParameterizedContent;
 import org.rcfaces.core.internal.util.ServletTools;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
@@ -41,6 +44,10 @@ import org.rcfaces.renderkit.html.internal.HtmlModulesServlet;
 import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
 import org.rcfaces.renderkit.html.internal.agent.ClientBrowserFactory;
 import org.rcfaces.renderkit.html.internal.agent.IClientBrowser;
+import org.rcfaces.renderkit.html.internal.agent.IUserAgent;
+import org.rcfaces.renderkit.html.internal.agent.IUserAgentRules;
+import org.rcfaces.renderkit.html.internal.agent.UserAgentRuleTools;
+import org.rcfaces.renderkit.html.internal.renderer.HtmlRendererTypeFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
@@ -128,6 +135,8 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
     private String charset;
 
+    private String renderKitId = RenderKitFactory.HTML_BASIC_RENDER_KIT;
+
     public StylesheetsServlet() {
     }
 
@@ -193,7 +202,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
         final String[] baseDirectoryRef = new String[1];
 
-        final Set<String> modulesHasAgentVary = new HashSet<String>();
+        final Map<String, Set<IUserAgentRules>> agentRulesAgentVaryByModule = new HashMap<String, Set<IUserAgentRules>>();
 
         digester.addRule("repository", new Rule() {
 
@@ -210,7 +219,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
         digester.addRule("repository/module", new Rule() {
 
-            private String currentModule;
+            private String currentModuleName;
 
             public void begin(String namespace, String name,
                     Attributes attributes) {
@@ -220,16 +229,16 @@ public class StylesheetsServlet extends HtmlModulesServlet {
                 if (id != null) {
                     modules.add(id);
 
-                    currentModule = id;
-                    getDigester().push(currentModule);
+                    currentModuleName = id;
+                    getDigester().push(currentModuleName);
                 }
             }
 
             public void end(String namespace, String name) throws Exception {
                 super.end(namespace, name);
 
-                if (currentModule != null) {
-                    currentModule = null;
+                if (currentModuleName != null) {
+                    currentModuleName = null;
 
                     getDigester().pop();
                 }
@@ -237,17 +246,36 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
         });
 
+        RcfacesContext rcfacesContext = RcfacesContext.getInstance(
+                getServletContext(), null, null);
+
+        final HtmlRendererTypeFactory htmlRendererTypeFactory = (HtmlRendererTypeFactory) AbstractRendererTypeFactory
+                .get(rcfacesContext, renderKitId);
+
+        final Map<String, IUserAgentRules> userAgentRuleList = htmlRendererTypeFactory
+                .listFeaturesByNames();
+
         digester.addRule("repository/module/file", new Rule() {
 
             public void begin(String namespace, String name,
                     Attributes attributes) {
 
-                if (attributes.getIndex("userAgent") >= 0) {
-                    String currentModel = (String) getDigester().peek();
+                String userAgent = attributes.getValue("userAgent");
+                if (userAgent != null) {
+                    String currentModuleName = (String) getDigester().peek();
 
-                    if (currentModel != null) {
-                        modulesHasAgentVary.add(currentModel);
+                    IUserAgentRules userAgentRules = UserAgentRuleTools
+                            .constructUserAgentRules(userAgent, false, true, 0,
+                                    userAgentRuleList);
+
+                    Set<IUserAgentRules> uar = agentRulesAgentVaryByModule
+                            .get(currentModuleName);
+                    if (uar == null) {
+                        uar = new HashSet<IUserAgentRules>();
+                        agentRulesAgentVaryByModule.put(currentModuleName, uar);
                     }
+
+                    uar.add(userAgentRules);
                 }
             }
         });
@@ -363,7 +391,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
             moduleRepositories.put(moduleName, moduleRepository);
 
-            String propertyName = CSS_CONFIG_PROPERTY + "." + moduleName;
+            String propertyName = CSS_CONFIG_PROPERTY + ":" + moduleName;
 
             if (getServletContext().getAttribute(propertyName) == null) {
                 String fileName = CAMELIA_CSS_URL;
@@ -390,11 +418,13 @@ public class StylesheetsServlet extends HtmlModulesServlet {
                     }
                 }
 
+                Set<IUserAgentRules> agentRulesAgentVary = agentRulesAgentVaryByModule
+                        .get(moduleName);
+
                 getServletContext().setAttribute(
                         propertyName,
                         new CssConfig(fileName, uri, styleSheetSourceContainer
-                                .getCharSet(), modulesHasAgentVary
-                                .contains(moduleName)));
+                                .getCharSet(), agentRulesAgentVary));
             }
             if (noCache == false) {
                 styleSheetSourceContainer.getDefaultContent().getRawBuffer();
@@ -415,7 +445,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             String moduleName) {
         ICssConfig cssConfig = (ICssConfig) htmlExternalContext
                 .getFacesContext().getExternalContext().getApplicationMap()
-                .get(CSS_CONFIG_PROPERTY + "." + moduleName);
+                .get(CSS_CONFIG_PROPERTY + ":" + moduleName);
 
         if (cssConfig == null) {
             throw new FacesException(
@@ -451,7 +481,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
         return new StyleSheetSourceContainer(getServletConfig(), module,
                 getCharset(), hasGZipSupport(), hasEtagSupport(),
-                hasHashSupport(), null);
+                hasHashSupport(), null, renderKitId);
     }
 
     /*
@@ -1137,7 +1167,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
      */
     protected static final class CssConfig implements ICssConfig {
 
-        private final Map<String, String> userAgentVaries;
+        private final Map<String, String> userAgentVariesFileName;
 
         private final String styleSheetURI;
 
@@ -1145,13 +1175,17 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
         private final String charSet;
 
+        private final Collection<IUserAgentRules> agentRulesAgentVary;
+
         public CssConfig(String styleSheetFileName, String styleSheetURI,
-                String charSet, boolean userAgentVaryEnabled) {
+                String charSet, Set<IUserAgentRules> agentRulesAgentVary) {
             this.styleSheetFileName = styleSheetFileName;
             this.styleSheetURI = styleSheetURI;
             this.charSet = charSet;
-            this.userAgentVaries = (userAgentVaryEnabled) ? (new HashMap<String, String>())
-                    : null;
+            this.agentRulesAgentVary = agentRulesAgentVary;
+
+            this.userAgentVariesFileName = (agentRulesAgentVary != null && agentRulesAgentVary
+                    .size() > 0) ? (new HashMap<String, String>()) : null;
         }
 
         public String getDefaultStyleSheetURI() {
@@ -1159,24 +1193,40 @@ public class StylesheetsServlet extends HtmlModulesServlet {
         }
 
         public String getStyleSheetFileName(IClientBrowser clientBrowser) {
-            if (userAgentVaries == null) {
+            if (userAgentVariesFileName == null) {
                 return styleSheetFileName;
             }
 
-            String browserId = clientBrowser.getBrowserId();
+            String browserIdAndVersion = clientBrowser.getBrowserIdAndVersion();
 
-            synchronized (userAgentVaries) {
-                String uri = userAgentVaries.get(browserId);
+            synchronized (userAgentVariesFileName) {
+                String uri = userAgentVariesFileName.get(browserIdAndVersion);
                 if (uri != null) {
                     return uri;
                 }
 
-                URIParameters uriParameters = new URIParameters(
-                        styleSheetFileName);
-                uriParameters.appendAgent(browserId);
+                IUserAgent target = clientBrowser;
+                for (IUserAgentRules ua : agentRulesAgentVary) {
+                    IUserAgent r = ua.reduce(target);
+                    if (r == null) {
+                        // Notre clientBrowser non impacté par cette regle
+                        continue;
+                    }
+                    // Version impactée par cette regle
+                    target = r;
+                }
+                if (target != clientBrowser) {
+                    URIParameters uriParameters = new URIParameters(
+                            styleSheetFileName);
+                    uriParameters.appendAgent(browserIdAndVersion);
 
-                uri = uriParameters.computeParametredURI();
-                userAgentVaries.put(browserId, uri);
+                    uri = uriParameters.computeParametredURI();
+
+                } else {
+                    uri = styleSheetFileName;
+                }
+
+                userAgentVariesFileName.put(browserIdAndVersion, uri);
 
                 return uri;
             }

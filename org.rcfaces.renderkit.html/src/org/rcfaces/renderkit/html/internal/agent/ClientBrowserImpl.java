@@ -29,6 +29,8 @@ class ClientBrowserImpl implements IClientBrowser {
 
     private final Boolean isMobileVersion;
 
+    private final String browserIdVersion;
+
     ClientBrowserImpl(String userAgent, BrowserType browserType,
             Integer majorVersion, Integer minorVersion, Integer releaseVersion,
             String browserId, Boolean isMobileVersion) {
@@ -40,6 +42,21 @@ class ClientBrowserImpl implements IClientBrowser {
         this.releaseVersion = releaseVersion;
         this.browserId = browserId;
         this.isMobileVersion = isMobileVersion;
+
+        StringBuilder sb = new StringBuilder(128);
+        sb.append(browserId);
+        if (majorVersion != null) {
+            sb.append('.').append(majorVersion);
+
+            if (minorVersion != null) {
+                sb.append('.').append(minorVersion);
+
+                if (releaseVersion != null) {
+                    sb.append('.').append(releaseVersion);
+                }
+            }
+        }
+        browserIdVersion = sb.toString();
     }
 
     public BrowserType getBrowserType() {
@@ -64,6 +81,10 @@ class ClientBrowserImpl implements IClientBrowser {
 
     public String getBrowserId() {
         return browserId;
+    }
+
+    public String getBrowserIdAndVersion() {
+        return browserIdVersion;
     }
 
     public Boolean isMobileVersion() {
