@@ -57,9 +57,20 @@
 				<include name="**/*.xml"/>
 			</fileset>
 		</jar>
+		
+		<jar destfile="dist/last/rcfaces-css-src.jar" manifest="${build}/MANIFEST.MF">
+			<fileset dir="${basedir}/src">
+				<include name="**/*.properties"/>
+				<include name="**/*.xml"/>
+				<include name="**/*.java"/>
+			</fileset>
+			<fileset dir="${basedir}/src-generated">
+			</fileset>
+		</jar>
 
 		<mkdir dir="${dist}/rcfaces-css-I${build.number}"/>
 		<copy file="dist/last/rcfaces-css.jar" tofile="dist/rcfaces-css-I${build.number}/rcfaces-css-I${build.number}.jar"></copy>
+		<copy file="dist/last/rcfaces-css-src.jar" tofile="dist/rcfaces-css-I${build.number}/rcfaces-css-src-I${build.number}.jar"></copy>
 		
 		<copy file="dist/last/rcfaces-css.jar" todir="../org.rcfaces.packager/lib-generator" overwrite="true" />
 	</target>

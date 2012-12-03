@@ -109,7 +109,10 @@
 	</css-property>
 	<css-property>
 		<name>opacity</name>
+		<!-- 
+		Cette regle n'est pas lue par le parser de CSS !
 		<user-agent name="ie" version="5.5" ruleProcessor="org.rcfaces.css.internal.rules.IE567_OpacityRuleProcessor" />
+		-->
 		<user-agent name="ie" version="8" ruleProcessor="org.rcfaces.css.internal.rules.IE8_OpacityRuleProcessor"/>
 	</css-property>
 	
