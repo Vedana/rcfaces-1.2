@@ -1697,5 +1697,27 @@
         	return null;
 		</code>	
 	</method>
+	<method id="setAlignment" returnType="void" modifier="public">
+		<parameter type="java.lang.String" name="alignment" />
+		<import>org.rcfaces.core.internal.converter.AlignmentNormalizer</import>
+ 		<code>
+			engine.setProperty(Properties.ALIGNMENT, AlignmentNormalizer.normalize(alignment));
+    	</code>
+	</method>
+
+	<method id="setLayoutType">
+		<import>org.rcfaces.core.internal.converter.LayoutManagerTypeConverter</import>
+		<parameter type="String" name="type" />
+		<code>
+			setLayoutType(((Integer)LayoutManagerTypeConverter.SINGLETON.getAsObject(null, this, type)).intValue());
+		</code>
+	</method>
+
+	<method id="listToolTips" returnType="org.rcfaces.core.component.iterator.IToolTipIterator">
+		<import>org.rcfaces.core.internal.tools.ToolTipTools</import>
+		<code>
+			return ToolTipTools.listToolTips(this);
+		</code>
+	</method>
 </camelia-components>
 	
