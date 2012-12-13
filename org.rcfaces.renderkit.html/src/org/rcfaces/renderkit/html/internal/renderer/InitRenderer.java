@@ -236,7 +236,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
                     IHtmlRenderContext.CSS_TYPE);
             htmlWriter.endElement(IHtmlWriter.META);
         }
-        
+
         if (htmlProcessContext.getClientBrowser().getBrowserType() == BrowserType.MICROSOFT_INTERNET_EXPLORER) {
         	 String version = "IE="+htmlProcessContext.getClientBrowser().getMajorVersion();
         	 htmlWriter.startElement(IHtmlWriter.META);
@@ -967,8 +967,6 @@ public class InitRenderer extends AbstractHtmlRenderer {
      */
     private static class ApplicationParameters implements Serializable {
 
-        private static final String REVISION = "$Revision$";
-
         private static final long serialVersionUID = 491523571265962718L;
 
         boolean metaContentType;
@@ -1215,7 +1213,6 @@ public class InitRenderer extends AbstractHtmlRenderer {
      * @version $Revision$ $Date$
      */
     static class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
-        private static final String REVISION = "$Revision$";
 
         private final IHtmlWriter writer;
 

@@ -73,6 +73,8 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
 
     private boolean htmlEscapingDisabled;
 
+    private Set<String> cssProcessRulesForce;
+
     public HtmlProcessContextImpl(FacesContext facesContext) {
         super(facesContext);
 
@@ -93,6 +95,17 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
 
         useFlatIdentifier = "true".equalsIgnoreCase((String) applicationMap
                 .get(HTML_FLAT_IDENTIFIER_PARAMETER));
+
+        String prf = (String) applicationMap
+                .get(HTML_PROCESS_RULES_FORCED_PARAMETER);
+        if (prf != null) {
+            StringTokenizer st = new StringTokenizer(prf, ",; ");
+
+            cssProcessRulesForce = new HashSet<String>(8);
+            for (; st.hasMoreTokens();) {
+                cssProcessRulesForce.add(st.nextToken());
+            }
+        }
 
         // keepDisabledState = "true".equalsIgnoreCase((String)
         // applicationMap.get(KEEP_DISABLED_STATE_PARAMETER));
@@ -383,6 +396,10 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
 
     public boolean isHtmlEscapingDisabled() {
         return htmlEscapingDisabled;
+    }
+
+    public Set<String> listCssProcessRulesForced() {
+        return cssProcessRulesForce;
     }
 
     // public boolean keepDisabledState() {

@@ -7,6 +7,7 @@ package org.rcfaces.renderkit.html.internal.renderer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.faces.FacesException;
@@ -89,17 +90,33 @@ public class CssStyleRenderer extends AbstractFilesCollectorRenderer {
             sources = filesCollectorDecorator.listSources();
         }
 
+        boolean mergeStyles = cssStyleComponent.isMergeStyles(facesContext);
+        boolean processRules = cssStyleComponent.isProcessRules(facesContext);
+
         String requiredModules = cssStyleComponent
                 .getRequiredModules(facesContext);
-
         String requiredSets = cssStyleComponent.getRequiredSets(facesContext);
         if (requiredModules != null || requiredSets != null) {
             sources = addRequired(htmlWriter, sources, requiredModules,
                     requiredSets);
-        }
 
-        boolean mergeStyles = cssStyleComponent.isMergeStyles(facesContext);
-        boolean processRules = cssStyleComponent.isProcessRules(facesContext);
+            if (processRules == false) {
+                Set<String> forceProcessRules = htmlProcessContext
+                        .listCssProcessRulesForced();
+                if (forceProcessRules != null
+                        && forceProcessRules.isEmpty() == false) {
+
+                    if (containsProcessRulesId(forceProcessRules,
+                            requiredModules)) {
+                        processRules = true;
+
+                    } else if (containsProcessRulesId(forceProcessRules,
+                            requiredSets)) {
+                        processRules = true;
+                    }
+                }
+            }
+        }
 
         if (src != null || (sources != null && sources.length > 0)) {
 
@@ -225,6 +242,22 @@ public class CssStyleRenderer extends AbstractFilesCollectorRenderer {
             htmlWriter.endElement(IHtmlWriter.STYLE);
 
         }
+    }
+
+    private static boolean containsProcessRulesId(
+            Set<String> forceProcessRules, String ids) {
+
+        StringTokenizer st = new StringTokenizer(ids, ", ");
+        for (; st.hasMoreTokens();) {
+            String token = st.nextToken();
+            if (forceProcessRules.contains(token) == false) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     private FileItemSource[] addRequired(IHtmlWriter writer,

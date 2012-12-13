@@ -51,6 +51,9 @@ public interface IHtmlProcessContext extends IProcessContext {
     String SYSTEM_PARAMETERS_NAMES_APPLICATION_PARAMETER = Constants
             .getPackagePrefix() + ".client.SYSTEM_PARAMETERS_NAMES";
 
+    String HTML_PROCESS_RULES_FORCED_PARAMETER = Constants.getPackagePrefix()
+            + ".PROCESS_RULES_FORCED";
+
     boolean isFlatIdentifierEnabled();
 
     String getStyleSheetURI(String uri, boolean containsContextPath);
@@ -77,6 +80,8 @@ public interface IHtmlProcessContext extends IProcessContext {
     Set<String> getSystemParametersNames();
 
     boolean isHtmlEscapingDisabled();
+
+    Set<String> listCssProcessRulesForced();
 
     // boolean keepDisabledState();
 }
