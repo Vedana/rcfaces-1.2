@@ -57,6 +57,7 @@ import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.agent.ClientBrowserFactory;
 import org.rcfaces.renderkit.html.internal.agent.IClientBrowser;
+import org.rcfaces.renderkit.html.internal.agent.IUserAgent.BrowserType;
 import org.rcfaces.renderkit.html.internal.css.ICssConfig;
 import org.rcfaces.renderkit.html.internal.css.StylesheetsServlet;
 import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository;
@@ -235,6 +236,15 @@ public class InitRenderer extends AbstractHtmlRenderer {
                     IHtmlRenderContext.CSS_TYPE);
             htmlWriter.endElement(IHtmlWriter.META);
         }
+        
+        if (htmlProcessContext.getClientBrowser().getBrowserType() == BrowserType.MICROSOFT_INTERNET_EXPLORER) {
+        	 String version = "IE="+htmlProcessContext.getClientBrowser().getMajorVersion();
+        	 htmlWriter.startElement(IHtmlWriter.META);
+        	 htmlWriter.writeHttpEquiv("X-UA-Compatible",
+                     version);
+        	 htmlWriter.endElement(IHtmlWriter.META);
+        }
+        
 
         if (disableContextMenu) {
             htmlRenderContext.setDisabledContextMenu(true);
