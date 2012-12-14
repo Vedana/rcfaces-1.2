@@ -193,6 +193,10 @@ TOKEN_MGR_DECLS :
 
 | < INHERIT: "inherit" >
 
+| < EXPRESSION_SYM: "expression">
+
+| < PROGID_SYM: "progid">
+
 // ident        -?{nmstart}{nmchar}*
 // {ident}         {return IDENT;}
 | < IDENT: ("-")? <NMSTART> ( <NMCHAR> )* >
@@ -357,6 +361,12 @@ TOKEN_MGR_DECLS :
 // "url("{w}{string}{w}")"  {return URI;}
 // "url("{w}{url}{w}")" {return URI;}
 | < URI: "url(" ( <S> )* ( <STRING> | <URL> ) ( <S> )* ")" > { matchedToken.image = trimUrl(image); }
+
+// {expressionSym}"(        {return EXPRESSION_FUNC;}
+| < PROGID_FUNC: <PROGID_SYM> ":" (~["("])* "(" (~[")"])* ")">
+
+// {expressionSym}"(        {return EXPRESSION_FUNC;}
+| < EXPRESSION_FUNC: <EXPRESSION_SYM> "(" (~[")"])* ")">
 
 // {ident}"(        {return FUNCTION;}
 | < FUNCTION: <IDENT> "(" >
@@ -1285,7 +1295,7 @@ LexicalUnit expr() :
 //
 // term
 //  : unary_operator?
-//    [ NUMBER S* | PERCENTAGE S* | LENGTH S* | EMS S* | EXS S* | ANGLE S* |
+//    [ NUMBER S* | PERCENTAGE S* | LENGTH S* | EMS S* | PS S* | ANGLE S* |
 //      TIME S* | FREQ S* ]
 //  | STRING S* | IDENT S* | URI S* | hexcolor | function
 //  ;
@@ -1334,6 +1344,8 @@ LexicalUnit term(LexicalUnit prev) :
         | t = <TIME_S>      { value = LexicalUnitImpl.createSecond(prev, floatValue(op, t.image)); }
         | t = <FREQ_HZ>     { value = LexicalUnitImpl.createHertz(prev, floatValue(op, t.image)); }
         | t = <FREQ_KHZ>    { value = LexicalUnitImpl.createKiloHertz(prev, floatValue(op, t.image)); }
+        | value = ieExpression(prev)
+        | value = ieProgId(prev)
         | value = function(prev)
         )
     | t = <STRING>          { value = new LexicalUnitImpl(prev, LexicalUnit.SAC_STRING_VALUE, unescape(t.image, false)); }
@@ -1382,6 +1394,30 @@ LexicalUnit function(LexicalUnit prev) :
     <RROUND>
     {
         return this.functionInternal(prev, t, params);
+    }
+}
+
+LexicalUnit ieExpression(LexicalUnit prev) :
+{
+    Token t;
+    LexicalUnit params;
+}
+{
+    t = <EXPRESSION_FUNC>
+    {
+        return this.functionInternal(prev, t, null);
+    }
+}
+
+LexicalUnit ieProgId(LexicalUnit prev) :
+{
+    Token t;
+    LexicalUnit params;
+}
+{
+    t = <PROGID_FUNC>
+    {
+        return this.functionInternal(prev, t, null);
     }
 }
 

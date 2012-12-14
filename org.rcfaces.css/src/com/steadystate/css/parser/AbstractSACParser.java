@@ -568,9 +568,33 @@ abstract class AbstractSACParser implements Parser {
             return LexicalUnitImpl.createRect(prev, params);
         } else if ("rgb(".equalsIgnoreCase(t.image)) {
             return LexicalUnitImpl.createRgbColor(prev, params);
+        } else if (t.image.toLowerCase().startsWith("expression(")) {
+            String img = t.image;
+
+            return LexicalUnitImpl.createFunction(
+                    prev,
+                    "expression",
+                    LexicalUnitImpl.createIdent(
+                            null,
+                            img.substring(img.indexOf('(') + 1,
+                                    img.indexOf(')'))));
+        } else if (t.image.toLowerCase().startsWith("progid:")) {
+            String img = t.image;
+
+            return LexicalUnitImpl.createFunction(
+                    prev,
+                    img.substring(0, img.indexOf('(')),
+                    LexicalUnitImpl.createIdent(
+                            null,
+                            img.substring(img.indexOf('(') + 1,
+                                    img.indexOf(')'))));
         }
         return LexicalUnitImpl.createFunction(prev,
                 t.image.substring(0, t.image.length() - 1), params);
+    }
+
+    protected LexicalUnit parametersInternal(final Token t) {
+        return LexicalUnitImpl.createIdent(null, t.image);
     }
 
     protected LexicalUnit hexcolorInternal(final LexicalUnit prev, final Token t) {
