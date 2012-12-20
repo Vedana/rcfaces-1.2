@@ -140,6 +140,7 @@ if (window._RCFACES_LEVEL3) {
 				newArray.prototype.f_addElement=parentArray.prototype.f_addElement;
 				newArray.prototype.f_addElements=parentArray.prototype.f_addElements;
 				newArray.prototype.f_contains=parentArray.prototype.f_contains;
+				newArray.prototype.f_indexOf=parentArray.prototype.f_indexOf;
 				return newArray;
 				
 			case "f_core":
@@ -166,7 +167,7 @@ if (window._RCFACES_LEVEL3) {
 				var newClassLoader=function() {
 					this._window=win;
 					parentClassLoader.apply(this, arguments);		
-				}
+				};
 				
 				newClassLoader.prototype=parentClassLoader.prototype;
 				for(var i in parentClassLoader) {
@@ -210,7 +211,7 @@ if (window._RCFACES_LEVEL3) {
 				statics: clazz._staticMembers,
 				extend: aspects,
 				_classLoader: this
-			}
+			};
 			
 			return new this._window.f_aspect(className, atts);			
 		}
@@ -249,7 +250,7 @@ if (window._RCFACES_LEVEL3) {
 				extend: parent,
 				aspects: aspects,
 				_classLoader: this
-			}
+			};
 			
 			var lookId=clazz._lookId;
 			if (lookId) {
@@ -290,7 +291,7 @@ if (window._RCFACES_LEVEL3) {
 		}
 
 		return newClass;
-	}
+	};
 	
 	
 	/**
@@ -302,5 +303,5 @@ if (window._RCFACES_LEVEL3) {
 			return "[MultiWindowClassLoader]";
 		}
 		return "[MultiWindowClassLoader '"+this._window.location+"']";
-	}
+	};
 }
