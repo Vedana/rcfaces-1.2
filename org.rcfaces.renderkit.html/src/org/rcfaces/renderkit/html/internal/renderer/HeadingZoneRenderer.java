@@ -3,9 +3,13 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.UINamingContainer;
+import javax.faces.component.html.HtmlOutputText;
 
 import org.rcfaces.core.component.HeadingZoneComponent;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
@@ -37,11 +41,31 @@ public class HeadingZoneRenderer extends AbstractCssRenderer {
         if (text != null && text.length() > 0) {
             hasCaption = true;
 
-            boolean visible = true;
+            boolean visible = false;
             List<UIComponent> children = headingZoneComponent.getChildren();
-            for (UIComponent child : children) {
+
+            Deque<UIComponent> stack = new LinkedList<UIComponent>(children);
+            for (; stack.isEmpty() == false;) {
+                UIComponent child = stack.pop();
 
                 if (child.isRendered() == false) {
+                    continue;
+                }
+
+                if (child instanceof HtmlOutputText) {
+                    Object value = ((HtmlOutputText) child).getValue();
+                    if (value == null) {
+                        continue;
+                    }
+                    if (value instanceof String) {
+                        if (((String) value).trim().length() == 0) {
+                            continue;
+                        }
+                    }
+                }
+
+                if (child instanceof UINamingContainer) {
+                    stack.addAll(child.getChildren());
                     continue;
                 }
 
@@ -50,7 +74,7 @@ public class HeadingZoneRenderer extends AbstractCssRenderer {
             }
 
             if (visible == false) {
-                headingZoneComponent.setRendered(visible);
+                hasCaption = false;
             }
         }
 
