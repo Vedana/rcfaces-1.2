@@ -107,6 +107,11 @@ public class ImageRenderer extends AbstractCssRenderer {
             htmlWriter.writeHeight(imageHeight);
         }
 
+        String alternateText = image.getAlternateText(facesContext);
+        if (alternateText != null) {
+            htmlWriter.writeAlt(alternateText);
+        }
+
         htmlWriter.endElement(IHtmlWriter.IMG);
 
         super.encodeEnd(htmlWriter);
