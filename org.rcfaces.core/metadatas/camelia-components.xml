@@ -2368,6 +2368,9 @@
 		<capability id="IScrollableCapability" />
 		<capability id="IShowValueCapability"/>
 
+		<capability id="IHeadingZoneCapability" default="false" />
+		<capability id="IHeadingLevelCapability" />
+
 		<!-- 
 			Pas de filter ... ce n'est pas possible avec le decodage des UIData !
 			<capability id="IFilterCapability" clearCachedValue="true"/>
