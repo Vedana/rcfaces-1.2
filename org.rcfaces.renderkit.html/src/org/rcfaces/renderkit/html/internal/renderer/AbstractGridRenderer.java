@@ -1345,6 +1345,10 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         return GRID_MAIN_STYLE_CLASS + "_hidden_title";
     }
 
+    protected String getHiddenCaptionClassName(IHtmlWriter htmlWriter) {
+        return GRID_MAIN_STYLE_CLASS + "_hidden_caption";
+    }
+
     protected int getTitleHeight() {
         return 20;
     }
@@ -1851,7 +1855,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             AbstractGridRenderContext gridRenderContext, String caption)
             throws WriterException {
         htmlWriter.startElement(IHtmlWriter.CAPTION);
-        htmlWriter.writeClass(getHiddenTitleClassName(htmlWriter));
+        htmlWriter.writeClass(getHiddenCaptionClassName(htmlWriter));
         htmlWriter.writeText(caption);
         htmlWriter.endElement(IHtmlWriter.CAPTION);
     }
