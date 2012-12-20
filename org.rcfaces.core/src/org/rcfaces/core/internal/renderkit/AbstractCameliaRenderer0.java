@@ -34,6 +34,8 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
     private static final Log LOG = LogFactory
             .getLog(AbstractCameliaRenderer0.class);
 
+    private static final boolean LOG_DEBUG = LOG.isDebugEnabled();
+
     private static final String HIDE_CHILDREN_PROPERTY = "camelia.ASYNC_TREE_MODE";
 
     private static final String COMPONENT_HIDDEN = "camelia.COMPONENT_HIDDEN";
@@ -66,6 +68,11 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
     @Override
     public final void encodeBegin(FacesContext context, UIComponent component)
             throws IOException {
+
+        if (LOG_DEBUG) {
+            LOG.debug("Encode begin START '" + component.getClientId(context)
+                    + "' rendererType=" + component.getRendererType());
+        }
 
         super.encodeBegin(context, component);
 
@@ -105,6 +112,11 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
         if (writer instanceof ISgmlWriter) {
             ((ISgmlWriter) writer).endComponent();
         }
+
+        if (LOG_DEBUG) {
+            LOG.debug("Encode begin END '" + component.getClientId(context)
+                    + "' rendererType=" + component.getRendererType());
+        }
     }
 
     protected abstract void encodeBegin(IComponentWriter writer)
@@ -120,9 +132,21 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
     @Override
     public void encodeChildren(FacesContext facesContext, UIComponent component)
             throws IOException {
+
         if ((this instanceof IAsyncRenderer) == false) {
+
+            if (LOG_DEBUG) {
+                LOG.debug("Encode children of '"
+                        + component.getClientId(facesContext) + "'");
+            }
+
             super.encodeChildren(facesContext, component);
             return;
+        }
+
+        if (LOG_DEBUG) {
+            LOG.debug("Encode children of '"
+                    + component.getClientId(facesContext) + "' IASync Renderer");
         }
 
         IRenderContext renderContext = getRenderContext(facesContext);
@@ -133,10 +157,20 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
                 .getComponentRenderContext();
 
         if (componentRenderContext.containsAttribute(HIDE_CHILDREN_PROPERTY)) {
+            if (LOG_DEBUG) {
+                LOG.debug("Encode END children of '"
+                        + component.getClientId(facesContext)
+                        + "'  HIDE_CHILDREN");
+            }
             return;
         }
 
         super.encodeChildren(facesContext, component);
+
+        if (LOG_DEBUG) {
+            LOG.debug("Encode END children of '"
+                    + component.getClientId(facesContext) + "'");
+        }
     }
 
     @Override
@@ -166,6 +200,11 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
     @Override
     public void encodeEnd(FacesContext context, UIComponent component)
             throws IOException {
+
+        if (LOG_DEBUG) {
+            LOG.debug("Encode end START '" + component.getClientId(context)
+                    + "' rendererType=" + component.getRendererType());
+        }
 
         IRenderContext renderContext = getRenderContext(context);
 
@@ -215,6 +254,11 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
         }
 
         renderContext.popComponent(component);
+
+        if (LOG_DEBUG) {
+            LOG.debug("Encode end END '" + component.getClientId(context)
+                    + "' rendererType=" + component.getRendererType());
+        }
     }
 
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
@@ -225,6 +269,11 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
     @Override
     public final void decode(FacesContext context, UIComponent component) {
 
+        if (LOG_DEBUG) {
+            LOG.debug("Decode START '" + component.getClientId(context)
+                    + "' rendererType=" + component.getRendererType());
+        }
+
         IRequestContext requestContext = getRequestContext(context);
 
         String requestComponentId = getRequestComponentId(requestContext,
@@ -234,6 +283,11 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
                 component, requestComponentId, this);
 
         decode(requestContext, component, componentData);
+
+        if (LOG_DEBUG) {
+            LOG.debug("Decode END '" + component.getClientId(context)
+                    + "' rendererType=" + component.getRendererType());
+        }
     }
 
     protected String getRequestComponentId(IRequestContext requestContext,
@@ -250,11 +304,22 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
     }
 
     public void decodeChildren(FacesContext context, UIComponent component) {
+
+        if (LOG_DEBUG) {
+            LOG.debug("Decode chidlren START '"
+                    + component.getClientId(context) + "'");
+        }
+
         for (Iterator<UIComponent> children = component.getFacetsAndChildren(); children
                 .hasNext();) {
             UIComponent child = children.next();
 
             decodeChild(context, component, child);
+        }
+
+        if (LOG_DEBUG) {
+            LOG.debug("Decode chidlren END '" + component.getClientId(context)
+                    + "'");
         }
     }
 
@@ -333,7 +398,7 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
         Renderer renderer = renderKit.getRenderer(component.getFamily(),
                 rendererType);
 
-        if (LOG.isDebugEnabled()) {
+        if (LOG_DEBUG) {
             LOG.debug("getRenderer(id='" + component.getId() + " family='"
                     + component.getFamily() + "' rendererType='" + rendererType
                     + "' class='" + component.getClass().getName()
