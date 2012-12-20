@@ -2928,8 +2928,12 @@ var __members = {
 			this.f_setFirst(this._first, this._cursor);
 		}
 
-		if (this._thead) {
-			this._thead.style.display = "none"; //danger accessibilite
+		if (this._thead && f_core.IsGecko()) {
+			this._thead.style.display = "block"; //danger accessibilite
+			
+			if (this._table.caption) {
+				this._table.caption.style.display="block";
+			}
 		}
 	},
 	/**
@@ -5587,7 +5591,7 @@ var __members = {
 
 		this._thead = table.tHead;
 		if (this._thead) {
-			this._thead.style.display = "none";
+			//this._thead.style.display = "none";
 		}
 
 		var scrollBody = this;
