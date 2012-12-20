@@ -20,8 +20,6 @@ import org.rcfaces.core.internal.repository.IRepository;
  * @version $Revision$ $Date$
  */
 public final class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory
             .getLog(JavaScriptWriterImpl.class);
 

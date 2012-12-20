@@ -111,7 +111,7 @@ f_aspect.prototype = {
 	toString: function() {
 		return "[Aspect "+this._name+"]";
 	}
-}
+};
 
 /** 
  * Returns class name.
@@ -121,7 +121,7 @@ f_aspect.prototype = {
  */
 f_aspect.f_getName=function() {
 	return "f_aspect";
-}
+};
 
 f_aspect._nativeClass=true;
 //f_aspect._kernelClass=true;
