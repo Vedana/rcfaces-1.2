@@ -431,6 +431,16 @@
 	height: auto;
 }
 
+.f_grid_hidden_caption {
+	display: none;  /* pour taille colonne  attention accessibilite*/
+	position: absolute;
+	left: -10000px;
+	top: auto;
+	height: 1px;
+	overflow: hidden;
+	line-height: 0px;
+}
+
 .f_grid_hidden_title {
 	display: none;  /* pour taille colonne  attention accessibilite*/
 	position: absolute;
