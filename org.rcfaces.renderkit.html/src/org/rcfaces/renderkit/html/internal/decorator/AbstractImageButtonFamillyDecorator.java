@@ -160,22 +160,32 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                 textPosition = IHorizontalTextPositionCapability.DEFAULT_POSITION;
             }
 
-            if (imageButtonFamilly instanceof IAccessKeyCapability) {
-                accessKey = ((IAccessKeyCapability) imageButtonFamilly)
-                        .getAccessKey();
-            }
+            if (accessKey == null) {
+                // Peut être positionné par le constructeur enfant !
 
-            if (imageButtonFamilly instanceof IAlternateTextCapability) {
-                alternateText = ((IAlternateTextCapability) imageButtonFamilly)
-                        .getAlternateText();
-
-                if (alternateText == null
-                        && (imageButtonFamilly instanceof IToolTipTextCapability)) {
-                    alternateText = ((IToolTipTextCapability) imageButtonFamilly)
-                            .getToolTipText();
+                if (imageButtonFamilly instanceof IAccessKeyCapability) {
+                    accessKey = ((IAccessKeyCapability) imageButtonFamilly)
+                            .getAccessKey();
                 }
             }
-            tabIndex = imageButtonFamilly.getTabIndex(facesContext);
+
+            if (alternateText == null) {
+                // Peut être positionné par le constructeur enfant !
+                if (imageButtonFamilly instanceof IAlternateTextCapability) {
+                    alternateText = ((IAlternateTextCapability) imageButtonFamilly)
+                            .getAlternateText();
+
+                    if (alternateText == null
+                            && (imageButtonFamilly instanceof IToolTipTextCapability)) {
+                        alternateText = ((IToolTipTextCapability) imageButtonFamilly)
+                                .getToolTipText();
+                    }
+                }
+            }
+            if (tabIndex == null) {
+                // Peut être positionné par le constructeur enfant !
+                tabIndex = imageButtonFamilly.getTabIndex(facesContext);
+            }
 
             if (htmlBorderWriter == null && (text != null)) {
                 IBorderRenderersRegistry borderRendererRegistry = RcfacesContext
@@ -436,7 +446,8 @@ public abstract class AbstractImageButtonFamillyDecorator extends
         return null;
     }
 
-    private void writeInputAttributes(IHtmlWriter writer, boolean isInput) throws WriterException {
+    private void writeInputAttributes(IHtmlWriter writer, boolean isInput)
+            throws WriterException {
 
         if (isInput) {
             if (disabled) {
@@ -456,7 +467,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
         if (accessKey != null) {
             writer.writeAccessKey(accessKey);
         }
-        if (alternateText!=null) {
+        if (alternateText != null) {
             writer.writeTitle(alternateText);
         }
     }
