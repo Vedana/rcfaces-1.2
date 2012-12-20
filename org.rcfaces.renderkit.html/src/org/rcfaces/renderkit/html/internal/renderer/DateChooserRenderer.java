@@ -56,11 +56,15 @@ public class DateChooserRenderer extends AbstractCalendarRenderer implements
         return true;
     }
 
+    protected IComponentDecorator createDateChooserButtonDecorator(
+            IImageButtonFamilly imageButtonFamilly) {
+        return new DateChooserButtonDecorator(imageButtonFamilly);
+    }
+
     protected IComponentDecorator createComponentDecorator(
             FacesContext facesContext, UIComponent component) {
 
-        IComponentDecorator componentDecorator = new DateChooserButtonDecorator(
-                (IImageButtonFamilly) component);
+        IComponentDecorator componentDecorator = createDateChooserButtonDecorator((IImageButtonFamilly) component);
 
         IComponentDecorator parent = super.createComponentDecorator(
                 facesContext, component);
