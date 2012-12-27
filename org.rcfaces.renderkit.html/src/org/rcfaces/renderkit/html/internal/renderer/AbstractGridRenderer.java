@@ -1028,7 +1028,6 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         }
 
         boolean resizable = gridRenderContext.isResizable();
-        int totalResize = gridRenderContext.getColumnWidthTotalSize();
 
         if (resizable) {
             htmlWriter.writeAttributeNS("resizable", true);
@@ -1137,19 +1136,16 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         htmlWriter.writeCellSpacing(0);
 
         int tableWidth = gridRenderContext.getColumnWidthTotalSize();
+//        if (tableWidth > 0) {
+//            if (gridWidth > 0 && gridWidth > tableWidth) {
+//                // tableWidth = -1;
+//            }
+//        }
+
         if (tableWidth > 0) {
-            if (gridWidth > 0 && gridWidth > tableWidth) {
-                // tableWidth = -1;
-            }
-        }
-
-        if (resizable) {
-            // 2 htmlWriter.writeAttribute("width", totalResize);
-            htmlWriter.writeStyle().writeWidthPx(totalResize);
-
-        } else if (tableWidth > 0) {
             htmlWriter.writeWidth(tableWidth);
-
+        } else if (w > 0)  {
+        	 htmlWriter.writeWidth(w);
         } else {
             htmlWriter.writeWidth("100%");
         }
