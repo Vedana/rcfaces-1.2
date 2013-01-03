@@ -655,6 +655,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
         unlockedProperties.add("collapsedItems");
     }
 
+    @SuppressWarnings("unused")
     public void decode(IRequestContext context, UIComponent component,
             IComponentData componentData) {
         super.decode(context, component, componentData);
