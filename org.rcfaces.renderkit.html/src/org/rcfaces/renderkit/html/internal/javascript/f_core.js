@@ -1535,10 +1535,27 @@ var f_core = {
 		return null;
 	},
 	/**
-	 * @method static hidden
+	 * @method public static
+	 * @param HTMLElement parent
+	 * @param String text
+	 * @return Text
+	 */
+	CreateTextNode: function(parent, text) {
+		f_core.Assert(parent && (parent.nodeType==f_core.ELEMENT_NODE || parent.nodeType==f_core.DOCUMENT_FRAGMENT), "f_core.CreateTextNode: Invalid component ! ("+parent+")");		
+		
+		var doc=parent.ownerDocument;
+
+		var node=doc.createTextNode(text);
+		
+		parent.appendChild(node);
+		
+		return node;
+	},
+	/**
+	 * @method public static
 	 * @param HTMLElement parent
 	 * @param String tagName
-	 * @param Object properties
+	 * @param optional Object properties
 	 * @return HTMLElement
 	 */
 	CreateElement: function(parent, tagName, properties) {
@@ -1551,14 +1568,14 @@ var f_core = {
 		var element=undefined;
 
 		for(var i=1;i<arguments.length;) {
-			tagName=arguments[i++];
-			properties=arguments[i++];
+			var tagName=arguments[i++];
+			var properties=arguments[i++];
 			
 			f_core.Assert(typeof(tagName)=="string", "f_core.CreateElement: Invalid tagName parameter ("+tagName+")");
 			f_core.Assert(properties===undefined || typeof(properties)=="object", "f_core.CreateElement: Invalid properties parameter ("+properties+")");
 			
 			
-			if (ie && tagName.toLowerCase()=="input" && properties.type && properties.name) {
+			if (ie && tagName.toLowerCase()=="input" && properties && properties.type && properties.name) {
 				element=doc.createElement("<input name=\""+properties.name+"\" type=\""+properties.type+"\">");
 				delete properties.name;
 				delete properties.type;
@@ -1662,17 +1679,17 @@ var f_core = {
 				}
 
 				if (idx) {
-					component.appendChild(doc.createTextNode(text.substring(0, idx)));
+					f_core.CreateTextNode(component, text.substring(0, idx));
 				}
 
 				var ul=doc.createElement("u");
 				component.appendChild(ul);
 				ul.className="f_accessKey";
 				
-				ul.appendChild(doc.createTextNode(text.charAt(idx)));
+				f_core.CreateTextNode(ul, text.charAt(idx));
 			
 				if (idx+1<text.length) {
-					component.appendChild(doc.createTextNode(text.substring(idx+1)));
+					f_core.CreateTextNode(component, text.substring(idx+1));
 				}
 				
 				return;
@@ -1699,7 +1716,7 @@ var f_core = {
 		}
 		
 		if (text) {
-			component.appendChild(doc.createTextNode(text));
+			f_core.CreateTextNode(component, text);
 		}
 	},
 	/**
@@ -1745,7 +1762,7 @@ var f_core = {
 		}
 		
 		var win;
-		var form;
+		var form=undefined;
 		
 		var tagName=this.tagName;
 		if (!tagName || tagName.toLowerCase()!="form") {
@@ -1814,7 +1831,7 @@ var f_core = {
 			// evt peut être null !
 		
 			var win;
-			var form;
+			var form=undefined;
 			
 			if (!this.tagName || this.tagName.toLowerCase()!="form") {
 				// this est une window ?
