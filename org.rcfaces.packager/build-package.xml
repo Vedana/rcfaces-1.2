@@ -85,7 +85,7 @@
 			<fileset dir="${build}/js_optimizer*"/>
 		</delete>
 
-		<java taskname="OptimizeJs Level1" classname="com.vedana.camelia.generator.js.parser.JsOptimizer">
+		<java taskname="OptimizeJs Level1" classname="com.vedana.camelia.generator.js.parser.JsOptimizer" failonerror="true">
 			<classpath refid="generator.classpath" />
 			<classpath refid="commons.classpath" />
 
@@ -111,7 +111,7 @@
 			<arg value="${integration.type}${integrationVersion}" />
 		</java>
 
-		<java taskname="OptimizeJs Level2" classname="com.vedana.camelia.generator.js.parser.JsOptimizer">
+		<java taskname="OptimizeJs Level2" classname="com.vedana.camelia.generator.js.parser.JsOptimizer" failonerror="true">
 			<classpath refid="generator.classpath" />
 			<classpath refid="commons.classpath" />
 
@@ -142,7 +142,7 @@
 
 		</java>
 
-		<java taskname="OptimizeJs Level3" classname="com.vedana.camelia.generator.js.parser.JsOptimizer">
+		<java taskname="OptimizeJs Level3" classname="com.vedana.camelia.generator.js.parser.JsOptimizer" failonerror="true">
 			<classpath refid="generator.classpath" />
 			<classpath refid="commons.classpath" />
 
@@ -380,7 +380,7 @@
 			</fileset>
 		</path>
 
-		<java taskname="Prepare bootStrap" classname="${generator.classname}">
+		<java taskname="Prepare bootStrap" classname="${generator.classname}" failonerror="true">
 			<classpath refid="generator.classpath" />
 			<classpath refid="generated.classpath" />
 
@@ -443,7 +443,7 @@
 		<echo message="  html-model=${metadas.xml.html}" />
 		<echo message="  svg-model=${metadas.xml.svg}" />
 
-		<java taskname="Build template" classname="${generator.classname}">
+		<java taskname="Build template" classname="${generator.classname}" failonerror="true">
 			<classpath refid="generator.classpath" />
 			<classpath refid="generated.classpath" />
 
@@ -1062,7 +1062,7 @@
 		</path>
 
 		
-		<java taskname="Build template" classname="${generator.classname}">
+		<java taskname="Build template" classname="${generator.classname}" failonerror="true">
 			<classpath refid="generator.classpath" />
 			<classpath refid="generated.classpath" />
 
