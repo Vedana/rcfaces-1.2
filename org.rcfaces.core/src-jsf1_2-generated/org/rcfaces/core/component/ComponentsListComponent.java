@@ -9,11 +9,13 @@ import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.AbstractDataComponent;
 import org.rcfaces.core.component.capability.IShowValueCapability;
+import org.rcfaces.core.component.capability.IHeadingZoneCapability;
 import org.rcfaces.core.component.capability.IBorderTypeCapability;
 import org.rcfaces.core.component.IMenuComponent;
 import javax.el.ValueExpression;
 import java.util.HashSet;
 import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.capability.IHeadingLevelCapability;
 import java.util.Set;
 import java.util.Arrays;
 import org.rcfaces.core.component.capability.IMenuCapability;
@@ -58,7 +60,9 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 	IBorderCapability,
 	IBorderTypeCapability,
 	IScrollableCapability,
-	IShowValueCapability {
+	IShowValueCapability,
+	IHeadingZoneCapability,
+	IHeadingLevelCapability {
 
 	private static final Log LOG = LogFactory.getLog(ComponentsListComponent.class);
 
@@ -66,7 +70,7 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"showValue","columnStyleClass","verticalScrollPosition","borderType","horizontalScrollPosition","rowStyleClass","rowCountVar","border","rowIndexVar","columnNumber"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headingLevel","showValue","columnStyleClass","verticalScrollPosition","borderType","horizontalScrollPosition","rowStyleClass","rowCountVar","border","rowIndexVar","headingZone","columnNumber"}));
 	}
 
 	public ComponentsListComponent() {
@@ -212,6 +216,52 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 
 	public void setShowValue(java.lang.Object showValue) {
 		engine.setProperty(Properties.SHOW_VALUE, showValue);
+	}
+
+	public boolean isHeadingZone() {
+		return isHeadingZone(null);
+	}
+
+	/**
+	 * See {@link #isHeadingZone() isHeadingZone()} for more details
+	 */
+	public boolean isHeadingZone(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.HEADING_ZONE, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "headingZone" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHeadingZoneSetted() {
+		return engine.isPropertySetted(Properties.HEADING_ZONE);
+	}
+
+	public void setHeadingZone(boolean headingZone) {
+		engine.setProperty(Properties.HEADING_ZONE, headingZone);
+	}
+
+	public java.lang.String getHeadingLevel() {
+		return getHeadingLevel(null);
+	}
+
+	/**
+	 * See {@link #getHeadingLevel() getHeadingLevel()} for more details
+	 */
+	public java.lang.String getHeadingLevel(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.HEADING_LEVEL, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "headingLevel" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHeadingLevelSetted() {
+		return engine.isPropertySetted(Properties.HEADING_LEVEL);
+	}
+
+	public void setHeadingLevel(java.lang.String headingLevel) {
+		engine.setProperty(Properties.HEADING_LEVEL, headingLevel);
 	}
 
 	/**

@@ -23,6 +23,8 @@ public class ComponentsListTag extends AbstractDataTag implements Tag {
 	private ValueExpression horizontalScrollPosition;
 	private ValueExpression verticalScrollPosition;
 	private ValueExpression showValue;
+	private ValueExpression headingZone;
+	private ValueExpression headingLevel;
 	private ValueExpression rowCountVar;
 	private ValueExpression rowIndexVar;
 	private ValueExpression columnNumber;
@@ -50,6 +52,14 @@ public class ComponentsListTag extends AbstractDataTag implements Tag {
 
 	public void setShowValue(ValueExpression showValue) {
 		this.showValue = showValue;
+	}
+
+	public void setHeadingZone(ValueExpression headingZone) {
+		this.headingZone = headingZone;
+	}
+
+	public void setHeadingLevel(ValueExpression headingLevel) {
+		this.headingLevel = headingLevel;
 	}
 
 	public void setRowCountVar(ValueExpression rowCountVar) {
@@ -82,6 +92,8 @@ public class ComponentsListTag extends AbstractDataTag implements Tag {
 			LOG.debug("  horizontalScrollPosition='"+horizontalScrollPosition+"'");
 			LOG.debug("  verticalScrollPosition='"+verticalScrollPosition+"'");
 			LOG.debug("  showValue='"+showValue+"'");
+			LOG.debug("  headingZone='"+headingZone+"'");
+			LOG.debug("  headingLevel='"+headingLevel+"'");
 			LOG.debug("  rowCountVar='"+rowCountVar+"'");
 			LOG.debug("  rowIndexVar='"+rowIndexVar+"'");
 			LOG.debug("  columnNumber='"+columnNumber+"'");
@@ -145,6 +157,24 @@ public class ComponentsListTag extends AbstractDataTag implements Tag {
 			}
 		}
 
+		if (headingZone != null) {
+			if (headingZone.isLiteralText()==false) {
+				component.setValueExpression(Properties.HEADING_ZONE, headingZone);
+
+			} else {
+				component.setHeadingZone(getBool(headingZone.getExpressionString()));
+			}
+		}
+
+		if (headingLevel != null) {
+			if (headingLevel.isLiteralText()==false) {
+				component.setValueExpression(Properties.HEADING_LEVEL, headingLevel);
+
+			} else {
+				component.setHeadingLevel(headingLevel.getExpressionString());
+			}
+		}
+
 		if (rowCountVar != null) {
 			if (rowCountVar.isLiteralText()==false) {
 				throw new javax.faces.FacesException("Attribute 'rowCountVar' does not accept binding !");
@@ -193,6 +223,8 @@ public class ComponentsListTag extends AbstractDataTag implements Tag {
 		horizontalScrollPosition = null;
 		verticalScrollPosition = null;
 		showValue = null;
+		headingZone = null;
+		headingLevel = null;
 		rowCountVar = null;
 		rowIndexVar = null;
 		columnNumber = null;
