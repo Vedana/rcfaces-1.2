@@ -243,7 +243,8 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
                     + " setted for servlet '" + getServletName() + "'.");
         }
 
-        Map applicationParamaters = new ApplicationParametersMap(servletContext);
+        Map<String, Object> applicationParamaters = new ApplicationParametersMap(
+                servletContext);
 
         JavaScriptRepository repository = new JavaScriptRepository(
                 mainRepositoryURI, repositoryVersion, applicationParamaters);
@@ -772,21 +773,26 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
         return context;
     }
 
-    public static Map getSymbols(FacesContext facesContext) {
+    @SuppressWarnings("unchecked")
+    public static Map<String, String> getSymbols(FacesContext facesContext) {
         Map applicationMap = facesContext.getExternalContext()
                 .getApplicationMap();
 
-        return (Map) applicationMap.get(JAVASCRIPT_SYMBOLS_PARAMETER);
+        return (Map<String, String>) applicationMap
+                .get(JAVASCRIPT_SYMBOLS_PARAMETER);
     }
 
-    public static Map getSymbols(ServletContext servletContext) {
-        return (Map) servletContext.getAttribute(JAVASCRIPT_SYMBOLS_PARAMETER);
+    @SuppressWarnings("unchecked")
+    public static Map<String, String> getSymbols(ServletContext servletContext) {
+        return (Map<String, String>) servletContext
+                .getAttribute(JAVASCRIPT_SYMBOLS_PARAMETER);
     }
 
-    protected final Map getSymbols() {
+    protected final Map<String, String> getSymbols() {
         return getSymbols(getServletContext());
     }
 
+    @SuppressWarnings("null")
     private void reloadSymbols(IRepository repository) throws IOException {
         IFile file = repository.getFileByName(SYMBOLS_FILENAME);
 
@@ -813,8 +819,9 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
         getServletContext().setAttribute(JAVASCRIPT_SYMBOLS_PARAMETER, symbols);
     }
 
-    private Map loadSymbols(byte[] buffer) throws IOException {
-        Map symbols = new HashMap(buffer.length / 16);
+    private Map<String, String> loadSymbols(byte[] buffer) throws IOException {
+        Map<String, String> symbols = new HashMap<String, String>(
+                buffer.length / 16);
 
         InputStream bin = new ByteBufferInputStream(buffer);
 
@@ -823,8 +830,9 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
         bin.close();
 
-        // On utilise une version non synchronisée !
-        symbols.putAll(properties);
+        // Merci les génériques à la sauce JAVA
+        Map propertiesMap = properties;
+        symbols.putAll(propertiesMap);
 
         return symbols;
     }

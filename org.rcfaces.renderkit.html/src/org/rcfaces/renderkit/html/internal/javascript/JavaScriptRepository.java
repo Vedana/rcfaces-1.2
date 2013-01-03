@@ -60,10 +60,10 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
 
     private String resourceBundleBaseName = null;
 
-    private final Map applicationParameters;
+    private final Map<String, Object> applicationParameters;
 
     public JavaScriptRepository(String servletURI, String repositoryVersion,
-            Map applicationParameters) {
+            Map<String, Object> applicationParameters) {
         super(servletURI, repositoryVersion);
 
         this.applicationParameters = applicationParameters;
@@ -168,7 +168,7 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
             classes.add(name);
         }
 
-        public String convertSymbols(Map symbols, String code) {
+        public String convertSymbols(Map<String, String> symbols, String code) {
             if (remapSymbols == false || symbols == null) {
                 return code;
             }
@@ -262,7 +262,7 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
 
             public void end(String namespace, String name) throws Exception {
 
-                ClassImpl clazz = (ClassImpl) this.digester.peek();
+                // ClassImpl clazz = (ClassImpl) this.digester.peek();
 
                 /*
                  * List l = null;

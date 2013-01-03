@@ -25,7 +25,7 @@ public interface IJavaScriptRepository extends IHierarchicalRepository {
     public interface IClassFile extends IHierarchicalFile {
         IClass[] listClasses();
 
-        String convertSymbols(Map symbols, String code);
+        String convertSymbols(Map<String, String> symbols, String code);
     }
 
     /**
