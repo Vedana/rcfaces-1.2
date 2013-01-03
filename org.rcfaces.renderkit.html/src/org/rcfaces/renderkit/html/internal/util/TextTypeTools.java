@@ -46,6 +46,7 @@ public class TextTypeTools {
         HTML_TYPES.put("preformatted", "pre");
         HTML_TYPES.put("ins", "ins");
         HTML_TYPES.put("del", "del");
+        HTML_TYPES.put("strong", "strong");
         HTML_TYPES.put("header", "h1");
         HTML_TYPES.put("header1", "h1");
         HTML_TYPES.put("header2", "h2");
