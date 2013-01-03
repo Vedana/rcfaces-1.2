@@ -77,7 +77,7 @@ var __statics = {
 			dialog.f_open();
 		});
 	}   
-}
+};
 
 var __members = {
 	
@@ -85,6 +85,11 @@ var __members = {
 	 * @field private f_columnSortConfigurator
 	 */
 	_configurator: undefined,
+	
+	/**
+	 * @field private f_grid
+	 */
+	_grid: undefined,
 
 	/**
 	 * <p>Construct a new <code>f_columnSortDialog</code> with the specified
@@ -194,7 +199,7 @@ var __members = {
 		var _radios = new Array;
 		var _selects = new Array;
 
-		var sortedCols = grid.f_getSortedColumns();
+		// var sortedCols = grid.f_getSortedColumns();
 		var cols = f_columnSortConfigurator.GetColumns(grid);
 		var nbCols = cols.length;
 		if (nbCols > 3) {
@@ -278,7 +283,7 @@ var __members = {
 			value: f_resourceBundle.Get(f_shell).f_get("VALID_BUTTON")
 		});
 		
-		var applyButton;
+		var applyButton=undefined;
 
 		// Bouton Apply
 		if (this._style & f_columnSortDialog.APPLY_BUTTON) {			
@@ -388,7 +393,7 @@ var __members = {
 		ts += "\n[f_columnSortDialog title='"+this._title+"' text='"+this._text+"' defaultValue='"+this._defaultValue+"']";
 		return ts;
 	}
-}
+};
 
 new f_class("f_columnSortDialog", {
 	extend: f_dialog,
