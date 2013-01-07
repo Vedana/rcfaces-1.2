@@ -33,6 +33,9 @@ public class HeadingRenderer extends TextRenderer {
             if (ariaLevel > IHtmlElements.MAX_HEADING_LEVEL) {
                 ariaLevel = IHtmlElements.MAX_HEADING_LEVEL;
             }
+
+            // Pas de role en même temps que un Hx (ca bug avec JAWS)
+            textComponent.setWaiRole(null);
             return IHtmlElements.H_BASE + ariaLevel;
         }
 
