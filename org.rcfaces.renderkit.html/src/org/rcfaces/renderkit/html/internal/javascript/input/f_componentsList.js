@@ -34,16 +34,14 @@ var __statics = {
 			}
 		}
 	}
-}
+};
  
 var __members = {
 	
 	f_componentsList: function() {
 		this.f_super(arguments);
-	
-		this._scrollBody=f_core.GetFirstElementByTagName(this, "table");
 		
-		this._tbody=f_core.GetFirstElementByTagName(this._scrollBody, "tbody");
+		this._updateScrollComponents();
 	},
 	f_finalize: function() {
 		this._scrollBody=undefined;
@@ -58,6 +56,17 @@ var __members = {
 		// this._oldHeightStyle=undefined; // string
 		
 		this.f_super(arguments);
+	},
+	_updateScrollComponents: function() {
+		var scrollBody=this.ownerDocument.getElementById(this.id+"::table");
+		this._scrollBody=scrollBody;
+
+		if (scrollBody.tagName.toUpperCase()=="TABLE") {	
+			this._tbody=scrollBody.tBodies[0];
+			
+		} else {
+			this._tbody=scrollBody;
+		}
 	},
 	f_update: function() {
 		this.f_super(arguments);
@@ -377,10 +386,8 @@ var __members = {
 		
 		this.f_getClass().f_getClassLoader().f_loadContent(this, component, buffer);
 
-		if (component==this) {
-			this._scrollBody=f_core.GetFirstElementByTagName(this, "table");
-			
-			this._tbody=f_core.GetFirstElementByTagName(this._scrollBody, "tbody");
+		if (component==this) {		
+			this._updateScrollComponents();
 		}
 
 		if (this._rowCount<0) {
@@ -421,6 +428,11 @@ var __members = {
 		
 		return false;
 	}
-}
+};
  
-new f_class("f_componentsList", null, __statics, __members, f_component, fa_pagedComponent);
+new f_class("f_componentsList", {
+	extend: f_component,
+	aspects: [ fa_pagedComponent ],
+	statics: __statics,
+	members: __members
+});
