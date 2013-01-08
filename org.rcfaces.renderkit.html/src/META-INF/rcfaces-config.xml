@@ -717,4 +717,13 @@
 	
 	</features-compatibilities>
 	
+
+	<renderKit id="HTML_BASIC">
+		<renderer>
+			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.core.componentsList</renderer-type>
+			<renderer-lookId>list</renderer-lookId>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ComponentsListULRenderer</renderer-class>
+		</renderer>
+	</renderKit>	
 </rcfaces-config>
