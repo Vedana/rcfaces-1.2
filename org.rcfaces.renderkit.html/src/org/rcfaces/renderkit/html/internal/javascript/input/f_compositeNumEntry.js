@@ -139,7 +139,7 @@ var __members={
 				
 		return this.f_super(arguments);	
 	}
-}
+};
  
 new f_class("f_compositeNumEntry", {
 	extend: f_component,
