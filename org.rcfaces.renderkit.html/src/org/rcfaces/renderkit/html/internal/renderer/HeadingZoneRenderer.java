@@ -3,7 +3,6 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
-import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -44,9 +43,9 @@ public class HeadingZoneRenderer extends AbstractCssRenderer {
             boolean visible = false;
             List<UIComponent> children = headingZoneComponent.getChildren();
 
-            Deque<UIComponent> stack = new LinkedList<UIComponent>(children);
+            List<UIComponent> stack = new LinkedList<UIComponent>(children);
             for (; stack.isEmpty() == false;) {
-                UIComponent child = stack.pop();
+                UIComponent child = stack.remove(stack.size() - 1);
 
                 if (child.isRendered() == false) {
                     continue;
