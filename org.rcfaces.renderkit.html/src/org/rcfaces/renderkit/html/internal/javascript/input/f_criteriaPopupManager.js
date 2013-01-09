@@ -135,10 +135,13 @@ var __statics = {
 
 	/**
 	 * @method public
-	 * @param Integer
-	 *            ResultCount
-	 * @param Object
+	 * @param Number
+	 *            resultCount
+	 * @param Array
 	 *            availableCriteria
+	 * @param Array selectedCriteria
+	 * @param f_grid grid
+	 * @return void 
 	 */
 	UpdateCriteriaPopups : function(resultCount, availableCriteria,
 			selectedCriteria, grid) {

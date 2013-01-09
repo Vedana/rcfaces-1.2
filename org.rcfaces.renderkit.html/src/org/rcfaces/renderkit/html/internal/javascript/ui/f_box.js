@@ -5,7 +5,7 @@
 /**
  * Box class.
  *
- * @class public f_box extends f_component, fa_asyncRender, fa_subMenu
+ * @class public f_box extends f_component, fa_asyncRender, fa_subMenu, fa_overStyleClass
  */
  
 var __statics = {

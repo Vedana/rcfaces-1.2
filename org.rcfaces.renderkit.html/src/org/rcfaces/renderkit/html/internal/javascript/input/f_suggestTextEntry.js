@@ -1266,7 +1266,7 @@ var __members = {
 		this._focus=undefined;
 	},
 	/**
-	 * 
+	 * @method public
 	 * @param optional Boolean set  (Default value is <code>true</code>)
 	 * @return void
 	 */
@@ -1280,6 +1280,8 @@ var __members = {
 		this.f_setProperty(f_prop.DISABLE_PROPOSALS, set);
 	},
 	/**
+	 * @method public
+	 * @override
 	 * @return Boolean
 	 */
 	f_isDisableProposals: function() {

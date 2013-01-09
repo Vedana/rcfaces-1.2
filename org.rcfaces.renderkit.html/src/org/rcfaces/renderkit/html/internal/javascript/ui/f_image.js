@@ -5,7 +5,7 @@
 /**
  * Class f_image.
  *
- * @class f_image extends f_filtredComponent
+ * @class f_image extends f_filtredComponent, fa_basicToolTipContainer
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */

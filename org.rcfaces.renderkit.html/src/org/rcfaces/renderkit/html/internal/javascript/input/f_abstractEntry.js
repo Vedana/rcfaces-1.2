@@ -5,7 +5,7 @@
 /**
  * f_abstractEntry class
  *
- * @class public f_abstractEntry extends f_input, fa_required, fa_selectionProvider<f_textSelection>, fa_subMenu, fa_immediate
+ * @class public abstract f_abstractEntry extends f_input, fa_required, fa_selectionProvider<f_textSelection>, fa_subMenu, fa_immediate
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */

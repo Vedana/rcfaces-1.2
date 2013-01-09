@@ -7,7 +7,7 @@
  * @class public abstract f_grid extends f_component, fa_disabled, fa_immediate,
  *        fa_pagedComponent, fa_subMenu, fa_commands, fa_selectionManager<String[]>,
  *        fa_scrollPositions, fa_additionalInformationManager, fa_droppable,
- *        fa_draggable, fa_autoScroll, fa_aria, fa_tabIndex
+ *        fa_draggable, fa_autoScroll, fa_aria, fa_toolTipContainer, fa_tabIndex, fa_autoOpen
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
