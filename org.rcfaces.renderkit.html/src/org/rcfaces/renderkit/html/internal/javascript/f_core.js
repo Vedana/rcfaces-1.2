@@ -1070,22 +1070,36 @@ var f_core = {
 			// Bug du frameSet
 			if (!win.event) {
 				// Une des frames doit positionner 'event'
-				var frames=win.frames;
-				for(var i=0;i<frames.length;i++) {
-					try {
-						if (frames[i].event) {
-							win=frames[i];
-							break;
+				
+				function fm(w) {
+					var frames=w.frames;
+					for(var i=0;i<frames.length;i++) {
+						var f=frames[i];
+						
+						try {
+							if (f.event) {
+								return f;
+							}
+							
+							if (f.frames.length) {
+								var r=fm(f);
+								if (r) {
+									return r;
+								}
+							}
+							
+						} catch (x) {
+							// Probleme de sécurité !
 						}
-					} catch (x) {
-						// Probleme de sécurité !
 					}
 				}
+				
+				win=fm(win);
 			}
 		}
 		
 		// Un BUG IE appelle le onload 2 fois !!!
-		if (win._rcfacesWindowInitialized) {
+		if (!win || win._rcfacesWindowInitialized) {
 			return;
 		}
 		win._rcfacesWindowInitialized=true;
