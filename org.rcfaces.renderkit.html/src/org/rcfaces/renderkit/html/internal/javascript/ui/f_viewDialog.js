@@ -79,6 +79,7 @@ var __members = {
 			this.f_finalizeIframe(iframe);
 		}
 		this._parameters=undefined;
+		this._loadFrame=undefined;
 		this.f_super(arguments);		
 	},
 	/**
