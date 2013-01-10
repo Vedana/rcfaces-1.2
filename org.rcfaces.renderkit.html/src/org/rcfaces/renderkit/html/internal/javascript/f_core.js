@@ -1064,7 +1064,7 @@ var f_core = {
 		var now=new Date();
 		var win=this;
 		
-		if (win.document.readyState) {
+		if (win.document.readyState && f_core.IsInternetExplorer()) {
 			// Sous IE;
 			
 			// Bug du frameSet
@@ -1094,7 +1094,7 @@ var f_core = {
 					}
 				}
 				
-				win=fm(win);
+				win=fm(win) | win;
 			}
 		}
 		
