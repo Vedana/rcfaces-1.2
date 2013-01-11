@@ -2334,6 +2334,7 @@
 		<attribute id="valueFormat" type="java.lang.String"/>
 	
 		<attribute id="valueFormatTooltip" type="java.lang.String"/>
+		<attribute id="valueFormatDescription" type="java.lang.String"/>
 
 		<attribute id="forceValidation" type="boolean" default="false"/>
 		

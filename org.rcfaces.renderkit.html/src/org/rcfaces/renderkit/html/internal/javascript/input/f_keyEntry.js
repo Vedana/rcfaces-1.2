@@ -69,6 +69,7 @@ var __members = {
 		this._valueFormatLabel=f_core.GetAttributeNS(this,"valueFormatLabel");
 		this._noValueFormatLabel=f_core.GetAttributeNS(this,"noValueFormatLabel", "");
 		this._valueFormatTooltip=f_core.GetAttributeNS(this,"valueFormatTooltip", "");
+		this._valueFormatDescription=f_core.GetAttributeNS(this,"valueFormatDescription", "");
 		this._filtred=true;
 		
 		var input=this.f_getInput();
@@ -132,8 +133,9 @@ var __members = {
 			f_classLoader.Destroy(indexDb);
 		}
 	
-		// this._suggestionDelayMs=undefined;  // number
-		// this._suggestionMinChars=undefined; // number
+		// this._valueFormatDescription=undefined; // String
+		// this._suggestionDelayMs=undefined;  // Number
+		// this._suggestionMinChars=undefined; // Number
 		// this._valueFormat=undefined; // String
 		// this._valueFormatLabel=undefined; // String
 		// this._noValueFormatLabel=undefined; // String
@@ -141,15 +143,15 @@ var __members = {
 		// this._forLabel=undefined; // String
 		// this._formattedValue=undefined; // String
 		// this._inputValue=undefined; // String
-		// this._focus=undefined; // boolean
+		// this._focus=undefined; // Boolean
 		// this._selectedValue=undefined; // String
-		// this._verifyingKey=undefined; // boolean
-		// this._editable=undefined; // boolean
-		// this._readOnly=undefined; // boolean 
+		// this._verifyingKey=undefined; // Boolean
+		// this._editable=undefined; // Boolean
+		// this._readOnly=undefined; // Boolean 
 		// this._maxTextLength=undefined; // number
-		// this._emptyMessageShown=undefined; boolean
-		// this._forceValidation=undefined; boolean
-		// this._required=undefined; boolean
+		// this._emptyMessageShown=undefined; Boolean
+		// this._forceValidation=undefined; Boolean
+		// this._required=undefined; Boolean
 		
 		var request=this._verifyRequest;
 		if (request) {
@@ -476,19 +478,34 @@ var __members = {
 	 * @return void
 	 */
 	f_updateTitle: function(rowValues) {
-		if (this._valueFormatTooltip) {
+		var valueFormatTooltip=this._valueFormatTooltip;
+		if (valueFormatTooltip) {
 			var title="";
 			
 			if (this._keyErrored) {
 				title=f_resourceBundle.Get(f_keyEntry).f_formatParams("INVALIDKEY_ERROR_SUMMARY");
 
 			} else if (rowValues) {
-				title=f_core.FormatMessage(this._valueFormatTooltip,rowValues);
+				title=f_core.FormatMessage(valueFormatTooltip, rowValues);
+			}
+			
+			this.f_getInput().title=title;
+		}
+		
+		var valueFormatDescription=this._valueFormatDescription;
+		if (valueFormatDescription) {
+			var desc="";
+			
+			if (this._keyErrored) {
+				desc=f_resourceBundle.Get(f_keyEntry).f_formatParams("INVALIDKEY_ERROR_SUMMARY");
+	
+			} else if (rowValues) {
+				desc=f_core.FormatMessage(valueFormatDescription, rowValues);
 			}
 			
 			var descriptionComponent=this.ownerDocument.getElementById(this.id+"::description");
 			if (descriptionComponent) {
-				f_core.SetTextNode(descriptionComponent, title);
+				f_core.SetTextNode(descriptionComponent, desc);
 			}
 		}
 	},

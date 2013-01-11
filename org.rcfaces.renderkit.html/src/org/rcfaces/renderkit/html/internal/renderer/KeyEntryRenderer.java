@@ -127,6 +127,17 @@ public class KeyEntryRenderer extends DataGridRenderer {
             }
         }
 
+        String valueFormatDescription = keyEntryComponent
+                .getValueFormatDescription(facesContext);
+        if (valueFormatDescription == null) {
+            valueFormatDescription = "{key} {label}";
+        }
+        if (valueFormatDescription != null) {
+            htmlWriter.writeAttributeNS("valueFormatDescription",
+                    valueFormatDescription);
+            formatValues.put("valueFormatDescription", valueFormatDescription);
+        }
+
         String valueFormatLabel = keyEntryComponent
                 .getValueFormatLabel(facesContext);
         if (valueFormatLabel != null) {
@@ -138,6 +149,7 @@ public class KeyEntryRenderer extends DataGridRenderer {
         String formattedValue = null;
         String formattedValueLabel = null;
         String formattedValueTooltip = null;
+        String formattedValueDescription = null;
         String convertedSelectedValue = null;
         Object selectedValue = keyEntryComponent.getSelectedValue(facesContext);
         String valueColumnId = keyEntryComponent.getValueColumnId(facesContext);
@@ -161,6 +173,8 @@ public class KeyEntryRenderer extends DataGridRenderer {
                             .get("valueFormatLabel");
                     formattedValueTooltip = (String) formattedValues
                             .get("valueFormatTooltip");
+                    formattedValueDescription = (String) formattedValues
+                            .get("valueFormatDescription");
                 }
 
                 if (formattedValue == null) {
@@ -315,7 +329,7 @@ public class KeyEntryRenderer extends DataGridRenderer {
 
         htmlWriter.endElement(IHtmlWriter.INPUT);
 
-        writeDescriptionComponent(htmlWriter);
+        writeDescriptionComponent(htmlWriter, formattedValueDescription);
 
         htmlWriter.getJavaScriptEnableMode().enableOnInit();
     }
@@ -402,8 +416,8 @@ public class KeyEntryRenderer extends DataGridRenderer {
         return labelId;
     }
 
-    protected void writeDescriptionComponent(IHtmlWriter htmlWriter)
-            throws WriterException {
+    protected void writeDescriptionComponent(IHtmlWriter htmlWriter,
+            String computedDescription) throws WriterException {
         String labelId = computeDescriptionClientId(htmlWriter);
         if (labelId == null) {
             return;
@@ -413,6 +427,10 @@ public class KeyEntryRenderer extends DataGridRenderer {
         htmlWriter.writeId(labelId);
         htmlWriter.writeClass("f_keyEntry_description");
         htmlWriter.writeAttribute("aria-live", "polite");
+
+        if (computedDescription != null) {
+            htmlWriter.writeText(computedDescription);
+        }
 
         htmlWriter.endElement(IHtmlWriter.LABEL);
     }
@@ -424,7 +442,8 @@ public class KeyEntryRenderer extends DataGridRenderer {
 
     protected final Map formatValue(FacesContext facesContext,
             KeyEntryComponent comboGridComponent, Object selectedValue,
-            String convertedSelectedValue, final Map formatValues) {
+            String convertedSelectedValue,
+            final Map<String, String> formatValues) {
 
         return (Map) filterValue(facesContext, comboGridComponent,
                 selectedValue, convertedSelectedValue, new IFilterProcessor() {
@@ -441,7 +460,7 @@ public class KeyEntryRenderer extends DataGridRenderer {
 
     protected final Map<String, String> formatValue(FacesContext facesContext,
             KeyEntryComponent comboGridComponent, Object rowData,
-            Map formatValues) {
+            Map<String, String> formatValues) {
 
         Map<String, String> columnValues = new HashMap<String, String>();
 

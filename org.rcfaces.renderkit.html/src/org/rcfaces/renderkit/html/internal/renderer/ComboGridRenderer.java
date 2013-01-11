@@ -85,6 +85,7 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
         String formattedValue = null;
         String formattedValueLabel = null;
         String formattedValueTooltip = null;
+        String formattedValueDescription = null;
         String convertedSelectedValue = null;
         Object selectedValue = comboGridComponent
                 .getSelectedValue(facesContext);
@@ -103,7 +104,10 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
             } else {
                 valueFormat = "{" + valueColumnId + "}";
             }
+        } else {
+            htmlWriter.writeAttributeNS("valueFormat", valueFormat);
         }
+
         formatValues.put("valueFormat", valueFormat);
 
         // Si on a déja un toolTipText, on ignore valueFormatTooltip
@@ -112,8 +116,36 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
             valueFormatTooltip = comboGridComponent
                     .getValueFormatTooltip(facesContext);
             if (valueFormatTooltip != null) {
+                htmlWriter.writeAttributeNS("valueFormatTooltip",
+                        valueFormatTooltip);
                 formatValues.put("valueFormatTooltip", valueFormatTooltip);
             }
+        }
+        String valueFormatDescription = comboGridComponent
+                .getValueFormatDescription(facesContext);
+        if (valueFormatDescription == null) {
+            StringAppender sa = new StringAppender(128);
+
+            if (valueColumnId != null) {
+                sa.append('{').append(valueColumnId).append('}');
+            }
+            if (labelColumnId != null) {
+                if (sa.length() > 0) {
+                    sa.append(' ');
+                }
+                sa.append('{').append(labelColumnId).append('}');
+            }
+
+            if (sa.length() == 0) {
+                sa.append("{0}");
+            }
+
+            valueFormatDescription = sa.toString();
+        }
+        if (valueFormatDescription != null) {
+            htmlWriter.writeAttributeNS("valueFormatDescription",
+                    valueFormatDescription);
+            formatValues.put("valueFormatDescription", valueFormatDescription);
         }
 
         String valueFormatLabel = comboGridComponent
@@ -146,6 +178,8 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
                             .get("valueFormatLabel");
                     formattedValueTooltip = (String) formattedValues
                             .get("valueFormatTooltip");
+                    formattedValueDescription = (String) formattedValues
+                            .get("valueFormatDescription");
                 }
 
                 if (formattedValue == null) {
@@ -437,7 +471,7 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
         writeInputSubComponent(htmlWriter, formattedValue, colWidth,
                 formattedValueTooltip);
 
-        writeDescriptionComponent(htmlWriter);
+        writeDescriptionComponent(htmlWriter, formattedValueDescription);
 
         htmlWriter.endElement(IHtmlWriter.TD);
 
