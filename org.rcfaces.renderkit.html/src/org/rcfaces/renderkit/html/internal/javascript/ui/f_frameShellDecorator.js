@@ -337,11 +337,15 @@ var __members = {
  		var frameDocument = f_core.GetFrameDocument(iframe);
 
      	if (targetDocument==frameDocument) {
- 			f_core.Debug(f_shellManager, "f_isIntoShell: Same document ("+targetDocument.location+"/"+frameDocument.location+")");
+ 			f_core.Debug(f_shellManager, "f_isIntoShell: Same document ("+targetDocument.location+")");
      		return true;
      	}
      	
-		f_core.Debug(f_shellManager, "f_isIntoShell: Different document ("+targetDocument.location+"/"+frameDocument.location+")");
+     	try {
+     		f_core.Debug(f_shellManager, "f_isIntoShell: Different document ("+targetDocument.location+"/"+frameDocument.location+")");
+     	} catch (x) {
+     		// Probleme de sécurité possible !
+     	}
      	return false;
 	},
 	/**
