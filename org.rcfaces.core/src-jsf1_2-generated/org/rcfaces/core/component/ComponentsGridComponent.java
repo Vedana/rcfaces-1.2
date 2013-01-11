@@ -1073,7 +1073,8 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	 * @return variable name
 	 */
 	public String getRowCountVar(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ROW_COUNT_VAR, facesContext);
+		String s = engine.getStringProperty(Properties.ROW_COUNT_VAR, facesContext);
+		return s;
 	}
 
 	/**
@@ -1109,7 +1110,8 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	 * @return variable name
 	 */
 	public String getRowIndexVar(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ROW_INDEX_VAR, facesContext);
+		String s = engine.getStringProperty(Properties.ROW_INDEX_VAR, facesContext);
+		return s;
 	}
 
 	/**
@@ -1137,7 +1139,8 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	}
 
 	public String getRowValue(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ROW_VALUE, facesContext);
+		String s = engine.getStringProperty(Properties.ROW_VALUE, facesContext);
+		return s;
 	}
 
 	public void setRowValue(String rowValue) {

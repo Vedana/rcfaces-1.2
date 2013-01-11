@@ -115,7 +115,8 @@ public class ImagePagerButtonComponent extends ImageButtonComponent implements
 	 * @return type of data
 	 */
 	public String getType(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.TYPE, facesContext);
+		String s = engine.getStringProperty(Properties.TYPE, facesContext);
+		return s;
 	}
 
 	/**

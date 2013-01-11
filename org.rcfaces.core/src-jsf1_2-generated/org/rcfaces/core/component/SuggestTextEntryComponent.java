@@ -389,7 +389,8 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	}
 
 	public String getMoreResultsMessage(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.MORE_RESULTS_MESSAGE, facesContext);
+		String s = engine.getStringProperty(Properties.MORE_RESULTS_MESSAGE, facesContext);
+		return s;
 	}
 
 	public void setMoreResultsMessage(String moreResultsMessage) {
@@ -469,7 +470,8 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	}
 
 	public String getInputFormat(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.INPUT_FORMAT, facesContext);
+		String s = engine.getStringProperty(Properties.INPUT_FORMAT, facesContext);
+		return s;
 	}
 
 	public void setInputFormat(String inputFormat) {
@@ -489,7 +491,8 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	}
 
 	public String getLabelFormat(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.LABEL_FORMAT, facesContext);
+		String s = engine.getStringProperty(Properties.LABEL_FORMAT, facesContext);
+		return s;
 	}
 
 	public void setLabelFormat(String labelFormat) {
@@ -509,7 +512,8 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	}
 
 	public String getDescriptionFormat(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DESCRIPTION_FORMAT, facesContext);
+		String s = engine.getStringProperty(Properties.DESCRIPTION_FORMAT, facesContext);
+		return s;
 	}
 
 	public void setDescriptionFormat(String descriptionFormat) {

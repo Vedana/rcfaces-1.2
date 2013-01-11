@@ -1311,7 +1311,8 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * @return image url
 	 */
 	public String getDefaultImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_IMAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_IMAGE_URL, facesContext);
+		return s;
 	}
 
 	/**
@@ -1347,7 +1348,8 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * @return selected image url
 	 */
 	public String getDefaultSelectedImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_SELECTED_IMAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_SELECTED_IMAGE_URL, facesContext);
+		return s;
 	}
 
 	/**
@@ -1383,7 +1385,8 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * @return expanded image url
 	 */
 	public String getDefaultExpandedImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_EXPANDED_IMAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_EXPANDED_IMAGE_URL, facesContext);
+		return s;
 	}
 
 	/**
@@ -1411,7 +1414,8 @@ public class TreeComponent extends AbstractInputComponent implements
 	}
 
 	public String getDefaultCollapsedImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_COLLAPSED_IMAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_COLLAPSED_IMAGE_URL, facesContext);
+		return s;
 	}
 
 	public void setDefaultCollapsedImageURL(String defaultCollapsedImageURL) {
@@ -1439,7 +1443,8 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * @return disabled image url
 	 */
 	public String getDefaultDisabledImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_DISABLED_IMAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_DISABLED_IMAGE_URL, facesContext);
+		return s;
 	}
 
 	/**
@@ -1475,7 +1480,8 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * @return leaf image url
 	 */
 	public String getDefaultLeafImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_LEAF_IMAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_LEAF_IMAGE_URL, facesContext);
+		return s;
 	}
 
 	/**
@@ -1503,7 +1509,8 @@ public class TreeComponent extends AbstractInputComponent implements
 	}
 
 	public String getDefaultSelectedLeafImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_SELECTED_LEAF_IMAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_SELECTED_LEAF_IMAGE_URL, facesContext);
+		return s;
 	}
 
 	public void setDefaultSelectedLeafImageURL(String defaultSelectedLeafImageURL) {
@@ -1523,7 +1530,8 @@ public class TreeComponent extends AbstractInputComponent implements
 	}
 
 	public String getDefaultExpandedLeafImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_EXPANDED_LEAF_IMAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_EXPANDED_LEAF_IMAGE_URL, facesContext);
+		return s;
 	}
 
 	public void setDefaultExpandedLeafImageURL(String defaultExpandedLeafImageURL) {
@@ -1543,7 +1551,8 @@ public class TreeComponent extends AbstractInputComponent implements
 	}
 
 	public String getDefaultDisabledLeafImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_DISABLED_LEAF_IMAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_DISABLED_LEAF_IMAGE_URL, facesContext);
+		return s;
 	}
 
 	public void setDefaultDisabledLeafImageURL(String defaultDisabledLeafImageURL) {

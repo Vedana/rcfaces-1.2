@@ -592,7 +592,8 @@ public class ComboGridComponent extends KeyEntryComponent implements
 	}
 
 	public String getPagerStyleClass(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.PAGER_STYLE_CLASS, facesContext);
+		String s = engine.getStringProperty(Properties.PAGER_STYLE_CLASS, facesContext);
+		return s;
 	}
 
 	public void setPagerStyleClass(String pagerStyleClass) {
@@ -612,7 +613,8 @@ public class ComboGridComponent extends KeyEntryComponent implements
 	}
 
 	public String getPagerLookId(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.PAGER_LOOK_ID, facesContext);
+		String s = engine.getStringProperty(Properties.PAGER_LOOK_ID, facesContext);
+		return s;
 	}
 
 	public void setPagerLookId(String pagerLookId) {
@@ -632,7 +634,8 @@ public class ComboGridComponent extends KeyEntryComponent implements
 	}
 
 	public String getPopupStyleClass(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.POPUP_STYLE_CLASS, facesContext);
+		String s = engine.getStringProperty(Properties.POPUP_STYLE_CLASS, facesContext);
+		return s;
 	}
 
 	public void setPopupStyleClass(String popupStyleClass) {
@@ -652,7 +655,8 @@ public class ComboGridComponent extends KeyEntryComponent implements
 	}
 
 	public String getGridStyleClass(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.GRID_STYLE_CLASS, facesContext);
+		String s = engine.getStringProperty(Properties.GRID_STYLE_CLASS, facesContext);
+		return s;
 	}
 
 	public void setGridStyleClass(String gridStyleClass) {
@@ -672,7 +676,8 @@ public class ComboGridComponent extends KeyEntryComponent implements
 	}
 
 	public String getGridLookId(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.GRID_LOOK_ID, facesContext);
+		String s = engine.getStringProperty(Properties.GRID_LOOK_ID, facesContext);
+		return s;
 	}
 
 	public void setGridLookId(String gridLookId) {

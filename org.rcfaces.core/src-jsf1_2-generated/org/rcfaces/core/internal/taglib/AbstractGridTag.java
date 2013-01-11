@@ -60,9 +60,9 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 	private ValueExpression verticalCenter;
 	private ValueExpression initListeners;
 	private ValueExpression hiddenMode;
-	private ValueExpression margins;
-	private ValueExpression var;
 	private ValueExpression first;
+	private ValueExpression var;
+	private ValueExpression margins;
 	private ValueExpression rows;
 	private ValueExpression value;
 	public void setHelpMessage(ValueExpression helpMessage) {
@@ -233,16 +233,16 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 		this.hiddenMode = hiddenMode;
 	}
 
-	public void setMargins(ValueExpression margins) {
-		this.margins = margins;
+	public void setFirst(ValueExpression first) {
+		this.first = first;
 	}
 
 	public void setVar(ValueExpression var) {
 		this.var = var;
 	}
 
-	public void setFirst(ValueExpression first) {
-		this.first = first;
+	public void setMargins(ValueExpression margins) {
+		this.margins = margins;
 	}
 
 	public void setRows(ValueExpression rows) {
@@ -285,9 +285,9 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 			LOG.debug("  top='"+top+"'");
 			LOG.debug("  verticalCenter='"+verticalCenter+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
-			LOG.debug("  margins='"+margins+"'");
-			LOG.debug("  var='"+var+"'");
 			LOG.debug("  first='"+first+"'");
+			LOG.debug("  var='"+var+"'");
+			LOG.debug("  margins='"+margins+"'");
 			LOG.debug("  rows='"+rows+"'");
 		}
 		if ((uiComponent instanceof AbstractGridComponent)==false) {
@@ -620,11 +620,13 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (margins != null) {
-			if (margins.isLiteralText()==false) {
-				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
+		if (first != null) {
+			if (first.isLiteralText()==false) {
+				component.setValueExpression(Properties.FIRST, first);
+
+			} else {
+				component.setFirst(getInt(first.getExpressionString()));
 			}
-				component.setMargins(margins.getExpressionString());
 		}
 
 		if (var != null) {
@@ -636,13 +638,11 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (first != null) {
-			if (first.isLiteralText()==false) {
-				component.setValueExpression(Properties.FIRST, first);
-
-			} else {
-				component.setFirst(getInt(first.getExpressionString()));
+		if (margins != null) {
+			if (margins.isLiteralText()==false) {
+				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
 			}
+				component.setMargins(margins.getExpressionString());
 		}
 
 		if (rows != null) {
@@ -707,9 +707,9 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 		verticalCenter = null;
 		initListeners = null;
 		hiddenMode = null;
-		margins = null;
-		var = null;
 		first = null;
+		var = null;
+		margins = null;
 		rows = null;
 		value = null;
 

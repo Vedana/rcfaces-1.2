@@ -713,7 +713,8 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 	 * @return the effect : slideUp|slideUpTrans
 	 */
 	public String getCollapseEffect(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.COLLAPSE_EFFECT, facesContext);
+		String s = engine.getStringProperty(Properties.COLLAPSE_EFFECT, facesContext);
+		return s;
 	}
 
 	/**
@@ -749,7 +750,8 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 	 * @return text
 	 */
 	public String getCollapsedText(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.COLLAPSED_TEXT, facesContext);
+		String s = engine.getStringProperty(Properties.COLLAPSED_TEXT, facesContext);
+		return s;
 	}
 
 	/**

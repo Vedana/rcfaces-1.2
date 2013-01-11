@@ -321,7 +321,8 @@ public class ItemsListComponent extends AbstractInputComponent implements
 	 * @return image url
 	 */
 	public String getDefaultImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_IMAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_IMAGE_URL, facesContext);
+		return s;
 	}
 
 	/**
@@ -357,7 +358,8 @@ public class ItemsListComponent extends AbstractInputComponent implements
 	 * @return selected image url
 	 */
 	public String getDefaultSelectedImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_SELECTED_IMAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_SELECTED_IMAGE_URL, facesContext);
+		return s;
 	}
 
 	/**
@@ -385,7 +387,8 @@ public class ItemsListComponent extends AbstractInputComponent implements
 	}
 
 	public String getDefaultHoverImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_HOVER_IMAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_HOVER_IMAGE_URL, facesContext);
+		return s;
 	}
 
 	public void setDefaultHoverImageURL(String defaultHoverImageURL) {
@@ -413,7 +416,8 @@ public class ItemsListComponent extends AbstractInputComponent implements
 	 * @return disabled image url
 	 */
 	public String getDefaultDisabledImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_DISABLED_IMAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_DISABLED_IMAGE_URL, facesContext);
+		return s;
 	}
 
 	/**
@@ -461,7 +465,8 @@ public class ItemsListComponent extends AbstractInputComponent implements
 	}
 
 	public String getDefaultItemLookId(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_ITEM_LOOK_ID, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_ITEM_LOOK_ID, facesContext);
+		return s;
 	}
 
 	public void setDefaultItemLookId(String defaultItemLookId) {
@@ -481,7 +486,8 @@ public class ItemsListComponent extends AbstractInputComponent implements
 	}
 
 	public String getDefaultItemStyleClass(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_ITEM_STYLE_CLASS, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_ITEM_STYLE_CLASS, facesContext);
+		return s;
 	}
 
 	public void setDefaultItemStyleClass(String defaultItemStyleClass) {
@@ -501,7 +507,8 @@ public class ItemsListComponent extends AbstractInputComponent implements
 	}
 
 	public String getDefaultItemGroupName(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_ITEM_GROUP_NAME, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_ITEM_GROUP_NAME, facesContext);
+		return s;
 	}
 
 	public void setDefaultItemGroupName(String defaultItemGroupName) {

@@ -53,8 +53,8 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 	private ValueExpression propertyChangeListeners;
 	private ValueExpression hiddenMode;
 	private ValueExpression showDetail;
-	private ValueExpression margins;
 	private ValueExpression showSummary;
+	private ValueExpression margins;
 	private ValueExpression forVal;
 	public void setMarginBottom(ValueExpression marginBottom) {
 		this.marginBottom = marginBottom;
@@ -196,12 +196,12 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 		this.showDetail = showDetail;
 	}
 
-	public void setMargins(ValueExpression margins) {
-		this.margins = margins;
-	}
-
 	public void setShowSummary(ValueExpression showSummary) {
 		this.showSummary = showSummary;
+	}
+
+	public void setMargins(ValueExpression margins) {
+		this.margins = margins;
 	}
 
 	public void setFor(ValueExpression forVal) {
@@ -239,8 +239,8 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 			LOG.debug("  unlockedClientAttributeNames='"+unlockedClientAttributeNames+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  showDetail='"+showDetail+"'");
-			LOG.debug("  margins='"+margins+"'");
 			LOG.debug("  showSummary='"+showSummary+"'");
+			LOG.debug("  margins='"+margins+"'");
 			LOG.debug("  forVal='"+forVal+"'");
 		}
 		if ((uiComponent instanceof AbstractMessageComponent)==false) {
@@ -540,13 +540,6 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (margins != null) {
-			if (margins.isLiteralText()==false) {
-				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
-			}
-				component.setMargins(margins.getExpressionString());
-		}
-
 		if (showSummary != null) {
 			if (showSummary.isLiteralText()==false) {
 				component.setValueExpression(Properties.SHOW_SUMMARY, showSummary);
@@ -554,6 +547,13 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 			} else {
 				component.setShowSummary(getBool(showSummary.getExpressionString()));
 			}
+		}
+
+		if (margins != null) {
+			if (margins.isLiteralText()==false) {
+				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
+			}
+				component.setMargins(margins.getExpressionString());
 		}
 
 		if (forVal != null) {
@@ -602,8 +602,8 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 		propertyChangeListeners = null;
 		hiddenMode = null;
 		showDetail = null;
-		margins = null;
 		showSummary = null;
+		margins = null;
 		forVal = null;
 
 		super.release();

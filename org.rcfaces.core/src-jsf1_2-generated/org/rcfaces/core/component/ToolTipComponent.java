@@ -317,7 +317,8 @@ public class ToolTipComponent extends AbstractBasicComponent implements
 	}
 
 	public String getToolTipId(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.TOOL_TIP_ID, facesContext);
+		String s = engine.getStringProperty(Properties.TOOL_TIP_ID, facesContext);
+		return s;
 	}
 
 	public void setToolTipId(String toolTipId) {
@@ -337,7 +338,8 @@ public class ToolTipComponent extends AbstractBasicComponent implements
 	}
 
 	public String getPosition(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.POSITION, facesContext);
+		String s = engine.getStringProperty(Properties.POSITION, facesContext);
+		return s;
 	}
 
 	public void setPosition(String position) {

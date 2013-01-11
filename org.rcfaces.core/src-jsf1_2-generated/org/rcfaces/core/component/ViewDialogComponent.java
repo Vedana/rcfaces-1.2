@@ -718,7 +718,8 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 	}
 
 	public String getViewURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.VIEW_URL, facesContext);
+		String s = engine.getStringProperty(Properties.VIEW_URL, facesContext);
+		return s;
 	}
 
 	public void setViewURL(String viewURL) {
@@ -738,7 +739,8 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 	}
 
 	public String getShellDecoratorName(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.SHELL_DECORATOR_NAME, facesContext);
+		String s = engine.getStringProperty(Properties.SHELL_DECORATOR_NAME, facesContext);
+		return s;
 	}
 
 	public void setShellDecoratorName(String shellDecoratorName) {

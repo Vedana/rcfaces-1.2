@@ -37,6 +37,7 @@ public class KeyEntryTag extends AbstractGridTag implements Tag {
 	private ValueExpression selectedValue;
 	private ValueExpression valueFormat;
 	private ValueExpression valueFormatTooltip;
+	private ValueExpression valueFormatDescription;
 	private ValueExpression forceValidation;
 	private ValueExpression forLabel;
 	private ValueExpression valueFormatLabel;
@@ -121,6 +122,10 @@ public class KeyEntryTag extends AbstractGridTag implements Tag {
 		this.valueFormatTooltip = valueFormatTooltip;
 	}
 
+	public void setValueFormatDescription(ValueExpression valueFormatDescription) {
+		this.valueFormatDescription = valueFormatDescription;
+	}
+
 	public void setForceValidation(ValueExpression forceValidation) {
 		this.forceValidation = forceValidation;
 	}
@@ -160,6 +165,7 @@ public class KeyEntryTag extends AbstractGridTag implements Tag {
 			LOG.debug("  selectedValue='"+selectedValue+"'");
 			LOG.debug("  valueFormat='"+valueFormat+"'");
 			LOG.debug("  valueFormatTooltip='"+valueFormatTooltip+"'");
+			LOG.debug("  valueFormatDescription='"+valueFormatDescription+"'");
 			LOG.debug("  forceValidation='"+forceValidation+"'");
 			LOG.debug("  forLabel='"+forLabel+"'");
 			LOG.debug("  valueFormatLabel='"+valueFormatLabel+"'");
@@ -339,6 +345,15 @@ public class KeyEntryTag extends AbstractGridTag implements Tag {
 			}
 		}
 
+		if (valueFormatDescription != null) {
+			if (valueFormatDescription.isLiteralText()==false) {
+				component.setValueExpression(Properties.VALUE_FORMAT_DESCRIPTION, valueFormatDescription);
+
+			} else {
+				component.setValueFormatDescription(valueFormatDescription.getExpressionString());
+			}
+		}
+
 		if (forceValidation != null) {
 			if (forceValidation.isLiteralText()==false) {
 				component.setValueExpression(Properties.FORCE_VALIDATION, forceValidation);
@@ -396,6 +411,7 @@ public class KeyEntryTag extends AbstractGridTag implements Tag {
 		selectedValue = null;
 		valueFormat = null;
 		valueFormatTooltip = null;
+		valueFormatDescription = null;
 		forceValidation = null;
 		forLabel = null;
 		valueFormatLabel = null;

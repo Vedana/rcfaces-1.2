@@ -81,7 +81,8 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * @return base HRef
 	 */
 	public String getBase(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.BASE, facesContext);
+		String s = engine.getStringProperty(Properties.BASE, facesContext);
+		return s;
 	}
 
 	/**
@@ -109,7 +110,8 @@ public class InitComponent extends CameliaBaseComponent implements
 	}
 
 	public String getDomain(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DOMAIN, facesContext);
+		String s = engine.getStringProperty(Properties.DOMAIN, facesContext);
+		return s;
 	}
 
 	public void setDomain(String domain) {
@@ -137,7 +139,8 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * @return title
 	 */
 	public String getTitle(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.TITLE, facesContext);
+		String s = engine.getStringProperty(Properties.TITLE, facesContext);
+		return s;
 	}
 
 	/**
@@ -173,7 +176,8 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * @return favorite image url
 	 */
 	public String getFavoriteImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FAVORITE_IMAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.FAVORITE_IMAGE_URL, facesContext);
+		return s;
 	}
 
 	/**
@@ -209,7 +213,8 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * @return url
 	 */
 	public String getDisabledScriptPageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DISABLED_SCRIPT_PAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.DISABLED_SCRIPT_PAGE_URL, facesContext);
+		return s;
 	}
 
 	/**
@@ -245,7 +250,8 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * @return true if cookies are disabled
 	 */
 	public String getDisabledCookiesPageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DISABLED_COOKIES_PAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.DISABLED_COOKIES_PAGE_URL, facesContext);
+		return s;
 	}
 
 	/**
@@ -281,7 +287,8 @@ public class InitComponent extends CameliaBaseComponent implements
 	 * @return url
 	 */
 	public String getInvalidBrowserPageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.INVALID_BROWSER_PAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.INVALID_BROWSER_PAGE_URL, facesContext);
+		return s;
 	}
 
 	/**
@@ -493,7 +500,8 @@ public class InitComponent extends CameliaBaseComponent implements
 	}
 
 	public String getClientMessageIdFilter(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.CLIENT_MESSAGE_ID_FILTER, facesContext);
+		String s = engine.getStringProperty(Properties.CLIENT_MESSAGE_ID_FILTER, facesContext);
+		return s;
 	}
 
 	public void setClientMessageIdFilter(String clientMessageIdFilter) {
@@ -513,7 +521,8 @@ public class InitComponent extends CameliaBaseComponent implements
 	}
 
 	public String getWaiRolesNS(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.WAI_ROLES_NS, facesContext);
+		String s = engine.getStringProperty(Properties.WAI_ROLES_NS, facesContext);
+		return s;
 	}
 
 	public void setWaiRolesNS(String waiRolesNS) {

@@ -218,7 +218,8 @@ public class PagerComponent extends AbstractBasicComponent implements
 	 * @return message
 	 */
 	public String getNoPagedMessage(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.NO_PAGED_MESSAGE, facesContext);
+		String s = engine.getStringProperty(Properties.NO_PAGED_MESSAGE, facesContext);
+		return s;
 	}
 
 	/**

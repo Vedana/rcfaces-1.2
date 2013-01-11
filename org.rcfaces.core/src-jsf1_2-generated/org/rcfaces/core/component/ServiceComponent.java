@@ -488,7 +488,8 @@ public class ServiceComponent extends CameliaBaseComponent implements
 	 * @return service id
 	 */
 	public String getServiceId(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.SERVICE_ID, facesContext);
+		String s = engine.getStringProperty(Properties.SERVICE_ID, facesContext);
+		return s;
 	}
 
 	/**

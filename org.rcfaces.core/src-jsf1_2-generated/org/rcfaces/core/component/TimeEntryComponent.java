@@ -840,7 +840,8 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	}
 
 	public String getTimeFormat(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.TIME_FORMAT, facesContext);
+		String s = engine.getStringProperty(Properties.TIME_FORMAT, facesContext);
+		return s;
 	}
 
 	public void setTimeFormat(String timeFormat) {
@@ -868,7 +869,8 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * @return step used
 	 */
 	public String getHourStep(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.HOUR_STEP, facesContext);
+		String s = engine.getStringProperty(Properties.HOUR_STEP, facesContext);
+		return s;
 	}
 
 	/**
@@ -904,7 +906,8 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * @return step
 	 */
 	public String getMinuteStep(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.MINUTE_STEP, facesContext);
+		String s = engine.getStringProperty(Properties.MINUTE_STEP, facesContext);
+		return s;
 	}
 
 	/**
@@ -940,7 +943,8 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * @return step
 	 */
 	public String getSecondStep(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.SECOND_STEP, facesContext);
+		String s = engine.getStringProperty(Properties.SECOND_STEP, facesContext);
+		return s;
 	}
 
 	/**
@@ -976,7 +980,8 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * @return step
 	 */
 	public String getMillisStep(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.MILLIS_STEP, facesContext);
+		String s = engine.getStringProperty(Properties.MILLIS_STEP, facesContext);
+		return s;
 	}
 
 	/**

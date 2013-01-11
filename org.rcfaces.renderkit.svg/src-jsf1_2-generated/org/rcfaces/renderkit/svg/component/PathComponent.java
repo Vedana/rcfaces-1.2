@@ -34,7 +34,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getClip(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.CLIP, facesContext);
+		String s = engine.getStringProperty(Properties.CLIP, facesContext);
+		return s;
 	}
 
 	public void setClip(String clip) {
@@ -54,7 +55,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getClipPath(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.CLIP_PATH, facesContext);
+		String s = engine.getStringProperty(Properties.CLIP_PATH, facesContext);
+		return s;
 	}
 
 	public void setClipPath(String clipPath) {
@@ -74,7 +76,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getClipRule(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.CLIP_RULE, facesContext);
+		String s = engine.getStringProperty(Properties.CLIP_RULE, facesContext);
+		return s;
 	}
 
 	public void setClipRule(String clipRule) {
@@ -94,7 +97,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getColor(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.COLOR, facesContext);
+		String s = engine.getStringProperty(Properties.COLOR, facesContext);
+		return s;
 	}
 
 	public void setColor(String color) {
@@ -114,7 +118,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getDisplay(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DISPLAY, facesContext);
+		String s = engine.getStringProperty(Properties.DISPLAY, facesContext);
+		return s;
 	}
 
 	public void setDisplay(String display) {
@@ -134,7 +139,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getFill(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FILL, facesContext);
+		String s = engine.getStringProperty(Properties.FILL, facesContext);
+		return s;
 	}
 
 	public void setFill(String fill) {
@@ -154,7 +160,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getFillRule(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FILL_RULE, facesContext);
+		String s = engine.getStringProperty(Properties.FILL_RULE, facesContext);
+		return s;
 	}
 
 	public void setFillRule(String fillRule) {
@@ -174,7 +181,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getFillOpacity(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FILL_OPACITY, facesContext);
+		String s = engine.getStringProperty(Properties.FILL_OPACITY, facesContext);
+		return s;
 	}
 
 	public void setFillOpacity(String fillOpacity) {
@@ -194,7 +202,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getFontFamily(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FONT_FAMILY, facesContext);
+		String s = engine.getStringProperty(Properties.FONT_FAMILY, facesContext);
+		return s;
 	}
 
 	public void setFontFamily(String fontFamily) {
@@ -214,7 +223,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getFontSize(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FONT_SIZE, facesContext);
+		String s = engine.getStringProperty(Properties.FONT_SIZE, facesContext);
+		return s;
 	}
 
 	public void setFontSize(String fontSize) {
@@ -234,7 +244,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getFontSizeAdjust(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FONT_SIZE_ADJUST, facesContext);
+		String s = engine.getStringProperty(Properties.FONT_SIZE_ADJUST, facesContext);
+		return s;
 	}
 
 	public void setFontSizeAdjust(String fontSizeAdjust) {
@@ -254,7 +265,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getFontStretch(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FONT_STRETCH, facesContext);
+		String s = engine.getStringProperty(Properties.FONT_STRETCH, facesContext);
+		return s;
 	}
 
 	public void setFontStretch(String fontStretch) {
@@ -274,7 +286,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getFontStyle(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FONT_STYLE, facesContext);
+		String s = engine.getStringProperty(Properties.FONT_STYLE, facesContext);
+		return s;
 	}
 
 	public void setFontStyle(String fontStyle) {
@@ -294,7 +307,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getFontVariant(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FONT_VARIANT, facesContext);
+		String s = engine.getStringProperty(Properties.FONT_VARIANT, facesContext);
+		return s;
 	}
 
 	public void setFontVariant(String fontVariant) {
@@ -314,7 +328,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getFontWeight(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FONT_WEIGHT, facesContext);
+		String s = engine.getStringProperty(Properties.FONT_WEIGHT, facesContext);
+		return s;
 	}
 
 	public void setFontWeight(String fontWeight) {
@@ -334,7 +349,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getOpacity(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.OPACITY, facesContext);
+		String s = engine.getStringProperty(Properties.OPACITY, facesContext);
+		return s;
 	}
 
 	public void setOpacity(String opacity) {
@@ -354,7 +370,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getOverflow(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.OVERFLOW, facesContext);
+		String s = engine.getStringProperty(Properties.OVERFLOW, facesContext);
+		return s;
 	}
 
 	public void setOverflow(String overflow) {
@@ -374,7 +391,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getStopColor(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.STOP_COLOR, facesContext);
+		String s = engine.getStringProperty(Properties.STOP_COLOR, facesContext);
+		return s;
 	}
 
 	public void setStopColor(String stopColor) {
@@ -394,7 +412,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getStopOpacity(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.STOP_OPACITY, facesContext);
+		String s = engine.getStringProperty(Properties.STOP_OPACITY, facesContext);
+		return s;
 	}
 
 	public void setStopOpacity(String stopOpacity) {
@@ -414,7 +433,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getStroke(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.STROKE, facesContext);
+		String s = engine.getStringProperty(Properties.STROKE, facesContext);
+		return s;
 	}
 
 	public void setStroke(String stroke) {
@@ -434,7 +454,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getStrokeDashArray(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.STROKE_DASH_ARRAY, facesContext);
+		String s = engine.getStringProperty(Properties.STROKE_DASH_ARRAY, facesContext);
+		return s;
 	}
 
 	public void setStrokeDashArray(String strokeDashArray) {
@@ -454,7 +475,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getStrokeDashOffset(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.STROKE_DASH_OFFSET, facesContext);
+		String s = engine.getStringProperty(Properties.STROKE_DASH_OFFSET, facesContext);
+		return s;
 	}
 
 	public void setStrokeDashOffset(String strokeDashOffset) {
@@ -474,7 +496,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getStrokeLineCap(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.STROKE_LINE_CAP, facesContext);
+		String s = engine.getStringProperty(Properties.STROKE_LINE_CAP, facesContext);
+		return s;
 	}
 
 	public void setStrokeLineCap(String strokeLineCap) {
@@ -494,7 +517,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getStrokeLineJoin(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.STROKE_LINE_JOIN, facesContext);
+		String s = engine.getStringProperty(Properties.STROKE_LINE_JOIN, facesContext);
+		return s;
 	}
 
 	public void setStrokeLineJoin(String strokeLineJoin) {
@@ -514,7 +538,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getStrokeMiterLimit(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.STROKE_MITER_LIMIT, facesContext);
+		String s = engine.getStringProperty(Properties.STROKE_MITER_LIMIT, facesContext);
+		return s;
 	}
 
 	public void setStrokeMiterLimit(String strokeMiterLimit) {
@@ -534,7 +559,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getStrokeOpacity(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.STROKE_OPACITY, facesContext);
+		String s = engine.getStringProperty(Properties.STROKE_OPACITY, facesContext);
+		return s;
 	}
 
 	public void setStrokeOpacity(String strokeOpacity) {
@@ -554,7 +580,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getStrokeWidth(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.STROKE_WIDTH, facesContext);
+		String s = engine.getStringProperty(Properties.STROKE_WIDTH, facesContext);
+		return s;
 	}
 
 	public void setStrokeWidth(String strokeWidth) {
@@ -574,7 +601,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getTextAlign(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.TEXT_ALIGN, facesContext);
+		String s = engine.getStringProperty(Properties.TEXT_ALIGN, facesContext);
+		return s;
 	}
 
 	public void setTextAlign(String textAlign) {
@@ -594,7 +622,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getTextAnchor(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.TEXT_ANCHOR, facesContext);
+		String s = engine.getStringProperty(Properties.TEXT_ANCHOR, facesContext);
+		return s;
 	}
 
 	public void setTextAnchor(String textAnchor) {
@@ -614,7 +643,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getTextDecoration(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.TEXT_DECORATION, facesContext);
+		String s = engine.getStringProperty(Properties.TEXT_DECORATION, facesContext);
+		return s;
 	}
 
 	public void setTextDecoration(String textDecoration) {
@@ -634,7 +664,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getTextRendering(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.TEXT_RENDERING, facesContext);
+		String s = engine.getStringProperty(Properties.TEXT_RENDERING, facesContext);
+		return s;
 	}
 
 	public void setTextRendering(String textRendering) {
@@ -654,7 +685,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getVisibility(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.VISIBILITY, facesContext);
+		String s = engine.getStringProperty(Properties.VISIBILITY, facesContext);
+		return s;
 	}
 
 	public void setVisibility(String visibility) {
@@ -674,7 +706,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getWordSpacing(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.WORD_SPACING, facesContext);
+		String s = engine.getStringProperty(Properties.WORD_SPACING, facesContext);
+		return s;
 	}
 
 	public void setWordSpacing(String wordSpacing) {
@@ -694,7 +727,8 @@ public class PathComponent extends NodeComponent {
 	}
 
 	public String getWritingMode(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.WRITING_MODE, facesContext);
+		String s = engine.getStringProperty(Properties.WRITING_MODE, facesContext);
+		return s;
 	}
 
 	public void setWritingMode(String writingMode) {
