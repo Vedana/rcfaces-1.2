@@ -1064,7 +1064,7 @@ var f_core = {
 		var now=new Date();
 		var win=this;
 		
-		if (win.document.readyState && f_core.IsInternetExplorer()) {
+		if (f_core.IsInternetExplorer() && win.document.readyState) {
 			// Sous IE;
 			
 			// Bug du frameSet
@@ -1075,7 +1075,6 @@ var f_core = {
 					var frames=w.frames;
 					for(var i=0;i<frames.length;i++) {
 						var f=frames[i];
-						
 						try {
 							if (f.event) {
 								return f;
@@ -1092,9 +1091,11 @@ var f_core = {
 							// Probleme de sécurité !
 						}
 					}
+					
+//					return undefined;
 				}
 				
-				win=fm(win) | win;
+				win=fm(win) || win;
 			}
 		}
 		
