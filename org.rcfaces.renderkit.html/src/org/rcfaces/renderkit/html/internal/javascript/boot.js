@@ -78,12 +78,15 @@ if (window._RCFACES_LEVEL3) {
 				}
 	
 			} else if (thiz.frames) {
-				win=thiz;			
+				win=thiz;
+				
+			} else if (thiz._window) {
+				win=this._window;
 			}
-			
-			if (!win) {
-				throw new Error("RCFaces: Unknown 'this' object type ! ("+this+")");
-			}
+		}
+		
+		if (!win) {
+			throw new Error("RCFaces: Unknown 'this' object type ! ("+this+")");
 		}
 			
 		for(var w=win;w;w=w.opener) {
