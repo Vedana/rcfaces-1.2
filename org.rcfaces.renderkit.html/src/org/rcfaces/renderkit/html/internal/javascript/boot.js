@@ -64,7 +64,10 @@ if (window._RCFACES_LEVEL3) {
 		}
 		
 		if (!win) {
-			if (thiz.parentWindow) {
+			 if (thiz._window) {
+				win=thiz._window;
+					
+			} else if (thiz.parentWindow) {
 				// IE !
 				win=thiz.parentWindow;
 				
@@ -79,14 +82,11 @@ if (window._RCFACES_LEVEL3) {
 	
 			} else if (thiz.frames) {
 				win=thiz;
-				
-			} else if (thiz._window) {
-				win=this._window;
 			}
 		}
 		
 		if (!win) {
-			throw new Error("RCFaces: Unknown 'this' object type ! ("+this+")");
+			throw new Error("RCFaces: Unknown 'this' object type ! (thiz="+thiz+" evt="+evt+" this="+this+")");
 		}
 			
 		for(var w=win;w;w=w.opener) {
