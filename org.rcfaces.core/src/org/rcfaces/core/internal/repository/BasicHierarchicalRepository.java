@@ -116,7 +116,6 @@ public class BasicHierarchicalRepository extends AbstractRepository implements
         });
 
         digester.addRule("repository/module", new Rule() {
-            private static final String REVISION = "$Revision$";
 
             @Override
             public void begin(String namespace, String name,
@@ -155,7 +154,6 @@ public class BasicHierarchicalRepository extends AbstractRepository implements
         });
 
         digester.addRule("repository/module/file", new Rule() {
-            private static final String REVISION = "$Revision$";
 
             @Override
             public void begin(String namespace, String xname,
