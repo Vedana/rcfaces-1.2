@@ -1002,7 +1002,7 @@ var __statics = {
 			// Calcule la position de la souris 
 			var eventPos=f_core.GetJsEventPosition(jsEvent);
 			
-			popupComponent=jsEvent.srcElement.ownerDocument.body;
+			popupComponent=(jsEvent.srcElement || jsEvent.targetElement || jsEvent.toElement).ownerDocument.body;
 			popupX=eventPos.x; //-cursorPos.x;
 			popupY=eventPos.y; //-cursorPos.y;
 

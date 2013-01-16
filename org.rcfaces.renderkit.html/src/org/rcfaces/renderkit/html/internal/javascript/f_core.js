@@ -1058,45 +1058,54 @@ var f_core = {
 	},
 	/**
 	 * @method private static
+	 * @param Window win
+	 * @return Window
+	 */
+	_SearchIEEvent: function(win) {
+		// Bug du frameSet
+		if (win.event) {
+			return win;
+		}
+	
+		// Une des frames doit positionner 'event'
+		
+		function fm(w) {
+			var frames=w.frames;
+			for(var i=0;i<frames.length;i++) {
+				var f=frames[i];
+				try {
+					if (f.event) {
+						return f;
+					}
+					
+					if (f.frames.length) {
+						var r=fm(f);
+						if (r) {
+							return r;
+						}
+					}
+					
+				} catch (x) {
+					// Probleme de sécurité !
+				}
+			}
+		}
+		
+		var newWin=fm(win);
+		
+		return newWin;
+	},
+	/**
+	 * @method private static
 	 * @context window:win
 	 */
 	_OnInit: function() {
 		var now=new Date();
 		var win=this;
 		
-		if (f_core.IsInternetExplorer() && win.document.readyState) {
+		if (f_core.IsInternetExplorer() && win.document.readyState && !win.event) {
 			// Sous IE;
-			
-			// Bug du frameSet
-			if (!win.event) {
-				// Une des frames doit positionner 'event'
-				
-				function fm(w) {
-					var frames=w.frames;
-					for(var i=0;i<frames.length;i++) {
-						var f=frames[i];
-						try {
-							if (f.event) {
-								return f;
-							}
-							
-							if (f.frames.length) {
-								var r=fm(f);
-								if (r) {
-									return r;
-								}
-							}
-							
-						} catch (x) {
-							// Probleme de sécurité !
-						}
-					}
-					
-//					return undefined;
-				}
-				
-				win=fm(win) || win;
-			}
+			win=f_core._SearchIEEvent(win) || win;
 		}
 		
 		// Un BUG IE appelle le onload 2 fois !!!

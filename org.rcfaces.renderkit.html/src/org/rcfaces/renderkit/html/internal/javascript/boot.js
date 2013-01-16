@@ -52,13 +52,13 @@ if (window._RCFACES_LEVEL3) {
 					win=evt.target.ownerDocument.defaultView;
 				}
 
-			} else if (evt.fromElement) { // IE
+			} else if (evt.fromElement && evt.fromElement.ownerDocument) { // IE
 				win=evt.fromElement.ownerDocument.parentWindow;
 
-			} else if (evt.toElement) { // IE
+			} else if (evt.toElement && evt.toElement.ownerDocument) { // IE
 				win=evt.toElement.ownerDocument.parentWindow;
 
-			} else if (evt.srcElement) { // IE
+			} else if (evt.srcElement && evt.srcElement.ownerDocument) { // IE
 				win=evt.srcElement.ownerDocument.parentWindow;
 			}
 		}
