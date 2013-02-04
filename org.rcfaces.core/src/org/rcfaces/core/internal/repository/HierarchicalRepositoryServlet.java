@@ -7,7 +7,6 @@ package org.rcfaces.core.internal.repository;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Enumeration;
-import java.util.Locale;
 import java.util.StringTokenizer;
 
 import javax.servlet.ServletConfig;
@@ -16,6 +15,7 @@ import javax.servlet.ServletException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.repository.IHierarchicalRepository.ISet;
+import org.rcfaces.core.internal.repository.IRepository.ICriteria;
 import org.rcfaces.core.internal.repository.IRepository.IFile;
 import org.rcfaces.core.lang.OrderedSet;
 
@@ -38,6 +38,7 @@ public abstract class HierarchicalRepositoryServlet extends RepositoryServlet {
 
     private static final String BOOT_SET_DEFAULT_VALUE = null;
 
+    @SuppressWarnings("unchecked")
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -208,8 +209,8 @@ public abstract class HierarchicalRepositoryServlet extends RepositoryServlet {
      */
     protected abstract class HierarchicalRecord extends Record {
 
-        public HierarchicalRecord(IFile file, Locale locale) {
-            super(file, locale);
+        public HierarchicalRecord(IFile file, ICriteria criteria) {
+            super(file, criteria);
         }
 
         @Override

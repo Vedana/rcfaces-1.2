@@ -162,6 +162,8 @@ public class Constants {
 
     public static final boolean CONTENT_STORAGE_CACHE_SOFT_REFERENCES = true;
 
+    public static final boolean LOCALE_CRITERIA_LANGUAGE_ONLY = true;
+
     static {
         LOG.info("READ_ONLY_COLLECTION_LOCK_ENABLED="
                 + READ_ONLY_COLLECTION_LOCK_ENABLED);

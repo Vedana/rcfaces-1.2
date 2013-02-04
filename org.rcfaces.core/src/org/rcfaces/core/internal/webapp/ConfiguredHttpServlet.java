@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.repository.LocaleCriteria;
 import org.rcfaces.core.internal.util.Delay;
 import org.rcfaces.core.internal.util.ServletTools;
 
@@ -59,6 +60,9 @@ public class ConfiguredHttpServlet extends ExtendedHttpServlet {
 
     private static final String NONE_EXPIRATION_KEYWORD = "none";
 
+    private final Map<String, Locale> convertedLocales = new HashMap<String, Locale>(
+            256);
+
     private boolean gZipSupport;
 
     private boolean etagSupport;
@@ -72,9 +76,6 @@ public class ConfiguredHttpServlet extends ExtendedHttpServlet {
     private Set<Locale> filtredLocales;
 
     protected boolean localeSupport;
-
-    private final Map<String, Locale> convertedLocales = new HashMap<String, Locale>(
-            32);
 
     private Locale defaultLocale;
 
@@ -320,77 +321,15 @@ public class ConfiguredHttpServlet extends ExtendedHttpServlet {
     }
 
     protected final Locale convertLocaleName(String localeName, boolean accept) {
-        localeName = localeName.toLowerCase();
+        if (accept && filtredLocales != null) {
+            Locale locale = LocaleCriteria.convertLocaleName(localeName,
+                    convertedLocales, filtredLocales);
 
-        Locale locale;
-        synchronized (convertedLocales) {
-            locale = convertedLocales.get(localeName);
-        }
-
-        if (locale != null) {
             return locale;
         }
 
-        // On synchronise pas le bloc, histore de pas bloquer le reste des
-        // Threads ...
-        // Et tanpis pour les put multiple de la meme valeur !
+        Locale locale = LocaleCriteria.convertLocaleName(localeName);
 
-        StringTokenizer st = new StringTokenizer(localeName, "_");
-        String language = st.nextToken().toLowerCase();
-        String country = (st.hasMoreTokens()) ? st.nextToken().toLowerCase()
-                : "";
-        String variant = (st.hasMoreTokens()) ? st.nextToken().toLowerCase()
-                : "";
-
-        Locale bestLocale = null;
-        int bestHit = 0;
-
-        Locale locales[] = Locale.getAvailableLocales();
-        for (int i = 0; i < locales.length; i++) {
-            locale = locales[i];
-            if (accept && filtredLocales != null
-                    && filtredLocales.contains(locale) == false) {
-                continue;
-            }
-
-            if (locale.getLanguage().equalsIgnoreCase(language) == false) {
-                continue;
-            }
-            int hit = 1;
-
-            String lcountry = locale.getCountry();
-            if (lcountry.equalsIgnoreCase(country)) {
-                hit += 2;
-
-                String lvariant = locale.getVariant();
-                if (lvariant.equalsIgnoreCase(variant)) {
-                    hit += 2;
-
-                } else if (lvariant.length() < 1) {
-                    hit++;
-                }
-
-            } else if (lcountry.length() < 1) {
-                hit++;
-            }
-
-            if (hit < bestHit) {
-                continue;
-            }
-
-            bestLocale = locale;
-            bestHit = hit;
-        }
-
-        if (bestLocale == null) {
-            // On n'enregistre pas la mauvaise reponse !
-            return null;
-        }
-
-        synchronized (convertedLocales) {
-            convertedLocales.put(localeName, bestLocale);
-
-            return bestLocale;
-        }
+        return locale;
     }
 }

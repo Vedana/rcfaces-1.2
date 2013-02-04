@@ -7,7 +7,13 @@ package org.rcfaces.core.internal.repository;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.util.Locale;
+import java.util.List;
+
+import javax.faces.component.StateHolder;
+import javax.faces.context.FacesContext;
+
+import org.rcfaces.core.internal.webapp.URIParameters;
+import org.rcfaces.core.lang.IAdaptable;
 
 /**
  * 
@@ -18,11 +24,23 @@ public interface IRepository extends Serializable {
 
     String getVersion();
 
-    IContext createContext(Locale locale);
+    IContext createContext(ICriteria criteria);
 
     IFile getFileByName(String filename);
 
     IFile getFileByURI(String uri);
+
+    public interface ICriteria extends IAdaptable, StateHolder {
+        void appendSuffix(URIParameters uriParameters);
+
+        void appendSuffix(URIParameters uriParameters, boolean recursive);
+
+        List<String> listURIs(String uri);
+
+        ICriteria merge(ICriteria criteria);
+
+        ICriteria getParent();
+    }
 
     /**
      * 
@@ -36,9 +54,9 @@ public interface IRepository extends Serializable {
 
         String getFilename();
 
-        Object[] getContentReferences(Locale locale);
+        Object[] getContentReferences(ICriteria criteria);
 
-        String getURI(Locale locale);
+        String getURI(ICriteria criteria);
     }
 
     /**
@@ -47,7 +65,7 @@ public interface IRepository extends Serializable {
      * @version $Revision$ $Date$
      */
     public interface IContext {
-        Locale getLocale();
+        ICriteria getCriteria();
 
         boolean contains(IFile file);
 
@@ -55,9 +73,10 @@ public interface IRepository extends Serializable {
 
         IContext copy();
 
-        Object saveState();
+        Object saveState(FacesContext facesContext);
 
-        void restoreState(IRepository repository, Object state);
+        void restoreState(FacesContext facesContext, IRepository repository,
+                Object state);
     }
 
     /**
@@ -66,10 +85,10 @@ public interface IRepository extends Serializable {
      * @version $Revision$ $Date$
      */
     public interface IContentProvider {
-        IContent getContent(Object contentReference, Locale locale);
+        IContent getContent(Object contentReference, ICriteria criteria);
 
-        Object searchLocalizedContentReference(Object contentReference,
-                Locale locale);
+        Object searchCriteriaContentReference(Object contentReference,
+                ICriteria criteria);
     }
 
     /**

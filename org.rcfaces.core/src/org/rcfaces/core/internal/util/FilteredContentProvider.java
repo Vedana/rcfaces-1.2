@@ -9,11 +9,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.net.URL;
-import java.util.Locale;
 
 import org.rcfaces.core.internal.lang.ByteBufferInputStream;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.repository.IRepository.IContent;
+import org.rcfaces.core.internal.repository.IRepository.ICriteria;
 
 /**
  * 
@@ -25,8 +25,8 @@ public class FilteredContentProvider extends URLContentProvider {
     private static final String CONTENT_DEFAULT_CHARSET = "UTF-8";
 
     @Override
-    public IContent getContent(Object contentReference, Locale locale) {
-        return new FilteredURLContent((URL) contentReference, locale);
+    public IContent getContent(Object contentReference, ICriteria criteria) {
+        return new FilteredURLContent((URL) contentReference, criteria);
     }
 
     /**
@@ -35,10 +35,9 @@ public class FilteredContentProvider extends URLContentProvider {
      * @version $Revision$ $Date$
      */
     protected class FilteredURLContent extends URLContent {
-        private static final String REVISION = "$Revision$";
 
-        public FilteredURLContent(URL url, Locale locale) {
-            super(url, locale);
+        public FilteredURLContent(URL url, ICriteria criteria) {
+            super(url, criteria);
         }
 
         @Override
@@ -68,7 +67,7 @@ public class FilteredContentProvider extends URLContentProvider {
 
             String file = writer.toString();
 
-            file = updateBuffer(file, url, locale);
+            file = updateBuffer(file, url, criteria);
 
             return new ByteBufferInputStream(file.getBytes(getCharset()));
         }
@@ -78,7 +77,7 @@ public class FilteredContentProvider extends URLContentProvider {
         return CONTENT_DEFAULT_CHARSET;
     }
 
-    protected String updateBuffer(String buffer, URL url, Locale locale) {
+    protected String updateBuffer(String buffer, URL url, ICriteria criteria) {
         return buffer;
     }
 

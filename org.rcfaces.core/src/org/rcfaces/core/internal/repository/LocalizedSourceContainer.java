@@ -15,6 +15,7 @@ import javax.servlet.ServletException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.webapp.URIParameters;
 
 /**
  * 
@@ -26,7 +27,7 @@ public abstract class LocalizedSourceContainer extends SourceContainer<String> {
     private static final Log LOG = LogFactory
             .getLog(LocalizedSourceContainer.class);
 
-    private final String localizedSuffixes[];
+    private final Locale[] testedLocales;
 
     public LocalizedSourceContainer(ServletConfig config,
             String repositoryType, Set<String> modules, String charSet,
@@ -36,13 +37,18 @@ public abstract class LocalizedSourceContainer extends SourceContainer<String> {
         super(config, repositoryType, modules, charSet, canUseGzip, canUseETag,
                 canUseHash, externalRepositoriesPropertyName, repositoryVersion);
 
-        this.localizedSuffixes = getLocalizedSuffixes(config);
+        this.testedLocales = listTestedLocales(config);
     }
 
     @Override
     protected URL getURL(String path) {
-        for (int i = 0; i < localizedSuffixes.length; i++) {
-            String p = path + localizedSuffixes[i];
+        for (Locale locale : testedLocales) {
+            URIParameters up = URIParameters.parseURI(path);
+            if (locale != null) {
+                up.appendLocale(locale);
+            }
+
+            String p = up.computeParametredURI();
 
             URL url = super.getURL(p);
             if (url != null) {
@@ -53,10 +59,10 @@ public abstract class LocalizedSourceContainer extends SourceContainer<String> {
         return null;
     }
 
-    protected String[] getLocalizedSuffixes(ServletConfig config) {
+    protected Locale[] listTestedLocales(ServletConfig config) {
         Locale locale = Locale.getDefault();
 
-        List<String> l = new ArrayList<String>();
+        List<Locale> l = new ArrayList<Locale>();
 
         if (locale != null) {
             String language = locale.getLanguage();
@@ -65,17 +71,25 @@ public abstract class LocalizedSourceContainer extends SourceContainer<String> {
                 if (country != null && country.length() > 0) {
                     String variant = locale.getVariant();
                     if (variant != null && variant.length() > 0) {
-                        l.add("_" + language + "_" + country + "_" + variant);
+                        l.add(locale);
+
+                        locale = new Locale(locale.getLanguage(),
+                                locale.getCountry(), null);
                     }
 
-                    l.add("_" + language + "_" + country);
+                    l.add(locale);
+
+                    locale = new Locale(locale.getLanguage(), null, null);
                 }
-                l.add("_" + language);
+
+                l.add(locale);
             }
+
+            locale = null;
         }
 
-        l.add("");
+        l.add(locale);
 
-        return l.toArray(new String[l.size()]);
+        return l.toArray(new Locale[l.size()]);
     }
 }

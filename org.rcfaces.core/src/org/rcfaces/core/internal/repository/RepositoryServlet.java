@@ -27,6 +27,7 @@ import org.rcfaces.core.internal.lang.ByteBufferOutputStream;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.repository.IRepository.IContent;
 import org.rcfaces.core.internal.repository.IRepository.IContentProvider;
+import org.rcfaces.core.internal.repository.IRepository.ICriteria;
 import org.rcfaces.core.internal.repository.IRepository.IFile;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.internal.webapp.ExpirationDate;
@@ -57,7 +58,7 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
 
     private static final int CONTENT_INITIAL_SIZE = 16000;
 
-    private final Map<Locale, Map<IFile, Record>> fileToRecordByLocale = new HashMap<Locale, Map<IFile, Record>>(
+    private final Map<ICriteria, Map<IFile, Record>> fileToRecordByCriteria = new HashMap<ICriteria, Map<IFile, Record>>(
             128);
 
     private IRepository repository;
@@ -145,8 +146,6 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
             uri = uri.substring(idx + 1);
         }
 
-        Locale locale = null;
-
         boolean isVersioned = false;
         String version = null;
         if (getVersionSupport()) {
@@ -162,20 +161,10 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
         }
 
         URIParameters up = URIParameters.parseURI(uri);
-        if (up != null) {
-            if (localeSupport) {
-                String localeName = up.getLocaleName();
-                if (localeName != null) {
-                    locale = convertLocaleName(localeName, true);
-                }
-            }
-
-            if (version == null) {
-                version = up.getVersion();
-            }
-
-            uri = up.getURI();
+        if (version == null) {
+            version = up.getVersion();
         }
+        String normalizedURI = up.getURI();
 
         if (version != null) {
             String repositoryVersion = repository.getVersion();
@@ -192,42 +181,62 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
             }
         }
 
-        IFile file = repository.getFileByURI(uri);
+        IFile file = repository.getFileByURI(normalizedURI);
         if (file == null) {
             setNoCache(response);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
-        if (locale == null) {
-            locale = getDefaultLocale(request, response);
-        }
+        ICriteria criteria = constructCriteria(request, response, up);
 
-        Record record = getFileRecord(file, locale);
+        Record record = getFileRecord(file, criteria);
 
         sendRecord(request, response, record, isVersioned);
     }
 
-    protected abstract boolean getVersionSupport();
+    protected ICriteria constructCriteria(HttpServletRequest request,
+            HttpServletResponse response, URIParameters up) {
 
-    protected Record getFileRecord(IFile file, Locale locale) {
-        Record record;
+        Locale locale = null;
+
+        if (localeSupport) {
+            String localeName = up.getLocaleName();
+            if (localeName != null) {
+                locale = convertLocaleName(localeName, true);
+            }
+        }
 
         if (locale == null) {
+            locale = getDefaultLocale(request, response);
+        }
+
+        ICriteria localeCriteria = LocaleCriteria.get(locale);
+
+        return localeCriteria;
+    }
+
+    protected abstract boolean getVersionSupport();
+
+    protected Record getFileRecord(IFile file, ICriteria criteria) {
+        Record record;
+
+        if (criteria == null) {
             throw new FacesException("Locale is NULL for file '"
                     + file.getFilename() + "'.");
         }
 
-        synchronized (fileToRecordByLocale) {
-            Map<IFile, Record> fileToRecord = fileToRecordByLocale.get(locale);
+        synchronized (fileToRecordByCriteria) {
+            Map<IFile, Record> fileToRecord = fileToRecordByCriteria
+                    .get(criteria);
             if (fileToRecord == null) {
                 fileToRecord = new HashMap<IFile, Record>();
-                fileToRecordByLocale.put(locale, fileToRecord);
+                fileToRecordByCriteria.put(criteria, fileToRecord);
             }
 
             record = fileToRecord.get(file);
             if (record == null) {
-                record = newRecord(file, locale);
+                record = newRecord(file, criteria);
 
                 fileToRecord.put(file, record);
             }
@@ -390,8 +399,8 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
         }
     }
 
-    protected Record newRecord(IFile file, Locale locale) {
-        return new Record(file, locale);
+    protected Record newRecord(IFile file, ICriteria criteria) {
+        return new Record(file, criteria);
     }
 
     protected abstract String getContentType(Record record);
@@ -402,11 +411,10 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
      * @version $Revision$ $Date$
      */
     protected class Record {
-        private static final String REVISION = "$Revision$";
 
         protected final IFile file;
 
-        protected final Locale locale;
+        protected final ICriteria criteria;
 
         protected byte buffer[];
 
@@ -420,9 +428,9 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
 
         private String hash;
 
-        public Record(IFile file, Locale locale) {
+        public Record(IFile file, ICriteria criteria) {
             this.file = file;
-            this.locale = locale;
+            this.criteria = criteria;
         }
 
         protected final IFile getFile() {
@@ -465,7 +473,7 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
                 long l;
                 try {
                     IContent content = contentProvider.getContent(urls[i],
-                            locale);
+                            criteria);
                     try {
                         l = content.getLastModified();
 
@@ -503,7 +511,7 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
             boolean modified = false;
 
             for (int i = 0; i < files.length; i++) {
-                Record record = getFileRecord(files[i], locale);
+                Record record = getFileRecord(files[i], criteria);
 
                 if (record.verifyFileModifications()) {
                     record.resetRecord();
@@ -527,7 +535,7 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
 
             for (int i = 0; i < urls.length; i++) {
                 IContent contentProvider = file.getContentProvider()
-                        .getContent(urls[i], locale);
+                        .getContent(urls[i], criteria);
                 try {
                     long date = contentProvider.getLastModified();
                     if (date < 1) {
@@ -614,7 +622,7 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
             lastModificationDate = 0;
 
             for (int i = 0; i < files.length; i++) {
-                Record record = getFileRecord(files[i], locale);
+                Record record = getFileRecord(files[i], criteria);
 
                 synchronized (record) {
                     buffers[i] = record.getBuffer();
@@ -650,7 +658,7 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
 
                 StringAppender sb = new StringAppender(files.length * 32);
                 for (int i = 0; i < files.length; i++) {
-                    Record record = getFileRecord(files[i], locale);
+                    Record record = getFileRecord(files[i], criteria);
 
                     if (sb.length() > 0) {
                         sb.append(", ");
@@ -676,7 +684,7 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
         }
 
         protected Object[] getFileContentReferences(IFile file) {
-            return file.getContentReferences(locale);
+            return file.getContentReferences(criteria);
         }
 
         protected byte[] updateBuffer(byte[] buffer) throws IOException {

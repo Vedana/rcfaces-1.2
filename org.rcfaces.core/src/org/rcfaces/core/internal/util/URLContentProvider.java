@@ -6,16 +6,15 @@ package org.rcfaces.core.internal.util;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Locale;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.repository.AbstractRepository.AbstractContent;
 import org.rcfaces.core.internal.repository.IRepository.IContent;
 import org.rcfaces.core.internal.repository.IRepository.IContentProvider;
+import org.rcfaces.core.internal.repository.IRepository.ICriteria;
 
 /**
  * 
@@ -31,121 +30,27 @@ public class URLContentProvider implements IContentProvider {
     protected URLContentProvider() {
     }
 
-    public IContent getContent(Object contentReference, Locale locale) {
-        return new URLContent((URL) contentReference, locale);
+    public IContent getContent(Object contentReference, ICriteria criteria) {
+        return new URLContent((URL) contentReference, criteria);
     }
 
-    public Object searchLocalizedContentReference(Object contentReference,
-            Locale locale) {
-
-        String localized = contentReference.toString();
-
-        int idx0 = localized.lastIndexOf('.');
-        if (idx0 <= 0) {
-            return null;
-        }
-
-        String variant = locale.getVariant();
-        String country = locale.getCountry();
-        String language = locale.getLanguage();
-
-        String suffix = "";
-        String baseURL = localized;
-        if (localized.lastIndexOf('/') < idx0) {
-            baseURL = localized.substring(0, idx0);
-            suffix = localized.substring(idx0);
-        }
-
-        if (language.length() > 0) {
-            int idx2 = baseURL.lastIndexOf('/');
-
-            baseURL = baseURL.substring(0, idx2) + '/' + language
-                    + baseURL.substring(idx2);
-        }
-
-        if (LOG.isTraceEnabled()) {
-            LOG.trace("searchLocalizedContentReference ref='"
-                    + contentReference + "' locale='" + locale
-                    + "' => baseURL=" + baseURL);
-        }
-
-        try {
-            if (variant != null && variant.length() > 0) {
-                URL l = new URL(baseURL + "_" + language + "_" + country + "_"
-                        + variant + suffix);
-
-                Locale tryLocale = locale;
-                if (testURL(l, tryLocale)) {
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug("Localized version '" + locale
-                                + "' found for url '" + localized + "' => "
-                                + tryLocale);
-                    }
-
-                    return l;
-                }
-            }
-
-            if (country != null && country.length() > 0) {
-                URL l = new URL(baseURL + "_" + language + "_" + country
-                        + suffix);
-
-                Locale tryLocale = locale;
-                if (variant != null && variant.length() > 0) {
-                    tryLocale = new Locale(language, country);
-                }
-
-                if (testURL(l, tryLocale)) {
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug("Localized version '" + locale
-                                + "' found for url '" + localized + "' => "
-                                + tryLocale);
-                    }
-
-                    return l;
-                }
-            }
-
-            if (language != null && language.length() > 0) {
-                URL l = new URL(baseURL + "_" + language + suffix);
-
-                Locale tryLocale = locale;
-                if ((country != null && country.length() > 0)
-                        || (variant != null && variant.length() > 0)) {
-                    tryLocale = new Locale(language);
-                }
-
-                if (testURL(l, tryLocale)) {
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug("Localized version '" + locale
-                                + "' found for url '" + localized + "' => "
-                                + tryLocale);
-                    }
-
-                    return l;
-                }
-            }
-        } catch (MalformedURLException ex) {
-            LOG.error("Can not search localized url of uri '" + localized
-                    + "' for locale '" + locale + "'.", ex);
-
-            return null;
-        }
+    public Object searchCriteriaContentReference(Object contentReference,
+            ICriteria criteria) {
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Localized version '" + locale + "' not found for url '"
-                    + localized + "'.");
+            LOG.debug("Criteria version '" + criteria + "' not found for url '"
+                    + contentReference + "'.");
         }
 
         return null;
     }
 
-    private boolean testURL(URL contentReference, Locale locale) {
-        IContent content = getContent(contentReference, locale);
+    protected boolean testURL(URL contentReference, ICriteria criteria) {
+        IContent content = getContent(contentReference, criteria);
 
         if (LOG.isTraceEnabled()) {
-            LOG.trace("TestURL '" + contentReference + "' locale='" + locale
-                    + "'");
+            LOG.trace("TestURL '" + contentReference + "' criteria='"
+                    + criteria + "'");
         }
 
         InputStream inputStream;
@@ -161,8 +66,8 @@ public class URLContentProvider implements IContentProvider {
 
         if (inputStream == null) {
             if (LOG.isTraceEnabled()) {
-                LOG.trace("TestURL '" + contentReference + "' locale='"
-                        + locale + "' => NOT FOUND");
+                LOG.trace("TestURL '" + contentReference + "' criteria='"
+                        + criteria + "' => NOT FOUND");
             }
 
             return false;
@@ -176,8 +81,8 @@ public class URLContentProvider implements IContentProvider {
         }
 
         if (LOG.isTraceEnabled()) {
-            LOG.trace("TestURL '" + contentReference + "' locale='" + locale
-                    + "' => FOUND");
+            LOG.trace("TestURL '" + contentReference + "' criteria='"
+                    + criteria + "' => FOUND");
         }
 
         return true;
@@ -189,19 +94,18 @@ public class URLContentProvider implements IContentProvider {
      * @version $Revision$ $Date$
      */
     protected static class URLContent extends AbstractContent {
-        private static final String REVISION = "$Revision$";
 
         protected final URL url;
 
-        protected final Locale locale;
+        protected final ICriteria criteria;
 
         private URLConnection urlConnection;
 
         private boolean opened;
 
-        public URLContent(URL url, Locale locale) {
+        public URLContent(URL url, ICriteria criteria) {
             this.url = url;
-            this.locale = locale;
+            this.criteria = criteria;
         }
 
         public InputStream getInputStream() throws IOException {

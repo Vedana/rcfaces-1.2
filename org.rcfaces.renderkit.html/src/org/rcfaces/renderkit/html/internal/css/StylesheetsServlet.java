@@ -397,7 +397,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
                 String fileName = CAMELIA_CSS_URL;
                 String version = moduleRepository.getVersion();
                 if (version != null) {
-                    URIParameters up = new URIParameters(fileName);
+                    URIParameters up = URIParameters.parseURI(fileName);
 
                     // up.appendVersion(version);
 
@@ -667,6 +667,8 @@ public class StylesheetsServlet extends HtmlModulesServlet {
         }
 
         byte workBytes[] = bout.toByteArray();
+
+        bout.close();
 
         if (charset == null) {
             charset = getCharset();
@@ -1216,8 +1218,8 @@ public class StylesheetsServlet extends HtmlModulesServlet {
                     target = r;
                 }
                 if (target != clientBrowser) {
-                    URIParameters uriParameters = new URIParameters(
-                            styleSheetFileName);
+                    URIParameters uriParameters = URIParameters
+                            .parseURI(styleSheetFileName);
                     uriParameters.appendAgent(browserIdAndVersion);
 
                     uri = uriParameters.computeParametredURI();

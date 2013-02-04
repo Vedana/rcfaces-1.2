@@ -9,7 +9,6 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -39,6 +38,7 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.repository.IHierarchicalRepository;
 import org.rcfaces.core.internal.repository.IRepository;
 import org.rcfaces.core.internal.repository.IRepository.IContext;
+import org.rcfaces.core.internal.repository.IRepository.ICriteria;
 import org.rcfaces.core.internal.tools.PageConfiguration;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.lang.IContentFamily;
@@ -238,13 +238,12 @@ public class InitRenderer extends AbstractHtmlRenderer {
         }
 
         if (htmlProcessContext.getClientBrowser().getBrowserType() == BrowserType.MICROSOFT_INTERNET_EXPLORER) {
-        	 String version = "IE="+htmlProcessContext.getClientBrowser().getMajorVersion();
-        	 htmlWriter.startElement(IHtmlWriter.META);
-        	 htmlWriter.writeHttpEquiv("X-UA-Compatible",
-                     version);
-        	 htmlWriter.endElement(IHtmlWriter.META);
+            String version = "IE="
+                    + htmlProcessContext.getClientBrowser().getMajorVersion();
+            htmlWriter.startElement(IHtmlWriter.META);
+            htmlWriter.writeHttpEquiv("X-UA-Compatible", version);
+            htmlWriter.endElement(IHtmlWriter.META);
         }
-        
 
         if (disableContextMenu) {
             htmlRenderContext.setDisabledContextMenu(true);
@@ -379,7 +378,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
             // Il n'est pas connu du repository !
 
             String cameliaScriptURI = bootSet.getURI(repositoryContext
-                    .getLocale());
+                    .getCriteria());
 
             String jsBaseURI = repository.getBaseURI(htmlProcessContext);
 
@@ -925,7 +924,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
                 IHierarchicalRepository.FILENAME_COLLECTION_TYPE,
                 repositoryContext);
         if (files != null && files.length > 0) {
-            Locale locale = repositoryContext.getLocale();
+            ICriteria criteria = repositoryContext.getCriteria();
             for (int i = 0; i < files.length; i++) {
                 jsWriter.write("<SCRIPT");
                 if (htmlProcessContext.useMetaContentScriptType() == false) {
@@ -937,7 +936,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
 
                 jsWriter.write(jsBaseURI);
                 jsWriter.write('/');
-                jsWriter.write(files[i].getURI(locale));
+                jsWriter.write(files[i].getURI(criteria));
 
                 jsWriter.write("\\\"");
                 if (javascriptCharset != null) {

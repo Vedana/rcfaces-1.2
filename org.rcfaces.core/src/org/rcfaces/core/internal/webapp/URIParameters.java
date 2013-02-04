@@ -5,9 +5,11 @@
 package org.rcfaces.core.internal.webapp;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.rcfaces.core.internal.lang.StringAppender;
 
@@ -16,50 +18,52 @@ import org.rcfaces.core.internal.lang.StringAppender;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class URIParameters {
+public class URIParameters implements Cloneable {
     public static final String PARAMETER_URI_SEPARATOR = "__";
 
-    public static final char VERSION_PARAMETER = 'V';
+    public static final String VERSION_PARAMETER = "V";
 
-    public static final char LOCALE_PARAMETER = 'L';
+    public static final String LOCALE_PARAMETER = "L";
 
-    public static final char AGENT_PARAMETER = 'A';
-
-    private static final int MAX_COMMANDS = 8;
+    public static final String AGENT_PARAMETER = "A";
 
     private final String uri;
 
-    private char[] commands;
+    private Map<String, String> parameters;
 
-    private String[] parameters;
-
-    private URIParameters(String uri, char[] commands, String[] parameters) {
+    private URIParameters(String uri, Map<String, String> parameters) {
         this.uri = uri;
-        this.commands = commands;
         this.parameters = parameters;
     }
 
-    public URIParameters(String uri) {
-        this.uri = uri;
-        this.commands = new char[MAX_COMMANDS];
-        this.parameters = new String[this.commands.length];
+    private URIParameters(String uri) {
+        this(uri, null);
     }
 
     public static URIParameters parseURI(String uri) {
         int separatorPos = uri.indexOf(PARAMETER_URI_SEPARATOR);
         if (separatorPos < 0) {
-            return null;
+            return new URIParameters(uri);
         }
 
         StringAppender sb = new StringAppender(uri.length());
         sb.append(uri.substring(0, separatorPos));
 
         int lastDot = uri.lastIndexOf('.');
+        int lastSlash = uri.lastIndexOf('/');
+        if (lastSlash > 0 && lastSlash > lastDot) {
+            if (separatorPos < lastSlash) {
+                return new URIParameters(uri);
+            }
 
-        List<String> parameters = new ArrayList<String>(8);
+            lastDot = -1;
+        }
+
+        Map<String, String> parameters = null;
 
         int last = 0;
-        for (; last < uri.length();) {
+        int uriLength = uri.length();
+        for (; last < uriLength;) {
             int pos = uri.indexOf(PARAMETER_URI_SEPARATOR, last);
             if (pos < 0) {
                 sb.append(uri.substring(last));
@@ -73,47 +77,32 @@ public class URIParameters {
             }
 
             if (last < 0) {
-                last = uri.length();
+                last = uriLength;
             }
 
-            parameters.add(uri.substring(pos, last));
-        }
+            String p = uri.substring(pos, last);
 
-        char chs[] = new char[parameters.size()];
-        String commands[] = new String[chs.length];
-
-        int i = 0;
-        for (Iterator<String> it = parameters.iterator(); it.hasNext(); i++) {
-            String s = it.next();
-
-            chs[i] = s.charAt(0);
-            commands[i] = s.substring(1);
+            if (parameters == null) {
+                parameters = new HashMap<String, String>(8);
+            }
+            parameters.put(p.substring(0, 1), p.substring(1));
         }
 
         uri = sb.toString();
 
-        return new URIParameters(uri, chs, commands);
+        return new URIParameters(uri, parameters);
     }
 
     public String getURI() {
         return uri;
     }
 
-    public char getCommand(int index) {
-        return commands[index];
-    }
-
-    public String getParameter(int index) {
-        return parameters[index];
-    }
-
-    public int countParameters() {
-        return commands.length;
-    }
-
     public String computeParametredURI() {
-        StringAppender sb = new StringAppender(uri.length() + commands.length
-                * 8);
+        if (parameters == null || parameters.isEmpty()) {
+            return uri;
+        }
+        StringAppender sb = new StringAppender(uri.length() + parameters.size()
+                * 16);
 
         int idx = uri.lastIndexOf('.');
 
@@ -123,16 +112,30 @@ public class URIParameters {
             sb.append(uri.substring(0, idx));
         }
 
-        for (int i = 0; i < commands.length; i++) {
-            if (commands[i] == 0) {
-                break;
-            }
+        if (parameters.size() == 1) {
+
+            Map.Entry<String, String> entry = parameters.entrySet().iterator()
+                    .next();
 
             sb.append(PARAMETER_URI_SEPARATOR);
-            sb.append(commands[i]);
-            String param = parameters[i];
+            sb.append(entry.getKey());
+            String param = entry.getValue();
             if (param != null) {
                 sb.append(param);
+            }
+
+        } else {
+            List<String> keys = new ArrayList<String>(parameters.keySet());
+
+            Collections.sort(keys);
+
+            for (String key : keys) {
+                sb.append(PARAMETER_URI_SEPARATOR);
+                sb.append(key);
+                String param = parameters.get(key);
+                if (param != null) {
+                    sb.append(param);
+                }
             }
         }
 
@@ -143,29 +146,26 @@ public class URIParameters {
         return sb.toString();
     }
 
-    public void append(char command, String parameter) {
-        for (int i = 0; i < commands.length; i++) {
-            if (commands[i] != 0) {
-                continue;
-            }
+    private URIParameters append(String command, String parameter) {
 
-            commands[i] = command;
-            parameters[i] = parameter;
-            return;
+        if (parameters == null) {
+            parameters = new HashMap<String, String>(8);
         }
+        parameters.put(command, parameter);
 
+        return this;
     }
 
-    public void appendLocale(Locale locale) {
-        append(LOCALE_PARAMETER, locale.toString());
+    public URIParameters appendLocale(Locale locale) {
+        return append(LOCALE_PARAMETER, locale.toString());
     }
 
-    public void appendVersion(String version) {
-        append(VERSION_PARAMETER, version);
+    public URIParameters appendVersion(String version) {
+        return append(VERSION_PARAMETER, version);
     }
 
-    public void appendAgent(String version) {
-        append(AGENT_PARAMETER, version);
+    public URIParameters appendAgent(String version) {
+        return append(AGENT_PARAMETER, version);
     }
 
     public String getVersion() {
@@ -180,15 +180,17 @@ public class URIParameters {
         return getParameterByCommand(AGENT_PARAMETER);
     }
 
-    private String getParameterByCommand(char command) {
-        for (int i = 0; i < commands.length; i++) {
-            if (commands[i] != command) {
-                continue;
-            }
-
-            return parameters[i];
+    private String getParameterByCommand(String command) {
+        if (parameters == null || parameters.isEmpty()) {
+            return null;
         }
 
-        return null;
+        return parameters.get(command);
     }
+
+    @Override
+    public URIParameters clone() {
+        return new URIParameters(uri, parameters);
+    }
+
 }

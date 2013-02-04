@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 
@@ -57,6 +58,32 @@ public class StyleSheetSourceContainer extends SourceContainer<IUserAgent> {
 
         public void textForm(StringBuilder sb) {
             throw new IllegalStateException("NO PARAMETER");
+        }
+
+        public Object saveState(FacesContext context) {
+            return null;
+        }
+
+        public void restoreState(FacesContext context, Object state) {
+        }
+
+        public boolean isTransient() {
+            return false;
+        }
+
+        public void setTransient(boolean newTransientValue) {
+        }
+
+        public IUserAgent reduce() {
+            return this;
+        }
+
+        public IUserAgent reduceByBrowserType() {
+            return this;
+        }
+
+        public boolean equalsType(IUserAgent clientBrowser) {
+            return false;
         }
 
     };

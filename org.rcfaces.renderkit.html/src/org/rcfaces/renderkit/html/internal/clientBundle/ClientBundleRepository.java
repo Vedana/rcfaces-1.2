@@ -25,6 +25,7 @@ import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.repository.AbstractRepository;
 import org.rcfaces.core.internal.repository.IRepository;
+import org.rcfaces.core.internal.repository.LocaleCriteria;
 import org.rcfaces.core.internal.version.HashCodeTools;
 import org.rcfaces.core.internal.webapp.URIParameters;
 import org.rcfaces.renderkit.html.internal.Constants;
@@ -49,18 +50,23 @@ class ClientBundleRepository extends AbstractRepository implements
     private static final boolean VERIFY_BUNDLE_KEY = true;
 
     private final IContentProvider contentProvider = new IContentProvider() {
-        private static final String REVISION = "$Revision$";
 
-        public IContent getContent(Object contentReference, Locale locale) {
+        public IContent getContent(Object contentReference, ICriteria criteria) {
             String baseName = ((ResourceFile) contentReference).getFilename();
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Get resourceBundle name='" + baseName + "' locale='"
-                        + locale + "'.");
+                        + criteria + "'.");
             }
 
             ClassLoader classLoader = Thread.currentThread()
                     .getContextClassLoader();
+
+            Locale locale = LocaleCriteria.getLocale(criteria);
+            if (locale == null) {
+                LOG.error("Can not get locale from criteria '" + criteria + "'");
+                return null;
+            }
 
             try {
                 ResourceBundle resourceBundle = ResourceBundle.getBundle(
@@ -70,15 +76,15 @@ class ClientBundleRepository extends AbstractRepository implements
 
             } catch (MissingResourceException ex) {
                 LOG.error("Can not find resource bundle: basename='" + baseName
-                        + "' locale='" + locale + "' classLoader='"
+                        + "' locale='" + criteria + "' classLoader='"
                         + classLoader + "'.", ex);
             }
 
             return null;
         }
 
-        public Object searchLocalizedContentReference(Object contentReference,
-                Locale locale) {
+        public Object searchCriteriaContentReference(Object contentReference,
+                ICriteria criteria) {
             return null;
         }
 
@@ -151,7 +157,7 @@ class ClientBundleRepository extends AbstractRepository implements
 
         private String uri;
 
-        private Map<Locale, String> localizedUris;
+        private Map<ICriteria, String> localizedUris;
 
         public ResourceFile(String baseName) {
             this.baseName = baseName;
@@ -161,7 +167,7 @@ class ClientBundleRepository extends AbstractRepository implements
             return contentProvider;
         }
 
-        public Object[] getContentReferences(Locale locale) {
+        public Object[] getContentReferences(ICriteria criteria) {
             return new Object[] { this };
         }
 
@@ -173,13 +179,13 @@ class ClientBundleRepository extends AbstractRepository implements
             return ClientBundleRepository.this;
         }
 
-        public synchronized String getURI(Locale locale) {
-            if (locale == null) {
+        public synchronized String getURI(ICriteria criteria) {
+            if (criteria == null) {
                 if (uri != null) {
                     return uri;
                 }
             } else if (localizedUris != null) {
-                String luri = localizedUris.get(locale);
+                String luri = localizedUris.get(criteria);
                 if (luri != null) {
                     return luri;
                 }
@@ -192,7 +198,7 @@ class ClientBundleRepository extends AbstractRepository implements
             if (Constants.VERSIONED_CLIENT_BUNDLE_SUPPORT) {
                 sa.append('/');
 
-                String hashCode = computeHashCode(locale);
+                String hashCode = computeHashCode(criteria);
 
                 if (hashCode == null) {
                     hashCode = ERROR_VERSION;
@@ -204,36 +210,34 @@ class ClientBundleRepository extends AbstractRepository implements
             sa.append(baseName);
             sa.append(".js");
 
-            String ret;
-            if (locale != null) {
-                URIParameters p = new URIParameters(sa.toString());
-                p.appendLocale(locale);
+            String ret = sa.toString();
+            if (criteria != null) {
+                URIParameters p = URIParameters.parseURI(ret);
+
+                criteria.appendSuffix(p);
 
                 ret = p.computeParametredURI();
-
-            } else {
-                ret = sa.toString();
             }
 
-            if (locale == null) {
+            if (criteria == null) {
                 uri = ret;
             } else {
                 if (localizedUris == null) {
-                    localizedUris = new HashMap<Locale, String>(4);
+                    localizedUris = new HashMap<ICriteria, String>(4);
                 }
 
-                localizedUris.put(locale, ret);
+                localizedUris.put(criteria, ret);
             }
 
             return ret;
         }
 
-        private String computeHashCode(Locale locale) {
+        private String computeHashCode(ICriteria criteria) {
             ResourceContent content = (ResourceContent) getContentProvider()
-                    .getContent(this, locale);
+                    .getContent(this, criteria);
             if (content == null) {
                 LOG.error("Can not get content of client bundle '"
-                        + getFilename() + "' for locale '" + locale + "'.");
+                        + getFilename() + "' for criteria '" + criteria + "'.");
 
                 return null;
             }
@@ -263,6 +267,9 @@ class ClientBundleRepository extends AbstractRepository implements
 
         } catch (UnsupportedEncodingException ex) {
             LOG.error(ex);
+
+            out.close();
+
             throw new FacesException(
                     "Can not write DefineRequested method content.", ex);
         }

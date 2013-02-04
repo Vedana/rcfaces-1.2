@@ -44,7 +44,9 @@ import org.rcfaces.core.internal.repository.IHierarchicalRepository.ISet;
 import org.rcfaces.core.internal.repository.IRepository;
 import org.rcfaces.core.internal.repository.IRepository.IContent;
 import org.rcfaces.core.internal.repository.IRepository.IContext;
+import org.rcfaces.core.internal.repository.IRepository.ICriteria;
 import org.rcfaces.core.internal.repository.IRepository.IFile;
+import org.rcfaces.core.internal.repository.LocaleCriteria;
 import org.rcfaces.core.internal.tools.ContextTools;
 import org.rcfaces.core.internal.util.ApplicationParametersMap;
 import org.rcfaces.core.internal.util.ClassLocator;
@@ -53,8 +55,11 @@ import org.rcfaces.core.internal.webapp.ExpirationDate;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
+import org.rcfaces.renderkit.html.internal.agent.ClientBrowserFactory;
+import org.rcfaces.renderkit.html.internal.agent.IUserAgent;
 import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository.IClass;
 import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository.IClassFile;
+import org.rcfaces.renderkit.html.internal.util.UserAgentCriteria;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -112,6 +117,9 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
     }
 
     private static final Locale SYMBOL_LOCALE = new Locale("SYMBOLS");
+
+    private static final ICriteria SYMBOL_CRITERIA = LocaleCriteria
+            .get(SYMBOL_LOCALE);
 
     private static final String JAVASCRIPT_VERSION_PROPERTY = "javascript.version";
 
@@ -420,8 +428,8 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
         return "vfs-" + setName + ".js";
     }
 
-    protected Record newRecord(IFile file, Locale locale) {
-        return new JavaScriptRecord(file, locale);
+    protected Record newRecord(IFile file, ICriteria criteria) {
+        return new JavaScriptRecord(file, criteria);
     }
 
     protected String getInputCharset() {
@@ -477,8 +485,8 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
         protected byte epilog[];
 
-        public JavaScriptRecord(IFile file, Locale locale) {
-            super(file, locale);
+        public JavaScriptRecord(IFile file, ICriteria criteria) {
+            super(file, criteria);
         }
 
         public ExpirationDate getExpirationDate() {
@@ -492,7 +500,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
         protected Object[] getFileContentReferences(IFile file) {
             // On peut tenter ici de rechercher la version compil�e !
 
-            Object urls[] = file.getContentReferences(locale);
+            Object urls[] = file.getContentReferences(criteria);
 
             String surl = urls[0].toString();
             if (surl.endsWith(".js") == false) {
@@ -523,7 +531,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
                 try {
                     IContent content = file.getContentProvider().getContent(
-                            url, locale);
+                            url, criteria);
                     try {
                         InputStream ins = content.getInputStream();
                         if (ins != null) {
@@ -602,7 +610,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
         private void fillEpilog(StringAppender sb) {
 
             // if (isMultiWindowScript(getServletContext())) {
-            writeBundles(sb, (IHierarchicalFile) getFile(), locale);
+            writeBundles(sb, (IHierarchicalFile) getFile(), criteria);
             // }
 
             Map map = getSymbols();
@@ -689,7 +697,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
     }
 
     public void writeBundles(StringAppender sb, IHierarchicalFile file,
-            Locale locale) {
+            ICriteria criteria) {
         IHierarchicalFile dependencies[];
         if (file instanceof IHierarchicalRepository.ISet) {
             dependencies = ((IHierarchicalRepository.ISet) file)
@@ -720,7 +728,12 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
         sb.append("new f_bundle(window, \"");
 
-        sb.append(file.getURI(locale));
+        String furi = file.getURI(criteria);
+        if (furi == null) {
+            throw new NullPointerException("Can not get URI of file '" + file
+                    + "' criteria='" + criteria + "'");
+        }
+        sb.append(furi);
         sb.append('\"');
 
         Map symbols = null;
@@ -765,9 +778,19 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
             return context;
         }
 
-        Locale locale = ContextTools.getUserLocale(facesContext);
+        ICriteria criteria = null;
 
-        context = getRepository(facesContext).createContext(locale);
+        Locale locale = ContextTools.getUserLocale(facesContext);
+        if (locale != null) {
+            criteria = LocaleCriteria.get(criteria, locale);
+        }
+
+        IUserAgent userAgent = ClientBrowserFactory.Get().get(facesContext);
+        if (userAgent != null) {
+            criteria = UserAgentCriteria.get(criteria, userAgent);
+        }
+
+        context = getRepository(facesContext).createContext(criteria);
         map.put(CONTEXT_REPOSITORY_PROPERTY, context);
 
         return context;
@@ -798,7 +821,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
         byte buffer[] = null;
 
-        Record record = getFileRecord(file, SYMBOL_LOCALE);
+        Record record = getFileRecord(file, SYMBOL_CRITERIA);
         if (record != null) {
             if (symbolsLastModified == record.getLastModificationDate()) {
                 return;
@@ -819,6 +842,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
         getServletContext().setAttribute(JAVASCRIPT_SYMBOLS_PARAMETER, symbols);
     }
 
+    @SuppressWarnings("unchecked")
     private Map<String, String> loadSymbols(byte[] buffer) throws IOException {
         Map<String, String> symbols = new HashMap<String, String>(
                 buffer.length / 16);

@@ -231,12 +231,10 @@ public class BasicHierarchicalRepository extends AbstractRepository implements
         });
     }
 
-    public final IHierarchicalFile declareFile(String name, String directory,
-            IModule module, IHierarchicalFile depends[], Object container,
-            IContentProvider contentProvider) {
-        final String contentLocation = getContentLocation(name, directory);
-
+    protected URL searchContent(String name, String contentLocation,
+            Object container) {
         URL url = null;
+
         if (container instanceof ClassLoader) {
             String cl = contentLocation;
             if (cl.startsWith("/")) {
@@ -274,6 +272,24 @@ public class BasicHierarchicalRepository extends AbstractRepository implements
                         + url);
             }
         }
+
+        if (url == null) {
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("Can not find resource ('" + name + "') '"
+                        + contentLocation + "' from container='" + container
+                        + "'.");
+            }
+        }
+
+        return url;
+    }
+
+    public final IHierarchicalFile declareFile(String name, String directory,
+            IModule module, IHierarchicalFile depends[], Object container,
+            IContentProvider contentProvider) {
+        final String contentLocation = getContentLocation(name, directory);
+
+        URL url = searchContent(name, contentLocation, container);
 
         if (url == null) {
             throw new IllegalArgumentException("Can not locate file '" + name
@@ -649,7 +665,6 @@ public class BasicHierarchicalRepository extends AbstractRepository implements
      * @version $Revision$ $Date$
      */
     public class SetImpl extends HierarchicalFile implements ISet {
-        private static final String REVISION = "$Revision$";
 
         private static final long serialVersionUID = -5572999892750207302L;
 

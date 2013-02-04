@@ -22,6 +22,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.repository.IRepository.IContent;
+import org.rcfaces.core.internal.repository.IRepository.ICriteria;
+import org.rcfaces.core.internal.repository.LocaleCriteria;
 import org.rcfaces.core.internal.util.FilteredContentProvider;
 import org.rcfaces.renderkit.html.internal.AbstractCalendarRenderer;
 import org.rcfaces.renderkit.html.internal.codec.JavascriptCodec;
@@ -32,7 +34,6 @@ import org.rcfaces.renderkit.html.internal.codec.JavascriptCodec;
  * @version $Revision$ $Date$
  */
 public class SystemLocaleContentProvider extends FilteredContentProvider {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(SystemLocaleContentProvider.class);
@@ -62,9 +63,9 @@ public class SystemLocaleContentProvider extends FilteredContentProvider {
         this.bundleName = bundleName;
     }
 
-    public IContent getContent(Object contentReference, Locale locale) {
+    public IContent getContent(Object contentReference, ICriteria criteria) {
 
-        if (locale == null) {
+        if (criteria == null) {
             throw new NullPointerException("Locale parameter can not be null !");
         }
 
@@ -89,27 +90,20 @@ public class SystemLocaleContentProvider extends FilteredContentProvider {
             }
         }
 
-        return new FilteredURLContent((URL) contentReference, locale);
+        return new FilteredURLContent((URL) contentReference, criteria);
     }
-
-    /*
-     * public boolean searchLocale(Object contentReference, Locale locale,
-     * Locale[] foundLocale) { String surl = contentReference.toString(); int
-     * idx = surl.lastIndexOf(LOCALE_CLASS_PATTERN); if (idx < 0) { return
-     * false; }
-     * 
-     * return true; }
-     */
 
     protected String getCharset() {
         return JAVASCRIPT_CHARSET;
     }
 
-    protected String updateBuffer(String buffer, URL url, Locale locale) {
+    protected String updateBuffer(String buffer, URL url, ICriteria criteria) {
 
-        if (locale == null || buffer.indexOf("$$$MONTH_SHORT_NAMES$$$") < 0) {
-            return super.updateBuffer(buffer, url, locale);
+        if (criteria == null || buffer.indexOf("$$$MONTH_SHORT_NAMES$$$") < 0) {
+            return super.updateBuffer(buffer, url, criteria);
         }
+
+        Locale locale = LocaleCriteria.getLocale(criteria);
 
         DateFormatSymbols dateFormatSymbols = new DateFormatSymbols(locale);
 
@@ -193,8 +187,8 @@ public class SystemLocaleContentProvider extends FilteredContentProvider {
         Calendar calendar = Calendar.getInstance(locale);
         int firstDayOfWeek = calendar.getFirstDayOfWeek() - Calendar.SUNDAY;
 
-        buffer = replace(buffer, "$$$FIRST_DAY_OF_WEEK$$$", String
-                .valueOf(firstDayOfWeek));
+        buffer = replace(buffer, "$$$FIRST_DAY_OF_WEEK$$$",
+                String.valueOf(firstDayOfWeek));
 
         StringAppender datePatterns = new StringAppender(64);
 
@@ -296,7 +290,7 @@ public class SystemLocaleContentProvider extends FilteredContentProvider {
         buffer = replaceResource(buffer, resourceBundle,
                 "javax.faces.validator.LongRangeValidator.TYPE");
 
-        return super.updateBuffer(buffer, url, locale);
+        return super.updateBuffer(buffer, url, criteria);
     }
 
     private String replaceResource(String buffer,

@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -30,6 +29,7 @@ import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.repository.IRepository;
+import org.rcfaces.core.internal.repository.IRepository.ICriteria;
 import org.rcfaces.core.internal.script.AbstractScriptContentAccessorHandler;
 import org.rcfaces.core.internal.script.GeneratedScriptInformation;
 import org.rcfaces.core.internal.script.IScriptContentAccessorHandler;
@@ -262,7 +262,7 @@ public class JavaScriptCollectorRenderContext extends
 
                 int mode = js.getMode();
                 if (initialized == false) {
-                     String accessKey = null;
+                    String accessKey = null;
 
                     if ((mode & JavaScriptEnableModeImpl.ONACCESSKEY) > 0) {
                         UIComponent component = getWriter()
@@ -497,14 +497,23 @@ public class JavaScriptCollectorRenderContext extends
                             + Arrays.asList(filesToRequire));
                 }
 
-                Locale locale = getUserLocale();
+                ICriteria criteria = jsWriter.getJavaScriptRenderContext()
+                        .getCriteria();
+
                 for (int i = 0; i < filesToRequire.length; i++) {
                     IRepository.IFile file = filesToRequire[i];
 
                     if (i > 0) {
                         jsWriter.write(',');
                     }
-                    jsWriter.writeString(file.getURI(locale));
+
+                    String fileURI = file.getURI(criteria);
+                    if (fileURI == null) {
+                        throw new NullPointerException(
+                                "Can not get URI of file '" + file
+                                        + "' criteria='" + criteria + "'");
+                    }
+                    jsWriter.writeString(fileURI);
                 }
                 jsWriter.writeln(");");
             }

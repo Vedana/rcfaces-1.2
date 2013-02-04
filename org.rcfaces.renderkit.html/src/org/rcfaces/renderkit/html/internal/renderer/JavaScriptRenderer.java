@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.StringTokenizer;
 
 import javax.faces.FacesException;
@@ -27,8 +26,8 @@ import org.rcfaces.core.internal.repository.IHierarchicalRepository.IHierarchica
 import org.rcfaces.core.internal.repository.IHierarchicalRepository.IModule;
 import org.rcfaces.core.internal.repository.IHierarchicalRepository.ISet;
 import org.rcfaces.core.internal.repository.IRepository;
+import org.rcfaces.core.internal.repository.IRepository.ICriteria;
 import org.rcfaces.core.internal.repository.IRepository.IFile;
-import org.rcfaces.core.internal.tools.ContextTools;
 import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.renderkit.html.component.JavaScriptComponent;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
@@ -348,9 +347,13 @@ public class JavaScriptRenderer extends AbstractFilesCollectorRenderer {
 
         jsWriter.writeCall(cameliaClassLoader, "f_requiresBundle");
 
-        Locale locale = ContextTools.getUserLocale(facesContext);
+        ICriteria criteria = repositoryContext.getCriteria();
         for (int i = 0; i < fs.length; i++) {
-            String src = fs[i].getURI(locale);
+            String src = fs[i].getURI(criteria);
+            if (src == null) {
+                throw new NullPointerException("Can not get URI of file '"
+                        + fs[i] + "' criteria='" + criteria + "'");
+            }
 
             if (i > 0) {
                 jsWriter.write(',');

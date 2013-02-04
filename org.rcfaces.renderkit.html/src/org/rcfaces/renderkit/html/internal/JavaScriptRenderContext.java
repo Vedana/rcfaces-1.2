@@ -5,7 +5,6 @@
 package org.rcfaces.renderkit.html.internal;
 
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
 
 import javax.faces.FacesException;
@@ -18,6 +17,7 @@ import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.repository.IRepository;
+import org.rcfaces.core.internal.repository.IRepository.ICriteria;
 import org.rcfaces.renderkit.html.internal.renderer.InitRenderer;
 
 /**
@@ -129,14 +129,16 @@ public class JavaScriptRenderContext extends AbstractJavaScriptRenderContext {
                     IRepository.IFile files[] = renderContext
                             .getJavaScriptRenderContext().popRequiredFiles();
                     if (files != null && files.length > 0) {
-                        Locale locale = getUserLocale();
+                        ICriteria criteria = writer
+                                .getJavaScriptRenderContext().getCriteria();
+
                         StringAppender sb = new StringAppender(
                                 files.length * 32);
                         for (int i = 0; i < files.length; i++) {
                             if (i > 0) {
                                 sb.append(',');
                             }
-                            sb.append(files[i].getURI(locale));
+                            sb.append(files[i].getURI(criteria));
                         }
 
                         htmlWriter.writeAttribute("requiresBundle",

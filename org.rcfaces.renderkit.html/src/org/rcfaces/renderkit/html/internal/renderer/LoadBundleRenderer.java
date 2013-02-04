@@ -166,7 +166,8 @@ public class LoadBundleRenderer extends AbstractHtmlRenderer {
 
             IFile file = bundleRepository.getFileByName(baseName);
 
-            String bundleURI = file.getURI(locale);
+            String bundleURI = file.getURI(jsWriter
+                    .getJavaScriptRenderContext().getCriteria());
 
             String uri = htmlWriter.getHtmlComponentRenderContext()
                     .getHtmlRenderContext().getHtmlProcessContext()

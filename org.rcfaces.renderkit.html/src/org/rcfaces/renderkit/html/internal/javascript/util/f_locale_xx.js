@@ -9,14 +9,6 @@
  */
  
 f_resourceBundle.Define2("f_locale", {
-/*	MONTH_SHORT_NAMES: [ "J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D" ],
-	MONTH_MED_NAMES: [ "jan", "fév", "mar", "avr", "mai", "juin", "juil", "août", "sep", "oct", "nov", "déc" ],
-	MONTH_LONG_NAMES: [ "Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre" ],
-
-	DAY_SHORT_NAMES: [ "D", "L", "M", "M", "J", "V", "S" ], 
-	DAY_MED_NAMES: [ "dim", "lun", "mar", "mer", "jeu", "ven", "sam" ], 
-	DAY_LONG_NAMES: [ "Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi" ], 
-*/
 	MONTH_SHORT_NAMES: [ $$$MONTH_SHORT_NAMES$$$ ],
 	MONTH_MED_NAMES: [ $$$MONTH_MED_NAMES$$$ ],
 	MONTH_LONG_NAMES: [ $$$MONTH_LONG_NAMES$$$ ],

@@ -4,7 +4,6 @@
 package org.rcfaces.renderkit.html.internal;
 
 import java.util.Arrays;
-import java.util.Locale;
 
 import javax.faces.context.FacesContext;
 
@@ -13,6 +12,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.repository.IRepository;
+import org.rcfaces.core.internal.repository.IRepository.ICriteria;
 
 /**
  * 
@@ -243,14 +243,21 @@ public final class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
                     + Arrays.asList(filesToRequire));
         }
 
-        Locale locale = javascriptRenderContext.getUserLocale();
+        ICriteria criteria = javascriptRenderContext.getCriteria();
         for (int i = 0; i < filesToRequire.length; i++) {
             IRepository.IFile file = filesToRequire[i];
 
             if (i > 0) {
                 write(',');
             }
-            writeString(file.getURI(locale));
+
+            String fileURI = file.getURI(criteria);
+            if (fileURI == null) {
+                throw new NullPointerException("Can not get URI of file '"
+                        + fileURI + "' criteria='" + criteria + "'");
+            }
+
+            writeString(fileURI);
         }
         writeln(");");
 

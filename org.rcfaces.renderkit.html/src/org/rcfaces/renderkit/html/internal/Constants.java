@@ -80,6 +80,8 @@ public class Constants {
 
     public static final boolean DISABLE_HEADING_ZONE = false;
 
+    public static final boolean REDUCE_USER_AGENT_TO_BROWSER_TYPE = true;
+
     static {
         if (BUILDER_VERSION != null) {
             version = BUILDER_VERSION;
