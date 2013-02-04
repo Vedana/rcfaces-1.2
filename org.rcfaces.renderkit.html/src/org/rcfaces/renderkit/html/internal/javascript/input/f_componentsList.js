@@ -190,7 +190,7 @@ var __members = {
 		}
 		
 		if (tbody) {	
-			this.f_getClass().f_getClassLoader().f_garbageObjects(tbody);
+			this.f_getClass().f_getClassLoader().f_garbageObjects(false, tbody);
 
 			while (tbody.hasChildNodes()) {
 				tbody.removeChild(tbody.lastChild);
@@ -388,6 +388,10 @@ var __members = {
 
 		if (component==this) {		
 			this._updateScrollComponents();
+		}
+		
+		if (rowCount>0) {
+			this._rowCount=rowCount;
 		}
 
 		if (this._rowCount<0) {

@@ -295,13 +295,11 @@ public class ComponentsListService extends AbstractHtmlService {
             // IComponentTreeRenderProcessor
             // componentTreeRenderProcessor=ComponentTreeRenderProcessorFactory.get(facesContext)
 
-            dgr.encodeChildren(writer, listContext);
+            int rowCount = dgr.encodeChildren(writer, listContext);
 
             newWriter.flush();
 
             String buffer = myWriter.toString();
-
-            int rowCount = 10;
 
             jsWriter.writeMethodCall("f_updateNewPage").writeInt(rowCount)
                     .write(',').writeString(buffer).writeln(");");
