@@ -189,8 +189,8 @@ var __members = {
 			this.style.height=this.offsetHeight+"px";
 		}
 		
-		if (tbody) {	
-			this.f_getClass().f_getClassLoader().f_garbageObjects(tbody);
+		if (tbody) {				
+			this.f_getClass().f_getClassLoader().f_garbageObjects(false, tbody);
 
 			while (tbody.hasChildNodes()) {
 				tbody.removeChild(tbody.lastChild);
