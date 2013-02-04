@@ -26,7 +26,9 @@ import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.repository.IRepository;
+import org.rcfaces.core.internal.repository.IRepository.ICriteria;
 import org.rcfaces.core.internal.repository.IRepository.IFile;
+import org.rcfaces.core.internal.repository.LocaleCriteria;
 import org.rcfaces.core.internal.service.log.LogService;
 import org.rcfaces.core.internal.tools.ContextTools;
 import org.rcfaces.core.lang.IClientStorage;
@@ -120,6 +122,8 @@ public abstract class AbstractJavaScriptRenderContext implements
 
     private boolean transientState;
 
+    private ICriteria criteria;
+
     public AbstractJavaScriptRenderContext(FacesContext facesContext) {
         parent = null;
 
@@ -153,6 +157,12 @@ public abstract class AbstractJavaScriptRenderContext implements
                 LOG.debug("Set lazyTagUsesBrother=" + lazyTagUsesBrother);
             }
         }
+
+        IRepository.IContext repositoryContext = JavaScriptRepositoryServlet
+                .getContextRepository(facesContext);
+
+        criteria = repositoryContext.getCriteria();
+        userLocale = LocaleCriteria.getLocale(criteria);
     }
 
     protected AbstractJavaScriptRenderContext(
@@ -525,31 +535,35 @@ public abstract class AbstractJavaScriptRenderContext implements
         Object ret[] = (Object[]) state;
 
         initialized = ((Boolean) ret[0]).booleanValue();
-        declaredFiles.restoreState(repository, ret[1]);
+        declaredFiles.restoreState(facesContext, repository, ret[1]);
     }
 
     public Object saveState(FacesContext facesContext) {
         initialized = true; // Il est forcement initialisé !
 
         return new Object[] { Boolean.valueOf(initialized),
-                declaredFiles.saveState() };
+                declaredFiles.saveState(facesContext) };
     }
 
-    public boolean isTransient() {
+    public final boolean isTransient() {
         return transientState;
     }
 
-    public void setTransient(boolean newTransientValue) {
+    public final void setTransient(boolean newTransientValue) {
         transientState = newTransientValue;
     }
 
-    public Locale getUserLocale() {
-        if (userLocale != null) {
-            return userLocale;
+    public final ICriteria getCriteria() {
+        if (parent != null) {
+            return parent.getCriteria();
         }
+        return criteria;
+    }
 
-        userLocale = ContextTools.getUserLocale(null);
-
+    public final Locale getUserLocale() {
+        if (parent != null) {
+            return parent.getUserLocale();
+        }
         return userLocale;
     }
 
