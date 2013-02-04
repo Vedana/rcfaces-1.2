@@ -558,20 +558,16 @@ public class UserAgentRuleTools {
 
     }
 
-    private static class AgentRule implements IUserAgent, Comparable<AgentRule> {
-        private BrowserType type;
-
-        private Integer majorVersion;
-
-        private Integer minorVersion;
-
-        private Integer releaseVersion;
+    public static class AgentRule extends BasicUserAgent implements
+            Comparable<AgentRule> {
 
         private boolean andMore;
 
         private boolean not;
 
-        private float priority;
+        private Float priority;
+
+        private boolean transientState;
 
         public AgentRule(String expression, boolean acceptMore,
                 boolean acceptNot) {
@@ -589,7 +585,7 @@ public class UserAgentRuleTools {
                 String q = expression.substring(idx2 + 3);
                 expression = expression.substring(0, idx2);
 
-                priority = Float.parseFloat(q);
+                priority = Float.valueOf(q);
             }
 
             int idx = expression.indexOf('/');
@@ -760,23 +756,7 @@ public class UserAgentRuleTools {
             return true;
         }
 
-        public BrowserType getBrowserType() {
-            return type;
-        }
-
-        public Integer getMajorVersion() {
-            return majorVersion;
-        }
-
-        public Integer getMinorVersion() {
-            return minorVersion;
-        }
-
-        public Integer getReleaseVersion() {
-            return releaseVersion;
-        }
-
-        public float getPriority() {
+        public Float getPriority() {
             return priority;
         }
 
@@ -804,8 +784,8 @@ public class UserAgentRuleTools {
                 }
             }
 
-            if (priority > 0f) {
-                sb.append(";q=").append(priority);
+            if (priority != null && priority.floatValue() > 0f) {
+                sb.append(";q=").append(priority.toString());
             }
         }
 
@@ -818,18 +798,26 @@ public class UserAgentRuleTools {
                 return 1;
             }
 
-            // On inverse le sens ! Le plus prioritaire en premier !
-            float retf = other.priority - this.priority;
-            if (retf < 0f) {
-                return -1;
-            }
-            if (retf > 0f) {
-                return 1;
-            }
-
             int ret = this.getBrowserType().compareTo(other.getBrowserType());
             if (ret != 0) {
                 return ret;
+            }
+
+            if (this.getPriority() == null) {
+                if (other.getPriority() != null) {
+                    return -1;
+                }
+            } else if (other.getPriority() == null) {
+                return 1;
+            }
+
+            float retf = this.getPriority().floatValue()
+                    - other.getPriority().floatValue();
+            if (retf < 0.0f) {
+                return -1;
+            }
+            if (retf > 0.0f) {
+                return 1;
             }
 
             if (this.getMajorVersion() == null) {
@@ -888,17 +876,11 @@ public class UserAgentRuleTools {
         @Override
         public int hashCode() {
             final int prime = 31;
-            int result = 1;
+            int result = super.hashCode();
             result = prime * result + (andMore ? 1231 : 1237);
-            result = prime * result
-                    + ((majorVersion == null) ? 0 : majorVersion.hashCode());
-            result = prime * result
-                    + ((minorVersion == null) ? 0 : minorVersion.hashCode());
             result = prime * result + (not ? 1231 : 1237);
-            result = prime
-                    * result
-                    + ((releaseVersion == null) ? 0 : releaseVersion.hashCode());
-            result = prime * result + ((type == null) ? 0 : type.hashCode());
+            result = prime * result
+                    + ((priority == null) ? 0 : priority.hashCode());
             return result;
         }
 
@@ -906,31 +888,19 @@ public class UserAgentRuleTools {
         public boolean equals(Object obj) {
             if (this == obj)
                 return true;
-            if (obj == null)
+            if (!super.equals(obj))
                 return false;
             if (getClass() != obj.getClass())
                 return false;
             AgentRule other = (AgentRule) obj;
             if (andMore != other.andMore)
                 return false;
-            if (majorVersion == null) {
-                if (other.majorVersion != null)
-                    return false;
-            } else if (!majorVersion.equals(other.majorVersion))
-                return false;
-            if (minorVersion == null) {
-                if (other.minorVersion != null)
-                    return false;
-            } else if (!minorVersion.equals(other.minorVersion))
-                return false;
             if (not != other.not)
                 return false;
-            if (releaseVersion == null) {
-                if (other.releaseVersion != null)
+            if (priority == null) {
+                if (other.priority != null)
                     return false;
-            } else if (!releaseVersion.equals(other.releaseVersion))
-                return false;
-            if (type != other.type)
+            } else if (!priority.equals(other.priority))
                 return false;
             return true;
         }
@@ -945,6 +915,35 @@ public class UserAgentRuleTools {
                     .append("' andMore='").append(andMore).append("' not='")
                     .append(not).append("']");
             return builder.toString();
+        }
+
+        public Object saveState(FacesContext context) {
+            Object[] ret = new Object[4];
+
+            ret[0] = saveState(context);
+            ret[1] = (andMore) ? Boolean.TRUE : null;
+            ret[2] = (not) ? Boolean.TRUE : null;
+            ret[3] = priority;
+
+            return ret;
+        }
+
+        public void setTransient(boolean newTransientValue) {
+            this.transientState = newTransientValue;
+        }
+
+        public void restoreState(FacesContext context, Object state) {
+            Object[] array = (Object[]) state;
+
+            super.restoreState(context, array[0]);
+
+            andMore = (array[1] != null);
+            not = (array[2] != null);
+            priority = (Float) array[3];
+        }
+
+        public boolean isTransient() {
+            return transientState;
         }
 
     }

@@ -22,6 +22,4 @@ public interface IClientBrowser extends IUserAgent {
      *         not detected.
      */
     Boolean isMobileVersion();
-
-    boolean equalsType(IClientBrowser clientBrowser);
 }

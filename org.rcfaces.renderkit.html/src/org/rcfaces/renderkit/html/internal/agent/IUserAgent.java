@@ -31,6 +31,9 @@ public interface IUserAgent {
 
     Integer getReleaseVersion();
 
-    void textForm(StringBuilder sb);
+    IUserAgent reduce();
 
+    IUserAgent reduceByBrowserType();
+
+    boolean equalsType(IUserAgent clientBrowser);
 }
