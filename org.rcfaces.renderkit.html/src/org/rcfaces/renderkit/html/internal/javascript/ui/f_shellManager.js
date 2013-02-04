@@ -216,6 +216,22 @@ var __statics = {
 		
 		return true;
 	},
+	
+	
+	/**
+	 * @method public static
+	 * @param String name
+	 * @param Function constructor
+	 * @return void
+	 */
+	RegisterShellDecorator: function(name, constructor) {
+		var shellDecorators=f_shellManager._ShellDecorators;
+		if (!shellDecorators) {
+			shellDecorators=new Object;
+			f_shellManager._ShellDecorators = shellDecorators;
+		}
+		shellDecorators[name]=constructor;
+	},
 	Finalizer: function() {
 		var shellManager=f_shellManager._singleton;
 		if (shellManager) {
@@ -234,25 +250,8 @@ var __statics = {
 			}
 		}
 
-		f_shellManager._documentComplete=undefined; //boolean
-	},
-	
-	
-	/**
-	 * @method public static
-	 * @param String name
-	 * @param Function constructor
-	 * @return void
-	 */
-	RegisterShellDecorator: function(name, constructor) {
-		var shellDecorators=f_shellManager._ShellDecorators;
-		if (!shellDecorators) {
-			shellDecorators=new Object;
-			f_shellManager._ShellDecorators = shellDecorators;
-		}
-		shellDecorators[name]=constructor;
-	},
-	Finalizer: function() {
+		f_shellManager._documentComplete=undefined; //Boolean
+
 		f_shellManager._ShellDecorators=undefined;
 	}
 };
