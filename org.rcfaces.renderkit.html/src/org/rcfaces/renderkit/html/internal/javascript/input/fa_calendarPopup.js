@@ -568,6 +568,6 @@ var __members={
 		
 		calendar.f_setSelection(selection, showSelection);
 	}
-}
- 
+};
+
 new f_aspect("fa_calendarPopup", __statics, __members, fa_itemsWrapper, fa_selectionProvider);

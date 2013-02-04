@@ -69,6 +69,7 @@ import org.rcfaces.renderkit.html.internal.service.AsyncRenderService;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
+@SuppressWarnings("deprecation")
 public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
         implements IEventObjectDecoder, INamespaceContributor {
 

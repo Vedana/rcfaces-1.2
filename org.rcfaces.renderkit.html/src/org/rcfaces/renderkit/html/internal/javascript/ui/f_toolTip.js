@@ -265,7 +265,7 @@ var __members = {
 
 		var offsetX = 0;
 		var offsetY = 0;
-		var offsetWidth;
+		var offsetWidth= 0;
 
 		if (component) {
 			var absPos = f_core.GetAbsolutePosition(component);
