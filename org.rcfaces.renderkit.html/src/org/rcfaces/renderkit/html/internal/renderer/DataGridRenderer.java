@@ -646,7 +646,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
                             .listSortedIndexes();
 
                     if (tableContext.getClientAdditionalFullState() != IClientFullStateCapability.NONE_CLIENT_FULL_STATE) {
-                        writeFullStates(jsWriter, "f_setAdditionalStates",
+                        writeFullStates(jsWriter,
+                                "f_setAdditionalInformationStates",
                                 additionalIndexes);
                         additionalIndexes = null;
 
@@ -674,7 +675,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
                     if (tableContext.getClientAdditionalFullState() != IClientFullStateCapability.NONE_CLIENT_FULL_STATE) {
                         writeFullStates(jsWriter, tableContext,
-                                "f_setAdditionalStates", additionalObjects);
+                                "f_setAdditionalInformationStates",
+                                additionalObjects);
                         additionalObjects = null;
                     }
                 }
