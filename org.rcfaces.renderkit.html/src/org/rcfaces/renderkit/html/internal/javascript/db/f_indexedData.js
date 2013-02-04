@@ -165,7 +165,10 @@ var __members = {
 		this.f_super(arguments);
 	},
 	/**
-	 * 
+	 * @method public
+	 * @param Array rows
+	 * @param Function datasFunction
+	 * @return void
 	 */
 	f_asyncFillRows: function(rows, datasFunction) {	
 		if (this._completed) {
@@ -182,7 +185,10 @@ var __members = {
 	},
 	
 	/**
-	 * 
+	 * @method private
+	 * @param Array rows
+	 * @param Function datasFunction
+	 * @return void
 	 */
 	_asyncFillRows: function(rows, datasFunction) {
 		if (this._completed) {
