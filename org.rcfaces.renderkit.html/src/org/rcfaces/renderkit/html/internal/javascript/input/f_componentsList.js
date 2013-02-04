@@ -190,7 +190,7 @@ var __members = {
 		}
 		
 		if (tbody) {	
-			this.f_getClass().f_getClassLoader().f_garbageObjects(tbody);
+			this.f_getClass().f_getClassLoader().f_garbageObjects(false, tbody);
 
 			while (tbody.hasChildNodes()) {
 				tbody.removeChild(tbody.lastChild);
