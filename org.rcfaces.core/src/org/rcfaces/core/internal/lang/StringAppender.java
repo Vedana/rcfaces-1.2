@@ -193,6 +193,10 @@ public final class StringAppender implements CharSequence {
         return this;
     }
 
+    public StringAppender append(Object obj) {
+        return append(String.valueOf(obj));
+    }
+
     public StringAppender append(boolean b) {
         if (b) {
             return append("true");
