@@ -181,9 +181,11 @@ public abstract class AbstractComponentsListRenderer extends
 
         DataModel dataModel = componentsListComponent.getDataModelValue();
 
-        if (dataModel instanceof IComponentRefModel) {
-            ((IComponentRefModel) dataModel)
-                    .setComponent(componentsListComponent);
+        IComponentRefModel componentRefModel = getAdapter(
+                IComponentRefModel.class, dataModel);
+
+        if (componentRefModel != null) {
+            componentRefModel.setComponent(componentsListComponent);
         }
 
         // boolean filtred = false;
