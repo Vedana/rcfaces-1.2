@@ -36,7 +36,7 @@ public class BasicSelectItem extends SelectItem implements ISelectItem,
 
     private Map<String, Object> serverDatas;
 
-    private Map clientDatas;
+    private Map<String, String> clientDatas;
 
     private String accessKey;
 
@@ -87,42 +87,46 @@ public class BasicSelectItem extends SelectItem implements ISelectItem,
         // défaut
 
         if (component instanceof IAccessKeyCapability) {
-            accessKey = ((IAccessKeyCapability) component).getAccessKey();
+            setAccessKey(((IAccessKeyCapability) component).getAccessKey());
 
         } else {
-            accessKey = null;
+            setAccessKey(null);
         }
 
         if (component instanceof IAcceleratorKeyCapability) {
-            acceleratorKey = ((IAcceleratorKeyCapability) component)
-                    .getAcceleratorKey();
+            setAcceleratorKey(((IAcceleratorKeyCapability) component)
+                    .getAcceleratorKey());
 
         } else {
-            acceleratorKey = null;
+            setAcceleratorKey(null);
         }
 
         if (component instanceof IRadioGroupCapability) {
-            groupName = ((IRadioGroupCapability) component).getGroupName();
+            setGroupName(((IRadioGroupCapability) component).getGroupName());
             s = IInputTypeCapability.AS_RADIO_BUTTON;
 
         } else {
-            groupName = null;
+            setGroupName(null);
         }
 
-        if (component instanceof IVisibilityCapability) {
+        if (component.isRendered() == false) {
+            setVisible(false);
+
+        } else if (component instanceof IVisibilityCapability) {
             Boolean b = ((IVisibilityCapability) component).getVisibleState();
 
-            visible = (Boolean.FALSE.equals(b) == false);
+            setVisible(Boolean.FALSE.equals(b) == false);
 
         } else {
-            visible = true;
+            setVisible(true);
         }
 
         if (component instanceof IServerDataCapability) {
             IServerDataCapability serverDataCapability = (IServerDataCapability) component;
 
             if (serverDataCapability.getServerDataCount() > 0) {
-                Map map = serverDataCapability.getServerDataMap();
+                Map<String, Object> map = serverDataCapability
+                        .getServerDataMap();
 
                 getServerDataMap().putAll(map);
             }
@@ -132,7 +136,8 @@ public class BasicSelectItem extends SelectItem implements ISelectItem,
             IClientDataCapability clientDataCapability = (IClientDataCapability) component;
 
             if (clientDataCapability.getClientDataCount() > 0) {
-                Map map = clientDataCapability.getClientDataMap();
+                Map<String, String> map = clientDataCapability
+                        .getClientDataMap();
 
                 getClientDataMap().putAll(map);
             }
@@ -144,19 +149,19 @@ public class BasicSelectItem extends SelectItem implements ISelectItem,
                     .getToolTipText());
         }
 
-        this.inputType = s;
+        setInputType(s);
 
         if (component instanceof IStyleClassCapability) {
             IStyleClassCapability styleClassCapability = (IStyleClassCapability) component;
 
-            styleClass = styleClassCapability.getStyleClass();
+            setStyleClass(styleClassCapability.getStyleClass());
         }
 
         if (component instanceof IDraggableCapability) {
             IDraggableCapability draggableItemCapability = (IDraggableCapability) component;
 
-            dragTypes = draggableItemCapability.getDragTypes();
-            dragEffects = draggableItemCapability.getDragEffects();
+            setDragTypes(draggableItemCapability.getDragTypes());
+            setDragEffects(draggableItemCapability.getDragEffects());
         }
     }
 
@@ -240,9 +245,9 @@ public class BasicSelectItem extends SelectItem implements ISelectItem,
         return clientDatas.isEmpty();
     }
 
-    public Map<String, Object> getClientDataMap() {
+    public Map<String, String> getClientDataMap() {
         if (clientDatas == null) {
-            clientDatas = new HashMap();
+            clientDatas = new HashMap<String, String>();
         }
 
         return clientDatas;

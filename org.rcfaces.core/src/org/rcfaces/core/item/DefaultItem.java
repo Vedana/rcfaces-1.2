@@ -48,9 +48,9 @@ class DefaultItem extends SelectItemGroup {
 
     protected static final SelectItem SELECT_ITEMS_EMPTY_ARRAY[] = new SelectItem[0];
 
-    private Map serverDatas;
+    private Map<String, Object> serverDatas;
 
-    private Map clientDatas;
+    private Map<String, String> clientDatas;
 
     private String imageURL;
 
@@ -164,14 +164,16 @@ class DefaultItem extends SelectItemGroup {
         }
 
         if (selectItem instanceof IClientDataItem) {
-            Map map = ((IClientDataItem) selectItem).getClientDataMap();
+            Map<String, String> map = ((IClientDataItem) selectItem)
+                    .getClientDataMap();
             if (map.isEmpty() == false) {
                 getClientDataMap().putAll(map);
             }
         }
 
         if (selectItem instanceof IServerDataItem) {
-            Map map = ((IServerDataItem) selectItem).getServerDataMap();
+            Map<String, Object> map = ((IServerDataItem) selectItem)
+                    .getServerDataMap();
             if (map.isEmpty() == false) {
                 getServerDataMap().putAll(map);
             }
@@ -321,7 +323,8 @@ class DefaultItem extends SelectItemGroup {
             IServerDataCapability serverDataCapability = (IServerDataCapability) selectItemComponent;
 
             if (serverDataCapability.getServerDataCount() > 0) {
-                Map map = serverDataCapability.getServerDataMap();
+                Map<String, Object> map = serverDataCapability
+                        .getServerDataMap();
 
                 getServerDataMap().putAll(map);
             }
@@ -331,7 +334,8 @@ class DefaultItem extends SelectItemGroup {
             IClientDataCapability clientDataCapability = (IClientDataCapability) selectItemComponent;
 
             if (clientDataCapability.getClientDataCount() > 0) {
-                Map map = clientDataCapability.getClientDataMap();
+                Map<String, String> map = clientDataCapability
+                        .getClientDataMap();
 
                 getClientDataMap().putAll(map);
             }
@@ -523,9 +527,9 @@ class DefaultItem extends SelectItemGroup {
         return clientDatas.isEmpty();
     }
 
-    public Map getClientDataMap() {
+    public Map<String, String> getClientDataMap() {
         if (clientDatas == null) {
-            clientDatas = new HashMap();
+            clientDatas = new HashMap<String, String>();
         }
 
         return clientDatas;
