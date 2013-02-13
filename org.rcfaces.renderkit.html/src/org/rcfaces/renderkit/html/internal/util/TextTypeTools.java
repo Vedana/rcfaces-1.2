@@ -59,6 +59,10 @@ public class TextTypeTools {
         HTML_TYPES.put("listitem", IHtmlWriter.LI);
         HTML_TYPES.put("orderedlist", "ol");
 
+        HTML_TYPES.put("datalist", "dl");
+        HTML_TYPES.put("datatitle", "dt");
+        HTML_TYPES.put("datadata", "dd");
+
         Collection<String> c = HTML_TYPES.values();
         String values[] = c.toArray(new String[c.size()]);
 
