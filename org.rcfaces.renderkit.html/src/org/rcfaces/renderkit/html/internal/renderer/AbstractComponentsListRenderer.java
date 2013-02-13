@@ -167,7 +167,7 @@ public abstract class AbstractComponentsListRenderer extends
         encodeChildren(htmlWriter, listContext);
     }
 
-    public void encodeChildren(IComponentWriter writer, ListContext listContext)
+    public int encodeChildren(IComponentWriter writer, ListContext listContext)
             throws WriterException {
         FacesContext facesContext = writer.getComponentRenderContext()
                 .getFacesContext();
@@ -220,9 +220,7 @@ public abstract class AbstractComponentsListRenderer extends
 
         int columnNumber = listContext.getColumnNumber();
 
-        if (columnNumber > 1) {
-            rows = rows * columnNumber;
-        }
+        int rowCount = listContext.getRowCount();
 
         String rcls = componentsListComponent.getRowStyleClass(facesContext);
         String rowClasses[] = parseClasses(rcls);
@@ -250,11 +248,14 @@ public abstract class AbstractComponentsListRenderer extends
             encodeChildrenComponentBegin(htmlWriter, componentsListComponent,
                     processed, columnNumber, rowClasses, tdClass);
 
-            for (; rows <= 0 || processed < rows; processed++, rowIndex++) {
+            for (; rows < 0 || processed < rows; processed++, rowIndex++) {
 
                 componentsListComponent.setRowIndex(rowIndex);
                 if (componentsListComponent.isRowAvailable() == false) {
-                    break;
+                    if (rowCount >= 0) {
+                        return rowCount;
+                    }
+                    return rowIndex;
                 }
 
                 if (rowIndexVar != null) {
@@ -285,6 +286,15 @@ public abstract class AbstractComponentsListRenderer extends
 
             encodeChildrenComponentEnd(htmlWriter, componentsListComponent,
                     processed, columnNumber, rowClasses, tdClass);
+
+            if (rowCount < 0) {
+                componentsListComponent.setRowIndex(rowIndex);
+                if (componentsListComponent.isRowAvailable() == false) {
+                    rowCount = rowIndex;
+                }
+            }
+
+            return rowCount;
 
         } finally {
             componentsListComponent.setRowIndex(-1);

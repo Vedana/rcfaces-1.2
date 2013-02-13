@@ -390,6 +390,10 @@ var __members = {
 			this._updateScrollComponents();
 		}
 
+		if (rowCount>0) {
+			this._rowCount=rowCount;
+		}
+
 		if (this._rowCount<0) {
 			if (this._maxRows<this._first+this._rows) {
 				this._maxRows=this._first+this._rows;
