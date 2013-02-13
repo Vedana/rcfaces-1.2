@@ -10,6 +10,7 @@ import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.renderkit.html.internal.agent.IClientBrowser;
+import org.rcfaces.renderkit.html.internal.util.CarriageReturnNormalizerMode;
 
 /**
  * 
@@ -82,6 +83,8 @@ public interface IHtmlProcessContext extends IProcessContext {
     boolean isHtmlEscapingDisabled();
 
     Set<String> listCssProcessRulesForced();
+
+    CarriageReturnNormalizerMode getCarriageReturnNormalizerMode();
 
     // boolean keepDisabledState();
 }

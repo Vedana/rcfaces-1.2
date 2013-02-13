@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
@@ -27,6 +28,7 @@ import org.rcfaces.renderkit.html.internal.agent.ClientBrowserFactory;
 import org.rcfaces.renderkit.html.internal.agent.IClientBrowser;
 import org.rcfaces.renderkit.html.internal.css.ICssConfig;
 import org.rcfaces.renderkit.html.internal.css.StylesheetsServlet;
+import org.rcfaces.renderkit.html.internal.util.CarriageReturnNormalizerMode;
 
 /**
  * 
@@ -42,6 +44,8 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
     private static final String NAMESPACE_URI = "rcfaces.xsd";
 
     private static final String HTML_ESCAPING_DISABLED_ATTRIBUTE = "org.rcfaces.html.HTML_ESCAPING_DISABLED";
+
+    private static final String CARRIAGE_RETURN_NORMALIZER_PARAMETER = "org.rcfaces.html.CARRIAGE_RETURN_NORMALIZER";
 
     private String styleSheetURI;
 
@@ -74,6 +78,8 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
     private boolean htmlEscapingDisabled;
 
     private Set<String> cssProcessRulesForce;
+
+    private CarriageReturnNormalizerMode carriageReturnNormalizerMode;
 
     public HtmlProcessContextImpl(FacesContext facesContext) {
         super(facesContext);
@@ -163,9 +169,31 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
                     .getRequestContextPath() + styleSheetURI;
         }
 
-        htmlEscapingDisabled = "true".equalsIgnoreCase(facesContext
-                .getExternalContext().getInitParameter(
-                        HTML_ESCAPING_DISABLED_ATTRIBUTE));
+        htmlEscapingDisabled = "true".equalsIgnoreCase((String) applicationMap
+                .get(HTML_ESCAPING_DISABLED_ATTRIBUTE));
+
+        String crNormalizerMode = (String) applicationMap
+                .get(CARRIAGE_RETURN_NORMALIZER_PARAMETER);
+        if (crNormalizerMode != null) {
+            if ("cr".equalsIgnoreCase(crNormalizerMode)) {
+                carriageReturnNormalizerMode = CarriageReturnNormalizerMode.NormalizeToCR;
+
+            } else if ("lf".equalsIgnoreCase(crNormalizerMode)) {
+                carriageReturnNormalizerMode = CarriageReturnNormalizerMode.NormalizeToLF;
+
+            } else if ("crlf".equalsIgnoreCase(crNormalizerMode)) {
+                carriageReturnNormalizerMode = CarriageReturnNormalizerMode.NormalizeToCRLF;
+
+            } else if ("none".equalsIgnoreCase(crNormalizerMode)
+                    || "false".equalsIgnoreCase(crNormalizerMode)) {
+                carriageReturnNormalizerMode = CarriageReturnNormalizerMode.None;
+
+            } else {
+                throw new FacesException("Invalid value ('" + crNormalizerMode
+                        + "') for application parameter '"
+                        + CARRIAGE_RETURN_NORMALIZER_PARAMETER + "'.");
+            }
+        }
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Initialize htmlRenderExternalContext useMetaContentScriptType="
@@ -400,6 +428,10 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
 
     public Set<String> listCssProcessRulesForced() {
         return cssProcessRulesForce;
+    }
+
+    public CarriageReturnNormalizerMode getCarriageReturnNormalizerMode() {
+        return carriageReturnNormalizerMode;
     }
 
     // public boolean keepDisabledState() {

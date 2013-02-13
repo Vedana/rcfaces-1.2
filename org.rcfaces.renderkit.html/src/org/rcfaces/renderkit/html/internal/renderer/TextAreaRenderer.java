@@ -13,9 +13,11 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.AbstractInputRenderer;
+import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
+import org.rcfaces.renderkit.html.internal.util.CarriageReturnNormalizerMode;
 
 /**
  * 
@@ -172,6 +174,34 @@ public class TextAreaRenderer extends AbstractInputRenderer {
             if (newValue == null) {
                 // Toujours rien ... on essaye les données du form !
                 newValue = componentData.getComponentParameter();
+            }
+        }
+
+        if (newValue != null && newValue.length() > 0) {
+            IHtmlProcessContext htmlProcessContext = (IHtmlProcessContext) context
+                    .getProcessContext();
+
+            CarriageReturnNormalizerMode normalizer = htmlProcessContext
+                    .getCarriageReturnNormalizerMode();
+
+            if (normalizer != null) {
+                switch (normalizer) {
+                case NormalizeToCR:
+                    newValue = newValue.replace("\r\n", "\r");
+                    newValue = newValue.replace("\n", "\r");
+                    break;
+
+                case NormalizeToLF:
+                    newValue = newValue.replace("\r\n", "\n");
+                    newValue = newValue.replace("\r", "\n");
+                    break;
+
+                case NormalizeToCRLF:
+                    newValue = newValue.replace("\r\n", "\n");
+                    newValue = newValue.replace("\r", "\n");
+                    newValue = newValue.replace("\n", "\r\n");
+                    break;
+                }
             }
         }
 
