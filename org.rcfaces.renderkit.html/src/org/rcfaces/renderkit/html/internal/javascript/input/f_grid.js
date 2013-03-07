@@ -1162,8 +1162,12 @@ var __statics = {
 
 		// alert("CB="+dataGrid._columnCanBeSorted);
 		if (!dataGrid._columnCanBeSorted || !column._method) {
-			// NON on veut pouvoir attraper sur le TitleClick
-			//return f_core.CancelJsEvent(evt);
+			// NON au CancelJsEvent  on veut pouvoir attraper sur le TitleClick
+			
+			if (column.f_isActionListEmpty(f_event.SELECTION)) {
+				// pas de TitleClick ... cancel alors !
+				return f_core.CancelJsEvent(evt);
+			}
 		}
 
 		f_core.Debug(f_grid, "_Title_onMouseDown: select column='" + column
@@ -1491,9 +1495,11 @@ var __statics = {
 			return false;
 		}
 
-		if (dataGrid.f_isDisabled() || !dataGrid._columnCanBeSorted) {
+		/*
+		if (dataGrid.f_isDisabled() / * || !dataGrid._columnCanBeSorted * /) {
 			return f_core.CancelJsEvent(evt);
 		}
+		*/
 
 		var oldColumn = dataGrid._columnSelected;
 		if (!oldColumn) {
@@ -6657,7 +6663,12 @@ var __members = {
 		}
 
 		var elementItem = tooltip.f_getElementItem();
-
+		if (!elementItem) {
+			// Pas d'item ?
+			// Le temps que le nextCommand soit appelé, la popup est fermée
+			return false;
+		}
+		
 		var row = null;
 
 		switch (elementItem.tagName.toUpperCase()) {
@@ -6676,7 +6687,7 @@ var __members = {
 			break;
 		}
 
-		if (row._rowIndex === undefined || row._rowIndex < 0) {
+		if (!row || row._rowIndex === undefined || row._rowIndex < 0) {
 			return false;// a revoir
 		}
 
