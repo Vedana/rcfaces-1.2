@@ -3999,6 +3999,7 @@ Dans le cas d'un mode period !
 		<attribute id="cursorValue" type="java.lang.Object" />
 
 		<attribute id="expansionUseValue" type="boolean" />
+		<attribute id="schrodingerCheckable" type="boolean" />
 
 		<method id="setClientSelectionFullState(String)" /> 		
 		<method id="setClientCheckFullState(String)" /> 
