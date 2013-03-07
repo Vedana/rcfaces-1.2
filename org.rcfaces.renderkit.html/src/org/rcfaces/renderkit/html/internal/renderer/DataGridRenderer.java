@@ -1634,7 +1634,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
         }
 
         if (images != null || cellStyleClasses != null
-                || cellToolTipTexts != null) {
+                || cellToolTipIds != null || cellToolTipTexts != null) {
 
             allocateStrings(jsWriter, images, images);
             allocateStrings(jsWriter, cellStyleClasses, cellStyleClasses);
@@ -1836,6 +1836,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
                 if (rowValueColumn != null) {
                     clientCursorValue = ValuesTools.convertValueToString(
                             cursorValue, rowValueColumn, facesContext);
+                } else {
+                    clientCursorValue = String.valueOf(cursorValue);
                 }
             }
 
