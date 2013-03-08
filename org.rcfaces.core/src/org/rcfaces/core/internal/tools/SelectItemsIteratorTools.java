@@ -28,7 +28,6 @@ import org.rcfaces.core.lang.IAdaptable;
  * @version $Revision$ $Date$
  */
 public class SelectItemsIteratorTools {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(SelectItemsIteratorTools.class);
@@ -51,15 +50,16 @@ public class SelectItemsIteratorTools {
 
         int size = -1;
         if (items instanceof Collection) {
-            size = ((Collection) items).size();
+            size = ((Collection< ? >) items).size();
 
         } else if (items.getClass().isArray()) {
             size = Array.getLength(items);
         }
 
-        Iterator it = convertToIterator(items);
+        Iterator< ? > it = convertToIterator(items);
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Convert to iterator (items=" + items + ",  size="+size+") returns " + it);
+            LOG.debug("Convert to iterator (items=" + items + ",  size=" + size
+                    + ") returns " + it);
         }
         if (it == null) {
             return null;
@@ -73,13 +73,14 @@ public class SelectItemsIteratorTools {
                     + varName + "'");
         }
 
-        Map requestMap = facesContext.getExternalContext().getRequestMap();
+        Map<String, Object> requestMap = facesContext.getExternalContext()
+                .getRequestMap();
 
-        List selectItems;
+        List<SelectItem> selectItems;
         if (size > 0) {
-            selectItems = new ArrayList(size);
+            selectItems = new ArrayList<SelectItem>(size);
         } else {
-            selectItems = new ArrayList();
+            selectItems = new ArrayList<SelectItem>();
         }
 
         Object oldIndexVar = null;
@@ -206,12 +207,14 @@ public class SelectItemsIteratorTools {
                 if (clientMapAccessor != null) {
                     String keys[] = clientMapAccessor
                             .listDataKeys(facesContext);
-                    Map clientDataMap = selectItem.getClientDataMap();
+
+                    Map<String, String> clientDataMap = selectItem
+                            .getClientDataMap();
                     for (int i = 0; i < keys.length; i++) {
                         Object data = clientMapAccessor.getData(keys[i],
                                 facesContext);
                         if (data != null) {
-                            clientDataMap.put(keys[i], data);
+                            clientDataMap.put(keys[i], String.valueOf(data));
                         }
                     }
                 }
@@ -221,7 +224,8 @@ public class SelectItemsIteratorTools {
                 if (serverMapAccessor != null) {
                     String keys[] = serverMapAccessor
                             .listDataKeys(facesContext);
-                    Map serverDataMap = selectItem.getServerDataMap();
+                    Map<String, Object> serverDataMap = selectItem
+                            .getServerDataMap();
                     for (int i = 0; i < keys.length; i++) {
                         Object data = serverMapAccessor.getData(keys[i],
                                 facesContext);
@@ -239,19 +243,18 @@ public class SelectItemsIteratorTools {
             }
         }
 
-        return (SelectItem[]) selectItems.toArray(new SelectItem[selectItems
-                .size()]);
+        return selectItems.toArray(new SelectItem[selectItems.size()]);
     }
 
-    private static Iterator convertToIterator(final Object items) {
+    private static Iterator< ? > convertToIterator(final Object items) {
         if (items instanceof Iterator) {
-            return (Iterator) items;
+            return (Iterator< ? >) items;
         }
         if (items instanceof Collection) {
-            return ((Collection) items).iterator();
+            return ((Collection< ? >) items).iterator();
         }
         if (items.getClass().isArray()) {
-            return new Iterator() {
+            return new Iterator<Object>() {
                 private final int size = Array.getLength(items);
 
                 private int index = 0;
@@ -260,8 +263,8 @@ public class SelectItemsIteratorTools {
                     return index < size;
                 }
 
-                public Object next() {
-                    return Array.get(items, index++);
+                public SelectItem next() {
+                    return (SelectItem) Array.get(items, index++);
                 }
 
                 public void remove() {
@@ -274,9 +277,9 @@ public class SelectItemsIteratorTools {
             Object collection = ((IAdaptable) items).getAdapter(
                     Collection.class, null);
             if (collection != null) {
-                return ((Collection) collection).iterator();
+                return ((Collection< ? >) collection).iterator();
             }
-            Iterator iterator = (Iterator) ((IAdaptable) items).getAdapter(
+            Iterator< ? > iterator = ((IAdaptable) items).getAdapter(
                     Iterator.class, null);
             if (iterator != null) {
                 return iterator;
