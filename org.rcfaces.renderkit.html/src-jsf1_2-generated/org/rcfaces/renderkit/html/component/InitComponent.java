@@ -3,8 +3,8 @@ package org.rcfaces.renderkit.html.component;
 import java.util.TimeZone;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.capability.IPageConfigurator;
-import org.apache.commons.logging.LogFactory;
 import java.lang.String;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.converter.TimeZoneConverter;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import javax.el.ValueExpression;
@@ -35,7 +35,7 @@ public class InitComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"clientMessageIdFilter","userAgentVary","disabledCookiesPageURL","invalidBrowserPageURL","waiRolesNS","clientValidation","title","literalLocale","favoriteImageURL","disabledScriptPageURL","literalTimeZone","base","domain","disableCache","disabledIEImageBar","renderBaseTag","disableContextMenu"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"clientMessageIdFilter","userAgentVary","disabledCookiesPageURL","invalidBrowserPageURL","waiRolesNS","clientValidation","title","literalLocale","favoriteImageURL","disabledScriptPageURL","literalTimeZone","base","domain","disableCache","renderBaseTag","disabledIEImageBar","disableContextMenu"}));
 	}
 
 	public InitComponent() {
