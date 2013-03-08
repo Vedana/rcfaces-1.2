@@ -469,7 +469,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
     }
 
     private void writeNodeObject(TreeRenderContext treeRenderContext,
-            SelectItem selectItem, boolean forRefresh, boolean hasChild)
+            SelectItem selectItem, boolean refreshNode, boolean hasChild)
             throws WriterException {
 
         IObjectLiteralWriter objectLiteralWriter = javaScriptWriter
@@ -477,7 +477,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
 
         Object selectItemValue = selectItem.getValue();
 
-        if (!forRefresh) {
+        if (refreshNode == false) {
             String value = convertItemValue(
                     javaScriptWriter.getHtmlComponentRenderContext(),
                     selectItemValue);
@@ -546,7 +546,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
             }
         }
 
-        if (forRefresh) {
+        if (refreshNode) {
             objectLiteralWriter.writeSymbol("_hasChild").writeBoolean(hasChild);
         }
 
