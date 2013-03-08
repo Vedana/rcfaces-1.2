@@ -58,7 +58,7 @@ public class ImageCheckButtonComponent extends CheckButtonComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CheckButtonComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disabledImageURL","imageHeight","text","borderType","textPosition","hoverImageURL","tabIndex","selectedImageURL","selectionListener","readOnly","border","imageURL","disabled","imageWidth"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disabledImageURL","imageHeight","text","borderType","textPosition","tabIndex","hoverImageURL","selectedImageURL","selectionListener","readOnly","border","imageURL","disabled","imageWidth"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="selected";
 

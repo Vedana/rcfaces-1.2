@@ -13,8 +13,8 @@ import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.IDisabledCapability;
+import javax.el.ValueExpression;
 import java.util.HashSet;
 import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.CardComponent;
@@ -44,7 +44,7 @@ public class TabComponent extends CardComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CardComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disabledImageURL","text","fontName","accessKey","hoverImageURL","fontBold","fontSize","textDirection","selectedImageURL","fontItalic","fontUnderline","disabled","imageURL"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disabledImageURL","accessKey","text","fontName","hoverImageURL","fontBold","fontSize","textDirection","selectedImageURL","fontItalic","fontUnderline","disabled","imageURL"}));
 	}
 
 	public TabComponent() {
@@ -376,17 +376,17 @@ public class TabComponent extends CardComponent implements
 		engine.setProperty(Properties.ACCESS_KEY, accessKey);
 	}
 
-	public IMenuComponent getMenu() {
-
-
-		return MenuTools.getMenu(this);
-		
-	}
-
 	public IMenuComponent getMenu(String menuId) {
 
 
 		return MenuTools.getMenu(this, menuId);
+		
+	}
+
+	public IMenuComponent getMenu() {
+
+
+		return MenuTools.getMenu(this);
 		
 	}
 

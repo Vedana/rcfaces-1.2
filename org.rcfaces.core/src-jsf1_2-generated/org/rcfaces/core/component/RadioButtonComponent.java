@@ -2,8 +2,8 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.component.RadioButtonComponent;
 import org.rcfaces.core.internal.component.Properties;
-import java.util.Map;
 import org.rcfaces.core.internal.converter.HorizontalTextPositionConverter;
+import java.util.Map;
 import org.rcfaces.core.component.capability.IRadioValueCapability;
 import java.util.Collections;
 import org.apache.commons.logging.LogFactory;

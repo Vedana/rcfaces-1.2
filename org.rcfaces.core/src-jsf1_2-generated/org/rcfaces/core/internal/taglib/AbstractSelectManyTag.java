@@ -46,9 +46,9 @@ public abstract class AbstractSelectManyTag extends CameliaTag implements Tag {
 	private ValueExpression keyUpListeners;
 	private ValueExpression keyDownListeners;
 	private ValueExpression keyPressListeners;
+	private ValueExpression userEventListeners;
 	private ValueExpression x;
 	private ValueExpression y;
-	private ValueExpression userEventListeners;
 	private ValueExpression partialRendering;
 	private ValueExpression styleClass;
 	private ValueExpression lookId;
@@ -183,16 +183,16 @@ public abstract class AbstractSelectManyTag extends CameliaTag implements Tag {
 		this.keyPressListeners = keyPressListeners;
 	}
 
+	public void setUserEventListener(ValueExpression userEventListeners) {
+		this.userEventListeners = userEventListeners;
+	}
+
 	public void setX(ValueExpression x) {
 		this.x = x;
 	}
 
 	public void setY(ValueExpression y) {
 		this.y = y;
-	}
-
-	public void setUserEventListener(ValueExpression userEventListeners) {
-		this.userEventListeners = userEventListeners;
 	}
 
 	public void setPartialRendering(ValueExpression partialRendering) {
@@ -540,6 +540,10 @@ public abstract class AbstractSelectManyTag extends CameliaTag implements Tag {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.KEY_PRESS_LISTENER_TYPE, keyPressListeners);
 		}
 
+		if (userEventListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.USER_EVENT_LISTENER_TYPE, userEventListeners);
+		}
+
 		if (x != null) {
 			if (x.isLiteralText()==false) {
 				component.setValueExpression(Properties.X, x);
@@ -556,10 +560,6 @@ public abstract class AbstractSelectManyTag extends CameliaTag implements Tag {
 			} else {
 				component.setY(y.getExpressionString());
 			}
-		}
-
-		if (userEventListeners != null) {
-			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.USER_EVENT_LISTENER_TYPE, userEventListeners);
 		}
 
 		if (partialRendering != null) {
@@ -783,9 +783,9 @@ public abstract class AbstractSelectManyTag extends CameliaTag implements Tag {
 		keyUpListeners = null;
 		keyDownListeners = null;
 		keyPressListeners = null;
+		userEventListeners = null;
 		x = null;
 		y = null;
-		userEventListeners = null;
 		partialRendering = null;
 		styleClass = null;
 		lookId = null;

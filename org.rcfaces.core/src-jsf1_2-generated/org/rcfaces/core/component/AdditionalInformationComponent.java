@@ -60,7 +60,7 @@ public class AdditionalInformationComponent extends CameliaColumnComponent imple
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaColumnComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"backgroundColor","marginLeft","errorListener","backgroundImageVerticalPosition","propertyChangeListener","loadListener","backgroundImageHorizontalPosition","ariaLevel","height","mouseOverListener","scopeValue","backgroundImageURL","headingZone","waiRole","foregroundColor","mouseOutListener","lookId","headingLevel","backgroundImageVerticalRepeat","userEventListener","marginTop","marginRight","styleClass","backgroundImageHorizontalRepeat","ariaLabel","initListener","marginBottom","scopeSaveValue","scopeVar","margins"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"marginLeft","backgroundColor","errorListener","backgroundImageVerticalPosition","propertyChangeListener","loadListener","backgroundImageHorizontalPosition","ariaLevel","height","mouseOverListener","scopeValue","backgroundImageURL","headingZone","waiRole","foregroundColor","mouseOutListener","lookId","headingLevel","backgroundImageVerticalRepeat","userEventListener","marginTop","marginRight","styleClass","backgroundImageHorizontalRepeat","ariaLabel","initListener","marginBottom","scopeSaveValue","scopeVar","margins"}));
 	}
 
 	public AdditionalInformationComponent() {
@@ -600,17 +600,17 @@ public class AdditionalInformationComponent extends CameliaColumnComponent imple
 		return getFacesListeners(org.rcfaces.core.event.ILoadListener.class);
 	}
 
-	public IMenuComponent getMenu() {
-
-
-		return MenuTools.getMenu(this);
-		
-	}
-
 	public IMenuComponent getMenu(String menuId) {
 
 
 		return MenuTools.getMenu(this, menuId);
+		
+	}
+
+	public IMenuComponent getMenu() {
+
+
+		return MenuTools.getMenu(this);
 		
 	}
 

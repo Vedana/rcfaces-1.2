@@ -67,6 +67,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 	private ValueExpression bodyDroppable;
 	private ValueExpression cursorValue;
 	private ValueExpression expansionUseValue;
+	private ValueExpression schrodingerCheckable;
 	public String getComponentType() {
 		return TreeComponent.COMPONENT_TYPE;
 	}
@@ -267,6 +268,10 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		this.expansionUseValue = expansionUseValue;
 	}
 
+	public void setSchrodingerCheckable(ValueExpression schrodingerCheckable) {
+		this.schrodingerCheckable = schrodingerCheckable;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (TreeComponent.COMPONENT_TYPE==getComponentType()) {
@@ -312,6 +317,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 			LOG.debug("  bodyDroppable='"+bodyDroppable+"'");
 			LOG.debug("  cursorValue='"+cursorValue+"'");
 			LOG.debug("  expansionUseValue='"+expansionUseValue+"'");
+			LOG.debug("  schrodingerCheckable='"+schrodingerCheckable+"'");
 		}
 		if ((uiComponent instanceof TreeComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -705,6 +711,15 @@ public class TreeTag extends AbstractInputTag implements Tag {
 				component.setExpansionUseValue(getBool(expansionUseValue.getExpressionString()));
 			}
 		}
+
+		if (schrodingerCheckable != null) {
+			if (schrodingerCheckable.isLiteralText()==false) {
+				component.setValueExpression(Properties.SCHRODINGER_CHECKABLE, schrodingerCheckable);
+
+			} else {
+				component.setSchrodingerCheckable(getBool(schrodingerCheckable.getExpressionString()));
+			}
+		}
 	}
 
 	public void release() {
@@ -757,6 +772,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		bodyDroppable = null;
 		cursorValue = null;
 		expansionUseValue = null;
+		schrodingerCheckable = null;
 
 		super.release();
 	}

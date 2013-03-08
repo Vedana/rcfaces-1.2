@@ -186,7 +186,7 @@ public class TreeComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"dragListener","dropListener","dropEffects","overStyleClass","loadListener","checkedValues","selectionListener","defaultLeafImageURL","cursorValue","required","border","preSelectionListener","bodyDroppable","defaultCollapsedImageURL","defaultDisabledImageURL","doubleClickListener","expandListener","clientCheckFullState","horizontalScrollPosition","dropCompleteListener","dropTypes","expandedValues","hideRootExpandSign","defaultExpandedLeafImageURL","expandable","checkListener","preloadedLevelDepth","droppable","selectionCardinality","dragTypes","defaultDisabledLeafImageURL","checkCardinality","checkable","showValue","verticalScrollPosition","defaultSelectedLeafImageURL","clientSelectionFullState","headingLevel","filterProperties","defaultExpandedImageURL","defaultImageURL","dragEffects","caption","selectedValues","readOnly","expansionUseValue","selectable","defaultSelectedImageURL","draggable"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"dragListener","dropListener","dropEffects","schrodingerCheckable","overStyleClass","loadListener","checkedValues","selectionListener","defaultLeafImageURL","cursorValue","required","border","preSelectionListener","bodyDroppable","defaultCollapsedImageURL","defaultDisabledImageURL","expandListener","doubleClickListener","clientCheckFullState","horizontalScrollPosition","dropCompleteListener","dropTypes","expandedValues","hideRootExpandSign","defaultExpandedLeafImageURL","expandable","checkListener","preloadedLevelDepth","droppable","selectionCardinality","dragTypes","defaultDisabledLeafImageURL","checkable","checkCardinality","showValue","verticalScrollPosition","defaultSelectedLeafImageURL","clientSelectionFullState","headingLevel","filterProperties","defaultExpandedImageURL","defaultImageURL","dragEffects","caption","selectedValues","expansionUseValue","readOnly","selectable","defaultSelectedImageURL","draggable"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="value";
 
@@ -656,17 +656,17 @@ public class TreeComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
-	public IMenuComponent getMenu() {
-
-
-		return MenuTools.getMenu(this);
-		
-	}
-
 	public IMenuComponent getMenu(String menuId) {
 
 
 		return MenuTools.getMenu(this, menuId);
+		
+	}
+
+	public IMenuComponent getMenu() {
+
+
+		return MenuTools.getMenu(this);
 		
 	}
 
@@ -1673,6 +1673,26 @@ public class TreeComponent extends AbstractInputComponent implements
 	 */
 	public boolean isExpansionUseValueSetted() {
 		return engine.isPropertySetted(Properties.EXPANSION_USE_VALUE);
+	}
+
+	public boolean isSchrodingerCheckable() {
+		return isSchrodingerCheckable(null);
+	}
+
+	public boolean isSchrodingerCheckable(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.SCHRODINGER_CHECKABLE, false, facesContext);
+	}
+
+	public void setSchrodingerCheckable(boolean schrodingerCheckable) {
+		engine.setProperty(Properties.SCHRODINGER_CHECKABLE, schrodingerCheckable);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "schrodingerCheckable" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isSchrodingerCheckableSetted() {
+		return engine.isPropertySetted(Properties.SCHRODINGER_CHECKABLE);
 	}
 
 	protected Set getCameliaFields() {

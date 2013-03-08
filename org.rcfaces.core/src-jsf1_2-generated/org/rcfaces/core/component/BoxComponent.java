@@ -9,8 +9,8 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.AbstractBasicComponent;
 import org.rcfaces.core.component.capability.ILoadEventCapability;
 import org.rcfaces.core.component.capability.IBorderCapability;
-import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
+import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.internal.converter.AsyncDecodeModeConverter;
 import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.IHeadingLevelCapability;
@@ -405,17 +405,17 @@ public class BoxComponent extends AbstractBasicComponent implements
 		engine.setProperty(Properties.LAYOUT_TYPE, layoutType);
 	}
 
-	public IMenuComponent getMenu() {
-
-
-		return MenuTools.getMenu(this);
-		
-	}
-
 	public IMenuComponent getMenu(String menuId) {
 
 
 		return MenuTools.getMenu(this, menuId);
+		
+	}
+
+	public IMenuComponent getMenu() {
+
+
+		return MenuTools.getMenu(this);
 		
 	}
 

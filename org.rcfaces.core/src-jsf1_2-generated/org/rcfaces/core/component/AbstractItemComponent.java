@@ -2,8 +2,8 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
-import java.util.Map;
 import java.lang.Object;
+import java.util.Map;
 import java.util.Collections;
 import java.lang.String;
 import org.apache.commons.logging.LogFactory;

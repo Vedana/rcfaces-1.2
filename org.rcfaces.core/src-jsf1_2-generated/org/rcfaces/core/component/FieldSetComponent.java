@@ -22,8 +22,8 @@ import java.util.Arrays;
 import org.rcfaces.core.internal.capability.IVariableScopeCapability;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
 import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
-import org.rcfaces.core.component.capability.IFontCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.capability.IFontCapability;
 
 /**
  * <p>The fieldSet Component is a container with a title (text and/or picture).</p>

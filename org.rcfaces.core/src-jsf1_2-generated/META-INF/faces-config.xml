@@ -3235,6 +3235,10 @@ A boolean value that indicates wether a node is identified by it's value or by a
 			<attribute-name>expansionUseValue</attribute-name>
 			<attribute-class>boolean</attribute-class>
 		</attribute>
+		<attribute>
+			<attribute-name>schrodingerCheckable</attribute-name>
+			<attribute-class>boolean</attribute-class>
+		</attribute>
 	</component>
 	<component>
 		<component-type>org.rcfaces.core.itemsList</component-type>

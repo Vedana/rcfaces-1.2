@@ -22,9 +22,9 @@ import org.rcfaces.core.component.capability.IBorderTypeCapability;
 import javax.faces.convert.Converter;
 import org.rcfaces.core.component.capability.ICheckEventCapability;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
+import org.rcfaces.core.component.capability.IDisabledCapability;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.ITextPositionCapability;
-import org.rcfaces.core.component.capability.IDisabledCapability;
 import java.util.HashSet;
 import org.rcfaces.core.internal.tools.ToolBarTools;
 import java.util.Arrays;
@@ -56,7 +56,7 @@ public class ItemsToolFolderComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"checkListener","defaultItemLookId","itemHiddenMode","textPosition","borderType","showDropDownMark","doubleClickListener","initListener","checkedValues","selectionListener","verticalAlignment","readOnly","mouseOverListener","defaultItemStyleClass","mouseOutListener","disabled"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"checkListener","defaultItemLookId","itemHiddenMode","showDropDownMark","textPosition","borderType","doubleClickListener","initListener","checkedValues","selectionListener","verticalAlignment","readOnly","mouseOverListener","defaultItemStyleClass","mouseOutListener","disabled"}));
 	}
 
 	public ItemsToolFolderComponent() {
@@ -96,17 +96,17 @@ public class ItemsToolFolderComponent extends AbstractInputComponent implements
 		
 	}
 
-	public IMenuComponent getMenu() {
-
-
-		return MenuTools.getMenu(this);
-		
-	}
-
 	public IMenuComponent getMenu(String menuId) {
 
 
 		return MenuTools.getMenu(this, menuId);
+		
+	}
+
+	public IMenuComponent getMenu() {
+
+
+		return MenuTools.getMenu(this);
 		
 	}
 

@@ -9,8 +9,8 @@ import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.capability.ICellToolTipTextSettings;
 import org.rcfaces.core.component.capability.ICellStyleClassCapability;
 import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.internal.component.CameliaValueColumnComponent;
 import org.rcfaces.core.component.capability.IInitEventCapability;
+import org.rcfaces.core.internal.component.CameliaValueColumnComponent;
 import org.rcfaces.core.internal.converter.OrderConverter;
 import org.rcfaces.core.internal.tools.CriteriaTools;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
@@ -40,8 +40,8 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IImageSizeCapability;
 import org.rcfaces.core.component.capability.IResizableCapability;
 import org.rcfaces.core.component.iterator.IToolTipIterator;
-import org.rcfaces.core.internal.capability.ICellStyleClassSettings;
 import org.apache.commons.logging.Log;
+import org.rcfaces.core.internal.capability.ICellStyleClassSettings;
 import org.rcfaces.core.component.capability.ITitleToolTipIdCapability;
 import java.util.Set;
 import org.rcfaces.core.component.capability.IAutoFilterCapability;
@@ -55,8 +55,8 @@ import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import org.rcfaces.core.internal.converter.AlignmentNormalizer;
 import javax.faces.convert.Converter;
-import org.rcfaces.core.component.capability.ISortEventCapability;
 import javax.el.ValueExpression;
+import org.rcfaces.core.component.capability.ISortEventCapability;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.IWidthRangeCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
@@ -698,17 +698,17 @@ public class DataColumnComponent extends CameliaValueColumnComponent implements
 		engine.setProperty(Properties.MENU_POPUP_ID, menuPopupId);
 	}
 
-	public IMenuComponent getMenu() {
-
-
-		return MenuTools.getMenu(this);
-		
-	}
-
 	public IMenuComponent getMenu(String menuId) {
 
 
 		return MenuTools.getMenu(this, menuId);
+		
+	}
+
+	public IMenuComponent getMenu() {
+
+
+		return MenuTools.getMenu(this);
 		
 	}
 
