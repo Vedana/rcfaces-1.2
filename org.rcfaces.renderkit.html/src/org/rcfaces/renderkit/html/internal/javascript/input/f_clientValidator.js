@@ -303,6 +303,13 @@ var __statics = {
 				
 				var value=input.value;
 				
+				f_core.Debug(f_clientValidator, "_ChangeKeyCode: oldScrollTop="+oldScrollTop+
+						" oldScrollLeft="+oldScrollLeft+
+						" oldScrollWidth="+oldScrollWidth+
+						" selectionStart="+selectionStart+
+						" selectionEnd="+selectionEnd+
+						" value='"+value+"'");
+				
 				// Gestion du maxTextLength
 				if (component.f_getMaxTextLength) {
 					var max = component.f_getMaxTextLength();
@@ -312,8 +319,15 @@ var __statics = {
 				}
 				
 				input.value = value.substring(0, selectionStart)+ ch + value.substring(selectionEnd);
-									
 				input.setSelectionRange(selectionStart + ch.length, selectionStart + ch.length);
+								
+				f_core.Debug(f_clientValidator, "_ChangeKeyCode: iScrollTop="+input.scrollTop+
+						" iScrollLeft="+input.scrollLeft+
+						" iScrollWidth="+input.scrollWidth+
+						" selectionStart="+input.selectionStart+
+						" selectionEnd="+input.selectionEnd+
+						" value='"+input.value+"'");
+			
 				var deltaW = input.scrollWidth - oldScrollWidth;
 				if (!input.scrollTop) {
 					input.scrollTop=oldScrollTop;
@@ -321,6 +335,7 @@ var __statics = {
 				if (!input.scrollLeft) {
 					input.scrollLeft=oldScrollLeft+deltaW;
 				}
+				
 				return false;
 			}
 
