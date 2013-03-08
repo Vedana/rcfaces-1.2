@@ -3741,12 +3741,9 @@ var f_core = {
 	IsGeckoDisableDispatchKeyEvent: function() {
 		if (!f_core.IsGecko()) {
 			return false;
-		}
+		}		
 		
-		if (f_core._browser_major>1 || f_core._browser_release>1) {
-			return true;
-		}
-		if (f_core._browser_minor>=5) {
+		if (f_core._browser_major>=12) {
 			return true;
 		}
 		
