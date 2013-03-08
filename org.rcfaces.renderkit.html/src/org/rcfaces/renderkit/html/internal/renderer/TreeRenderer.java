@@ -6,6 +6,7 @@ package org.rcfaces.renderkit.html.internal.renderer;
 import java.lang.reflect.Array;
 import java.util.Set;
 
+import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.ConverterException;
@@ -57,6 +58,7 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
 
     private static final boolean LINK_TREE_NODE_FOCUS = true;
 
+    @SuppressWarnings("unused")
     protected void encodeBeforeDecorator(IHtmlWriter htmlWriter,
             IComponentDecorator componentDecorator) throws WriterException {
         super.encodeBeforeDecorator(htmlWriter, componentDecorator);
@@ -101,6 +103,14 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
             if (csfs != IClientFullStateCapability.NONE_CLIENT_FULL_STATE) {
                 htmlWriter.writeAttributeNS("clientSelectionFullState", csfs);
             }
+        }
+
+        if (treeComponent.isSchrodingerCheckable(facesContext)) {
+            if (treeComponent.isCheckable(facesContext) == false) {
+                throw new FacesException(
+                        "A schrodingerCheckable tree must be checkable !");
+            }
+            htmlWriter.writeAttributeNS("schrodingerCheckable", true);
         }
 
         if (treeComponent.isExpandable(facesContext) == false) {

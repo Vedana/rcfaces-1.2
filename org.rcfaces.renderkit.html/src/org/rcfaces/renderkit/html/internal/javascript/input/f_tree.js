@@ -564,19 +564,21 @@ var __members = {
 		
 		this._nodesList=new Array();
 
-		this._interactive=f_core.GetBooleanAttributeNS(this,"asyncRender", false);
+		this._interactive=f_core.GetBooleanAttributeNS(this, "asyncRender", false);
 
-		this._hideRootExpandSign=f_core.GetBooleanAttributeNS(this,"hideRootExpandSign", false);
+		this._schrodingerCheckable=f_core.GetBooleanAttributeNS(this, "schrodingerCheckable", false);
+
+		this._hideRootExpandSign=f_core.GetBooleanAttributeNS(this, "hideRootExpandSign", false);
 				
-		this._userExpandable=f_core.GetBooleanAttributeNS(this,"userExpandable", true);
+		this._userExpandable=f_core.GetBooleanAttributeNS(this, "userExpandable", true);
 		
-		this._images=f_core.GetBooleanAttributeNS(this,"images");
+		this._images=f_core.GetBooleanAttributeNS(this, "images");
 		
-		this._preloadedLevelDepth=f_core.GetNumberAttributeNS(this,"preloadedLevelDepth");
+		this._preloadedLevelDepth=f_core.GetNumberAttributeNS(this, "preloadedLevelDepth");
 		
-		this._initCursorValue=f_core.GetAttributeNS(this,"cursorValue");
+		this._initCursorValue=f_core.GetAttributeNS(this, "cursorValue");
 
-		this._showValue=f_core.GetAttributeNS(this,"showValue");
+		this._showValue=f_core.GetAttributeNS(this, "showValue");
 		
 		this._blankNodeImageURL=f_env.GetBlankImageURL();
 		
@@ -680,6 +682,7 @@ var __members = {
 		this._tree=undefined;
 //		this._hideRootExpandSign=undefined; // boolean
 		this._body=undefined; // HTMLElement
+//		this._schrodingerCheckable=undefined; // Boolean
 		
 		this._cursor=undefined; // HtmlLIElement
 		this._breadCrumbsCursor=undefined; // HtmlLIElement
@@ -851,6 +854,7 @@ var __members = {
 		var input=li._input;
 		if (input) {
 			li._input=undefined;
+			li._inputImage=undefined;
 
 			input._node=undefined;
 			input.onclick=null;
@@ -1094,26 +1098,40 @@ var __members = {
 			divNode.style.paddingLeft=(d*f_tree._COMMAND_IMAGE_WIDTH)+"px";
 			
 			if (this.f_isCheckable()) {
-				var input=doc.createElement("input");
+		
+				var input;
+				if (this.f_isSchrodingerCheckable()) {
+					input=doc.createElement("button");
+					input.type="button";
+					
+					var inputImage=f_core.CreateElement(input, "img", {
+						width: 16,
+						height: 16,
+						classname: "f_tree_checkImage"
+					});
+					li._inputImage=inputImage;					
+					
+				} else {
+					input=doc.createElement("input");
+					
+					if (this._checkCardinality==fa_cardinality.ONE_CARDINALITY) {
+						input.type="radio";
+						input.value="CHECKED_"+nodeIdx;
+						input.name=this.id+"::radio";
+						
+					} else {
+						input.type="checkbox";
+						input.value="CHECKED";
+						input.name=input.id;
+					}
+				}
 				li._input=input;
 				input._node=li;
 
 				input.id=this.id+"::input"+nodeIdx;
 				input.className="f_tree_check";				
 				input.onclick=f_tree._NodeInput_mouseClick;
-		
-				if (this._checkCardinality==fa_cardinality.ONE_CARDINALITY) {
-					input.type="radio";
-					input.value="CHECKED_"+nodeIdx;
-					input.name=this.id+"::radio";
-					
-				} else {
-					input.type="checkbox";
-					input.value="CHECKED";
-					input.name=input.id;
-				}
-				
-				
+			
 				if (this._treeNodeFocusEnabled==2) {
 					input.onfocus=f_tree._Link_onfocus;
 					input.onblur=f_tree._Link_onblur;
@@ -4204,6 +4222,14 @@ var __members = {
 	},
 	fa_isSameAutoOpenElement: function(elt1, elt2) {
 		return elt1._value===elt2._value;
+	},
+	/**
+	 * Returns the schrodinger checkable feature state.
+	 * 
+	 * @return Boolean
+	 */
+	f_isSchrodingerCheckable: function() {
+		return this._schrodingerCheckable;
 	}
 };
 
