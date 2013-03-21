@@ -388,7 +388,7 @@ var __members = {
 			id: tooltipClientId
 		});
 
-		tooltipComponent.setAttribute(f_core._VNS+":class", "f_toolTip");
+		f_core.SetAttributeNS(tooltipComponent, "class", "f_toolTip");
 
 		tooltipComponent = this.f_getClass().f_getClassLoader().f_init(
 				tooltipComponent, true, true);
