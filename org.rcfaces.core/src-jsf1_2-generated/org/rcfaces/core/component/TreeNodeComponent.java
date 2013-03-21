@@ -118,7 +118,7 @@ public class TreeNodeComponent extends ExpandableItemComponent implements
 	public TreeComponent getTree() {
 
 
-			return TreeTools.getTree(this);
+				return TreeTools.getTree(this);
 			
 	}
 

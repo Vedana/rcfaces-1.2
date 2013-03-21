@@ -35,21 +35,21 @@ public class SelectItemComponent extends AbstractItemComponent implements
 	public void setToolTipText(String text) {
 
 
-			setItemDescription(text);
+				setItemDescription(text);
 			
 	}
 
 	public String getToolTipText() {
 
 
-			return getItemDescription();
+				return getItemDescription();
 			
 	}
 
 	public boolean isToolTipTextSetted() {
 
 
-			return getItemDescription()!=null;			
+				return getItemDescription()!=null;
 			
 	}
 

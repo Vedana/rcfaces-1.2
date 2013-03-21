@@ -600,17 +600,17 @@ public class AdditionalInformationComponent extends CameliaColumnComponent imple
 		return getFacesListeners(org.rcfaces.core.event.ILoadListener.class);
 	}
 
-	public IMenuComponent getMenu(String menuId) {
-
-
-		return MenuTools.getMenu(this, menuId);
-		
-	}
-
 	public IMenuComponent getMenu() {
 
 
 		return MenuTools.getMenu(this);
+		
+	}
+
+	public IMenuComponent getMenu(String menuId) {
+
+
+		return MenuTools.getMenu(this, menuId);
 		
 	}
 

@@ -14,6 +14,8 @@ import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import org.rcfaces.core.internal.tools.CheckTools;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.component.capability.ICheckedValuesCapability;
+import org.rcfaces.core.internal.converter.TextPositionConverter
+			;
 import java.lang.String;
 import org.rcfaces.core.component.capability.IHeadingZoneCapability;
 import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
@@ -29,7 +31,6 @@ import org.rcfaces.core.internal.tools.ToolBarTools;
 import java.util.Arrays;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import org.rcfaces.core.component.AbstractInputComponent;
-import org.rcfaces.core.internal.converter.TextPositionConverter;
 
 public class ItemsListComponent extends AbstractInputComponent implements 
 	IHeadingZoneCapability,

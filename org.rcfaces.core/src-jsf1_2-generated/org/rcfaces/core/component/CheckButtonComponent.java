@@ -1,8 +1,9 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.internal.converter.HorizontalTextPositionConverter
+			;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.converter.HorizontalTextPositionConverter;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IAlternateTextCapability;
 import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;

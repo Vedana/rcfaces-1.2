@@ -30,14 +30,14 @@ public abstract class ExpandableItemComponent extends UIImageItemComponent imple
 	public void setText(String text) {
 
 
-			setItemLabel(text);
+				setItemLabel(text);
 			
 	}
 
 	public String getText() {
 
 
-			return getItemLabel();
+				return getItemLabel();
 			
 	}
 

@@ -20,6 +20,8 @@ public class TreeTag extends AbstractInputTag implements Tag {
 
 	private ValueExpression caption;
 	private ValueExpression headingLevel;
+	private ValueExpression outlinedLabel;
+	private ValueExpression outlinedLabelMethod;
 	private ValueExpression doubleClickListeners;
 	private ValueExpression required;
 	private ValueExpression horizontalScrollPosition;
@@ -78,6 +80,14 @@ public class TreeTag extends AbstractInputTag implements Tag {
 
 	public void setHeadingLevel(ValueExpression headingLevel) {
 		this.headingLevel = headingLevel;
+	}
+
+	public void setOutlinedLabel(ValueExpression outlinedLabel) {
+		this.outlinedLabel = outlinedLabel;
+	}
+
+	public void setOutlinedLabelMethod(ValueExpression outlinedLabelMethod) {
+		this.outlinedLabelMethod = outlinedLabelMethod;
 	}
 
 	public void setDoubleClickListener(ValueExpression doubleClickListeners) {
@@ -279,6 +289,8 @@ public class TreeTag extends AbstractInputTag implements Tag {
 			}
 			LOG.debug("  caption='"+caption+"'");
 			LOG.debug("  headingLevel='"+headingLevel+"'");
+			LOG.debug("  outlinedLabel='"+outlinedLabel+"'");
+			LOG.debug("  outlinedLabelMethod='"+outlinedLabelMethod+"'");
 			LOG.debug("  required='"+required+"'");
 			LOG.debug("  horizontalScrollPosition='"+horizontalScrollPosition+"'");
 			LOG.debug("  verticalScrollPosition='"+verticalScrollPosition+"'");
@@ -346,6 +358,24 @@ public class TreeTag extends AbstractInputTag implements Tag {
 
 			} else {
 				component.setHeadingLevel(headingLevel.getExpressionString());
+			}
+		}
+
+		if (outlinedLabel != null) {
+			if (outlinedLabel.isLiteralText()==false) {
+				component.setValueExpression(Properties.OUTLINED_LABEL, outlinedLabel);
+
+			} else {
+				component.setOutlinedLabel(outlinedLabel.getExpressionString());
+			}
+		}
+
+		if (outlinedLabelMethod != null) {
+			if (outlinedLabelMethod.isLiteralText()==false) {
+				component.setValueExpression(Properties.OUTLINED_LABEL_METHOD, outlinedLabelMethod);
+
+			} else {
+				component.setOutlinedLabelMethod(outlinedLabelMethod.getExpressionString());
 			}
 		}
 
@@ -725,6 +755,8 @@ public class TreeTag extends AbstractInputTag implements Tag {
 	public void release() {
 		caption = null;
 		headingLevel = null;
+		outlinedLabel = null;
+		outlinedLabelMethod = null;
 		doubleClickListeners = null;
 		required = null;
 		horizontalScrollPosition = null;

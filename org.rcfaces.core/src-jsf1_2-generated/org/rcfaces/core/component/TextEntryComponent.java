@@ -319,9 +319,9 @@ public class TextEntryComponent extends AbstractInputComponent implements
 
 	public void setClientValidator(String clientValidator) {
 
-
+			
 				engine.setProperty(Properties.CLIENT_VALIDATOR, clientValidator);
-				
+
 				ClientValidatorTools.setClientValidator(null, this);
 			
 	}
@@ -457,17 +457,17 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		return getFacesListeners(javax.faces.event.ValueChangeListener.class);
 	}
 
-	public IMenuComponent getMenu(String menuId) {
-
-
-		return MenuTools.getMenu(this, menuId);
-		
-	}
-
 	public IMenuComponent getMenu() {
 
 
 		return MenuTools.getMenu(this);
+		
+	}
+
+	public IMenuComponent getMenu(String menuId) {
+
+
+		return MenuTools.getMenu(this, menuId);
 		
 	}
 

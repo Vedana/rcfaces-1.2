@@ -86,7 +86,7 @@ public class TabbedPaneComponent extends CardBoxComponent implements
 	public ITabIterator listTabs() {
 
 
-				return TabbedPaneTools.listTabs(this);				
+				return TabbedPaneTools.listTabs(this);
 			
 	}
 

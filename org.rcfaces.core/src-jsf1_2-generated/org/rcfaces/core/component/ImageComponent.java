@@ -90,9 +90,9 @@ public class ImageComponent extends AbstractOutputComponent implements
 
 				Object value=getLocalValue();
 				if (value==null) {
-					value=getValueExpression(Properties.VALUE);
+				value=getValueExpression(Properties.VALUE);
 				}
-			
+
 				return ImageAccessorTools.createImageAccessor(facesContext, value);
 			
 	}

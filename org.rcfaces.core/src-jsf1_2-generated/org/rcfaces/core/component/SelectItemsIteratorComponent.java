@@ -1,5 +1,7 @@
 package org.rcfaces.core.component;
 
+import org.rcfaces.core.internal.tools.SelectItemsIteratorTools
+			;
 import org.rcfaces.core.internal.component.CameliaItemsComponent;
 import org.rcfaces.core.internal.component.Properties;
 import java.lang.Object;
@@ -9,7 +11,6 @@ import org.rcfaces.core.internal.manager.IClientDataManager;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.internal.manager.IServerDataManager;
-import org.rcfaces.core.internal.tools.SelectItemsIteratorTools;
 import javax.faces.FacesException;
 import javax.el.ValueExpression;
 import java.util.HashSet;
@@ -77,36 +78,36 @@ public class SelectItemsIteratorComponent extends CameliaItemsComponent implemen
 
 	public void setValue(Object value) {
 
-
-			throw new FacesException("Can not set value of 'SelectItemsIterator', use 'items' attribute to set the collection.");
+			
+				throw new FacesException("Can not set value of 'SelectItemsIterator', use 'items' attribute to set the collection.");
 			
 	}
 
 	public Object getValue() {
 
 
-			return getValue(null);
+				return getValue(null);
 			
 	}
 
 	public Object getValue(FacesContext context) {
 
 
-			return SelectItemsIteratorTools.getValue(this, context);
+				return SelectItemsIteratorTools.getValue(this, context);
 			
 	}
 
 	public IDataMapAccessor getClientMapAccessor(FacesContext context) {
 
 
-			return engine.getDataMapAccessor(context, "clientData", false);
+				return engine.getDataMapAccessor(context, "clientData", false);
 			
 	}
 
 	public IDataMapAccessor getServerMapAccessor(FacesContext context) {
 
 
-			return engine.getDataMapAccessor(context, "serverData", false);
+				return engine.getDataMapAccessor(context, "serverData", false);
 			
 	}
 

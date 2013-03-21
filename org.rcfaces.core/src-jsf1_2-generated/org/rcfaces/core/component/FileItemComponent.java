@@ -23,14 +23,14 @@ public abstract class FileItemComponent extends CameliaItemComponent {
 	public void setSrc(String src) {
 
 
-			setItemValue(src);
+				setItemValue(src);
 			
 	}
 
 	public String getSrc() {
 
 
-			return (String)getItemValue();
+				return (String)getItemValue();
 			
 	}
 

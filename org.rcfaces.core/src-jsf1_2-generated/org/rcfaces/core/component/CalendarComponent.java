@@ -1,7 +1,6 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.converter.CalendarModeConverter;
 import org.rcfaces.core.internal.converter.CalendarLayoutConverter;
 import java.lang.String;
 import org.apache.commons.logging.LogFactory;
@@ -15,6 +14,8 @@ import java.util.HashSet;
 import org.apache.commons.logging.Log;
 import java.util.Set;
 import java.util.Arrays;
+import org.rcfaces.core.internal.converter.CalendarModeConverter
+			;
 
 /**
  * <p>The calendar Component shows a calendar. It can be customized in differents ways (days off, holidays, tool tips ...).</p>
@@ -92,8 +93,8 @@ public class CalendarComponent extends AbstractCalendarComponent implements
 
 	public void setMode(String calendarMode) {
 
-
-			setMode(((Integer)CalendarModeConverter.SINGLETON.getAsObject(null, this, calendarMode)).intValue());
+			
+				setMode(((Integer)CalendarModeConverter.SINGLETON.getAsObject(null, this, calendarMode)).intValue());
 			
 	}
 

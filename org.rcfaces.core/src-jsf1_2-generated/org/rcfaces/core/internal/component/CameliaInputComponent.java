@@ -690,19 +690,19 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 
 
 				if (!Constants.MYFACES_INPUT_BROADCAST_BUG) {
-					super.broadcast(event);
-					return;
+				super.broadcast(event);
+				return;
 				}
-				
+
 				// Bug #1647203
-				if (event instanceof ValueChangeEvent) {				
-					super.broadcast(event);
-					return;
+				if (event instanceof ValueChangeEvent) {
+				super.broadcast(event);
+				return;
 				}
-				
+
 				FacesListener listeners[]=getFacesListeners(FacesListener.class);
 				ComponentTools.broadcast(this, event, listeners);
-				
+
 			
 	}
 
@@ -710,22 +710,22 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 
 
 				Object value=super.getLocalValue();
-				
+
 				if (NULL_VALUE.equals(value)) {
-					value=null;
+				value=null;
 				}
-				
+
 				return value;
 			
 	}
 
 	protected Object getConvertedValue(FacesContext context, Object submittedValue) {
 
-				
+
 				if (NULL_VALUE.equals(submittedValue)) {
-					submittedValue=null;
+				submittedValue=null;
 				}
-				
+
 				return super.getConvertedValue(context, submittedValue);
 			
 	}
@@ -734,11 +734,11 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 
 
 				Object value=super.getSubmittedValue();
-				
+
 				if (NULL_VALUE.equals(value)) {
-					value=null;
+				value=null;
 				}
-				
+
 				return value;
 			
 	}
@@ -747,9 +747,9 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 
 
 				if (submittedValue==null) {
-					submittedValue=NULL_VALUE;
+				submittedValue=NULL_VALUE;
 				}
-				
+
 				super.setSubmittedValue(submittedValue);
 			
 	}
@@ -758,11 +758,11 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 
 
 				Object value=super.getSubmittedValue();
-				
+
 				if (NULL_VALUE.equals(value)) {
-					return true;
+				return true;
 				}
-				
+
 				return value!=null;
 			
 	}
@@ -771,11 +771,11 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 
 
 				Object value=super.getValue();
-				
+
 				if (NULL_VALUE.equals(value)) {
-					value=null;
+				value=null;
 				}
-				
+
 				return value;
 			
 	}

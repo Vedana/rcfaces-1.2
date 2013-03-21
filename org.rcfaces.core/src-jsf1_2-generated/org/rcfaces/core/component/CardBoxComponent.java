@@ -112,7 +112,7 @@ public class CardBoxComponent extends AbstractInputComponent implements
 	public void select(CardComponent card) {
 
 
-			CardBoxTools.selectCard(this, card);
+				CardBoxTools.selectCard(this, card);
 			
 	}
 

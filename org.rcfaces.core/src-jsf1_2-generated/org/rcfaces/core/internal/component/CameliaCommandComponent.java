@@ -663,15 +663,16 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
 	
 	public void broadcast(FacesEvent event) {
 
-				
+
 				if (event instanceof ActionEvent) {
-					// Traitement local, sinon l'actionEvent est traité 2 fois !
-					
-					FacesListener listeners[]=getFacesListeners(FacesListener.class);
-					ComponentTools.broadcastCommand(this, (ActionEvent)event, listeners);
-					return;
+				// Traitement local, sinon l'actionEvent est traité 2 fois !
+
+				FacesListener listeners[]=getFacesListeners(FacesListener.class);
+				ComponentTools.broadcastCommand(this, (ActionEvent)event,
+				listeners);
+				return;
 				}
-				
+
 				super.broadcast(event);
 			
 	}

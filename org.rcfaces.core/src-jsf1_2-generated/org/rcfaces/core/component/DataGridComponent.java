@@ -24,6 +24,8 @@ import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import org.rcfaces.core.component.capability.IRowToolTipIdCapability;
 import org.rcfaces.core.component.capability.ISortedChildrenCapability;
 import org.rcfaces.core.component.capability.IDroppableCapability;
+import org.rcfaces.core.internal.tools.AdditionalInformationTools
+			;
 import org.rcfaces.core.internal.converter.CheckCardinalityConverter;
 import org.rcfaces.core.component.capability.IGridCaptionCapability;
 import org.rcfaces.core.internal.capability.IAdditionalInformationRangeComponent;
@@ -33,7 +35,6 @@ import org.rcfaces.core.internal.tools.CriteriaTools;
 import org.rcfaces.core.component.capability.IScrollableCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.model.ISortedComponent;
-import org.rcfaces.core.internal.tools.AdditionalInformationTools;
 import java.lang.Object;
 import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import org.rcfaces.core.internal.tools.OrderTools;
@@ -260,28 +261,32 @@ public class DataGridComponent extends AbstractDataComponent implements
 	public UIComponent[] getSortedChildren() {
 
 
-				return SortTools.getSortedChildren(null, this, engine, DataColumnComponent.class);
+				return SortTools.getSortedChildren(null, this, engine,
+				DataColumnComponent.class);
 			
 	}
 
 	public void setSortedChildren(UIComponent[] components) {
 
 
-				SortTools.setSortedChildren(null, this, engine, DataColumnComponent.class, components);
+				SortTools.setSortedChildren(null, this, engine,
+				DataColumnComponent.class, components);
 			
 	}
 
 	public void setOrderedChildren(UIComponent[] components) {
 
 
-				OrderTools.setOrderedChildren(null, this, engine, DataColumnComponent.class, components);
+				OrderTools.setOrderedChildren(null, this, engine,
+				DataColumnComponent.class, components);
 			
 	}
 
 	public UIComponent[] getOrderedChildren() {
 
 
-				return OrderTools.getOrderedChildren(null, this, engine, DataColumnComponent.class);
+				return OrderTools.getOrderedChildren(null, this, engine,
+				DataColumnComponent.class);
 			
 	}
 
@@ -351,7 +356,8 @@ public class DataGridComponent extends AbstractDataComponent implements
 	public IColumnIterator listColumns() {
 
 
-				return GridTools.listColumns(this, org.rcfaces.core.component.DataColumnComponent.class);
+				return GridTools.listColumns(this,
+				org.rcfaces.core.component.DataColumnComponent.class);
 			
 	}
 
@@ -365,7 +371,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 	public IAdditionalInformationIterator listAdditionalInformations() {
 
 
-			return AdditionalInformationTools.listAdditionalInformations(this);
+				return AdditionalInformationTools.listAdditionalInformations(this);
 			
 	}
 
@@ -393,14 +399,16 @@ public class DataGridComponent extends AbstractDataComponent implements
 	public Object getFirstSelectedValue() {
 
 
-				return SelectionTools.getFirst(getSelectedValues(), getValue());
+				return SelectionTools.getFirst(getSelectedValues(),
+				getValue());
 			
 	}
 
 	public Object[] listSelectedValues() {
 
 
-				return SelectionTools.listValues(getSelectedValues(), getValue());
+				return SelectionTools.listValues(getSelectedValues(),
+				getValue());
 			
 	}
 
@@ -504,49 +512,58 @@ public class DataGridComponent extends AbstractDataComponent implements
 	public int getAdditionalInformationValuesCount() {
 
 
-				return AdditionalInformationTools.getCount(getAdditionalInformationValues());
+				return
+				AdditionalInformationTools.getCount(getAdditionalInformationValues());
 			
 	}
 
 	public Object getFirstAdditionalInformationValue() {
 
 
-				return AdditionalInformationTools.getFirst(getAdditionalInformationValues(), null);
+				return
+				AdditionalInformationTools.getFirst(getAdditionalInformationValues(),
+				null);
 			
 	}
 
 	public Object getAdditionalInformationValues(FacesContext facesContext) {
 
 
-				return engine.getValue(Properties.ADDITIONAL_INFORMATION_VALUES, facesContext);
+				return
+				engine.getValue(Properties.ADDITIONAL_INFORMATION_VALUES,
+				facesContext);
 			
 	}
 
 	public Object[] listAdditionalInformationValues() {
 
 
-				return AdditionalInformationTools.listValues(getAdditionalInformationValues(), getValue());
+				return
+				AdditionalInformationTools.listValues(getAdditionalInformationValues(),
+				getValue());
 			
 	}
 
 	public ICriteriaContainer[] listCriteriaContainers() {
 
 
-			return CriteriaTools.listCriteriaContainers(null, this);
+				return CriteriaTools.listCriteriaContainers(null, this);
 			
 	}
 
 	public ICriteriaContainer[] listSelectedCriteriaContainers() {
 
 
-				return CriteriaTools.getSelectedCriteriaColumns(null, this, engine, Properties.SELECTED_CRITERIA_COLUMNS);
+				return CriteriaTools.getSelectedCriteriaColumns(null, this,
+				engine, Properties.SELECTED_CRITERIA_COLUMNS);
 			
 	}
 
 	public void setSelectedCriteriaContainers(ICriteriaContainer[] components) {
 
 
-				CriteriaTools.setSelectedCriteriaColumns(null, this, engine, components, Properties.SELECTED_CRITERIA_COLUMNS);
+				CriteriaTools.setSelectedCriteriaColumns(null, this, engine,
+				components, Properties.SELECTED_CRITERIA_COLUMNS);
 			
 	}
 
@@ -574,14 +591,17 @@ public class DataGridComponent extends AbstractDataComponent implements
 	public DataColumnComponent getFirstSortedColumn() {
 
 
-				return (DataColumnComponent)SortTools.getFirstSortedChild(null, this, engine, DataColumnComponent.class );
+				return (DataColumnComponent)SortTools.getFirstSortedChild(null,
+				this, engine, DataColumnComponent.class );
 			
 	}
 
 	public void setSortedColumn(DataColumnComponent dataColumn) {
 
 
-				SortTools.setSortedChildren(null, this, engine, DataColumnComponent.class, new DataColumnComponent[] { dataColumn });
+				SortTools.setSortedChildren(null, this, engine,
+				DataColumnComponent.class, new DataColumnComponent[] { dataColumn
+				});
 			
 	}
 
@@ -798,11 +818,12 @@ public class DataGridComponent extends AbstractDataComponent implements
 	public Object getCursorValue(FacesContext facesContext) {
 
 
-				Object cursorValue=engine.getValue(Properties.CURSOR_VALUE, facesContext);
+				Object cursorValue=engine.getValue(Properties.CURSOR_VALUE,
+				facesContext);
 				if (cursorValue!=null) {
-					return cursorValue;
+				return cursorValue;
 				}
-				
+
 				return ComponentTools.getCursorValue(getValue(), this, facesContext);
 			
 	}
@@ -1408,17 +1429,17 @@ public class DataGridComponent extends AbstractDataComponent implements
 		engine.setProperty(Properties.DISABLED, disabled);
 	}
 
-	public IMenuComponent getMenu(String menuId) {
-
-
-		return MenuTools.getMenu(this, menuId);
-		
-	}
-
 	public IMenuComponent getMenu() {
 
 
 		return MenuTools.getMenu(this);
+		
+	}
+
+	public IMenuComponent getMenu(String menuId) {
+
+
+		return MenuTools.getMenu(this, menuId);
 		
 	}
 

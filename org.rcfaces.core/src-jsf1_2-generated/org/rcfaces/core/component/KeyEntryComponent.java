@@ -135,7 +135,7 @@ public class KeyEntryComponent extends AbstractGridComponent implements
 	public IColumnIterator listColumns() {
 
 
-			return GridTools.listColumns(this, javax.faces.component.UIColumn.class);
+				return GridTools.listColumns(this, javax.faces.component.UIColumn.class);
 			
 	}
 

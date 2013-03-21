@@ -33,6 +33,7 @@ import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.capability.IDraggableCapability;
 import org.rcfaces.core.component.capability.IClientSelectionFullStateCapability;
 import org.rcfaces.core.component.capability.IShowValueCapability;
+import org.rcfaces.core.component.capability.IOutlinedLabelCapability;
 import org.rcfaces.core.component.capability.IDropCompleteEventCapability;
 import org.rcfaces.core.component.capability.IFilterCapability;
 import java.util.Arrays;
@@ -146,6 +147,7 @@ import org.rcfaces.core.component.AbstractInputComponent;
 public class TreeComponent extends AbstractInputComponent implements 
 	ICaptionCapability,
 	IHeadingLevelCapability,
+	IOutlinedLabelCapability,
 	IDoubleClickEventCapability,
 	IRequiredCapability,
 	IScrollableCapability,
@@ -186,7 +188,7 @@ public class TreeComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"dragListener","dropListener","dropEffects","schrodingerCheckable","overStyleClass","loadListener","checkedValues","selectionListener","defaultLeafImageURL","cursorValue","required","border","preSelectionListener","bodyDroppable","defaultCollapsedImageURL","defaultDisabledImageURL","expandListener","doubleClickListener","clientCheckFullState","horizontalScrollPosition","dropCompleteListener","dropTypes","expandedValues","hideRootExpandSign","defaultExpandedLeafImageURL","expandable","checkListener","preloadedLevelDepth","droppable","selectionCardinality","dragTypes","defaultDisabledLeafImageURL","checkable","checkCardinality","showValue","verticalScrollPosition","defaultSelectedLeafImageURL","clientSelectionFullState","headingLevel","filterProperties","defaultExpandedImageURL","defaultImageURL","dragEffects","caption","selectedValues","expansionUseValue","readOnly","selectable","defaultSelectedImageURL","draggable"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"dragListener","dropListener","dropEffects","schrodingerCheckable","outlinedLabel","overStyleClass","loadListener","checkedValues","selectionListener","defaultLeafImageURL","cursorValue","required","border","preSelectionListener","bodyDroppable","defaultCollapsedImageURL","defaultDisabledImageURL","expandListener","doubleClickListener","clientCheckFullState","horizontalScrollPosition","dropCompleteListener","dropTypes","expandedValues","hideRootExpandSign","defaultExpandedLeafImageURL","expandable","checkListener","preloadedLevelDepth","droppable","selectionCardinality","dragTypes","defaultDisabledLeafImageURL","checkable","checkCardinality","showValue","verticalScrollPosition","defaultSelectedLeafImageURL","clientSelectionFullState","filterProperties","headingLevel","defaultExpandedImageURL","defaultImageURL","dragEffects","outlinedLabelMethod","caption","selectedValues","expansionUseValue","readOnly","selectable","defaultSelectedImageURL","draggable"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="value";
 
@@ -274,7 +276,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	public void removeAllTreeNodes() {
 
 
-			ComponentIterators.removeAll(this, UISelectItem.class);
+				ComponentIterators.removeAll(this, UISelectItem.class);
 			
 	}
 
@@ -399,14 +401,14 @@ public class TreeComponent extends AbstractInputComponent implements
 
 	public Object getCursorValue(FacesContext facesContext) {
 
-
+			
 				if (engine.isPropertySetted(Properties.CURSOR_VALUE)) {
 					return engine.getValue(Properties.CURSOR_VALUE, facesContext);
 				}
-				
+
 				Object cursorValue=ComponentTools.getCursorValue(getValue(), this, facesContext);
-								
-				return cursorValue;				
+
+				return cursorValue;
 			
 	}
 
@@ -552,6 +554,52 @@ public class TreeComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.HEADING_LEVEL, headingLevel);
 	}
 
+	public java.lang.String getOutlinedLabel() {
+		return getOutlinedLabel(null);
+	}
+
+	/**
+	 * See {@link #getOutlinedLabel() getOutlinedLabel()} for more details
+	 */
+	public java.lang.String getOutlinedLabel(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.OUTLINED_LABEL, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "outlinedLabel" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isOutlinedLabelSetted() {
+		return engine.isPropertySetted(Properties.OUTLINED_LABEL);
+	}
+
+	public void setOutlinedLabel(java.lang.String outlinedLabel) {
+		engine.setProperty(Properties.OUTLINED_LABEL, outlinedLabel);
+	}
+
+	public java.lang.String getOutlinedLabelMethod() {
+		return getOutlinedLabelMethod(null);
+	}
+
+	/**
+	 * See {@link #getOutlinedLabelMethod() getOutlinedLabelMethod()} for more details
+	 */
+	public java.lang.String getOutlinedLabelMethod(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.OUTLINED_LABEL_METHOD, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "outlinedLabelMethod" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isOutlinedLabelMethodSetted() {
+		return engine.isPropertySetted(Properties.OUTLINED_LABEL_METHOD);
+	}
+
+	public void setOutlinedLabelMethod(java.lang.String outlinedLabelMethod) {
+		engine.setProperty(Properties.OUTLINED_LABEL_METHOD, outlinedLabelMethod);
+	}
+
 	public final void addDoubleClickListener(org.rcfaces.core.event.IDoubleClickListener listener) {
 		addFacesListener(listener);
 	}
@@ -656,17 +704,17 @@ public class TreeComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
-	public IMenuComponent getMenu(String menuId) {
-
-
-		return MenuTools.getMenu(this, menuId);
-		
-	}
-
 	public IMenuComponent getMenu() {
 
 
 		return MenuTools.getMenu(this);
+		
+	}
+
+	public IMenuComponent getMenu(String menuId) {
+
+
+		return MenuTools.getMenu(this, menuId);
 		
 	}
 

@@ -51,32 +51,32 @@ public class CriteriaComponent extends CameliaBaseComponent implements
 
 	public void setCriteriaConverter(String converterId) {
 
-			
+
 				setCriteriaConverter(converterId, null);
 			
 	}
 
 	public void setCriteriaConverter(String converterId, FacesContext facesContext) {
 
-
+			
 				Converter converter=ComponentTools.createConverter(facesContext, converterId);
-	
+
 				setCriteriaConverter(converter);
 			
 	}
 
 	public void setLabelConverter(String converterId) {
 
-			
+
 				setLabelConverter(converterId, null);
 			
 	}
 
 	public void setLabelConverter(String converterId, FacesContext facesContext) {
 
-
+			
 				Converter converter=ComponentTools.createConverter(facesContext, converterId);
-	
+
 				setLabelConverter(converter);
 			
 	}

@@ -23,11 +23,12 @@ import java.util.Date;
 import org.rcfaces.core.component.capability.ITabIndexCapability;
 import org.rcfaces.core.component.capability.IHeightCapability;
 import org.rcfaces.core.lang.Time;
+import org.rcfaces.core.internal.converter.LiteralTimeConverter
+			;
 import javax.el.ValueExpression;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.ILiteralTimeZoneCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
-import org.rcfaces.core.internal.converter.LiteralTimeConverter;
 import java.util.Arrays;
 
 /**
@@ -116,14 +117,16 @@ public class SchedulerComponent extends CameliaBaseComponent implements
 	public void setHourBegin(String time) {
 
 
-				Time timeValue=(Time)LiteralTimeConverter.SINGLETON.getAsObject(null, this, time);
+				Time
+				timeValue=(Time)LiteralTimeConverter.SINGLETON.getAsObject(null,
+				this, time);
 				setHourBegin(timeValue);
 			
 	}
 
 	public void setHourEnd(String time) {
 
-
+			
 				Time timeValue=(Time)LiteralTimeConverter.SINGLETON.getAsObject(null, this, time);
 				setHourEnd(timeValue);
 			
@@ -183,14 +186,14 @@ public class SchedulerComponent extends CameliaBaseComponent implements
 
 	public List getSchedulerColumn() {
 
-
+			
 				return ComponentIterators.list(this, SchedulerColumnComponent.class);
 			
 	}
 
 	public List getPeriodClientData() {
 
-
+			
 				return ComponentIterators.list(this, PeriodClientDataComponent.class);
 			
 	}

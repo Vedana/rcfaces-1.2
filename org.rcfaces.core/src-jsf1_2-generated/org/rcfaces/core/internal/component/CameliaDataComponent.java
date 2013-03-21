@@ -666,10 +666,11 @@ public abstract class CameliaDataComponent extends org.rcfaces.core.internal.com
 				return getDataModel();
 				/*
 				Object value=getValue();
-				if (value instanceof DataModel) {
-					return (DataModel)value;
+				if (value
+				instanceof DataModel) {
+				return (DataModel)value;
 				}
-				
+
 				return null; */
 			
 	}

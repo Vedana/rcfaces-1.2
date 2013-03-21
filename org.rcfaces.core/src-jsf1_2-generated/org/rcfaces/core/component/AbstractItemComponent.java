@@ -81,14 +81,14 @@ public abstract class AbstractItemComponent extends CameliaItemComponent impleme
 	public void setDisabled(boolean disabled) {
 
 
-			setItemDisabled(disabled);
+				setItemDisabled(disabled);
 			
 	}
 
 	public boolean isDisabled() {
 
 
-			return isItemDisabled();
+				return isItemDisabled();
 			
 	}
 
@@ -186,10 +186,10 @@ public abstract class AbstractItemComponent extends CameliaItemComponent impleme
 	public void setValueExpression(String name, ValueExpression binding) {
 
 
-			if(name.equals(Properties.DISABLED)){
+				if(name.equals(Properties.DISABLED)){
 				name = Properties.ITEM_DISABLED;
-			}
-			super.setValueExpression(name, binding);
+				}
+				super.setValueExpression(name, binding);
 			
 	}
 

@@ -698,17 +698,17 @@ public class DataColumnComponent extends CameliaValueColumnComponent implements
 		engine.setProperty(Properties.MENU_POPUP_ID, menuPopupId);
 	}
 
-	public IMenuComponent getMenu(String menuId) {
-
-
-		return MenuTools.getMenu(this, menuId);
-		
-	}
-
 	public IMenuComponent getMenu() {
 
 
 		return MenuTools.getMenu(this);
+		
+	}
+
+	public IMenuComponent getMenu(String menuId) {
+
+
+		return MenuTools.getMenu(this, menuId);
 		
 	}
 

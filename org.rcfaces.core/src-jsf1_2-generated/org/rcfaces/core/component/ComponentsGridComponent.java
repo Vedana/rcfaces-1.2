@@ -15,13 +15,14 @@ import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.capability.IRowToolTipIdCapability;
 import org.rcfaces.core.component.capability.ISortedChildrenCapability;
+import org.rcfaces.core.internal.tools.AdditionalInformationTools
+			;
 import org.rcfaces.core.component.capability.IGridCaptionCapability;
 import org.rcfaces.core.internal.capability.IAdditionalInformationRangeComponent;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.component.capability.IScrollableCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.model.ISortedComponent;
-import org.rcfaces.core.internal.tools.AdditionalInformationTools;
 import java.lang.Object;
 import org.rcfaces.core.internal.tools.OrderTools;
 import org.rcfaces.core.component.iterator.IColumnIterator;
@@ -168,28 +169,32 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	public UIComponent[] getSortedChildren() {
 
 
-				return SortTools.getSortedChildren(null, this, engine, ComponentsColumnComponent.class);
+				return SortTools.getSortedChildren(null, this, engine,
+				ComponentsColumnComponent.class);
 			
 	}
 
 	public void setSortedChildren(UIComponent[] components) {
 
 
-				SortTools.setSortedChildren(null, this, engine, ComponentsColumnComponent.class, components);
+				SortTools.setSortedChildren(null, this, engine,
+				ComponentsColumnComponent.class, components);
 			
 	}
 
 	public void setOrderedChildren(UIComponent[] components) {
 
 
-				OrderTools.setOrderedChildren(null, this, engine, ComponentsColumnComponent.class, components);
+				OrderTools.setOrderedChildren(null, this, engine,
+				ComponentsColumnComponent.class, components);
 			
 	}
 
 	public UIComponent[] getOrderedChildren() {
 
 
-				return OrderTools.getOrderedChildren(null, this, engine, ComponentsColumnComponent.class);
+				return OrderTools.getOrderedChildren(null, this, engine,
+				ComponentsColumnComponent.class);
 			
 	}
 
@@ -203,14 +208,14 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	public IColumnIterator listColumns() {
 
 
-			return GridTools.listColumns(this, ComponentsColumnComponent.class);
+				return GridTools.listColumns(this, ComponentsColumnComponent.class);
 			
 	}
 
 	public IAdditionalInformationIterator listAdditionalInformations() {
 
 
-			return AdditionalInformationTools.listAdditionalInformations(this);
+				return AdditionalInformationTools.listAdditionalInformations(this);
 			
 	}
 
@@ -254,14 +259,16 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	public Object getFirstSelectedValue() {
 
 
-				return SelectionTools.getFirst(getSelectedValues(), getValue());
+				return SelectionTools.getFirst(getSelectedValues(),
+				getValue());
 			
 	}
 
 	public Object[] listSelectedValues() {
 
 
-				return SelectionTools.listValues(getSelectedValues(), getValue());
+				return SelectionTools.listValues(getSelectedValues(),
+				getValue());
 			
 	}
 
@@ -306,28 +313,35 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	public int getAdditionalInformationValuesCount() {
 
 
-				return AdditionalInformationTools.getCount(getAdditionalInformationValues());
+				return
+				AdditionalInformationTools.getCount(getAdditionalInformationValues());
 			
 	}
 
 	public Object getFirstAdditionalInformationValue() {
 
 
-				return AdditionalInformationTools.getFirst(getAdditionalInformationValues(), null);
+				return
+				AdditionalInformationTools.getFirst(getAdditionalInformationValues(),
+				null);
 			
 	}
 
 	public Object getAdditionalInformationValues(FacesContext facesContext) {
 
 
-				return engine.getValue(Properties.ADDITIONAL_INFORMATION_VALUES, facesContext);
+				return
+				engine.getValue(Properties.ADDITIONAL_INFORMATION_VALUES,
+				facesContext);
 			
 	}
 
 	public Object[] listAdditionalInformationValues() {
 
 
-				return AdditionalInformationTools.listValues(getAdditionalInformationValues(), getValue());
+				return
+				AdditionalInformationTools.listValues(getAdditionalInformationValues(),
+				getValue());
 			
 	}
 
@@ -341,14 +355,18 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	public ComponentsColumnComponent getFirstSortedColumn() {
 
 
-				return (ComponentsColumnComponent)SortTools.getFirstSortedChild(null, this, engine, ComponentsColumnComponent.class );
+				return
+				(ComponentsColumnComponent)SortTools.getFirstSortedChild(null, this,
+				engine, ComponentsColumnComponent.class );
 			
 	}
 
 	public void setSortedColumn(ComponentsColumnComponent componentsColumn) {
 
 
-				SortTools.setSortedChildren(null, this, engine, ComponentsColumnComponent.class, new ComponentsColumnComponent[] { componentsColumn });
+				SortTools.setSortedChildren(null, this, engine,
+				ComponentsColumnComponent.class, new ComponentsColumnComponent[] {
+				componentsColumn });
 			
 	}
 
@@ -833,17 +851,17 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 		engine.setProperty(Properties.EMPTY_DATA_MESSAGE, emptyDataMessage);
 	}
 
-	public IMenuComponent getMenu(String menuId) {
-
-
-		return MenuTools.getMenu(this, menuId);
-		
-	}
-
 	public IMenuComponent getMenu() {
 
 
 		return MenuTools.getMenu(this);
+		
+	}
+
+	public IMenuComponent getMenu(String menuId) {
+
+
+		return MenuTools.getMenu(this, menuId);
 		
 	}
 

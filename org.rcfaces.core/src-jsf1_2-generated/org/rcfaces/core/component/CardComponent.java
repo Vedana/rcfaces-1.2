@@ -16,6 +16,8 @@ import org.rcfaces.core.component.CardBoxComponent;
 import org.rcfaces.core.component.AbstractOutputComponent;
 import java.util.Set;
 import java.util.Arrays;
+import org.rcfaces.core.component.capability.IAsyncDecodeModeCapability
+			;
 import org.rcfaces.core.internal.capability.IVariableScopeCapability;
 import org.rcfaces.core.component.capability.IAsyncDecodeModeCapability;
 import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
@@ -58,16 +60,16 @@ public class CardComponent extends AbstractOutputComponent implements
 
 	public int getAsyncDecodeMode(FacesContext facesContext) {
 
-
-				if (engine.isPropertySetted(Properties.ASYNC_DECODE_MODE)) {			
-					return engine.getIntProperty(Properties.ASYNC_DECODE_MODE,0, facesContext);
+			
+				if (engine.isPropertySetted(Properties.ASYNC_DECODE_MODE)) {
+					return engine.getIntProperty(Properties.ASYNC_DECODE_MODE, 0, facesContext);
 				}
-				
+
 				CardBoxComponent cardBox=getCardBox();
 				if (cardBox==null) {
 					return IAsyncDecodeModeCapability.DEFAULT_ASYNC_DECODE_MODE;
 				}
-				
+
 				return cardBox.getAsyncDecodeMode(facesContext);
 			
 	}
