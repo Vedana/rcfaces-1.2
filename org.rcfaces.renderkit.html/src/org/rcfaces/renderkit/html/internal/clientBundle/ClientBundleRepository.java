@@ -23,7 +23,9 @@ import org.rcfaces.core.internal.lang.ByteBufferInputStream;
 import org.rcfaces.core.internal.lang.ByteBufferOutputStream;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.repository.AbstractContentRef;
 import org.rcfaces.core.internal.repository.AbstractRepository;
+import org.rcfaces.core.internal.repository.IContentRef;
 import org.rcfaces.core.internal.repository.IRepository;
 import org.rcfaces.core.internal.repository.LocaleCriteria;
 import org.rcfaces.core.internal.version.HashCodeTools;
@@ -49,10 +51,13 @@ class ClientBundleRepository extends AbstractRepository implements
 
     private static final boolean VERIFY_BUNDLE_KEY = true;
 
-    private final IContentProvider contentProvider = new IContentProvider() {
+    private final IContentProvider bundleContentProvider = new IContentProvider() {
 
-        public IContent getContent(Object contentReference, ICriteria criteria) {
-            String baseName = ((ResourceFile) contentReference).getFilename();
+        public IContent getContent(IContentRef contentRef) {
+            String baseName = ((ResourceContentRef) contentRef)
+                    .getResourceFile().getFilename();
+
+            ICriteria criteria = contentRef.getCriteria();
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Get resourceBundle name='" + baseName + "' locale='"
@@ -83,8 +88,8 @@ class ClientBundleRepository extends AbstractRepository implements
             return null;
         }
 
-        public Object searchCriteriaContentReference(Object contentReference,
-                ICriteria criteria) {
+        public IContentRef[] searchCriteriaContentReference(
+                IContentRef contentReference, ICriteria criteria) {
             return null;
         }
 
@@ -100,7 +105,7 @@ class ClientBundleRepository extends AbstractRepository implements
     }
 
     protected IContentProvider getDefaultContentProvider() {
-        return contentProvider;
+        return bundleContentProvider;
     }
 
     public IFile getFileByName(String name) {
@@ -155,7 +160,7 @@ class ClientBundleRepository extends AbstractRepository implements
 
         private final String baseName;
 
-        private String uri;
+        private String noCriteriaURI;
 
         private Map<ICriteria, String> localizedUris;
 
@@ -164,11 +169,11 @@ class ClientBundleRepository extends AbstractRepository implements
         }
 
         public IContentProvider getContentProvider() {
-            return contentProvider;
+            return bundleContentProvider;
         }
 
-        public Object[] getContentReferences(ICriteria criteria) {
-            return new Object[] { this };
+        public IContentRef[] getContentReferences(ICriteria criteria) {
+            return new IContentRef[] { new ResourceContentRef(criteria, this) };
         }
 
         public String getFilename() {
@@ -181,8 +186,8 @@ class ClientBundleRepository extends AbstractRepository implements
 
         public synchronized String getURI(ICriteria criteria) {
             if (criteria == null) {
-                if (uri != null) {
-                    return uri;
+                if (noCriteriaURI != null) {
+                    return noCriteriaURI;
                 }
             } else if (localizedUris != null) {
                 String luri = localizedUris.get(criteria);
@@ -220,7 +225,7 @@ class ClientBundleRepository extends AbstractRepository implements
             }
 
             if (criteria == null) {
-                uri = ret;
+                noCriteriaURI = ret;
             } else {
                 if (localizedUris == null) {
                     localizedUris = new HashMap<ICriteria, String>(4);
@@ -234,7 +239,7 @@ class ClientBundleRepository extends AbstractRepository implements
 
         private String computeHashCode(ICriteria criteria) {
             ResourceContent content = (ResourceContent) getContentProvider()
-                    .getContent(this, criteria);
+                    .getContent(new ResourceContentRef(criteria, this));
             if (content == null) {
                 LOG.error("Can not get content of client bundle '"
                         + getFilename() + "' for criteria '" + criteria + "'.");
@@ -254,6 +259,23 @@ class ClientBundleRepository extends AbstractRepository implements
         public IFile[] listDependencies() {
             return FILE_EMPTY_ARRAY;
         }
+    }
+
+    private class ResourceContentRef extends AbstractContentRef {
+
+        private final ResourceFile resourceFile;
+
+        protected ResourceContentRef(ICriteria criteria,
+                ResourceFile resourceFile) {
+            super(criteria);
+
+            this.resourceFile = resourceFile;
+        }
+
+        public ResourceFile getResourceFile() {
+            return resourceFile;
+        }
+
     }
 
     private byte[] createBuffer(ResourceBundle resourceBundle, String baseName) {
