@@ -12,8 +12,10 @@ import java.net.URL;
 
 import org.rcfaces.core.internal.lang.ByteBufferInputStream;
 import org.rcfaces.core.internal.lang.StringAppender;
+import org.rcfaces.core.internal.repository.IContentRef;
 import org.rcfaces.core.internal.repository.IRepository.IContent;
 import org.rcfaces.core.internal.repository.IRepository.ICriteria;
+import org.rcfaces.core.internal.repository.URLContentRef;
 
 /**
  * 
@@ -25,8 +27,10 @@ public class FilteredContentProvider extends URLContentProvider {
     private static final String CONTENT_DEFAULT_CHARSET = "UTF-8";
 
     @Override
-    public IContent getContent(Object contentReference, ICriteria criteria) {
-        return new FilteredURLContent((URL) contentReference, criteria);
+    public IContent getContent(IContentRef contentReference) {
+        URLContentRef urlContentRef = (URLContentRef) contentReference;
+
+        return new FilteredURLContent(urlContentRef);
     }
 
     /**
@@ -38,6 +42,10 @@ public class FilteredContentProvider extends URLContentProvider {
 
         public FilteredURLContent(URL url, ICriteria criteria) {
             super(url, criteria);
+        }
+
+        public FilteredURLContent(URLContentRef urlContentRef) {
+            super(urlContentRef);
         }
 
         @Override
