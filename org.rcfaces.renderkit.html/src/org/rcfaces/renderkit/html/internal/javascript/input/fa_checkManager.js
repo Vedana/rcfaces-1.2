@@ -331,6 +331,9 @@ var __members = {
 		}
 		
 		var elementChecked=this.fa_isElementChecked(element);
+		if (elementChecked==checked) {
+			return false;
+		}
 		var elementValue=this.fa_getElementValue(element);
 		
 		switch(cardinality) {
