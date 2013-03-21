@@ -1309,8 +1309,7 @@ var __members = {
 		
 		var waitingObject=(partialWaiting && !length)?this._pagedWaiting:this._waiting;
 
-		var url=f_env.GetViewURI();
-		var request=new f_httpRequest(this, url, f_httpRequest.JAVASCRIPT_MIME_TYPE);
+		var request=new f_httpRequest(this, f_httpRequest.JAVASCRIPT_MIME_TYPE);
 		var dataGrid=this;
 		request.f_setListener({
 			/**
@@ -2235,8 +2234,7 @@ var __members = {
 			
 			var waitingObject=undefined;
 
-			var url=f_env.GetViewURI();
-			var request=new f_httpRequest(this, url, f_httpRequest.JAVASCRIPT_MIME_TYPE);
+			var request=new f_httpRequest(this, f_httpRequest.JAVASCRIPT_MIME_TYPE);
 			var dataGrid=this;
 			var elementWait = waitingElement;
 			request.f_setListener({
