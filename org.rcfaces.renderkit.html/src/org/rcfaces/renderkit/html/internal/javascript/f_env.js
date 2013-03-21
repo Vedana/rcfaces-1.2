@@ -175,7 +175,6 @@ var __statics = {
 	/**
 	 * @method hidden static  
 	 * @return String The url of the rcfaces resources, or null if it is not defined !
-	 * @return String
 	 */
 	GetStyleSheetBase: function() {
 		if (f_env._StyleSheetBase) {

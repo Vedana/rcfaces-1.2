@@ -59,7 +59,7 @@ var __members = {
 	 * @return void
 	 */
 	fa_updateReadOnly: f_class.ABSTRACT
-}
+};
 
 new f_aspect("fa_readOnly", {
 	members: __members

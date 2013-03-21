@@ -3,7 +3,6 @@
  * 
  * @class f_scheduler extends f_component, fa_items, fa_selectionManager
  * @author jb.meslin@vedana.com
- * @version $Revision: 1.0
  */
 var __statics = {
 	/**
@@ -299,7 +298,7 @@ var __members = {
 	fa_updateElementStyle: function(divNode) {
 		var period = divNode._period;
 		var style = f_scheduler._PERIOD_STYLE;
-		var periodStyle;
+		var periodStyle=undefined;
 		if (period._periodStyle){
 			periodStyle  = period._periodStyle;
 		}
@@ -410,8 +409,7 @@ var __members = {
 		
 		this.f_super(arguments, type, target);
 	}
-
-}
+};
 
 new f_class("f_scheduler", {
 	extend : f_component,

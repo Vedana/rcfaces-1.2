@@ -45,9 +45,14 @@ var __statics = {
 	 * @field public static final Number
 	 */
 	AS_SEPARATOR: 64
-}
+};
 
 var __members = {
+		
+	/**
+	 * @field protected Object[]
+	 */
+	_items: undefined,
 
 	fa_items: function() {
 	},
@@ -739,6 +744,7 @@ var __members = {
 	
 	/**
 	 * @method abstract protected
+	 * @param Array items
 	 * @return void
 	 */
 	fa_destroyItems: f_class.ABSTRACT,
@@ -754,7 +760,7 @@ var __members = {
 	 * @return void
 	 */
 	fa_componentUpdated: f_class.OPTIONAL_ABSTRACT
-}
+};
 
 new f_aspect("fa_items", {
 	extend: [ fa_itemClientDatas ],
