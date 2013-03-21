@@ -583,11 +583,11 @@ var __members = {
 
 			if (!f_core.GetAttributeNS(this,"message")) {				
 
-				this.setAttribute(f_core._VNS+":message", resourceBundle.f_get("MESSAGE"));
-				this.setAttribute(f_core._VNS+":zeroResultMessage", resourceBundle.f_get("ZERO_RESULT_MESSAGE"));			
-				this.setAttribute(f_core._VNS+":oneResultMessage", resourceBundle.f_get("ONE_RESULT_MESSAGE"));			
-				this.setAttribute(f_core._VNS+":manyResultMessage", resourceBundle.f_get("MANY_RESULTS_MESSAGE"));			
-				this.setAttribute(f_core._VNS+":manyResultMessage2", resourceBundle.f_get("MANY_RESULTS_MESSAGE2"));			
+				f_core.SetAttributeNS(this, "message", resourceBundle.f_get("MESSAGE"));
+				f_core.SetAttributeNS(this, "zeroResultMessage", resourceBundle.f_get("ZERO_RESULT_MESSAGE"));			
+				f_core.SetAttributeNS(this, "oneResultMessage", resourceBundle.f_get("ONE_RESULT_MESSAGE"));			
+				f_core.SetAttributeNS(this, "manyResultMessage", resourceBundle.f_get("MANY_RESULTS_MESSAGE"));			
+				f_core.SetAttributeNS(this, "manyResultMessage2", resourceBundle.f_get("MANY_RESULTS_MESSAGE2"));			
 			}			
 			
 			td=f_core.CreateElement(tBodyContainer, "tr", { 
