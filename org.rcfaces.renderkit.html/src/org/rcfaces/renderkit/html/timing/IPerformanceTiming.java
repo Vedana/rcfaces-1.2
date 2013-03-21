@@ -30,6 +30,8 @@ public interface IPerformanceTiming {
 
     String getDestinationTarget();
 
+    long getEventStart();
+
     long getNavigationStart();
 
     long getUnloadEventStart();

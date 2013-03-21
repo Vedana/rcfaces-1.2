@@ -9,6 +9,8 @@ class PerformanceTiming implements IPerformanceTiming {
     private static final DateFormat dateFormat = new SimpleDateFormat(
             "yyyy-MM-dd HH:mm:ss.SSS");
 
+    private long eventStart = -1;
+
     private long navigationStart = -1;
 
     private long unloadEventStart = -1;
@@ -309,6 +311,14 @@ class PerformanceTiming implements IPerformanceTiming {
         this.loadEventEnd = loadEventEnd;
     }
 
+    public long getEventStart() {
+        return eventStart;
+    }
+
+    public void setEventStart(long eventStart) {
+        this.eventStart = eventStart;
+    }
+
     @Override
     public String toString() {
         String ct;
@@ -322,7 +332,8 @@ class PerformanceTiming implements IPerformanceTiming {
                 + "' sourceURL='" + sourceURL + "' sourceTarget='"
                 + sourceTarget + "' destinationURL='" + destinationURL
                 + "' destinationTarget='" + destinationTarget + "' pageType='"
-                + pageType + "' navigationStart='" + navigationStart
+                + pageType + "' eventStart='" + format(eventStart)
+                + "' navigationStart='" + navigationStart
                 + "' unloadEventStart=" + format(unloadEventStart)
                 + " unloadEventEnd=" + format(unloadEventEnd)
                 + " redirectStart=" + format(redirectStart) + " redirectEnd="
