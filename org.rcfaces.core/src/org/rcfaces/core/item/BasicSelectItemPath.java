@@ -6,6 +6,7 @@ package org.rcfaces.core.item;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Arrays;
+import java.util.Collection;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
@@ -26,6 +27,10 @@ public class BasicSelectItemPath implements ISelectItemPath {
 
     public BasicSelectItemPath(SelectItem[] segments) {
         this.segments = segments;
+    }
+
+    public BasicSelectItemPath(Collection<SelectItem> segments) {
+        this(segments.toArray(new SelectItem[segments.size()]));
     }
 
     public SelectItem[] segments() {
