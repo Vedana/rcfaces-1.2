@@ -4,6 +4,7 @@
 package org.rcfaces.renderkit.html.internal.renderer;
 
 import java.lang.reflect.Array;
+import java.util.EnumSet;
 import java.util.Set;
 
 import javax.faces.FacesException;
@@ -17,6 +18,7 @@ import org.rcfaces.core.component.TreeComponent;
 import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
 import org.rcfaces.core.component.capability.IClientFullStateCapability;
 import org.rcfaces.core.component.capability.IDragAndDropEffects;
+import org.rcfaces.core.component.capability.IOutlinedLabelCapability;
 import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
 import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.event.PropertyChangeEvent;
@@ -31,22 +33,24 @@ import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentWriter;
+import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.agent.IClientBrowser;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.ISelectItemNodeWriter;
 import org.rcfaces.renderkit.html.internal.decorator.SubMenuDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.TreeDecorator;
 import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 import org.rcfaces.renderkit.html.internal.util.HeadingTools;
+import org.rcfaces.renderkit.html.internal.util.OutlinedLabelTools;
 
 /**
  * 
- * @author Olivier Oeuillot (latest modification by $Author$)
- * @version $Revision$ $Date$
+ * @author Olivier Oeuillot
  */
 public class TreeRenderer extends AbstractSelectItemsRenderer {
 
@@ -58,6 +62,9 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
 
     private static final boolean LINK_TREE_NODE_FOCUS = true;
 
+    private static final String NEED_ACCENTS_API_PROPERTY = "org.rcfaces.html.NEED_ACCENTS_API";
+
+    @Override
     @SuppressWarnings("unused")
     protected void encodeBeforeDecorator(IHtmlWriter htmlWriter,
             IComponentDecorator componentDecorator) throws WriterException {
@@ -75,6 +82,14 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
+
+        if (treeComponent.isReadOnly(facesContext)) {
+            htmlWriter.writeAttributeNS("readOnly", true);
+        }
+
+        if (treeComponent.isDisabled(facesContext)) {
+            htmlWriter.writeAttributeNS("disabled", true);
+        }
 
         if (treeComponent.isCheckable(facesContext)) {
             int cardinality = treeComponent.getCheckCardinality(facesContext);
@@ -111,6 +126,39 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
                         "A schrodingerCheckable tree must be checkable !");
             }
             htmlWriter.writeAttributeNS("schrodingerCheckable", true);
+
+            String cbIndeterminate = getCheckboxInderminateImageURL(htmlWriter);
+            if (cbIndeterminate != null) {
+                htmlWriter.writeAttributeNS("cbxInd", cbIndeterminate);
+                htmlWriter.writeAttributeNS("cbxCheck",
+                        getCheckboxCheckedImageURL(htmlWriter));
+                htmlWriter.writeAttributeNS("cbxUncheck",
+                        getCheckboxUncheckedImageURL(htmlWriter));
+            }
+        }
+
+        String outlinedLabel = treeComponent.getOutlinedLabel(facesContext);
+        if (outlinedLabel != null) {
+            htmlWriter.writeAttributeNS("outlinedLabel", outlinedLabel);
+        }
+
+        String outlinedLabelMethod = treeComponent
+                .getOutlinedLabelMethod(facesContext);
+        if (outlinedLabelMethod != null && outlinedLabelMethod.length() > 0) {
+            EnumSet<IOutlinedLabelCapability.Method> outlinedLabelMethods = OutlinedLabelTools
+                    .normalize(outlinedLabelMethod);
+
+            if (outlinedLabelMethods.size() > 0) {
+                String ms = OutlinedLabelTools.format(outlinedLabelMethods);
+
+                htmlWriter.writeAttributeNS("outlinedLabelMethod", ms);
+
+                if (outlinedLabelMethods
+                        .contains(IOutlinedLabelCapability.Method.IgnoreAccents)) {
+                    htmlWriter.getComponentRenderContext().setAttribute(
+                            NEED_ACCENTS_API_PROPERTY, Boolean.TRUE);
+                }
+            }
         }
 
         if (treeComponent.isExpandable(facesContext) == false) {
@@ -289,10 +337,12 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
         htmlWriter.writeClass(className);
     }
 
+    @Override
     protected String getWAIRole() {
         return null;
     }
 
+    @Override
     protected void addUnlockProperties(Set unlockedProperties) {
         super.addUnlockProperties(unlockedProperties);
 
@@ -355,6 +405,7 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
 
     }
 
+    @Override
     protected void decode(IRequestContext context, UIComponent component,
             IComponentData componentData) {
         super.decode(context, component, componentData);
@@ -384,6 +435,7 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
         treeComponent.setShowValue(null);
     }
 
+    @Override
     protected void encodeAfterDecorator(IHtmlWriter htmlWriter,
             IComponentDecorator componentDecorator) throws WriterException {
         super.encodeAfterDecorator(htmlWriter, componentDecorator);
@@ -392,6 +444,7 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
         htmlWriter.endElement(IHtmlWriter.DIV);
     }
 
+    @Override
     public void addRequiredJavaScriptClassNames(IHtmlWriter htmlWriter,
             IJavaScriptRenderContext javaScriptRenderContext) {
         super.addRequiredJavaScriptClassNames(htmlWriter,
@@ -419,6 +472,12 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
             javaScriptRenderContext.appendRequiredClass(JavaScriptClasses.TREE,
                     "dnd");
         }
+
+        if (htmlWriter.getComponentRenderContext().getAttribute(
+                NEED_ACCENTS_API_PROPERTY) != null) {
+            javaScriptRenderContext.appendRequiredClass(JavaScriptClasses.TREE,
+                    "accents");
+        }
     }
 
     /*
@@ -427,6 +486,7 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
      * @seeorg.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#
      * getJavaScriptClassName()
      */
+    @Override
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.TREE;
     }
@@ -439,6 +499,7 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
      * (org.rcfaces.core.internal.renderkit.IWriter,
      * org.rcfaces.core.internal.renderkit.html.AbstractCssRenderer.CssWriter)
      */
+    @Override
     protected void writeCustomCss(IHtmlWriter htmlWriter, ICssWriter cssWriter) {
         super.writeCustomCss(htmlWriter, cssWriter);
 
@@ -460,6 +521,7 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
 
     }
 
+    @Override
     protected IComponentDecorator createComponentDecorator(
             FacesContext facesContext, UIComponent component) {
 
@@ -519,6 +581,7 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
         return (ISelectItemNodeWriter) getComponentDecorator(componentRenderContext);
     }
 
+    @Override
     public Object getConvertedValue(FacesContext context,
             UIComponent component, Object submittedValue)
             throws ConverterException {
@@ -575,6 +638,81 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
         return null;
     }
 
+    protected boolean isCheckboxInderminateSupported(
+            IHtmlRenderContext htmlRenderContext) {
+
+        IClientBrowser clientBrowser = htmlRenderContext
+                .getHtmlProcessContext().getClientBrowser();
+
+        if (clientBrowser == null) {
+            return false;
+        }
+
+        switch (clientBrowser.getBrowserType()) {
+        case FIREFOX:
+            if (clientBrowser.getMajorVersion() > 3) {
+                return true;
+            }
+            if (clientBrowser.getMajorVersion() == 3
+                    && clientBrowser.getMinorVersion() >= 6) {
+                return true;
+            }
+
+            break;
+
+        case CHROME:
+            return true;
+
+        case MICROSOFT_INTERNET_EXPLORER:
+            if (clientBrowser.getMajorVersion() >= 9) {
+                return true;
+            }
+            break;
+
+        case SAFARI:
+            if (clientBrowser.getMajorVersion() >= 3) {
+                return true;
+            }
+            break;
+
+        case OPERA:
+            if (clientBrowser.getMajorVersion() > 10) {
+                return true;
+            }
+            if (clientBrowser.getMajorVersion() == 10
+                    && clientBrowser.getMinorVersion() >= 60) {
+                return true;
+            }
+            break;
+
+        }
+
+        return false;
+    }
+
+    protected String getCheckboxInderminateImageURL(IHtmlWriter htmlWriter) {
+        if (isCheckboxInderminateSupported(htmlWriter
+                .getHtmlComponentRenderContext().getHtmlRenderContext())) {
+            return null;
+        }
+
+        return computeAndCacheImageURL(htmlWriter, null,
+                "button/3states_indeterminated_xp.gif");
+    }
+
+    protected String getCheckboxCheckedImageURL(IHtmlWriter htmlWriter) {
+
+        return computeAndCacheImageURL(htmlWriter, null,
+                "button/3states_checked_xp.gif");
+    }
+
+    protected String getCheckboxUncheckedImageURL(IHtmlWriter htmlWriter) {
+
+        return computeAndCacheImageURL(htmlWriter, null,
+                "button/3states_unchecked_xp.gif");
+    }
+
+    @Override
     public void declare(INamespaceConfiguration nameSpaceProperties) {
         super.declare(nameSpaceProperties);
 
