@@ -346,7 +346,7 @@ var __members = {
 		}
 	},
 	_removeAccent: function(text) {
-		if (window.f_vb.RemoveAccents) {
+		if (window.f_vb) {
 			var ret = f_vb.RemoveAccents(text);
 			
 			return ret;
