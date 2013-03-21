@@ -26,7 +26,6 @@ import javax.faces.render.Renderer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IImageCapability;
-import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
@@ -42,13 +41,13 @@ import org.rcfaces.core.item.BasicSelectItem;
 import org.rcfaces.core.item.IClientDataItem;
 import org.rcfaces.core.item.IImagesItem;
 import org.rcfaces.core.item.ISelectItem;
-import org.rcfaces.core.item.ISelectItemGroup;
 import org.rcfaces.core.lang.IAdaptable;
 import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredCollection;
 import org.rcfaces.core.model.IFiltredCollection.IFiltredIterator;
 import org.rcfaces.core.model.IFiltredCollection2;
+import org.rcfaces.core.util.SelectItemTools;
 import org.rcfaces.renderkit.html.internal.EventDecoders;
 import org.rcfaces.renderkit.html.internal.EventDecoders.IEventDecoder;
 import org.rcfaces.renderkit.html.internal.EventDecoders.IEventObjectDecoder;
@@ -469,52 +468,8 @@ public abstract class AbstractSelectItemsDecorator extends
     }
 
     protected SelectItem convertToSelectItem(Object value) {
-        if ((value == null) || (value instanceof SelectItem)) {
-            return (SelectItem) value;
-        }
-
-        if (value instanceof ISelectItem) {
-            if (value instanceof ISelectItemGroup) {
-                ISelectItemGroup selectItemGroup = (ISelectItemGroup) value;
-
-                SelectItemGroup sig = new SelectItemGroup(
-                        selectItemGroup.getLabel(),
-                        selectItemGroup.getDescription(),
-                        selectItemGroup.isDisabled(),
-                        selectItemGroup.getSelectItems());
-
-                sig.setValue(selectItemGroup.getValue());
-
-                return sig;
-            }
-
-            ISelectItem selectItem = (ISelectItem) value;
-
-            return new SelectItem(selectItem.getValue(), selectItem.getLabel(),
-                    selectItem.getDescription(), selectItem.isDisabled());
-        }
-
-        if (value instanceof IAdaptable) {
-            IAdaptable adaptable = (IAdaptable) value;
-
-            SelectItem selectItem = adaptable
-                    .getAdapter(SelectItem.class, null);
-            if (selectItem != null) {
-                return selectItem;
-            }
-        }
-
-        if (Constants.ADAPT_SELECT_ITEMS) {
-            RcfacesContext rcfacesContext = getComponentRenderContext()
-                    .getRenderContext().getProcessContext().getRcfacesContext();
-            SelectItem selectItem = rcfacesContext.getAdapterManager()
-                    .getAdapter(value, SelectItem.class, null);
-            if (selectItem != null) {
-                return selectItem;
-            }
-        }
-
-        return null;
+        return SelectItemTools.convertToSelectItem(getComponentRenderContext()
+                .getFacesContext(), value);
     }
 
     private boolean mapSelectItem(ISelectItemMapper mapper, SelectItem si) {
@@ -693,13 +648,13 @@ public abstract class AbstractSelectItemsDecorator extends
                 }
             }
 
-            Iterator it;
+            Iterator< ? > it;
             if (value instanceof IFiltredCollection2) {
-                it = ((IFiltredCollection2) value).iterator(getComponent(),
-                        filterProperties, max);
+                it = ((IFiltredCollection2< ? >) value).iterator(
+                        getComponent(), filterProperties, max);
             } else {
-                it = ((IFiltredCollection) value).iterator(filterProperties,
-                        max);
+                it = ((IFiltredCollection< ? >) value).iterator(
+                        filterProperties, max);
             }
 
             if (it != null) {
@@ -723,9 +678,8 @@ public abstract class AbstractSelectItemsDecorator extends
                         sic++;
                     }
 
-                    if (it instanceof IFiltredCollection.IFiltredIterator) {
-                        int s = ((IFiltredCollection.IFiltredIterator) it)
-                                .getSize();
+                    if (it instanceof IFiltredIterator) {
+                        int s = ((IFiltredIterator) it).getSize();
                         if (s > sic) {
                             selectItemCount += s - sic;
                         }
