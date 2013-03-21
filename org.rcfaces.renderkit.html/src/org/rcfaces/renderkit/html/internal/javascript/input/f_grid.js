@@ -5520,13 +5520,21 @@ var __members = {
 				+ scrollBody.scrollTop + " scrollBody.h="
 				+ scrollBody.clientHeight);
 
+		
+		
 		if (row.offsetTop - scrollBody.scrollTop < 0) {
+			// Bug Firefox de repositionnement de la scrollbar
+			scrollBody.scrollTop=-1;
+			scrollBody.scrollTop=99999;
 			scrollBody.scrollTop = row.offsetTop;
 
 			f_core.Debug(f_grid, "fa_showElement: set scrollTop to "
 					+ row.offsetTop);
 
 		} else if (row.offsetTop + row.offsetHeight - scrollBody.scrollTop > scrollBody.clientHeight) {
+			// Bug Firefox de repositionnement de la scrollbar
+			scrollBody.scrollTop=-1;
+			scrollBody.scrollTop=99999;
 			scrollBody.scrollTop = row.offsetTop + row.offsetHeight
 					- scrollBody.clientHeight;
 
@@ -6450,9 +6458,7 @@ var __members = {
 
 		// On récupère en AJAX ....
 
-		var url = f_env.GetViewURI();
-		var request = new f_httpRequest(this, url,
-				f_httpRequest.TEXT_HTML_MIME_TYPE);
+		var request = new f_httpRequest(this, f_httpRequest.TEXT_HTML_MIME_TYPE);
 		var self = this;
 
 		request
@@ -6693,9 +6699,7 @@ var __members = {
 
 		var component = tooltip;
 
-		var url = f_env.GetViewURI();
-		var request = new f_httpRequest(component, url,
-				f_httpRequest.TEXT_HTML_MIME_TYPE);
+		var request = new f_httpRequest(component, f_httpRequest.TEXT_HTML_MIME_TYPE);
 
 		var toolTipManager = f_toolTipManager.Get();
 
@@ -6965,10 +6969,10 @@ var __members = {
 			texts.unshift(text.replace(exp, " "));
 		}
 
-		this.setAttribute(f_core._VNS + ":sortBreadCrumbsIds", ids.join("|"));
-		this.setAttribute(f_core._VNS + ":sortBreadCrumbsIndexes", indexes
+		f_core.SetAttributeNS(this, "sortBreadCrumbsIds", ids.join("|"));
+		f_core.SetAttributeNS(this, "sortBreadCrumbsIndexes", indexes
 				.join("|"));
-		this.setAttribute(f_core._VNS + ":sortBreadCrumbsTexts", texts
+		f_core.SetAttributeNS(this, "sortBreadCrumbsTexts", texts
 				.join("|"));
 	},
 	/**
