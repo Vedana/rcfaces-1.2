@@ -123,7 +123,7 @@ public class ContentKeyGenerator {
             throw new RuntimeException(ex);
         }
 
-        Class< ? > clazz = (Class< ? >) objects.getClass().getComponentType();
+        Class< ? > clazz = objects.getClass().getComponentType();
 
         BeanInfo beanInfo;
         try {

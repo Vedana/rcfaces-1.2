@@ -17,8 +17,6 @@ import org.rcfaces.core.internal.Constants;
  */
 public class VariableResolver {
 
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory.getLog(VariableResolver.class);
 
     /**

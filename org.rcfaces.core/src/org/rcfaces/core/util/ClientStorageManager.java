@@ -35,7 +35,7 @@ public class ClientStorageManager {
             return null;
         }
 
-        Map sessionMap = externalContext.getSessionMap();
+        Map<String, Object> sessionMap = externalContext.getSessionMap();
 
         IClientStorage clientStorage = (IClientStorage) sessionMap
                 .get(CLIENT_STORAGE_PROPERTY);
