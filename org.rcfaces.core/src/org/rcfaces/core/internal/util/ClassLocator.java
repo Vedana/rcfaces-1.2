@@ -292,4 +292,13 @@ public class ClassLocator {
 
         return false;
     }
+
+    public static ClassLoader getCurrentLoader(Object fallbackClass) {
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        if (loader != null) {
+            return loader;
+        }
+
+        return fallbackClass.getClass().getClassLoader();
+    }
 }
