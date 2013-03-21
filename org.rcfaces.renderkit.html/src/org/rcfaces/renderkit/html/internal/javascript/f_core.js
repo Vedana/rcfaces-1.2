@@ -2012,7 +2012,8 @@ var f_core = {
 		f_core.Assert(closeWindow===undefined || closeWindow===null || typeof(closeWindow)=="boolean", "f_core._Submit: closeWindow parameter must be undefined or a boolean.");
 		f_core.Assert(modal===undefined || modal===null || typeof(modal)=="boolean", "f_core._Submit: modal parameter must be undefined or a boolean.");
 
-		f_core.Profile(false, "f_core._submit("+url+")");
+		f_core._submitDate=new Date().getTime();
+		f_core.Profile(false, "f_core._submit("+url+")", f_core._submitDate);
 
 		f_core.Debug(f_core, "_Submit: submit form='"+form+"' elt='"+elt+"' event='"+event+"' url='"+url+"' closeWindow="+closeWindow+" modal="+modal);
 
@@ -3450,6 +3451,20 @@ var f_core = {
 	GetBooleanAttributeNS: function(element, attributeName, defaultValue) {
 		return f_core.GetBooleanAttribute(element, f_core._VNS+":"+attributeName, defaultValue);
 	},	
+	/** 
+	 * @method hidden static
+	 * @param Element element
+	 * @param String attributeName
+	 * @param String attributeValue
+	 * @return void
+	 */	
+	SetAttributeNS: function(element, attributeName, attributeValue) {
+		f_core.Assert(element && element.nodeType==f_core.ELEMENT_NODE, "f_core.SetAttributeNS: Object parameter is not a valid node ! ("+element+")");
+		f_core.Assert(typeof(attributeName)=="string" && attributeName.length, "f_core.SetAttributeNS: attributeName parameter is invalid. ("+attributeName+")");
+		f_core.Assert(typeof(attributeValue)=="string" || !attributeValue, "f_core.SetAttributeNS: attributeValue parameter is invalid. ("+attributeValue+")");
+
+		element.setAttribute(f_core._VNS+":"+attributeName, attributeValue);
+	},
 	/** 
 	 * Returns true if component (and its ancestors) is visible.
 	 *
@@ -6105,6 +6120,7 @@ var f_core = {
 	},	 
 	/**
 	 * @method hidden static 
+	 * @param HTMLElement component
 	 * @param String url 
 	 * @param any data
 	 * @return any Data
@@ -6793,6 +6809,12 @@ var f_core = {
 				continue;
 			}
 			ps.push(key, "=", String(t), " ");
+		}
+		
+		var sd=f_core._submitDate;
+		if (sd) {
+			f_core._submitDate=undefined;
+			ps.push("eventStart=", sd, " ");
 		}
 		
 		var ret=ps.join("");
