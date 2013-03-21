@@ -119,4 +119,44 @@ public class UserAgentCriteria extends AbstractCriteria {
 
         return criteria;
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result
+                + ((userAgent == null) ? 0 : userAgent.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        UserAgentCriteria other = (UserAgentCriteria) obj;
+        if (userAgent == null) {
+            if (other.userAgent != null)
+                return false;
+        } else if (!userAgent.equals(other.userAgent))
+            return false;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("[UserAgentCriteria userAgent='").append(userAgent)
+                .append("' ");
+        if (getParent() != null) {
+            builder.append(" parent='").append(getParent()).append("'");
+        }
+
+        builder.append(']');
+        return builder.toString();
+    }
+
 }
