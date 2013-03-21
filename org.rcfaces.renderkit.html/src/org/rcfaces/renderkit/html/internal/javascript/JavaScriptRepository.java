@@ -31,12 +31,11 @@ import org.rcfaces.core.internal.contentProxy.IResourceProxyHandler;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.repository.BasicHierarchicalRepository;
+import org.rcfaces.core.internal.repository.IContentRef;
 import org.rcfaces.core.internal.repository.LocaleCriteria;
+import org.rcfaces.core.internal.repository.URLContentRef;
 import org.rcfaces.core.internal.util.FilteredContentProvider;
 import org.rcfaces.core.internal.util.LocalizedURLContentProvider;
-import org.rcfaces.core.internal.webapp.URIParameters;
-import org.rcfaces.renderkit.html.internal.agent.IUserAgent;
-import org.rcfaces.renderkit.html.internal.agent.IUserAgent.BrowserType;
 import org.xml.sax.Attributes;
 
 /**
@@ -88,11 +87,15 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
     @Override
     protected FileByCriteria createFileByCriteria(IFile file,
             IContentProvider contentProvider, ICriteria criteria, String uri,
-            Object noCriteriaContentLocation) {
+            IContentRef noCriteriaContentLocation) {
 
         if (hasResourceBundleName) {
-            return new JavaScriptCriteriaFile(file, contentProvider, criteria,
-                    uri, noCriteriaContentLocation);
+            ICriteria localeCriteria = LocaleCriteria.keepLocale(criteria);
+
+            if (localeCriteria != null) {
+                return new JavaScriptCriteriaFile(file, contentProvider,
+                        localeCriteria, uri, noCriteriaContentLocation);
+            }
         }
 
         return super.createFileByCriteria(file, contentProvider, criteria, uri,
@@ -126,14 +129,12 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
 
     protected HierarchicalFile createFile(IModule module, String name,
             String filename, String noCriteriaURI,
-            URL noCriteriaContentLocation, IHierarchicalFile dependencies[],
-            IContentProvider contentProvider) {
-
-        Map<BrowserType, URL> contentByBrowser = new HashMap<IUserAgent.BrowserType, URL>();
+            IContentRef noCriteriaContentLocation,
+            IHierarchicalFile dependencies[], IContentProvider contentProvider) {
 
         return new JavaScriptFile(module, name, filename, noCriteriaURI,
                 noCriteriaContentLocation, dependencies, contentProvider,
-                convertSymbols, parsingBundleBaseName, contentByBrowser);
+                convertSymbols, parsingBundleBaseName);
     }
 
     public IClass getClassByName(String className) {
@@ -171,26 +172,32 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
 
         private final String resourceBundleBaseName;
 
-        private final LocalizedContentProvider contentProvider;
+        private final LocalizedContentProvider specifiedContentProvider;
 
         public JavaScriptFile(IModule module, String name, String filename,
-                String noCriteriaURI, URL noCriteriaContentLocation,
+                String noCriteriaURI, IContentRef noCriteriaContentLocation,
                 IHierarchicalFile[] dependencies,
                 IContentProvider contentProvider, boolean remapSymbols,
-                String resourceBundleBaseName,
-                Map<BrowserType, URL> contentByBrowserType) {
+                String resourceBundleBaseName) {
             super(module, name, filename, noCriteriaURI,
                     noCriteriaContentLocation, dependencies, contentProvider);
 
             this.remapSymbols = remapSymbols;
             this.resourceBundleBaseName = resourceBundleBaseName;
 
-            if (resourceBundleBaseName != null) {
-                this.contentProvider = new LocalizedContentProvider(this);
+            if (contentProvider == null && resourceBundleBaseName != null) {
+                this.specifiedContentProvider = new LocalizedContentProvider(
+                        this);
 
             } else {
-                this.contentProvider = null;
+                this.specifiedContentProvider = null;
             }
+        }
+
+        @Override
+        public ICriteria getSupportedCriteria(ICriteria criteria) {
+            // TODO Auto-generated method stub
+            return super.getSupportedCriteria(criteria);
         }
 
         public String getResourceBundleBaseName() {
@@ -200,7 +207,8 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
         @Override
         public String getURI(ICriteria criteria) {
             String uri = super.getURI(criteria);
-            if (resourceBundleBaseName == null) {
+            if (resourceBundleBaseName == null
+                    && specifiedContentProvider == null) {
                 return uri;
             }
 
@@ -246,8 +254,8 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
 
         @Override
         public IContentProvider getContentProvider() {
-            if (contentProvider != null) {
-                return contentProvider;
+            if (specifiedContentProvider != null) {
+                return specifiedContentProvider;
             }
 
             return super.getContentProvider();
@@ -622,6 +630,59 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
             this.javaScriptFile = javaScriptFile;
         }
 
+        @Override
+        public IContentRef[] searchCriteriaContentReference(
+                IContentRef contentReference, ICriteria criteria) {
+
+            URLContentRef uric = (URLContentRef) contentReference;
+
+            if (javaScriptFile.resourceBundleBaseName == null) {
+                return null;
+            }
+
+            IClass cls[] = javaScriptFile.listClasses();
+
+            if (cls.length == 0) {
+                return null;
+            }
+            Locale locale = LocaleCriteria.getLocale(criteria);
+            if (locale == null) {
+                return null;
+            }
+
+            ResourceBundle resourceBundle = ResourceBundle.getBundle(
+                    javaScriptFile.resourceBundleBaseName, locale);
+
+            boolean found = false;
+
+            classes: for (int i = 0; i < cls.length; i++) {
+                String className = cls[i].getName();
+
+                String key = className + ".";
+
+                Enumeration keys = resourceBundle.getKeys();
+                for (; keys.hasMoreElements();) {
+                    String resourceKey = (String) keys.nextElement();
+                    if (resourceKey.startsWith(key) == false) {
+                        continue;
+                    }
+
+                    found = true;
+                    break classes;
+                }
+            }
+
+            if (found == false) {
+                return null;
+            }
+
+            // Cela permet de retirer les autres criteres attachés !
+            ICriteria selectedCriteria = LocaleCriteria.keepLocale(criteria);
+
+            return new IContentRef[] { new URLContentRef(selectedCriteria,
+                    uric.getURL()) };
+        }
+
         protected String updateBuffer(String buffer, URL url, ICriteria criteria) {
             if (criteria == null) {
                 return super.updateBuffer(buffer, url, criteria);
@@ -735,70 +796,9 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
 
         public JavaScriptCriteriaFile(IFile file,
                 IContentProvider contentProvider, ICriteria criteria,
-                String uri, Object noCriteriaContentLocation) {
+                String uri, IContentRef noCriteriaContentLocation) {
             super(file, contentProvider, criteria, uri,
                     noCriteriaContentLocation);
-        }
-
-        @Override
-        protected void searchCriteriaSupport(IContentProvider contentProvider,
-                ICriteria criteria, String uri, Object noCriteriaContentLocation) {
-            super.searchCriteriaSupport(contentProvider, criteria, uri,
-                    noCriteriaContentLocation);
-
-            if (getSelectedCriteria() != null) {
-                return;
-            }
-
-            if ((file instanceof JavaScriptFile) == false) {
-                return;
-            }
-
-            JavaScriptFile javaScriptFile = (JavaScriptFile) file;
-            if (javaScriptFile.resourceBundleBaseName == null) {
-                return;
-            }
-
-            IClass cls[] = javaScriptFile.listClasses();
-
-            if (cls.length > 0) {
-                Locale locale = LocaleCriteria.getLocale(criteria);
-                if (locale != null) {
-                    ResourceBundle resourceBundle = ResourceBundle.getBundle(
-                            javaScriptFile.resourceBundleBaseName, locale);
-
-                    boolean found = false;
-
-                    classes: for (int i = 0; i < cls.length; i++) {
-                        String className = cls[i].getName();
-
-                        String key = className + ".";
-
-                        Enumeration keys = resourceBundle.getKeys();
-                        for (; keys.hasMoreElements();) {
-                            String resourceKey = (String) keys.nextElement();
-                            if (resourceKey.startsWith(key) == false) {
-                                continue;
-                            }
-
-                            found = true;
-                            break classes;
-                        }
-                    }
-
-                    if (found) {
-                        // Cela permet de retirer les autres criteres attachés !
-                        selectedCriteria = LocaleCriteria.get(locale);
-
-                        URIParameters uriParameters = URIParameters
-                                .parseURI(uri);
-                        selectedCriteria.appendSuffix(uriParameters);
-                        uri = uriParameters.computeParametredURI();
-
-                        return;
-                    }
-                }
-            }
         }
     }
 }

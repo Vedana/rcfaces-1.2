@@ -37,6 +37,7 @@ import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.lang.ByteBufferInputStream;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.repository.HierarchicalRepositoryServlet;
+import org.rcfaces.core.internal.repository.IContentRef;
 import org.rcfaces.core.internal.repository.IHierarchicalRepository;
 import org.rcfaces.core.internal.repository.IHierarchicalRepository.IHierarchicalFile;
 import org.rcfaces.core.internal.repository.IHierarchicalRepository.IModule;
@@ -47,6 +48,7 @@ import org.rcfaces.core.internal.repository.IRepository.IContext;
 import org.rcfaces.core.internal.repository.IRepository.ICriteria;
 import org.rcfaces.core.internal.repository.IRepository.IFile;
 import org.rcfaces.core.internal.repository.LocaleCriteria;
+import org.rcfaces.core.internal.repository.URLContentRef;
 import org.rcfaces.core.internal.tools.ContextTools;
 import org.rcfaces.core.internal.util.ApplicationParametersMap;
 import org.rcfaces.core.internal.util.ClassLocator;
@@ -497,25 +499,27 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
             return super.getExpirationDate();
         }
 
-        protected Object[] getFileContentReferences(IFile file) {
+        protected IContentRef[] getFileContentReferences(IFile file) {
             // On peut tenter ici de rechercher la version compil�e !
 
-            Object urls[] = file.getContentReferences(criteria);
-
-            String surl = urls[0].toString();
-            if (surl.endsWith(".js") == false) {
-                return urls;
-            }
+            IContentRef urls[] = file.getContentReferences(criteria);
 
             if (enableSymbols == false) {
                 return urls;
             }
 
-            URL urlsc[] = new URL[urls.length];
-            System.arraycopy(urls, 0, urlsc, 0, urls.length);
+            URLContentRef ucr0 = (URLContentRef) urls[0];
+            String surl0 = ucr0.getURL().toString();
+            if (surl0.endsWith(".js") == false) {
+                return urls;
+            }
+
+            IContentRef urlsc[] = new IContentRef[urls.length];
 
             for (int i = 0; i < urls.length; i++) {
-                surl = urls[i].toString(); // + "c";
+                URLContentRef ucr = (URLContentRef) urls[i];
+
+                String surl = ucr.getURL().toString(); // + "c";
                 if (compiledJsSuffix != null) {
                     surl += compiledJsSuffix;
                 }
@@ -530,8 +534,8 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
                 }
 
                 try {
-                    IContent content = file.getContentProvider().getContent(
-                            url, criteria);
+                    IContent content = file.getContentProvider()
+                            .getContent(ucr);
                     try {
                         InputStream ins = content.getInputStream();
                         if (ins != null) {
@@ -540,7 +544,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
                             } catch (IOException ex2) {
                             }
 
-                            urlsc[i] = url;
+                            urlsc[i] = new URLContentRef(ucr.getCriteria(), url);
 
                             LOG.debug("Use compiled record of '"
                                     + file.getFilename() + "' (" + surl + ")");
