@@ -72,6 +72,8 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
 
     private DropWalker dropWalker;
 
+    private Set<String> interactiveParentsVarId;
+
     public TreeDecorator(TreeComponent component) {
         super(component, component.getFilterProperties());
 
@@ -97,10 +99,6 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
         mapSelectItems(componentContext, SelectItemMappers.SEARCH_IMAGE_MAPPER);
 
         super.preEncodeContainer();
-    }
-
-    protected void postEncodeContainer() throws WriterException {
-        super.postEncodeContainer();
     }
 
     /*
@@ -297,6 +295,24 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
                     treeRenderContext.getSelectionValues());
         }
 
+        if (interactiveParentsVarId != null) {
+
+            javaScriptWriter.writeMethodCall("f_setInteractiveParent");
+
+            boolean first = true;
+            for (String id : interactiveParentsVarId) {
+                if (first) {
+                    first = false;
+                } else {
+                    javaScriptWriter.write(',');
+                }
+                javaScriptWriter.write(id);
+            }
+
+            javaScriptWriter.writeln(");");
+
+        }
+
         super.encodeComponentsEnd();
     }
 
@@ -368,8 +384,11 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
             if (preloadLevelDepth > 0
                     && preloadLevelDepth < treeRenderContext.getDepth()) {
                 if (treeRenderContext.isFirstInteractiveChild(parentVarId)) {
-                    javaScriptWriter.writeMethodCall("f_setInteractiveParent")
-                            .write(parentVarId).writeln(");");
+
+                    if (interactiveParentsVarId == null) {
+                        interactiveParentsVarId = new HashSet<String>();
+                    }
+                    interactiveParentsVarId.add(parentVarId);
                 }
 
                 return SKIP_NODE;
