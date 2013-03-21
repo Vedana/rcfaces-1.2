@@ -4,12 +4,16 @@
  */
 package org.rcfaces.core.internal.webapp;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import javax.faces.FacesException;
 
 import org.rcfaces.core.internal.lang.StringAppender;
 
@@ -95,6 +99,17 @@ public class URIParameters implements Cloneable {
 
     public String getURI() {
         return uri;
+    }
+
+    public URL computeParametredURL() {
+        String uri = computeParametredURI();
+
+        try {
+            return new URL(uri);
+
+        } catch (MalformedURLException ex) {
+            throw new FacesException("Bad uri '" + uri + "'", ex);
+        }
     }
 
     public String computeParametredURI() {
