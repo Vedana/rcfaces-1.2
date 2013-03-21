@@ -22,7 +22,7 @@ var __statics = {
 	GET_METHOD: "GET",
 	
 	/**
-	 * @field hidden static final String
+	 * @field public static final String
 	 */
 	URLENCODED_MIME_TYPE: "application/x-www-form-urlencoded; charset=UTF-8",
 	
@@ -69,11 +69,24 @@ var __statics = {
 
 var __members = {
 
-	f_httpRequest: function(component, url, acceptType, noLog) {
+	/**
+	 * @method public
+	 * @param HTMLElement component
+	 * @param optional String acceptType
+	 * @param optional String url
+	 * @param optional hidden Boolean noLog
+	 */
+	f_httpRequest: function(component, acceptType, url, noLog) {
 		this._component=component;		
-		this._noLog=noLog;
-		this._url=url;
+	
 		this.f_setAcceptType(acceptType);
+
+		if (!url) {
+			url=f_env.GetViewURI();
+		}
+		this._url=url;
+
+		this._noLog=noLog;
 
 		this.f_cancelRequest();		
 	},
@@ -83,7 +96,8 @@ var __members = {
 		
 		// this._requestHeaders=undefined; // Map<String,String>
 		// this._ready = undefined; // Boolean
-		//this._noLog=noLog; // Boolean
+		//this._noLog=undefined; // Boolean
+		// this._url=undefined; // String
 		this._listener= undefined; // Function
 		this._component = undefined; // any ?
 	},

@@ -80,8 +80,7 @@ var __members = {
 			return;
 		}
 		var component = this;
-		var url=f_env.GetViewURI();
-		var request=new f_httpRequest(component, url, f_httpRequest.TEXT_HTML_MIME_TYPE);
+		var request=new f_httpRequest(component, f_httpRequest.TEXT_HTML_MIME_TYPE);
 		
 		if (!component.style.height || component.offsetHeight<f_waiting.HEIGHT) {
 			component._removeStyleHeight=true;

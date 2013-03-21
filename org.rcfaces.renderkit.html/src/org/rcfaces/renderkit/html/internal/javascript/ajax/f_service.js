@@ -190,8 +190,7 @@ var __members={
 		
 		this._setRequestState(requestId, f_service.INIT_STATE);
 
-		var url=f_env.GetViewURI();
-		var request=new f_httpRequest(this, url);
+		var request=new f_httpRequest(this);
 		var params=this._prepareRequest(request, requestId, parameter);
 
 		// var ret=
@@ -299,8 +298,7 @@ var __members={
 	 * @return void
 	 */
 	_asyncCallServer: function(requestId, resultCallback, parameter, progressMonitor, showLoading) {
-		var url=f_env.GetViewURI();
-		var request=new f_httpRequest(this, url);
+		var request=new f_httpRequest(this);
 		var params=this._prepareRequest(request, requestId, parameter);
 		
 		var subProgressMonitor=undefined;

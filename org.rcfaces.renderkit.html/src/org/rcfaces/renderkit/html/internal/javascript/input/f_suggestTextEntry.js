@@ -546,8 +546,7 @@ var __members = {
 			
 			f_core.Debug(f_suggestTextEntry, "_callServer: Call server text='"+text+"' maxResultNumber="+params.maxResultNumber);
 		
-			var url=f_env.GetViewURI();	
-			var request=new f_httpRequest(this, url, f_httpRequest.JAVASCRIPT_MIME_TYPE);
+			var request=new f_httpRequest(this, f_httpRequest.JAVASCRIPT_MIME_TYPE);
 			var suggestTextEntry=this;
 			request.f_setListener({
 				/**

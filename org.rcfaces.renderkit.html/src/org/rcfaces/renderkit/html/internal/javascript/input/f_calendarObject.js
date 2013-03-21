@@ -3374,8 +3374,7 @@ var __members = {
 		params.minDate=minDate.getTime();
 		params.maxDate=maxDate.getTime();
 
-		var url=f_env.GetViewURI();	
-		var request=new f_httpRequest(this, url, f_httpRequest.JAVASCRIPT_MIME_TYPE);
+		var request=new f_httpRequest(this, f_httpRequest.JAVASCRIPT_MIME_TYPE);
 		var calendarObject=this;
 		request.f_setListener({
 			/**
