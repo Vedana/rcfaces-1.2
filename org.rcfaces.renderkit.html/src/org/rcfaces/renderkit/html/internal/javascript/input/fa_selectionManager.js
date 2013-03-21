@@ -215,13 +215,25 @@ var __members = {
 	/**
 	 * @method protected
 	 */
+	f_getCursorElement: function() {
+		return this._cursor;
+	},
+	/**
+	 * @method protected
+	 */
+	f_setCursorElement: function(element) {
+		this._cursor=element;
+	},
+	/**
+	 * @method protected
+	 */
 	f_moveCursor: function(element, show, evt, selection, phaseName, selectOnMousedown) {
-		f_core.Assert(element && element.tagName, "fa_selectionManager.f_moveCursor: Invalid parameter to move cursor !");
+		f_core.Assert(element, "fa_selectionManager.f_moveCursor: Invalid parameter to move cursor !");
 		
-		var old=this._cursor;
+		var old=this.f_getCursorElement();
 		
 		if (element!=old) {
-			this._cursor=element;
+			this.f_setCursorElement(element);
 			
 			if (old) {
 				this.fa_updateElementStyle(old);
@@ -721,6 +733,12 @@ var __members = {
 	 */
 	f_setSelectionStates: function(selectionFullState) {
 		this._selectionFullState=selectionFullState;
+	},
+	/**
+	 * @method protected
+	 */
+	f_getClientSelection: function() {
+		return this._currentSelection;
 	},
 	/**
 	 * @method public
