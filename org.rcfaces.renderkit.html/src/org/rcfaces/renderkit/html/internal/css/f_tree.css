@@ -122,9 +122,6 @@
 	padding: 0;
 	margin: 0 2px 0 0;
 	cursor: pointer;
-	-moz-user-focus: ignore;
-	width: 16px;
-	height: 16px;
 }
 
 .f_tree_label {
@@ -173,4 +170,22 @@
 	top: -10000px;
 	display: block;
 }
+
+.f_tree_checkButton {
+	border: 0;
+	padding: 0;
+	margin: 0;
+	width: 16px;
+	height: 16px;
+}
+
+.f_tree_checkImage {
+	border: 0;
+	padding: 0;
+	margin: 0;
+	width: 16px;
+	height: 16px;
+	vertical-align: top;	
+}
+
 
