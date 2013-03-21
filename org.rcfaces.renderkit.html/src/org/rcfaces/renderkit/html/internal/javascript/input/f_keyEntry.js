@@ -636,7 +636,7 @@ var __members = {
 		// On affiche la clef, ou la valeur saisie
 		if (this.f_isEditable() && !this.f_isReadOnly()) {
 			
-			this.setAttribute(f_core._VNS+":notFocusedValue", input.value);
+			f_core.SetAttributeNS(this, "notFocusedValue", input.value);
 			
 			input.value=this._inputValue;
 			
@@ -777,8 +777,7 @@ var __members = {
 			params.filterExpression=filterExpression;
 		}
 		
-		var url=f_env.GetViewURI();
-		var request=new f_httpRequest(this, url, f_httpRequest.JAVASCRIPT_MIME_TYPE);
+		var request=new f_httpRequest(this, f_httpRequest.JAVASCRIPT_MIME_TYPE);
 		var keyEntry=this;
 		request.f_setListener({
 			/**
