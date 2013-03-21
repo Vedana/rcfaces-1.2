@@ -34,7 +34,7 @@ public abstract class AbstractRepository implements IRepository {
 
     protected static final IFile[] FILE_EMPTY_ARRAY = new IFile[0];
 
-    private static final Object[] OBJECT_EMPTY_ARRAY = new Object[0];
+    private static final IContentRef[] CONTENT_REF_EMPTY_ARRAY = new IContentRef[0];
 
     protected final Map<String, IFile> filesByName = new HashMap<String, IFile>();
 
@@ -165,7 +165,7 @@ public abstract class AbstractRepository implements IRepository {
 
     protected FileByCriteria createFileByCriteria(IFile file,
             IContentProvider contentProvider, ICriteria criteria, String uri,
-            Object noCriteriaContentLocation) {
+            IContentRef noCriteriaContentLocation) {
         return new FileByCriteria(file, contentProvider, criteria, uri,
                 noCriteriaContentLocation);
     }
@@ -183,7 +183,7 @@ public abstract class AbstractRepository implements IRepository {
 
         private final String filename;
 
-        private final Object noCriteriaContentLocation;
+        private final IContentRef noCriteriaContentRef;
 
         private final String noCriteriaURI;
 
@@ -196,12 +196,12 @@ public abstract class AbstractRepository implements IRepository {
         private Map<ICriteria, FileByCriteria> criteriaFiles;
 
         public File(String name, String filename, String noCriteriaURI,
-                Object noCriteriaContentLocation,
+                IContentRef noCriteriaContentRef,
                 IContentProvider contentProvider) {
             this.id = name;
             this.filename = filename;
             this.noCriteriaURI = noCriteriaURI;
-            this.noCriteriaContentLocation = noCriteriaContentLocation;
+            this.noCriteriaContentRef = noCriteriaContentRef;
             this.contentProvider = contentProvider;
             this.hashCode = filename.hashCode();
         }
@@ -214,10 +214,10 @@ public abstract class AbstractRepository implements IRepository {
             return id;
         }
 
-        public Object[] getContentReferences(ICriteria criteria) {
+        public IContentRef[] getContentReferences(ICriteria criteria) {
             FileByCriteria localizedFile = getCriteriaFile(criteria);
 
-            return localizedFile.getContentLocations();
+            return localizedFile.getContentRefs();
         }
 
         public String getFilename() {
@@ -260,7 +260,7 @@ public abstract class AbstractRepository implements IRepository {
 
                 noCriteriaFile = createFileByCriteria(this,
                         getContentProvider(), null, noCriteriaURI,
-                        noCriteriaContentLocation);
+                        noCriteriaContentRef);
                 return noCriteriaFile;
             }
 
@@ -280,7 +280,7 @@ public abstract class AbstractRepository implements IRepository {
             }
 
             criteriaFile = createFileByCriteria(this, getContentProvider(),
-                    criteria, noCriteriaURI, noCriteriaContentLocation);
+                    criteria, noCriteriaURI, noCriteriaContentRef);
 
             synchronized (this) {
                 criteriaFiles.put(criteria, criteriaFile);
@@ -328,21 +328,21 @@ public abstract class AbstractRepository implements IRepository {
 
         protected String uri;
 
-        protected Object[] contentLocations;
+        protected IContentRef[] contentRefs;
 
         protected ICriteria selectedCriteria;
 
         public FileByCriteria(IFile file, IContentProvider contentProvider,
-                ICriteria criteria, String uri, Object noCriteriaContentLocation) {
+                ICriteria criteria, String uri, IContentRef noCriteriaContentRef) {
             this.file = file;
 
             searchCriteriaSupport(contentProvider, criteria, uri,
-                    noCriteriaContentLocation);
+                    noCriteriaContentRef);
         }
 
         protected void searchCriteriaSupport(IContentProvider contentProvider,
                 ICriteria proposedCriteria, String uri,
-                Object noCriteriaContentLocation) {
+                IContentRef noCriteriaContentRef) {
 
             ICriteria selectedCriteria = null;
 
@@ -374,15 +374,14 @@ public abstract class AbstractRepository implements IRepository {
 
             } else {
 
-                Object criteriaContentLocation = null;
+                IContentRef[] criteriaContentRefs = null;
 
-                if (proposedCriteria != null
-                        && noCriteriaContentLocation != null) {
-                    criteriaContentLocation = contentProvider
+                if (proposedCriteria != null && noCriteriaContentRef != null) {
+                    criteriaContentRefs = contentProvider
                             .searchCriteriaContentReference(
-                                    noCriteriaContentLocation, proposedCriteria);
+                                    noCriteriaContentRef, proposedCriteria);
 
-                    if (criteriaContentLocation != null) {
+                    if (criteriaContentRefs != null) {
                         selectedCriteria = proposedCriteria;
 
                     } else {
@@ -395,11 +394,11 @@ public abstract class AbstractRepository implements IRepository {
                                         + proposedCriteria);
                             }
 
-                            criteriaContentLocation = contentProvider
+                            criteriaContentRefs = contentProvider
                                     .searchCriteriaContentReference(
-                                            noCriteriaContentLocation,
+                                            noCriteriaContentRef,
                                             proposedCriteria);
-                            if (criteriaContentLocation != null) {
+                            if (criteriaContentRefs != null) {
                                 selectedCriteria = defaultCriteria;
                             }
                         }
@@ -407,10 +406,10 @@ public abstract class AbstractRepository implements IRepository {
 
                     if (LOG.isTraceEnabled()) {
                         if (proposedCriteria != null
-                                && criteriaContentLocation != null) {
+                                && criteriaContentRefs != null) {
                             LOG.trace("Find criteria version ("
                                     + proposedCriteria + ") of '" + uri
-                                    + "' => " + criteriaContentLocation);
+                                    + "' => " + criteriaContentRefs);
 
                         } else {
                             LOG.trace("Can not find criteria version ("
@@ -419,20 +418,19 @@ public abstract class AbstractRepository implements IRepository {
                     }
                 }
 
-                if (noCriteriaContentLocation == null) {
-                    contentLocations = OBJECT_EMPTY_ARRAY;
+                if (noCriteriaContentRef == null) {
+                    contentRefs = CONTENT_REF_EMPTY_ARRAY;
 
-                } else if (criteriaContentLocation == null) {
-                    contentLocations = new Object[] { noCriteriaContentLocation };
+                } else if (criteriaContentRefs == null) {
+                    contentRefs = new IContentRef[] { noCriteriaContentRef };
 
                 } else {
-                    contentLocations = new Object[] {
-                            noCriteriaContentLocation, criteriaContentLocation };
+                    contentRefs = criteriaContentRefs;
                 }
 
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Content locations of " + this + " => "
-                            + Arrays.asList(contentLocations));
+                            + Arrays.asList(contentRefs));
                 }
             }
 
@@ -448,8 +446,8 @@ public abstract class AbstractRepository implements IRepository {
             this.uri = uri;
         }
 
-        public Object[] getContentLocations() {
-            return contentLocations;
+        public IContentRef[] getContentRefs() {
+            return contentRefs;
         }
 
         public String getURI() {

@@ -129,6 +129,22 @@ public class LocaleCriteria extends AbstractCriteria {
         return locale;
     }
 
+    public static ICriteria keepLocale(ICriteria criteria) {
+        Locale locale = getLocale(criteria);
+        if (locale == null) {
+            return null;
+        }
+        if (criteria.getParent() == null) {
+            return criteria;
+        }
+        ICriteria pc = keepLocale(criteria.getParent());
+        if (pc != null) {
+            return pc;
+        }
+
+        return get(locale);
+    }
+
     @Override
     public Object saveState(FacesContext context) {
         Object[] obj = new Object[2];
@@ -258,4 +274,5 @@ public class LocaleCriteria extends AbstractCriteria {
 
         return criteria;
     }
+
 }

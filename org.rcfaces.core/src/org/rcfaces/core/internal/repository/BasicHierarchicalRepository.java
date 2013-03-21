@@ -296,8 +296,10 @@ public class BasicHierarchicalRepository extends AbstractRepository implements
                     + "'  (location='" + contentLocation + "')");
         }
 
+        IContentRef contentRef = new URLContentRef(null, url);
+
         String rname = "f:" + name;
-        IHierarchicalFile f = createFile(module, rname, name, name, url,
+        IHierarchicalFile f = createFile(module, rname, name, name, contentRef,
                 depends, contentProvider);
 
         filesByName.put(name, f);
@@ -308,8 +310,8 @@ public class BasicHierarchicalRepository extends AbstractRepository implements
 
     protected HierarchicalFile createFile(IModule module, String name,
             String filename, String unlocalizedURI,
-            URL unlocalizedContentLocation, IHierarchicalFile dependencies[],
-            IContentProvider contentProvider) {
+            IContentRef unlocalizedContentLocation,
+            IHierarchicalFile dependencies[], IContentProvider contentProvider) {
 
         return new HierarchicalFile(module, name, filename, unlocalizedURI,
                 unlocalizedContentLocation, dependencies, contentProvider);
@@ -598,7 +600,7 @@ public class BasicHierarchicalRepository extends AbstractRepository implements
         private IHierarchicalFile[] dependencies;
 
         public HierarchicalFile(IModule module, String name, String filename,
-                String unlocalizedURI, Object unlocalizedContentLocation,
+                String unlocalizedURI, IContentRef unlocalizedContentLocation,
                 IHierarchicalFile[] dependencies,
                 IContentProvider contentProvider) {
             super(name, filename, unlocalizedURI, unlocalizedContentLocation,

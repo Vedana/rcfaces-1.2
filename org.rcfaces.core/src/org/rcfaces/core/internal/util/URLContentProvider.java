@@ -12,9 +12,11 @@ import java.net.URLConnection;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.repository.AbstractRepository.AbstractContent;
+import org.rcfaces.core.internal.repository.IContentRef;
 import org.rcfaces.core.internal.repository.IRepository.IContent;
 import org.rcfaces.core.internal.repository.IRepository.IContentProvider;
 import org.rcfaces.core.internal.repository.IRepository.ICriteria;
+import org.rcfaces.core.internal.repository.URLContentRef;
 
 /**
  * 
@@ -30,12 +32,14 @@ public class URLContentProvider implements IContentProvider {
     protected URLContentProvider() {
     }
 
-    public IContent getContent(Object contentReference, ICriteria criteria) {
-        return new URLContent((URL) contentReference, criteria);
+    public IContent getContent(IContentRef contentReference) {
+        URLContentRef urlContentRef = (URLContentRef) contentReference;
+
+        return new URLContent(urlContentRef);
     }
 
-    public Object searchCriteriaContentReference(Object contentReference,
-            ICriteria criteria) {
+    public IContentRef[] searchCriteriaContentReference(
+            IContentRef contentReference, ICriteria criteria) {
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Criteria version '" + criteria + "' not found for url '"
@@ -45,12 +49,12 @@ public class URLContentProvider implements IContentProvider {
         return null;
     }
 
-    protected boolean testURL(URL contentReference, ICriteria criteria) {
-        IContent content = getContent(contentReference, criteria);
+    protected boolean testURL(URLContentRef urlContentRef) {
+        IContent content = getContent(urlContentRef);
 
         if (LOG.isTraceEnabled()) {
-            LOG.trace("TestURL '" + contentReference + "' criteria='"
-                    + criteria + "'");
+            LOG.trace("TestURL '" + urlContentRef.getURL() + "' criteria='"
+                    + urlContentRef.getCriteria() + "'");
         }
 
         InputStream inputStream;
@@ -59,15 +63,16 @@ public class URLContentProvider implements IContentProvider {
 
         } catch (IOException ex) {
             if (LOG.isDebugEnabled()) {
-                LOG.debug("URL '" + contentReference + "' does not exist !", ex);
+                LOG.debug("URL '" + urlContentRef.getURL()
+                        + "' does not exist !", ex);
             }
             return false;
         }
 
         if (inputStream == null) {
             if (LOG.isTraceEnabled()) {
-                LOG.trace("TestURL '" + contentReference + "' criteria='"
-                        + criteria + "' => NOT FOUND");
+                LOG.trace("TestURL '" + urlContentRef.getURL() + "' criteria='"
+                        + urlContentRef.getCriteria() + "' => NOT FOUND");
             }
 
             return false;
@@ -77,12 +82,12 @@ public class URLContentProvider implements IContentProvider {
             inputStream.close();
 
         } catch (IOException ex) {
-            LOG.info("Can not close URL '" + contentReference + "'.", ex);
+            LOG.info("Can not close URL '" + urlContentRef.getURL() + "'.", ex);
         }
 
         if (LOG.isTraceEnabled()) {
-            LOG.trace("TestURL '" + contentReference + "' criteria='"
-                    + criteria + "' => FOUND");
+            LOG.trace("TestURL '" + urlContentRef.getURL() + "' criteria='"
+                    + urlContentRef.getCriteria() + "' => FOUND");
         }
 
         return true;
@@ -106,6 +111,10 @@ public class URLContentProvider implements IContentProvider {
         public URLContent(URL url, ICriteria criteria) {
             this.url = url;
             this.criteria = criteria;
+        }
+
+        public URLContent(URLContentRef urlContentRef) {
+            this(urlContentRef.getURL(), urlContentRef.getCriteria());
         }
 
         public InputStream getInputStream() throws IOException {

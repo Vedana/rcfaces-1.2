@@ -466,14 +466,13 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
 
         private boolean verifyFileModifications() {
 
-            Object urls[] = getFileContentReferences(file);
+            IContentRef[] urls = getFileContentReferences(file);
 
             IContentProvider contentProvider = file.getContentProvider();
             for (int i = 0; i < urls.length; i++) {
                 long l;
                 try {
-                    IContent content = contentProvider.getContent(urls[i],
-                            criteria);
+                    IContent content = contentProvider.getContent(urls[i]);
                     try {
                         l = content.getLastModified();
 
@@ -527,17 +526,17 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
                 return buffer;
             }
 
-            Object urls[] = getFileContentReferences(file);
+            IContentRef[] contentRefs = getFileContentReferences(file);
 
             ByteBufferOutputStream bos = new ByteBufferOutputStream(
                     CONTENT_INITIAL_SIZE);
             lastModificationDate = -1;
 
-            for (int i = 0; i < urls.length; i++) {
-                IContent contentProvider = file.getContentProvider()
-                        .getContent(urls[i], criteria);
+            for (int i = 0; i < contentRefs.length; i++) {
+                IContent content = file.getContentProvider().getContent(
+                        contentRefs[i]);
                 try {
-                    long date = contentProvider.getLastModified();
+                    long date = content.getLastModified();
                     if (date < 1) {
                         date = System.currentTimeMillis();
                     }
@@ -545,12 +544,12 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
                         lastModificationDate = date;
                     }
 
-                    long size = contentProvider.getLength();
+                    long size = content.getLength();
                     if (size == 0) {
                         continue;
                     }
 
-                    InputStream in = contentProvider.getInputStream();
+                    InputStream in = content.getInputStream();
                     try {
                         byte buf[];
                         if (size > 0) {
@@ -573,12 +572,12 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
                             in.close();
 
                         } catch (Exception ex) {
-                            LOG.error("Can not close inputstream '" + urls[i]
-                                    + "'.", ex);
+                            LOG.error("Can not close inputstream '"
+                                    + contentRefs[i] + "'.", ex);
                         }
                     }
                 } finally {
-                    contentProvider.release();
+                    content.release();
                 }
             }
 
@@ -683,7 +682,7 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
             return buffer;
         }
 
-        protected Object[] getFileContentReferences(IFile file) {
+        protected IContentRef[] getFileContentReferences(IFile file) {
             return file.getContentReferences(criteria);
         }
 

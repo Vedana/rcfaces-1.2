@@ -10,9 +10,11 @@ import java.util.Locale;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.repository.IContentRef;
 import org.rcfaces.core.internal.repository.IRepository.IContentProvider;
 import org.rcfaces.core.internal.repository.IRepository.ICriteria;
 import org.rcfaces.core.internal.repository.LocaleCriteria;
+import org.rcfaces.core.internal.repository.URLContentRef;
 import org.rcfaces.core.internal.webapp.URIParameters;
 
 /**
@@ -31,8 +33,10 @@ public class LocalizedURLContentProvider extends URLContentProvider {
     }
 
     @Override
-    public Object searchCriteriaContentReference(Object contentReference,
-            ICriteria criteria) {
+    public IContentRef[] searchCriteriaContentReference(
+            IContentRef contentReference, ICriteria criteria) {
+
+        URLContentRef urlContentRef = (URLContentRef) contentReference;
 
         Locale locale = LocaleCriteria.getLocale(criteria);
         if (locale == null) {
@@ -40,7 +44,7 @@ public class LocalizedURLContentProvider extends URLContentProvider {
             return null;
         }
 
-        String baseURL = contentReference.toString();
+        String baseURL = urlContentRef.getURL().toString();
 
         String variant = locale.getVariant();
         String country = locale.getCountry();
@@ -59,13 +63,15 @@ public class LocalizedURLContentProvider extends URLContentProvider {
 
                 URL l = new URL(up.computeParametredURI());
 
-                if (testURL(l, LocaleCriteria.get(locale))) {
+                ICriteria c = LocaleCriteria.get(locale);
+                URLContentRef ucr = new URLContentRef(c, l);
+                if (testURL(ucr)) {
                     if (LOG.isDebugEnabled()) {
                         LOG.debug("Localized version '" + criteria
                                 + "' found for url '" + l + "' => " + locale);
                     }
 
-                    return l;
+                    return new IContentRef[] { ucr };
                 }
 
                 locale = new Locale(language, country);
@@ -76,14 +82,15 @@ public class LocalizedURLContentProvider extends URLContentProvider {
                 up.appendLocale(locale);
 
                 URL l = new URL(up.computeParametredURI());
-
-                if (testURL(l, LocaleCriteria.get(locale))) {
+                ICriteria c = LocaleCriteria.get(locale);
+                URLContentRef ucr = new URLContentRef(c, l);
+                if (testURL(ucr)) {
                     if (LOG.isDebugEnabled()) {
                         LOG.debug("Localized version '" + criteria
-                                + "' found for url '" + l + "' => " + locale);
+                                + "' found for url '" + l + "' => " + ucr);
                     }
 
-                    return l;
+                    return new IContentRef[] { ucr };
                 }
 
                 locale = new Locale(language);
@@ -95,13 +102,15 @@ public class LocalizedURLContentProvider extends URLContentProvider {
 
                 URL l = new URL(up.computeParametredURI());
 
-                if (testURL(l, LocaleCriteria.get(locale))) {
+                ICriteria c = LocaleCriteria.get(locale);
+                URLContentRef ucr = new URLContentRef(c, l);
+                if (testURL(ucr)) {
                     if (LOG.isDebugEnabled()) {
                         LOG.debug("Localized version '" + criteria
-                                + "' found for url '" + l + "' => " + locale);
+                                + "' found for url '" + l + "' => " + ucr);
                     }
 
-                    return l;
+                    return new IContentRef[] { ucr };
                 }
             }
         } catch (MalformedURLException ex) {

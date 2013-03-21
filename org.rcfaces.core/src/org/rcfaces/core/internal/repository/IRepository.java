@@ -54,7 +54,7 @@ public interface IRepository extends Serializable {
 
         String getFilename();
 
-        Object[] getContentReferences(ICriteria criteria);
+        IContentRef[] getContentReferences(ICriteria criteria);
 
         String getURI(ICriteria criteria);
     }
@@ -85,10 +85,10 @@ public interface IRepository extends Serializable {
      * @version $Revision$ $Date$
      */
     public interface IContentProvider {
-        IContent getContent(Object contentReference, ICriteria criteria);
+        IContent getContent(IContentRef contentReference);
 
-        Object searchCriteriaContentReference(Object contentReference,
-                ICriteria criteria);
+        IContentRef[] searchCriteriaContentReference(
+                IContentRef contentReference, ICriteria proposedCriteria);
     }
 
     /**
