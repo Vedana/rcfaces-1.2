@@ -86,6 +86,11 @@
 				<command id="tree.request" />
 			</service>
 
+			<service id="org.rcfaces.renderkit.html.FindTreeNodes"
+				class="org.rcfaces.renderkit.html.internal.service.FindTreeNodesService">
+				<command id="tree.find" />
+			</service>
+
 			<service id="org.rcfaces.renderkit.html.Items"
 				class="org.rcfaces.renderkit.html.internal.service.ItemsService">
 				<command id="items.request" />
