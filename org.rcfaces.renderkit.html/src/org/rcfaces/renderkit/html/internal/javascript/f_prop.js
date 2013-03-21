@@ -205,6 +205,11 @@ var __statics = {
 	 * @field hidden static final String
 	 */
 	MULTIPLE:				"multiple",
+	
+	/**
+	 * @field hidden static final String
+	 */
+	OUTLINED_LABEL:			"outlinedLabel",
 
 	/**
 	 * @field hidden static final String

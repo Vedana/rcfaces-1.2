@@ -15,3 +15,8 @@
 	accelerator:true;
 }
 
+.f_outlinedLabel {
+	background-color: #FF7;
+	border: 1px solid #DD5;
+	border-radius: 2px;
+}
