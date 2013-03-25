@@ -12,14 +12,9 @@ package org.rcfaces.core.component.capability;
 public interface IOutlinedLabelCapability {
 
     public enum Method {
-        IgnoreCase,
-        IgnoreAccents,
-        Multiple,
-        StartsWith,
-        WordOnly,
-        FullText
+        IgnoreCase, IgnoreAccents, Multiple, StartsWith, WordOnly, FullText, Server
     }
-    
+
     /**
      * Returns the label which is outlined
      * 
