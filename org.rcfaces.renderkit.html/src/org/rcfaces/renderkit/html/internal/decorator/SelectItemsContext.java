@@ -116,7 +116,13 @@ public class SelectItemsContext {
     }
 
     protected void initializeCheckValue(Object values) {
-        this.checkValues = CheckTools.valuesToSet(values, true);
+        // Les CHECK doit être mutable
+        this.checkValues = CheckTools.valuesToSet(values,
+                isCheckValuesAlterable());
+    }
+
+    protected boolean isCheckValuesAlterable() {
+        return false;
     }
 
     protected void initializeExpansionValue(Object values) {
@@ -149,6 +155,14 @@ public class SelectItemsContext {
         }
 
         return checkValues.contains(value);
+    }
+
+    public final void removeValueChecked(SelectItem item) {
+        if (checkValues == null || checkValues.isEmpty()) {
+            return;
+        }
+
+        checkValues.remove(item.getValue());
     }
 
     public final boolean isValueExpanded(SelectItem item, Object value) {
@@ -337,20 +351,27 @@ public class SelectItemsContext {
         return depth;
     }
 
-    public Set getCheckValues() {
+    public Set<Object> getCheckValues() {
         if (checkValues != null) {
             return checkValues;
         }
 
-        return Collections.EMPTY_SET;
+        return Collections.emptySet();
     }
 
-    public Set getSelectionValues() {
+    public Set<Object> getSelectionValues() {
         if (selectionValues != null) {
             return selectionValues;
         }
 
-        return Collections.EMPTY_SET;
+        return Collections.emptySet();
     }
 
+    public SelectItem getParentSelectItem() {
+        int size = items.size();
+
+        SelectItem parentSelectItem = (SelectItem) items.get(size - 3);
+
+        return parentSelectItem;
+    }
 }

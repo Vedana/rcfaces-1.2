@@ -27,6 +27,7 @@ import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.tools.OutlinedLabelTools;
 import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.renderkit.html.internal.AbstractSelectItemsRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
@@ -46,7 +47,6 @@ import org.rcfaces.renderkit.html.internal.decorator.SubMenuDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.TreeDecorator;
 import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 import org.rcfaces.renderkit.html.internal.util.HeadingTools;
-import org.rcfaces.renderkit.html.internal.util.OutlinedLabelTools;
 
 /**
  * 
@@ -142,22 +142,19 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
             htmlWriter.writeAttributeNS("outlinedLabel", outlinedLabel);
         }
 
-        String outlinedLabelMethod = treeComponent
-                .getOutlinedLabelMethod(facesContext);
-        if (outlinedLabelMethod != null && outlinedLabelMethod.length() > 0) {
-            EnumSet<IOutlinedLabelCapability.Method> outlinedLabelMethods = OutlinedLabelTools
-                    .normalize(outlinedLabelMethod);
+        EnumSet<IOutlinedLabelCapability.Method> outlinedLabelMethods = treeComponent
+                .getOutlinedLabelMethodSet();
+        if (outlinedLabelMethods != null
+                && outlinedLabelMethods.isEmpty() == false) {
 
-            if (outlinedLabelMethods.size() > 0) {
-                String ms = OutlinedLabelTools.format(outlinedLabelMethods);
+            String ms = OutlinedLabelTools.format(outlinedLabelMethods);
 
-                htmlWriter.writeAttributeNS("outlinedLabelMethod", ms);
+            htmlWriter.writeAttributeNS("outlinedLabelMethod", ms);
 
-                if (outlinedLabelMethods
-                        .contains(IOutlinedLabelCapability.Method.IgnoreAccents)) {
-                    htmlWriter.getComponentRenderContext().setAttribute(
-                            NEED_ACCENTS_API_PROPERTY, Boolean.TRUE);
-                }
+            if (outlinedLabelMethods
+                    .contains(IOutlinedLabelCapability.Method.IgnoreAccents)) {
+                htmlWriter.getComponentRenderContext().setAttribute(
+                        NEED_ACCENTS_API_PROPERTY, Boolean.TRUE);
             }
         }
 

@@ -9,8 +9,11 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.zip.GZIPOutputStream;
 
 import javax.faces.FacesException;
@@ -26,20 +29,22 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.TreeComponent;
+import org.rcfaces.core.component.capability.IOutlinedLabelCapability;
+import org.rcfaces.core.component.iterator.ISelectItemFinder;
 import org.rcfaces.core.internal.RcfacesContext;
-import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
-import org.rcfaces.core.item.IVisibleItem;
+import org.rcfaces.core.item.BasicSelectItemPath;
+import org.rcfaces.core.item.ISelectItemPath;
+import org.rcfaces.core.lang.FilterPropertiesMap;
 import org.rcfaces.core.model.IFilterProperties;
+import org.rcfaces.core.util.SelectItemTools;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
-import org.rcfaces.renderkit.html.internal.decorator.ISelectItemNodeWriter;
-import org.rcfaces.renderkit.html.internal.decorator.SelectItemsContext;
-import org.rcfaces.renderkit.html.internal.decorator.TreeDecorator;
 import org.rcfaces.renderkit.html.internal.renderer.TreeRenderer;
+import org.rcfaces.renderkit.html.internal.util.MapDecoder;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -95,12 +100,14 @@ public class FindTreeNodesService extends AbstractHtmlService {
             return;
         }
 
-        String text = (String) parameters.get("text");
-        if (text == null) {
+        String params = (String) parameters.get("params");
+        if (params == null) {
             sendJsError(facesContext, treeId, INVALID_PARAMETER_SERVICE_ERROR,
                     "Can not find 'text' parameter.", null);
             return;
         }
+
+        Map<String, Object> properties = MapDecoder.parse(params);
 
         ILocalizedComponent localizedComponent = HtmlTools.localizeComponent(
                 facesContext, treeId);
@@ -112,8 +119,6 @@ public class FindTreeNodesService extends AbstractHtmlService {
 
             return;
         }
-
-        String filterExpression = (String) parameters.get("filterExpression");
 
         try {
             UIComponent component = localizedComponent.getComponent();
@@ -169,7 +174,7 @@ public class FindTreeNodesService extends AbstractHtmlService {
                 }
 
                 writePaths(facesContext, printWriter, treeComponent, treeId,
-                        treeRenderer, text, filterExpression);
+                        treeRenderer, properties);
 
             } catch (IOException ex) {
                 throw new FacesException("Can not write tree node paths !", ex);
@@ -205,16 +210,12 @@ public class FindTreeNodesService extends AbstractHtmlService {
     }
 
     private void writePaths(FacesContext facesContext, PrintWriter printWriter,
-            TreeComponent treeComponent, String treeId,
-            TreeRenderer treeRenderer, String text, String filterExpression)
+            final TreeComponent treeComponent, String treeId,
+            TreeRenderer treeRenderer, final Map<String, Object> parameters)
             throws IOException {
 
-        if (filterExpression != null) {
-            IFilterProperties filtersMap = HtmlTools.decodeFilterExpression(
-                    null, treeComponent, filterExpression);
-
-            treeComponent.setFilterProperties(filtersMap);
-        }
+        final IFilterProperties filterProperties = new FilterPropertiesMap(
+                parameters);
 
         HtmlProcessContextImpl.getHtmlProcessContext(facesContext);
 
@@ -225,20 +226,69 @@ public class FindTreeNodesService extends AbstractHtmlService {
             pw = new PrintWriter(cw);
         }
 
-        /*
-        ISelectItemNodeWriter nodeWriter = treeRenderer
-                .getSelectItemNodeWriter(jsWriter
-                        .getHtmlComponentRenderContext());
+        final List<ISelectItemPath> paths = new ArrayList<ISelectItemPath>();
 
-        FilterNodeRenderer nodeRenderer = new FilterNodeRenderer(node,
-                nodeWriter);
+        final EnumSet<IOutlinedLabelCapability.Method> methods = treeComponent
+                .getOutlinedLabelMethodSet();
 
-        treeRenderer.encodeNodes(jsWriter, treeComponent, nodeRenderer,
-                nodeRenderer.getDepth(), waitingVarId);
+        SelectItemTools.traverseSelectItemTree(facesContext, treeComponent,
+                filterProperties,
+                new SelectItemTools.DefaultSelectItemNodeHandler<Boolean>() {
 
-        jsWriter.writeMethodCall("f_clearWaiting").write(waitingId)
-                .writeln(");");
-                */
+                    private List<SelectItem> stack = new ArrayList<SelectItem>();
+
+                    @Override
+                    public Boolean beginNode(UIComponent component,
+                            SelectItem selectItem) {
+
+                        if (selectItem instanceof ISelectItemFinder) {
+                            ISelectItemFinder finder = ((ISelectItemFinder) selectItem);
+
+                            ISelectItemPath[] ps = finder.search(treeComponent,
+                                    parameters);
+
+                            if (ps != null) {
+                                paths.addAll(Arrays.asList(ps));
+                            }
+
+                            return Boolean.TRUE;
+                        }
+
+                        stack.add(selectItem);
+
+                        String label = selectItem.getLabel();
+
+                        if (match(treeComponent, filterProperties, methods,
+                                label)) {
+                            paths.add(new BasicSelectItemPath(stack));
+                        }
+
+                        return null;
+                    }
+
+                    @Override
+                    public Boolean endNode(UIComponent component,
+                            SelectItem selectItem) {
+
+                        stack.remove(stack.size() - 1);
+
+                        return null;
+                    }
+
+                });
+
+        StringBuilder sb = new StringBuilder(1024);
+        for (ISelectItemPath path : paths) {
+            if (sb.length() > 0) {
+                sb.append('&');
+            }
+
+            String normalizedPath = path.normalizePath(facesContext,
+                    treeComponent, treeComponent.getConverter());
+            sb.append(normalizedPath);
+        }
+
+        pw.print(sb.toString());
 
         if (LOG.isTraceEnabled()) {
             pw.flush();
@@ -249,103 +299,17 @@ public class FindTreeNodesService extends AbstractHtmlService {
         }
     }
 
-    /**
-     * 
-     * @author Olivier Oeuillot (latest modification by $Author$)
-     * @version $Revision$ $Date$
-     */
-    private static class FilterNodeRenderer implements ISelectItemNodeWriter {
+    protected boolean match(TreeComponent treeComponent,
+            IFilterProperties filterProperties,
+            EnumSet<IOutlinedLabelCapability.Method> methods, String label) {
 
-        private final ISelectItemNodeWriter parent;
+        String text = filterProperties.getStringProperty("text");
 
-        private final int indexes[];
-
-        private int currentIndex = 0;
-
-        private SelectItem mainNode = null;
-
-        private boolean mainNodeHasChild = false;
-
-        public FilterNodeRenderer(String node, ISelectItemNodeWriter parent) {
-            this.parent = parent;
-
-            StringTokenizer st = new StringTokenizer(node, ",");
-            indexes = new int[st.countTokens()];
-            for (int i = 0; i < indexes.length; i++) {
-                indexes[i] = Integer.parseInt(st.nextToken()) + 1;
-            }
+        if (label.toLowerCase().indexOf(text.toLowerCase()) >= 0) {
+            return true;
         }
 
-        public SelectItemsContext getContext() {
-            return parent.getContext();
-        }
-
-        public int getDepth() {
-            return indexes.length;
-        }
-
-        public void encodeNodeInit(UIComponent component, SelectItem selectItem) {
-
-            if (selectItem instanceof IVisibleItem) {
-                if (((IVisibleItem) selectItem).isVisible() == false) {
-                    return;
-                }
-            }
-
-            SelectItemsContext context = getContext();
-            if (LOG_TREE) {
-                System.out.println("Init>" + context.getDepth() + "  "
-                        + selectItem.getLabel());
-            }
-
-            int depth = context.getDepth() - 1;
-
-            if (depth >= 0 && depth < indexes.length && --indexes[depth] == 0) {
-                context.setValueExpanded(selectItem, selectItem.getValue());
-            }
-
-            parent.encodeNodeInit(component, selectItem);
-        }
-
-        public int encodeNodeBegin(UIComponent component,
-                SelectItem selectItem, boolean hasChild, boolean isVisible)
-                throws WriterException {
-
-            if (selectItem instanceof IVisibleItem) {
-                if (((IVisibleItem) selectItem).isVisible() == false) {
-                    return SKIP_NODE;
-                }
-            }
-
-            int depth = getContext().getDepth() - 1;
-            if (depth >= 0 && depth < indexes.length) {
-                if (indexes[depth] != 0) {
-                    return SKIP_NODE;
-                }
-                mainNode = selectItem;
-                return EVAL_NODE;
-            }
-
-            mainNodeHasChild = true;
-            return parent.encodeNodeBegin(component, selectItem, hasChild,
-                    isVisible);
-        }
-
-        public void encodeNodeEnd(UIComponent component, SelectItem selectItem,
-                boolean hasChild, boolean isVisible) throws WriterException {
-            int depth = getContext().getDepth() - 1;
-            if (depth >= 0 && depth < indexes.length) {
-                return;
-            }
-
-            parent.encodeNodeEnd(component, selectItem, hasChild, isVisible);
-        }
-
-        public void refreshNode(UIComponent component) throws WriterException {
-            if (mainNode != null && parent instanceof TreeDecorator) {
-                ((TreeDecorator) parent)
-                        .refreshNode(mainNode, mainNodeHasChild);
-            }
-        }
+        return false;
     }
+
 }

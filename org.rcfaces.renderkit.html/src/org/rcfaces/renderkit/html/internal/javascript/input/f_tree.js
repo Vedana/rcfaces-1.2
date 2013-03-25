@@ -623,6 +623,8 @@ var __members = {
 		this._blankNodeImageURL=f_env.GetBlankImageURL();
 		
 		if (this.f_isSchrodingerCheckable()) {
+			alert("Schrodinger is not YET implemented");
+			
 			var url=f_core.GetAttributeNS(this, "cbxInd");
 			if (url) {
 				this._customIndeterminate=true;
@@ -644,6 +646,7 @@ var __members = {
 		}
 
 		this._tree=this;
+		this._interactiveCount=0;
 
 		// =2 la marque contient le focus   =1 c'est le label qui devient un lien   =0 ancienne méthode
 		this._treeNodeFocusEnabled=(this.f_isCheckable())?2:1;
@@ -814,6 +817,8 @@ var __members = {
 //		this._disabledValues=undefined;
 //		this._enabledValues=undefined;
 
+		this._schrodingerNodeStates=undefined; // Map<String, Object>
+		
 		var wns=this._waitingNodes;
 		if (wns) {
 			this._waitingNodes=undefined;
@@ -1346,8 +1351,11 @@ var __members = {
 		if (this._interactiveCount>0) {
 			var tree=this;
 			
-			this.f_showAndOutlineNodes(text, function(type, request, parameter) {
-				
+			this._showAndOutlineNodes(text, function(type, request, parameter) {
+				switch(type) {
+				case "response":
+					//alert("voila="+parameter);
+				}
 			});
 		}
 	},
@@ -1494,6 +1502,7 @@ var __members = {
 		if (node._interactive) {
 			// Noeuds à charger dynamiquement ....
 			node._interactive=undefined;
+			node._loadingChildren=true;
 			if (this._interactiveCount>0) {
 				this._interactiveCount--;
 			}
@@ -1612,7 +1621,7 @@ var __members = {
 			return;
 		}
 		
-		var request=new f_httpRequest(this, f_httpRequest.JAVASCRIPT_MIME_TYPE);
+		var request=new f_httpRequest(this, f_httpRequest.JAVASCRIPT_MIME_TYPE, f_httpRequest.UTF_8);
 		var tree=this;
 
 		request.f_setListener({
@@ -1706,6 +1715,8 @@ var __members = {
 	 * @method private
 	 */
 	_showError: function(waitingNode) {
+		waitingNode._loadingChildren=undefined;
+		
 		var label=waitingNode._label;
 		if (label) {
 			label.innerHTML="ERREUR !";
@@ -2447,7 +2458,13 @@ var __members = {
 		
 		if (this._schrodingerCheckable && this.fa_componentUpdated) {
 			if (!parent._indeterminated && parent._checked!=node._checked) {
-				this.fa_performElementCheck(node, false, null, parent._checked);
+				
+				if (node._container) {
+					node._checked=parent._checked;
+					
+				} else {
+					this.fa_performElementCheck(node, false, null, parent._checked);
+				}
 			}
 		}
 		
@@ -3994,6 +4011,38 @@ var __members = {
 		if (enabledValues) {
 			this.f_setProperty(f_prop.ENABLED_ITEMS, enabledValues, true);
 		}
+		
+		var sns=this._schrodingerNodeStates;
+		if (sns) {
+			var checks=undefined;
+			var unchecks=undefined;
+			for(var value in sns) {
+				var node=sns[value];
+				
+				if (node._checked) {
+					if (!checks) {
+						checks=new Array;
+					}
+					
+					checks.push(value);
+					continue;
+				}
+				if (!unchecks) {
+					unchecks=new Array;
+				}
+				
+				unchecks.push(value);
+				continue;
+			}
+			
+			if (checks) {
+				this.f_setProperty("schrodingerChecks", checks, true);
+			}
+			
+			if (unchecks) {
+				this.f_setProperty("schrodingerUnchecks", unchecks, true);
+			}
+		}
 	
 		var cursor=this.f_getCursorElement();
 		var cursorValue=null;
@@ -4060,10 +4109,32 @@ var __members = {
 		var node=li._node;
 		f_core.Debug(f_tree, "f_clearWaiting: construct node '"+node._value+"'.");
 	
+		node._loadingChildren=undefined;
+		
 		if (node._nodes && node._opened) {
 			var ul=li._nodes;
 			
 			this._constructTree(ul, node._nodes, li._depth+1);
+
+			if (this._schrodingerCheckable) {
+				if (!node._indeterminated) {
+					var tree=this;
+						
+					this.f_forEachNode(function(n) {
+						if (n._container) {
+							n._checked=node._checked;
+							n._indeterminated=undefined;
+							return;
+						}
+						
+						if (node._checked) {
+							tree.f_check(n);
+						} else {
+							tree.f_uncheck(n);
+						}
+					}, node);
+				}
+			}
 			
 			ul.style.display="list-item";
 	
@@ -4447,7 +4518,7 @@ var __members = {
 					for(var i=0;i<children.length;i++) {
 				
 						var child=children[i];
-						
+
 						if (newState) {
 							this.f_check(child);
 						} else {
@@ -4509,7 +4580,10 @@ var __members = {
 		
 		node._indeterminated=true;
 		
-		this.fa_performElementCheck(node, show, evt, false);
+		var sns=this._schrodingerNodeStates;
+		if (sns) {
+			sns[node._value]=undefined;
+		}
 		
 		this.fa_updateElementStyle(node);
 		
@@ -4520,11 +4594,35 @@ var __members = {
 	 * @return Boolean
 	 */
 	fa_performElementCheck2: function(node, show, evt, checked) {
-		
-		node._indeterminated=undefined;
 	
-		var ret=this.fa_performElementCheck(node, show, evt, checked);
+		if (!this._schrodingerCheckable) {
+			return this.fa_performElementCheck(node, show, evt, checked);
+		}
+		
 
+		var ret=true;
+		if (!node._container) {
+			ret=this.fa_performElementCheck(node, show, evt, checked);
+		} else {
+			node._checked=checked;
+			node._indeterminated=undefined;
+			
+			if (this._interactiveCount) {
+				if (this.f_forEachNode(function(node) {
+						return node._interactive;
+					}, node)) {
+					
+					var sns=this._schrodingerNodeStates;
+					if (!sns) {
+						sns=new Object;
+						this._schrodingerNodeStates=sns;
+					}
+					
+					sns[node._value]=node;
+				}
+			}
+		}
+		
 		// On le fait quand même car on peut dechecker un indeterminate !
 		this.fa_updateElementStyle(node);
 		
@@ -4533,12 +4631,12 @@ var __members = {
 		return ret;
 	},
 	/**
-	 * @method public
+	 * @method private
 	 * @param String text
 	 * @param optional Function returnCallback
 	 * @param returnCallback
 	 */
-	f_showAndOutlineNodes: function(text, returnCallback) {
+	_showAndOutlineNodes: function(text, returnCallback) {
 		var request=new f_httpRequest(this, f_httpRequest.URLENCODED_MIME_TYPE);
 		var tree=this;
 
@@ -4594,6 +4692,9 @@ var __members = {
 	 			var ret=request.f_getResponse();
 				try {
 					var paths=ret.split('&');
+
+					returnCallback("response", request, paths);
+
 					tree._openPaths(paths);
 
 				} catch(x) {				
@@ -4605,13 +4706,11 @@ var __members = {
 	 		}			
 		});
 
-//		alert("Params="+params);
-
 		request.f_setRequestHeader("X-Camelia", "tree.find");
 		
 		var requestParams = {
 			treeId: this.id,
-			params: { text: text } 
+			params: "text="+encodeURIComponent(text) 
 		};
 		
 		var filterExpression=this.fa_getSerializedPropertiesExpression();
@@ -4640,25 +4739,31 @@ var __members = {
 					
 					var found=false;
 					var children=node._nodes;
-					for(var k=0;k<children.length;k++) {
-						var child=children[k];
-						
-						if (child._value!=segment) {
-							continue;
+					if (children) {
+						for(var k=0;k<children.length;k++) {
+							var child=children[k];
+							
+							if (child._value!=segment) {
+								continue;
+							}
+							
+							node=child;
+							found=true;
+							break;
 						}
-						
-						node=child;
-						found=true;
+						if (!found) {
+							node=null;
+							break;
+						}		
+					}
+					
+					if (node._interactive || node._loadingChildren) {
+						waitingInteractives.push(path);
 						break;
 					}
-					if (!found) {
-						node=null;
-						break;
-					}		
 					
-					if (node._interactive) {
-						waitingInteractives.push(node);
-						break;
+					if (node._container) {
+						this._openNode(node);
 					}
 				}
 			}
@@ -4668,6 +4773,37 @@ var __members = {
 			}
 			
 			this._openNode(node);
+		}
+		
+		if (waitingInteractives.length) {
+			var tree=this;
+			
+			this.f_addEventListener(f_event.LOAD, function(evt) {
+				tree.f_removeEventListener(f_event.LOAD, arguments.callee);
+				
+				tree._openPaths(waitingInteractives);
+			});
+		}
+	},
+	/**
+	 * @method hidden
+	 */
+	f_setSchrodingerStates: function(indeterminatedArray, checkedArray) {
+		
+		if (indeterminatedArray) {
+			for(var i=0;i<indeterminatedArray.length;i++) {
+				var node=indeterminatedArray[i];
+				
+				node._indeterminated=true;
+			}
+		}
+		
+		if (checkedArray) {
+			for(var i=0;i<checkedArray.length;i++) {
+				var node=checkedArray[i];
+				
+				node._checked=true;
+			}
 		}
 	}
 };
