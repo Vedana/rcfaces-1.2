@@ -24,7 +24,7 @@ var __statics = {
 	/**
 	 * @field public static final String
 	 */
-	URLENCODED_MIME_TYPE: "application/x-www-form-urlencoded; charset=UTF-8",
+	URLENCODED_MIME_TYPE: "application/x-www-form-urlencoded",
 	
 	/**
 	 * @field public static final String
@@ -59,12 +59,17 @@ var __statics = {
 	/**
 	 * @field public static final String
 	 */
-	 HTTP_CONTENT_TYPE: "Content-Type",
+	HTTP_CONTENT_TYPE: "Content-Type",
 	
 	/**
 	 * @field hidden static final String
 	 */
-	 CAMELIA_RESPONSE_HEADER: "X-Camelia-Service"
+	CAMELIA_RESPONSE_HEADER: "X-Camelia-Service",
+	
+	/**
+	 * @field hidden static final String
+	 */
+	UTF_8: "UTF-8"
 };
 
 var __members = {
@@ -73,13 +78,14 @@ var __members = {
 	 * @method public
 	 * @param HTMLElement component
 	 * @param optional String acceptType
+	 * @param optional String charSet
 	 * @param optional String url
 	 * @param optional hidden Boolean noLog
 	 */
-	f_httpRequest: function(component, acceptType, url, noLog) {
+	f_httpRequest: function(component, acceptType, charSet, url, noLog) {
 		this._component=component;		
 	
-		this.f_setAcceptType(acceptType);
+		this.f_setAcceptType(acceptType, charSet);
 
 		if (!url) {
 			url=f_env.GetViewURI();
@@ -589,14 +595,14 @@ var __members = {
 				}
 				
 				if (!contentType) {
-					contentType = f_httpRequest.URLENCODED_MIME_TYPE;
+					contentType = f_httpRequest.URLENCODED_MIME_TYPE+"; charset=UTF-8";
 				}
 				
 			} else if (typeof(data)=="string") {
 				formData=data;
 
 				if (!contentType) {
-					contentType = f_httpRequest.URLENCODED_MIME_TYPE;
+					contentType = f_httpRequest.URLENCODED_MIME_TYPE+"; charset=UTF-8";
 				}
 			} 
 		}
@@ -856,11 +862,15 @@ var __members = {
 	/**
 	 * @method public
 	 * @param optional String acceptType Mime type of accept header parameter.
+	 * @param optional String charSet
 	 * @return void
 	 */
-	f_setAcceptType: function(acceptType) {
+	f_setAcceptType: function(acceptType, charSet) {
 		if (!acceptType) {
 			acceptType=f_httpRequest.ANY_MIME_TYPE;		
+		}
+		if (charSet) {
+			acceptType+="; charset="+charSet;
 		}
 		this._acceptType=acceptType;
 	}
