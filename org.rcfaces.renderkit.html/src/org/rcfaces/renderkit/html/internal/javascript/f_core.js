@@ -2012,7 +2012,7 @@ var f_core = {
 		f_core.Assert(closeWindow===undefined || closeWindow===null || typeof(closeWindow)=="boolean", "f_core._Submit: closeWindow parameter must be undefined or a boolean.");
 		f_core.Assert(modal===undefined || modal===null || typeof(modal)=="boolean", "f_core._Submit: modal parameter must be undefined or a boolean.");
 
-		f_core._submitDate=new Date().getTime();
+		f_core._submitDate=new Date();
 		f_core.Profile(false, "f_core._submit("+url+")", f_core._submitDate);
 
 		f_core.Debug(f_core, "_Submit: submit form='"+form+"' elt='"+elt+"' event='"+event+"' url='"+url+"' closeWindow="+closeWindow+" modal="+modal);
@@ -2274,13 +2274,14 @@ var f_core = {
 		}
 		
 		window._rcfacesSubmitLocked=true;
+		return;
 		
 		var doc=form.ownerDocument;
 		var forms = doc.forms;
 		for (var i=0; i<forms.length; i++) {
 			var form=forms[i];
 			try {
-				form.action="javascript:void(0)?__DoubleSubmit=true";
+				form.action="javascript:void(DoubleSubmit=true)";
 				
 				form.onsubmit=document._rcfacesDisableSubmit;
 				form.submit=document._rcfacesDisableSubmitReturnFalse;
@@ -6814,7 +6815,7 @@ var f_core = {
 		var sd=f_core._submitDate;
 		if (sd) {
 			f_core._submitDate=undefined;
-			ps.push("eventStart=", sd, " ");
+			ps.push("eventStart=", sd.getTime(), " ");
 		}
 		
 		var ret=ps.join("");
