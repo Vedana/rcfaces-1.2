@@ -115,7 +115,7 @@ var __members = {
 			
 			window._ignoreLog=true;
 			
-			var request=new f_httpRequest(document, null, null, true);
+			var request=new f_httpRequest(document, null, null, null, true);
 			
 			var self=this;
 			
