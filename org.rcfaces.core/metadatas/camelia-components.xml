@@ -4421,6 +4421,16 @@
 				engine.setValue(Properties.EXPANDED_VALUES, expandedValues);
 			]]></code>
 		</method>
+		<method id="getOutlinedLabelMethodSet" returnType="java.util.EnumSet&lt;Method&gt;">
+			<import>org.rcfaces.core.internal.tools.OutlinedLabelTools</import>
+			<import>org.rcfaces.core.component.capability.IOutlinedLabelCapability.Method</import>
+			<code><![CDATA[
+				String method=getOutlinedLabelMethod();
+				
+				return OutlinedLabelTools.normalize(method);
+			
+			]]></code>
+		</method>
 	</component>
 
 	<component id="itemsList" extends="abstractInput">
