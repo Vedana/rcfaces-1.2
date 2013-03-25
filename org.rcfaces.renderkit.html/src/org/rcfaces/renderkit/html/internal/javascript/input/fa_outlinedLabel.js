@@ -43,6 +43,9 @@ var __statics = {
 			case "ew":
 				obj._eachWord=true;					
 				break;
+			case "se":
+				obj._server=true;					
+				break;
 			}
 		}
 		
