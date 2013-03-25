@@ -16,6 +16,7 @@ import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.capability.IDragEventCapability;
 import org.rcfaces.core.internal.util.ComponentIterators;
 import org.rcfaces.core.component.IMenuComponent;
+import java.util.EnumSet;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import org.rcfaces.core.component.capability.IExpandEventCapability;
 import org.rcfaces.core.component.capability.IHeadingLevelCapability;
@@ -29,6 +30,7 @@ import org.rcfaces.core.component.capability.IScrollableCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import java.lang.Object;
 import org.rcfaces.core.component.capability.ICheckedValuesCapability;
+import org.rcfaces.core.internal.tools.OutlinedLabelTools;
 import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.capability.IDraggableCapability;
 import org.rcfaces.core.component.capability.IClientSelectionFullStateCapability;
@@ -41,6 +43,7 @@ import org.rcfaces.core.component.capability.ICaptionCapability;
 import org.rcfaces.core.component.capability.IMenuCapability;
 import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
+import org.rcfaces.core.component.capability.IOutlinedLabelCapability.Method;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IClientCheckFullStateCapability;
 import org.rcfaces.core.internal.tools.TreeTools;
@@ -505,6 +508,16 @@ public class TreeComponent extends AbstractInputComponent implements
 				}
 								
 				engine.setValue(Properties.EXPANDED_VALUES, expandedValues);
+			
+	}
+
+	public EnumSet<Method> getOutlinedLabelMethodSet() {
+
+
+				String method=getOutlinedLabelMethod();
+				
+				return OutlinedLabelTools.normalize(method);
+			
 			
 	}
 
