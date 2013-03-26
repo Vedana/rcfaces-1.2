@@ -42,6 +42,10 @@ public class SelectItemTreeTools {
             UIComponent component, IFilterProperties filterProperties,
             ISelectItemNodeFactory factory) {
 
+        if (facesContext == null) {
+            facesContext = FacesContext.getCurrentInstance();
+        }
+
         if (factory == null) {
             factory = DEFAULT_FACTORY;
         }
