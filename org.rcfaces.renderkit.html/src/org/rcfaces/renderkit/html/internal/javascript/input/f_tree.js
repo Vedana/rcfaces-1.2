@@ -622,9 +622,7 @@ var __members = {
 		
 		this._blankNodeImageURL=f_env.GetBlankImageURL();
 		
-		if (this.f_isSchrodingerCheckable()) {
-			alert("Schrodinger is not YET implemented");
-			
+		if (this.f_isSchrodingerCheckable()) {			
 			var url=f_core.GetAttributeNS(this, "cbxInd");
 			if (url) {
 				this._customIndeterminate=true;
