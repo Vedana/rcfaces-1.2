@@ -217,37 +217,10 @@ public class SelectItemTools {
                 } else if ((value instanceof IFiltredCollection)
                         || (value instanceof IFiltredCollection2)) {
 
-                    Iterator< ? > it;
-                    if (value instanceof IFiltredCollection2) {
-                        it = ((IFiltredCollection2< ? >) value).iterator(
-                                component, filterProperties, -1);
-                    } else {
-                        it = ((IFiltredCollection< ? >) value).iterator(
-                                filterProperties, -1);
-                    }
-
-                    try {
-                        for (; it.hasNext();) {
-                            Object item = it.next();
-                            if ((item instanceof SelectItem) == false) {
-                                item = convertToSelectItem(facesContext, item);
-
-                                if (item == null) {
-                                    continue;
-                                }
-                            }
-
-                            T t = processSelectItem(component,
-                                    (SelectItem) item, false);
-                            if (t != null) {
-                                return t;
-                            }
-                        }
-
-                    } finally {
-                        if (it instanceof IFiltredIterator) {
-                            ((IFiltredIterator< ? >) it).release();
-                        }
+                    T t = processCollection(facesContext, component,
+                            filterProperties, value);
+                    if (t != null) {
+                        return t;
                     }
 
                 } else if (value == null) {
@@ -275,6 +248,20 @@ public class SelectItemTools {
                         if (t != null) {
                             return t;
                         }
+                    }
+
+                } else if ((value instanceof IFiltredCollection)
+                        || (value instanceof IFiltredCollection2)) {
+
+                    T t = processCollection(facesContext, component,
+                            filterProperties, value);
+                    if (t != null) {
+                        return t;
+                    }
+                } else {
+                    if (LOG.isErrorEnabled()) {
+                        LOG.error("Unknown type of selectItems value '" + value
+                                + "'");
                     }
                 }
             }
@@ -316,6 +303,45 @@ public class SelectItemTools {
                 T t = handler.endNode(component, selectItem);
                 if (t != null) {
                     return t;
+                }
+            }
+
+            return null;
+        }
+
+        protected T processCollection(FacesContext facesContext,
+                UIComponent component, IFilterProperties filterProperties,
+                Object value) {
+
+            Iterator< ? > it;
+            if (value instanceof IFiltredCollection2) {
+                it = ((IFiltredCollection2< ? >) value).iterator(component,
+                        filterProperties, -1);
+            } else {
+                it = ((IFiltredCollection< ? >) value).iterator(
+                        filterProperties, -1);
+            }
+
+            try {
+                for (; it.hasNext();) {
+                    Object item = it.next();
+                    if ((item instanceof SelectItem) == false) {
+                        item = convertToSelectItem(facesContext, item);
+
+                        if (item == null) {
+                            continue;
+                        }
+                    }
+
+                    T t = processSelectItem(component, (SelectItem) item, false);
+                    if (t != null) {
+                        return t;
+                    }
+                }
+
+            } finally {
+                if (it instanceof IFiltredIterator) {
+                    ((IFiltredIterator< ? >) it).release();
                 }
             }
 
