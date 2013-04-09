@@ -199,7 +199,7 @@ var __members={
 	 * @method protected
 	 * @param String labelText
 	 * @param HtmlElement labelComponent
-	 * @return void
+	 * @return Boolean Returns <code>TRUE</code> if the token is found in the label.
 	 */
 	fa_setOutlinedSpan: function(labelText, labelComponent) {
 		var outlinedLabel=this._normalizedOutlinedLabel;
@@ -215,7 +215,7 @@ var __members={
 				
 				f_core.SetTextNode(labelComponent, labelText);
 			}
-			return;
+			return false;
 		}
 		
 		labelComponent._outlined=true;
@@ -245,6 +245,8 @@ var __members={
 			var textNode=doc.createTextNode(labelText.substring(cur));
 			f_core.AppendChild(labelComponent, textNode);
 		}		
+		
+		return true;
 	},
 
 	/**

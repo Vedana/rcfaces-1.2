@@ -11,7 +11,28 @@
  */
  
 var __statics = {
+		
+	/**
+	 * @field public static final String
+	 */
+	OUTLINED_LABEL_SEARCH_DOWNLOADED_EVENT: "outlinedLabelSearchDownloaded",
+	
+	/**
+	 * @field public static final String
+	 */
+	OUTLINED_LABEL_SEARCH_RESULT_EVENT:	"outlinedLabelSearchResult",
 
+	
+	/**
+	 * @field public static final String
+	 */
+	NODE_CLOSED_EVENT: "nodeClosed",
+	
+	/**
+	 * @field public static final String
+	 */
+	NODE_OPENED_EVENT: "nodeOpened",
+	
 	/**
 	 * @field private static final String
 	 */
@@ -161,6 +182,15 @@ var __statics = {
 		if (!evt) {
 			evt=f_core.GetJsEvent(this);
 		}
+	
+		var target=evt.srcElement;
+		if (!target) {
+			target=evt.target;
+		}
+
+		if (li._input==target || li._inputImage==target) {
+			return false;
+		}
 
 		if (tree.f_getEventLocked(evt)) {
 			return false;
@@ -185,6 +215,15 @@ var __statics = {
 			evt=f_core.GetJsEvent(this);
 		}
 		if (tree.f_getEventLocked(evt)) {
+			return false;
+		}
+		
+		var target=evt.srcElement;
+		if (!target) {
+			target=evt.target;
+		}
+
+		if (li._input==target || li._inputImage==target) {
 			return false;
 		}
 		
@@ -226,6 +265,15 @@ var __statics = {
 			return false;
 		}
 		
+		var target=evt.srcElement;
+		if (!target) {
+			target=evt.target;
+		}
+
+		if (li._input==target || li._inputImage==target) {
+			return false;
+		}
+	
 		if (!tree._focus) {
 			tree.f_setFocus();
 		}
@@ -366,8 +414,10 @@ var __statics = {
 	 */
 	_Link_onfocus: function(evt) {
 		var tree=this._tree;
-		if (!tree && this._node) {
-			tree=this._node._tree;
+		var li=this._node;
+		var node=li._node;
+		if (!tree && li) {
+			tree=li._tree;
 		}
 
 		f_core.Debug(f_tree, "_Link_onfocus: on focus ");
@@ -399,19 +449,17 @@ var __statics = {
 				if (!cursor) {
 					var li=f_core.GetFirstElementByTagName(tree, "li");
 					if (li) {
-						cursor=li._node;
+						cursor=node;
 						tree.f_setCursorElement(cursor);
 						tree._initCursorValue=undefined;
 					}
 				}
 			}
-
-			tree._updateSelectedNodes();
 			
 		} else if (!cursor) {
 			var li=f_core.GetFirstElementByTagName(tree, "li");
 			if (li) {
-				cursor=li._node;
+				cursor=node;
 				tree.f_setCursorElement(cursor);
 				tree._initCursorValue=undefined;
 				
@@ -420,11 +468,25 @@ var __statics = {
 		}
 		
 		if (cursor) {
-			if (!tree._lastFocusDesactivate || new Date().getTime()-tree._lastFocusDesactivate>300) {
-				tree.fa_showElement(cursor, true);
+			if (cursor!=node) {
+				var oldCursor=cursor;
+				
+				tree.f_setCursorElement(node);
+				
+				tree.fa_updateElementStyle(oldCursor);
+				
+				//if (!tree._lastFocusDesactivate || new Date().getTime()-tree._lastFocusDesactivate>300) {
+				//	tree.fa_showElement(cursor, true);
+				//}
+			} else {			
+				tree.fa_updateElementStyle(li);
 			}
 		}
-
+		
+		if (tree.f_isSelectable()) {
+			tree._updateSelectedNodes();
+		}
+		
 		tree.f_fireEvent(f_event.FOCUS, evt);
 
 		return true;		
@@ -653,6 +715,8 @@ var __members = {
 			this.onkeydown=f_tree._Link_onkeydown;
 			this.onkeypress=f_tree._Link_onkeypress;
 			this.onkeyup=f_tree._Link_onkeyup;
+			
+			//this.tabIndex=-1; // C'est le noeud qui a le focus !
 			
 		} else {
 			var focus=this.ownerDocument.getElementById(this.id+"::focus");
@@ -1333,6 +1397,7 @@ var __members = {
 		
 		var lis=new Array;
 		var nodes=new Array;
+		var nodesFound=new Array;
 		this._listNodesInTree(null, nodes, lis);
 		
 		for(var i=0;i<nodes.length;i++) {
@@ -1343,17 +1408,37 @@ var __members = {
 				continue;
 			}
 			
-			this.fa_setOutlinedSpan(node._label, li._label);
+			if (this.fa_setOutlinedSpan(node._label, li._label)) {
+				nodesFound.push(node);
+			}
 		}
 		
-		if (this._interactiveCount>0) {
+		if (text && this._interactiveCount>0) {
 			var tree=this;
 			
 			this._showAndOutlineNodes(text, function(type, request, parameter) {
 				switch(type) {
 				case "response":
-					//alert("voila="+parameter);
+					tree.f_fireEvent(f_tree.OUTLINED_LABEL_SEARCH_DOWNLOADED_EVENT, null, null, parameter, null, {
+						text: text
+					});
+					return;
+					
+				case "complete":
+					tree.f_fireEvent(f_tree.OUTLINED_LABEL_SEARCH_RESULT_EVENT, null, null, parameter, null, {
+						text: text
+					});
+					return;
+					
 				}
+			});
+		} else {
+			for(var i=0;i<nodesFound.length;i++) {
+				this.f_revealNode(nodesFound[i]);
+			}
+			
+			this.f_fireEvent(f_tree.OUTLINED_LABEL_SEARCH_RESULT_EVENT, null, null, nodesFound, null,  {
+				text: text
 			});
 		}
 	},
@@ -1373,6 +1458,29 @@ var __members = {
 		}
 		
 		return this._closeNode(node, evt, li);
+	},
+
+	
+	/**
+	 * Close all nodes.
+	 *
+	 * @method public
+	 * @param optional any value Value of the node, or the node object.
+	 * @return Boolean <code>true</code> if success.
+	 */
+	f_closeAllNodes: function(value) {
+		var tree=this;
+		
+		this.f_forEachNode(function(node, nodeValue, nodeComponent) {
+			try {
+				tree.f_closeNode(node, null, nodeComponent);
+				
+			} catch (ex) {
+				// forget the error given if the node is not present in the tree
+			}
+		}, value, false, true);
+		
+		return true;
 	},
 	
 	/**
@@ -1404,11 +1512,12 @@ var __members = {
 		}
 		node._opened=false;
 		
-		if (!li) {
+		if (li===undefined) {
 			li=this._searchComponentByNodeOrValue(node, undefined, false);
-			if (!li) {
-				return false;
-			}
+		}
+		if (!li) {		
+			this.f_fireEvent(f_tree.NODE_CLOSED_EVENT, evt, node, node._value, this);
+			return true;
 		}
 		
 		li._divNode.removeAttribute(fa_aria.AriaExpanded);
@@ -1427,6 +1536,8 @@ var __members = {
 		this.fa_updateElementStyle(li);
 		this._updateCommandStyle(li);
 		
+
+		this.f_fireEvent(f_tree.NODE_CLOSED_EVENT, evt, node, node._value, this);
 		return true;
 	},
 	/**
@@ -1491,10 +1602,14 @@ var __members = {
 			this._expandedValues.f_addElement(node._value);
 		}
 
-		if (!li) {
+		if (li===undefined) {
 			li=this._searchComponentByNodeOrValue(node);
 		}
-
+		if (!li) {
+			this.f_fireEvent(f_tree.NODE_OPENED_EVENT, evt, node, node._value, this);
+			return true;
+		}
+		
 		var ul=li._nodes;
 
 		if (node._interactive) {
@@ -1544,7 +1659,8 @@ var __members = {
 
 		this.fa_updateElementStyle(li);
 		this._updateCommandStyle(li);
-		
+	
+		this.f_fireEvent(f_tree.NODE_OPENED_EVENT, evt, node, node._value, this);
 		return true;
 	},
 	/**
@@ -1807,6 +1923,20 @@ var __members = {
 		
 		return true;
 	},
+	/**
+	 * Set the focus marker to a specific node 
+	 * 
+	 * @method public
+	 * @param Object value
+	 * @return Boolean
+	 */
+	f_focusNode: function(value) {
+		this.f_revealNode(value);
+		
+		this.fa_showElement(value);
+		
+		this.f_moveCursor(value, true);
+	},
 	fa_showElement: function(node, giveFocus) {
 		
 		var li=null;
@@ -1847,12 +1977,56 @@ var __members = {
 		}
 
 		f_core.Assert(li && li.tagName, "f_tree.fa_showElement: Component associated to node parameter must be a LI tag ! ("+li+")");	
+	
 		
+		var body=this._body;
+		var scrollContainer=this;
+		if (body!=scrollContainer) {		
+			var itemTop = li.offsetTop;
+			var itemHeight = li._divNode.offsetHeight; 
+			if (!itemHeight) {
+				itemHeight=li.offsetHeight;
+				if (li._nodes) {
+					itemHeight-=li._nodes.offsetHeight;
+				}
+			}
+			if (!itemHeight) {
+				var n=li._label;
+				for(;n!=li;n=n.parentNode) {
+					if (n.offsetHeight) {
+						itemHeight=n.offsetHeight;
+					}
+				}
+			}
+			
+			if (itemTop-scrollContainer.scrollTop<0) {
+				scrollContainer.scrollTop=itemTop;
+	
+			} else if (itemTop+itemHeight-scrollContainer.scrollTop>scrollContainer.clientHeight) {			
+				scrollContainer.scrollTop=itemTop+itemHeight-scrollContainer.offsetHeight;
+			}
+			
+			var itemNode=li.firstChild; // Div du noeud
+			var firstChild=itemNode.firstChild;
+			var lastChild=itemNode.lastChild;
+			
+			if (firstChild.offsetLeft-scrollContainer.scrollLeft<0) {
+				scrollContainer.scrollLeft=firstChild.offsetLeft;
+	
+			} else if (lastChild.offsetLeft+lastChild.offsetWidth-scrollContainer.scrollLeft>scrollContainer.clientWidth) {			
+				scrollContainer.scrollLeft=firstChild.offsetLeft;
+			}		
+		}
+
 		if (giveFocus && this._treeNodeFocusEnabled) {
 			
 			var cfocus=this._treeNodeFocus;
 			if (cfocus) {				
 				if (cfocus==li._focusComponent) {
+					
+					if (!this._focus) {
+						f_core.SetFocus(cfocus, true);
+					}
 					return;
 				}
 					
@@ -1867,42 +2041,12 @@ var __members = {
 
 			f_core.SetFocus(cfocus, true);
 				
-			return;
+			return true;
 		}
-		
-		var body=this._body;
-		
-		if (li.offsetTop-body.scrollTop<0) {
-			body.scrollTop=li.offsetTop;
-
-		} else if (li.offsetTop+li._label.offsetHeight-body.scrollTop>body.clientHeight) {			
-			var itemHeight = li.offsetHeight; 
-			if (itemHeight == 0){ // possible sur certain arbre
-				if (li.nextSibling) {
-					itemHeight = (li.nextSibling.offsetTop - li.offsetTop)*2 ;
-				} else if (li.parentNode){
-					var parent = li.parentNode; // Le warning WTP est une ERREUR
-					while (parent.offsetTop != 0){
-						parent = parent.parentNode;
-					}
-					itemHeight = parent.offsetTop+parent.offsetHeight;
-				}
-			}
-			body.scrollTop=li.offsetTop+itemHeight-body.clientHeight;
-		}
-		
-		var itemNode=li.firstChild; // Div du noeud
-		var firstChild=itemNode.firstChild;
-		var lastChild=itemNode.lastChild;
-		
-		if (firstChild.offsetLeft-body.scrollLeft<0) {
-			body.scrollLeft=firstChild.offsetLeft;
-
-		} else if (lastChild.offsetLeft+lastChild.offsetWidth-body.scrollLeft>body.clientWidth) {			
-			body.scrollLeft=firstChild.offsetLeft;
-		}		
 		
 		f_core.ShowComponent(li._span);
+		
+		return true;
 	},
 	fa_updateElementStyle: function(node, constructMode) {
 		f_core.Assert(node, "f_tree.fa_updateElementStyle: Invalid node parameter '"+node+"'");
@@ -1952,7 +2096,7 @@ var __members = {
 			suffixLabel+="_disabled";
 			suffixDivNode+="_disabled";
 			
-			if (this._cfocus && li==cursor){
+			if (this._cfocus && node==cursor){
 				fa_aria.SetElementAriaActiveDescendant(this._cfocus, li._divNode.id);
 			}
 			
@@ -1979,7 +2123,7 @@ var __members = {
 			if (node._selected) {
 				suffixLabel+="_selected";
 				
-				if (this._focus) {
+				if (this._focus && node==cursor) {
 					suffixLabel+="_focus";
 					
 					if (this._cfocus) {
@@ -1991,7 +2135,7 @@ var __members = {
 					fa_aria.SetElementAriaSelected(li._focusComponent, true);
 				}
 		
-			} else if (this._focus && li==cursor) {
+			} else if (this._focus && node==cursor) {
 				suffixLabel+="_focus";
 				
 				if (this._cfocus) {
@@ -2046,7 +2190,7 @@ var __members = {
 		}
 		
 		labelClassName="f_tree_label";
-		if (cursor==li && this._focus) {
+		if (cursor==node && this._focus) {
 			labelClassName+=" "+labelClassName+"_cursor";
 		}
 
@@ -2104,7 +2248,7 @@ var __members = {
 				container: !!node._container,
 				root: node._parentTreeNode==this,
 				leaf: !node._container,
-				cursor:  (this._focus && li==cursor),
+				cursor:  (this._focus && node==cursor),
 				opened: node._opened,
 				closed: (node.container && !node._opened),
 				selected: node._selected,
@@ -2682,24 +2826,25 @@ var __members = {
 	 * @return Boolean <code>true</code> if the node was found.
 	 */
 	f_revealNode: function(value) {
-		var node=this._searchNodeByComponentOrValue(componentOrValue);
+		var node=this._searchNodeByComponentOrValue(value);
 		if (!node) {
 			return false;
 		}
 		
 		var parents = [];
-		var parent = this._getParentNode(node);
+		
 		// tant qu'on est pas au niveau racine et que le noeud n'est pas ouvert
-		while (parent != this && !this.f_isOpened(parent)) {
+		for(var parent = this._getParentNode(node);parent;parent = this._getParentNode(parent)) {
 			parents.push(parent);
-			parent = this._getParentNode(parent);
 		}
-		while (parents.length > 0) {
-			parent = parents.pop();
+
+		for(;parents.length;) {
+			var parent = parents.pop();
+			
 			this.f_openNode(parent);
 		}
 		
-		this.fa_showElement(node);
+//		this.fa_showElement(node);
 		
 		return true;
 	},
@@ -2904,7 +3049,7 @@ var __members = {
 
 		var nodes=this.fa_listVisibleElements();
 		
-		var parent=this; // WTP dans les choux
+		var scrollContainer=this; // WTP dans les choux
 		
 		var cache=new Object();
 		var i=0;
@@ -2915,7 +3060,7 @@ var __members = {
 			
 			var li=this._searchComponentByNodeOrValue(node, cache);
 			
-			if (li.offsetTop+li._span.offsetHeight/2-parent.scrollTop>parent.clientHeight) {
+			if (li.offsetTop+li._span.offsetHeight/2-scrollContainer.scrollTop>scrollContainer.clientHeight) {
 				break;
 			}
 			
@@ -2928,7 +3073,7 @@ var __members = {
 		}
 		
 		if (lastNode==cursorNode) {
-			var next=i+Math.floor(parent.scrollHeight/lastComponent._span.offsetHeight);
+			var next=i+Math.floor(scrollContainer.scrollHeight/lastComponent._span.offsetHeight);
 			if (next>=nodes.length) {
 				next=nodes.length-1;
 			}
@@ -3003,7 +3148,7 @@ var __members = {
 		
 		var nodes=this.fa_listVisibleElements();
 		
-		var parent=this; // Le warning WTP est un ERREUR !
+		var scrollContainer=this; // Le warning WTP est un ERREUR !
 		
 		var i=0;
 		var lastNode=null;
@@ -3014,7 +3159,7 @@ var __members = {
 			
 			var li=this._searchComponentByNodeOrValue(node, cache);
 	
-			if (li.offsetTop+li._span.offsetHeight/2-parent.scrollTop>0) {
+			if (li.offsetTop+li._span.offsetHeight/2-scrollContainer.scrollTop>0) {
 				lastNode=node;
 				lastComponent=li;
 				// On le voit !
@@ -3027,7 +3172,7 @@ var __members = {
 		}
 		
 		if (lastNode==cursorNode) {
-			var next=i-Math.floor(parent.scrollHeight/lastComponent._span.offsetHeight);
+			var next=i-Math.floor(scrollContainer.scrollHeight/lastComponent._span.offsetHeight);
 			if (next<0) {
 				next=0;
 			}
@@ -3263,24 +3408,24 @@ var __members = {
 		if (this.f_forEachNode(function(node, nodeValue) {
 				if (node==cursorNode) {
 					found=true;
-					return false;
+					return;
 				}
 				if (!found) {
-					return false;
+					return;
 				}
 				
 				if (tree.fa_isElementDisabled(node)) {
-					return false;
+					return;
 				}
 				
 				var text=tree.f_getNodeLabel(node);
 				
 				if (!text || text.length<kl) {
-					return false;
+					return;
 				}
 				
 				if (text.substring(0, kl).toUpperCase()!=key) {
-					return false;
+					return;
 				}
 				
 				nodeFound=node;
@@ -3417,6 +3562,16 @@ var __members = {
 			return this._cfocus;
 		}
 		
+		if (this._treeNodeFocusEnabled) {
+			var cursorElement=this.f_getCursorElement();
+			if (cursorElement) {
+				var li=this._searchComponentByNodeOrValue(cursorElement);
+				if (li) {
+					return li._input;
+				}
+			}
+		}
+		
 		return this;
 	},	
 	f_setFocus: function() {
@@ -3427,7 +3582,7 @@ var __members = {
 		}
 		
 		if (this._cfocus) {
-			if(this._cursor){ //ff3.5.x
+			if (this._cursor){ //ff3.5.x
 				this._cfocus.style.top=this._body.scrollTop+"px";
 			}
 			this._cfocus.focus();
@@ -3639,6 +3794,10 @@ var __members = {
 			return false;
 		}
 		
+		if (this.f_getChecked(node)) {
+			return;
+		}
+		
 		return this.fa_performElementCheck2(node, show, jsEvent, true);
 	},
 	/**
@@ -3653,6 +3812,10 @@ var __members = {
 		var node=this._searchNodeByComponentOrValue(value);
 		if (!node) {
 			return false;
+		}
+		
+		if (!this.f_getChecked(node) && !this.f_isElementIndeterminated(node)) {
+			return;
 		}
 		
 		return this.fa_performElementCheck2(node, false, jsEvent, false);
@@ -3875,7 +4038,7 @@ var __members = {
 			}
 			
 			var ret=callBack.call(this, node, node._value, li);
-			if (ret) {
+			if (ret!==undefined) {
 				return ret;
 			}
 
@@ -3883,10 +4046,17 @@ var __members = {
 			if (!nodes) {
 				continue;
 			}
+			
+			if (node!=this && onlyVisible && !node._opened) {
+				continue;
+			}
 	
-			ns.splice.apply(ns, [ 0, 0].concat(nodes));
+			for(var i=nodes.length-1;i>=0;i--) {
+				ns.unshift(nodes[i]);
+			}
 		}
-		return null;
+		
+		return undefined;
 	},
 	/**
 	 * Search a node by a specified value.
@@ -3901,8 +4071,6 @@ var __members = {
 			if (nodeValue==value) {
 				return node;
 			}
-			
-			return null;
 		});
 		if (ret) {
 			return ret;
@@ -4127,9 +4295,10 @@ var __members = {
 						
 						if (node._checked) {
 							tree.f_check(n);
-						} else {
-							tree.f_uncheck(n);
+							return;
 						}
+						
+						tree.f_uncheck(n);
 					}, node);
 				}
 			}
@@ -4238,6 +4407,16 @@ var __members = {
 	 */
 	fa_componentCaptureMenuEvent: function() {
 		return null;
+	},
+	
+	/**
+	 * Returns the node which has the focus
+	 * 
+	 * @method public
+	 * @return Object
+	 */
+	f_getFocusedNode: function() {
+		return this.f_getCursorElement();
 	},
 
 	fa_getElementItem: function(node) {
@@ -4517,7 +4696,7 @@ var __members = {
 				
 						var child=children[i];
 
-						if (newState) {
+						if (newState) {							
 							this.f_check(child);
 						} else {
 							this.f_uncheck(child);
@@ -4577,6 +4756,7 @@ var __members = {
 		}
 		
 		node._indeterminated=true;
+		node._checked=false;
 		
 		var sns=this._schrodingerNodeStates;
 		if (sns) {
@@ -4601,13 +4781,16 @@ var __members = {
 		var ret=true;
 		if (!node._container) {
 			ret=this.fa_performElementCheck(node, show, evt, checked);
+			
 		} else {
 			node._checked=checked;
 			node._indeterminated=undefined;
 			
 			if (this._interactiveCount) {
 				if (this.f_forEachNode(function(node) {
-						return node._interactive;
+						if (node._interactive) {
+							return true;
+						}
 					}, node)) {
 					
 					var sns=this._schrodingerNodeStates;
@@ -4693,7 +4876,15 @@ var __members = {
 
 					returnCallback("response", request, paths);
 
-					tree._openPaths(paths);
+					var list=new Array;
+					tree._openPaths(paths, {
+						onNode: function(node) {
+							list.push(node);
+						},
+						onComplete: function() {
+							returnCallback("complete", request, list);
+						}
+					});
 
 				} catch(x) {				
 					if (returnCallback) {
@@ -4723,7 +4914,7 @@ var __members = {
 	 * @param Array paths
 	 * @return void
 	 */
-	_openPaths: function(paths) {
+	_openPaths: function(paths, callbacks) {
 		var waitingInteractives=new Array;
 		
 		for(var i=0;i<paths.length;i++) {
@@ -4757,6 +4948,8 @@ var __members = {
 					
 					if (node._interactive || node._loadingChildren) {
 						waitingInteractives.push(path);
+						this._openNode(node);
+						node=null;
 						break;
 					}
 					
@@ -4770,6 +4963,10 @@ var __members = {
 				continue;
 			}
 			
+			if (callbacks && callbacks.onNode) {
+				callbacks.onNode.call(this, node);
+			}
+			
 			this._openNode(node);
 		}
 		
@@ -4779,8 +4976,14 @@ var __members = {
 			this.f_addEventListener(f_event.LOAD, function(evt) {
 				tree.f_removeEventListener(f_event.LOAD, arguments.callee);
 				
-				tree._openPaths(waitingInteractives);
+				tree._openPaths(waitingInteractives, callbacks);
 			});
+			
+			return;	
+		}
+		
+		if (callbacks && callbacks.onComplete) {
+			callbacks.onComplete.call(this);
 		}
 	},
 	/**
