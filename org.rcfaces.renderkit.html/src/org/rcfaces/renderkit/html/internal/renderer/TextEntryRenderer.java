@@ -1088,7 +1088,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         IRenderContext renderContext = writer.getComponentRenderContext()
                 .getRenderContext();
 
-        List vls = null;
+        List<String> vls = null;
 
         int expressionsLength = 0;
 
@@ -1112,7 +1112,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             }
 
             if (vls == null) {
-                vls = new ArrayList(validators.length - i);
+                vls = new ArrayList<String>(validators.length - i);
             }
 
             vls.add(expression);
