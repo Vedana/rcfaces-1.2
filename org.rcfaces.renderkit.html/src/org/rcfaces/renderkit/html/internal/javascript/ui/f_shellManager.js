@@ -203,7 +203,7 @@ var __statics = {
 			object=object.f_getComponent();
 		}
 		
-		if (object.nodeType!=f_core.ELEMENT_NODE) {
+		if (!object || object.nodeType!=f_core.ELEMENT_NODE) {
 			return false;
 		}
 		
