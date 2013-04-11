@@ -945,11 +945,9 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
             }
         }
 
-        String schrodingerChecks = componentData
-                .getStringProperty("schrodingerChecks");
-        String schrodingerUnchecks = componentData
-                .getStringProperty("schrodingerUnchecks");
-        if (schrodingerChecks != null || schrodingerUnchecks != null) {
+        String schrodingerStates = componentData
+                .getStringProperty("schrodingerStates");
+        if (schrodingerStates != null) {
 
             final Set<Object> checkedValuesSet = CheckTools.checkValuesToSet(
                     facesContext, tree, true);
@@ -957,11 +955,21 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
             SelectItemNode root = SelectItemTreeTools.constructTree(
                     facesContext, component, null, null);
 
-            if (schrodingerChecks != null) {
-                List<Object> values = HtmlValuesTools.parseValues(facesContext,
-                        component, true, true, schrodingerChecks);
+            if (schrodingerStates != null) {
+                List<Object> states = HtmlValuesTools.parseValues(facesContext,
+                        component, false, false, schrodingerStates);
 
-                for (Object value : values) {
+                for (Object stateObject : states) {
+                    String state = (String) stateObject;
+                    final boolean check = (state.charAt(0) == '+');
+                    state = state.substring(1);
+
+                    Object value = HtmlValuesTools.convertStringToValue(
+                            facesContext, component, state, true);
+                    if (value == null) {
+                        continue;
+                    }
+
                     SelectItemNode selectItemNode = root.searchByValue(value);
                     if (selectItemNode == null) {
                         continue;
@@ -976,36 +984,14 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
 
                             Object value = node.getSelectItem().getValue();
 
-                            if (checkedValuesSet.contains(value)) {
+                            if (check) {
+                                if (checkedValuesSet.contains(value)) {
+                                    return null;
+                                }
+
+                                tree.check(value);
                                 return null;
                             }
-
-                            tree.check(value);
-                            return null;
-                        }
-                    });
-
-                }
-            }
-
-            if (schrodingerUnchecks != null) {
-                List<Object> values = HtmlValuesTools.parseValues(facesContext,
-                        component, true, true, schrodingerUnchecks);
-
-                for (Object value : values) {
-                    SelectItemNode selectItemNode = root.searchByValue(value);
-                    if (selectItemNode == null) {
-                        continue;
-                    }
-
-                    selectItemNode.forEachNode(new INodeHandler<Boolean>() {
-
-                        public Boolean process(SelectItemNode node) {
-                            if (node.hasChildren()) {
-                                return null;
-                            }
-
-                            Object value = node.getSelectItem().getValue();
 
                             if (checkedValuesSet.contains(value) == false) {
                                 return null;
@@ -1015,6 +1001,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
                             return null;
                         }
                     });
+
                 }
             }
         }
