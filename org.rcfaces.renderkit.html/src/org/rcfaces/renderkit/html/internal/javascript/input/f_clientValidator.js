@@ -79,27 +79,41 @@ var __statics = {
 	 * @return f_clientValidator Returns the validator associated to the component or <code>null</code>.
 	 */
 	InstallValidator: function(component) {
-		var params=f_core.GetAttributeNS(component,"clientValidator", null);
-		if (params===null) { // Il peut être "" !
-			return null;
-		}
 
-		var parameters=undefined;
-		if (params) {
-			parameters=f_core.ParseParameters(params);
+		var validator=undefined;
+		
+		var clientValidators=f_core.GetAttributeNS(component, "clientValidator", null);
+		if (clientValidators!==null) { // Il peut être "" !
+			var parameters=undefined;
+			if (clientValidators) {
+				parameters=f_core.ParseParameters(clientValidators);
+			}
+			
+			validator=f_clientValidator.f_newInstance(component, parameters, true);
 		}
 		
-		var validator=f_clientValidator.f_newInstance(component, parameters, true);
+		var validators=f_core.GetAttributeNS(component, "validators", null);
+		if (validators) {
+			if (!validator) {
+				validator=f_clientValidator.f_newInstance(component);
+			}
+			
+			validator._installValidatorObjects(validators);
+		}
+	
 		
 		return validator;
 	},
 	/**
 	 * @method private static 
+	 * @param String expr
+	 * @param Boolean resolveObject
+	 * @return Object
 	 */
 	_EvalFunction: function(expr, resolveObject) {
 		var expressions=f_clientValidator._Expressions;
 
-		var f;
+		var f=undefined;
 		if (!expressions) {
 			expressions=new Object;
 			f_clientValidator._Expressions=expressions;
@@ -177,7 +191,8 @@ var __statics = {
 
 		var validator=this._validator;
 
-		var bRet = validator._applyAutoCheck(this._input.value, false);
+		// var bRet = 
+		validator._applyAutoCheck(this._input.value, false);
 		validator._applyOutputValue();
 		validator._hasFocus = undefined;
 		
@@ -640,28 +655,28 @@ var __members = {
 		component._validator = this;
 		
 		if (false) {
-		var internalValue=f_core.GetAttributeNS(component,"internalValue", undefined);
-		
-		if (internalValue!==undefined) { //window._rcfacesLazyFocusInit /* && parameters && parameters["org.rcfaces.LAZY_FOCUS_INIT"] */) {
-			var self=this;
+			var internalValue=f_core.GetAttributeNS(component, "internalValue", undefined);
 			
-			this._lazyFocus=true;
-			
-			component.f_insertEventListenerFirst(f_event.FOCUS, function(event){
-				component.f_removeEventListener(f_event.FOCUS, arguments.callee);
+			if (internalValue!==undefined) { //window._rcfacesLazyFocusInit /* && parameters && parameters["org.rcfaces.LAZY_FOCUS_INIT"] */) {
+				var self=this;
 				
-				if (!self._lazyFocus) {
-					return;
-				}
-				self._lazyFocus=false;
+				this._lazyFocus=true;
 				
-				self.f_installValidator();
+				component.f_insertEventListenerFirst(f_event.FOCUS, function(event){
+					component.f_removeEventListener(f_event.FOCUS, arguments.callee);
+					
+					if (!self._lazyFocus) {
+						return;
+					}
+					self._lazyFocus=false;
+					
+					self.f_installValidator();
+					
+					return this.f_fireEvent(event);
+				});
 				
-				return this.f_fireEvent(event);
-			});
-			
-			return;
-		}
+				return;
+			}
 		}
 		
 		this.f_installValidator();
@@ -710,8 +725,6 @@ var __members = {
 		if (this._checked) {
 			return true;
 		}
-		
-		//f_core.SetFocus(this._component, true);
 
 		return false;
 	},
@@ -1117,7 +1130,7 @@ var __members = {
 		var bValid;
 		var fError = (check)? this._onCheckError:this._onError;
 		var fErrorArguments = (check)? this._onCheckErrorArguments:this._onErrorArguments;
-		var handled;
+		var handled=undefined;
 		
 		if (!fError && check) {
 			fError=f_clientValidator.PerformMessageError;
@@ -1487,6 +1500,19 @@ var __members = {
 		return this._lastErrorObject;
 	},
 	/**
+	 * @method hidden
+	 * @param String name
+	 * @param Object value
+	 */
+	f_addParameter: function(name, value) {
+		var ps=this._parameters;
+		if (!ps) {
+			ps=new Object;
+			this._parameters=ps;
+		}
+		ps[name]=value;
+	},
+	/**
 	 * @method public final
 	 * @param String name
 	 * @param optional String def Returned value if parameter is not found
@@ -1646,55 +1672,81 @@ var __members = {
 	 * @return void
 	 */
 	f_parseComponentAttributes: function(component) {
-		var internalValue=f_core.GetAttributeNS(component,"internalValue");
+		var internalValue=f_core.GetAttributeNS(component, "internalValue");
 		this._initialValue=(internalValue)?internalValue:"";
 		
-		var filter=f_core.GetAttributeNS(component,"vFilter");
-		if (filter) {
-			filter=f_clientValidator._EvalFunction(filter);
-			this.f_addFilter(filter);
+		var filters=f_core.GetAttributeNS(component, "vFilter");
+		if (filters) {
+			var s=filters.split(':');
+			for(var i=0;i<s.length;i++) {
+				var filter=f_clientValidator._EvalFunction(s[i]);
+			
+				this.f_addFilter(filter);
+			}
 		}
 		
-		var translator=f_core.GetAttributeNS(component,"vTranslator");
-		if (translator) {
-			translator=f_clientValidator._EvalFunction(translator);
-			this.f_addTranslator(translator);
+		var translators=f_core.GetAttributeNS(component, "vTranslator");
+		if (translators) {
+			var s=translators.split(':');
+			for(var i=0;i<s.length;i++) {
+				var translator=f_clientValidator._EvalFunction(s[i]);
+				
+				this.f_addTranslator(translator);
+			}
 		}
 
-		var checker=f_core.GetAttributeNS(component,"vChecker");
-		if (checker) {
-			checker=f_clientValidator._EvalFunction(checker);
-			this.f_addChecker(checker);
+		var checkers=f_core.GetAttributeNS(component, "vChecker");
+		if (checkers) {
+			var s=checkers.split(':');
+			for(var i=0;i<s.length;i++) {
+				var checker=f_clientValidator._EvalFunction(s[i]);
+				this.f_addChecker(checker);
+			}
 		}
 
-		var formatter=f_core.GetAttributeNS(component,"vFormatter");
-		if (formatter) {
-			formatter=f_clientValidator._EvalFunction(formatter);
-			this.f_addFormatter(formatter);
+		var formatters=f_core.GetAttributeNS(component, "vFormatter");
+		if (formatters) {
+			var s=formatters.split(':');
+			for(var i=0;i<s.length;i++) {
+				var formatter=f_clientValidator._EvalFunction(s[i]);
+				this.f_addFormatter(formatter);
+			}
 		}
 
-		var behavior=f_core.GetAttributeNS(component,"vBehavior");
-		if (behavior) {
-			behavior=f_clientValidator._EvalFunction(behavior);
-			this.f_addBehavior(behavior);
+		var behaviors=f_core.GetAttributeNS(component, "vBehavior");
+		if (behaviors) {
+			var s=behaviors.split(':');
+			for(var i=0;i<s.length;i++) {
+				var behavior=f_clientValidator._EvalFunction(s[i]);
+				this.f_addBehavior(behavior);
+			}
 		}
 
-		var error=f_core.GetAttributeNS(component,"vError");
-		if (error) {
-			error=f_clientValidator._EvalFunction(error);
-			this.f_setOnError(error);
+		var errors=f_core.GetAttributeNS(component, "vError");
+		if (errors) {
+			var s=errors.split(':');
+			for(var i=0;i<s.length;i++) {
+				var error=f_clientValidator._EvalFunction(s[i]);
+				this.f_setOnError(error);
+			}
 		}
 
-		var checkError=f_core.GetAttributeNS(component,"vCheckError");
-		if (checkError) {
-			checkError=f_clientValidator._EvalFunction(checkError);
-			this.f_setOnCheckError(checkError);
+		var checkErrors=f_core.GetAttributeNS(component, "vCheckError");
+		if (checkErrors) {
+			var s=checkErrors.split(':');
+			for(var i=0;i<s.length;i++) {
+				var checkError=f_clientValidator._EvalFunction(s[i]);
+				this.f_setOnCheckError(checkError);
+			}
 		}
 
-		var converter=f_core.GetAttributeNS(component,"converter");
-		if (converter) {
-			converter=f_clientValidator._EvalFunction(converter, true);
-			this.f_setConverter(converter);
+		var converters=f_core.GetAttributeNS(component, "converter");
+		if (converters) {
+			var s=converters.split(':');
+			for(var i=0;i<s.length;i++) {
+				var converter=f_clientValidator._EvalFunction(s[i], true);
+				this.f_setConverter(converter);
+			}
 		}
 		
 		if (internalValue===undefined) {
@@ -1705,6 +1757,47 @@ var __members = {
 		this._applyOutputValue();
 	
 		this._initialFormattedValue=this._input.value;
+	},
+	/**
+	 * @method private
+	 * @param Array validators
+	 * @return void 
+	 */
+	_installValidatorObjects: function(validators) {
+		var expressions=f_clientValidator._Expressions;
+		if (!expressions) {
+			expressions=new Object;
+			f_clientValidator._Expressions=expressions;
+		}
+		
+		var vs=validators.split(';');
+		
+		var event=new f_event(this, f_event.INIT);
+		var oldEvent=undefined;
+		try {
+			oldEvent=f_event.SetEvent(event);
+			
+			for(var i=0;i<vs.length;i++) {
+				var v=decodeURIComponent(vs[i]);
+				
+				try {
+					var f=expressions[v];
+					if (!f) {
+						f=new window.Function("event", v);
+						expressions[v]=f;
+					}
+					
+					f.call(this, event);
+					
+				} catch (x) {
+					f_core.Error(f_clientValidator, "_InstallValidatorObjects: Can not initialize validator object '"+v+"'", x);
+				}
+			}
+		} finally {
+			f_event.SetEvent(oldEvent);
+
+			f_classLoader.Destroy(event);
+		}
 	}
 };
 

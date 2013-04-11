@@ -1366,11 +1366,44 @@ var __statics = {
 	/**
 	 * @method private static
 	 */
-	_SetLastError : function(validator, parameterPrefix, resourcePrefix, params) {
+	_SetLocaleError: function(validator, parameterPrefix, resourcePrefix, params) {
+		var resourceBundle = f_resourceBundle.Get(f_locale);
+
+		var summary = validator.f_getStringParameter(parameterPrefix
+				+ ".summary");
+		if (!summary) {
+			summary = validator.f_getStringParameter(parameterPrefix);
+		}
+		if (!summary) {
+			summary = resourceBundle.f_get(resourcePrefix);
+		}
+		if (summary && params) {
+			summary = f_core.FormatMessage(summary, params);
+		}
+
+		var detail = validator
+				.f_getStringParameter(parameterPrefix + ".detail");
+		if (!detail) {
+			detail = resourceBundle.f_formatParams(resourcePrefix + "_detail",
+					null, null);
+		}
+		if (detail && params) {
+			detail = f_core.FormatMessage(detail, params);
+		}
+
+		validator.f_setLastError(summary, detail, f_messageObject.SEVERITY_ERROR);
+	},
+	/**
+	 * @method private static
+	 */
+	_SetLastError: function(validator, parameterPrefix, resourcePrefix, params) {
 		var resourceBundle = f_resourceBundle.Get(f_vb);
 
 		var summary = validator.f_getStringParameter(parameterPrefix
 				+ ".summary");
+		if (!summary) {
+			summary = validator.f_getStringParameter(parameterPrefix);
+		}
 		if (!summary) {
 			summary = resourceBundle.f_get(resourcePrefix + "_SUMMARY");
 		}
@@ -1582,7 +1615,7 @@ var __statics = {
 				return null;
 			}
 
-			var n;
+			var n=undefined;
 			var ip;
 			// var d;
 			var dp;
@@ -1596,8 +1629,7 @@ var __statics = {
 				dp = r[3];
 			}
 
-			for (; ip.length > 1 && ip.charAt(0) == "0"; ip = ip.substring(1))
-				;
+			for (; ip.length > 1 && ip.charAt(0) == "0"; ip = ip.substring(1));
 
 			var num;
 			if (dp) {
@@ -1672,6 +1704,150 @@ var __statics = {
 		}
 		
 		return ret;
+	},
+	/**
+	 * @method private static
+	 * @param f_validator validator
+	 * @param String inVal
+	 * @return Boolean
+	 */
+	_LengthValidatorBehavior: function(validator, inVal) {
+		if (!inVal) {
+			return inVal;
+		}
+		
+		var max=validator.f_getParameter("lv.max");
+		var min=validator.f_getParameter("lv.min");
+		var label="";
+
+		if (typeof(max)=="number" && max>0 && max<inVal.length) {
+			f_vb._SetLocaleError(validator, "maximum.error", "javax_faces_validator_LengthValidator_MAXIMUM", [max, label]);
+			return null;
+		} 
+		
+		if (typeof(min)=="number" && min>0 && min>inVal.length) {
+			f_vb._SetLocaleError(validator, "minimum.error", "javax_faces_validator_LengthValidator_MINIMUM", [min, label]);
+			return null;
+		}
+		
+		return inVal;
+	},
+	/**
+	 * @method private static
+	 * @param f_validator validator
+	 * @param String inVal
+	 * @return Boolean
+	 */
+	_DoubleRangeValidator: function(validator, inVal) {
+		var val=validator.f_getComponent().f_getValue();
+		
+		if (typeof(val)=="string") {
+			val=parseFloat(val);
+		}
+
+		var label="";
+
+		if (typeof(val)!="number") {
+			f_vb._SetLocaleError(validator, "invalid.error", "javax_faces_validator_DoubleRangeValidator_TYPE", [label]);
+			return inVal;
+		}		
+		
+		var max=validator.f_getParameter("drv.max");
+		var min=validator.f_getParameter("drv.min");
+
+		var minAndMaxError=false;
+		
+		if (typeof(max)=="number" && max<val) {
+			if (typeof(min)=="number") {
+				minAndMaxError=true;
+			} else {
+				f_vb._SetLocaleError(validator, "maximum.error", "javax_faces_validator_DoubleRangeValidator_MAXIMUM", [max, label]);
+			}
+
+		} else if (typeof(min)=="number" && min>val) {
+			if (typeof(max)=="number") {
+				minAndMaxError=true;
+			} else {
+				f_vb._SetLocaleError(validator, "minimum.error", "javax_faces_validator_DoubleRangeValidator_MINIMUM", [min, label]);							
+			}
+		}
+		
+		if (minAndMaxError) {
+			f_vb._SetLocaleError(validator, "range.error", "javax_faces_validator_NOT_IN_RANGE", [min, max, label]);										
+		}
+		return inVal;
+	},
+	/**
+	 * @method private static
+	 * @param f_validator validator
+	 * @param String inVal
+	 * @return Boolean
+	 */
+	_LongRangeValidator: function(validator, inVal) {
+		var val=validator.f_getComponent().f_getValue();
+		
+		if (typeof(val)=="string") {
+			val=parseInt(val, 10);
+		}
+
+		var label="";
+
+		if (typeof(val)!="number") {
+			f_vb._SetLocaleError(validator, "invalid.error", "javax_faces_validator_LongRangeValidator_TYPE", [label]);							
+			return inVal;
+		}		
+		
+		var max=validator.f_getParameter("lrv.max");
+		var min=validator.f_getParameter("lrv.min");
+
+		var minAndMaxError=false;
+		
+		if (typeof(max)=="number" && max<val) {
+			if (typeof(min)=="number") {
+				minAndMaxError=true;
+			} else {
+				f_vb._SetLocaleError(validator, "maximum.error", "javax_faces_validator_LongRangeValidator_MAXIMUM", [max, label]);
+			}
+
+		} else if (typeof(min)=="number" && min>val) {
+			if (typeof(max)=="number") {
+				minAndMaxError=true;
+			} else {
+				f_vb._SetLocaleError(validator, "minimum.error", "javax_faces_validator_LongRangeValidator_MINIMUM", [min, label]);
+			}
+		}
+		
+		if (minAndMaxError) {
+			f_vb._SetLocaleError(validator, "range.error", "javax_faces_validator_NOT_IN_RANGE", [min, max, label]);										
+		}
+		return inVal;
+	},
+	/**
+	 * @method public static
+	 */
+	LengthValidator: function(validator, max, min) {
+		validator.f_addParameter("lv.max", max);
+		validator.f_addParameter("lv.min", min);
+		
+		validator.f_addChecker(f_vb._LengthValidatorBehavior);
+	},
+	/**
+	 * @method public static
+	 */
+	DoubleRangeValidator: function(validator, min, max) {
+		validator.f_addParameter("drv.max", max);
+		validator.f_addParameter("drv.min", min);
+		
+		validator.f_addChecker(f_vb._DoubleRangeValidator);
+	},
+	/**
+	 * @method public static
+	 */
+	LongRangeValidator: function(validator, min, max) {
+		validator.f_addParameter("lrv.max", max);
+		validator.f_addParameter("lrv.min", min);
+		
+		validator.f_addChecker(f_vb._LongRangeValidator);
 	}
 };
 
