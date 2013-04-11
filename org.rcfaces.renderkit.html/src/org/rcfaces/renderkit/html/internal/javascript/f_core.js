@@ -6051,20 +6051,17 @@ var f_core = {
 			
 			ret.push(message.substring(pos, idx2));
 			idx2++;
-			
-			for(;;) {
-				idx=message.indexOf('\'', idx2);
-				if (idx<0) {
-					throw new Error("Invalid expression \""+message+"\".");
-				}
-				if (idx==idx2+1) {
-					ret.push('\'');
-					idx2=idx+1;
-					continue;
-				}
-				break;
+		
+			idx=message.indexOf('\'', idx2);
+			if (idx<0) {
+				throw new Error("Invalid expression \""+message+"\".");
 			}
-			
+			if (idx==idx2) {
+				ret.push('\'');
+				pos=idx+1;
+				continue;
+			}
+
 			pos=idx+1; // On continue apres le '
 			
 			if (idx>idx2) {
