@@ -636,21 +636,34 @@ var __members = {
 	 */
 	f_computeStyleClass: function(suffix) {				
 		if (suffix) {
+			var c=[];
 			// Un suffix, pas de cache !
 			var mainStyleClass=this.f_getMainStyleClass();
 			
-			var computedStyleClass=mainStyleClass+" "+mainStyleClass+suffix;
+			var ss=mainStyleClass.split(" ");
+			for(var i=0;i<ss.length;i++) {
+				var clazz=ss[i];
+				
+				c.push(clazz);
+				c.push(clazz+suffix);
+			}
 			
 			var styleClass=this.f_getStyleClass();
 			if (styleClass) {
-				computedStyleClass+=" "+styleClass+" "+styleClass+suffix;
+				var ss=styleClass.split(" ");
+				for(var i=0;i<ss.length;i++) {
+					var clazz=ss[i];
+					
+					c.push(clazz);
+					c.push(clazz+suffix);
+				}
 			}
 			
-			return computedStyleClass;	
+			return c.join(" ");	
 		}
 
 		var computedStyleClass=this._computedStyleClass;
-		if (!computedStyleClass) {
+		if (computedStyleClass===undefined) {
 			computedStyleClass=this.f_getMainStyleClass();
 			
 			var styleClass=this.f_getStyleClass();
