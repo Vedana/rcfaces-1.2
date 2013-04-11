@@ -138,7 +138,7 @@ public abstract class AbstractRenderContext implements IRenderContext {
      * protected void releaseComponentAttributes(Map map) { map.clear(); }
      */
 
-    private void releaseMap(Map map) {
+    private void releaseMap(Map< ? , ? > map) {
         map.clear();
     }
 
