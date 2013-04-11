@@ -236,6 +236,22 @@ public class SelectItemTools {
                     if (t != null) {
                         return t;
                     }
+
+                } else {
+                    SelectItem selectItem = convertToSelectItem(facesContext,
+                            value);
+
+                    if (selectItem != null) {
+                        T t = processSelectItem(component, selectItem, true);
+                        if (t != null) {
+                            return t;
+                        }
+                    } else {
+                        if (LOG.isErrorEnabled()) {
+                            LOG.error("Unknown type of selectItem value '"
+                                    + value + "'");
+                        }
+                    }
                 }
 
             } else if (component instanceof UISelectItems) {
