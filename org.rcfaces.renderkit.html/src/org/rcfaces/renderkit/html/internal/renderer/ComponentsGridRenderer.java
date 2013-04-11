@@ -42,7 +42,6 @@ import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
-import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.CollectionTools;
 import org.rcfaces.core.internal.tools.ComponentTools;
@@ -180,7 +179,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 
     public ComponentsGridRenderContext createComponentsGridContext(
             IProcessContext processContext,
-            IScriptRenderContext scriptRenderContext,
+            IJavaScriptRenderContext scriptRenderContext,
             ComponentsGridComponent dgc, int rowIndex, int forcedRow,
             ISortedComponent[] sortedComponents, String filterExpression,
             String showAdditionals, String hideAdditionals,
@@ -1156,7 +1155,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         private Converter rowValueConverter;
 
         public ComponentsGridRenderContext(IProcessContext processContext,
-                IScriptRenderContext scriptRenderContext,
+                IJavaScriptRenderContext scriptRenderContext,
                 ComponentsGridComponent gridComponent, int rowIndex,
                 int forcedRows, ISortedComponent[] sortedComponents,
                 String filterExpression, String showAdditionals,

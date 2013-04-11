@@ -1,7 +1,7 @@
 /*
  * $Id$
  */
-package org.rcfaces.core.internal.config;
+package org.rcfaces.core.internal.validator;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
@@ -19,25 +19,16 @@ import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.validator.DoubleRangeValidator;
-import javax.faces.validator.LengthValidator;
-import javax.faces.validator.LongRangeValidator;
-import javax.faces.validator.Validator;
 
 import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.Rule;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.config.AbstractRenderKitRegistryImpl;
 import org.rcfaces.core.internal.lang.StringAppender;
-import org.rcfaces.core.internal.renderkit.IRenderContext;
-import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.tools.BindingTools;
 import org.rcfaces.core.internal.util.ClassLocator;
 import org.rcfaces.core.internal.util.Convertor;
-import org.rcfaces.core.internal.validator.IClientValidatorDescriptor;
-import org.rcfaces.core.internal.validator.IClientValidatorsRegistry;
-import org.rcfaces.core.internal.validator.IServerConverter;
-import org.rcfaces.core.internal.validator.ITaskDescriptor;
 import org.rcfaces.core.internal.validator.impl.RegExpFilter;
 import org.rcfaces.core.lang.IParametredConverter;
 import org.rcfaces.core.validator.IClientValidatorTask;
@@ -901,80 +892,5 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
 
             return map;
         }
-    }
-
-    public String convertFromValidatorToExpression(
-            IRenderContext renderContext, Validator validator) {
-
-        if (validator instanceof LongRangeValidator) {
-            return getLongRangeValidatorExpression(renderContext,
-                    (LongRangeValidator) validator);
-        }
-
-        if (validator instanceof DoubleRangeValidator) {
-            return getDoubleRangeValidatorExpression(renderContext,
-                    (DoubleRangeValidator) validator);
-        }
-
-        if (validator instanceof LengthValidator) {
-            return getLengthValidatorExpression(renderContext,
-                    (LengthValidator) validator);
-        }
-
-        return null;
-    }
-
-    private String getLengthValidatorExpression(IRenderContext renderContext,
-            LengthValidator validator) {
-        StringAppender sa = new StringAppender(64);
-
-        return convertValidatorExpression(renderContext, "f_validator",
-                "LengthValidator", sa.toString());
-    }
-
-    private String getDoubleRangeValidatorExpression(
-            IRenderContext renderContext, DoubleRangeValidator validator) {
-        StringAppender sa = new StringAppender(64);
-
-        return convertValidatorExpression(renderContext, "f_validator",
-                "DoubleRangeValidator", sa.toString());
-    }
-
-    private String getLongRangeValidatorExpression(
-            IRenderContext renderContext, LongRangeValidator validator) {
-        StringAppender sa = new StringAppender(64);
-
-        return convertValidatorExpression(renderContext, "f_validator",
-                "LongRangeValidator", sa.toString());
-    }
-
-    private String convertValidatorExpression(IRenderContext renderContext,
-            String clazz, String method, String params) {
-
-        IScriptRenderContext scriptRenderContext = renderContext
-                .getScriptRenderContext();
-
-        StringAppender sa = new StringAppender(clazz.length() + 1
-                + method.length() + params.length());
-
-        if (clazz != null) {
-            if (scriptRenderContext != null) {
-                clazz = scriptRenderContext.convertSymbol(null, clazz);
-            }
-
-            sa.append(clazz);
-            sa.append('.');
-        }
-
-        if (scriptRenderContext != null) {
-            method = scriptRenderContext.convertSymbol(clazz, method);
-        }
-        sa.append(method);
-
-        sa.append('(');
-        sa.append(params);
-        sa.append(')');
-
-        return sa.toString();
     }
 }

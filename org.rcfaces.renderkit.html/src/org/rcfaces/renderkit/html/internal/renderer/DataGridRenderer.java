@@ -60,7 +60,6 @@ import org.rcfaces.core.internal.renderkit.IEventData;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
-import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.AdditionalInformationTools;
 import org.rcfaces.core.internal.tools.ArrayIndexesModel;
@@ -1738,7 +1737,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
     public DataGridRenderContext createTableContext(
             IProcessContext processContext,
-            IScriptRenderContext scriptRenderContext, IGridComponent dg,
+            IJavaScriptRenderContext scriptRenderContext, IGridComponent dg,
             int rowIndex, int forcedRows, ISortedComponent sortedComponents[],
             String filterExpression, String showAdditional,
             String hideAdditional, ISelectedCriteria[] criteriaContainers) {
@@ -1763,8 +1762,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
         private UIColumn keySearchColumn;
 
         public DataGridRenderContext(IProcessContext processContext,
-                IScriptRenderContext scriptRenderContext, IGridComponent dg,
-                int rowIndex, int forcedRows,
+                IJavaScriptRenderContext scriptRenderContext,
+                IGridComponent dg, int rowIndex, int forcedRows,
                 ISortedComponent[] sortedComponents, String filterExpression,
                 String showAdditionals, String hideAdditionals,
                 ISelectedCriteria[] criteriaContainers) {

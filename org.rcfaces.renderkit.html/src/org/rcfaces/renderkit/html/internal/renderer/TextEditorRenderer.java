@@ -101,14 +101,16 @@ public class TextEditorRenderer extends AbstractInputRenderer {
         if (htmlRenderContext.getJavaScriptRenderContext().isCollectorMode() == false) {
             String onLoad = "f_textEditor."
                     + htmlWriter.getHtmlComponentRenderContext()
-                            .getRenderContext().getScriptRenderContext()
+                            .getHtmlRenderContext()
+                            .getJavaScriptRenderContext()
                             .convertSymbol("f_textEditor", "_OnLoad")
                     + "(this)";
             htmlWriter.writeAttribute("onload", onLoad);
         } else {
             String onLoad = "this."
                     + htmlWriter.getHtmlComponentRenderContext()
-                            .getRenderContext().getScriptRenderContext()
+                            .getHtmlRenderContext()
+                            .getJavaScriptRenderContext()
                             .convertSymbol("f_textEditor", "_loaded") + "=true";
             htmlWriter.writeAttribute("onload", onLoad);
             htmlWriter.getJavaScriptEnableMode().enableOnInit();

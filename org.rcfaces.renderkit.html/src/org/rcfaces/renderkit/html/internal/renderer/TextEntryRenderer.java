@@ -20,18 +20,17 @@ import org.rcfaces.core.component.TextEntryComponent;
 import org.rcfaces.core.component.capability.IClientValidationCapability;
 import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.config.ClientValidatorsRegistryImpl.ClientValidator;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.manager.IValidationParameters;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
-import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.ClientValidatorTools;
 import org.rcfaces.core.internal.tools.ClientValidatorTools.IClientValidationContext;
 import org.rcfaces.core.internal.util.CommandParserIterator;
 import org.rcfaces.core.internal.util.ParamUtils;
+import org.rcfaces.core.internal.validator.ClientValidatorsRegistryImpl.ClientValidator;
 import org.rcfaces.core.internal.validator.IClientValidatorDescriptor;
 import org.rcfaces.core.internal.validator.IClientValidatorsRegistry;
 import org.rcfaces.core.internal.validator.ITaskDescriptor;
@@ -45,11 +44,13 @@ import org.rcfaces.core.validator.IParameter;
 import org.rcfaces.core.validator.ITranslatorTask;
 import org.rcfaces.renderkit.html.internal.AbstractInputRenderer;
 import org.rcfaces.renderkit.html.internal.EventsRenderer;
+import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
+import org.rcfaces.renderkit.html.internal.validator.HtmlClientValidators;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -1073,11 +1074,11 @@ public class TextEntryRenderer extends AbstractInputRenderer {
     private void appendValidators(FacesContext facesContext,
             IHtmlWriter writer, Validator[] validators) throws WriterException {
 
-        IClientValidatorsRegistry clientValidatorManager = writer
+        IClientValidatorsRegistry clientValidatorsRegistry = writer
                 .getComponentRenderContext().getRenderContext()
                 .getProcessContext().getRcfacesContext()
                 .getClientValidatorsRegistry();
-        if (clientValidatorManager == null) {
+        if (clientValidatorsRegistry == null) {
             // throw new FacesException("Can not get validator registry from
             // faces context !");
 
@@ -1085,8 +1086,8 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             return;
         }
 
-        IRenderContext renderContext = writer.getComponentRenderContext()
-                .getRenderContext();
+        IHtmlRenderContext renderContext = writer
+                .getHtmlComponentRenderContext().getHtmlRenderContext();
 
         List<String> vls = null;
 
@@ -1102,7 +1103,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
                 expression = clientValidator.getExpression();
 
             } else {
-                expression = clientValidatorManager
+                expression = HtmlClientValidators.get()
                         .convertFromValidatorToExpression(renderContext,
                                 validator);
             }

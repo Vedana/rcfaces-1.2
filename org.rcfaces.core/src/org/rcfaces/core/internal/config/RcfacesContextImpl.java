@@ -44,6 +44,7 @@ import org.rcfaces.core.internal.repository.IRepositoryManager;
 import org.rcfaces.core.internal.repository.RepositoryManagerImpl;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.util.ConfigurationLoader;
+import org.rcfaces.core.internal.validator.ClientValidatorsRegistryImpl;
 import org.rcfaces.core.internal.validator.IClientValidatorsRegistry;
 import org.rcfaces.core.internal.version.IResourceVersionHandler;
 import org.rcfaces.core.internal.version.ResourceVersionHandlerImpl;

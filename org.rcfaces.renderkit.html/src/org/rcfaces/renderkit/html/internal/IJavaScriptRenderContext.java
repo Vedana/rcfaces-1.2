@@ -86,4 +86,6 @@ public interface IJavaScriptRenderContext extends IScriptRenderContext {
     void writeRaw(IHtmlWriter htmlWriter, String text) throws WriterException;
 
     IJavaScriptRepository getRepository();
+
+    String convertSymbol(String className, String memberName);
 }

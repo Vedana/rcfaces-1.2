@@ -17,5 +17,5 @@ public interface IScriptRenderContext extends StateHolder {
 
     Locale getUserLocale();
 
-    String convertSymbol(String className, String memberName);
+//    String convertSymbol(String className, String memberName);
 }

@@ -25,7 +25,6 @@ import org.rcfaces.core.internal.manager.IValidationParameters;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
-import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.internal.util.ParamUtils;
@@ -39,6 +38,7 @@ import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlElements;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
+import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.ISubInputClientIdRenderer;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
@@ -697,7 +697,7 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
 
     public DataGridRenderContext createTableContext(
             IProcessContext processContext,
-            IScriptRenderContext scriptRenderContext, IGridComponent dg,
+            IJavaScriptRenderContext scriptRenderContext, IGridComponent dg,
             int rowIndex, int forcedRows, ISortedComponent sortedComponents[],
             String filterExpression, String showAdditionals,
             String hideAdditionals, ISelectedCriteria[] criteriaContainers) {
@@ -732,8 +732,8 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
     public class ComboGridRenderContext extends DataGridRenderContext {
 
         public ComboGridRenderContext(IProcessContext processContext,
-                IScriptRenderContext scriptRenderContext, IGridComponent dg,
-                int rowIndex, int forcedRows,
+                IJavaScriptRenderContext scriptRenderContext,
+                IGridComponent dg, int rowIndex, int forcedRows,
                 ISortedComponent[] sortedComponents, String filterExpression,
                 String showAdditionals, String hideAdditionals,
                 ISelectedCriteria[] criteriaContainers) {

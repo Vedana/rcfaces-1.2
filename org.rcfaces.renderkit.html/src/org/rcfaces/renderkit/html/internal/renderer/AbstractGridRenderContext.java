@@ -79,7 +79,6 @@ import org.rcfaces.core.internal.listener.IScriptListener;
 import org.rcfaces.core.internal.listener.IServerActionListener;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
-import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.tools.CriteriaTools;
 import org.rcfaces.core.lang.FilterPropertiesMap;
@@ -91,6 +90,7 @@ import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
+import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 
 /**
  * 
@@ -187,7 +187,7 @@ public abstract class AbstractGridRenderContext {
 
     private boolean designerMode;
 
-    private IScriptRenderContext scriptRenderContext;
+    private IJavaScriptRenderContext scriptRenderContext;
 
     private boolean hasScrollBars;
 
@@ -247,7 +247,7 @@ public abstract class AbstractGridRenderContext {
     private String scopeColId = null;
 
     private AbstractGridRenderContext(IProcessContext processContext,
-            IScriptRenderContext scriptRenderContext,
+            IJavaScriptRenderContext scriptRenderContext,
             IGridComponent gridComponent, ISortedComponent sortedComponents[],
             boolean checkTitleImages, ISelectedCriteria[] criteriaConfigs) {
         this.processContext = processContext;
@@ -883,8 +883,8 @@ public abstract class AbstractGridRenderContext {
     protected AbstractGridRenderContext(
             IHtmlComponentRenderContext componentRenderContext) {
         this(componentRenderContext.getRenderContext().getProcessContext(),
-                componentRenderContext.getRenderContext()
-                        .getScriptRenderContext(),
+                componentRenderContext.getHtmlRenderContext()
+                        .getJavaScriptRenderContext(),
                 (IGridComponent) componentRenderContext.getComponent(),
                 computeSortedComponents(componentRenderContext), true, null);
 
@@ -924,7 +924,7 @@ public abstract class AbstractGridRenderContext {
     }
 
     protected AbstractGridRenderContext(IProcessContext processContext,
-            IScriptRenderContext scriptRenderContext,
+            IJavaScriptRenderContext scriptRenderContext,
             IGridComponent gridComponent, int rowIndex, int forcedRows,
             ISortedComponent sortedComponents[], String filterExpression,
             String showAdditionals, String hideAdditionals,

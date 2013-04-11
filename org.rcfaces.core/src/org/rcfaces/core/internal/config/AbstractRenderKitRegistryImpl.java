@@ -17,7 +17,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-abstract class AbstractRenderKitRegistryImpl {
+public abstract class AbstractRenderKitRegistryImpl {
 
     private static final Log LOG = LogFactory
             .getLog(AbstractRenderKitRegistryImpl.class);
