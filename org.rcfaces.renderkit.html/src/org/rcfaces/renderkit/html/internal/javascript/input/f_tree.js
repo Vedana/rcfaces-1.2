@@ -4180,33 +4180,27 @@ var __members = {
 		
 		var sns=this._schrodingerNodeStates;
 		if (sns) {
-			var checks=undefined;
-			var unchecks=undefined;
+			var nodes=[];
 			for(var value in sns) {
 				var node=sns[value];
 				
-				if (node._checked) {
-					if (!checks) {
-						checks=new Array;
-					}
-					
-					checks.push(value);
-					continue;
-				}
-				if (!unchecks) {
-					unchecks=new Array;
-				}
-				
-				unchecks.push(value);
+				nodes.push(node);
 				continue;
 			}
 			
-			if (checks) {
-				this.f_setProperty("schrodingerChecks", checks, true);
-			}
-			
-			if (unchecks) {
-				this.f_setProperty("schrodingerUnchecks", unchecks, true);
+			if (nodes) {
+				nodes.sort(function(n1, n2) {
+					return n1._depth-n2._depth;
+				});
+				
+				var values=[];
+				for(var i=0;i<nodes.length;i++) {
+					var node=nodes[i];
+					
+					values.push(((node._checked)?"+":"-")+node._value);
+				}
+				
+				this.f_setProperty("schrodingerStates", values, true);
 			}
 		}
 	
@@ -4760,7 +4754,7 @@ var __members = {
 		
 		var sns=this._schrodingerNodeStates;
 		if (sns) {
-			sns[node._value]=undefined;
+			delete sns[node._value];
 		}
 		
 		this.fa_updateElementStyle(node);
@@ -4946,6 +4940,10 @@ var __members = {
 						}		
 					}
 					
+					if (j==segments.length-1) {
+						break;
+					}
+					
 					if (node._interactive || node._loadingChildren) {
 						waitingInteractives.push(path);
 						this._openNode(node);
@@ -4967,7 +4965,7 @@ var __members = {
 				callbacks.onNode.call(this, node);
 			}
 			
-			this._openNode(node);
+			// this._openNode(node);
 		}
 		
 		if (waitingInteractives.length) {
