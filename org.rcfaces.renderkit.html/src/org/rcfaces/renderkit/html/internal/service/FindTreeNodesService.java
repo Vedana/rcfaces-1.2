@@ -18,6 +18,7 @@ import java.util.zip.GZIPOutputStream;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UISelectItem;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
@@ -32,17 +33,20 @@ import org.rcfaces.core.component.TreeComponent;
 import org.rcfaces.core.component.capability.IOutlinedLabelCapability;
 import org.rcfaces.core.component.iterator.ISelectItemFinder;
 import org.rcfaces.core.internal.RcfacesContext;
+import org.rcfaces.core.internal.adapter.IAdapterManager;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.item.BasicSelectItemPath;
 import org.rcfaces.core.item.ISelectItemPath;
 import org.rcfaces.core.lang.FilterPropertiesMap;
+import org.rcfaces.core.lang.IAdaptable;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.util.SelectItemTools;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
+import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
 import org.rcfaces.renderkit.html.internal.renderer.TreeRenderer;
 import org.rcfaces.renderkit.html.internal.util.MapDecoder;
 
@@ -217,7 +221,8 @@ public class FindTreeNodesService extends AbstractHtmlService {
         final IFilterProperties filterProperties = new FilterPropertiesMap(
                 parameters);
 
-        HtmlProcessContextImpl.getHtmlProcessContext(facesContext);
+        IHtmlProcessContext htmlProcessContext = HtmlProcessContextImpl
+                .getHtmlProcessContext(facesContext);
 
         CharArrayWriter cw = null;
         PrintWriter pw = printWriter;
@@ -231,51 +236,55 @@ public class FindTreeNodesService extends AbstractHtmlService {
         final EnumSet<IOutlinedLabelCapability.Method> methods = treeComponent
                 .getOutlinedLabelMethodSet();
 
-        SelectItemTools.traverseSelectItemTree(facesContext, treeComponent,
-                filterProperties,
-                new SelectItemTools.DefaultSelectItemNodeHandler<Boolean>() {
+        final IAdapterManager adapterManager = htmlProcessContext
+                .getRcfacesContext().getAdapterManager();
 
-                    private List<SelectItem> stack = new ArrayList<SelectItem>();
+        ISelectItemFinder finder = findFinder(adapterManager, treeComponent);
 
-                    @Override
-                    public Boolean beginNode(UIComponent component,
-                            SelectItem selectItem) {
+        if (finder != null) {
+            ISelectItemPath[] ps = finder.search(treeComponent, parameters);
 
-                        if (selectItem instanceof ISelectItemFinder) {
-                            ISelectItemFinder finder = ((ISelectItemFinder) selectItem);
+            if (ps != null) {
+                paths.addAll(Arrays.asList(ps));
+            }
 
-                            ISelectItemPath[] ps = finder.search(treeComponent,
-                                    parameters);
+        } else {
+            SelectItemTools
+                    .traverseSelectItemTree(
+                            facesContext,
+                            treeComponent,
+                            filterProperties,
+                            new SelectItemTools.DefaultSelectItemNodeHandler<Boolean>() {
 
-                            if (ps != null) {
-                                paths.addAll(Arrays.asList(ps));
-                            }
+                                private List<SelectItem> stack = new ArrayList<SelectItem>();
 
-                            return Boolean.TRUE;
-                        }
+                                @Override
+                                public Boolean beginNode(UIComponent component,
+                                        SelectItem selectItem) {
 
-                        stack.add(selectItem);
+                                    stack.add(selectItem);
 
-                        String label = selectItem.getLabel();
+                                    String label = selectItem.getLabel();
 
-                        if (match(treeComponent, filterProperties, methods,
-                                label)) {
-                            paths.add(new BasicSelectItemPath(stack));
-                        }
+                                    if (match(treeComponent, filterProperties,
+                                            methods, label)) {
+                                        paths.add(new BasicSelectItemPath(stack));
+                                    }
 
-                        return null;
-                    }
+                                    return null;
+                                }
 
-                    @Override
-                    public Boolean endNode(UIComponent component,
-                            SelectItem selectItem) {
+                                @Override
+                                public Boolean endNode(UIComponent component,
+                                        SelectItem selectItem) {
 
-                        stack.remove(stack.size() - 1);
+                                    stack.remove(stack.size() - 1);
 
-                        return null;
-                    }
+                                    return null;
+                                }
 
-                });
+                            });
+        }
 
         StringBuilder sb = new StringBuilder(1024);
         for (ISelectItemPath path : paths) {
@@ -297,6 +306,43 @@ public class FindTreeNodesService extends AbstractHtmlService {
 
             printWriter.write(cw.toCharArray());
         }
+    }
+
+    private ISelectItemFinder findFinder(IAdapterManager adapterManager,
+            TreeComponent treeComponent) {
+        for (UIComponent child : treeComponent.getChildren()) {
+            if (child instanceof UISelectItem) {
+                UISelectItem uiSelectItem = (UISelectItem) child;
+
+                Object value = uiSelectItem.getValue();
+                if (value == null) {
+                    continue;
+                }
+
+                if (value instanceof ISelectItemFinder) {
+                    return (ISelectItemFinder) value;
+                }
+
+                if (value instanceof IAdaptable) {
+                    ISelectItemFinder finder = ((IAdaptable) value).getAdapter(
+                            ISelectItemFinder.class, treeComponent);
+
+                    if (finder != null) {
+                        return finder;
+                    }
+                }
+
+                if (org.rcfaces.core.internal.Constants.ADAPT_SELECT_ITEMS) {
+                    ISelectItemFinder finder = adapterManager.getAdapter(value,
+                            ISelectItemFinder.class, treeComponent);
+
+                    if (finder != null) {
+                        return finder;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     protected boolean match(TreeComponent treeComponent,
