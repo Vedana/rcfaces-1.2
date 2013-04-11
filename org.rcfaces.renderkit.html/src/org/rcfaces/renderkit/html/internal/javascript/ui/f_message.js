@@ -121,13 +121,13 @@ var __members = {
 				this.className=cls;
 			}
 
-			if (summaryLabel && summaryLabel.style.display!="none") {
+			if (summaryLabel) {
 				summaryLabel.style.display="none";
 			}
-			if (detailLabel && detailLabel.style.display!="none") {
+			if (detailLabel) {
 				detailLabel.style.display="none";
 			}
-			if (textLabel && textLabel.style.display!="inline") {
+			if (textLabel) {
 				textLabel.style.display="inline";
 			}
 			

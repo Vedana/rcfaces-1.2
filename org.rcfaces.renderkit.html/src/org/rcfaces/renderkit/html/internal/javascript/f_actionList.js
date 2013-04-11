@@ -277,7 +277,7 @@ var __members= {
 				continue;
 			}
 	
-			var oldEvent=null;
+			var oldEvent=undefined;
 			try {
 				oldEvent=f_event.SetEvent(evt);
 				

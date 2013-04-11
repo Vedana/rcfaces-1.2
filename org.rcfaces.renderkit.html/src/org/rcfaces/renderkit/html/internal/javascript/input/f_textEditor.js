@@ -210,7 +210,7 @@ var __statics = {
 		
 		return textEditor._onBlur(evt);
 	}
-}
+};
 
 var __members = {
 	f_textEditor: function() {
