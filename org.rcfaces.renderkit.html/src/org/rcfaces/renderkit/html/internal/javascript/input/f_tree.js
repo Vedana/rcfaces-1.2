@@ -1142,6 +1142,10 @@ var __members = {
 		}
 		
 		var outlinedLabel=this.fa_getOutlinedLabel();
+		var outlinedLabelTitle=undefined;
+		if (outlinedLabel) {
+			outlinedLabelTitle=f_resourceBundle.Get(f_tree).f_get("OUTLINED_NODE");
+		}
 		
 		var readOnly=this.f_isReadOnly();
 		var disabled=this.f_isDisabled();
@@ -1179,12 +1183,15 @@ var __members = {
 				ondblclick: f_tree._DivNode_dblClick
 			});
 			
+			if (node._tooltip) {
+				divNode.title=node._tooltip;
+			}
+			
 			if (this._treeNodeFocusEnabled==0) {
 				divNode.setAttribute("role", "treeitem");
 			} else {
 				divNode.setAttribute("role", "presentation");				
 			}
-
 			
 			li._divNode=divNode;
 			
@@ -1305,7 +1312,9 @@ var __members = {
 			li._label=label;
 			
 			if (outlinedLabel) {
-				this.fa_setOutlinedSpan(node._label, label);
+				if (this.fa_setOutlinedSpan(node._label, label)) {		
+					divNode.title=outlinedLabelTitle;
+				}
 			}
 			
 			if (this._treeNodeFocusEnabled==1) {				
@@ -1400,6 +1409,8 @@ var __members = {
 		var nodesFound=new Array;
 		this._listNodesInTree(null, nodes, lis);
 		
+		var outlinedLabelTitle=f_resourceBundle.Get(f_tree).f_get("OUTLINED_NODE");
+
 		for(var i=0;i<nodes.length;i++) {
 			var node=nodes[i];
 
@@ -1410,6 +1421,16 @@ var __members = {
 			
 			if (this.fa_setOutlinedSpan(node._label, li._label)) {
 				nodesFound.push(node);
+				
+				li._divNode.title=outlinedLabelTitle;
+
+			} else if (li._divNode.title) {
+				var tooltip=node._tooltip;
+				if (tooltip) {
+					li._divNode.title=tooltip;
+				} else {
+					li._divNode.removeAttribute("title");
+				}
 			}
 		}
 		
