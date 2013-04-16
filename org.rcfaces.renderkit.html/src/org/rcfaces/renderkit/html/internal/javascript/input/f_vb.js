@@ -1365,6 +1365,11 @@ var __statics = {
 
 	/**
 	 * @method private static
+	 * @param f_validator validator
+	 * @param String parameterPrefix
+	 * @param String resourcePrefix
+	 * @param Object params
+	 * @return String
 	 */
 	_SetLocaleError: function(validator, parameterPrefix, resourcePrefix, params) {
 		var resourceBundle = f_resourceBundle.Get(f_locale);
@@ -1395,6 +1400,11 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @param f_validator validator
+	 * @param String parameterPrefix
+	 * @param String resourcePrefix
+	 * @param Object params
+	 * @return String
 	 */
 	_SetLastError: function(validator, parameterPrefix, resourcePrefix, params) {
 		var resourceBundle = f_resourceBundle.Get(f_vb);
@@ -1429,6 +1439,9 @@ var __statics = {
 
 	/**
 	 * @method public static
+	 * @param f_validator validator
+	 * @param String inVal
+	 * @return Boolean
 	 * @context object:validator
 	 */
 	Behavior_forcefill : function(validator, inVal) {
@@ -1690,6 +1703,8 @@ var __statics = {
 
 	/**
 	 * @method public static
+	 * @param String inVal
+	 * @return String
 	 */
 	RemoveAccents : function(inVal) {
 		var mapper = f_vb._ACCENTS_MAPPER;
@@ -1709,7 +1724,8 @@ var __statics = {
 	 * @method private static
 	 * @param f_validator validator
 	 * @param String inVal
-	 * @return Boolean
+	 * @return String
+	 * @context object:validator
 	 */
 	_LengthValidatorBehavior: function(validator, inVal) {
 		if (!inVal) {
@@ -1737,6 +1753,7 @@ var __statics = {
 	 * @param f_validator validator
 	 * @param String inVal
 	 * @return Boolean
+	 * @context object:validator
 	 */
 	_DoubleRangeValidator: function(validator, inVal) {
 		var val=validator.f_getComponent().f_getValue();
@@ -1782,6 +1799,7 @@ var __statics = {
 	 * @param f_validator validator
 	 * @param String inVal
 	 * @return Boolean
+	 * @context object:validator
 	 */
 	_LongRangeValidator: function(validator, inVal) {
 		var val=validator.f_getComponent().f_getValue();
@@ -1824,6 +1842,11 @@ var __statics = {
 	},
 	/**
 	 * @method public static
+	 * @param f_validator validator
+	 * @param Number max
+	 * @param optional Number min
+	 * @return void
+	 * @context object:validator
 	 */
 	LengthValidator: function(validator, max, min) {
 		validator.f_addParameter("lv.max", max);
@@ -1833,6 +1856,11 @@ var __statics = {
 	},
 	/**
 	 * @method public static
+	 * @param f_validator validator
+	 * @param Number min
+	 * @param optional Number max
+	 * @return void
+	 * @context object:validator
 	 */
 	DoubleRangeValidator: function(validator, min, max) {
 		validator.f_addParameter("drv.max", max);
@@ -1842,6 +1870,11 @@ var __statics = {
 	},
 	/**
 	 * @method public static
+	 * @param f_validator validator
+	 * @param Number min
+	 * @param optional Number max
+	 * @return void
+	 * @context object:validator
 	 */
 	LongRangeValidator: function(validator, min, max) {
 		validator.f_addParameter("lrv.max", max);
