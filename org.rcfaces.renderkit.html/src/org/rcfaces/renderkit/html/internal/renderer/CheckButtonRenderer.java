@@ -282,8 +282,9 @@ public class CheckButtonRenderer extends AbstractInputRenderer implements
             }
         }
 
-        if (button.isSelected(facesContext) != selected) {
-            button.setValue(Boolean.valueOf(selected));
+        if (button.isSelected(facesContext) != selected
+                && button.isValueLocked(facesContext) == false) {
+            button.setSubmittedExternalValue(Boolean.valueOf(selected));
 
             button.queueEvent(new PropertyChangeEvent(button,
                     Properties.SELECTED, Boolean.valueOf(selected == false),
