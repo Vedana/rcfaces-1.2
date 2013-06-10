@@ -166,7 +166,7 @@ public class CollectionTools {
     };
 
     protected static IValuesAccessor getValuesAccessor(Object values,
-            Class providerClass, IValuesAccessor providerValuesAccessor,
+            Class< ? > providerClass, IValuesAccessor providerValuesAccessor,
             boolean useValue, boolean indexSupported) {
 
         if (values == null) {
