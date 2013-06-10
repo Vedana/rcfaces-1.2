@@ -95,7 +95,7 @@ public class ExpansionTools extends CollectionTools {
 
     public static Object getAdaptedValues(Object value, boolean useValue) {
         IValuesAccessor valuesAccessor = getValuesAccessor(value,
-                ICheckProvider.class, EXPANSION_PROVIDER_VALUES_ACCESSOR,
+                IExpansionProvider.class, EXPANSION_PROVIDER_VALUES_ACCESSOR,
                 useValue, true);
 
         if (valuesAccessor == null) {
@@ -107,7 +107,7 @@ public class ExpansionTools extends CollectionTools {
 
     public static boolean setAdaptedValues(Object value, Object values) {
         IValuesAccessor valuesAccessor = getValuesAccessor(value,
-                ICheckProvider.class, EXPANSION_PROVIDER_VALUES_ACCESSOR,
+                IExpansionProvider.class, EXPANSION_PROVIDER_VALUES_ACCESSOR,
                 false, true);
 
         if (valuesAccessor == null) {
