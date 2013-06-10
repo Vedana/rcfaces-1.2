@@ -611,6 +611,8 @@ var __members = {
 		var initCursorValue=this._initCursorValue;
 		if (!this._cursor && row._index==initCursorValue) {
 			this._cursor=row;
+			
+			
 			this._initCursorValue=undefined;
 		}
 		
@@ -730,7 +732,7 @@ var __members = {
 						td.onclick=f_dataGrid._ReturnFalse;
 						
 						td._dataGrid=this;
-						td.onfocus=f_grid.GotFocus;
+					//	td.onfocus=f_grid.GotFocus; // OO: A VOIR 
 					}
 					
 					var ctrlContainer=td;
@@ -793,12 +795,24 @@ var __members = {
 							input._row=row;
 							input._dontSerialize=true;
 							
-							if (this._focusOnInput) {
-								
+							if (this._focusOnInput) {	
+								// On prend le premier INPUT
 								if (!this._inputTabIndex) {
-									input.tabIndex=this.fa_getTabIndex();
 									this._inputTabIndex=input;
 
+									// On lui donne le tabIndex du composant
+									input.tabIndex=this.fa_getTabIndex();
+
+								} else if (this._cursor==row) {
+									// déjà donné ?
+									if (this._inputTabIndex) {
+										this._inputTabIndex.tabIndex=-1;
+									}
+
+									// On lui donne le tabIndex du composant
+									input.tabIndex=this.fa_getTabIndex();
+									this._inputTabIndex=input;
+									
 								} else {
 									input.tabIndex=-1;
 								}
@@ -2467,7 +2481,18 @@ var __members = {
 	
 			f_core.Debug(f_dataGrid, "fa_showElement: give focus to "+input);
 
-			f_core.SetFocus(input, true);
+			var deltaFocus=undefined;
+			if (this._scrollBody && this._checkable && this._scrollBody.scrollLeft) {
+				var sl=this._scrollBody.scrollLeft;
+				sl-=input.offsetLeft;
+				if (sl>0) {
+					deltaFocus={
+						x: sl
+					};
+				}
+			}
+			
+			f_core.SetFocus(input, true, deltaFocus);
 		}
 	},
 	f_getFocusableElement : function() {

@@ -4667,7 +4667,7 @@ var f_core = {
 	 * @param Boolean asyncMode
 	 * @return Boolean <code>true</code> is success !
 	 */
-	SetFocus: function(component, asyncMode) {
+	SetFocus: function(component, asyncMode, hideInput) {
 		f_core.Assert(component, "f_core.SetFocus: Component is NULL");
 		f_core.Assert(component.nodeType==f_core.ELEMENT_NODE, "f_core.SetFocus: Parameter is not a component.");
 
@@ -4679,6 +4679,18 @@ var f_core = {
 		}
 		
 		if (asyncMode) {
+			if (hideInput) {
+				//component.style.visibility="hidden";
+				if (hideInput.x) {
+					component.style.left=hideInput.x+"px";
+				}
+				if (hideInput.y) {
+					component.style.top=hideInput.y+"px";
+				}
+				
+				component.style.position="relative";
+			}
+
 			f_core._FocusComponent=component;
 			
 			f_core._FocusTimeoutID=window.setTimeout(function() {
@@ -4693,7 +4705,7 @@ var f_core = {
 					return;
 				}
 				f_core._FocusComponent=undefined;
-				f_core.SetFocus(component, false);
+				f_core.SetFocus(component, false, hideInput);
 				
 			}, f_core._FOCUS_TIMEOUT_DELAY);
 			return true;
@@ -4734,6 +4746,10 @@ var f_core = {
 
 		try {
 			component.focus();
+
+			if (hideInput) {
+				component.style.position="static";
+			}
 			return true;
 			
 		} catch (ex) {
