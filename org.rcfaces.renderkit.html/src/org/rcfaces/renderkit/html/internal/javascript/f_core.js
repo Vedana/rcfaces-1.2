@@ -2273,8 +2273,7 @@ var f_core = {
 			return;
 		}
 		
-		window._rcfacesSubmitLocked=true;
-		return;
+		window._rcfacesSubmitLocked=true;		
 		
 		var doc=form.ownerDocument;
 		var forms = doc.forms;
