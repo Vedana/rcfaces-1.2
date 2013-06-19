@@ -2274,7 +2274,6 @@ var f_core = {
 		}
 		
 		window._rcfacesSubmitLocked=true;
-		return;
 		
 		var doc=form.ownerDocument;
 		var forms = doc.forms;
