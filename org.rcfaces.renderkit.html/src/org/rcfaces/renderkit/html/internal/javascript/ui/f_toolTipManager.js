@@ -389,7 +389,12 @@ var __members = {
 		});
 
 		f_core.SetAttributeNS(tooltipComponent, "class", "f_toolTip");
-
+		
+		tooltipComponent.setAttribute("role", "description");        
+		tooltipComponent.setAttribute("aria-relevant", "additions all");
+		tooltipComponent.setAttribute("aria-atomic", "true");
+		tooltipComponent.setAttribute("aria-live", "polite");
+		
 		tooltipComponent = this.f_getClass().f_getClassLoader().f_init(
 				tooltipComponent, true, true);
 

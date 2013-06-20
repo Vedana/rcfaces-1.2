@@ -229,8 +229,13 @@ var __members = {
 			this._interactive=false;
 		}
 		
-		this.f_setVisible(true);
+		var parentNode=this.parentNode;
+		parentNode.removeChild(this);
 
+		this.f_setVisible(true);
+		
+		parentNode.appendChild(this);
+		
 		return true;
 	},
 	/**

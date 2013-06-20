@@ -35,6 +35,11 @@ public class ToolTipRenderer extends AbstractCssRenderer implements
 
         writeComponentAttributes(htmlWriter);
 
+        htmlWriter.writeAttribute("role", "description");
+        
+        htmlWriter.writeAttribute("aria-relevant", "additions all");
+        htmlWriter.writeAttribute("aria-atomic", true);
+                
         htmlWriter.writeAttribute("aria-live", "polite");
     }
 
