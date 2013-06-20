@@ -72,6 +72,7 @@ public class SuggestTextEntryRenderer extends TextEntryRenderer implements
         htmlWriter = super.writeInputAttributes(htmlWriter);
 
         htmlWriter.writeAutoComplete(IHtmlWriter.AUTOCOMPLETE_OFF);
+        htmlWriter.writeAttribute("aria-autocomplete", "list");
 
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
@@ -291,7 +292,7 @@ public class SuggestTextEntryRenderer extends TextEntryRenderer implements
 
     @Override
     protected String getWAIRole() {
-        return IAccessibilityRoles.COMBOBOX;
+        return IAccessibilityRoles.LISTBOX;
     }
 
     protected IComponentDecorator createSuggestionDecorator(
