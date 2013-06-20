@@ -689,6 +689,20 @@ var __members = {
 	 */
 	f_getBottomHeight : function(){
 		return  0;
+	},
+	
+	/**
+	 * @method public
+	 * @return String
+	 */
+	f_getTitle: function() {
+		if (!this._decorationValues) {
+			return null;
+		}
+		
+		var title=this._decorationValues[f_shellDecorator.TITLE_DECORATOR];
+
+		return title;
 	}
 };
 

@@ -298,6 +298,12 @@ var __members = {
 		if (!shellDecorator) {
 			return;
 		}
+
+		var title=shellDecorator.f_getTitle();
+		if (title) {
+			doc.title=title;
+			iframe.title=title;
+		}
 		
 		try {
 			if (shellDecorator.f_isIntoShell(component)) {
