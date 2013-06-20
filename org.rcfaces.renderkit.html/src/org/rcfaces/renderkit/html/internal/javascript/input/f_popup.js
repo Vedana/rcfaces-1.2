@@ -672,13 +672,15 @@ var __statics = {
 		if (found) {
 			return true;
 		}
-		try {
-			f_popup.Callbacks.exit.call(f_popup.Component, evt);
-			
-		} catch (x) {
-			f_core.Error(f_popup, "exit callback throws exception", x);
+		if (f_popup.Callbacks) {
+			try {
+				f_popup.Callbacks.exit.call(f_popup.Component, evt);
+				
+			} catch (x) {
+				f_core.Error(f_popup, "exit callback throws exception", x);
+			}
 		}
-
+		
 		return true;
 	},
 	/**
@@ -703,16 +705,18 @@ var __statics = {
 			return true;
 		}
 	
-		try {
-			f_popup.Callbacks.exit.call(f_popup.Component, evt);
-			
-		} catch (x) {
-			f_core.Error(f_popup, "Exit callback throws exception", x);
-
-		} finally {
-			f_popup.Callbacks=undefined;
+		if (f_popup.Callbacks) {
+			try {
+				f_popup.Callbacks.exit.call(f_popup.Component, evt);
+				
+			} catch (x) {
+				f_core.Error(f_popup, "Exit callback throws exception", x);
+	
+			} finally {
+				f_popup.Callbacks=undefined;
+			}
 		}
-			
+		
 		return true;
 	},
 	/**
