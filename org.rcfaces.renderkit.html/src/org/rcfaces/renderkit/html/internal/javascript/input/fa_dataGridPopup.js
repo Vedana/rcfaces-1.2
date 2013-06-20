@@ -563,6 +563,7 @@ var __members = {
 			valign: "middle" 
 		});									
 		
+		
 		var dataGridStyleClass="fa_dataGridPopup_grid";
 		var ds=f_core.GetAttributeNS(this,"gridStyleClass");
 		if (ds) {
@@ -595,7 +596,7 @@ var __members = {
 			}, "td", {
 				align: "center", 
 				valign: "middle" });
-				
+
 			var psc="fa_dataGridPopup_pager";
 			var ppsc=f_core.GetAttributeNS(this,"pagerStyleClass");
 			if (ppsc) {
@@ -607,6 +608,11 @@ var __members = {
 				":"+dataGrid.id,
 				psc);
 			this._pager=pager;			
+			
+			pager.setAttribute("role", "description");        
+			pager.setAttribute("aria-relevant", "additions all");
+			pager.setAttribute("aria-atomic", "true");
+			pager.setAttribute("aria-live", "polite");
 		}
 				
 		var self=this;
@@ -706,6 +712,13 @@ var __members = {
 		}
 		
 		dataGrid.f_setAutoSelection(1);
+		
+		var pager=this._pager;
+		if (pager) {
+			var parent=pager.parentNode;
+			parent.removeChild(pager);
+			parent.appendChild(pager);
+		}
 		
 		var filterProperties=this.f_getFilterProperties();
 		if (text) {
