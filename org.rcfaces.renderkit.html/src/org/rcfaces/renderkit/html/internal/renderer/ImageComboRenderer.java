@@ -32,7 +32,6 @@ public class ImageComboRenderer extends ImageButtonRenderer {
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.IMAGE_COMBO;
     }
-    
 
     protected IComponentDecorator createComponentDecorator(
             FacesContext facesContext, UIComponent component) {
@@ -92,8 +91,6 @@ public class ImageComboRenderer extends ImageButtonRenderer {
      * @version $Revision$ $Date$
      */
     protected class ImageComboDecorator extends ImageButtonDecorator {
-        private static final String REVISION = "$Revision$";
-
         private final boolean showDropDownMark;
 
         private boolean firstLine = true;
@@ -104,9 +101,6 @@ public class ImageComboRenderer extends ImageButtonRenderer {
             showDropDownMark = isShowDropDownMark(imageButtonFamilly);
         }
 
-        
-        
-        
         protected void writeEndRow(int nextRowCount) throws WriterException {
             if (firstLine == false || showDropDownMark == false) {
                 super.writeEndRow(nextRowCount);
@@ -160,7 +154,7 @@ public class ImageComboRenderer extends ImageButtonRenderer {
         }
 
         protected String getInputRole() {
-        	return IAccessibilityRoles.LISTBOX;
+            return IAccessibilityRoles.LISTBOX;
         }
     }
 
