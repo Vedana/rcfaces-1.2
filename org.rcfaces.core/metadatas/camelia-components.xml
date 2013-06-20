@@ -420,6 +420,28 @@
 				setValueBinding(Properties.VALUE, value);
 			</code>
 		</method>
+		
+		
+		<method id="processEngineUpdates" modifier="protected"  override="true">
+			<parameter type="javax.faces.context.FacesContext" name="context" />
+			<import>javax.el.ELContext</import>
+			<code>
+			<![CDATA[
+        super.processEngineUpdates(context);
+
+        ELContext elContext = context.getELContext();
+
+        int first = getFirst();
+        ValueExpression vae = getValueExpression("first");
+        if (vae != null) {
+            Number num = (Number) vae.getValue(elContext);
+            if (num != null && num.intValue() != first) {
+                vae.setValue(elContext, Integer.valueOf(first));
+            }
+        }
+        ]]>
+			</code>
+		</method>
 	</component>
 
 	<component id="abstractGrid" abstract="true" extends="cameliaGrid"
