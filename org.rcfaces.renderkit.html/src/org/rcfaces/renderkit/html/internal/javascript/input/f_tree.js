@@ -1501,6 +1501,19 @@ var __members = {
 			}
 		}, value, false, true);
 		
+		var cursor=this.f_getCursorElement();
+		for(;cursor && cursor!=this;cursor=cursor._parentTreeNode) {
+			var par=cursor._parentTreeNode;
+			
+			if (par._opened || par==this) {
+				break;
+			}
+		}
+		
+		if (cursor) {
+			this.f_moveCursor(cursor, true);
+		}
+		
 		return true;
 	},
 	
@@ -1556,7 +1569,6 @@ var __members = {
 			
 		this.fa_updateElementStyle(li);
 		this._updateCommandStyle(li);
-		
 
 		this.f_fireEvent(f_tree.NODE_CLOSED_EVENT, evt, node, node._value, this);
 		return true;
