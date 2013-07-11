@@ -2827,7 +2827,7 @@ var __members = {
 		return serializedIndexes;
 	},
 
-	f_update : function() {
+	f_update: function() {
 		var rowCount = this._rowCount;
 
 		if (this._rows > 0 && !this._paged) {
@@ -2889,6 +2889,15 @@ var __members = {
 			this._tbody.style.display = "table-row-group";
 		}
 
+		/*var columns = this._columns;
+		for (var i = 0; i < columns.length; i++) {
+			var column=columns[i];
+			if (column._visibility) {
+				this._updateTitleStyle(column);
+			}
+		}*/
+
+		
 		this.f_performPagedComponentInitialized();
 
 		// On a besoin de faire des calculs CSS quand le grid est affiché !
@@ -3268,6 +3277,10 @@ var __members = {
 				column._sorter = undefined;
 
 				this._installSorter(column, sorter);
+			}
+		
+			if (column._visibility) {
+//				this._updateTitleStyle(column);
 			}
 		}
 
@@ -4869,6 +4882,7 @@ var __members = {
 		if (this._rows > 0) { // Dans le cas d'un page par page, on revient en
 			// position 0
 			this._first = 0;
+			this.f_setProperty(f_prop.FIRST, this._first); // A VALIDER
 		}
 
 		if (currentSorts.length) {
@@ -5776,7 +5790,7 @@ var __members = {
 	/**
 	 * @method protected
 	 */
-	f_updateTitle : function() {
+	f_updateTitle: function() {
 		if (!this._title) {
 			return;
 		}
@@ -6325,7 +6339,7 @@ var __members = {
 			if (!tooltip.f_isContentSpecified()) {
 				var tagName = item.tagName.toUpperCase();
 
-				if (tagName == "TD" && item.parentNode._index !== undefined) {
+				if ((tagName == "TD" || tagName=="TH") && item.parentNode._index !== undefined) {
 					this.f_showToolTip(tooltip, jsEvent,
 							f_toolTip.BOTTOM_COMPONENT);
 					return;
@@ -6686,6 +6700,7 @@ var __members = {
 			break;
 
 		case "TD":
+		case "TH":
 			row = elementItem.parentNode;
 			if (!tooltipId) {
 				tooltipId = "#cell";
