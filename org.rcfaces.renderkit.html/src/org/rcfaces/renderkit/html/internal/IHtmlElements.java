@@ -48,6 +48,8 @@ public interface IHtmlElements {
 
     String NOSCRIPT = "noscript";
 
+    String OBJECT = "object";
+
     String OPTGROUP = "optgroup";
 
     String OPTION = "option";
