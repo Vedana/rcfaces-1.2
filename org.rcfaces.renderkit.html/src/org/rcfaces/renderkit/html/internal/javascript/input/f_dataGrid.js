@@ -892,11 +892,18 @@ var __members = {
 						td._toolTipContent=col._toolTipContent;
 					}
 
-					var labelComponent=doc.createElement("label");
+					var labelType=(false && countTd)?"a":"label";					
+					var labelComponent=doc.createElement(labelType);
 					row._label=labelComponent;
 					if (!cellText) {
 						cellText=" ";
 					}
+					if (labelType=="a") {
+						//labelComponent.tabIndex="-1";
+						 labelComponent.href=f_core.CreateJavaScriptVoid0();
+						 labelComponent.setAttribute("aria-haspopup", true);
+					}
+					
 					f_core.AppendChild(labelComponent, doc.createTextNode(cellText));
 					labelComponent.className="f_grid_label";
 					f_core.AppendChild(ctrlContainer, labelComponent);
@@ -2374,7 +2381,7 @@ var __members = {
 			return;
 		}
 		this._first = 0;
-		
+		this.f_setProperty(f_prop.FIRST, this._first);
 		
 		this.f_refreshContent(true);
 		
