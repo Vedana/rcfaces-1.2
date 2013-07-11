@@ -248,6 +248,10 @@ public class JavaScriptResponseWriter extends
         // Y en a pas !
         // Par contre, il ne faut pas envoyer d'exception,
         // car le RewritingURL l'appelle !
+
+        if (renderContext == null) {
+            renderContext = getRenderContext(getFacesContext());
+        }
         return renderContext;
         // throw new FacesException("Not supported !");
     }

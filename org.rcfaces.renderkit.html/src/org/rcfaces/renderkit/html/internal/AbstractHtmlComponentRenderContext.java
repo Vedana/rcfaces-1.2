@@ -58,4 +58,8 @@ public abstract class AbstractHtmlComponentRenderContext extends
     public IHtmlRenderContext getHtmlRenderContext() {
         return (IHtmlRenderContext) getRenderContext();
     }
+
+    protected IHtmlRenderContext getRenderContext(FacesContext facesContext) {
+        return HtmlRenderContext.getRenderContext(facesContext);
+    }
 }
