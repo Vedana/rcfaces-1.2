@@ -1120,7 +1120,7 @@ var f_core = {
 			
 			f_core.Info("f_core", "Install library (onload) on "+now);
 			
-			if (f_core.DebugMode) {
+			if (false && f_core.DebugMode) {
 				var title=["DEBUG"];
 				f_core.Info("f_core", "Enable f_core.DEBUG mode");
 			
@@ -1747,9 +1747,10 @@ var f_core = {
 	 * @method static hidden
 	 * @param Element component
 	 * @param optional Boolean concatChildren
+	 * @param optional Boolean ignoreAudioDescription
 	 * @return String
 	 */
-	GetTextNode: function(component, concatChildren) {
+	GetTextNode: function(component, concatChildren, ignoreAudioDescription) {
 		f_core.Assert(component && component.nodeType==f_core.ELEMENT_NODE, "f_core.GetTextNode: Invalid component ! ("+component+")");
 
 		var children=component.childNodes;
@@ -1765,6 +1766,9 @@ var f_core = {
 				break;
 				
 			case f_core.ELEMENT_NODE:
+				if (ignoreAudioDescription && child.className=="f_audioDescription") {
+					break;
+				}
 				if (concatChildren) {
 					text+=f_core.GetTextNode(child, true);
 				}
@@ -2274,7 +2278,6 @@ var f_core = {
 		}
 		
 		window._rcfacesSubmitLocked=true;
-		return;
 		
 		var doc=form.ownerDocument;
 		var forms = doc.forms;
