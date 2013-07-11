@@ -108,7 +108,7 @@ public class ContentAccessorFactory {
 
     };
 
-    private static final IContentProxyHandler RESOURCE_CONTENT_PROXY_HANDLER = new AbstractContentProxyHandler() {
+    protected static final IContentProxyHandler RESOURCE_CONTENT_PROXY_HANDLER = new AbstractContentProxyHandler() {
 
         public String getId() {
             return "ResourceProxyHandler(proxy)";
@@ -137,8 +137,7 @@ public class ContentAccessorFactory {
 
     };
 
-    private static final IContentVersionHandler RESOURCE_CONTENT_VERSION_HANDLER = new AbstractContentVersionHandler() {
-        private static final String REVISION = "$Revision$";
+    protected static final IContentVersionHandler RESOURCE_CONTENT_VERSION_HANDLER = new AbstractContentVersionHandler() {
 
         public String getId() {
             return "ResourceVersionHandler(proxy)";
