@@ -18,7 +18,7 @@ var __statics = {
 	Initializer: function() {
 		f_effect.Declare("slideUpTrans", this);
 	}
-}
+};
 
 var __members = {
 	f_performTick: function(component, cur, next) {
@@ -31,7 +31,7 @@ var __members = {
 		
 		f_core.SetOpacity(component, cur);
 	}
-}
+};
 
 new f_class("f_slideUpTransEffect", null, __statics, __members, f_slideUpEffect);
 

@@ -710,7 +710,6 @@ var __members = {
     	}
     	
     	for(;waitingShells.length;) {		    		
-    		var maxPriority=-1;
     		var waitingShell=null;
     		
     		for(var i=0;i<waitingShells.length;i++) {
@@ -785,7 +784,7 @@ var __members = {
 	f_clearPendingShells: function() {
     	this._waitingShells=undefined;
 	}
-}
+};
 
 new f_class("f_shellManager", {
 	statics: __statics,
