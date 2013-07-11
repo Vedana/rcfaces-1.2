@@ -111,11 +111,18 @@ var __members = {
 		menu.f_addEventListener("itemHover", function(evt) {
 			// var jsEvt=evt.f_getJsEvent();
 			var item=evt.f_getValue();
+			var details=evt.f_getDetail();
 			
-			if (!item) { // Ca peut arriver si c'est l'indicateur de fin de liste !
+			//suggestTextEntry.setAttribute("aria-owns", details.uiPopup.id);
+			//details.uiPopup.setAttribute("aria-expanded", true);
+
+			if (!item) { // Ca peut arriver si c'est l'indicateur de fin de liste !				
+				fa_aria.SetElementAriaActiveDescendant(suggestTextEntry, details.uiItem.id);
+				
 				return;
 			}
 
+			fa_aria.SetElementAriaActiveDescendant(suggestTextEntry, evt.f_getDetail().uiItem.id);
 			suggestTextEntry._proposeItem(item._label, true);
 		});
 		
@@ -739,10 +746,12 @@ var __members = {
 		}
 		
 		if (parseInt(requestId, 10)==this._lastRequestId) {			
-			this._lockResponse=undefined;
+			this._lockResponse=undefined;			
+			this._results=undefined;
 			return;
 		}
 		
+		// On accepte pas cette réponse !
 		this._lockResponse=true;
 	},
 
@@ -1285,6 +1294,11 @@ var __members = {
 	 */
 	f_isDisableProposals: function() {
 		return !!this._disableProposals;
+	},
+	
+	_closePopup: function() {
+		suggestTextEntry.setAttribute("aria-owns", details.uiPopup.id);		
+		fa_aria.SetElementAriaActiveDescendant(suggestTextEntry, details.uiItem.id);		
 	},
 	_proposeItem: function(text) {
 		if (true) {

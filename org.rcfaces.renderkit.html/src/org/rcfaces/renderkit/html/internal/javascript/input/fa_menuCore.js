@@ -894,8 +894,8 @@ var __members = {
 
 		this.f_uiUpdateItemStyle(menuItem);
 
+		var uiItem = this.f_getUIItem(menuItem);
 		if (popup.scrollHeight > popup.clientHeight) {
-			var uiItem = this.f_getUIItem(menuItem);
 			var scrollBody=popup;
 
 			if (uiItem.offsetTop - scrollBody.scrollTop < 0) {
@@ -908,7 +908,10 @@ var __members = {
 		}
 
 		var value = this.f_getItemValue(menuItem);
-		this.f_fireEvent("itemHover", null, menuItem, value);
+		this.f_fireEvent("itemHover", null, menuItem, value, null, {
+			uiItem: uiItem,
+			uiPopup: popup
+		});
 	},
 	/**
 	 * @method protected final
@@ -1632,7 +1635,7 @@ var __members = {
 	 *            number autoSelect
 	 * @return Boolean
 	 */
-	f_open : function(jsEvent, positionInfos, autoSelect) {
+	f_open: function(jsEvent, positionInfos, autoSelect) {
 		f_core.Debug(fa_menuCore, "f_open: Open menu " + this + ".");
 
 		if (!positionInfos) {
@@ -1720,6 +1723,12 @@ var __members = {
 			} else {
 				f_popup.Gecko_openPopup(popup._popupObject, positionInfos);
 			}
+			
+			if (positionInfos.ariaOwns) {
+				positionInfos.ariaOwns.setAttribute("aria-owns", popup._popupObject.id);
+				
+				popup._popupObject.setAttribute("aria-expanded", true);
+			}
 
 		} catch (x) {
 			if (!parentItem) {
@@ -1776,7 +1785,7 @@ var __members = {
 	 *            Object popup
 	 * @return void
 	 */
-	f_closeUIPopup : function(menuItem, popup) {
+	f_closeUIPopup: function(menuItem, popup) {
 		f_core
 				.Assert(
 						!popup
@@ -1798,6 +1807,14 @@ var __members = {
 				return;
 			}
 		}
+
+		/* TODO
+		if (positionInfos.ariaOwns) {
+			positionInfos.ariaOwns.setAttribute("aria-owns", popup._popupObject.id);
+			
+			popup._popupObject.setAttribute("aria-expanded", true);
+		}
+		*/
 
 		if (popup._item === undefined) {
 			// Déjà fermé !
