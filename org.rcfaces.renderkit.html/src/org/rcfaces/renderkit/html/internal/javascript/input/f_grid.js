@@ -4881,8 +4881,7 @@ var __members = {
 
 		if (this._rows > 0) { // Dans le cas d'un page par page, on revient en
 			// position 0
-			this._first = 0;
-			this.f_setProperty(f_prop.FIRST, this._first); // A VALIDER
+			this._changeFirst(0);
 		}
 
 		if (currentSorts.length) {
@@ -7564,6 +7563,15 @@ var __members = {
 		if (this._targetDragAndDropEngine) {
 			this._targetDragAndDropEngine.f_updateMousePosition();
 		}
+	},
+	/**
+	 * @method hidden 
+	 * @param Number newFirst
+	 * @return void
+	 */
+	_changeFirst: function(newFirst) {
+		this._first=newFirst;
+		this.f_setProperty(f_prop.FIRST, newFirst);
 	}
 };
 

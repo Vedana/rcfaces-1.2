@@ -449,6 +449,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
         }
 
         int rowIndex = tableContext.getFirst();
+        int newFirst = -1; // Dans les cas critiques ou on retourne à la page 1
 
         IRangeDataModel rangeDataModel = getAdapter(IRangeDataModel.class,
                 dataModel, null);
@@ -769,7 +770,12 @@ public class DataGridRenderer extends AbstractGridRenderer {
                     gridComponent.setRowIndex(translatedRowIndex);
                     boolean available = gridComponent.isRowAvailable();
                     if (available == false) {
-                        // ???
+                        // Nous sommes à la fin du tableau, et il n'y a plus
+                        // rien a afficher
+                        // Finalement on retourne ligne 0
+                        rowIndex = 0;
+                        newFirst = 0;
+
                         break;
                     }
 
@@ -1065,24 +1071,24 @@ public class DataGridRenderer extends AbstractGridRenderer {
         // de rows
 
         if (selectedCriteria != null && rows > 0) {
-
-            encodeJsRowCount(jsWriter, tableContext, fullCriteriaRowCount);
+            encodeJsRowCount(jsWriter, tableContext, fullCriteriaRowCount,
+                    newFirst);
 
         } else if ((unknownRowCount && firstRowCount >= 0)) {
-            encodeJsRowCount(jsWriter, tableContext, count);
+            encodeJsRowCount(jsWriter, tableContext, count, newFirst);
 
         } else if (rows > 0) {
             if (count > firstRowCount
                     || (gridComponent.getFirst() == 0 && count == 0)) {
-                encodeJsRowCount(jsWriter, tableContext, count);
+                encodeJsRowCount(jsWriter, tableContext, count, newFirst);
             }
 
         } else if (tableContext.getRowCount() < 0) {
-            encodeJsRowCount(jsWriter, tableContext, rowIndex);
+            encodeJsRowCount(jsWriter, tableContext, rowIndex, newFirst);
 
         } else if (filtred) {
             if (searchEnd && count == 0) {
-                encodeJsRowCount(jsWriter, tableContext, count);
+                encodeJsRowCount(jsWriter, tableContext, count, newFirst);
             }
         }
     }
@@ -1161,9 +1167,13 @@ public class DataGridRenderer extends AbstractGridRenderer {
     }
 
     protected void encodeJsRowCount(IJavaScriptWriter jsWriter,
-            AbstractGridRenderContext tableContext, int count)
+            AbstractGridRenderContext tableContext, int count, int newFirst)
             throws WriterException {
         jsWriter.writeMethodCall("f_setRowCount").writeInt(count).writeln(");");
+        if (newFirst >= 0) {
+            jsWriter.writeMethodCall("_changeFirst").writeInt(newFirst)
+                    .writeln(");");
+        }
     }
 
     @SuppressWarnings("unused")

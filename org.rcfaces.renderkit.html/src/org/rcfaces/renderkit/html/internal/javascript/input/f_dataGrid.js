@@ -2380,8 +2380,7 @@ var __members = {
 		if(refresh === false) {
 			return;
 		}
-		this._first = 0;
-		this.f_setProperty(f_prop.FIRST, this._first);
+		this._changeFirst(0);
 		
 		this.f_refreshContent(true);
 		
