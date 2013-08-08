@@ -2141,9 +2141,11 @@ var f_core = {
 				}
 			}
 			
+			/*
 			if (window.console) {
 				window.console.log("Set input HIDDEN "+id);
 			}
+			*/
 			
 			// On les effecte quand meme, car cela peut etre le 2eme submit !
 			f_core.SetInputHidden(form, 
