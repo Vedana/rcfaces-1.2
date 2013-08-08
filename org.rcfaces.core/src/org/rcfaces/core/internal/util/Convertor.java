@@ -118,7 +118,6 @@ public final class Convertor {
     }
 
     private static final ClassConvertor TO_INTEGER = new ClassConvertor() {
-        private static final String REVISION = "$Revision$";
 
         private final Object DEFAULT_INTEGER = new Integer(0);
 
@@ -140,7 +139,6 @@ public final class Convertor {
     };
 
     private static final ClassConvertor TO_LONG = new ClassConvertor() {
-        private static final String REVISION = "$Revision$";
 
         private final Object DEFAULT_LONG = new Long(0);
 

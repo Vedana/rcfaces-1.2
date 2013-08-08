@@ -51,8 +51,6 @@ public class IncludeResourceLoaderFactory extends AbstractResourceLoaderFactory 
      * @version $Revision$ $Date$
      */
     private static class IncludeResourceLoader implements IResourceLoader {
-        private static final String REVISION = "$Revision$";
-
         private static final String TEMP_FILE_PREFIX = "include-resource.";
 
         private static final String TEMP_FILE_SUFFIX = ".tmp";
