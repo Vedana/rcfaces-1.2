@@ -426,13 +426,18 @@ public abstract class AbstractJavaScriptRenderer extends
 
     public String getResourceBundleValue(IHtmlWriter htmlWriter, String key) {
 
+        return getResourceBundleValue(htmlWriter, getJavaScriptClassName(), key);
+    }
+
+    public String getResourceBundleValue(IHtmlWriter htmlWriter,
+            String refClassName, String key) {
+
         IJavaScriptRenderContext javaScriptRenderContext = htmlWriter
                 .getHtmlComponentRenderContext().getHtmlRenderContext()
                 .getJavaScriptRenderContext();
 
-        return getResourceBundleValue(javaScriptRenderContext,
-                getJavaScriptClassName(), htmlWriter
-                        .getComponentRenderContext().getRenderContext()
+        return getResourceBundleValue(javaScriptRenderContext, refClassName,
+                htmlWriter.getComponentRenderContext().getRenderContext()
                         .getProcessContext().getUserLocale(), key);
     }
 
