@@ -434,10 +434,11 @@
         int first = getFirst();
         ValueExpression vae = getValueExpression("first");
         if (vae != null) {
-            Number num = (Number) vae.getValue(elContext);
-            if (num != null && num.intValue() != first) {
+        	// JS de Bull demande de forcer systématiquement le setValue()
+            //Number num = (Number) vae.getValue(elContext);
+            //if (num != null && num.intValue() != first) {
                 vae.setValue(elContext, Integer.valueOf(first));
-            }
+            //}
         }
         ]]>
 			</code>
@@ -2891,6 +2892,8 @@
 		<capability id="ITextCapability" />
 		<capability id="ITextDirectionCapability" />
 		<capability id="ITextAlignmentCapability" />
+		<capability id="IAudioDescriptionCapability" />
+		
 		<capability id="IVerticalAlignmentCapability" />
 		<capability id="IBorderTypeCapability" />
 		<capability id="IImageCapability" />
@@ -3767,6 +3770,7 @@
 	<component id="text" extends="abstractOutput"
 		textBodyContent="true">
 		<capability id="ITextCapability" />
+		<capability id="IAudioDescriptionCapability" />
 		<capability id="ITextDirectionCapability" />
 		<capability id="IFontCapability" />
 		<capability id="ITextAlignmentCapability" />

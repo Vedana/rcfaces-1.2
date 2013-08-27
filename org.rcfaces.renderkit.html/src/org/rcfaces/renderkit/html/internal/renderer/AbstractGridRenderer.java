@@ -2783,10 +2783,9 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             int old = gridComponent.getFirst();
 
             int f = first.intValue();
-            // Pour JS de Bull ....  on fait le setFirst dans tous les cas !
-            gridComponent.setFirst(f);
-            
             if (old != f) {
+                gridComponent.setFirst(f);
+
                 component.queueEvent(new PropertyChangeEvent(component,
                         Properties.FIRST, new Integer(old), first));
             }
