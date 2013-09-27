@@ -753,6 +753,10 @@ var __statics = {
 		f_core.Debug(f_popup, "_OnKeyDownJs: keyCode="+evt.keyCode+" on "+this+" component:"+component+" target:"+target);
 		
 		var callbacks=f_popup.Callbacks;
+		if (!callbacks) {
+			// Bizarre ... pas possible ???
+			return f_core.CancelJsEvent(evt);
+		}
 		if (evt.altKey) { // ?
 			try {
 				if (callbacks.exit.call(component, evt)===true) {
@@ -858,13 +862,19 @@ var __statics = {
 			return true;
 		}
 	
+		var callbacks=f_popup.Callbacks;
+		if (!callbacks) {
+			f_core.Debug(f_popup, "_OnKeyPressJs["+evt.keyCode+"] on "+this+" no callbacks");
+
+			return true;
+		}
+
 		var target=evt.target;
 		if (!target) {
 			target=evt.srcElement;
 		}
-		f_core.Debug(f_popup, "_OnKeyPressJs["+evt.keyCode+"] on "+this+" component:"+component+" target:"+target);
-		
-		var callbacks=f_popup.Callbacks;
+		f_core.Debug(f_popup, "_OnKeyPressJs["+evt.keyCode+"] on "+this+" component:"+component+" target:"+target);		
+
 		try {
 			if (callbacks.keyPress) {
 				if (callbacks.keyPress.call(component, evt, f_popup.Popup)===false) {
