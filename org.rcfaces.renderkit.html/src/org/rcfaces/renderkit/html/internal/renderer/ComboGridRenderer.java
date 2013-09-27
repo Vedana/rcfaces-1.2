@@ -580,6 +580,8 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
         String labelId = computeDescriptionClientId(htmlWriter);
         htmlWriter.writeAttribute("aria-describedby", labelId);
 
+       // htmlWriter.writeAttribute("aria-haspopup", true);
+        
         StringAppender sa = new StringAppender(128);
         sa.append(getMainStyleClassName());
         sa.append("_input");
