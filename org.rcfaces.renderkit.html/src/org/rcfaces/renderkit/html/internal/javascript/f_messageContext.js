@@ -50,6 +50,7 @@ var __statics = {
 	 */
 	Get : function(component) {
 		f_core.Assert(!arguments.length || typeof (component) == "object"
+				|| typeof (component) == "string"
 				|| (component instanceof f_event),
 				"f_messageContext: Invalid component parameter ! (" + component
 						+ ")");
@@ -201,21 +202,21 @@ var __statics = {
 		}
 
 		if (!focusComponent) {
-			var component=event.f_getComponent();
+			var component = event.f_getComponent();
 			if (component) {
 				focusComponent = f_core.GetParentForm(component);
 			}
 		}
-		
+
 		if (!focusComponent) {
-			focusComponent=document.forms[0];
+			focusComponent = document.forms[0];
 		}
-		
+
 		if (!focusComponent) {
 			return false;
 		}
 
-		var component=focusComponent;
+		var component = focusComponent;
 		var stack = new Array();
 		for (;;) {
 			var fc = component;
@@ -232,8 +233,7 @@ var __statics = {
 				stack.unshift(fc);
 			}
 			component = component.parentNode;
-			if (!component
-					|| component.nodeType != f_core.ELEMENT_NODE
+			if (!component || component.nodeType != f_core.ELEMENT_NODE
 					|| component.tagName.toLowerCase() == "form") {
 				break;
 			}
@@ -264,25 +264,19 @@ var __statics = {
 		}
 
 		if (!found) {
-			for(var i=0;i<lst.length && !found;i++) {
+			for ( var i = 0; i < lst.length && !found; i++) {
 				if (!lst[i]) { // Eviter les erreurs globales
-					continue; 
+					continue;
 				}
-				found=f_core.GetElementByClientId(lst[i]);
+				found = f_core.GetElementByClientId(lst[i]);
 			}
 		}
-		
+
 		if (found) {
-			/*
+	
 			if (found.id==focusComponent.id) {
-				window.setTimeout(function() {
-					f_core.SetFocus(f_core.GetParentForm(found), false);
-					f_core.SetFocus(found, false);
-				});
-				return false;
+				focusComponent.blur();
 			}
-			*/
-			
 			f_core.SetFocus(found, true);
 		}
 
