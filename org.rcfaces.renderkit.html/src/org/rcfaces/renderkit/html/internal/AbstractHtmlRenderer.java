@@ -808,6 +808,8 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
             IReadOnlyCapability readOnlyCapability) throws WriterException {
         if (readOnlyCapability.isReadOnly()) {
             writer.writeReadOnly();
+
+            // writer.writeAttribute("aria-readonly", true);
         }
 
         return writer;
@@ -824,9 +826,16 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
 
     protected IHtmlWriter writeChecked(IHtmlWriter writer,
             ISelectedCapability selectedCapability) throws WriterException {
-        if (selectedCapability.isSelected()) {
+        System.out.println("TEST CHECK  "
+                + writer.getComponentRenderContext().getComponentClientId());
+
+        boolean isSelected = selectedCapability.isSelected();
+        if (isSelected) {
             writer.writeChecked();
         }
+        System.out.println("CHECK  "
+                + writer.getComponentRenderContext().getComponentClientId()
+                + " => " + isSelected);
 
         return writer;
     }
