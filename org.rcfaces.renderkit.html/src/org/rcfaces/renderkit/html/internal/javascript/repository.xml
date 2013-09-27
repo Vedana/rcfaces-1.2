@@ -312,6 +312,12 @@
 			</class>
 		</file>	
 		
+		<file name="ui/fa_audioDescription.js">
+			<class name="fa_audioDescription">
+				<required-class name="f_aspect" />
+			</class>
+		</file>	
+		
 	</module>
 	
 <!-- Components -->
@@ -381,6 +387,8 @@
 		<file name="ui/f_text.js">
 			<class name="f_text">
 				<required-class name="f_component" />
+				<required-class name="fa_audioDescription" />
+				<required-class name="fa_message" />
 			</class>
 		</file>
 		<file name="ui/f_heading.js">
@@ -1804,8 +1812,17 @@
 			
 	</module>
 
+	<module id="focusSection">
+		 <file name="ui/f_focusSectionPopup.js">
+			<class name="f_focusSectionPopup">
+				<required-class name="f_focusManager" />
+
+				<required-class name="f_popup" />
+			</class>		
+		 </file>
+	</module>
+
 	<module id="indexedDb">
-	
 		 <file name="db/f_indexedDbEngine.js">
 			<class name="f_indexedDbEngine">
 				<required-class name="f_core" />
