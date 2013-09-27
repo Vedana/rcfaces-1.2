@@ -85,6 +85,7 @@
 		<file name="f_progressMonitorDialog.css" />
 		<file name="f_keyLabel.css" />
 		<file name="f_externalBox.css" />
+		<file name="f_focusManager.css" />
 		
 		<file name="f_consoleAppender.css" />
 	</module>
