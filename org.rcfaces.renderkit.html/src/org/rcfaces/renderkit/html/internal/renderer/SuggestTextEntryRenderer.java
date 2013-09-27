@@ -292,7 +292,7 @@ public class SuggestTextEntryRenderer extends TextEntryRenderer implements
 
     @Override
     protected String getWAIRole() {
-        return IAccessibilityRoles.LISTBOX;
+        return IAccessibilityRoles.COMBOBOX;
     }
 
     protected IComponentDecorator createSuggestionDecorator(
