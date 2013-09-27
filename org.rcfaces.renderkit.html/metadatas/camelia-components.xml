@@ -1,4 +1,4 @@
-<camelia-components>	
+<camelia-components package="html">	
 
 	<component id="init" extends="cameliaBase" renderKit="html">
 	
