@@ -12,6 +12,52 @@
  */
 
 var __members = {
+
+	/**
+	 * @field private String
+	 */
+	_type : undefined,
+
+	/**
+	 * @field private Element
+	 */
+	_component : undefined,
+
+	/**
+	 * @field private Event
+	 */
+	_jsEvent : undefined,
+
+	/**
+	 * @field private Object
+	 */
+	_item : undefined,
+
+	/**
+	 * @field private any
+	 */
+	_value : undefined,
+
+	/**
+	 * @field private f_selectionProvider
+	 */
+	_selectionProvider : undefined,
+
+	/**
+	 * @field private String
+	 */
+	_serializedValue : undefined,
+
+	/**
+	 * @field private Number
+	 */
+	_detail : undefined,
+
+	/**
+	 * @field private Object
+	 */
+	_detailObject : undefined,
+
 	/**
 	 * @method public
 	 * @param f_object
@@ -28,16 +74,25 @@ var __members = {
 	 *            fa_selectionProvider selectionProvider
 	 * @param optional
 	 *            any detail
-	 * @param optional String serializedValue
+	 * @param optional
+	 *            String serializedValue
 	 */
 	f_event : function(component, type, jsEvent, item, value,
 			selectionProvider, detail, serializedValue) {
 		f_core.Assert(typeof (type) == "string",
 				"f_event.f_event: Bad type of event '" + type + "'");
-		f_core.Assert(component && (component.nodeType==f_core.ELEMENT_NODE || component._kclass),
-				"f_event.f_event: Bad component '" + component + "'.");
-		f_core.Assert(serializedValue===undefined || typeof(serializedValue)=="string",
-				"f_event.f_event: Bad serializedValue type '" + serializedValue + "'.");
+		f_core
+				.Assert(
+						component
+								&& (component.nodeType == f_core.ELEMENT_NODE || component._kclass),
+						"f_event.f_event: Bad component '" + component + "'.");
+		f_core.Assert(serializedValue === undefined
+				|| typeof (serializedValue) == "string",
+				"f_event.f_event: Bad serializedValue type '" + serializedValue
+						+ "'.");
+		f_core.Assert(typeof (detail) == "object"
+				|| typeof (detail) == "number" || detail === undefined,
+				"f_event.f_event: Invalid detail parameter (" + detail + ")");
 
 		this._type = type;
 		this._component = component;
@@ -45,8 +100,19 @@ var __members = {
 		this._item = item;
 		this._value = value;
 		this._selectionProvider = selectionProvider;
-		this._detail = detail;
-		this._serializedValue=serializedValue;
+		this._serializedValue = serializedValue;
+
+		if (typeof (detail) == "object") {
+			f_core.Assert(typeof (detail.value) == "number",
+					"f_event.f_event: Invalid value field of detail object ("
+							+ detail.value + ")");
+
+			this._detailObject = detail;
+			this._detail = detail.value;
+
+		} else {
+			this._detail = detail;
+		}
 	},
 
 	/**
@@ -60,6 +126,7 @@ var __members = {
 		this._item = undefined; // any
 		this._value = undefined; // any
 		this._detail = undefined; // any
+		this._detailObject = undefined; // any
 		// this._immediate = undefined; // Boolean
 		// this._serializedValue=undefined; // String
 		this._selectionProvider = undefined; // fa_selectionProvider
@@ -140,11 +207,11 @@ var __members = {
 		f_core.Assert(arguments.length == 0,
 				"f_event.f_getSerializedValue: Invalid number of parameter");
 
-		var s=this._serializedValue;
-		if (s!==undefined) {
+		var s = this._serializedValue;
+		if (s !== undefined) {
 			return s;
 		}
-		
+
 		return this._value;
 	},
 
@@ -174,6 +241,19 @@ var __members = {
 				"f_event.f_getDetail: Invalid number of parameter");
 
 		return this._detail;
+	},
+
+	/**
+	 * Returns a detail about the event.
+	 * 
+	 * @method public
+	 * @return Object A detail value.
+	 */
+	f_getDetailObject : function() {
+		f_core.Assert(arguments.length == 0,
+				"f_event.f_getDetail: Invalid number of parameter");
+
+		return this._detailObject;
 	},
 
 	/**
@@ -230,12 +310,13 @@ var __members = {
 	 * <code>id</code> that matches the specified search expression (if any).
 	 * 
 	 * @method public
-	 * @param String... id Identifier of component.
+	 * @param String...
+	 *            id Identifier of component.
 	 * @return HTMLElement the found {@link f_component}, or <code>null</code>
 	 *         if the component was not found.
 	 * @see #f_findSiblingComponent f_findSiblingComponent(x)
-	 */	
-	$: function(id) {
+	 */
+	$ : function(id) {
 		return this.f_findSiblingComponent.apply(this, arguments);
 	},
 	/**
@@ -250,7 +331,7 @@ var __members = {
 	 *         if the component was not found.
 	 * @see #f_findComponent f_findComponent()
 	 */
-	$$: function(id) {
+	$$ : function(id) {
 		return this.f_findComponent.apply(this, arguments);
 	},
 
@@ -273,20 +354,23 @@ var __members = {
 	 * @method public
 	 * @return Boolean
 	 */
-	f_isImmediate: function() {
+	f_isImmediate : function() {
 		return this._immediate;
 	},
 	/**
 	 * @method public
-	 * @param Boolean immediate
+	 * @param Boolean
+	 *            immediate
 	 * @return void
 	 */
-	f_setImmediate: function(immediate) {
-		f_core.Assert(immediate===undefined || typeof(immediate)=="boolean", "f_event.f_setImmediate: Invalid immediate parameter ("+immediate+").");
-		
-		this._immediate=immediate;
-	},
+	f_setImmediate : function(immediate) {
+		f_core.Assert(immediate === undefined
+				|| typeof (immediate) == "boolean",
+				"f_event.f_setImmediate: Invalid immediate parameter ("
+						+ immediate + ").");
 
+		this._immediate = immediate;
+	},
 
 	/**
 	 * @method public
@@ -295,8 +379,8 @@ var __members = {
 	toString : function() {
 		return "[f_event type='" + this._type + "' component='"
 				+ this._component + "' value='" + this._value + "' item='"
-				+ this._item + "' detail='" + this._detail + "' immediate='"+this._immediate+"' jsEvent='"
-				+ this._jsEvent + "']";
+				+ this._item + "' detail='" + this._detail + "' immediate='"
+				+ this._immediate + "' jsEvent='" + this._jsEvent + "']";
 	}
 };
 
@@ -428,11 +512,11 @@ var __statics = {
 	ERROR : "error",
 
 	/**
- 	 * Expand event name.
- 	 *
+	 * Expand event name.
+	 * 
 	 * @field public static final String
 	 */
-	EXPAND:		"expand",
+	EXPAND : "expand",
 
 	/**
 	 * Focus event name.
@@ -517,7 +601,7 @@ var __statics = {
 	 * @field public static final String
 	 */
 	PRE_SELECTION : "preSelection",
-	
+
 	/**
 	 * Property Change event name.
 	 * 
@@ -581,7 +665,7 @@ var __statics = {
 	 * @field public static final Number
 	 */
 	IMMEDIATE_DETAIL : 0x400,
-	
+
 	/**
 	 * @field public static final Number
 	 */
@@ -773,20 +857,22 @@ var __statics = {
 				}
 
 			} else if (jsEvent) {
-				// On va rechercher si notre evenement est dans ou en dehors de la popup
-				
+				// On va rechercher si notre evenement est dans ou en dehors de
+				// la popup
+
 				var target = jsEvent.target;
 				if (!target) {
 					target = jsEvent.srcElement;
 				}
 
-				var ret=undefined;
+				var ret = undefined;
 				if (target) {
 					// On recherche si le click se situe dans la popup
 
 					ret = f_popup.IsChildOfDocument(target, jsEvent);
-					
-					// Ret=TRUE le click est dans la popup ou le composant qui a ouvert la popup (cf f_isPopupLock() )
+
+					// Ret=TRUE le click est dans la popup ou le composant qui a
+					// ouvert la popup (cf f_isPopupLock() )
 				}
 
 				f_core.Debug(f_event,
@@ -810,13 +896,13 @@ var __statics = {
 		if (currentLock == f_event.DND_LOCK) {
 			return false;
 		}
-		
+
 		var currentMode = f_event._EvtLockMode;
 		if (currentLock == f_event.SUBMIT_LOCK && currentMode === false) {
-			// Nous sommes en LOCK,  mais c'est pas bloqué
+			// Nous sommes en LOCK, mais c'est pas bloqué
 			return false;
 		}
-		
+
 		// Nous sommes en LOCK et c'est bloqué !
 
 		f_core.Debug(f_event,
@@ -829,7 +915,7 @@ var __statics = {
 		}
 
 		var s = f_env.Get("CORE_LOCK_MESSAGE");
-		if (s===undefined) {
+		if (s === undefined) {
 			var bundle = f_resourceBundle.Get(f_event);
 			if (bundle) {
 				s = bundle.f_get("LOCK_MESSAGE");
@@ -839,14 +925,13 @@ var __statics = {
 				s = f_event._LOCK_MESSAGE;
 			}
 		}
-		
-		if (s===null) {
+
+		if (s === null) {
 			return true;
 		}
 
 		/*
-		 * if (window.console && console.trace) {
-		 *  }
+		 * if (window.console && console.trace) { }
 		 */
 
 		if (f_core.IsDebugEnabled(f_event)) {
@@ -928,11 +1013,31 @@ var __statics = {
 				+ f_event._EvtLock + " old=" + currentLock + ")");
 
 		return f_event._EvtLock;
+	},
+	/**
+	 * Allocate detail object
+	 * 
+	 * @method public static
+	 * @param optional Object details
+	 * @return Object
+	 */
+	NewDetail : function(details) {
+		f_core.Assert(typeof(details)=="object" || details===undefined, "f_event.NewDetail: Invalid 'details' parameter ("+details+")");
+		
+		if (!details) {
+			details={};
+		}
+		if (!details.value) {
+			details.value=0;
+		}
+		
+		return details;
 	}
 };
 
 new f_class("f_event", {
 	statics : __statics,
 	members : __members,
-	_systemClass : true // Il est systeme car on peut sortir de l'appli sur un evenement
+	_systemClass : true
+// Il est systeme car on peut sortir de l'appli sur un evenement
 });
