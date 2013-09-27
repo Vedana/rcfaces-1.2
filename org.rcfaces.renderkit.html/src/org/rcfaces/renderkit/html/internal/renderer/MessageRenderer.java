@@ -126,6 +126,8 @@ public class MessageRenderer extends AbstractCssRenderer {
                 htmlWriter.writeHeight(imageHeight);
             }
 
+            htmlWriter.writeAlt("");
+
             htmlWriter.endElement(IHtmlWriter.IMG);
         }
 
