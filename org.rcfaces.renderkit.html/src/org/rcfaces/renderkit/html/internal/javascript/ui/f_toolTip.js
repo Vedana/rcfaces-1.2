@@ -77,11 +77,19 @@ var __members = {
 	f_toolTip: function() {
 		this.f_super(arguments);
 
-		if (this.parentNode.tagName.toLowerCase() != "body") {
-			var body = this.ownerDocument.body;
-
+		if (!this.parentNode._tooltipContainer) {
+			var tc=this.ownerDocument.getElementById("__rcfaces_tooltipContainer");
+			if (!tc) {
+				var body = this.ownerDocument.body;
+				
+				tc=f_core.CreateElement(body, "div", {
+					id: "__rcfaces_tooltipContainer",
+					"aria-live": "polite"
+				});
+			}
+			
 			this.parentNode.removeChild(this);
-			body.appendChild(this);
+			tc.appendChild(this);
 		}
 
 		this._visible = false;
