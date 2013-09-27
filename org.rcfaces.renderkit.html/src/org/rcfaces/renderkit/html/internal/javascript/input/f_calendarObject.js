@@ -2318,7 +2318,7 @@ var __members = {
 		var maxDate=this._maxDate;
 				
 		var dates=this._dates;
-		var dtimes;
+		var dtimes=undefined;
 		if (dates.length>0) {
 			dtimes=new Array;
 
@@ -2559,7 +2559,7 @@ var __members = {
 						}
 						d=null;
 						
-						ds.splice(j--, 1)
+						ds.splice(j--, 1);
 						break;
 					}
 					if (!d) {
