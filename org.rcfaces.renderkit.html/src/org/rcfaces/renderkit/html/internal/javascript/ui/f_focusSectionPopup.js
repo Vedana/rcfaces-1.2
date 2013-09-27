@@ -69,7 +69,7 @@ var __statics = {
 		var doc=focusComponent.ownerDocument;
 		
 		var popup=f_core.CreateElement(doc.body, "div", {
-			classname: "f_focusSection",			
+			classname: "f_focusSection"
 		});
 		f_focusSectionPopup._PopupSection=popup;
 		
