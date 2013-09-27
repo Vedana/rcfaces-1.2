@@ -937,6 +937,8 @@
 		<implements
 			id="org.rcfaces.core.internal.capability.ICellToolTipTextSettings" />
 		<implements
+			id="org.rcfaces.core.internal.capability.ICellClickableSettings" />
+		<implements
 			id="org.rcfaces.core.internal.capability.IImageAccessorsCapability" />
 		<implements id="org.rcfaces.core.internal.capability.ICriteriaContainer"
 			importMethods="false" />
@@ -964,6 +966,7 @@
 		<capability id="ICellImageCapability" />
 		<capability id="ICellStyleClassCapability" />
 		<capability id="ICellToolTipTextCapability" />
+		<capability id="ICellClickableCapability" />
 		<capability id="IToolTipIdCapability" />
 		<capability id="ITitleToolTipIdCapability" />
 
@@ -3045,6 +3048,7 @@
 	<component id="imageCombo" extends="abstractMenu">
 		<capability id="IImageButtonFamilly" />
 		<capability id="IShowDropDownMarkCapability" />
+		<capability id="IAudioDescriptionCapability" />
 
 		<attribute id="popupRowNumber" type="int">
 		</attribute>
@@ -3182,6 +3186,7 @@
 
 		<attribute id="viewURL" type="java.lang.String" />
 		<attribute id="shellDecoratorName" type="java.lang.String" />
+		<attribute id="returnFocusClientId" type="java.lang.String" />
 
 		<method id="setHiddenMode(String)" />
 		<method id="getVisibleState(javax.faces.context.FacesContext)" />
@@ -4564,6 +4569,8 @@
 	<component id="focusManager" extends="cameliaBase">
 		<attribute id="focusId" type="java.lang.String" />
 		<attribute id="setFocusIfMessage" type="boolean" default="true" />
+		<attribute id="autoFocus" type="boolean" />
+		<attribute id="autoFocusFrom" type="java.lang.String" />
 	</component>
 
 	<component id="scheduler" extends="cameliaBase">
