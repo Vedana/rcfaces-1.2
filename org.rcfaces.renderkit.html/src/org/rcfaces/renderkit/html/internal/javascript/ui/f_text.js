@@ -3,7 +3,7 @@
  */
 
 /**
- * @class f_text extends f_component
+ * @class f_text extends f_component, fa_audioDescription, fa_message
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -19,7 +19,9 @@ var __members = {
 	 * @return String
 	 */
 	f_getText: function() {
-		return f_core.GetTextNode(this, true);
+		this.fa_searchAudioDescription();
+		
+		return f_core.GetTextNode(this, true, true);
 	},
 	/**
 	 * @method public
@@ -33,7 +35,9 @@ var __members = {
 		}
 		
 		f_core.SetTextNode(this, text, this._accessKey);
-		
+
+		this.fa_updateAudioDescription();
+
 		this.f_setProperty(f_prop.TEXT,text);
 	},
 	/**
@@ -75,10 +79,56 @@ var __members = {
 		this._forComponentId=forComponentId;
 		
 		return forComponentId;
+	},
+	f_performMessageChanges: function(messageContext, messageEvent) {
+		
+		switch(messageEvent.type) {
+		case f_messageContext.POST_CHECK_EVENT_TYPE:
+		//case f_messageContext.ADD_MESSAGE_EVENT_TYPE:
+			break;
+			
+		default:
+			return;
+		}
+
+		var cid=this.f_getForClientId();
+		if (!cid) {
+			return;
+		}
+		var pid=cid.lastIndexOf("::");
+		if (pid>0) {
+			cid=cid.substring(0, pid);
+		}
+
+		var messages=messageContext.f_listMessages(cid, false);
+	
+		var selectedMessage=null;
+		if (messages) {			
+			for(var j=0;j<messages.length;j++) {
+				var message=messages[j];
+				var severity=message.f_getSeverity();
+	
+				if (!selectedMessage || selectedMessage.severity<severity) {
+					selectedMessage=message;
+				}
+			}
+		}
+		
+		if (!selectedMessage) {
+			this.fa_removeAudioDescription("error");
+			return;
+		}
+		
+    	var message = f_resourceBundle.Get(f_text).f_get("ARIA_ERROR");
+    	message=message.replace("%s", selectedMessage.f_getSummary());
+    	message=message.replace("%d", selectedMessage.f_getDetail());
+
+		this.fa_setAudioDescription(message, "error");
 	}
 };
 
 new f_class("f_text", {
 	extend: f_component,
-	members: __members
+	members: __members,
+	aspects: [fa_audioDescription, fa_message]
 });
