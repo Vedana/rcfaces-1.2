@@ -251,7 +251,7 @@ var __members = {
 						+ event._type + "' on '" + this.id + "' item='"
 						+ event._item + "' value='" + event._value
 						+ "' selectionProvider='" + event._selectionProvider
-						+ "' detail='" + event._detail + "'.");
+						+ "' detail='" + event._detail + "' detailObject='"+event._detailObject+"'.");
 
 				ret = al.f_callActions(event);
 
