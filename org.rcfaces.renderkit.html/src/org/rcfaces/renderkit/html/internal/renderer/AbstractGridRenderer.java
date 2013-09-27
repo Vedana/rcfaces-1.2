@@ -1125,6 +1125,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         }
 
         htmlWriter.startElement(IHtmlWriter.TABLE);
+        htmlWriter.writeAttribute("role", "grid");
         htmlWriter.writeId(getDataTableId(htmlWriter));
         htmlWriter.writeClass(getDataTableClassName(htmlWriter,
                 gridRenderContext.isDisabled()));
@@ -1136,16 +1137,16 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         htmlWriter.writeCellSpacing(0);
 
         int tableWidth = gridRenderContext.getColumnWidthTotalSize();
-//        if (tableWidth > 0) {
-//            if (gridWidth > 0 && gridWidth > tableWidth) {
-//                // tableWidth = -1;
-//            }
-//        }
+        // if (tableWidth > 0) {
+        // if (gridWidth > 0 && gridWidth > tableWidth) {
+        // // tableWidth = -1;
+        // }
+        // }
 
         if (tableWidth > 0) {
             htmlWriter.writeWidth(tableWidth);
-        } else if (w > 0)  {
-        	 htmlWriter.writeWidth(w);
+        } else if (w > 0) {
+            htmlWriter.writeWidth(w);
         } else {
             htmlWriter.writeWidth("100%");
         }
@@ -1909,8 +1910,11 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                 htmlWriter.writeId(headerId);
             }
         } else {
+            htmlWriter.writeId(headerId); // ARIA
+
             htmlWriter.writeAttribute("scope", "col");
         }
+
         String text = null;
         if (column instanceof ITextCapability) {
             text = ((ITextCapability) column).getText();
@@ -2274,33 +2278,34 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                         "#title", null);
             }
 
-            if (toolTipComponent == null) {
-                continue;
-            }
+            if (toolTipComponent != null) {
+                String toolTipClientId = null;
+                String toolTipContent = null;
+                if (toolTipComponent.getAsyncRenderMode(facesContext) == IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
+                    toolTipContent = encodeToolTip(jsWriter, toolTipComponent);
+                    toolTipClientId = "##CONTENT";
 
-            String toolTipClientId = null;
-            String toolTipContent = null;
-            if (toolTipComponent.getAsyncRenderMode(facesContext) == IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
-                toolTipContent = encodeToolTip(jsWriter, toolTipComponent);
-                toolTipClientId = "##CONTENT";
-
-            } else {
-                toolTipClientId = toolTipComponent.getClientId(facesContext);
-            }
-
-            if (toolTipClientId != null) {
-                if (titleToolTipIds == null) {
-                    titleToolTipIds = new String[columns.length];
+                } else {
+                    toolTipClientId = toolTipComponent
+                            .getClientId(facesContext);
                 }
-                titleToolTipIds[i] = jsWriter.allocateString(toolTipClientId);
-            }
-            if (toolTipContent != null) {
-                if (titleToolTipContents == null) {
-                    titleToolTipContents = new String[columns.length];
+
+                if (toolTipClientId != null) {
+                    if (titleToolTipIds == null) {
+                        titleToolTipIds = new String[columns.length];
+                    }
+                    titleToolTipIds[i] = jsWriter
+                            .allocateString(toolTipClientId);
                 }
-                titleToolTipContents[i] = jsWriter
-                        .allocateString(toolTipContent);
+                if (toolTipContent != null) {
+                    if (titleToolTipContents == null) {
+                        titleToolTipContents = new String[columns.length];
+                    }
+                    titleToolTipContents[i] = jsWriter
+                            .allocateString(toolTipContent);
+                }
             }
+
         }
 
         int autoFilterIndex = 0;
@@ -2319,7 +2324,10 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             if (columnId != null) {
                 objectWriter.writeSymbol("_id").writeString(columnId);
             }
-
+            /*
+            objectWriter.writeSymbol("_cid").writeString(
+                    columnComponent.getClientId(facesContext));
+*/
             String columnText = null;
             if (columnComponent instanceof ITextCapability) {
                 columnText = ((ITextCapability) columnComponent).getText();

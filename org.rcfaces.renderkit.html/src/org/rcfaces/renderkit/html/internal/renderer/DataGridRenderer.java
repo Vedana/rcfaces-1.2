@@ -27,6 +27,7 @@ import org.rcfaces.core.component.DataGridComponent;
 import org.rcfaces.core.component.ToolTipComponent;
 import org.rcfaces.core.component.capability.IAdditionalInformationValuesCapability;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
+import org.rcfaces.core.component.capability.ICellClickableCapability;
 import org.rcfaces.core.component.capability.ICellImageCapability;
 import org.rcfaces.core.component.capability.ICellStyleClassCapability;
 import org.rcfaces.core.component.capability.ICellToolTipTextCapability;
@@ -44,6 +45,7 @@ import org.rcfaces.core.component.capability.IToolTipIdCapability;
 import org.rcfaces.core.component.iterator.IColumnIterator;
 import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.capability.IAdditionalInformationComponent;
+import org.rcfaces.core.internal.capability.ICellClickableSettings;
 import org.rcfaces.core.internal.capability.ICellImageSettings;
 import org.rcfaces.core.internal.capability.ICheckComponent;
 import org.rcfaces.core.internal.capability.ICheckRangeComponent;
@@ -275,18 +277,20 @@ public class DataGridRenderer extends AbstractGridRenderer {
         super.writeGridColumnProperties(objectWriter, tableContext,
                 columnComponent, columnIndex);
 
-        UIColumn rowValueColumn = ((DataGridRenderContext) tableContext)
-                .getRowValueColumn();
+        DataGridRenderContext dataGridRenderContext = (DataGridRenderContext) tableContext;
 
+        UIColumn rowValueColumn = dataGridRenderContext.getRowValueColumn();
         if (rowValueColumn == columnComponent) {
             objectWriter.writeSymbol("_valueColumn").writeBoolean(true);
         }
 
-        UIColumn keySearchColumn = ((DataGridRenderContext) tableContext)
-                .getKeySearchColumn();
-
+        UIColumn keySearchColumn = dataGridRenderContext.getKeySearchColumn();
         if (keySearchColumn == columnComponent) {
             objectWriter.writeSymbol("_keySearch").writeBoolean(true);
+        }
+
+        if (dataGridRenderContext.isAllClickableCell(columnIndex)) {
+            objectWriter.writeSymbol("_cellClickable").writeBoolean(true);
         }
     }
 
@@ -1249,6 +1253,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
         String images[] = null;
         String cellStyleClasses[] = null;
         String cellToolTipTexts[] = null;
+        boolean clickableCells[] = null;
         int visibleColumns = 0;
 
         boolean designerMode = tableContext.isDesignerMode();
@@ -1350,6 +1355,22 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
                     cellToolTipTexts[i] = ct;
                 }
+            }
+
+            boolean cCell = false;
+            if (tableContext.isAllClickableCell(i) == false
+                    && tableContext.isClickableCellSetted(i)) {
+                ICellClickableCapability capability = (ICellClickableCapability) dc;
+
+                cCell = ((ICellClickableCapability) dc).isCellClickable();
+            }
+
+            if (cCell) {
+                if (clickableCells == null) {
+                    clickableCells = new boolean[columnNumber];
+                }
+
+                clickableCells[i] = true;
             }
 
             visibleColumns++;
@@ -1643,7 +1664,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
         }
 
         if (images != null || cellStyleClasses != null
-                || cellToolTipIds != null || cellToolTipTexts != null) {
+                || cellToolTipIds != null || cellToolTipTexts != null
+                || clickableCells != null) {
 
             allocateStrings(jsWriter, images, images);
             allocateStrings(jsWriter, cellStyleClasses, cellStyleClasses);
@@ -1681,9 +1703,14 @@ public class DataGridRenderer extends AbstractGridRenderer {
                     toolTipContent = cellToolTipContents[i];
                 }
 
+                boolean clickableCell = false;
+                if (clickableCells != null) {
+                    clickableCell = clickableCells[i];
+                }
+
                 if (imageURL == null && cellStyleClass == null
                         && toolTipText == null && toolTipId == null
-                        && toolTipContent == null) {
+                        && toolTipContent == null && clickableCell == false) {
                     continue;
                 }
 
@@ -1722,6 +1749,10 @@ public class DataGridRenderer extends AbstractGridRenderer {
                 if (toolTipContent != null) {
                     objWriter.writeSymbol("_toolTipContent").write(
                             toolTipContent);
+                }
+
+                if (clickableCell) {
+                    objWriter.writeSymbol("_clickable").writeBoolean(true);
                 }
 
                 objWriter.end();
@@ -1771,6 +1802,10 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
         private UIColumn keySearchColumn;
 
+        private boolean[] clickableCellSettedArray;
+
+        private boolean[] allClickableCellArray;
+
         public DataGridRenderContext(IProcessContext processContext,
                 IJavaScriptRenderContext scriptRenderContext,
                 IGridComponent dg, int rowIndex, int forcedRows,
@@ -1796,6 +1831,24 @@ public class DataGridRenderer extends AbstractGridRenderer {
                     .getRowValueColumn(getGridComponent());
             keySearchColumn = DataGridRenderer.this
                     .getKeySearchColumn(getGridComponent());
+
+            clickableCellSettedArray = new boolean[columns.length];
+            allClickableCellArray = new boolean[columns.length];
+
+            int i = 0;
+            for (UIColumn column : columns) {
+                if (column instanceof ICellClickableCapability) {
+                    allClickableCellArray[i] = ((ICellClickableCapability) column)
+                            .isAllCellClickable();
+                }
+
+                if (column instanceof ICellClickableSettings) {
+                    clickableCellSettedArray[i] = ((ICellClickableSettings) column)
+                            .isCellClickableSetted();
+                }
+
+                i++;
+            }
         }
 
         protected String convertAliasCommand(String command) {
@@ -1808,6 +1861,14 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
         public UIColumn getKeySearchColumn() {
             return keySearchColumn;
+        }
+
+        public boolean isClickableCellSetted(int i) {
+            return clickableCellSettedArray[i];
+        }
+
+        public boolean isAllClickableCell(int i) {
+            return allClickableCellArray[i];
         }
     }
 
