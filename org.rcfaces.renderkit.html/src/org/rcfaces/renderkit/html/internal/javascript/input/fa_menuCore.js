@@ -908,10 +908,11 @@ var __members = {
 		}
 
 		var value = this.f_getItemValue(menuItem);
-		this.f_fireEvent("itemHover", null, menuItem, value, null, {
+		var detail = f_event.NewDetail({
 			uiItem: uiItem,
 			uiPopup: popup
 		});
+		this.f_fireEvent("itemHover", null, menuItem, value, null, detail);
 	},
 	/**
 	 * @method protected final

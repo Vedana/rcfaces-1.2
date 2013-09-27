@@ -4419,7 +4419,7 @@ var __members = {
 				}
 				
 				if (selectedValue.length) {
-					this.fa_fireSelectionChangedEvent(null, f_event.REFRESH_DETAIL);
+					this.fa_fireSelectionChangedEvent(null,  { value: f_event.REFRESH_DETAIL, refresh: true});
 				}				
 			}
 		}

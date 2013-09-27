@@ -289,7 +289,7 @@ var __members = {
 					
 					if (!this._selectionFullState) {
 						// Pas de fullstate: elles sont perdues !
-						this.fa_fireSelectionChangedEvent(null, f_event.REFRESH_DETAIL);
+						this.fa_fireSelectionChangedEvent(null, { value: f_event.REFRESH_DETAIL, refresh: true});
 					}
 				}
 			}
