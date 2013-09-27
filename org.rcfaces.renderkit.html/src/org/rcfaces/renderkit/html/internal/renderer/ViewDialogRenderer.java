@@ -15,7 +15,6 @@ import org.rcfaces.core.internal.codec.URLFormCodec;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.lang.StringAppender;
-import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.lang.IContentFamily;
@@ -38,18 +37,18 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
 
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
 
-        IComponentRenderContext componentRenderContext = writer
-                .getComponentRenderContext();
+        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
+
+        IHtmlComponentRenderContext componentRenderContext = htmlWriter
+                .getHtmlComponentRenderContext();
         FacesContext facesContext = componentRenderContext.getFacesContext();
-        ViewDialogComponent component = (ViewDialogComponent) componentRenderContext
+        ViewDialogComponent viewDialogComponent = (ViewDialogComponent) componentRenderContext
                 .getComponent();
 
         boolean designMode = componentRenderContext.getRenderContext()
                 .getProcessContext().isDesignerMode();
 
-        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
-
-        if (component.isVisible(facesContext) && designMode == false) {
+        if (viewDialogComponent.isVisible(facesContext) && designMode == false) {
             htmlWriter.getJavaScriptEnableMode().enableOnInit();
         }
 
@@ -57,27 +56,38 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
 
-        String width = component.getWidth(facesContext);
+        String width = viewDialogComponent.getWidth(facesContext);
         if (width != null) {
             htmlWriter.writeAttributeNS("width", width);
         }
 
-        String height = component.getHeight(facesContext);
+        String height = viewDialogComponent.getHeight(facesContext);
         if (height != null) {
             htmlWriter.writeAttributeNS("height", height);
         }
 
-        String text = component.getText(facesContext);
+        String text = viewDialogComponent.getText(facesContext);
         if (text != null) {
             htmlWriter.writeAttributeNS("title", text);
         }
 
-        boolean closable = component.isClosable(facesContext);
+        boolean closable = viewDialogComponent.isClosable(facesContext);
         if (closable == true) {
             htmlWriter.writeAttributeNS("closable", closable);
         }
 
-        String src = component.getViewURL(facesContext);
+        String returnFocusClientId = viewDialogComponent
+                .getReturnFocusClientId(facesContext);
+        if (returnFocusClientId != null) {
+            String forId = componentRenderContext.getRenderContext()
+                    .computeBrotherComponentClientId(viewDialogComponent,
+                            returnFocusClientId);
+            if (forId != null) {
+                htmlWriter.writeAttributeNS("returnFocusClientId", forId);
+            }
+        }
+
+        String src = viewDialogComponent.getViewURL(facesContext);
         if (src != null) {
             IContentAccessor contentAccessor = ContentAccessorFactory
                     .createFromWebResource(facesContext, src,
@@ -89,10 +99,10 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
             }
         }
 
-        writeClientData(htmlWriter, component);
+        writeClientData(htmlWriter, viewDialogComponent);
 
         // TODO A refaire en décorator !
-        List children = component.getChildren();
+        List children = viewDialogComponent.getChildren();
         Map<String, String> values = null;
         for (int i = 0; i < children.size(); i++) {
             if (children.get(i) instanceof UISelectItem) {
@@ -136,18 +146,19 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
             }
         }
 
-        String shellDecorator = component.getShellDecoratorName(facesContext);
+        String shellDecorator = viewDialogComponent
+                .getShellDecoratorName(facesContext);
         if (shellDecorator != null) {
             htmlWriter.writeAttributeNS("shellDecorator", shellDecorator);
         }
 
-        if (component.isVisible(facesContext) == false) {
+        if (viewDialogComponent.isVisible(facesContext) == false) {
             htmlWriter.writeAttributeNS("visible", false);
         }
 
-        if (component.isDialogPrioritySetted()) {
+        if (viewDialogComponent.isDialogPrioritySetted()) {
             htmlWriter.writeAttributeNS("dialogPriority",
-                    component.getDialogPriority(facesContext));
+                    viewDialogComponent.getDialogPriority(facesContext));
         }
         htmlWriter.endElementNS(LAZY_INIT_TAG);
 
