@@ -215,7 +215,7 @@ var f_core = {
 
 
 	/**
-	 * @field private static final RegExp
+	 * @field hidden static final RegExp
 	 */
 	_FOCUSABLE_TAGS: "^(A|AREA|BUTTON|IFRAME|INPUT|OBJECT|SELECT|TEXTAREA){1}$",
 
@@ -1583,7 +1583,7 @@ var f_core = {
 	 * @return HTMLElement
 	 */
 	CreateElement: function(parent, tagName, properties) {
-		f_core.Assert(parent && (parent.nodeType==f_core.ELEMENT_NODE || parent.nodeType==f_core.DOCUMENT_FRAGMENT), "f_core.CreateElement: Invalid component ! ("+parent+")");		
+		f_core.Assert(parent && (parent.nodeType==f_core.ELEMENT_NODE || parent.nodeType==f_core.DOCUMENT_FRAGMENT), "f_core.CreateElement: Invalid parent component ! ("+parent+")");		
 		
 		var doc=parent.ownerDocument;
 		
@@ -1595,7 +1595,7 @@ var f_core = {
 			var tagName=arguments[i++];
 			var properties=arguments[i++];
 			
-			f_core.Assert(typeof(tagName)=="string", "f_core.CreateElement: Invalid tagName parameter ("+tagName+")");
+			f_core.Assert(typeof(tagName)=="string", "f_core.CreateElement: Invalid 'tagName' parameter ("+tagName+")");
 			f_core.Assert(properties===undefined || typeof(properties)=="object", "f_core.CreateElement: Invalid properties parameter ("+properties+")");
 			
 			
@@ -1627,7 +1627,14 @@ var f_core = {
 					case "innerhtml":
 						innerHtml=value;
 						break;
-					
+						
+					case "role":
+					case "aria-live":
+					case "aria-atomic":
+					case "aria-relevant":
+						element.setAttribute(name, value);
+						break;
+						
 					case "style":
 						var rs=value.split(';');
 						for(var j=0;j<rs.length;j++) {
@@ -4677,11 +4684,6 @@ var f_core = {
 		f_core.Assert(component.nodeType==f_core.ELEMENT_NODE, "f_core.SetFocus: Parameter is not a component.");
 
 		f_core.Debug(f_core, "SetFocus: component="+component.id+" asyncMode="+asyncMode);
-
-		if (f_core._FocusTimeoutID) {
-			f_core._FocusComponent=component;
-			return true;
-		}
 		
 		if (asyncMode) {
 			if (hideInput) {
@@ -4697,7 +4699,11 @@ var f_core = {
 			}
 
 			f_core._FocusComponent=component;
-			
+
+			if (f_core._FocusTimeoutID) {
+				return true;
+			}
+		
 			f_core._FocusTimeoutID=window.setTimeout(function() {
 				// On sait jamais !
 				if (window._rcfacesExiting) {
@@ -4710,10 +4716,17 @@ var f_core = {
 					return;
 				}
 				f_core._FocusComponent=undefined;
-				f_core.SetFocus(component, false, hideInput);
+				f_core.SetFocus(component, false);
 				
 			}, f_core._FOCUS_TIMEOUT_DELAY);
 			return true;
+		}
+		
+		var timeoutId=f_core._FocusTimeoutID;
+		if (timeoutId) {
+			f_core._FocusTimeoutID=undefined;
+			f_core._FocusComponent=undefined;
+			window.clearTimeout(timeoutId);
 		}
 
 		if (typeof(component.f_show)=="function") {
