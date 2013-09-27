@@ -5,7 +5,6 @@
 package org.rcfaces.core.internal.converter;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.faces.component.UIComponent;
@@ -20,7 +19,6 @@ import org.rcfaces.core.model.AbstractConverter;
  * @version $Revision$ $Date$
  */
 public class CalendarLayoutConverter extends AbstractConverter {
-    private static final String REVISION = "$Revision$";
 
     public static final Converter SINGLETON = new CalendarLayoutConverter();
 
@@ -35,7 +33,8 @@ public class CalendarLayoutConverter extends AbstractConverter {
     private static final Integer DEFAULT_LAYOUT = new Integer(
             ICalendarLayoutCapability.DEFAULT_LAYOUT);
 
-    private static Map LAYOUTS = new HashMap(4);
+    private static Map<String, Integer> LAYOUTS = new HashMap<String, Integer>(
+            4);
     static {
         Integer i = new Integer(ICalendarLayoutCapability.SHORT_LAYOUT);
         LAYOUTS.put(SHORT_LAYOUT_NAME, i);
@@ -53,8 +52,9 @@ public class CalendarLayoutConverter extends AbstractConverter {
     /*
      * (non-Javadoc)
      * 
-     * @see javax.faces.convert.Converter#getAsObject(javax.faces.context.FacesContext,
-     *      javax.faces.component.UIComponent, java.lang.String)
+     * @see
+     * javax.faces.convert.Converter#getAsObject(javax.faces.context.FacesContext
+     * , javax.faces.component.UIComponent, java.lang.String)
      */
     public Object getAsObject(FacesContext context, UIComponent component,
             String value) {
@@ -66,7 +66,7 @@ public class CalendarLayoutConverter extends AbstractConverter {
 
         value = value.toLowerCase();
 
-        Integer i = (Integer) LAYOUTS.get(value);
+        Integer i = LAYOUTS.get(value);
         if (i != null) {
             return i;
         }
@@ -78,25 +78,25 @@ public class CalendarLayoutConverter extends AbstractConverter {
     /*
      * (non-Javadoc)
      * 
-     * @see javax.faces.convert.Converter#getAsString(javax.faces.context.FacesContext,
-     *      javax.faces.component.UIComponent, java.lang.Object)
+     * @see
+     * javax.faces.convert.Converter#getAsString(javax.faces.context.FacesContext
+     * , javax.faces.component.UIComponent, java.lang.Object)
      */
     public String getAsString(FacesContext context, UIComponent component,
             Object value) {
 
         if (value == null) {
-            return (String) LAYOUTS.get(DEFAULT_LAYOUT);
+            value = DEFAULT_LAYOUT;
         }
 
         if ((value instanceof Integer) == false) {
             throw new IllegalArgumentException("Value must be an Integer !");
         }
 
-        for (Iterator it = LAYOUTS.entrySet().iterator(); it.hasNext();) {
-            Map.Entry entry = (Map.Entry) it.next();
+        for (Map.Entry<String, Integer> entry : LAYOUTS.entrySet()) {
 
             if (value.equals(entry.getValue())) {
-                return (String) entry.getKey();
+                return entry.getKey();
             }
         }
 
