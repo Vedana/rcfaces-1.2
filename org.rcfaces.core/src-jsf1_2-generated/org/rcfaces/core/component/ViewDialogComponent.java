@@ -101,7 +101,7 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"closeListener","lookId","text","shellDecoratorName","visible","styleClass","width","ariaLabel","dialogPriority","textDirection","ariaLevel","immediate","height","closable","hiddenMode","viewURL","waiRole","imageURL"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"returnFocusClientId","closeListener","lookId","text","shellDecoratorName","visible","styleClass","width","ariaLabel","dialogPriority","textDirection","ariaLevel","immediate","height","closable","hiddenMode","viewURL","imageURL","waiRole"}));
 	}
 
 	public ViewDialogComponent() {
@@ -753,6 +753,27 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 	 */
 	public boolean isShellDecoratorNameSetted() {
 		return engine.isPropertySetted(Properties.SHELL_DECORATOR_NAME);
+	}
+
+	public String getReturnFocusClientId() {
+		return getReturnFocusClientId(null);
+	}
+
+	public String getReturnFocusClientId(javax.faces.context.FacesContext facesContext) {
+		String s = engine.getStringProperty(Properties.RETURN_FOCUS_CLIENT_ID, facesContext);
+		return s;
+	}
+
+	public void setReturnFocusClientId(String returnFocusClientId) {
+		engine.setProperty(Properties.RETURN_FOCUS_CLIENT_ID, returnFocusClientId);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "returnFocusClientId" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isReturnFocusClientIdSetted() {
+		return engine.isPropertySetted(Properties.RETURN_FOCUS_CLIENT_ID);
 	}
 
 	protected Set getCameliaFields() {

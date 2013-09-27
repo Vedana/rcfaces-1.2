@@ -148,7 +148,8 @@ public class ValuesTools extends CollectionTools {
 
             if (valueBinding.getValue(context.getELContext()) != null) {
                 // On peut avoir le type !
-                Class converterType = valueBinding.getType(context.getELContext());
+                Class converterType = valueBinding.getType(context
+                        .getELContext());
                 if (converterType == null || converterType == String.class
                         || converterType == Object.class) {
                     return values;
@@ -195,17 +196,17 @@ public class ValuesTools extends CollectionTools {
         return convertStringToValue(context, component, converter, value,
                 "value", testValue);
     }
-    
+
     public static Converter getConverter(UIComponent component) {
 
         if (component instanceof IConvertValueHolder) {
-           return ((IConvertValueHolder) component).getConverter();
-        } 
-        
+            return ((IConvertValueHolder) component).getConverter();
+        }
+
         if (component instanceof ValueHolder) {
             return ((ValueHolder) component).getConverter();
         }
-   	
+
         return null;
     }
 
@@ -225,7 +226,8 @@ public class ValuesTools extends CollectionTools {
 
                 // On récupère pas la valeur !
                 // if (valueBinding.getValue(context) != null) {
-                Class converterType = valueBinding.getType(context.getELContext());
+                Class converterType = valueBinding.getType(context
+                        .getELContext());
                 if (converterType == null || converterType == String.class
                         || converterType == Object.class) {
                     return value;
@@ -356,6 +358,8 @@ public class ValuesTools extends CollectionTools {
     public static final boolean valueToBool(ValueHolder valueHolder) {
         Boolean b = valueToBoolean(valueHolder);
 
+//        System.out.println("ValueToBool return "+b);
+        
         if (b == null) {
             return false;
         }
@@ -371,18 +375,43 @@ public class ValuesTools extends CollectionTools {
                 Object submittedValue = ((ISubmittedExternalValue) valueHolder)
                         .getSubmittedExternalValue();
 
+                //System.out.println("ExtSubmittedValue='" + submittedValue + "'");
+
+                if (submittedValue == null) {
+                    return null;
+                }
+
+                if ((submittedValue instanceof Boolean) == false) {
+                    throw new FacesException(
+                            "Invalid BOOLEAN (Ext submitted) value of component '"
+                                    + ((UIComponent) valueHolder).getId()
+                                    + "' (" + submittedValue + ")");
+                }
+
                 return (Boolean) submittedValue;
             }
 
         } else if (valueHolder instanceof EditableValueHolder) {
             Object submittedValue = ((EditableValueHolder) valueHolder)
                     .getSubmittedValue();
+
+            // System.out.println("EditableValueHolder='" + submittedValue + "'");
+
             if (submittedValue != null) {
+                if ((submittedValue instanceof Boolean) == false) {
+                    throw new FacesException(
+                            "Invalid BOOLEAN (submitted) value of component '"
+                                    + ((UIComponent) valueHolder).getId()
+                                    + "' (" + submittedValue + ")");
+                }
+
                 return (Boolean) submittedValue;
             }
         }
 
         Object value = valueHolder.getValue();
+
+        // System.out.println("value='" + value + "'");
 
         if (value == null) {
             return null;

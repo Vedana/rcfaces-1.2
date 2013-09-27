@@ -1,9 +1,9 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.component.RadioButtonComponent;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.converter.HorizontalTextPositionConverter
 			;
-import org.rcfaces.core.internal.component.Properties;
 import java.util.Map;
 import org.rcfaces.core.component.capability.IRadioValueCapability;
 import java.util.Collections;
@@ -112,13 +112,6 @@ public class RadioButtonComponent extends AbstractInputComponent implements
 		
 	}
 
-	public String setValidationParameter(String name, String value, boolean client) {
-
-
-		return (String)setValidationParameterData(name, value, client);
-		
-	}
-
 	public boolean isClientSideValidationParameter(String name) {
 
 
@@ -130,6 +123,13 @@ public class RadioButtonComponent extends AbstractInputComponent implements
 
 
 		return getValidationParametersMap(null);
+		
+	}
+
+	public void setValidationParameter(String name, ValueExpression value, boolean client) {
+
+
+		setValidationParameterData(name, value, client);
 		
 	}
 
@@ -166,10 +166,10 @@ public class RadioButtonComponent extends AbstractInputComponent implements
 		
 	}
 
-	public void setValidationParameter(String name, ValueExpression value, boolean client) {
+	public String setValidationParameter(String name, String value, boolean client) {
 
 
-		setValidationParameterData(name, value, client);
+		return (String)setValidationParameterData(name, value, client);
 		
 	}
 

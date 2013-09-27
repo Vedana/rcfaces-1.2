@@ -5,6 +5,7 @@ import org.rcfaces.core.component.capability.ITypedComponentCapability;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.component.capability.IForCapability;
+import org.rcfaces.core.component.capability.IAudioDescriptionCapability;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.ITextAlignmentCapability;
@@ -51,6 +52,7 @@ import org.rcfaces.core.component.capability.IFontCapability;
  */
 public class TextComponent extends AbstractOutputComponent implements 
 	ITextCapability,
+	IAudioDescriptionCapability,
 	ITextDirectionCapability,
 	IFontCapability,
 	ITextAlignmentCapability,
@@ -64,7 +66,7 @@ public class TextComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"accessKey","fontName","fontItalic","text","fontUnderline","for","textAlignment","fontBold","type","fontSize","textDirection"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"accessKey","fontName","fontItalic","text","fontUnderline","for","textAlignment","fontBold","type","fontSize","audioDescription","textDirection"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="text";
 
@@ -98,6 +100,29 @@ public class TextComponent extends AbstractOutputComponent implements
 
 	public void setText(java.lang.String text) {
 		setValue(text);
+	}
+
+	public java.lang.String getAudioDescription() {
+		return getAudioDescription(null);
+	}
+
+	/**
+	 * See {@link #getAudioDescription() getAudioDescription()} for more details
+	 */
+	public java.lang.String getAudioDescription(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.AUDIO_DESCRIPTION, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "audioDescription" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAudioDescriptionSetted() {
+		return engine.isPropertySetted(Properties.AUDIO_DESCRIPTION);
+	}
+
+	public void setAudioDescription(java.lang.String audioDescription) {
+		engine.setProperty(Properties.AUDIO_DESCRIPTION, audioDescription);
 	}
 
 	public int getTextDirection() {

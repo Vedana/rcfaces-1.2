@@ -13,8 +13,8 @@ import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import org.rcfaces.core.component.capability.IDisabledCapability;
 import javax.el.ValueExpression;
+import org.rcfaces.core.component.capability.IDisabledCapability;
 import java.util.HashSet;
 import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.CardComponent;
@@ -44,7 +44,7 @@ public class TabComponent extends CardComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CardComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disabledImageURL","accessKey","text","fontName","hoverImageURL","fontBold","fontSize","textDirection","selectedImageURL","fontItalic","fontUnderline","disabled","imageURL"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disabledImageURL","text","fontName","accessKey","hoverImageURL","fontBold","fontSize","textDirection","selectedImageURL","fontItalic","fontUnderline","disabled","imageURL"}));
 	}
 
 	public TabComponent() {

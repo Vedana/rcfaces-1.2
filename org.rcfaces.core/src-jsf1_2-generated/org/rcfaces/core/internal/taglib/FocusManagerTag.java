@@ -20,6 +20,8 @@ public class FocusManagerTag extends CameliaTag implements Tag {
 
 	private ValueExpression focusId;
 	private ValueExpression setFocusIfMessage;
+	private ValueExpression autoFocus;
+	private ValueExpression autoFocusFrom;
 	public String getComponentType() {
 		return FocusManagerComponent.COMPONENT_TYPE;
 	}
@@ -32,6 +34,14 @@ public class FocusManagerTag extends CameliaTag implements Tag {
 		this.setFocusIfMessage = setFocusIfMessage;
 	}
 
+	public void setAutoFocus(ValueExpression autoFocus) {
+		this.autoFocus = autoFocus;
+	}
+
+	public void setAutoFocusFrom(ValueExpression autoFocusFrom) {
+		this.autoFocusFrom = autoFocusFrom;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (FocusManagerComponent.COMPONENT_TYPE==getComponentType()) {
@@ -39,6 +49,8 @@ public class FocusManagerTag extends CameliaTag implements Tag {
 			}
 			LOG.debug("  focusId='"+focusId+"'");
 			LOG.debug("  setFocusIfMessage='"+setFocusIfMessage+"'");
+			LOG.debug("  autoFocus='"+autoFocus+"'");
+			LOG.debug("  autoFocusFrom='"+autoFocusFrom+"'");
 		}
 		if ((uiComponent instanceof FocusManagerComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -69,11 +81,31 @@ public class FocusManagerTag extends CameliaTag implements Tag {
 				component.setSetFocusIfMessage(getBool(setFocusIfMessage.getExpressionString()));
 			}
 		}
+
+		if (autoFocus != null) {
+			if (autoFocus.isLiteralText()==false) {
+				component.setValueExpression(Properties.AUTO_FOCUS, autoFocus);
+
+			} else {
+				component.setAutoFocus(getBool(autoFocus.getExpressionString()));
+			}
+		}
+
+		if (autoFocusFrom != null) {
+			if (autoFocusFrom.isLiteralText()==false) {
+				component.setValueExpression(Properties.AUTO_FOCUS_FROM, autoFocusFrom);
+
+			} else {
+				component.setAutoFocusFrom(autoFocusFrom.getExpressionString());
+			}
+		}
 	}
 
 	public void release() {
 		focusId = null;
 		setFocusIfMessage = null;
+		autoFocus = null;
+		autoFocusFrom = null;
 
 		super.release();
 	}

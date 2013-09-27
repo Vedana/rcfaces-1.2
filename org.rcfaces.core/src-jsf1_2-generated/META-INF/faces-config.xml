@@ -1771,6 +1771,10 @@ An int value specifying the number of rows to be displayed.
 			<attribute-name>shellDecoratorName</attribute-name>
 			<attribute-class>java.lang.String</attribute-class>
 		</attribute>
+		<attribute>
+			<attribute-name>returnFocusClientId</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
 	</component>
 	<component>
 		<component-type>org.rcfaces.core.submitWait</component-type>
@@ -3273,6 +3277,14 @@ A boolean value indicating wether the component should be get the focus when a m
 ]]></description>
 			<attribute-name>setFocusIfMessage</attribute-name>
 			<attribute-class>boolean</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>autoFocus</attribute-name>
+			<attribute-class>boolean</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>autoFocusFrom</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
 		</attribute>
 	</component>
 	<component>

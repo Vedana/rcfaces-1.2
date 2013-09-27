@@ -29,6 +29,7 @@ public class ImageComboTag extends AbstractMenuTag implements Tag {
 	private ValueExpression imageHeight;
 	private ValueExpression imageWidth;
 	private ValueExpression showDropDownMark;
+	private ValueExpression audioDescription;
 	private ValueExpression popupRowNumber;
 	public String getComponentType() {
 		return ImageComboComponent.COMPONENT_TYPE;
@@ -78,6 +79,10 @@ public class ImageComboTag extends AbstractMenuTag implements Tag {
 		this.showDropDownMark = showDropDownMark;
 	}
 
+	public void setAudioDescription(ValueExpression audioDescription) {
+		this.audioDescription = audioDescription;
+	}
+
 	public void setPopupRowNumber(ValueExpression popupRowNumber) {
 		this.popupRowNumber = popupRowNumber;
 	}
@@ -98,6 +103,7 @@ public class ImageComboTag extends AbstractMenuTag implements Tag {
 			LOG.debug("  imageHeight='"+imageHeight+"'");
 			LOG.debug("  imageWidth='"+imageWidth+"'");
 			LOG.debug("  showDropDownMark='"+showDropDownMark+"'");
+			LOG.debug("  audioDescription='"+audioDescription+"'");
 			LOG.debug("  popupRowNumber='"+popupRowNumber+"'");
 		}
 		if ((uiComponent instanceof ImageComboComponent)==false) {
@@ -211,6 +217,15 @@ public class ImageComboTag extends AbstractMenuTag implements Tag {
 			}
 		}
 
+		if (audioDescription != null) {
+			if (audioDescription.isLiteralText()==false) {
+				component.setValueExpression(Properties.AUDIO_DESCRIPTION, audioDescription);
+
+			} else {
+				component.setAudioDescription(audioDescription.getExpressionString());
+			}
+		}
+
 		if (popupRowNumber != null) {
 			if (popupRowNumber.isLiteralText()==false) {
 				component.setValueExpression(Properties.POPUP_ROW_NUMBER, popupRowNumber);
@@ -233,6 +248,7 @@ public class ImageComboTag extends AbstractMenuTag implements Tag {
 		imageHeight = null;
 		imageWidth = null;
 		showDropDownMark = null;
+		audioDescription = null;
 		popupRowNumber = null;
 
 		super.release();

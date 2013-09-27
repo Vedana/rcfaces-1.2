@@ -1,7 +1,7 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
 import javax.faces.component.UIComponent;
+import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IClientAdditionalInformationFullStateCapability;
 import org.apache.commons.logging.LogFactory;

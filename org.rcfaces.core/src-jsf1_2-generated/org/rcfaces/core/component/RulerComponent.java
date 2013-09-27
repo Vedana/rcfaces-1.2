@@ -1,7 +1,7 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.component.capability.IPositionCapability;
+import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ILayoutPositionCapability;
 import java.lang.String;
@@ -78,7 +78,7 @@ public class RulerComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"alignment","orientation","lookId","visible","backgroundColor","marginLeft","marginTop","width","marginRight","rendered","verticalCenter","marginBottom","height","hiddenMode","bottom","left","right","foregroundColor","y","horizontalCenter","margins","x","top"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"alignment","orientation","lookId","visible","backgroundColor","marginLeft","marginTop","marginRight","width","rendered","verticalCenter","marginBottom","height","hiddenMode","bottom","left","right","foregroundColor","y","horizontalCenter","margins","x","top"}));
 	}
 
 	public RulerComponent() {

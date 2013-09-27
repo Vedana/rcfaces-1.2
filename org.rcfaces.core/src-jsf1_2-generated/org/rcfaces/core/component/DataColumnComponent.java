@@ -4,10 +4,12 @@ import org.rcfaces.core.component.capability.ICriteriaManagerCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.tools.ToolTipTools;
 import org.rcfaces.core.component.capability.IUserEventCapability;
+import org.rcfaces.core.internal.capability.ICellClickableSettings;
 import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.capability.ICellToolTipTextSettings;
 import org.rcfaces.core.component.capability.ICellStyleClassCapability;
+import org.rcfaces.core.component.capability.ICellClickableCapability;
 import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.capability.IInitEventCapability;
 import org.rcfaces.core.internal.component.CameliaValueColumnComponent;
@@ -87,6 +89,7 @@ public class DataColumnComponent extends CameliaValueColumnComponent implements
 	ICellImageCapability,
 	ICellStyleClassCapability,
 	ICellToolTipTextCapability,
+	ICellClickableCapability,
 	IToolTipIdCapability,
 	ITitleToolTipIdCapability,
 	ISelectionEventCapability,
@@ -97,6 +100,7 @@ public class DataColumnComponent extends CameliaValueColumnComponent implements
 	IImageAccessorsCapability,
 	ValueHolder,
 	ICellStyleClassSettings,
+	ICellClickableSettings,
 	ICriteriaContainer,
 	ICellToolTipTextSettings,
 	ICellImageSettings {
@@ -107,7 +111,7 @@ public class DataColumnComponent extends CameliaValueColumnComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaValueColumnComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disabledImageURL","alignment","defaultCellImageURL","titleToolTipId","menuPopupId","visible","backgroundColor","minWidth","sortComparator","autoFilter","cellStyleClass","cellImageURL","selectedImageURL","selectionListener","hiddenMode","value","defaultCellStyleClass","maxWidth","resizable","ascending","foregroundColor","imageHeight","text","cellToolTipText","userEventListener","styleClass","hoverImageURL","width","doubleClickListener","toolTipId","cellDefaultToolTipText","initListener","textDirection","verticalAlignment","sortListener","toolTipText","imageURL","imageWidth"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disabledImageURL","alignment","defaultCellImageURL","titleToolTipId","menuPopupId","visible","backgroundColor","minWidth","sortComparator","autoFilter","cellStyleClass","cellImageURL","cellClickable","selectedImageURL","selectionListener","hiddenMode","value","defaultCellStyleClass","maxWidth","resizable","ascending","foregroundColor","imageHeight","text","cellToolTipText","userEventListener","styleClass","hoverImageURL","width","doubleClickListener","toolTipId","cellDefaultToolTipText","allCellClickable","initListener","textDirection","verticalAlignment","sortListener","toolTipText","imageURL","imageWidth"}));
 	}
 
 	public DataColumnComponent() {
@@ -970,6 +974,52 @@ public class DataColumnComponent extends CameliaValueColumnComponent implements
 
 	public void setCellToolTipText(java.lang.String cellToolTipText) {
 		engine.setProperty(Properties.CELL_TOOL_TIP_TEXT, cellToolTipText);
+	}
+
+	public boolean isAllCellClickable() {
+		return isAllCellClickable(null);
+	}
+
+	/**
+	 * See {@link #isAllCellClickable() isAllCellClickable()} for more details
+	 */
+	public boolean isAllCellClickable(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.ALL_CELL_CLICKABLE, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "allCellClickable" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAllCellClickableSetted() {
+		return engine.isPropertySetted(Properties.ALL_CELL_CLICKABLE);
+	}
+
+	public void setAllCellClickable(boolean allCellClickable) {
+		engine.setProperty(Properties.ALL_CELL_CLICKABLE, allCellClickable);
+	}
+
+	public boolean isCellClickable() {
+		return isCellClickable(null);
+	}
+
+	/**
+	 * See {@link #isCellClickable() isCellClickable()} for more details
+	 */
+	public boolean isCellClickable(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.CELL_CLICKABLE, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "cellClickable" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isCellClickableSetted() {
+		return engine.isPropertySetted(Properties.CELL_CLICKABLE);
+	}
+
+	public void setCellClickable(boolean cellClickable) {
+		engine.setProperty(Properties.CELL_CLICKABLE, cellClickable);
 	}
 
 	public java.lang.String getToolTipId() {

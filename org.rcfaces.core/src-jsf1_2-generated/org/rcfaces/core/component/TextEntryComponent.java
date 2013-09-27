@@ -120,13 +120,6 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public String setValidationParameter(String name, String value, boolean client) {
-
-
-		return (String)setValidationParameterData(name, value, client);
-		
-	}
-
 	public boolean isClientSideValidationParameter(String name) {
 
 
@@ -138,6 +131,13 @@ public class TextEntryComponent extends AbstractInputComponent implements
 
 
 		return getValidationParametersMap(null);
+		
+	}
+
+	public void setValidationParameter(String name, ValueExpression value, boolean client) {
+
+
+		setValidationParameterData(name, value, client);
 		
 	}
 
@@ -174,10 +174,10 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public void setValidationParameter(String name, ValueExpression value, boolean client) {
+	public String setValidationParameter(String name, String value, boolean client) {
 
 
-		setValidationParameterData(name, value, client);
+		return (String)setValidationParameterData(name, value, client);
 		
 	}
 

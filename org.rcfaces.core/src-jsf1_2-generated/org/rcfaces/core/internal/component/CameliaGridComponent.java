@@ -553,7 +553,7 @@ public abstract class CameliaGridComponent extends javax.faces.component.UICompo
     @Override
    public void queueEvent(FacesEvent e) {
 // Un keyPress doit pouvoir activer l'immediate !
-// Oui mais le code d'appel ne fait rï¿½fï¿½rence qu'a des ActionEvent
+// Oui mais le code d'appel ne fait r�f�rence qu'a des ActionEvent
 		if ((e instanceof ActionEvent) && e.getComponent()==this) {
 	   		if (this instanceof IImmediateCapability) {
 	   			IImmediateCapability immediateCapability=(IImmediateCapability)this;

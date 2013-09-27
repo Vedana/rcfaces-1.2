@@ -49,6 +49,8 @@ public class DataColumnTag extends CameliaTag implements Tag {
 	private ValueExpression defaultCellStyleClass;
 	private ValueExpression cellDefaultToolTipText;
 	private ValueExpression cellToolTipText;
+	private ValueExpression allCellClickable;
+	private ValueExpression cellClickable;
 	private ValueExpression toolTipId;
 	private ValueExpression titleToolTipId;
 	private ValueExpression selectionListeners;
@@ -186,6 +188,14 @@ public class DataColumnTag extends CameliaTag implements Tag {
 		this.cellToolTipText = cellToolTipText;
 	}
 
+	public void setAllCellClickable(ValueExpression allCellClickable) {
+		this.allCellClickable = allCellClickable;
+	}
+
+	public void setCellClickable(ValueExpression cellClickable) {
+		this.cellClickable = cellClickable;
+	}
+
 	public void setToolTipId(ValueExpression toolTipId) {
 		this.toolTipId = toolTipId;
 	}
@@ -253,6 +263,8 @@ public class DataColumnTag extends CameliaTag implements Tag {
 			LOG.debug("  defaultCellStyleClass='"+defaultCellStyleClass+"'");
 			LOG.debug("  cellDefaultToolTipText='"+cellDefaultToolTipText+"'");
 			LOG.debug("  cellToolTipText='"+cellToolTipText+"'");
+			LOG.debug("  allCellClickable='"+allCellClickable+"'");
+			LOG.debug("  cellClickable='"+cellClickable+"'");
 			LOG.debug("  toolTipId='"+toolTipId+"'");
 			LOG.debug("  titleToolTipId='"+titleToolTipId+"'");
 			LOG.debug("  value='"+value+"'");
@@ -539,6 +551,24 @@ public class DataColumnTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (allCellClickable != null) {
+			if (allCellClickable.isLiteralText()==false) {
+				component.setValueExpression(Properties.ALL_CELL_CLICKABLE, allCellClickable);
+
+			} else {
+				component.setAllCellClickable(getBool(allCellClickable.getExpressionString()));
+			}
+		}
+
+		if (cellClickable != null) {
+			if (cellClickable.isLiteralText()==false) {
+				component.setValueExpression(Properties.CELL_CLICKABLE, cellClickable);
+
+			} else {
+				component.setCellClickable(getBool(cellClickable.getExpressionString()));
+			}
+		}
+
 		if (toolTipId != null) {
 			if (toolTipId.isLiteralText()==false) {
 				component.setValueExpression(Properties.TOOL_TIP_ID, toolTipId);
@@ -622,6 +652,8 @@ public class DataColumnTag extends CameliaTag implements Tag {
 		defaultCellStyleClass = null;
 		cellDefaultToolTipText = null;
 		cellToolTipText = null;
+		allCellClickable = null;
+		cellClickable = null;
 		toolTipId = null;
 		titleToolTipId = null;
 		selectionListeners = null;

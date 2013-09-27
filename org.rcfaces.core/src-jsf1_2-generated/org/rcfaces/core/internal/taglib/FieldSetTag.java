@@ -28,6 +28,7 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 	private ValueExpression text;
 	private ValueExpression textDirection;
 	private ValueExpression textAlignment;
+	private ValueExpression audioDescription;
 	private ValueExpression verticalAlignment;
 	private ValueExpression borderType;
 	private ValueExpression imageURL;
@@ -81,6 +82,10 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 		this.textAlignment = textAlignment;
 	}
 
+	public void setAudioDescription(ValueExpression audioDescription) {
+		this.audioDescription = audioDescription;
+	}
+
 	public void setVerticalAlignment(ValueExpression verticalAlignment) {
 		this.verticalAlignment = verticalAlignment;
 	}
@@ -132,6 +137,7 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 			LOG.debug("  text='"+text+"'");
 			LOG.debug("  textDirection='"+textDirection+"'");
 			LOG.debug("  textAlignment='"+textAlignment+"'");
+			LOG.debug("  audioDescription='"+audioDescription+"'");
 			LOG.debug("  verticalAlignment='"+verticalAlignment+"'");
 			LOG.debug("  borderType='"+borderType+"'");
 			LOG.debug("  imageURL='"+imageURL+"'");
@@ -244,6 +250,15 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 			}
 		}
 
+		if (audioDescription != null) {
+			if (audioDescription.isLiteralText()==false) {
+				component.setValueExpression(Properties.AUDIO_DESCRIPTION, audioDescription);
+
+			} else {
+				component.setAudioDescription(audioDescription.getExpressionString());
+			}
+		}
+
 		if (verticalAlignment != null) {
 			if (verticalAlignment.isLiteralText()==false) {
 				component.setValueExpression(Properties.VERTICAL_ALIGNMENT, verticalAlignment);
@@ -337,6 +352,7 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 		text = null;
 		textDirection = null;
 		textAlignment = null;
+		audioDescription = null;
 		verticalAlignment = null;
 		borderType = null;
 		imageURL = null;

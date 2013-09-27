@@ -23,7 +23,7 @@ public class FocusManagerComponent extends CameliaBaseComponent {
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"focusId","setFocusIfMessage"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"autoFocusFrom","focusId","autoFocus","setFocusIfMessage"}));
 	}
 
 	public FocusManagerComponent() {
@@ -90,6 +90,47 @@ public class FocusManagerComponent extends CameliaBaseComponent {
 	 */
 	public boolean isSetFocusIfMessageSetted() {
 		return engine.isPropertySetted(Properties.SET_FOCUS_IF_MESSAGE);
+	}
+
+	public boolean isAutoFocus() {
+		return isAutoFocus(null);
+	}
+
+	public boolean isAutoFocus(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.AUTO_FOCUS, false, facesContext);
+	}
+
+	public void setAutoFocus(boolean autoFocus) {
+		engine.setProperty(Properties.AUTO_FOCUS, autoFocus);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "autoFocus" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isAutoFocusSetted() {
+		return engine.isPropertySetted(Properties.AUTO_FOCUS);
+	}
+
+	public String getAutoFocusFrom() {
+		return getAutoFocusFrom(null);
+	}
+
+	public String getAutoFocusFrom(javax.faces.context.FacesContext facesContext) {
+		String s = engine.getStringProperty(Properties.AUTO_FOCUS_FROM, facesContext);
+		return s;
+	}
+
+	public void setAutoFocusFrom(String autoFocusFrom) {
+		engine.setProperty(Properties.AUTO_FOCUS_FROM, autoFocusFrom);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "autoFocusFrom" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isAutoFocusFromSetted() {
+		return engine.isPropertySetted(Properties.AUTO_FOCUS_FROM);
 	}
 
 	protected Set getCameliaFields() {

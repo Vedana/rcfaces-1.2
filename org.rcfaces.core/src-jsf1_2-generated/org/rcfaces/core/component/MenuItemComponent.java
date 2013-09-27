@@ -1,21 +1,21 @@
 package org.rcfaces.core.component;
 
+import org.rcfaces.core.component.ExpandableItemComponent;
+import org.rcfaces.core.internal.component.Properties;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IAcceleratorKeyCapability;
+import org.rcfaces.core.component.capability.IAccessKeyCapability;
+import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.iterator.IMenuItemIterator;
 import org.rcfaces.core.component.capability.IImmediateCapability;
 import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.ExpandableItemComponent;
 import javax.el.ValueExpression;
-import org.apache.commons.logging.Log;
 import java.util.HashSet;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
-import org.rcfaces.core.component.capability.IAcceleratorKeyCapability;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.capability.IAccessKeyCapability;
-import java.util.Arrays;
 import java.util.Set;
-import org.rcfaces.core.internal.tools.MenuTools;
+import java.util.Arrays;
 import org.rcfaces.core.component.capability.IMenuEventCapability;
-import org.rcfaces.core.component.iterator.IMenuItemIterator;
 
 /**
  * A menu item

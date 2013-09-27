@@ -36,6 +36,7 @@ public class ViewDialogTag extends CameliaTag implements Tag {
 	private ValueExpression immediate;
 	private ValueExpression viewURL;
 	private ValueExpression shellDecoratorName;
+	private ValueExpression returnFocusClientId;
 	private ValueExpression value;
 	private ValueExpression converter;
 	public String getComponentType() {
@@ -114,6 +115,10 @@ public class ViewDialogTag extends CameliaTag implements Tag {
 		this.shellDecoratorName = shellDecoratorName;
 	}
 
+	public void setReturnFocusClientId(ValueExpression returnFocusClientId) {
+		this.returnFocusClientId = returnFocusClientId;
+	}
+
 	public final void setValue(ValueExpression value) {
 		this.value = value;
 	}
@@ -144,6 +149,7 @@ public class ViewDialogTag extends CameliaTag implements Tag {
 			LOG.debug("  immediate='"+immediate+"'");
 			LOG.debug("  viewURL='"+viewURL+"'");
 			LOG.debug("  shellDecoratorName='"+shellDecoratorName+"'");
+			LOG.debug("  returnFocusClientId='"+returnFocusClientId+"'");
 		}
 		if ((uiComponent instanceof ViewDialogComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -314,6 +320,15 @@ public class ViewDialogTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (returnFocusClientId != null) {
+			if (returnFocusClientId.isLiteralText()==false) {
+				component.setValueExpression(Properties.RETURN_FOCUS_CLIENT_ID, returnFocusClientId);
+
+			} else {
+				component.setReturnFocusClientId(returnFocusClientId.getExpressionString());
+			}
+		}
+
 		if (value != null) {
 			if (value.isLiteralText()==false) {
 				component.setValueExpression(Properties.VALUE, value);
@@ -352,6 +367,7 @@ public class ViewDialogTag extends CameliaTag implements Tag {
 		immediate = null;
 		viewURL = null;
 		shellDecoratorName = null;
+		returnFocusClientId = null;
 		value = null;
 		converter = null;
 

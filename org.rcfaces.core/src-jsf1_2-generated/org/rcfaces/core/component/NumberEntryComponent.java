@@ -60,7 +60,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"focusStyleClass","fatalStyleClass","fractionDigits","minimum","defaultNumber","integerDigits","selectionListener","literalLocale","valueChangeListener","errorStyleClass","autoCompletion","alternateText","required","autoTab","fractionStep","styleClass","number","numberFormatType","readOnly","warnStyleClass","infoStyleClass","numberFormat","maximum","componentLocale","integerStep"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"focusStyleClass","fatalStyleClass","fractionDigits","minimum","defaultNumber","integerDigits","selectionListener","literalLocale","valueChangeListener","errorStyleClass","autoCompletion","alternateText","required","autoTab","fractionStep","styleClass","number","numberFormatType","warnStyleClass","readOnly","infoStyleClass","numberFormat","componentLocale","maximum","integerStep"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="number";
 
@@ -80,13 +80,6 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public String setValidationParameter(String name, String value, boolean client) {
-
-
-		return (String)setValidationParameterData(name, value, client);
-		
-	}
-
 	public boolean isClientSideValidationParameter(String name) {
 
 
@@ -98,6 +91,13 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 
 
 		return getValidationParametersMap(null);
+		
+	}
+
+	public void setValidationParameter(String name, ValueExpression value, boolean client) {
+
+
+		setValidationParameterData(name, value, client);
 		
 	}
 
@@ -134,10 +134,10 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public void setValidationParameter(String name, ValueExpression value, boolean client) {
+	public String setValidationParameter(String name, String value, boolean client) {
 
 
-		setValidationParameterData(name, value, client);
+		return (String)setValidationParameterData(name, value, client);
 		
 	}
 

@@ -21,6 +21,7 @@ public class TextTag extends AbstractOutputTag implements Tag {
 	private static final Log LOG=LogFactory.getLog(TextTag.class);
 
 	private ValueExpression text;
+	private ValueExpression audioDescription;
 	private ValueExpression textDirection;
 	private ValueExpression fontBold;
 	private ValueExpression fontItalic;
@@ -37,6 +38,10 @@ public class TextTag extends AbstractOutputTag implements Tag {
 
 	public void setText(ValueExpression text) {
 		this.text = text;
+	}
+
+	public void setAudioDescription(ValueExpression audioDescription) {
+		this.audioDescription = audioDescription;
 	}
 
 	public void setTextDirection(ValueExpression textDirection) {
@@ -85,6 +90,7 @@ public class TextTag extends AbstractOutputTag implements Tag {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
 			LOG.debug("  text='"+text+"'");
+			LOG.debug("  audioDescription='"+audioDescription+"'");
 			LOG.debug("  textDirection='"+textDirection+"'");
 			LOG.debug("  fontBold='"+fontBold+"'");
 			LOG.debug("  fontItalic='"+fontItalic+"'");
@@ -114,6 +120,15 @@ public class TextTag extends AbstractOutputTag implements Tag {
 
 			} else {
 				component.setText(text.getExpressionString());
+			}
+		}
+
+		if (audioDescription != null) {
+			if (audioDescription.isLiteralText()==false) {
+				component.setValueExpression(Properties.AUDIO_DESCRIPTION, audioDescription);
+
+			} else {
+				component.setAudioDescription(audioDescription.getExpressionString());
 			}
 		}
 
@@ -210,6 +225,7 @@ public class TextTag extends AbstractOutputTag implements Tag {
 
 	public void release() {
 		text = null;
+		audioDescription = null;
 		textDirection = null;
 		fontBold = null;
 		fontItalic = null;
