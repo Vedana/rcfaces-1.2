@@ -82,7 +82,8 @@ var __members = {
 		
 		menu.f_open(evt, {
 			component: this,
-			position: f_popup.BOTTOM_COMPONENT
+			position: f_popup.BOTTOM_COMPONENT,
+			ariaOwns: this
 		});
 		
 		f_core.Debug(f_imageCombo, "f_imageButtonSelect: Menu open (menu='"+menu+"')");
@@ -101,7 +102,7 @@ var __members = {
 	f_isPopupLock: function(popupDocument, event) {
 		return false;
 	}
-}		
+};
 
 new f_class("f_imageCombo", {
 	extend: f_imageButton, 
