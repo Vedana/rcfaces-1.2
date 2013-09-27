@@ -110,7 +110,34 @@ var __statics = {
 			f_core.Error(f_toolTipManager, "_HideToolTip: exception", x);
 		}
 	},
+	/**
+	 * @method public static
+	 * @param f_event event
+	 * @return void
+	 */
+	OpenTooltip: function(event) {
+		var instance = f_toolTipManager.Get();
+		var evt=event.f_getJsEvent();
+		var component = evt.target || evt.srcElement;
+		if (component && component.f_getClientData) {
+			var target=component.f_getClientData("aria.tooltip.retarget");
+			if (target) {
+				var te=fa_namingContainer.FindSiblingComponents(component, target);
+				if (te) {
+					component=te;
+				}
+			}
+		}
 
+		try {
+			instance._elementOver(event.f_getJsEvent(), component);
+
+		} catch (x) {
+			f_core.Error(f_toolTipManager, "OpenTooltip: exception", x);
+		}
+		
+	},
+	
 	/**
 	 * @method public static
 	 * @return f_toolTipManager
@@ -265,12 +292,13 @@ var __members = {
 	 * @method private
 	 * @param Event
 	 *            evt
+	 * @param optional Element element
 	 * @return void
 	 */
-	_elementOver: function(evt) {
+	_elementOver: function(evt, element) {
 		
 		var target = evt.target || evt.srcElement;
-		var element = target || this._getElementAtPosition(evt);
+		element = element || target || this._getElementAtPosition(evt);
 		var tooltipContainer = this._getToolTipContainerForElement(element);
 
 		var tooltipInfos = null;
