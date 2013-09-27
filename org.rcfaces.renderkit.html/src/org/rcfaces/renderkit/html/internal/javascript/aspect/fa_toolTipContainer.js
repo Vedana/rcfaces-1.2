@@ -44,8 +44,8 @@ var __members = {
 				break;
 			}
 			
-			var tooltipClientId;			
-			var tooltipContent;
+			var tooltipClientId=undefined;		
+			var tooltipContent=undefined;
 
 			if (parent.f_getTooltipId) {
 				tooltipClientId=parent.f_getTooltipId();
