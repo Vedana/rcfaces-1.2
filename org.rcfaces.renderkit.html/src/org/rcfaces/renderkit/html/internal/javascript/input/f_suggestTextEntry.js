@@ -111,10 +111,7 @@ var __members = {
 		menu.f_addEventListener("itemHover", function(evt) {
 			// var jsEvt=evt.f_getJsEvent();
 			var item=evt.f_getValue();
-			var details=evt.f_getDetail();
-			
-			//suggestTextEntry.setAttribute("aria-owns", details.uiPopup.id);
-			//details.uiPopup.setAttribute("aria-expanded", true);
+			var details=evt.f_getDetailObject();
 
 			if (!item) { // Ca peut arriver si c'est l'indicateur de fin de liste !				
 				fa_aria.SetElementAriaActiveDescendant(suggestTextEntry, details.uiItem.id);
@@ -122,7 +119,7 @@ var __members = {
 				return;
 			}
 
-			fa_aria.SetElementAriaActiveDescendant(suggestTextEntry, evt.f_getDetail().uiItem.id);
+			fa_aria.SetElementAriaActiveDescendant(suggestTextEntry, details.uiItem.id);
 			suggestTextEntry._proposeItem(item._label, true);
 		});
 		
@@ -950,7 +947,8 @@ var __members = {
 	
 		var params = {
 			component: this.f_getInput(),
-			position: f_popup.BOTTOM_COMPONENT
+			position: f_popup.BOTTOM_COMPONENT,
+			ariaOwns: this
 		};
 	
 		if (!f_core.IsInternetExplorer()) {
@@ -1301,31 +1299,7 @@ var __members = {
 		fa_aria.SetElementAriaActiveDescendant(suggestTextEntry, details.uiItem.id);		
 	},
 	_proposeItem: function(text) {
-		if (true) {
-			return;
-		}
-		
-		/*
-		var tid=this.id+"::ariaLive";
-		
-		var h=document.getElementById(tid);
-		if (h) {
-			h.parentNode.removeChild(h);
-			h=null;
-		}
-		
-		if (!h) {
-			h=f_core.CreateElement(this.parentNode, "LABEL", {
-				id: tid,
-				className: "f_suggestTextEntry_live"
-			});
-			h.setAttribute("aria-live", "polite");
-			//h.setAttribute("aria-relevant", "text");
-			//h.setAttribute("aria-labelledby", this.id);
-		}
-		
-		f_core.SetTextNode(h, text);
-		*/
+		//this.setAttribute("aria-activedescendant", tid);
 	}
 };
 
