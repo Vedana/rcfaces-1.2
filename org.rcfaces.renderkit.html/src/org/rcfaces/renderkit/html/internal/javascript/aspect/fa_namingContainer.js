@@ -98,8 +98,13 @@ var __statics = {
 	 * @return HTMLElement
 	 */
 	FindSiblingComponents: function(component, args) {
-		f_core.Assert(component && component.tagName, "fa_namingContainer.FindSiblingComponents: Bad component parameter ! ("+component+")");
-
+		f_core.Assert(component && component.tagName, "fa_namingContainer.FindSiblingComponents: Bad 'component' parameter ! ("+component+")");
+		f_core.Assert(typeof(args)=="string" || (args.length>0), "fa_namingContainer.FindSiblingComponents: Bad 'args' parameter ! ("+args+")")
+		
+		if (typeof(args)=="string") {
+			args=[args];
+		}
+		
 		for(var i=0;component && i<args.length;i++) {
 			var id=args[i];
 			f_core.Assert(typeof(id)=="string", "fa_namingContainer.FindSiblingComponents: Bad id parameter (parameter #"+(i+1)+") !");
