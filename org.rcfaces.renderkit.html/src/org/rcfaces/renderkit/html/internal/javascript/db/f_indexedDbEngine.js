@@ -232,7 +232,7 @@ var __members = {
 		}
 		
 		// @TODO Il faut passer en version "readonly" ou "readwrite"
-		var transaction=this._database.transaction(names, (readWrite)?IDBTransaction.READ_WRITE:IDBTransaction.READ_ONLY); //(readOnly)?0:1); //, f_indexedDbEngine._TRANSACTION_TIMEOUT_MS);
+		var transaction=this._database.transaction(names, (readWrite)?"readwrite":"readonly"); //(readOnly)?0:1); //, f_indexedDbEngine._TRANSACTION_TIMEOUT_MS);
 		
 		f_core.Debug(f_indexedDbEngine, "f_startTransaction: Transaction started for '"+name+"'. (transaction="+transaction+")");
 		
