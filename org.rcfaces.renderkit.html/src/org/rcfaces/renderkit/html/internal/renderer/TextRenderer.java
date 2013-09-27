@@ -21,6 +21,7 @@ import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.util.AudioDescriptionTools;
 import org.rcfaces.renderkit.html.internal.util.TextTypeTools;
 
 /**
@@ -86,6 +87,8 @@ public class TextRenderer extends AbstractCssRenderer {
                 }
 
                 htmlWriter.writeFor(forId);
+                
+                htmlWriter.getJavaScriptEnableMode().enableOnMessage();
             }
         }
         writeTextAttributes(htmlWriter, textComponent);
@@ -95,6 +98,8 @@ public class TextRenderer extends AbstractCssRenderer {
 
             htmlWriter.getJavaScriptEnableMode().enableOnAccessKey();
         }
+
+        AudioDescriptionTools.writeAudioDescription(htmlWriter);
 
         htmlWriter.endElement(element);
 
