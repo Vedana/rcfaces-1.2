@@ -483,7 +483,8 @@ f_classLoader.prototype = {
 	 * @return void
 	 */
 	_newInstance: function(object, systemClass) {
-		f_core.Assert(typeof(object)=="object", "f_classLoader._newInstance: Object parameter must be an object ! ("+typeof(object)+")");
+		// Certains composants sont de type "object" !!!! (<OBJECT> sous fx par exemple)
+		f_core.Assert(typeof(object)=="object" || typeof(object)=="function", "f_classLoader._newInstance: Object parameter must be an object ! ("+typeof(object)+")");
 	
 		if (this._exiting && !systemClass) {
 			throw "This classloader is exiting ... [newInstance: "+((object._kclass)?("className="+object._kclass._name):"")+",tagName="+object.tagName+"]";
