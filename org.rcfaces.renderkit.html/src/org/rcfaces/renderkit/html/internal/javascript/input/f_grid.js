@@ -7,17 +7,18 @@
  * @class public abstract f_grid extends f_component, fa_disabled, fa_immediate,
  *        fa_pagedComponent, fa_subMenu, fa_commands, fa_selectionManager<String[]>,
  *        fa_scrollPositions, fa_additionalInformationManager, fa_droppable,
- *        fa_draggable, fa_autoScroll, fa_aria, fa_toolTipContainer, fa_tabIndex, fa_autoOpen
+ *        fa_draggable, fa_autoScroll, fa_aria, fa_toolTipContainer,
+ *        fa_tabIndex, fa_autoOpen
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
 
 var __statics = {
-		
+
 	/**
 	 * @field private static final Boolean
 	 */
-	_GENERATE_HEADERS_ATTRIBUTE: false,
+	_GENERATE_HEADERS_ATTRIBUTE : false,
 
 	/**
 	 * @field hidden static final String
@@ -208,13 +209,14 @@ var __statics = {
 	 *            eventThisObject
 	 * @param Event
 	 *            evt
-	 * @param f_grid dataGrid
+	 * @param f_grid
+	 *            dataGrid
 	 * @return Boolean
 	 * @context object:dataGrid
 	 */
 	GetRowFromEvent : function(eventThisObject, evt, dataGrid) {
 
-		var target=undefined;
+		var target = undefined;
 		if (evt.target) {
 			target = evt.target;
 
@@ -226,7 +228,7 @@ var __statics = {
 			return null;
 		}
 
-		for (; target && (target.nodeType==f_core.ELEMENT_NODE); target = target.parentNode) {
+		for (; target && (target.nodeType == f_core.ELEMENT_NODE); target = target.parentNode) {
 
 			if (target._dataGrid && target._dataGrid != dataGrid) {
 				continue;
@@ -278,8 +280,8 @@ var __statics = {
 				f_core.Debug(f_grid, "RowMouseDown: invalid target");
 				return true;
 			}
-			
-			if (f_grid.IsTargetButton(evt)) {
+
+			if (f_grid.IsTargetButton(this, evt)) {
 				f_core.Debug(f_grid, "RowMouseDown: button target");
 				return true;
 			}
@@ -300,8 +302,19 @@ var __statics = {
 				selectOnMousedown = true;
 			}
 
-			dataGrid.f_moveCursor(this, true, evt, selection,
-					fa_selectionManager.BEGIN_PHASE, selectOnMousedown);
+			var details = f_event.NewDetail();
+
+			var col = dataGrid._searchColumnByElement(srcElement);
+			if (col) {
+				details = dataGrid._fillColumnDetails(details, col);
+			}
+
+			dataGrid._cursorCellIdx = undefined;
+
+			dataGrid
+					.f_moveCursor(this, true, evt, selection,
+							fa_selectionManager.BEGIN_PHASE, selectOnMousedown,
+							details);
 
 			// On deplace le cursor avant de donner le focus !
 			dataGrid.f_forceFocus();
@@ -351,8 +364,8 @@ var __statics = {
 				f_core.Debug(f_grid, "RowMouseUp: invalid target");
 				return true;
 			}
-			
-			if (f_grid.IsTargetButton(evt)) {
+
+			if (f_grid.IsTargetButton(this, evt)) {
 				f_core.Debug(f_grid, "RowMouseUp: button target");
 				return true;
 			}
@@ -362,12 +375,23 @@ var __statics = {
 				return f_core.CancelJsEvent(evt);
 			}
 
+			var srcElement = evt.target ? evt.target : evt.srcElement;
+
 			var sub = f_core.IsPopupButton(evt);
 
 			var selection = fa_selectionManager.ComputeMouseSelection(evt);
 
+			var details = f_event.NewDetail();
+
+			var col = dataGrid._searchColumnByElement(srcElement);
+			if (col) {
+				details = dataGrid._fillColumnDetails(details, col);
+			}
+
+			dataGrid._cursorCellIdx = undefined;
+
 			dataGrid.f_moveCursor(this, true, evt, selection,
-					fa_selectionManager.END_PHASE);
+					fa_selectionManager.END_PHASE, undefined, details);
 
 			// On deplace le cursor avant de donner le focus !
 			dataGrid.f_forceFocus();
@@ -390,15 +414,19 @@ var __statics = {
 	},
 	/**
 	 * @method protected static
+	 * @param Element
+	 *            thiz
 	 * @param Event
 	 *            evt
 	 * @return Boolean
 	 * @context event:evt
 	 */
-	IsTargetButton: function(evt) {
-		if (this._dataGrid || this._row) {
-			return true;
-		}
+	IsTargetButton : function(thiz, evt) {
+		// On recherche si on tombe sur un composant qui capture la selection,
+		// et ne provoque pas la selection de la ligne
+		// if (thiz._dataGrid || thiz._row) {
+		// return true;
+		// }
 
 		var target = undefined;
 		if (evt.target) {
@@ -411,7 +439,7 @@ var __statics = {
 		if (!target || target.nodeType != f_core.ELEMENT_NODE) {
 			return true;
 		}
-		
+
 		var tagName = target.tagName;
 		if (tagName) {
 			switch (tagName.toLowerCase()) {
@@ -420,7 +448,7 @@ var __statics = {
 				return true;
 			}
 		}
-		
+
 		return false;
 	},
 	/**
@@ -452,7 +480,7 @@ var __statics = {
 			if (target.nodeType != f_core.ELEMENT_NODE) {
 				return true;
 			}
-			
+
 			if (target._dataGrid || target._row) {
 				return true;
 			}
@@ -544,8 +572,8 @@ var __statics = {
 			return f_core.CancelJsEvent(evt);
 		}
 
-		dataGrid
-				.f_fireEvent(f_event.DBLCLICK, evt, this, this._index, dataGrid);
+		dataGrid.f_fireEvent(f_event.DBLCLICK, evt, this, this._index,
+				dataGrid, dataGrid._fillColumnDetails());
 
 		return f_core.CancelJsEvent(evt);
 	},
@@ -689,7 +717,7 @@ var __statics = {
 		f_core.Assert(element && element.tagName.toLowerCase() == "table",
 				"f_grid.ListRows: Invalid table parameter (" + element + ")");
 
-		var copy=0;
+		var copy = 0;
 		var rows = null;
 		var child = element.firstChild;
 		for (; child; child = child.nextSibling) {
@@ -697,16 +725,16 @@ var __statics = {
 			case "thead":
 			case "tbody":
 				if (child.firstChild) {
-					if (copy==0) {
-						var rs=child.rows;
+					if (copy == 0) {
+						var rs = child.rows;
 						if (rs) {
-							copy=1;
-							rows=rs;
+							copy = 1;
+							rows = rs;
 						}
 					} else {
-						if (copy==1) {
-							rows=f_core.PushArguments(null, rows);
-							copy=2;
+						if (copy == 1) {
+							rows = f_core.PushArguments(null, rows);
+							copy = 2;
 						}
 						f_core.PushArguments(rows, child.rows);
 					}
@@ -716,11 +744,11 @@ var __statics = {
 			case "tr":
 				if (!rows) {
 					rows = new Array;
-					copy=2;
+					copy = 2;
 
-				} else if (copy==1) {
-					rows=f_core.PushArguments(null, rows);
-					copy=2;
+				} else if (copy == 1) {
+					rows = f_core.PushArguments(null, rows);
+					copy = 2;
 				}
 
 				rows.push(child);
@@ -742,7 +770,7 @@ var __statics = {
 	_Link_onfocus : function(evt) {
 		var dataGrid = this._dataGrid;
 		if (!dataGrid) {
-			dataGrid=this.parentNode._dataGrid;
+			dataGrid = this.parentNode._dataGrid;
 		}
 		try {
 			if (dataGrid._ignoreFocus) {
@@ -773,16 +801,16 @@ var __statics = {
 			if (dataGrid.f_isSelectable()) {
 				if (dataGrid._focusOnInput) {
 					var oldCursor = dataGrid._cursor;
-					
+
 					var row = f_grid.GetRowFromEvent(dataGrid, evt, dataGrid);
 					if (row) {
-						dataGrid._cursor=row;
-	
+						dataGrid._cursor = row;
+
 						if (oldCursor) {
 							dataGrid.fa_updateElementStyle(oldCursor);
 						}
 					}
-					
+
 				} else if (!dataGrid._cursor) {
 					var currentSelection = dataGrid._currentSelection;
 					if (currentSelection.length) {
@@ -836,7 +864,7 @@ var __statics = {
 	_Link_onblur : function(evt) {
 		var dataGrid = this._dataGrid;
 		if (!dataGrid) {
-			dataGrid=this.parentNode._dataGrid;
+			dataGrid = this.parentNode._dataGrid;
 		}
 
 		try {
@@ -1162,8 +1190,8 @@ var __statics = {
 
 		// alert("CB="+dataGrid._columnCanBeSorted);
 		if (!dataGrid._columnCanBeSorted || !column._method) {
-			// NON au CancelJsEvent  on veut pouvoir attraper sur le TitleClick
-			
+			// NON au CancelJsEvent on veut pouvoir attraper sur le TitleClick
+
 			if (column.f_isActionListEmpty(f_event.SELECTION)) {
 				// pas de TitleClick ... cancel alors !
 				return f_core.CancelJsEvent(evt);
@@ -1465,7 +1493,7 @@ var __statics = {
 		if (!dataGrid._columnCanBeSorted || !column._method) {
 			return f_core.CancelJsEvent(evt);
 		}
-		
+
 		var append = (evt.shiftKey);
 
 		f_core.Debug(f_grid, "_Title_onClick: call set column sort append="
@@ -1496,10 +1524,9 @@ var __statics = {
 		}
 
 		/*
-		if (dataGrid.f_isDisabled() / * || !dataGrid._columnCanBeSorted * /) {
-			return f_core.CancelJsEvent(evt);
-		}
-		*/
+		 * if (dataGrid.f_isDisabled() / * || !dataGrid._columnCanBeSorted * /) {
+		 * return f_core.CancelJsEvent(evt); }
+		 */
 
 		var oldColumn = dataGrid._columnSelected;
 		if (!oldColumn) {
@@ -1845,7 +1872,7 @@ var __statics = {
 			col.style.width = w + "px"; // Colonne Des données ...
 
 			column._widthSetted = w; // On desactive le calcul automatique
-										// pour cette colonne ...
+			// pour cette colonne ...
 			column._widthPercent = undefined;
 			column._widthComputed = undefined;
 
@@ -1863,7 +1890,10 @@ var __statics = {
 			column._label.style.width = w3 + "px";
 			column._label.style.maxWidth = w3 + "px";
 
-			f_core.Debug(f_grid, "_DragCursorMove: set head.width="+w1+"  box.w="+w2+"  label.w="+w3+" w="+w+" tlrp="+dataGrid._textLeftRightPadding+" twidth="+twidth);
+			f_core.Debug(f_grid, "_DragCursorMove: set head.width=" + w1
+					+ "  box.w=" + w2 + "  label.w=" + w3 + " w=" + w
+					+ " tlrp=" + dataGrid._textLeftRightPadding + " twidth="
+					+ twidth);
 
 			var totalCols = 0;
 			var columns = dataGrid._columns;
@@ -1882,7 +1912,7 @@ var __statics = {
 
 			dataGrid._table.style.width = (totalCols) + "px";
 
-			f_core.Debug(f_grid, "_DragCursorMove: set total="+totalCols);
+			f_core.Debug(f_grid, "_DragCursorMove: set total=" + totalCols);
 		}
 
 		var scrollTitle = dataGrid._scrollTitle;
@@ -2147,11 +2177,11 @@ var __statics = {
 };
 
 var __members = {
-	
+
 	/**
 	 * @field protected Boolean
 	 */
-	_loading: undefined,
+	_loading : undefined,
 
 	/**
 	 * @field private Number
@@ -2186,7 +2216,14 @@ var __members = {
 	 */
 	_additionnalCloseImageURL : undefined,
 
-	f_grid: function() {
+	/**
+	 * 
+	 * 
+	 * @field protected Number
+	 */
+	_cursorCellIdx : undefined,
+
+	f_grid : function() {
 		this.f_super(arguments);
 
 		this._rowsPool = new Array;
@@ -2283,19 +2320,20 @@ var __members = {
 			f_core.AppendChild(sortIndicator, img);
 		}
 
-		this._focusOnInput=this.f_isCheckable && this.f_isCheckable();
-		
+		this._focusOnInput = this.f_isCheckable && this.f_isCheckable();
+
 		var focus;
-		
+
 		if (this._focusOnInput) {
-			var scrollBody=this._scrollBody;
-			
+			var scrollBody = this._scrollBody;
+
 			// Le focus est positionné dans les INPUTs !
 			scrollBody.onkeydown = f_grid._Link_onkeydown;
 			scrollBody.onkeypress = f_grid._Link_onkeypress;
 			scrollBody.onkeyup = f_grid._Link_onkeyup;
-			scrollBody.tabIndex=-1; // Explicite ... y a des bugs chez firefox !
-			 
+			scrollBody.tabIndex = -1; // Explicite ... y a des bugs chez
+			// firefox !
+
 		} else if (f_core.IsGecko()) {
 			focus = this.ownerDocument.getElementById(this.id
 					+ f_grid._DATA_BODY_SCROLL_ID_SUFFIX);
@@ -2432,10 +2470,11 @@ var __members = {
 
 		this._dragAndDropEngine = undefined;
 		this._targetDragAndDropEngine = undefined;
-		
+
 		this._inputTabIndex = undefined; // HTMLInputELement
 		// this._tabIndex=undefined; // Number
-		
+		// this._cursorCellIdx=undefined; // Number
+
 		// this._additionnalOpenImageURL=undefined; // String
 		// this._additionnalCloseImageURL=undefined; // String
 
@@ -2801,8 +2840,8 @@ var __members = {
 			serializedIndexes.push(nStart, nEnd - nStart);
 		}
 
-		this._serializedIndexes=serializedIndexes;
-		
+		this._serializedIndexes = serializedIndexes;
+
 		return serializedIndexes;
 	},
 	/**
@@ -2827,7 +2866,7 @@ var __members = {
 		return serializedIndexes;
 	},
 
-	f_update: function() {
+	f_update : function() {
 		var rowCount = this._rowCount;
 
 		if (this._rows > 0 && !this._paged) {
@@ -2889,20 +2928,18 @@ var __members = {
 			this._tbody.style.display = "table-row-group";
 		}
 
-		/*var columns = this._columns;
-		for (var i = 0; i < columns.length; i++) {
-			var column=columns[i];
-			if (column._visibility) {
-				this._updateTitleStyle(column);
-			}
-		}*/
+		/*
+		 * var columns = this._columns; for (var i = 0; i < columns.length; i++) {
+		 * var column=columns[i]; if (column._visibility) {
+		 * this._updateTitleStyle(column); } }
+		 */
 
-		
 		this.f_performPagedComponentInitialized();
 
 		// On a besoin de faire des calculs CSS quand le grid est affiché !
 		if (!this.f_isVisible()) {
-			this.f_getClass().f_getClassLoader().f_addVisibleComponentListener(this); 
+			this.f_getClass().f_getClassLoader().f_addVisibleComponentListener(
+					this);
 		}
 	},
 	/**
@@ -2944,10 +2981,10 @@ var __members = {
 		}
 
 		if (this._thead && f_core.IsGecko()) {
-			this._thead.style.display = "block"; //danger accessibilite
-			
+			this._thead.style.display = "block"; // danger accessibilite
+
 			if (this._table.caption) {
-				this._table.caption.style.display="block";
+				this._table.caption.style.display = "block";
 			}
 		}
 	},
@@ -3278,9 +3315,9 @@ var __members = {
 
 				this._installSorter(column, sorter);
 			}
-		
+
 			if (column._visibility) {
-//				this._updateTitleStyle(column);
+				// this._updateTitleStyle(column);
 			}
 		}
 
@@ -3416,30 +3453,22 @@ var __members = {
 		if (button) {
 			var buttonClassName = "f_grid_additional_button";
 
-			var additionalAlt = "";
-			var additionalImageURL = null;
+			var additionalImageURL = undefined;
+			var shown = undefined;
 
 			var content = row._additionalContent;
 			if (content === false) {
 				buttonClassName += " f_grid_additional_button_no_content";
 
 			} else {
-				var shown = this.fa_isAdditionalElementVisible(row);
+				shown = this.fa_isAdditionalElementVisible(row);
 
 				if (shown) {
 					buttonClassName += " f_grid_additional_button_expanded";
-					additionalAlt = f_resourceBundle.Get(f_grid)
-							.f_formatParams("COLLAPSE_BUTTON", {
-								value : row._lineHeader
-							});
 					additionalImageURL = this._additionnalOpenImageURL;
 
 				} else {
 					buttonClassName += " f_grid_additional_button_collapsed";
-					additionalAlt = f_resourceBundle.Get(f_grid)
-							.f_formatParams("EXPAND_BUTTON", {
-								value : row._lineHeader
-							});
 					additionalImageURL = this._additionnalCloseImageURL;
 				}
 
@@ -3451,11 +3480,26 @@ var __members = {
 			if (button.className != buttonClassName) {
 				button.className = buttonClassName;
 			}
-			if (button.alt != additionalAlt) {
-				button.title = button.alt = additionalAlt;
-			}
-			if (additionalImageURL) {
+
+			if (additionalImageURL !== undefined
+					&& button.src != additionalImageURL) {
 				button.src = additionalImageURL;
+
+				var rb=f_resourceBundle.Get(f_grid);
+				
+				var additionalAlt = rb.f_formatParams(
+								(shown) ? "COLLAPSE_BUTTON" : "EXPAND_BUTTON",
+								{
+									value : row._lineHeader
+								});
+
+				button.title = button.alt = additionalAlt;
+
+				var additionalRowMessage=rb.f_get((shown)?"COLLAPSABLE_ROW":"EXPANDABLE_ROW", "Ligne dépliable");			
+
+				fa_audioDescription.SetAudioDescription(row._input._label, additionalRowMessage, "additional", row._input._label.id);
+				
+				row._input.setAttribute("aria-expanded", shown);
 			}
 		}
 	},
@@ -3465,8 +3509,8 @@ var __members = {
 	f_updateCellsStyle : function(row, firstOnly) {
 		var td = row.firstChild;
 		for (; td; td = td.nextSibling) {
-			var tagName =  td.tagName.toLowerCase();
-			if (tagName== "td" || tagName=="th") {
+			var tagName = td.tagName.toLowerCase();
+			if (tagName == "td" || tagName == "th") {
 				break;
 			}
 		}
@@ -3474,36 +3518,14 @@ var __members = {
 			return;
 		}
 
-		if (false && row._selected) { // On généralise le traitement !
-			var className = this._cellStyleClass + " f_grid_cell_selected";
-
-			var firstClassName = className + " f_grid_cell_left";
-			if (row._hasCursor && this._focus && this._showCursor) {
-				firstClassName += " f_grid_cell_cursor";
-			}
-
-			for ( var i = 0; td; i++) {
-				if (!i) {
-					td.className = firstClassName;
-				} else {
-					td.className = className;
-				}
-
-				if (firstOnly) {
-					break;
-				}
-
-				for (td = td.nextSibling; td
-						&& td.tagName.toLowerCase() != "td"; td = td.nextSibling)
-					;
-			}
-
-			return;
-		}
-
 		var cols = this._columns;
 		var idx = 0;
 		var selected = row._selected;
+		var cursorCellIdx = this._cursorCellIdx;
+
+		if (cursorCellIdx !== undefined) {
+			firstOnly = false;
+		}
 
 		for ( var i = 0; i < cols.length && td; i++) {
 			var col = cols[i];
@@ -3514,6 +3536,11 @@ var __members = {
 			var className = [ this._cellStyleClass ];
 			if (selected) {
 				className.push(" f_grid_cell_selected");
+			}
+
+			if (col._cellClickable) {
+				// Sur le TD ! et c'est sur le Datagrid seulement !
+				className.push(" f_dataGrid_cell_clickable");
 			}
 
 			var cclassName = td._cellStyleClass;
@@ -3539,7 +3566,15 @@ var __members = {
 
 			if (!idx) {
 				className.push(" f_grid_cell_left");
-				if (this._cursor == row && this._focus && this._showCursor) {
+			}
+
+			if (this._cursor == row && this._focus && this._showCursor) {
+				if (cursorCellIdx !== undefined) {
+					if (col._index == cursorCellIdx) {
+						className.push(" f_grid_cell_cursor");
+					}
+
+				} else if (!idx) {
 					className.push(" f_grid_cell_cursor");
 				}
 			}
@@ -3557,8 +3592,8 @@ var __members = {
 			}
 
 			for (td = td.nextSibling; td; td = td.nextSibling) {
-				var tagName =  td.tagName.toLowerCase();
-				if (tagName== "td" || tagName=="th") {
+				var tagName = td.tagName.toLowerCase();
+				if (tagName == "td" || tagName == "th") {
 					break;
 				}
 			}
@@ -4030,6 +4065,7 @@ var __members = {
 			var input = row._input;
 			if (input) {
 				row._input = undefined;
+				row._checkbox = undefined;
 
 				input._row = undefined; // HtmlTRElement
 				input.onmousedown = null;
@@ -4111,6 +4147,8 @@ var __members = {
 			cell.onfocus = null;
 			cell.onbeforeactivate = null;
 
+			cell._label = undefined;
+			cell._input = undefined; // Element
 			// cell._className=undefined; // string
 			cell._dataGrid = undefined; // f_grid
 			// cell._cellStyleClasses=undefined; // string[]
@@ -4141,9 +4179,8 @@ var __members = {
 
 		var selection = fa_selectionManager.ComputeKeySelection(evt);
 
-		var additionalInformations = this._additionalInformations;
-
 		var code = evt.keyCode;
+
 		switch (code) {
 		case f_key.VK_DOWN: // FLECHE VERS LE BAS
 			this._nextCursorRow(evt, selection);
@@ -4177,12 +4214,14 @@ var __members = {
 
 		case f_key.VK_SPACE:
 			if (this.f_isCheckable && this.f_isCheckable()) {
-				 if (evt && evt.target && evt.target.tagName.toLowerCase()=="input") {
-					 // L'input gere de lui-meme le click ! donc on fait pas le job 2x
-					 cancel = true;
-					 break;
-				 }
-				
+				if (evt && evt.target
+						&& evt.target.tagName.toLowerCase() == "input") {
+					// L'input gere de lui-meme le click ! donc on fait pas le
+					// job 2x
+					cancel = true;
+					break;
+				}
+
 				var cursor = this._cursor;
 				if (cursor) {
 					this.fa_performElementCheck(cursor, true, evt, !this
@@ -4198,7 +4237,8 @@ var __members = {
 		case f_key.VK_ENTER:
 			if (this._cursor && this.f_isSelectable()) {
 				this.f_performElementSelection(this._cursor, true, evt,
-						selection);
+						selection, undefined, undefined, this
+								._fillColumnDetails());
 			}
 			cancel = true;
 			break;
@@ -4209,27 +4249,15 @@ var __members = {
 			break;
 
 		case f_key.VK_LEFT: // FLECHE A GAUCHE
-			if (additionalInformations) {
-				var cursor = this._cursor;
-				if (cursor) {
-					this._keyHideAdditionalInformation(evt, cursor);
-					cancel = true;
-				}
-			}
+			cancel = this._processRowLeftKey(evt);
 			break;
 
 		case f_key.VK_RIGHT: // FLECHE A DROITE
-			if (additionalInformations) {
-				var cursor = this._cursor;
-				if (cursor) {
-					this._keyShowAdditionalInformation(evt, cursor);
-					cancel = true;
-				}
-			}
+			cancel = this._processRowRightKey(evt);
 			break;
 
 		default:
-			if (this._keyRowSearch && f_key.IsLetterOrDigit(code)) {
+			if (this._keyRowSearch && f_key.IsLetterOrDigit(code) && !evt.ctrlKey && !alt.altKey && !evt.metaKey) {
 				this.f_searchRowNode(code, evt, selection);
 
 				// Dans tous les cas !
@@ -4247,6 +4275,43 @@ var __members = {
 
 		return true;
 	},
+	/**
+	 * @method protected
+	 * @param Event
+	 *            evt
+	 * @return Boolean
+	 */
+	_processRowLeftKey : function(evt) {
+		var additionalInformations = this._additionalInformations;
+		if (additionalInformations) {
+			var cursor = this._cursor;
+			if (cursor) {
+				this._keyHideAdditionalInformation(evt, cursor);
+				return true;
+			}
+		}
+
+		return undefined;
+	},
+	/**
+	 * @method protected
+	 * @param Event
+	 *            evt
+	 * @return Boolean
+	 */
+	_processRowRightKey : function(evt) {
+		var additionalInformations = this._additionalInformations;
+		if (additionalInformations) {
+			var cursor = this._cursor;
+			if (cursor) {
+				this._keyShowAdditionalInformation(evt, cursor);
+				return true;
+			}
+		}
+
+		return undefined;
+	},
+
 	/**
 	 * @method protected
 	 * @param Number
@@ -4304,7 +4369,7 @@ var __members = {
 	 * @method protected
 	 * @return void
 	 */
-	f_forceFocus: function() {
+	f_forceFocus : function() {
 		f_core.Debug(f_grid, "f_forceFocus: force focus=" + this._focus);
 
 		if (this._focus || this._ignoreFocus) {
@@ -4318,9 +4383,9 @@ var __members = {
 
 		var cfocus = this._cfocus;
 		if (!cfocus && this._inputTabIndex) {
-			cfocus=this._inputTabIndex;
+			cfocus = this._inputTabIndex;
 		}
-		
+
 		if (cfocus) {
 			if (f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_6)) {
 				// pour *vraiment* donner les focus sous IE
@@ -5052,20 +5117,21 @@ var __members = {
 		if (column._ascendingOrder !== undefined) {
 			if (column._ascendingOrder) {
 				suffix = "_ascending";
-				titleAlt += " "+f_resourceBundle.Get(f_grid).f_get("ASCENDING_SORT");
+				titleAlt += " "
+						+ f_resourceBundle.Get(f_grid).f_get("ASCENDING_SORT");
 				sorterAttributeName = "ascSorter";
 
 			} else {
 				suffix = "_descending";
-				titleAlt += " "+f_resourceBundle.Get(f_grid)
-						.f_get("DESCENDING_SORT");
+				titleAlt += " "
+						+ f_resourceBundle.Get(f_grid).f_get("DESCENDING_SORT");
 				sorterAttributeName = "descSorter";
 			}
 			className += " " + className + suffix;
 			stextClassName += " " + stextClassName + suffix;
 
 		} else if (column._method || column._sorter) {
-			titleAlt += " "+f_resourceBundle.Get(f_grid).f_get("NO_SORT");
+			titleAlt += " " + f_resourceBundle.Get(f_grid).f_get("NO_SORT");
 		}
 
 		if (column._sorterImage) {
@@ -5126,10 +5192,10 @@ var __members = {
 	 */
 	_updateTitleCellBody : function(column, swidth) {
 
-		if( f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_7)) {
+		if (f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_7)) {
 			return;
 		}
-		
+
 		if (swidth === undefined) {
 			var cw = column._head.style.width;
 			if (!cw) {
@@ -5533,12 +5599,10 @@ var __members = {
 				+ scrollBody.scrollTop + " scrollBody.h="
 				+ scrollBody.clientHeight);
 
-		
-		
 		if (row.offsetTop - scrollBody.scrollTop < 0) {
 			// Bug Firefox de repositionnement de la scrollbar
-			scrollBody.scrollTop=-1;
-			scrollBody.scrollTop=99999;
+			scrollBody.scrollTop = -1;
+			scrollBody.scrollTop = 99999;
 			scrollBody.scrollTop = row.offsetTop;
 
 			f_core.Debug(f_grid, "fa_showElement: set scrollTop to "
@@ -5546,8 +5610,8 @@ var __members = {
 
 		} else if (row.offsetTop + row.offsetHeight - scrollBody.scrollTop > scrollBody.clientHeight) {
 			// Bug Firefox de repositionnement de la scrollbar
-			scrollBody.scrollTop=-1;
-			scrollBody.scrollTop=99999;
+			scrollBody.scrollTop = -1;
+			scrollBody.scrollTop = 99999;
 			scrollBody.scrollTop = row.offsetTop + row.offsetHeight
 					- scrollBody.clientHeight;
 
@@ -5618,7 +5682,7 @@ var __members = {
 
 		this._thead = table.tHead;
 		if (this._thead) {
-			//this._thead.style.display = "none";
+			// this._thead.style.display = "none";
 		}
 
 		var scrollBody = this;
@@ -5716,8 +5780,8 @@ var __members = {
 			head.onmouseout = f_grid._Title_onMouseOut;
 			head.onmousedown = f_grid._Title_onMouseDown;
 			head.onmouseup = f_grid._Title_onMouseUp;
-			head.onclick = f_grid._Title_onClick; // OO  TODO .... A VERIFIER
-											 	 // JBM FIXME .... accessibilite
+			head.onclick = f_grid._Title_onClick; // OO TODO .... A VERIFIER
+			// JBM FIXME .... accessibilite
 			// head.onbeforeactivate=f_core.CancelJsEventHandler;
 			// head.tabIndex=-1;
 
@@ -5789,7 +5853,7 @@ var __members = {
 	/**
 	 * @method protected
 	 */
-	f_updateTitle: function() {
+	f_updateTitle : function() {
 		if (!this._title) {
 			return;
 		}
@@ -5799,9 +5863,10 @@ var __members = {
 		var offsetWidth = body.offsetWidth;
 		var scrollBarWidth = offsetWidth - clientWidth;
 		var verticalScrollBar = (scrollBarWidth > 0);
-		
-		var ie = f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_7) ||  f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_6);
-		
+
+		var ie = f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_7)
+				|| f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_6);
+
 		if (scrollBarWidth <= 0) {
 			// Ben si y a pas de scrollbar a droite, on cherche en bas !
 			scrollBarWidth = body.offsetHeight - body.clientHeight;
@@ -5811,7 +5876,6 @@ var __members = {
 			}
 		}
 
-		
 		var sw = this.style.width;
 		if (sw && sw.indexOf("px") > 0) {
 			var swPixel = parseInt(sw);
@@ -5827,7 +5891,7 @@ var __members = {
 			if (verticalScrollBar) {
 				clientWidth = offsetWidth - scrollBarWidth;
 			}
-			
+
 		}
 
 		if (!this._columnsLayoutPerformed) {
@@ -5842,8 +5906,8 @@ var __members = {
 		var totalPercent = 0; // total des %
 		var totalZero = 0; // total colone sans taille donnee
 		var colToProcess = new Array();
-		
-		for (var i = 0; i < columns.length; i++) {
+
+		for ( var i = 0; i < columns.length; i++) {
 			var column = columns[i];
 			if (column._visibility === false) {
 				continue;
@@ -5880,22 +5944,22 @@ var __members = {
 			}
 
 			if (!column._widthSetted) {
-				
+
 				var styleWidth = col.style.width;
-				
+
 				if (f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_7)) {
 					styleWidth = col.currentStyle.width;
 				}
 				var w = parseInt(styleWidth);
-				
-				if(ie && !isNaN(w) ) {
-					column._borderAndPaddingWidth = 	 f_core.ComputeContentBoxBorderLength(col, "left",
-					"right");
-						//f_core.ComputeIEBoxModelWidth(col);
-					col.style.width = (w-column._borderAndPaddingWidth);
-					column._col.style.width =(w-column._borderAndPaddingWidth);
+
+				if (ie && !isNaN(w)) {
+					column._borderAndPaddingWidth = f_core
+							.ComputeContentBoxBorderLength(col, "left", "right");
+					// f_core.ComputeIEBoxModelWidth(col);
+					col.style.width = (w - column._borderAndPaddingWidth);
+					column._col.style.width = (w - column._borderAndPaddingWidth);
 				}
-				
+
 				if (styleWidth.indexOf("%") > 0) {
 					totalPercent += w;
 					column._widthPercent = w;
@@ -5930,17 +5994,17 @@ var __members = {
 			if (f_core.IsWebkit(f_core.WEBKIT_SAFARI)) {
 				cw -= this._textLeftRightPadding;
 			}
-			
-			if (ie){
-				cw-=column._borderAndPaddingWidth;
+
+			if (ie) {
+				cw -= column._borderAndPaddingWidth;
 			}
-			
+
 			if (cw < 0) {
 				cw = 0;
 			}
-			
+
 			column._head.style.width = cw + "px";
-			
+
 			this._updateTitleCellBody(column, w);
 		}
 
@@ -6037,17 +6101,17 @@ var __members = {
 					if (totalNonPx < w) {
 						w = totalNonPx;
 					}
-					
+
 					var tmpW = w;
-					
-					if(ie) {
-						
+
+					if (ie) {
+
 						var currentCell = this._rowsPool[1]._cells[column._index];
-						
+
 						if (currentCell.currentStyle) {
-							w-= f_core.ComputeContentBoxBorderLength(currentCell, "left",
-							"right");
-							
+							w -= f_core.ComputeContentBoxBorderLength(
+									currentCell, "left", "right");
+
 						}
 					}
 
@@ -6075,10 +6139,8 @@ var __members = {
 				column._col.width = cw;
 
 				total += w;
-				
-			
 
-//				f_core.Debug(f_grid, "Total=" + total + " w=" + w);
+				// f_core.Debug(f_grid, "Total=" + total + " w=" + w);
 			}
 		}
 
@@ -6338,7 +6400,8 @@ var __members = {
 			if (!tooltip.f_isContentSpecified()) {
 				var tagName = item.tagName.toUpperCase();
 
-				if ((tagName == "TD" || tagName=="TH") && item.parentNode._index !== undefined) {
+				if ((tagName == "TD" || tagName == "TH")
+						&& item.parentNode._index !== undefined) {
 					this.f_showToolTip(tooltip, jsEvent,
 							f_toolTip.BOTTOM_COMPONENT);
 					return;
@@ -6432,6 +6495,8 @@ var __members = {
 
 		f_core.InsertBefore(this._tbody, additionalRow, row.nextSibling);
 
+		additionalRow.setAttribute("role", "description");
+		additionalRow.setAttribute("aria-live", "polite");
 		additionalRow._additionalBody = true;
 		additionalRow._row = row;
 		additionalRow._parentNode = row;
@@ -6687,7 +6752,7 @@ var __members = {
 			// Le temps que le nextCommand soit appelé, la popup est fermée
 			return false;
 		}
-		
+
 		var row = null;
 
 		switch (elementItem.tagName.toUpperCase()) {
@@ -6713,7 +6778,8 @@ var __members = {
 
 		var component = tooltip;
 
-		var request = new f_httpRequest(component, f_httpRequest.TEXT_HTML_MIME_TYPE);
+		var request = new f_httpRequest(component,
+				f_httpRequest.TEXT_HTML_MIME_TYPE);
 
 		var toolTipManager = f_toolTipManager.Get();
 
@@ -6984,10 +7050,10 @@ var __members = {
 		}
 
 		f_core.SetAttributeNS(this, "sortBreadCrumbsIds", ids.join("|"));
-		f_core.SetAttributeNS(this, "sortBreadCrumbsIndexes", indexes
-				.join("|"));
-		f_core.SetAttributeNS(this, "sortBreadCrumbsTexts", texts
-				.join("|"));
+		f_core
+				.SetAttributeNS(this, "sortBreadCrumbsIndexes", indexes
+						.join("|"));
+		f_core.SetAttributeNS(this, "sortBreadCrumbsTexts", texts.join("|"));
 	},
 	/**
 	 * @method hidden
@@ -7005,7 +7071,8 @@ var __members = {
 			return;
 		}
 
-		var parent = f_core.GetParentNode(label); // Ben si "parent" est utilisé ???
+		var parent = f_core.GetParentNode(label); // Ben si "parent" est
+		// utilisé ???
 
 		this._emptyDataMessageShown = true;
 
@@ -7089,6 +7156,21 @@ var __members = {
 	 * @return String Identifier of column or <code>null</code> if not found.
 	 */
 	f_computeColumnIdByElement : function(target) {
+		var column = this._searchColumnByElement(target);
+		if (!column) {
+			return column;
+		}
+
+		return column._id;
+	},
+	/**
+	 * @method public
+	 * @param HTMLElement
+	 *            target
+	 * @return String Identifier of column or <code>null</code> if not found.
+	 */
+	_searchColumnByElement : function(target) {
+
 		f_core.Assert(target && target.nodeType == f_core.ELEMENT_NODE,
 				"f_grid.f_computeColumnIdByElement: Invalid target parameter '"
 						+ target + "'.");
@@ -7142,7 +7224,7 @@ var __members = {
 						}
 
 						if (!index) {
-							return cl._id;
+							return cl;
 						}
 
 						index--;
@@ -7565,13 +7647,24 @@ var __members = {
 		}
 	},
 	/**
-	 * @method hidden 
-	 * @param Number newFirst
+	 * @method hidden
+	 * @param Number
+	 *            newFirst
 	 * @return void
 	 */
-	_changeFirst: function(newFirst) {
-		this._first=newFirst;
+	_changeFirst : function(newFirst) {
+		this._first = newFirst;
 		this.f_setProperty(f_prop.FIRST, newFirst);
+	},
+	/**
+	 * @method protected
+	 * @param Object
+	 *            details
+	 * @return Object
+	 */
+	_fillColumnDetails : function(details, column) {
+
+		return details;
 	}
 };
 
@@ -7580,7 +7673,8 @@ new f_class("f_grid", {
 	aspects : [ fa_disabled, fa_pagedComponent, fa_subMenu, fa_commands,
 			fa_selectionManager, fa_scrollPositions, fa_immediate,
 			fa_additionalInformationManager, fa_droppable, fa_draggable,
-			fa_autoScroll, fa_autoOpen, fa_aria, fa_toolTipContainer, fa_tabIndex ],
+			fa_autoScroll, fa_autoOpen, fa_aria, fa_toolTipContainer,
+			fa_tabIndex ],
 	statics : __statics,
 	members : __members
 });

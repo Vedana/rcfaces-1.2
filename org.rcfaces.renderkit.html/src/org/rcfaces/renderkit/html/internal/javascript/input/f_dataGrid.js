@@ -22,6 +22,11 @@ var __statics = {
 	_CheckMouseButtons: f_core.CancelJsEventHandler,
 	
 	/**
+	 * @field private static Number
+	 */
+	_CellIdx: 0,
+
+	/**
 	 * @method private static
 	 * @context object:dataGrid
 	 */
@@ -316,6 +321,7 @@ var __members = {
 		this._keyRowSearch=true;
 		this._countToken =0;
 		this._cellWrap=f_core.GetAttributeNS(this,"cellTextWrap", false);
+		this._cellFocusable=true;
 		//this._noCellWrap=false;
 
 		if (!!this._cellWrap) {
@@ -356,19 +362,26 @@ var __members = {
 		this.f_super(arguments, row, updateCells);	
 		
 		if (updateCells!==false) {
-			var input=row._input;
-			if (input && row._cheked!=input.checked) {
-				input.checked=row._checked;
+			var input=row._checkbox;
+			var checked=row._checked;
+			if (input && checked!==input._checked) {
+				input.checked=checked;
+				input._checked=checked;
 				
-				var bundleKey=(row._checked)?"UNCHECK_TITLE":"CHECK_TITLE";
-				input.title = f_resourceBundle.Get(f_grid).f_formatParams(bundleKey, {
+				row._input.setAttribute("aria-checked", checked);
+				
+				var rb=f_resourceBundle.Get(f_grid);
+				input.title = rb.f_formatParams((checked)?"UNCHECK_TITLE":"CHECK_TITLE", {
 					value: row._lineHeader
 				});
+
+				var checkRowMessage=rb.f_get((checked)?"CHECKED_ROW":"CHECKABLE_ROW");			
+				fa_audioDescription.SetAudioDescription(row._input._label, checkRowMessage, "check", row._input._label.id);
 				
 				if (f_core.IsInternetExplorer()) {
 					// Il se peut que le composant ne soit jamais affiché 
 					// auquel cas il faut utiliser le defaultChecked !
-					input.defaultChecked=row._checked;
+					input.defaultChecked=checked;
 				}
 			}
 		} 
@@ -543,6 +556,8 @@ var __members = {
 		
 		if (this._useInPopup){ // pour aria a revoir
 			row.setAttribute("role", "option");
+		} else {
+			row.setAttribute("role", "row");
 		}
 		
 		if (f_core.IsInternetExplorer()) {
@@ -622,15 +637,20 @@ var __members = {
 		var rowValueColumnIndex=this._rowValueColumnIndex;
 		var columns=this._columns;
 		var cellWrap=this._cellWrap;
+		var cellFocusable=this._cellFocusable;
 
+		var rb=f_resourceBundle.Get(f_dataGrid);
+		
+		var clickableCellMessage= rb.f_get("CLICKABLE_CELL");
+		var tooltipCellMessage=rb.f_get("TOOLTIP_CELL");
+		
 		// Accessibility : Get line header cell value
 		var idxBak = idx;
 		for (var i=0; i < columns.length;i++) {
 			var col=columns[i];
-			var cellText = "";
 			
 			if (col._visibility != null && i !=rowValueColumnIndex) {
-				cellText=arguments[idx++];
+				var cellText=arguments[idx++];
 				if (col._scopeCol) {
 					row._lineHeader = cellText;
 				}
@@ -703,6 +723,8 @@ var __members = {
 					
 					this._cellsPool.push(td);
 					
+					td.setAttribute("role", "gridcell");
+					td.setAttribute("aria-labelledby", this.id+"::ch"+col._index+" cellIdx"+(f_dataGrid._CellIdx));
 					td.valign="top";
 					if (!cellWrap) {
 						td.noWrap=true;
@@ -749,7 +771,7 @@ var __members = {
 							var button=doc.createElement("img");
 							button.width=f_grid.IMAGE_WIDTH;
 							button.height=f_grid.IMAGE_HEIGHT;
-								button.src=this._blankImageURL;
+							button.src=this._blankImageURL;
 							button._row=row;
 							button.onclick=f_dataGrid._AdditionalInformationSelect;
 							button.onfocus=f_grid.GotFocus;
@@ -771,12 +793,11 @@ var __members = {
 
 							f_core.AppendChild(ctrlContainer, button);
 						}
-						
 						if (this.f_isCheckable()) {
 							
 							var input=doc.createElement("input");
-							row._input=input;
-							
+							row._checkbox=input;
+														
 							input.id=this.id+"::"+rowIdx;
 							
 							if (this._checkCardinality==fa_cardinality.ONE_CARDINALITY) {
@@ -784,7 +805,7 @@ var __members = {
 								input.value="CHECKED_"+rowIdx;
 								input.name=this.id+"::radio";
 								
-							} else {							
+							} else {
 								input.type="checkbox";
 								input.value="CHECKED";
 								input.name=input.id;
@@ -851,6 +872,8 @@ var __members = {
 								value: row._lineHeader
 							});
 						}
+						
+						
 					}
 
 					if (col._cellImage || col._defaultCellImageURL) {
@@ -892,20 +915,71 @@ var __members = {
 						td._toolTipContent=col._toolTipContent;
 					}
 
-					var labelType=(false && countTd)?"a":"label";					
+					var aType=cellFocusable || (!row._input && !countTd);
+					
+					var labelType="label"; //"(aType?"a":"label";					
 					var labelComponent=doc.createElement(labelType);
-					row._label=labelComponent;
+					td._label=labelComponent;
 					if (!cellText) {
 						cellText=" ";
 					}
-					if (labelType=="a") {
+					var labClassName="f_grid_label";
+					if (aType) {
 						//labelComponent.tabIndex="-1";
-						 labelComponent.href=f_core.CreateJavaScriptVoid0();
-						 labelComponent.setAttribute("aria-haspopup", true);
+						//labelComponent.href=f_core.CreateJavaScriptVoid0();
+						//labelComponent.setAttribute("aria-haspopup", true);
+						//labelComponent._row=row;
+						labelComponent.id= "cellIdx"+(f_dataGrid._CellIdx++);
+						labClassName+=" f_grid_cellLink";
+						
+						
+						td.onfocus=f_grid._Link_onfocus;
+						td.onblur=f_grid._Link_onblur;					
+
+						ctrlContainer._input=td;
+							
+						if (!row._input) {
+							row._input=td;
+							
+							if (!this._inputTabIndex) {
+								this._inputTabIndex=td;
+								if (cellFocusable) {
+									//this._cursorCellIdx=0;
+								}
+							
+								// On lui donne le tabIndex du composant
+								td.tabIndex=this.fa_getTabIndex();
+							
+							} else if (this._cursor==row) {
+								// déjà donné ?
+								if (this._inputTabIndex) {
+									this._inputTabIndex.tabIndex=-1;
+								}
+							
+								// On lui donne le tabIndex du composant
+								td.tabIndex=this.fa_getTabIndex();
+								this._inputTabIndex=td;
+								
+							} else {
+								td.tabIndex=-1;
+							}
+						} else {
+							td.tabIndex=-1;
+						}
 					}
 					
 					f_core.AppendChild(labelComponent, doc.createTextNode(cellText));
-					labelComponent.className="f_grid_label";
+					
+					if (col._cellClickable) {
+						fa_audioDescription.AppendAudioDescription(labelComponent, clickableCellMessage);
+					}
+					if (td._toolTipId) {
+						fa_audioDescription.AppendAudioDescription(labelComponent, tooltipCellMessage);
+						
+						td._input.setAttribute("aria-haspopup", true);
+					}
+				
+					labelComponent.className=labClassName;
 					f_core.AppendChild(ctrlContainer, labelComponent);
 					
 					countTd++;
@@ -1533,7 +1607,7 @@ var __members = {
 					
 					if (!this._selectionFullState) {
 						// Pas de fullstate: elles sont perdues !
-						this.fa_fireSelectionChangedEvent(null, f_event.REFRESH_DETAIL);
+						this.fa_fireSelectionChangedEvent(null,  { value: f_event.REFRESH_DETAIL, refresh: true});
 					}
 				}
 			}
@@ -1810,6 +1884,7 @@ var __members = {
 		var images=row._cellImages;
 
 		var callUpdate=false;
+		var tooltipMessage=undefined;
 		
 		var argIdx=0;
 		for(var i=0;i<cols.length;i++) {
@@ -1837,7 +1912,11 @@ var __members = {
 			
 			var toolTipText=properties._toolTipText;
 			if (toolTipText) {
-				td.title=toolTipText;				
+				if (td._input) {
+					td._input.title=toolTipText;		
+				} else {
+					td.title=toolTipText;
+				}
 				
 			} else {
 				var toolTipId = properties._toolTipId;  
@@ -1849,8 +1928,21 @@ var __members = {
 				}
 				
 				if (toolTipId) {
+					
+					if (td._label && !td._toolTipId) {
+						if (!tooltipMessage) {
+							tooltipMessage=f_resourceBundle.Get(f_dataGrid).f_get("TOOLTIP_CELL");
+						}
+						
+						fa_audioDescription.AppendAudioDescription(td._label, tooltipMessage);
+					}
+
 					td._toolTipId = toolTipId;
 					td._toolTipContent = toolTipContent;
+					
+					if (td._input) {
+						td._input.setAttribute("aria-haspopup", true);
+					}
 				}
 			}
 			
@@ -1882,6 +1974,17 @@ var __members = {
 				
 				callUpdate=true;
 			}
+			
+			if (properties._clickable) {
+				// TODO  PAS JOLI !
+				td._input.className+=" f_grid_cell_clickable";
+				// callUpdate=true;
+				
+				if (!col._cellClickable) {
+					fa_audioDescription.AppendAudioDescription(td._label, "Cellule clickable");
+				}
+			}
+
 		}
 		
 		if (callUpdate) {
@@ -2470,24 +2573,36 @@ var __members = {
 		f_core.Debug(f_dataGrid, "fa_showElement: show row '"+row._value+"'  inputTabIndex='"+this._inputTabIndex+"'.");
 		
 		var old=this._inputTabIndex;
+		var oldCell = this._inputCellIndex;
 		if (old) { 
 			if (row && row._input==old) {
-				return;
+				if (this._cursorCellIdx===undefined || this._cursorCellIdx===oldCell) {
+					return;
+				}
 			}
 			
-			this._inputTabIndex.tabIndex=-1;
+			old.tabIndex=-1;
 			this._inputTabIndex=undefined;
+			this._inputCellIndex=undefined;
 		}
 		
 		if (row && row._input) {
 			var input=row._input;
+			if (this._cursorCellIdx!==undefined) {
+				var cc=row._cells[this._cursorCellIdx];
+				if (cc && cc._input) {
+					input=cc._input;
+				}
+			}
 			
 			input.tabIndex=this.fa_getTabIndex();
 			this._inputTabIndex=input;
+			this._inputCellIndex=this._cursorCellIdx;
 	
 			f_core.Debug(f_dataGrid, "fa_showElement: give focus to "+input);
 
 			var deltaFocus=undefined;
+			// On s'assure que le focus soit visible
 			if (this._scrollBody && this._checkable && this._scrollBody.scrollLeft) {
 				var sl=this._scrollBody.scrollLeft;
 				sl-=input.offsetLeft;
@@ -2507,8 +2622,97 @@ var __members = {
 		}
 		
 		return this.f_super(arguments);
+	},
+	/**
+	 * @method protected
+	 * @param evt
+	 * @returns
+	 */
+	_processRowRightKey: function(evt) {		
+		if (this._cellFocusable && (evt.ctrlKey || !this._additionalInformations)) {
+			var cursorCellIdx=this._cursorCellIdx;
+			if (!cursorCellIdx) {
+				cursorCellIdx=0;
+			}
+					
+			var columns=this._columns;
+			var newIdx=cursorCellIdx+1;
+			for(;newIdx<columns.length;newIdx++) {
+				if (columns[newIdx]._visibility===false) {
+					continue;
+				}
+				break;
+			}
+			if (newIdx<columns.length) {
+				cursorCellIdx=newIdx;
+						
+				this._cursorCellIdx=cursorCellIdx;
+				
+				this.fa_showElement(this._cursor, true);
+			}			
+			return true;			
+		}
+		
+		var ret=this.f_super(arguments, evt);
+		return ret;
+	},
+	/**
+	 * @method protected
+	 * @param evt
+	 * @returns
+	 */
+	_processRowLeftKey: function(evt) {		
+		if (this._cellFocusable && (evt.ctrlKey || !this._additionalInformations)) {
+			var cursorCellIdx=this._cursorCellIdx;
+			if (cursorCellIdx) {
+				var columns=this._columns;
+				var newIdx=cursorCellIdx;
+				for(newIdx--;newIdx>=0;newIdx--) {
+					if (columns[newIdx]._visibility===false) {
+						continue;
+					}
+					break;
+				}
+				if (newIdx>=0) {						
+					this._cursorCellIdx=newIdx;
+					
+					this.fa_showElement(this._cursor, true);					
+				}
+			}
+			return true;
+		}
+		
+		var ret=this.f_super(arguments, evt);
+		return ret;
+	},
+	/**
+	 * @method protected
+	 * @param Object details
+	 * @return Object 
+	 */
+	_fillColumnDetails: function(details, column) {
+		details=this.f_super(arguments, details, column);
+		
+		if (!column) {
+			var cursorCellIdx=this._cursorCellIdx;
+			if (cursorCellIdx!==undefined) {
+				column = this._columns[cursorCellIdx];
+			}
+		}
+			
+		if (column && column._cellClickable) {
+			if (!details) {
+				details=f_event.NewDetail();
+			}
+			
+			details.column=column;
+			details.columnId=column.f_getId();
+			details.columnIndex=column._index;
+		}
+		
+		return details;
 	}
-	
+
 };
 
 new f_class("f_dataGrid", {
