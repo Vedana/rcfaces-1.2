@@ -11,7 +11,9 @@ package org.rcfaces.renderkit.svg.internal.renderer;
 public class JavaScriptClasses {
 
     public static final String IMAGE = "fsvg_image";
-    
+
     public static final String IMAGE_BUTTON = "fsvg_imageButton";
+
+    public static final String SVG = "fsvg_svg";
 
 }

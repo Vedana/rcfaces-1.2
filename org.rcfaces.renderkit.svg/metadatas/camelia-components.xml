@@ -1,6 +1,29 @@
-<camelia-components>	
+<camelia-components package="svg">	
 
-	<component id="image" extends="abstractOutput" renderKit="svg">
+	<component id="SVG" extends="abstractOutput" renderKit="html">		
+		<capability id="IDisabledCapability" />
+		<capability id="IAccessKeyCapability" />
+		<capability id="ITabIndexCapability" />
+		<capability id="IFocusBlurEventCapability" />
+		<capability id="IKeyEventCapability" />
+		<capability id="IUnlockedClientAttributesCapability" />
+		<capability id="IImmediateCapability" />			
+		<capability id="IValidationEventCapability" />		
+		<capability id="ISelectionEventCapability" />
+		<capability id="IFocusStyleClassCapability" />
+	
+		<capability id="IFilterCapability"/>
+		
+		<method id="setFilterProperties(String)" returnType="void" />
+		
+		<attribute id="immediate" type="boolean" writeTag="false" />	
+		<attribute id="svgURL" type="java.lang.String" />	
+
+		<propertyValue>svgURL</propertyValue>
+		<property>value</property>
+	</component>
+	
+	<component id="image" extends="abstractOutput" renderKit="html">
 		<implements id="org.rcfaces.core.internal.capability.IImageAccessorsCapability" />
 		<capability id="IImageCapability" />
 		<capability id="IImageSizeCapability" />
@@ -31,7 +54,7 @@
 		<property>value</property>
 	</component>
 
-	<component id="imageButton" extends="image" renderKit="svg">
+	<component id="imageButton" extends="image" renderKit="html">
 		<capability id="IDisabledCapability" />
 		<capability id="IAccessKeyCapability" />
 		<capability id="ITabIndexCapability" />
@@ -47,7 +70,7 @@
 				
 	</component>
 
-	<component id="node" abstract="true" extends="cameliaItem" renderKit="svg">
+	<component id="node" abstract="true" renderKit="html" extends="cameliaItem" render="false">
 		<tagAttribute id="targetId" type="java.lang.String" generate="true" required="true"/>
 
 		<capability id="IAlternateTextCapability" />
@@ -100,10 +123,10 @@
 		
 	</component>
 	
-	<component id="group" extends="node" renderKit="svg" render="false">
+	<component id="group" extends="node" renderKit="html" render="false">
 	</component>
 	
-	<component id="path" extends="node" renderKit="svg" render="false">
+	<component id="path" extends="node" renderKit="html" render="false">
 		<attribute id="clip" type="java.lang.String"/>		
 		<attribute id="clipPath" type="java.lang.String"/>		
 		<attribute id="clipRule" type="java.lang.String"/>		

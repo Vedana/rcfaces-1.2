@@ -33,10 +33,9 @@ import org.rcfaces.renderkit.svg.item.INodeItem;
  * @version $Revision$ $Date$
  */
 public class ImageRenderer extends AbstractCssRenderer {
-    private static final String REVISION = "$Revision$";
+    private static final String FILTRED_CONTENT_PROPERTY = "org.rcfaces.svg.FILTRED_IMAGE";
 
-    private static final String FILTRED_CONTENT_PROPERTY = "camelia.image.filtredContent";
-
+    @Override
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
 
         IHtmlComponentRenderContext componentRenderContext = (IHtmlComponentRenderContext) writer
@@ -139,8 +138,8 @@ public class ImageRenderer extends AbstractCssRenderer {
 
         if (url == null) {
             url = componentRenderContext.getHtmlRenderContext()
-                    .getHtmlProcessContext().getStyleSheetURI(BLANK_IMAGE_URL,
-                            true);
+                    .getHtmlProcessContext()
+                    .getStyleSheetURI(BLANK_IMAGE_URL, true);
 
             htmlWriter.writeAttribute("v:blank", true);
         }
@@ -178,8 +177,7 @@ public class ImageRenderer extends AbstractCssRenderer {
 
         if (values != null) {
             mapName = htmlWriter.getComponentRenderContext()
-                    .getComponentClientId()
-                    + "::map";
+                    .getComponentClientId() + "::map";
 
             htmlWriter.writeAttribute("usemap", "#" + mapName);
         }
@@ -191,8 +189,14 @@ public class ImageRenderer extends AbstractCssRenderer {
             htmlWriter.writeName(mapName);
             htmlWriter.writeln();
 
-            AffineTransform transform = generatedImageInformation
-                    .getGlobalTransform();
+            AffineTransform transform = null;
+            if (generatedImageInformation != null) {
+                transform = generatedImageInformation.getGlobalTransform();
+            }
+
+            if (transform == null) {
+                transform = new AffineTransform();
+            }
 
             for (int i = 0; i < values.length; i++) {
                 ShapeValue value = values[i];
@@ -214,8 +218,7 @@ public class ImageRenderer extends AbstractCssRenderer {
 
                     htmlWriter.startElement(IHtmlElements.AREA);
                     htmlWriter.writeId(htmlWriter.getComponentRenderContext()
-                            .getComponentClientId()
-                            + "::map" + i);
+                            .getComponentClientId() + "::map" + i);
 
                     htmlWriter.writeAttribute("href", "#");
 
@@ -240,7 +243,8 @@ public class ImageRenderer extends AbstractCssRenderer {
                             htmlWriter.writeAttribute("v:label", label);
                         }
 
-                        Map clientDatas = value.getClientDatas();
+                        Map<String, String> clientDatas = value
+                                .getClientDatas();
                         if (clientDatas != null
                                 && clientDatas.isEmpty() == false) {
                             HtmlTools.writeClientData(htmlWriter, clientDatas);
@@ -266,6 +270,7 @@ public class ImageRenderer extends AbstractCssRenderer {
     protected void writeImageAttributes(IHtmlWriter htmlWriter) {
     }
 
+    @Override
     public void addRequiredJavaScriptClassNames(IHtmlWriter htmlWriter,
             IJavaScriptRenderContext javaScriptRenderContext) {
         super.addRequiredJavaScriptClassNames(htmlWriter,
@@ -281,6 +286,7 @@ public class ImageRenderer extends AbstractCssRenderer {
         }
     }
 
+    @Override
     protected IComponentDecorator createComponentDecorator(
             FacesContext facesContext, UIComponent component) {
 
@@ -291,14 +297,17 @@ public class ImageRenderer extends AbstractCssRenderer {
         return false;
     }
 
+    @Override
     protected final boolean hasComponenDecoratorSupport() {
         return true;
     }
 
+    @Override
     public final boolean getRendersChildren() {
         return true;
     }
 
+    @Override
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.IMAGE;
     }

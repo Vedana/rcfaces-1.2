@@ -30,15 +30,13 @@ import org.rcfaces.renderkit.svg.item.PathItem;
  */
 public class NodesCollectorDecorator extends AbstractSelectItemsDecorator {
 
-    private static final String REVISION = "$Revision$";
-
     private static final INodeItem NODE_ITEM_EMPTY_ARRAY[] = new INodeItem[0];
 
     private final boolean selectableSupport;
 
-    private List nodes;
+    private List<SelectItem> nodes;
 
-    private List nodesStack = new ArrayList();
+    private List<Object> nodesStack = new ArrayList<Object>();
 
     private boolean selectable;
 
@@ -49,6 +47,7 @@ public class NodesCollectorDecorator extends AbstractSelectItemsDecorator {
         this.selectableSupport = selectableSupport;
     }
 
+    @Override
     protected SelectItemsContext createHtmlContext() {
         IComponentRenderContext componentRenderContext = htmlWriter
                 .getComponentRenderContext();
@@ -57,6 +56,7 @@ public class NodesCollectorDecorator extends AbstractSelectItemsDecorator {
                 getComponent(), null);
     }
 
+    @Override
     protected SelectItemsContext createJavaScriptContext()
             throws WriterException {
         return null;
@@ -71,7 +71,7 @@ public class NodesCollectorDecorator extends AbstractSelectItemsDecorator {
 
         if (selectItem instanceof INodeItem) {
             if (nodes == null) {
-                nodes = new ArrayList(8);
+                nodes = new ArrayList<SelectItem>(8);
             }
             nodes.add(selectItem);
 
@@ -88,21 +88,22 @@ public class NodesCollectorDecorator extends AbstractSelectItemsDecorator {
         return EVAL_NODE;
     }
 
+    @SuppressWarnings("unchecked")
     public void encodeNodeEnd(UIComponent component, SelectItem selectItem,
             boolean hasChild, boolean isVisible) throws WriterException {
 
         if (isVisible && hasChild && (selectItem instanceof INodeItem)
                 && nodes != null) {
 
-            SelectItem children[] = (SelectItem[]) nodes
-                    .toArray(new SelectItem[nodes.size()]);
+            SelectItem children[] = nodes.toArray(new SelectItem[nodes.size()]);
 
             ((SelectItemGroup) selectItem).setSelectItems(children);
 
-            nodes = (List) nodesStack.remove(nodesStack.size() - 1);
+            nodes = (List<SelectItem>) nodesStack.remove(nodesStack.size() - 1);
         }
     }
 
+    @Override
     protected SelectItem createSelectItem(UISelectItem component) {
         if (component instanceof GroupComponent) {
             return new GroupItem((GroupComponent) component);
@@ -122,7 +123,7 @@ public class NodesCollectorDecorator extends AbstractSelectItemsDecorator {
             return NODE_ITEM_EMPTY_ARRAY;
         }
 
-        return (INodeItem[]) nodes.toArray(new INodeItem[nodes.size()]);
+        return nodes.toArray(new INodeItem[nodes.size()]);
     }
 
     public boolean isItemSelectable() {

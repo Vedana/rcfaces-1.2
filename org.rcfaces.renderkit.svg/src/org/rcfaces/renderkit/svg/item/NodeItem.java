@@ -26,15 +26,14 @@ import org.rcfaces.renderkit.svg.component.NodeComponent;
  * @version $Revision$ $Date$
  */
 public class NodeItem extends SelectItemGroup implements INodeItem, StateHolder {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = 8556900994943378471L;
 
     private static final SelectItem[] SELECT_ITEM_EMPTY_ARRAY = new SelectItem[0];
 
-    private Map serverDatas;
+    private Map<String, Object> serverDatas;
 
-    private Map clientDatas;
+    private Map<String, String> clientDatas;
 
     private boolean transientValue;
 
@@ -45,6 +44,7 @@ public class NodeItem extends SelectItemGroup implements INodeItem, StateHolder 
     private String alternateText;
 
     public NodeItem() {
+
     }
 
     public NodeItem(INodeItem nodeItem, INodeItem items[]) {
@@ -78,13 +78,13 @@ public class NodeItem extends SelectItemGroup implements INodeItem, StateHolder 
         setRendered(component.isRendered());
 
         if (component.getServerDataCount() > 0) {
-            Map map = component.getServerDataMap();
+            Map<String, Object> map = component.getServerDataMap();
 
             getServerDataMap().putAll(map);
         }
 
         if (component.getClientDataCount() > 0) {
-            Map map = component.getClientDataMap();
+            Map<String, String> map = component.getClientDataMap();
 
             getClientDataMap().putAll(map);
         }
@@ -129,11 +129,11 @@ public class NodeItem extends SelectItemGroup implements INodeItem, StateHolder 
             return;
         }
 
-        List l = new ArrayList(items.length + 1);
+        List<SelectItem> l = new ArrayList<SelectItem>(items.length + 1);
         l.addAll(Arrays.asList(items));
-        l.add(nodeItem);
+        l.add((SelectItem) nodeItem);
 
-        setSelectItems((SelectItem[]) l.toArray(new SelectItem[l.size()]));
+        setSelectItems(l.toArray(new SelectItem[l.size()]));
 
     }
 
@@ -160,13 +160,13 @@ public class NodeItem extends SelectItemGroup implements INodeItem, StateHolder 
         setAlternateText((String) states[6]);
 
         if (states[7] != null) {
-            clientDatas = (Map) UIComponentBase.restoreAttachedState(context,
-                    states[7]);
+            clientDatas = (Map<String, String>) UIComponentBase
+                    .restoreAttachedState(context, states[7]);
         }
 
         if (states[8] != null) {
-            serverDatas = (Map) UIComponentBase.restoreAttachedState(context,
-                    states[8]);
+            serverDatas = (Map<String, Object>) UIComponentBase
+                    .restoreAttachedState(context, states[8]);
         }
 
         int idx = 9;
@@ -245,9 +245,9 @@ public class NodeItem extends SelectItemGroup implements INodeItem, StateHolder 
         return serverDatas.isEmpty();
     }
 
-    public Map getServerDataMap() {
+    public Map<String, Object> getServerDataMap() {
         if (serverDatas == null) {
-            serverDatas = new HashMap();
+            serverDatas = new HashMap<String, Object>();
         }
 
         return serverDatas;
@@ -261,9 +261,9 @@ public class NodeItem extends SelectItemGroup implements INodeItem, StateHolder 
         return clientDatas.isEmpty();
     }
 
-    public Map getClientDataMap() {
+    public Map<String, String> getClientDataMap() {
         if (clientDatas == null) {
-            clientDatas = new HashMap();
+            clientDatas = new HashMap<String, String>();
         }
 
         return clientDatas;

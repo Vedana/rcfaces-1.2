@@ -1,10 +1,10 @@
 package org.rcfaces.renderkit.svg.component;
 
 import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
-import org.rcfaces.renderkit.svg.component.ImageComponent;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
+import java.lang.String;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.component.capability.ITabIndexCapability;
@@ -12,54 +12,18 @@ import org.rcfaces.core.component.capability.IKeyEventCapability;
 import org.rcfaces.core.component.capability.IValidationEventCapability;
 import org.rcfaces.core.component.capability.IImmediateCapability;
 import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
+import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.IDisabledCapability;
+import org.rcfaces.core.component.capability.IFilterCapability;
 import java.util.HashSet;
 import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.AbstractOutputComponent;
+import org.rcfaces.core.model.IFilterProperties;
 import java.util.Set;
 import java.util.Arrays;
 
-/**
- * <p>The imageButton Component is a <a href="/comps/buttonComponent.html">button Component</a> that can show an image.</p>
- * <p>The imageButton Component has the following capabilities :
- * <ul>
- * <li>IImageButtonFamilly </li>
- * <li>IImageAccessorsCapability </li>
- * </ul>
- * </p>
- * 
- * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageButtonComponent.html">imageButton</a> renderer is linked to the <a href="/jsdocs/index.html?f_imageButton.html" target="_blank">f_imageButton</a> javascript class. f_imageButton extends f_component, fa_readOnly, fa_disabled, fa_tabIndex, fa_borderType, fa_images, fa_immediate, fa_value, fa_aria</p>
- * 
- * <p> Table of component style classes: </p>
- * <table border="1" cellpadding="3" cellspacing="0" width="100%">
- * <tbody>
- * 
- * <tr style="text-align:left">
- * <th  width="33%">Style Name</th>
- * <th width="50%">Description</th>
- * </tr>
- * 
- * <tr  style="text-align:left">
- * <td width="33%">f_imageButton</td>
- * <td width="50%">Defines styles for the wrapper IMG element</td>
- * </tr>
- * 
- * <tr  style="text-align:left">
- * <td width="33%">f_imageButton_text</td>
- * <td width="50%">Defines styles for the wrapper SPAN element for text</td>
- * </tr>
- * 
- * <tr  style="text-align:left">
- * <td width="33%">f_imageButton_image</td>
- * <td width="50%">Defines styles for the wrapper IMG element</td>
- * </tr>
- * 
- * 
- * </tbody>
- * </table>
- */
-public class ImageButtonComponent extends ImageComponent implements 
+public class SVGComponent extends AbstractOutputComponent implements 
 	IDisabledCapability,
 	IAccessKeyCapability,
 	ITabIndexCapability,
@@ -69,24 +33,35 @@ public class ImageButtonComponent extends ImageComponent implements
 	IImmediateCapability,
 	IValidationEventCapability,
 	ISelectionEventCapability,
-	IFocusStyleClassCapability {
+	IFocusStyleClassCapability,
+	IFilterCapability {
 
-	private static final Log LOG = LogFactory.getLog(ImageButtonComponent.class);
+	private static final Log LOG = LogFactory.getLog(SVGComponent.class);
 
-	public static final String COMPONENT_TYPE="org.rcfaces.svg.imageButton";
+	public static final String COMPONENT_TYPE="org.rcfaces.svg.SVG";
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(ImageComponent.CAMELIA_ATTRIBUTES);
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"focusStyleClass","accessKey","blurListener","tabIndex","keyUpListener","focusListener","keyPressListener","unlockedClientAttributeNames","immediate","selectionListener","keyDownListener","disabled","validationListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"focusStyleClass","filterProperties","accessKey","blurListener","svgURL","tabIndex","keyUpListener","focusListener","keyPressListener","unlockedClientAttributeNames","immediate","selectionListener","keyDownListener","disabled","validationListener"}));
 	}
+	protected static final String CAMELIA_VALUE_ALIAS="svgURL";
 
-	public ImageButtonComponent() {
+	public SVGComponent() {
 		setRendererType(COMPONENT_TYPE);
 	}
 
-	public ImageButtonComponent(String componentId) {
+	public SVGComponent(String componentId) {
 		this();
 		setId(componentId);
+	}
+
+	public void setFilterProperties(String properties) {
+
+
+			IFilterProperties filterProperties=(IFilterProperties)FilterPropertiesConverter.SINGLETON.getAsObject(null, this, properties);
+			
+			setFilterProperties(filterProperties);
+		
 	}
 
 	public boolean isDisabled() {
@@ -265,6 +240,29 @@ public class ImageButtonComponent extends ImageComponent implements
 		engine.setProperty(Properties.FOCUS_STYLE_CLASS, focusStyleClass);
 	}
 
+	public org.rcfaces.core.model.IFilterProperties getFilterProperties() {
+		return getFilterProperties(null);
+	}
+
+	/**
+	 * See {@link #getFilterProperties() getFilterProperties()} for more details
+	 */
+	public org.rcfaces.core.model.IFilterProperties getFilterProperties(javax.faces.context.FacesContext facesContext) {
+		return (org.rcfaces.core.model.IFilterProperties)engine.getProperty(Properties.FILTER_PROPERTIES, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "filterProperties" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isFilterPropertiesSetted() {
+		return engine.isPropertySetted(Properties.FILTER_PROPERTIES);
+	}
+
+	public void setFilterProperties(org.rcfaces.core.model.IFilterProperties filterProperties) {
+		engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
+	}
+
 	public boolean isImmediate() {
 		return isImmediate(null);
 	}
@@ -285,7 +283,32 @@ public class ImageButtonComponent extends ImageComponent implements
 		return engine.isPropertySetted(Properties.IMMEDIATE);
 	}
 
+	public String getSvgURL() {
+		return getSvgURL(null);
+	}
+
+	public String getSvgURL(javax.faces.context.FacesContext facesContext) {
+		String s = engine.getStringProperty(Properties.SVG_URL, facesContext);
+		return s;
+	}
+
+	public void setSvgURL(String svgURL) {
+		engine.setProperty(Properties.SVG_URL, svgURL);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "svgURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isSvgURLSetted() {
+		return engine.isPropertySetted(Properties.SVG_URL);
+	}
+
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
+	}
+
+	protected String getCameliaValueAlias() {
+		return CAMELIA_VALUE_ALIAS;
 	}
 }

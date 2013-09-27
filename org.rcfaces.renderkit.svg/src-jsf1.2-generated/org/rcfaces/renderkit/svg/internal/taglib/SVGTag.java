@@ -8,16 +8,17 @@ import org.rcfaces.core.internal.taglib.CameliaTag;
 import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.faces.context.FacesContext;
 import javax.faces.application.Application;
-import org.rcfaces.renderkit.svg.component.ImageButtonComponent;
 import javax.el.ValueExpression;
 import org.apache.commons.logging.Log;
 import javax.faces.component.UIViewRoot;
+import org.rcfaces.renderkit.svg.component.SVGComponent;
+import org.rcfaces.core.internal.taglib.AbstractOutputTag;
 import org.rcfaces.core.internal.tools.ListenersTools1_2;
 
-public class ImageButtonTag extends ImageTag implements Tag {
+public class SVGTag extends AbstractOutputTag implements Tag {
 
 
-	private static final Log LOG=LogFactory.getLog(ImageButtonTag.class);
+	private static final Log LOG=LogFactory.getLog(SVGTag.class);
 
 	private ValueExpression disabled;
 	private ValueExpression accessKey;
@@ -31,8 +32,10 @@ public class ImageButtonTag extends ImageTag implements Tag {
 	private ValueExpression validationListeners;
 	private ValueExpression selectionListeners;
 	private ValueExpression focusStyleClass;
+	private ValueExpression filterProperties;
+	private ValueExpression svgURL;
 	public String getComponentType() {
-		return ImageButtonComponent.COMPONENT_TYPE;
+		return SVGComponent.COMPONENT_TYPE;
 	}
 
 	public void setDisabled(ValueExpression disabled) {
@@ -83,9 +86,17 @@ public class ImageButtonTag extends ImageTag implements Tag {
 		this.focusStyleClass = focusStyleClass;
 	}
 
+	public void setFilterProperties(ValueExpression filterProperties) {
+		this.filterProperties = filterProperties;
+	}
+
+	public void setSvgURL(ValueExpression svgURL) {
+		this.svgURL = svgURL;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
-			if (ImageButtonComponent.COMPONENT_TYPE==getComponentType()) {
+			if (SVGComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
 			LOG.debug("  disabled='"+disabled+"'");
@@ -93,18 +104,20 @@ public class ImageButtonTag extends ImageTag implements Tag {
 			LOG.debug("  tabIndex='"+tabIndex+"'");
 			LOG.debug("  immediate='"+immediate+"'");
 			LOG.debug("  focusStyleClass='"+focusStyleClass+"'");
+			LOG.debug("  filterProperties='"+filterProperties+"'");
 			LOG.debug("  immediate='"+immediate+"'");
+			LOG.debug("  svgURL='"+svgURL+"'");
 		}
-		if ((uiComponent instanceof ImageButtonComponent)==false) {
+		if ((uiComponent instanceof SVGComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
-			throw new IllegalStateException("Component specified by tag is not instanceof of 'ImageButtonComponent'.");
+			throw new IllegalStateException("Component specified by tag is not instanceof of 'SVGComponent'.");
 		}
 
 		super.setProperties(uiComponent);
 
-		ImageButtonComponent component = (ImageButtonComponent) uiComponent;
+		SVGComponent component = (SVGComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
 
 		if (disabled != null) {
@@ -179,6 +192,24 @@ public class ImageButtonTag extends ImageTag implements Tag {
 				component.setFocusStyleClass(focusStyleClass.getExpressionString());
 			}
 		}
+
+		if (filterProperties != null) {
+			if (filterProperties.isLiteralText()==false) {
+				component.setValueExpression(Properties.FILTER_PROPERTIES, filterProperties);
+
+			} else {
+				component.setFilterProperties(filterProperties.getExpressionString());
+			}
+		}
+
+		if (svgURL != null) {
+			if (svgURL.isLiteralText()==false) {
+				component.setValueExpression(Properties.VALUE, svgURL);
+
+			} else {
+				component.setSvgURL(svgURL.getExpressionString());
+			}
+		}
 	}
 
 	public void release() {
@@ -194,6 +225,8 @@ public class ImageButtonTag extends ImageTag implements Tag {
 		validationListeners = null;
 		selectionListeners = null;
 		focusStyleClass = null;
+		filterProperties = null;
+		svgURL = null;
 
 		super.release();
 	}
