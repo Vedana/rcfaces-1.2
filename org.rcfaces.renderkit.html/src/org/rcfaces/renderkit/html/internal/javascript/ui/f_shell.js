@@ -277,7 +277,12 @@ var __members = {
 	 * @field protected String
 	 */
 	_shellDecoratorName: undefined,
-
+	
+	/**
+	 * @field protected String
+	 */
+	_returnFocusClientId: undefined,
+	
 	/**
 	 * <p>Construct a new <code>f_shell</code> with the specified
      * initial values.</p>
@@ -319,6 +324,8 @@ var __members = {
 			if (closable === true) {
 				this._style |= f_shell.CLOSE_STYLE;
 			}
+			
+			this._returnFocusClientId = f_core.GetAttributeNS(this,"returnFocusClientId");
 		}
 		
 	},
@@ -613,15 +620,22 @@ var __members = {
 	/**
 	 * @method public
 	 * @param optional Function returnValueFunction
+	 * @param optional String returnFocusClientId
 	 * @return void
 	 */
-	f_open: function(returnValueFunction) {
+	f_open: function(returnValueFunction, returnFocusClientId) {
 		f_core.Assert(
 			this.f_getStatus()!=f_shell.OPENING_STATUS &&
 			this.f_getStatus()!=f_shell.OPENED_STATUS &&
 			this.f_getStatus()!=f_shell.CLOSING_STATUS, "f_open: Invalid shell state ! ("+this._status+")");
 		
-		this._returnValueFunction=returnValueFunction;
+		if (returnValueFunction!==undefined) {
+			this._returnValueFunction=returnValueFunction;
+		}
+		
+		if (returnFocusClientId!==undefined) {
+			this._returnFocusClientId=returnFocusClientId;
+		}
 		
 		this._shellManager.f_openShell(this);
 	},	
@@ -678,7 +692,7 @@ var __members = {
 			
 		//function(type, jsEvt, item, value, selectionProvider, detail) 
 		this.f_fireEvent(f_event.CLOSE, null, null, returnValue, null, null);
-		
+
 		var returnValueFunction=this._returnValueFunction;
 		if (typeof(returnValueFunction)=="function") {
 			try {
@@ -692,6 +706,15 @@ var __members = {
 			
 		} else if (returnValue===false) {
 			this.f_cancelNextShell();
+		}
+		
+		var returnFocusClientId=this._returnFocusClientId;
+		if (returnFocusClientId && this._showNextShell!==false) {
+			var elt=f_core.GetElementByClientId(returnFocusClientId);
+			
+			if (elt) {
+				f_core.SetFocus(elt, true);
+			}
 		}
 	},
 	
@@ -862,7 +885,25 @@ var __members = {
 	f_findSiblingComponent: function(id) {
 		return fa_namingContainer.FindSiblingComponents(this, arguments);
 	},
-	
+	/**
+	 * Specify the clientId of a component which will get focus when the shell will be closed
+	 * 
+	 * @method public
+	 * @param String clientId Identifier of component.
+	 * @return void
+	 */
+	f_setReturnFocusClientId: function(clientId) {
+    	f_core.Assert(clientId===null || clientId===undefined || typeof(clientId)=="string", "f_shell.f_setReturnFocusClientId: Invalid clientId parameter '"+backgroundMode+"'.");
+    	
+    	this._returnFocusClientId=clientId;
+	},
+	/**
+	 * @method public
+	 * @return String Id Identifier of component which will get focus when the shell will be closed
+	 */
+	f_getReturnFocusClientId: function() {
+     	return this._returnFocusClientId;
+	},
 	/**
 	 * @method public
 	 * @return String
