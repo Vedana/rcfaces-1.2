@@ -636,13 +636,13 @@ var __members = {
 		if (this.f_isDisabled()) {
 			return;
 		}
-
-		f_core.Debug(f_imageButton, "f_setFocus: Set focus on imageButton '"+this.id+"'.");
 		
 		var cmp=this.f_getEventElement();
 		if (!cmp) {
 			cmp=this;
 		}
+
+		f_core.Debug(f_imageButton, "f_setFocus: Set focus on imageButton '"+this.id+"' focussableComponent="+cmp);
 		
 		cmp.focus();
 	},
