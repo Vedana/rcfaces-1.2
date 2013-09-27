@@ -34,6 +34,10 @@ public class FocusManagerRenderer extends AbstractJavaScriptRenderer {
 
         IHtmlComponentRenderContext htmlComponentRenderContext = htmlWriter
                 .getHtmlComponentRenderContext();
+
+        FacesContext facesContext = htmlComponentRenderContext
+                .getFacesContext();
+
         if (htmlComponentRenderContext.getHtmlRenderContext()
                 .getJavaScriptRenderContext().isCollectorMode() == false) {
 
@@ -55,12 +59,20 @@ public class FocusManagerRenderer extends AbstractJavaScriptRenderer {
                     .getComponent();
 
             if (focusManagerComponent.isSetFocusIfMessageSetted()
-                    && focusManagerComponent
-                            .isSetFocusIfMessage(htmlComponentRenderContext
-                                    .getFacesContext()) == false) {
+                    && focusManagerComponent.isSetFocusIfMessage(facesContext) == false) {
                 htmlWriter.writeAttributeNS("setFocusIfMessage", false);
 
                 // lazy = false;
+            }
+
+            if (focusManagerComponent.isAutoFocus(facesContext)) {
+                htmlWriter.writeAttributeNS("autoFocus", true);
+
+                String from = focusManagerComponent
+                        .getAutoFocusFrom(facesContext);
+                if (from != null) {
+                    htmlWriter.writeAttributeNS("autoFocusFrom", from);
+                }
             }
 
             htmlWriter.endElementNS(LAZY_INIT_TAG);
@@ -83,6 +95,8 @@ public class FocusManagerRenderer extends AbstractJavaScriptRenderer {
         if (jsWriter.getJavaScriptRenderContext().isCollectorMode() == false) {
             return;
         }
+
+        FacesContext facesContext = jsWriter.getFacesContext();
 
         FocusManagerComponent focusManagerComponent = (FocusManagerComponent) jsWriter
                 .getComponentRenderContext().getComponent();
@@ -107,13 +121,32 @@ public class FocusManagerRenderer extends AbstractJavaScriptRenderer {
         }
 
         if (focusManagerComponent.isSetFocusIfMessageSetted()
-                && focusManagerComponent.isSetFocusIfMessage(jsWriter
-                        .getFacesContext()) == false) {
+                && focusManagerComponent.isSetFocusIfMessage(facesContext) == false) {
             for (; pred > 0; pred--) {
                 jsWriter.write(',').writeNull();
             }
 
-            jsWriter.writeBoolean(false);
+            jsWriter.write(',').writeBoolean(false);
+        } else {
+            pred++;
+        }
+
+        if (focusManagerComponent.isAutoFocus(facesContext)) {
+            for (; pred > 0; pred--) {
+                jsWriter.write(',').writeNull();
+            }
+
+            jsWriter.write(',').writeBoolean(true);
+
+            String from = focusManagerComponent.getAutoFocusFrom(facesContext);
+            if (from != null) {
+                jsWriter.write(',').writeString(from);
+
+            } else {
+                pred++;
+            }
+        } else {
+            pred += 2;
         }
 
         jsWriter.writeln(");");
