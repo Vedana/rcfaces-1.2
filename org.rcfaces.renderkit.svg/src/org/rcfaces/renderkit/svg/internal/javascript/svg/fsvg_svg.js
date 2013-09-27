@@ -95,7 +95,7 @@ var __members = {
 		valueToElement[value]=element;
 		
 		return element;
-	},
+	}
 }
 
 new f_class("fsvg_svg", {

@@ -222,7 +222,7 @@ var __members = {
 	 * @method protected
 	 * @param optional
 	 *            HTMLElement element
-	 * @return Map<String, String>
+	 * @return Map<String,String>
 	 */
 	fa_searchAudioDescription : function(element) {
 		var auds = this._audioDescriptionTexts;
