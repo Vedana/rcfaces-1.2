@@ -21,7 +21,6 @@ import org.apache.commons.logging.LogFactory;
  * @version $Revision$ $Date$
  */
 public final class ContextTools {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(ContextTools.class);
 
