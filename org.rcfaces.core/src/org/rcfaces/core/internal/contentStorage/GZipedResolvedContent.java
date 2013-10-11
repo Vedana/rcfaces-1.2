@@ -19,6 +19,7 @@ import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.util.Base64;
 import org.rcfaces.core.internal.util.MessageDigestSelector;
+import org.rcfaces.core.internal.webapp.ExtendedHttpServlet;
 
 /**
  * 
@@ -129,6 +130,14 @@ public class GZipedResolvedContent implements IResolvedContent, Serializable {
         }
 
         return length;
+    }
+
+    public String getContentEncoding() {
+        if (getGZipState() != GzipedState.GZIPED) {
+            return null;
+        }
+
+        return ExtendedHttpServlet.GZIP_CONTENT_ENCODING;
     }
 
     private synchronized GzipedState getGZipState() {

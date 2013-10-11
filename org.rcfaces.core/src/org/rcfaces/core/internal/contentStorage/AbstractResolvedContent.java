@@ -48,6 +48,10 @@ public abstract class AbstractResolvedContent implements IResolvedContent {
         return null;
     }
 
+    public String getContentEncoding() {
+        return null;
+    }
+
     public boolean isVersioned() {
         return versioned;
     }

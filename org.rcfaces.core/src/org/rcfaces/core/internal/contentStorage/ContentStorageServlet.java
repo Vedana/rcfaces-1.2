@@ -20,6 +20,7 @@ import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.util.ServletTools;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.internal.webapp.ExpirationDate;
+import org.rcfaces.core.internal.webapp.ExtendedHttpServlet;
 
 /**
  * 
@@ -238,7 +239,12 @@ public class ContentStorageServlet extends ConfiguredHttpServlet {
                 if (gzipedResolvedContent != null) {
                     resolvedContent = gzipedResolvedContent;
 
-                    setGzipContentEncoding(response, false);
+                    if (ExtendedHttpServlet.GZIP_CONTENT_ENCODING
+                            .equals(resolvedContent.getContentEncoding())) {
+                        // On encode pas forcement en GZIP (taille<256 octets)
+
+                        setGzipContentEncoding(response, false);
+                    }
                 }
             }
         }

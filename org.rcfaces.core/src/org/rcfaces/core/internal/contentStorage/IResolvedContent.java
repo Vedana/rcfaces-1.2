@@ -28,6 +28,8 @@ public interface IResolvedContent extends IResourceKey, Serializable {
 
     String getContentType();
 
+    String getContentEncoding();
+
     InputStream getInputStream() throws IOException;
 
     String getHash();

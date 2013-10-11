@@ -276,6 +276,10 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
         return getFileBuffer().getHash();
     }
 
+    public String getContentEncoding() {
+        return null;
+    }
+
     public String getResourceKey() {
         synchronized (this) {
             if (resourceKey == null) {
