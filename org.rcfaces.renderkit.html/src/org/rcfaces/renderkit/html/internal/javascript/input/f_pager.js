@@ -497,9 +497,10 @@ var __members = {
 	},
 	/**
 	 * @method protected
-	 * @param dataGrid
-	 * @param fragment
-	 * @param message
+	 * @param DocumentFragment fragment
+	 * @param String message
+	 * @param Object target
+	 * @return void
 	 */
 	_formatMessage : function(fragment, message, target) {
 
