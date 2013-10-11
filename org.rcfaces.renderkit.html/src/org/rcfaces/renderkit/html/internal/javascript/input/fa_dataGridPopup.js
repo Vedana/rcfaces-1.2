@@ -522,9 +522,12 @@ var __members = {
 			});
 			plabel.setAttribute("for", this.id+"::dataGridPopup_input");
 			
-			var form=f_core.CreateElement(div,  "form", {
+			var form=f_core.CreateElement(div, "form", {
 				className: "fa_dataGridPopup_form"
 			});
+			form.onsubmit=document._rcfacesDisableSubmit;
+			form.submit=document._rcfacesDisableSubmitReturnFalse;
+			form.action="#";
 		
 			var button=f_core.CreateElement(form, "img", {
 				className: "fa_dataGridPopup_icon",
