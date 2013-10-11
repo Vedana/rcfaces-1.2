@@ -4068,12 +4068,17 @@ var __members = {
 				row._checkbox = undefined;
 
 				input._row = undefined; // HtmlTRElement
+				input._label = undefined;
+				input._dataGrid = undefined;
+				input._input = undefined; // ????
 				input.onmousedown = null;
 				input.onmouseup = null;
 				input.onclick = null;
 				input.ondblclick = null;
 				input.onfocus = null;
 				input.onblur = null;
+				input.onbeforeactivate=null;
+				
 
 				f_core.VerifyProperties(input);
 			}
@@ -4257,7 +4262,7 @@ var __members = {
 			break;
 
 		default:
-			if (this._keyRowSearch && f_key.IsLetterOrDigit(code) && !evt.ctrlKey && !alt.altKey && !evt.metaKey) {
+			if (this._keyRowSearch && f_key.IsLetterOrDigit(code) && !evt.ctrlKey && !evt.altKey && !evt.metaKey) {
 				this.f_searchRowNode(code, evt, selection);
 
 				// Dans tous les cas !
