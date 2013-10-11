@@ -1763,10 +1763,13 @@ var __members = {
 			this.f_moveCursor(cursorRow, true, null, selection);
 		
 		}
+		
 		if (this._inputTabIndex) {			
 			f_core.Debug(f_dataGrid, "f_updateNewPage: give focus to '"+this._inputTabIndex+"'.");
 
-			f_core.SetFocus(this._inputTabIndex, true);
+			if (!this._ignoreFocus) {
+				f_core.SetFocus(this._inputTabIndex, true);
+			}
 		}
 
 		this.f_performPagedComponentInitialized();
@@ -2566,7 +2569,7 @@ var __members = {
 	fa_showElement : function(row, giveFocus) {
 		this.f_super(arguments, row);
 		
-		if (!giveFocus) {
+		if (!giveFocus || this._ignoreFocus) {
 			return;
 		}
 		
