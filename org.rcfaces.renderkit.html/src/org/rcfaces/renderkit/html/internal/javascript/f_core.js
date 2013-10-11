@@ -1670,11 +1670,11 @@ var f_core = {
 			
 			parent.appendChild(element);
 			
-			if (textNode) {
+			if (textNode!==null) {
 				element.appendChild(doc.createTextNode(textNode));
 			}
 			
-			if (innerHtml) {
+			if (innerHtml!==null) {
 				element.innerHTML=innerHtml;
 			}
 			
@@ -3316,6 +3316,7 @@ var f_core = {
 	 * @see #GetElementByClientId
 	 */	
 	$: function(clientId) {
+		// Utilisation queryAll
 		return f_core.GetElementByClientId(clientId);
 	},
 	/**
@@ -4683,7 +4684,7 @@ var f_core = {
 		f_core.Assert(component, "f_core.SetFocus: Component is NULL");
 		f_core.Assert(component.nodeType==f_core.ELEMENT_NODE, "f_core.SetFocus: Parameter is not a component.");
 
-		f_core.Debug(f_core, "SetFocus: component="+component.id+" asyncMode="+asyncMode);
+		f_core.Debug(f_core, "SetFocus: component.id="+component.id+" component="+component+" asyncMode="+asyncMode);
 		
 		if (asyncMode) {
 			if (hideInput) {
