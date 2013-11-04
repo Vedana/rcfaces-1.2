@@ -102,7 +102,7 @@ var __members = {
 		this._selectionProvider = selectionProvider;
 		this._serializedValue = serializedValue;
 
-		if (typeof (detail) == "object") {
+		if (detail && typeof (detail) == "object") {
 			f_core.Assert(typeof (detail.value) == "number",
 					"f_event.f_event: Invalid value field of detail object ("
 							+ detail.value + ")");
