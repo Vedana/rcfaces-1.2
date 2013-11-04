@@ -11,6 +11,21 @@
 		</component>
 	</tag>
 	<tag>
+		<tag-name>dataSVG</tag-name>
+		<component>
+			<component-type>org.rcfaces.svg.dataSVG</component-type>
+			<renderer-type>org.rcfaces.svg.dataSVG</renderer-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>SVGDataColumn</tag-name>
+		<component>
+			<component-type>org.rcfaces.svg.SVGDataColumn</component-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
 		<tag-name>image</tag-name>
 		<component>
 			<component-type>org.rcfaces.svg.image</component-type>

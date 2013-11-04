@@ -1,0 +1,82 @@
+package org.rcfaces.renderkit.svg.internal.taglib;
+
+import javax.faces.component.UIComponent;
+import org.rcfaces.core.internal.component.Properties;
+import org.apache.commons.logging.LogFactory;
+import javax.servlet.jsp.tagext.Tag;
+import org.rcfaces.core.internal.taglib.CameliaTag;
+import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.faces.context.FacesContext;
+import javax.faces.application.Application;
+import org.rcfaces.renderkit.svg.component.DataSVGComponent;
+import javax.el.ValueExpression;
+import org.apache.commons.logging.Log;
+import javax.faces.component.UIViewRoot;
+import org.rcfaces.core.internal.tools.ListenersTools1_2;
+
+public class DataSVGTag extends SVGTag implements Tag {
+
+
+	private static final Log LOG=LogFactory.getLog(DataSVGTag.class);
+
+	private ValueExpression var;
+	private ValueExpression dataModel;
+	public String getComponentType() {
+		return DataSVGComponent.COMPONENT_TYPE;
+	}
+
+	public void setVar(ValueExpression var) {
+		this.var = var;
+	}
+
+	public void setDataModel(ValueExpression dataModel) {
+		this.dataModel = dataModel;
+	}
+
+	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (DataSVGComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  var='"+var+"'");
+			LOG.debug("  dataModel='"+dataModel+"'");
+		}
+		if ((uiComponent instanceof DataSVGComponent)==false) {
+			if (uiComponent instanceof UIViewRoot) {
+				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
+			}
+			throw new IllegalStateException("Component specified by tag is not instanceof of 'DataSVGComponent'.");
+		}
+
+		super.setProperties(uiComponent);
+
+		DataSVGComponent component = (DataSVGComponent) uiComponent;
+		FacesContext facesContext = getFacesContext();
+
+		if (var != null) {
+			if (var.isLiteralText()==false) {
+				component.setValueExpression(Properties.VAR, var);
+
+			} else {
+				component.setVar(var.getExpressionString());
+			}
+		}
+
+		if (dataModel != null) {
+			if (dataModel.isLiteralText()==false) {
+				component.setValueExpression(Properties.DATA_MODEL, dataModel);
+
+			} else {
+				component.setDataModel(dataModel.getExpressionString());
+			}
+		}
+	}
+
+	public void release() {
+		var = null;
+		dataModel = null;
+
+		super.release();
+	}
+
+}
