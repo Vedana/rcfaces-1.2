@@ -991,7 +991,7 @@ var f_core = {
 	 * @method hidden static
 	 * @param Boolean timeEnd
 	 * @param String name of profile point.
-	 * @param optional any date Date of profile point. (Can be 'Date' or numer)
+	 * @param optional any date Date of profile point. (Can be 'Date' or number)
 	 * @return void
 	 */
 	Profile: function(timeEnd, name, date, win) {
