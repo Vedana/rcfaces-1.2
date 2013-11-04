@@ -22,7 +22,49 @@
 		<propertyValue>svgURL</propertyValue>
 		<property>value</property>
 	</component>
+
+	<component id="dataSVG" extends="SVG" renderKit="html">		
+		<attribute id="var" type="java.lang.String" />
+		<attribute id="dataModel" type="java.lang.Object" />
+	</component>
 	
+	
+	<component id="SVGDataColumn" extends="cameliaValueColumn" render="false" converter="true">
+
+		<attribute id="value" type="java.lang.Object"
+			writeComponent="false" />
+		
+		<method id="setConverter(String)" />
+		<method id="setConverter(javax.faces.context.FacesContext, String)" />
+
+		<method id="setConverter(javax.faces.convert.Converter)" />
+		<method id="getConverter()" />
+
+		<method id="getLocalValue" returnType="java.lang.Object">
+			<code>
+				return engine.getLocalValue(Properties.VALUE);
+			</code>
+		</method>
+
+		<method id="getValue" returnType="java.lang.Object">
+			<code>
+				return getValue(null);
+			</code>
+		</method>
+		<method id="getValue" returnType="java.lang.Object">
+			<parameter type="javax.faces.context.FacesContext" name="context" />
+			<code>
+				return engine.getValue(Properties.VALUE, context);
+			</code>
+		</method>
+		<method id="setValue">
+			<parameter type="java.lang.Object" name="value" />
+			<code>
+				engine.setValue(Properties.VALUE, value);
+			</code>
+		</method>
+	</component>
+		
 	<component id="image" extends="abstractOutput" renderKit="html">
 		<implements id="org.rcfaces.core.internal.capability.IImageAccessorsCapability" />
 		<capability id="IImageCapability" />

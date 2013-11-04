@@ -4,11 +4,17 @@
 package org.rcfaces.renderkit.svg.internal.renderer;
 
 import javax.faces.FacesException;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
+import org.rcfaces.core.internal.contentAccessor.BasicGeneratedResourceInformation;
+import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
+import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
@@ -16,6 +22,11 @@ import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlElements;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
+import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
+import org.rcfaces.renderkit.html.internal.decorator.CssFilesCollectorDecorator;
+import org.rcfaces.renderkit.html.internal.decorator.FilesCollectorDecorator;
+import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
+import org.rcfaces.renderkit.html.internal.util.FileItemSource;
 import org.rcfaces.renderkit.svg.component.SVGComponent;
 import org.rcfaces.renderkit.svg.internal.component.ISVGAccessors;
 import org.rcfaces.renderkit.svg.internal.image.SVGGeneratedInformation;
@@ -30,6 +41,8 @@ import org.rcfaces.renderkit.svg.internal.util.SVGContentAccessorFactory;
  */
 public class SVGRenderer extends AbstractCssRenderer {
     private static final String FILTRED_CONTENT_PROPERTY = "org.rcfaces.svg.FILTRED";
+
+    private static final String STYLE_FILES_PROPERTY = "org.rcfaces.svg.STYLE_FILES";
 
     @Override
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
@@ -139,6 +152,17 @@ public class SVGRenderer extends AbstractCssRenderer {
 
         htmlWriter.endElement(IHtmlElements.OBJECT);
 
+        FilesCollectorDecorator filesCollectorDecorator = (FilesCollectorDecorator) getComponentDecorator(componentRenderContext);
+        if (filesCollectorDecorator != null) {
+            FileItemSource[] sources = filesCollectorDecorator.listSources();
+            if (sources != null && sources.length > 0) {
+                componentRenderContext.setAttribute(STYLE_FILES_PROPERTY,
+                        sources);
+
+                htmlWriter.enableJavaScript();
+            }
+        }
+
         super.encodeEnd(htmlWriter);
     }
 
@@ -161,6 +185,49 @@ public class SVGRenderer extends AbstractCssRenderer {
             javaScriptRenderContext.appendRequiredClass(JavaScriptClasses.SVG,
                     "filter");
         }
+    }
+
+    @Override
+    protected void encodeJavaScript(IJavaScriptWriter jsWriter)
+            throws WriterException {
+        super.encodeJavaScript(jsWriter);
+
+        FileItemSource[] sources = (FileItemSource[]) jsWriter
+                .getComponentRenderContext().getAttribute(STYLE_FILES_PROPERTY);
+
+        if (sources != null) {
+            FacesContext facesContext = jsWriter.getFacesContext();
+
+            for (FileItemSource source : sources) {
+                String src = source.getSource();
+
+                IContentAccessor contentAccessor = ContentAccessorFactory
+                        .createFromWebResource(facesContext, src,
+                                IContentFamily.STYLE);
+
+                IGeneratedResourceInformation generatedResourceInformation = new BasicGeneratedResourceInformation();
+                IGenerationResourceInformation generationInformation = null;
+
+                src = contentAccessor.resolveURL(facesContext,
+                        generatedResourceInformation, generationInformation);
+
+                if (src != null) {
+                    jsWriter.writeMethodCall("f_appendStyleSheet")
+                            .writeString(src).writeln(");");
+                }
+            }
+        }
+    }
+
+    @Override
+    protected boolean hasComponenDecoratorSupport() {
+        return true;
+    }
+
+    @Override
+    protected IComponentDecorator createComponentDecorator(
+            FacesContext facesContext, UIComponent component) {
+        return new CssFilesCollectorDecorator(component);
     }
 
 }
