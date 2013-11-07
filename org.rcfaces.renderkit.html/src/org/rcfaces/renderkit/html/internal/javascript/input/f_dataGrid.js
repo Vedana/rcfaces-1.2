@@ -355,6 +355,28 @@ var __members = {
 		
 		this.f_super(arguments);
 	},
+	f_serialize : function() { 
+		
+		this._serializeIndexes();
+		
+		return this.f_super(arguments);
+	},
+	
+	
+	/**
+	 * @method private
+	 */
+	_serializeIndexes : function() { 
+		
+		if (!this._serializedIndexes || !this._serializedIndexes.length) {
+			this._serializedIndexes = [0 ,0];
+		}
+		if (!this._submittedIndexes || !this._submittedIndexes.length) {
+			this._submittedIndexes = [0 ,0];
+		}
+		
+	},
+	
 	/**
 	 * @method protected
 	 */
@@ -1402,6 +1424,10 @@ var __members = {
 		
 		this._prepareNewRows(params, cursorIndex, selection, partialWaiting);
 		
+		this._serializeIndexes();
+		params.serializedIndexes = this._serializedIndexes;
+		this._serializedIndexes = [];
+		
 		var waitingObject=(partialWaiting && !length)?this._pagedWaiting:this._waiting;
 
 		var request=new f_httpRequest(this, f_httpRequest.JAVASCRIPT_MIME_TYPE);
@@ -1994,6 +2020,7 @@ var __members = {
 			this.f_updateCellsStyle(row);
 		}
 	},
+	
 	/**
 	 * Check a row.
 	 *

@@ -229,6 +229,7 @@ public abstract class AbtractGridService extends AbstractHtmlService {
                     .parseInt(colIndex)];
             column.processDecodes(facesContext);
         }
-
+        
+        ((UIData2) dgc).clearDecodedIndex();
     }
 }

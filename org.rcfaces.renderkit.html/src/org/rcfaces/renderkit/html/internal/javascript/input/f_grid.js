@@ -2753,14 +2753,15 @@ var __members = {
 			this.f_setProperty(f_prop.COLUMN_WIDTHS, v);
 		}
 
-		var serializedIndexes = this._serializedIndexes;
-		if (serializedIndexes) {
+		var serializedIndexes = this._submittedIndexes;
+		if (serializedIndexes && serializedIndexes.length) {
 			this.f_setProperty(f_prop.SERIALIZED_INDEXES, serializedIndexes
 					.join(','));
 		}
 		f_core.Debug(f_dataGrid, "f_serialize: serializedIndexes="
 				+ serializedIndexes);
-
+		this._submittedIndexes = null;
+		
 		var cursor = this._cursor;
 		var cursorValue = null;
 		if (cursor) {
@@ -2776,7 +2777,7 @@ var __members = {
 			this.f_setProperty(f_prop.SORT_INDEX, this._sortIndexes);
 		}
 
-		this.f_super(arguments);
+		return this.f_super(arguments);
 	},
 	/**
 	 * @method protected
@@ -2789,7 +2790,23 @@ var __members = {
 	f_addSerializedIndexes : function(nStart, nLength) {
 
 		var serializedIndexes = this.f_listSerializedIndexes();
+		this._serializedIndexes = this._addIndexes(nStart, nLength, serializedIndexes);
+		
+		var submittedIndexes = this.f_listSubmittedIndexes();
+		this._submittedIndexes = this._addIndexes(nStart, nLength, submittedIndexes);
 
+		return serializedIndexes;
+	},
+	/**
+	 * @method private
+	 * @param Number
+	 *            first
+	 * @param Number
+	 *            rows
+	 * @return Number[]
+	 */
+	_addIndexes : function(nStart, nLength, serializedIndexes) {
+	
 		var nEnd = nStart + nLength;
 
 		var found = false;
@@ -2815,9 +2832,9 @@ var __members = {
 
 			if (nEnd <= aEnd) {
 				// On fusionne, le nouveau est juste avant l'ancien
-
-				serializedIndexes[i] = nStart;
-				serializedIndexes[i + 1] = aEnd - nStart;
+				var start = aStart < nStart ? aStart : nStart;
+				serializedIndexes[i] = start
+				serializedIndexes[i + 1] = aEnd - start;
 				found = true;
 				break;
 			}
@@ -2839,11 +2856,10 @@ var __members = {
 		if (!found) {
 			serializedIndexes.push(nStart, nEnd - nStart);
 		}
-
-		this._serializedIndexes = serializedIndexes;
-
+		
 		return serializedIndexes;
 	},
+
 	/**
 	 * @method protected
 	 * @return void
@@ -2864,6 +2880,22 @@ var __members = {
 		}
 
 		return serializedIndexes;
+	},
+	
+	
+	/**
+	 * @method protected
+	 * @return Array
+	 */
+	f_listSubmittedIndexes : function() {
+
+		var submittedIndexes = this._submittedIndexes;
+		if (!submittedIndexes) {
+			submittedIndexes = new Array;
+			this._submittedIndexes = submittedIndexes;
+		}
+
+		return submittedIndexes;
 	},
 
 	f_update : function() {

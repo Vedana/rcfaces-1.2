@@ -108,7 +108,7 @@ public class UIData2 extends UIData0 {
     @Override
     protected void iterate(FacesContext context, PhaseId phaseId) {
 
-        if (decodedIndexes == null || decodedIndexes.isEmpty()) {
+        if (decodedIndexes == null) { //|| decodedIndexes.isEmpty()) {
             if (DEBUG_ENABLED) {
                 LOG.debug("Iterate default mode for phaseId=" + phaseId);
             }
@@ -197,6 +197,10 @@ public class UIData2 extends UIData0 {
 
     @Override
     public boolean isRowAvailable() {
+    	if (decodedIndexes != null && decodedIndexes.isEmpty() ) {
+    		return false;
+    	}
+    	
         boolean rowAvailable = super.isRowAvailable();
 
         if (DEBUG_ENABLED) {
@@ -284,7 +288,7 @@ public class UIData2 extends UIData0 {
             LOG.debug("Add decoded indexes first=" + first + " rows=" + rows);
         }
 
-        if (decodedIndexes == null) {
+   	 	if (decodedIndexes == null) {
             decodedIndexes = new ArrayList<int[]>();
         }
 
@@ -568,5 +572,10 @@ public class UIData2 extends UIData0 {
         }
 
         return sb.toString();
+    }
+    
+    
+    public void clearDecodedIndex() {
+    	decodedIndexes = null; 
     }
 }

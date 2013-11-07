@@ -289,6 +289,7 @@ public class DataGridService extends AbstractHtmlService {
         }
 
         dgc.processDecodes(facesContext);
+        dgc.clearDecodedIndex();
     }
 
     private void writeJs(FacesContext facesContext, PrintWriter printWriter,
