@@ -2480,7 +2480,8 @@ var __members = {
 
 		// this._bodyDroppable=undefined; Boolean
 		// this._sortPadding=undefined; // Number
-		// this._serializedIndexes=undefined; // number[]
+		// this._additionalIndexes=undefined; // number[]
+		// this._submittedIndexes=undefined; // number[]
 		// this._keySearchColumnIndex=undefined; // number
 
 		// this._showValue=undefined; // String
@@ -2789,13 +2790,13 @@ var __members = {
 	 */
 	f_addSerializedIndexes : function(nStart, nLength) {
 
-		var serializedIndexes = this.f_listSerializedIndexes();
-		this._serializedIndexes = this._addIndexes(nStart, nLength, serializedIndexes);
+		var additionalIndexes = this.f_listAdditionalIndexes();
+		this._additionalIndexes = this._addIndexes(nStart, nLength, additionalIndexes);
 		
 		var submittedIndexes = this.f_listSubmittedIndexes();
 		this._submittedIndexes = this._addIndexes(nStart, nLength, submittedIndexes);
 
-		return serializedIndexes;
+		return additionalIndexes;
 	},
 	/**
 	 * @method private
@@ -2864,22 +2865,22 @@ var __members = {
 	 * @method protected
 	 * @return void
 	 */
-	f_clearSerializedIndexes : function() {
-		this._serializedIndexes = undefined;
+	f_clearAdditionalIndexes : function() {
+		this._additionalIndexes = undefined;
 	},
 	/**
 	 * @method protected
 	 * @return Array
 	 */
-	f_listSerializedIndexes : function() {
+	f_listAdditionalIndexes : function() {
 
-		var serializedIndexes = this._serializedIndexes;
-		if (!serializedIndexes) {
-			serializedIndexes = new Array;
-			this._serializedIndexes = serializedIndexes;
+		var additionalIndexes = this._additionalIndexes;
+		if (!additionalIndexes) {
+			additionalIndexes = new Array;
+			this._additionalIndexes = additionalIndexes;
 		}
 
-		return serializedIndexes;
+		return additionalIndexes;
 	},
 	
 	

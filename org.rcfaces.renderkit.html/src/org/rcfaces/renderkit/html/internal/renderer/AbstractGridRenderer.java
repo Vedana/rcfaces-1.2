@@ -620,16 +620,17 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                 sortedDataModel.setSortParameters((UIComponent) gridComponent,
                         sortedComponents);
             } else {
-                // Il faut faire le tri à la main !
+                // Il faut faire le tri à la main 
+               	// pas de tri , le js donne le bon index
 
-                int sortTranslations[] = GridServerSort
-                        .computeSortedTranslation(
-                                htmlRenderContext.getFacesContext(),
-                                gridComponent, dataModel, sortedComponents);
-
-                if (sortTranslations != null) {
-                    translatedRowIndex = sortTranslations[translatedRowIndex];
-                }
+//              int sortTranslations[] = GridServerSort
+//                      .computeSortedTranslation(
+//                              htmlRenderContext.getFacesContext(),
+//                              gridComponent, dataModel, sortedComponents);
+//
+//              if (sortTranslations != null) {
+//                  translatedRowIndex = sortTranslations[translatedRowIndex];
+//              } 
             }
         } else if (sortedDataModel != null) {
             // Reset des parametres de tri !
@@ -2770,7 +2771,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         IGridComponent gridComponent = (IGridComponent) component;
 
         if (component instanceof UIData2) {
-            ((UIData2) component).addDecodedIndexes(0, 0);
+            //((UIData2) component).addDecodedIndexes(0, 0);
 
             String serializedIndexes = componentData
                     .getStringProperty("serializedIndexes");

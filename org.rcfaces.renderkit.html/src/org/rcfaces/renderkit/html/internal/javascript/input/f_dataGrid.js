@@ -357,7 +357,7 @@ var __members = {
 	},
 	f_serialize : function() { 
 		
-		this._serializeIndexes();
+		this._normalizeIndexes();
 		
 		return this.f_super(arguments);
 	},
@@ -366,10 +366,10 @@ var __members = {
 	/**
 	 * @method private
 	 */
-	_serializeIndexes : function() { 
+	_normalizeIndexes : function() { 
 		
-		if (!this._serializedIndexes || !this._serializedIndexes.length) {
-			this._serializedIndexes = [0 ,0];
+		if (!this._additionalIndexes || !this._additionalIndexes.length) {
+			this._additionalIndexes = [0 ,0];
 		}
 		if (!this._submittedIndexes || !this._submittedIndexes.length) {
 			this._submittedIndexes = [0 ,0];
@@ -1424,9 +1424,9 @@ var __members = {
 		
 		this._prepareNewRows(params, cursorIndex, selection, partialWaiting);
 		
-		this._serializeIndexes();
-		params.serializedIndexes = this._serializedIndexes;
-		this._serializedIndexes = [];
+		this._normalizeIndexes();
+		params.serializedIndexes = this._additionalIndexes;
+		this._additionalIndexes = [];
 		
 		var waitingObject=(partialWaiting && !length)?this._pagedWaiting:this._waiting;
 
