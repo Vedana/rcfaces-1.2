@@ -284,7 +284,15 @@ public class PerformanceTimingProvider extends AbstractProvider {
                         continue;
                     }
                 } else {
-                    value = Long.valueOf(svalue);
+                    try {
+                        value = Long.valueOf(svalue);
+
+                    } catch (NumberFormatException ex) {
+                        LOG.error(
+                                "Invalid performance timing '" + svalue + "'",
+                                ex);
+                        continue;
+                    }
                 }
 
                 if (name.equals("clientDate")) {
