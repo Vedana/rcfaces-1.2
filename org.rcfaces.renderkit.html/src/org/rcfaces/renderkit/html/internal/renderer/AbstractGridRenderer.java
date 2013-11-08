@@ -620,8 +620,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                 sortedDataModel.setSortParameters((UIComponent) gridComponent,
                         sortedComponents);
             } else {
-                // Il faut faire le tri à la main 
-               	// pas de tri , le js donne le bon index
+                // OO: Il faut faire le tri à la main 
+               	// JB: pas de tri , le js donne le bon index
 
 //              int sortTranslations[] = GridServerSort
 //                      .computeSortedTranslation(
@@ -2771,6 +2771,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         IGridComponent gridComponent = (IGridComponent) component;
 
         if (component instanceof UIData2) {
+            // OO: Non le 0,0 est reservé pour interdire le décodage !
             //((UIData2) component).addDecodedIndexes(0, 0);
 
             String serializedIndexes = componentData
