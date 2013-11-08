@@ -198,6 +198,7 @@ public class UIData2 extends UIData0 {
     @Override
     public boolean isRowAvailable() {
     	if (decodedIndexes != null && decodedIndexes.isEmpty() ) {
+    	    // OO: Rien a décoder
     		return false;
     	}
     	
@@ -288,7 +289,7 @@ public class UIData2 extends UIData0 {
             LOG.debug("Add decoded indexes first=" + first + " rows=" + rows);
         }
 
-   	 	if (decodedIndexes == null) {
+        if (decodedIndexes == null) {
             decodedIndexes = new ArrayList<int[]>();
         }
 
