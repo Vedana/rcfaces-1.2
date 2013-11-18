@@ -2729,8 +2729,24 @@ var __members = {
 	f_getDefaultRowStyleClasses : function() {
 		return f_grid._DEFAULT_ROW_STYLE_CLASSES;
 	},
-	f_serialize : function() {
+	
+	
+	/**
+	 * @method private
+	 */
+	_normalizeIndexes : function() { 
+		
+		if (!this._additionalIndexes || !this._additionalIndexes.length) {
+			this._additionalIndexes = [0 ,0];
+		}
+		if (!this._submittedIndexes || !this._submittedIndexes.length) {
+			this._submittedIndexes = [0 ,0];
+		}
+	},
 
+	f_serialize : function() {
+		this._normalizeIndexes();
+		
 		if (this._resizable && this._titleLayout) {
 			var columns = this._columns;
 			var v = "";
@@ -2754,14 +2770,16 @@ var __members = {
 			this.f_setProperty(f_prop.COLUMN_WIDTHS, v);
 		}
 
-		var serializedIndexes = this._submittedIndexes;
-		if (serializedIndexes && serializedIndexes.length) {
-			this.f_setProperty(f_prop.SERIALIZED_INDEXES, serializedIndexes
+		var submittedIndexes = this._submittedIndexes;
+		if (submittedIndexes && submittedIndexes.length) {
+			this._submittedIndexes = undefined;
+
+			this.f_setProperty(f_prop.SERIALIZED_INDEXES, submittedIndexes
 					.join(','));
+			
+			f_core.Debug(f_grid, "f_serialize: submittedIndexes="
+					+ submittedIndexes);
 		}
-		f_core.Debug(f_dataGrid, "f_serialize: serializedIndexes="
-				+ serializedIndexes);
-		this._submittedIndexes = null;
 		
 		var cursor = this._cursor;
 		var cursorValue = null;
@@ -2790,11 +2808,11 @@ var __members = {
 	 */
 	f_addSerializedIndexes : function(nStart, nLength) {
 
-		var additionalIndexes = this.f_listAdditionalIndexes();
-		this._additionalIndexes = this._addIndexes(nStart, nLength, additionalIndexes);
+		var additionalIndexes = this.f_getAdditionalIndexes();
+		this._addIndexes(nStart, nLength, additionalIndexes);
 		
-		var submittedIndexes = this.f_listSubmittedIndexes();
-		this._submittedIndexes = this._addIndexes(nStart, nLength, submittedIndexes);
+		var submittedIndexes = this.f_getSubmittedIndexes();
+		this._addIndexes(nStart, nLength, submittedIndexes);
 
 		return additionalIndexes;
 	},
@@ -2834,7 +2852,7 @@ var __members = {
 			if (nEnd <= aEnd) {
 				// On fusionne, le nouveau est juste avant l'ancien
 				var start = aStart < nStart ? aStart : nStart;
-				serializedIndexes[i] = start
+				serializedIndexes[i] = start;
 				serializedIndexes[i + 1] = aEnd - start;
 				found = true;
 				break;
@@ -2872,13 +2890,15 @@ var __members = {
 	 * @method protected
 	 * @return Array
 	 */
-	f_listAdditionalIndexes : function() {
+	f_getAdditionalIndexes : function() {
 
 		var additionalIndexes = this._additionalIndexes;
-		if (!additionalIndexes) {
-			additionalIndexes = new Array;
-			this._additionalIndexes = additionalIndexes;
+		if (additionalIndexes) {
+			return additionalIndexes;
 		}
+		
+		additionalIndexes = new Array;
+		this._additionalIndexes = additionalIndexes;
 
 		return additionalIndexes;
 	},
@@ -2888,18 +2908,20 @@ var __members = {
 	 * @method protected
 	 * @return Array
 	 */
-	f_listSubmittedIndexes : function() {
+	f_getSubmittedIndexes : function() {
 
 		var submittedIndexes = this._submittedIndexes;
-		if (!submittedIndexes) {
-			submittedIndexes = new Array;
-			this._submittedIndexes = submittedIndexes;
+		if (submittedIndexes) {
+			return submittedIndexes;
 		}
-
+		
+		submittedIndexes = new Array;
+		this._submittedIndexes = submittedIndexes;
+		
 		return submittedIndexes;
 	},
 
-	f_update : function() {
+	f_update: function() {
 		var rowCount = this._rowCount;
 
 		if (this._rows > 0 && !this._paged) {

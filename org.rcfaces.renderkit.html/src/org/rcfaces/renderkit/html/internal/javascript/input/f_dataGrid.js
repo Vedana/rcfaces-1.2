@@ -355,27 +355,11 @@ var __members = {
 		
 		this.f_super(arguments);
 	},
+	/*
 	f_serialize : function() { 
-		
-		this._normalizeIndexes();
-		
 		return this.f_super(arguments);
 	},
-	
-	
-	/**
-	 * @method private
-	 */
-	_normalizeIndexes : function() { 
-		
-		if (!this._additionalIndexes || !this._additionalIndexes.length) {
-			this._additionalIndexes = [0 ,0];
-		}
-		if (!this._submittedIndexes || !this._submittedIndexes.length) {
-			this._submittedIndexes = [0 ,0];
-		}
-		
-	},
+	*/
 	
 	/**
 	 * @method protected
@@ -648,7 +632,6 @@ var __members = {
 		var initCursorValue=this._initCursorValue;
 		if (!this._cursor && row._index==initCursorValue) {
 			this._cursor=row;
-			
 			
 			this._initCursorValue=undefined;
 		}
