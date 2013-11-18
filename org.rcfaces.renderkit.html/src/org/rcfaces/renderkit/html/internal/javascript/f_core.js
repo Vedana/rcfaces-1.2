@@ -6838,7 +6838,7 @@ var f_core = {
 		
 		for(var key in timing) {
 			var t=timing[key];
-			if (!t) {
+			if (typeof(t)!="number" || !t) {
 				continue;
 			}
 			ps.push(key, "=", String(t), " ");
