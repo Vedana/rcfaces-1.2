@@ -92,6 +92,8 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 
     private static final String ROWCOUNT_PROPERTY = "org.rcfaces.html.componentsGrid.ROWCOUNT";
 
+    private static final String HTML_GENERATED_ROW_INDEXES_PROPERTY = "org.rcfaces.html.componentsGrid.ROW_INDEXES";
+
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.COMPONENTS_GRID;
     }
@@ -229,6 +231,56 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         if (rowCount >= 0) {
             componentRenderContext.setAttribute(ROWCOUNT_PROPERTY, new Integer(
                     rowCount));
+        }
+    }
+
+    @Override
+    protected void encodeJsBody(IJavaScriptWriter jsWriter,
+            AbstractGridRenderContext gridRenderContext) throws WriterException {
+        super.encodeJsBody(jsWriter, gridRenderContext);
+
+        List<Integer> rowIndexes = (List<Integer>) jsWriter
+                .getComponentRenderContext().getAttribute(
+                        HTML_GENERATED_ROW_INDEXES_PROPERTY);
+        if (rowIndexes != null && rowIndexes.isEmpty() == false) {
+            jsWriter.writeMethodCall("_addRowIndexes");
+
+            Collections.sort(rowIndexes);
+
+            boolean first = true;
+            int last = -1;
+            int count = 0;
+            for (Iterator<Integer> it = rowIndexes.iterator(); it.hasNext();) {
+                int i = it.next().intValue();
+
+                if (last >= 0 && count > 0 && last == i - 1) {
+                    last++;
+                    count++;
+                    continue;
+                }
+
+                if (count > 0) {
+                    jsWriter.write(',').writeInt(count);
+                    count = 0;
+                }
+
+                last = i;
+                count++;
+
+                if (first) {
+                    first = false;
+                } else {
+                    jsWriter.write(',');
+                }
+
+                jsWriter.writeInt(i);
+            }
+
+            if (count > 0) {
+                jsWriter.write(',').writeInt(count);
+            }
+
+            jsWriter.writeln(");");
         }
     }
 
@@ -514,6 +566,15 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
             writeSelected = false;
         }
 
+        List<Integer> htmlGeneratedRowIndexes = null;
+        if (encodeJs == false) {
+            htmlGeneratedRowIndexes = new ArrayList<Integer>();
+
+            writer.getComponentRenderContext().setAttribute(
+                    HTML_GENERATED_ROW_INDEXES_PROPERTY,
+                    htmlGeneratedRowIndexes);
+        }
+
         try {
             // int i = 0;
             boolean selected = false;
@@ -664,6 +725,9 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                     encodeRow((IHtmlWriter) writer, gridRenderContext,
                             rowValue, sa.toString(), selected, writeSelected,
                             defaultCellStyleClass, i, translatedRowIndex);
+
+                    htmlGeneratedRowIndexes
+                            .add(new Integer(translatedRowIndex));
                 }
 
                 if (sortTranslations == null) {
