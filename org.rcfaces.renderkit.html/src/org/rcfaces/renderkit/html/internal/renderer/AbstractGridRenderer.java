@@ -2052,21 +2052,21 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             AbstractGridRenderContext gridRenderContext) throws WriterException {
     }
 
-    protected void encodeJsBody(IJavaScriptWriter htmlWriter,
+    protected void encodeJsBody(IJavaScriptWriter jsWriter,
             AbstractGridRenderContext gridRenderContext) throws WriterException {
 
-        encodeJsColumns(htmlWriter, gridRenderContext);
+        encodeJsColumns(jsWriter, gridRenderContext);
 
         /* Si le tableau n'est pas visible ! */
 
         if (ENABLE_SERVER_REQUEST) {
-            String interactiveComponentClientId = htmlWriter
+            String interactiveComponentClientId = jsWriter
                     .getHtmlComponentRenderContext().getHtmlRenderContext()
                     .getCurrentInteractiveRenderComponentClientId();
 
             if (interactiveComponentClientId != null) {
                 // Pas de donn�es si nous sommes dans un scope interactif !
-                htmlWriter.writeMethodCall("f_setInteractiveShow").write('"')
+                jsWriter.writeMethodCall("f_setInteractiveShow").write('"')
                         .write(interactiveComponentClientId).writeln("\");");
                 return;
             }
