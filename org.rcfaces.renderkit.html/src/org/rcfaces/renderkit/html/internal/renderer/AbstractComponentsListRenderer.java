@@ -248,7 +248,7 @@ public abstract class AbstractComponentsListRenderer extends
             encodeChildrenComponentBegin(htmlWriter, componentsListComponent,
                     processed, columnNumber, rowClasses, tdClass);
 
-            for (; rows < 0 || processed < rows; processed++, rowIndex++) {
+            for (; rows <= 0 || processed < rows; processed++, rowIndex++) {
 
                 componentsListComponent.setRowIndex(rowIndex);
                 if (componentsListComponent.isRowAvailable() == false) {
@@ -264,13 +264,6 @@ public abstract class AbstractComponentsListRenderer extends
 
                 encodeComponentBegin(htmlWriter, componentsListComponent,
                         processed, columnNumber, rowClasses, tdClass);
-
-                /*
-                 * if (columnClasses.length > 0) { int rs = (processed %
-                 * columnNumber) % columnClasses.length;
-                 * 
-                 * htmlWriter.writeAttribute("class", columnClasses[rs]); }
-                 */
 
                 htmlWriter.endComponent();
 
