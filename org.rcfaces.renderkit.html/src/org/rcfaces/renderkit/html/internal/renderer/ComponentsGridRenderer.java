@@ -725,7 +725,9 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                     encodeRow((IHtmlWriter) writer, gridRenderContext,
                             rowValue, sa.toString(), selected, writeSelected,
                             defaultCellStyleClass, i, translatedRowIndex);
+                }
 
+                if (htmlGeneratedRowIndexes != null) {
                     htmlGeneratedRowIndexes
                             .add(new Integer(translatedRowIndex));
                 }
