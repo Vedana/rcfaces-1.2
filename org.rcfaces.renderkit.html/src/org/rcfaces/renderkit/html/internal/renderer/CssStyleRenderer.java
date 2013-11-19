@@ -106,12 +106,14 @@ public class CssStyleRenderer extends AbstractFilesCollectorRenderer {
                 if (forceProcessRules != null
                         && forceProcessRules.isEmpty() == false) {
 
-                    if (containsProcessRulesId(forceProcessRules,
-                            requiredModules)) {
+                    if (requiredModules != null
+                            && containsProcessRulesId(forceProcessRules,
+                                    requiredModules)) {
                         processRules = true;
 
-                    } else if (containsProcessRulesId(forceProcessRules,
-                            requiredSets)) {
+                    } else if (requiredSets != null
+                            && containsProcessRulesId(forceProcessRules,
+                                    requiredSets)) {
                         processRules = true;
                     }
                 }
