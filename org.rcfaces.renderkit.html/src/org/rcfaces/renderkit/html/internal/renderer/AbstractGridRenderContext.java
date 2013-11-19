@@ -301,6 +301,7 @@ public abstract class AbstractGridRenderContext {
         }
     }
 
+    @SuppressWarnings("unused")
     protected void initialize(boolean checkTitleImages) {
 
         if (gridComponent instanceof IHeaderVisibilityCapability) {
