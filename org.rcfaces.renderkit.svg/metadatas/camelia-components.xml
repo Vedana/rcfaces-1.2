@@ -11,6 +11,7 @@
 		<capability id="IValidationEventCapability" />		
 		<capability id="ISelectionEventCapability" />
 		<capability id="IFocusStyleClassCapability" />
+		<capability id="ICaptionCapability" />
 	
 		<capability id="IFilterCapability"/>
 		

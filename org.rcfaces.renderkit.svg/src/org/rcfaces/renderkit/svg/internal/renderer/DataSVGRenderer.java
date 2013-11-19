@@ -8,6 +8,8 @@ import javax.faces.component.UIColumn;
 import javax.faces.context.FacesContext;
 import javax.faces.model.DataModel;
 
+import org.rcfaces.core.component.ToolTipComponent;
+import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.GridTools;
@@ -99,7 +101,7 @@ public class DataSVGRenderer extends SVGRenderer {
                 String tooltipText = null;
                 String value = null;
                 Boolean selectable = null;
-                String audioDescription=null;
+                String audioDescription = null;
 
                 if (visibilityColumn != null) {
                     visibility = ValuesTools.valueToBoolean(visibilityColumn);
@@ -138,14 +140,42 @@ public class DataSVGRenderer extends SVGRenderer {
                 }
 
                 if (audioDescriptionColumn != null) {
-                    audioDescription = ValuesTools
-                            .valueToString(audioDescriptionColumn, facesContext);
+                    audioDescription = ValuesTools.valueToString(
+                            audioDescriptionColumn, facesContext);
+                }
+
+                ToolTipComponent tooltipComponent = null;
+
+                String tooltipId = null;
+                String tooltipContent = null;
+                if (tooltipComponent != null) {
+                    if (tooltipComponent.getAsyncRenderMode(facesContext) == IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
+                      //  tooltipContent = encodeToolTip(jsWriter, tooltipComponent);
+                        tooltipId = jsWriter.allocateString("##CONTENT");
+
+                    } else {
+                        tooltipId = tooltipComponent.getClientId(facesContext);
+                    }
                 }
 
                 if (visibility == null && color == null && styleClass == null
                         && fill == null && text == null && tooltipText == null
-                        && value == null && selectable == null) {
+                        && value == null && selectable == null
+                        && tooltipId == null && tooltipComponent == null) {
                     continue;
+                }
+
+                String colorVar = null;
+                if (color != null) {
+                    colorVar = jsWriter.allocateString(color);
+                }
+                String styleClassVar = null;
+                if (styleClass != null) {
+                    styleClassVar = jsWriter.allocateString(styleClass);
+                }
+                String fillVar = null;
+                if (fill != null) {
+                    fillVar = jsWriter.allocateString(fill);
                 }
 
                 jsWriter.writeMethodCall("_update").writeString(id).write(',');
@@ -157,15 +187,14 @@ public class DataSVGRenderer extends SVGRenderer {
                     objWriter.writeProperty("_visibility").writeBoolean(
                             visibility.booleanValue());
                 }
-                if (color != null) {
-                    objWriter.writeProperty("_color").writeString(color);
+                if (colorVar != null) {
+                    objWriter.writeProperty("_color").write(colorVar);
                 }
-                if (styleClass != null) {
-                    objWriter.writeProperty("_styleClass").writeString(
-                            styleClass);
+                if (styleClassVar != null) {
+                    objWriter.writeProperty("_styleClass").write(styleClassVar);
                 }
-                if (fill != null) {
-                    objWriter.writeProperty("_fill").writeString(fill);
+                if (fillVar != null) {
+                    objWriter.writeProperty("_fill").write(fillVar);
                 }
                 if (text != null) {
                     objWriter.writeProperty("_text").writeString(text);

@@ -3,10 +3,20 @@
  */
 package org.rcfaces.renderkit.svg.internal.renderer;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.contentAccessor.BasicGeneratedResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
@@ -14,15 +24,19 @@ import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.util.PathTypeTools;
 import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlElements;
+import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
+import org.rcfaces.renderkit.html.internal.css.ICssConfig;
+import org.rcfaces.renderkit.html.internal.css.StylesheetsServlet;
 import org.rcfaces.renderkit.html.internal.decorator.CssFilesCollectorDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.FilesCollectorDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
@@ -40,6 +54,9 @@ import org.rcfaces.renderkit.svg.internal.util.SVGContentAccessorFactory;
  * @version $Revision$ $Date$
  */
 public class SVGRenderer extends AbstractCssRenderer {
+
+    private static final Log LOG = LogFactory.getLog(SVGRenderer.class);
+
     private static final String FILTRED_CONTENT_PROPERTY = "org.rcfaces.svg.FILTRED";
 
     private static final String STYLE_FILES_PROPERTY = "org.rcfaces.svg.STYLE_FILES";
@@ -150,20 +167,76 @@ public class SVGRenderer extends AbstractCssRenderer {
             htmlWriter.writeHeight(svgHeight);
         }
 
+        String caption = svgComponent.getCaption(facesContext);
+        if (caption != null) {
+            htmlWriter.writeAriaLabel(caption);
+        }
+
         htmlWriter.endElement(IHtmlElements.OBJECT);
+
+        List<FileItemSource> fis = new ArrayList<FileItemSource>();
+        Set<String> cssRequiredModuleSet = new HashSet<String>();
+        fillCssRequiredModuleSet(cssRequiredModuleSet);
+        addCssRequiredModule(fis, htmlWriter, cssRequiredModuleSet);
 
         FilesCollectorDecorator filesCollectorDecorator = (FilesCollectorDecorator) getComponentDecorator(componentRenderContext);
         if (filesCollectorDecorator != null) {
             FileItemSource[] sources = filesCollectorDecorator.listSources();
             if (sources != null && sources.length > 0) {
-                componentRenderContext.setAttribute(STYLE_FILES_PROPERTY,
-                        sources);
-
-                htmlWriter.enableJavaScript();
+                fis.addAll(Arrays.asList(sources));
             }
         }
 
+        if (fis.isEmpty() == false) {
+            FileItemSource[] sources = fis.toArray(new FileItemSource[fis
+                    .size()]);
+            componentRenderContext.setAttribute(STYLE_FILES_PROPERTY, sources);
+
+            htmlWriter.enableJavaScript();
+        }
+
         super.encodeEnd(htmlWriter);
+    }
+
+    protected String getDefaultCssRequiredModule() {
+        return "svg_internal";
+    }
+
+    protected void fillCssRequiredModuleSet(Set<String> cssRequiredModuleSet) {
+        String def = getDefaultCssRequiredModule();
+        if (def != null) {
+            cssRequiredModuleSet.add(def);
+        }
+    }
+
+    protected void addCssRequiredModule(List<FileItemSource> sl,
+            IHtmlWriter htmlWriter, Collection<String> requiredModules) {
+        IHtmlProcessContext htmlProcessContext = htmlWriter
+                .getHtmlComponentRenderContext().getHtmlRenderContext()
+                .getHtmlProcessContext();
+
+        for (Iterator<String> it = requiredModules.iterator(); it.hasNext();) {
+            String moduleName = it.next();
+
+            ICssConfig cssConfig = StylesheetsServlet.getConfig(
+                    htmlProcessContext, moduleName);
+
+            if (cssConfig == null) {
+                LOG.error("Unknown css module '" + moduleName + "'");
+                continue;
+            }
+
+            String uri = cssConfig.getDefaultStyleSheetURI()
+                    + "/"
+                    + cssConfig.getStyleSheetFileName(htmlProcessContext
+                            .getClientBrowser());
+
+            uri = PathTypeTools.convertContextPathToAbsoluteType(htmlWriter
+                    .getHtmlComponentRenderContext().getFacesContext(), uri);
+
+            sl.add(new FileItemSource(uri, null, null, true));
+        }
+
     }
 
     @Override

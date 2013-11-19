@@ -6,4 +6,8 @@
 		<file name="fsvg_image.css" />
 		<file name="fsvg_imageButton.css" />
 	</module>
+
+	<module id="svg_internal">
+		<file name="fsvg_internal.css" />
+	</module>
 </repository>
