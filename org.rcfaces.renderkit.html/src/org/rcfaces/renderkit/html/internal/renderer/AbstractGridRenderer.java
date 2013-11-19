@@ -104,7 +104,6 @@ import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.tools.CriteriaTools;
 import org.rcfaces.core.internal.tools.FilterExpressionTools;
 import org.rcfaces.core.internal.tools.FilteredDataModel;
-import org.rcfaces.core.internal.tools.GridServerSort;
 import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.core.lang.provider.ICheckProvider;
@@ -620,17 +619,17 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                 sortedDataModel.setSortParameters((UIComponent) gridComponent,
                         sortedComponents);
             } else {
-                // OO: Il faut faire le tri à la main 
-               	// JB: pas de tri , le js donne le bon index
+                // OO: Il faut faire le tri à la main
+                // JB: pas de tri , le js donne le bon index
 
-//              int sortTranslations[] = GridServerSort
-//                      .computeSortedTranslation(
-//                              htmlRenderContext.getFacesContext(),
-//                              gridComponent, dataModel, sortedComponents);
-//
-//              if (sortTranslations != null) {
-//                  translatedRowIndex = sortTranslations[translatedRowIndex];
-//              } 
+                // int sortTranslations[] = GridServerSort
+                // .computeSortedTranslation(
+                // htmlRenderContext.getFacesContext(),
+                // gridComponent, dataModel, sortedComponents);
+                //
+                // if (sortTranslations != null) {
+                // translatedRowIndex = sortTranslations[translatedRowIndex];
+                // }
             }
         } else if (sortedDataModel != null) {
             // Reset des parametres de tri !
@@ -2326,9 +2325,9 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                 objectWriter.writeSymbol("_id").writeString(columnId);
             }
             /*
-            objectWriter.writeSymbol("_cid").writeString(
-                    columnComponent.getClientId(facesContext));
-*/
+             * objectWriter.writeSymbol("_cid").writeString(
+             * columnComponent.getClientId(facesContext));
+             */
             String columnText = null;
             if (columnComponent instanceof ITextCapability) {
                 columnText = ((ITextCapability) columnComponent).getText();
@@ -2772,7 +2771,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
         if (component instanceof UIData2) {
             // OO: Non le 0,0 est reservé pour interdire le décodage !
-            //((UIData2) component).addDecodedIndexes(0, 0);
+            // ((UIData2) component).addDecodedIndexes(0, 0);
 
             String serializedIndexes = componentData
                     .getStringProperty("serializedIndexes");
