@@ -43,7 +43,7 @@ var __statics = {
 	/**
 	 * @field private static final Number
 	 */
-	_DEFAULT_POSITION: 2
+	_DEFAULT_POSITION: 8
 
 };
 
@@ -230,7 +230,7 @@ var __members = {
 			return false;
 		}
 
-		this._computePosition(ref, f_toolTip.BOTTOM_LEFT_COMPONENT, jsEvent,
+		this._computePosition(ref, position /*f_toolTip.BOTTOM_LEFT_COMPONENT*/, jsEvent,
 				this, {});
 
 		if (this.f_isContentSpecified()) {
@@ -272,7 +272,7 @@ var __members = {
 		f_core.Assert(component,
 				"f_toolTip._computePosition: Invalid component parameter '"
 						+ component + "'.");
-		f_core.Assert(position,
+		f_core.Assert(typeof(position)=="number",
 				"f_toolTip._computePosition: Invalid position parameter '"
 						+ position + "'.");
 
@@ -296,6 +296,20 @@ var __members = {
 		case f_toolTip.BOTTOM_RIGHT_COMPONENT:
 			offsetY += component.offsetHeight;
 
+		case f_toolTip.MOUSE_POSITION:
+			var eventPos = f_core.GetJsEventPosition(jsEvent);
+			var cursorPos = f_core.GetAbsolutePosition(popup);
+
+			offsetX = eventPos.x;// - cursorPos.x;
+			offsetY = eventPos.y;// - cursorPos.y;
+
+			f_core.Debug(f_toolTip, "_computePosition: (mouse position) X="
+					+ offsetX + " Y=" + offsetY + " eventX=" + eventPos.x
+					+ " eventY=" + eventPos.y + " cursorPosX=" + cursorPos.x
+					+ " cursorPosY=" + cursorPos.y);
+
+			break;
+
 		case f_toolTip.RIGHT_COMPONENT:
 			offsetX += component.offsetWidth;
 			break;
@@ -303,22 +317,6 @@ var __members = {
 		case f_toolTip.MIDDLE_COMPONENT:
 			offsetX += component.offsetWidth / 2;
 			offsetY += component.offsetHeight / 2;
-			break;
-
-		case f_toolTip.MOUSE_POSITION:
-
-			// Calcule la position de la souris
-			var eventPos = f_core.GetJsEventPosition(jsEvent);
-			var cursorPos = f_core.GetAbsolutePosition(popup);
-
-			offsetX = eventPos.x - cursorPos.x;
-			offsetY = eventPos.y - cursorPos.y;
-
-			f_core.Debug(f_toolTip, "_computePosition: (mouse position) X="
-					+ offsetX + " Y=" + offsetY + " eventX=" + eventPos.x
-					+ " eventY=" + eventPos.y + " cursorPosX=" + cursorPos.x
-					+ " cursorPosY=" + cursorPos.y);
-
 			break;
 		}
 

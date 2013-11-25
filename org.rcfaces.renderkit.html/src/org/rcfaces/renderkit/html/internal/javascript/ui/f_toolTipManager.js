@@ -43,7 +43,7 @@ var __statics = {
 			
 		// f_core.Debug(f_toolTipManager, "_ElementOver: event="+evt+"
 		// target="+evt.target);
-
+		
 		var instance = f_toolTipManager.Get();
 
 		try {
@@ -151,6 +151,34 @@ var __statics = {
 
 		return instance;
 	},
+		
+	/**
+	 * @method hidden static
+	 * @param Document doc
+	 * @param Element rootElement
+	 * @return void
+	 */
+	InstallOverCallbacks: function(doc, rootElement) {
+		f_core.AddEventListener(rootElement, "mouseover",
+				f_toolTipManager._ElementOver, doc);
+
+		f_core.AddEventListener(rootElement, "mouseout",
+				f_toolTipManager._ElementOut, doc);		
+	},
+	
+	/**
+	 * @method hidden static
+	 * @param Document doc
+	 * @param Element rootElement
+	 * @return void
+	 */
+	UninstallOverCallbacks: function(doc, rootElement) {
+		f_core.RemoveEventListener(rootElement, "mouseover",
+				f_toolTipManager._ElementOver, doc);
+
+		f_core.RemoveEventListener(rootElement, "mouseout",
+				f_toolTipManager._ElementOut, doc);		
+	},	
 
 	/**
 	 * @method protected static
@@ -225,11 +253,7 @@ var __members = {
 		this._showDelayMs = delay;
 		this._neighbourThresholdMs = neighbourThresholdMs;
 
-		f_core.AddEventListener(document.body, "mouseover",
-				f_toolTipManager._ElementOver, document);
-
-		f_core.AddEventListener(document.body, "mouseout",
-				f_toolTipManager._ElementOut, document);
+		f_toolTipManager.InstallOverCallbacks(document, document.body);
 
 		// Touches
 
@@ -264,12 +288,8 @@ var __members = {
 
 		if (this._listenerInstalled) {
 			this._listenerInstalled=undefined; 
-			
-			f_core.RemoveEventListener(document.body, "mouseover",
-					f_toolTipManager._ElementOver, document);
 	
-			f_core.RemoveEventListener(document.body, "mouseout",
-					f_toolTipManager._ElementOut, document);
+			f_toolTipManager.UninstallOverCallbacks(document, document.body);
 	
 			// Touches
 	
@@ -299,11 +319,15 @@ var __members = {
 		
 		var target = evt.target || evt.srcElement;
 		element = element || target || this._getElementAtPosition(evt);
+		
 		var tooltipContainer = this._getToolTipContainerForElement(element);
+
+
+		console.log("_ElementOver: event="+evt+" target="+evt.target+" element="+element+" container="+tooltipContainer);
 
 		var tooltipInfos = null;
 		if (tooltipContainer) {
-			tooltipInfos = tooltipContainer.fa_getToolTipForElement(element);
+			tooltipInfos = tooltipContainer.fa_getToolTipForElement(element, evt);
 		}
 
 		if (f_core.IsDebugEnabled(f_toolTipManager)) {
@@ -556,6 +580,18 @@ var __members = {
 				continue;
 			}
 
+			if (comp.nodeType==f_core.DOCUMENT_NODE) {
+				if (comp.documentElement && comp.documentElement.tagName=="HTML") {
+					break;
+				}
+				
+				var win=f_core.GetWindow(comp);
+				if (!win.frameElement) {
+					break;
+				}
+				comp=win.frameElement;
+			}
+			
 			if (comp.nodeType != f_core.ELEMENT_NODE) {
 				break;
 			}
