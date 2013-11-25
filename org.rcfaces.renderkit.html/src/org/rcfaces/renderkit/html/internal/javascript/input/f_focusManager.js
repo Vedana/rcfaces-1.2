@@ -359,22 +359,32 @@ var __members = {
 		f_core.Debug(f_focusManager, "f_documentComplete: focus='" + focusId
 				+ "'.");
 
-		if (!focusId) {
-			if (this._autoFocus) {
-				var from=null;
-				if (this._autoFocusFrom) {
-					from=document.getElementById(this._autoFocusFrom);
-				}
+		if (!focusId && this._autoFocus) {
+			var from=null;
+			if (this._autoFocusFrom) {
+				from=document.getElementById(this._autoFocusFrom);
+
 				if (!from) {
-					from=document.body;
+					f_core.Info(f_focusManager, "f_documentComplete: focus from='" + this._autoFocusFrom
+							+ "' can not be found !");
 				}
-				
-				focusId=f_focusManager.SearchNextFocusable(from);
+			}
+			if (!from) {
+				from=document.body;
 			}
 			
-			if (!focusId) {
-				return;
-			}
+			focusId=f_focusManager.SearchNextFocusable(from);
+
+			f_core.Debug(f_focusManager, "f_documentComplete: Search next focusable from='" + from
+					+ "' => "+focusId);
+		}
+
+		if (window.console && window.console.log) {
+			console.log("Positionne le focus sur '"+focusId+"'");
+		}
+		
+		if (!focusId) {
+			return;
 		}
 
 		var activeElement = this._getActiveElement();
