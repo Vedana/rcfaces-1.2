@@ -101,7 +101,7 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"returnFocusClientId","closeListener","lookId","text","shellDecoratorName","visible","styleClass","width","ariaLabel","dialogPriority","textDirection","ariaLevel","immediate","height","closable","hiddenMode","viewURL","imageURL","waiRole"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"returnFocusClientId","closeListener","lookId","text","shellDecoratorName","visible","styleClass","width","ariaLabel","dialogPriority","textDirection","ariaLevel","immediate","height","closable","hiddenMode","viewURL","waiRole","imageURL"}));
 	}
 
 	public ViewDialogComponent() {

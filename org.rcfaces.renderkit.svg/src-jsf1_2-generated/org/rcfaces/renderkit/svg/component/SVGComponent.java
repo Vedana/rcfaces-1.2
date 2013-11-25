@@ -7,8 +7,8 @@ import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability
 import java.lang.String;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
-import org.rcfaces.core.component.capability.ITabIndexCapability;
 import org.rcfaces.core.component.capability.IKeyEventCapability;
+import org.rcfaces.core.component.capability.ITabIndexCapability;
 import org.rcfaces.core.component.capability.IValidationEventCapability;
 import org.rcfaces.core.component.capability.IImmediateCapability;
 import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
@@ -20,6 +20,7 @@ import java.util.HashSet;
 import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.AbstractOutputComponent;
 import org.rcfaces.core.model.IFilterProperties;
+import org.rcfaces.core.component.capability.ICaptionCapability;
 import java.util.Set;
 import java.util.Arrays;
 
@@ -34,6 +35,7 @@ public class SVGComponent extends AbstractOutputComponent implements
 	IValidationEventCapability,
 	ISelectionEventCapability,
 	IFocusStyleClassCapability,
+	ICaptionCapability,
 	IFilterCapability {
 
 	private static final Log LOG = LogFactory.getLog(SVGComponent.class);
@@ -42,7 +44,7 @@ public class SVGComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"focusStyleClass","filterProperties","accessKey","blurListener","svgURL","tabIndex","keyUpListener","focusListener","keyPressListener","unlockedClientAttributeNames","immediate","selectionListener","keyDownListener","disabled","validationListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"focusStyleClass","filterProperties","accessKey","blurListener","svgURL","tabIndex","keyUpListener","focusListener","caption","keyPressListener","unlockedClientAttributeNames","immediate","selectionListener","keyDownListener","disabled","validationListener"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="svgURL";
 
@@ -238,6 +240,29 @@ public class SVGComponent extends AbstractOutputComponent implements
 
 	public void setFocusStyleClass(java.lang.String focusStyleClass) {
 		engine.setProperty(Properties.FOCUS_STYLE_CLASS, focusStyleClass);
+	}
+
+	public java.lang.String getCaption() {
+		return getCaption(null);
+	}
+
+	/**
+	 * See {@link #getCaption() getCaption()} for more details
+	 */
+	public java.lang.String getCaption(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.CAPTION, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "caption" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isCaptionSetted() {
+		return engine.isPropertySetted(Properties.CAPTION);
+	}
+
+	public void setCaption(java.lang.String caption) {
+		engine.setProperty(Properties.CAPTION, caption);
 	}
 
 	public org.rcfaces.core.model.IFilterProperties getFilterProperties() {

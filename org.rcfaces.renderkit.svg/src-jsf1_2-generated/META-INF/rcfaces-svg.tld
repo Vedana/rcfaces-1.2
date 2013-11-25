@@ -549,6 +549,13 @@ A space-separated list of CSS style classes to be applied when this component ge
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>caption</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<description><![CDATA[
 A binded object that hold the filters to use on the server side. This property is often set via javascript code.
 ]]></description>
@@ -1125,6 +1132,13 @@ A space-separated list of CSS style classes to be applied when this component ge
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>caption</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<description><![CDATA[
 A binded object that hold the filters to use on the server side. This property is often set via javascript code.
 ]]></description>
@@ -1149,6 +1163,13 @@ A boolean value indicating that this component's value must be
 		</attribute>
 		<attribute>
 			<name>svgURL</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>rowToolTipId</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>

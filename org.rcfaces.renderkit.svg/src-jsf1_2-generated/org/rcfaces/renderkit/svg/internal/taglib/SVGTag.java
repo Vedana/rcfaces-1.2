@@ -32,6 +32,7 @@ public class SVGTag extends AbstractOutputTag implements Tag {
 	private ValueExpression validationListeners;
 	private ValueExpression selectionListeners;
 	private ValueExpression focusStyleClass;
+	private ValueExpression caption;
 	private ValueExpression filterProperties;
 	private ValueExpression svgURL;
 	public String getComponentType() {
@@ -86,6 +87,10 @@ public class SVGTag extends AbstractOutputTag implements Tag {
 		this.focusStyleClass = focusStyleClass;
 	}
 
+	public void setCaption(ValueExpression caption) {
+		this.caption = caption;
+	}
+
 	public void setFilterProperties(ValueExpression filterProperties) {
 		this.filterProperties = filterProperties;
 	}
@@ -104,6 +109,7 @@ public class SVGTag extends AbstractOutputTag implements Tag {
 			LOG.debug("  tabIndex='"+tabIndex+"'");
 			LOG.debug("  immediate='"+immediate+"'");
 			LOG.debug("  focusStyleClass='"+focusStyleClass+"'");
+			LOG.debug("  caption='"+caption+"'");
 			LOG.debug("  filterProperties='"+filterProperties+"'");
 			LOG.debug("  immediate='"+immediate+"'");
 			LOG.debug("  svgURL='"+svgURL+"'");
@@ -193,6 +199,15 @@ public class SVGTag extends AbstractOutputTag implements Tag {
 			}
 		}
 
+		if (caption != null) {
+			if (caption.isLiteralText()==false) {
+				component.setValueExpression(Properties.CAPTION, caption);
+
+			} else {
+				component.setCaption(caption.getExpressionString());
+			}
+		}
+
 		if (filterProperties != null) {
 			if (filterProperties.isLiteralText()==false) {
 				component.setValueExpression(Properties.FILTER_PROPERTIES, filterProperties);
@@ -225,6 +240,7 @@ public class SVGTag extends AbstractOutputTag implements Tag {
 		validationListeners = null;
 		selectionListeners = null;
 		focusStyleClass = null;
+		caption = null;
 		filterProperties = null;
 		svgURL = null;
 

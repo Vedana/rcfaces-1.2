@@ -1,15 +1,25 @@
 package org.rcfaces.renderkit.svg.component;
 
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import org.apache.commons.logging.Log;
-import java.util.HashSet;
+import org.rcfaces.core.internal.tools.ToolTipTools;
 import org.apache.commons.logging.LogFactory;
-import java.util.Arrays;
+import org.rcfaces.core.component.iterator.IColumnIterator;
+import org.rcfaces.core.internal.capability.IColumnsContainer;
+import org.rcfaces.core.internal.tools.GridTools;
+import org.rcfaces.core.internal.capability.IToolTipComponent;
+import org.rcfaces.core.component.iterator.IToolTipIterator;
+import javax.el.ValueExpression;
+import org.rcfaces.core.component.capability.IRowToolTipIdCapability;
+import java.util.HashSet;
+import org.apache.commons.logging.Log;
 import java.util.Set;
+import java.util.Arrays;
 import org.rcfaces.renderkit.svg.component.SVGComponent;
 
-public class DataSVGComponent extends SVGComponent {
+public class DataSVGComponent extends SVGComponent implements 
+	IRowToolTipIdCapability,
+	IToolTipComponent,
+	IColumnsContainer {
 
 	private static final Log LOG = LogFactory.getLog(DataSVGComponent.class);
 
@@ -17,7 +27,7 @@ public class DataSVGComponent extends SVGComponent {
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(SVGComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"dataModel","var"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"dataModel","var","rowToolTipId"}));
 	}
 
 	public DataSVGComponent() {
@@ -27,6 +37,44 @@ public class DataSVGComponent extends SVGComponent {
 	public DataSVGComponent(String componentId) {
 		this();
 		setId(componentId);
+	}
+
+	public IToolTipIterator listToolTips() {
+
+
+			return ToolTipTools.listToolTips(this);
+		
+	}
+
+	public IColumnIterator listColumns() {
+
+
+				return GridTools.listColumns(this,
+					org.rcfaces.renderkit.svg.component.SVGDataColumnComponent.class);
+			
+	}
+
+	public java.lang.String getRowToolTipId() {
+		return getRowToolTipId(null);
+	}
+
+	/**
+	 * See {@link #getRowToolTipId() getRowToolTipId()} for more details
+	 */
+	public java.lang.String getRowToolTipId(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ROW_TOOL_TIP_ID, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "rowToolTipId" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isRowToolTipIdSetted() {
+		return engine.isPropertySetted(Properties.ROW_TOOL_TIP_ID);
+	}
+
+	public void setRowToolTipId(java.lang.String rowToolTipId) {
+		engine.setProperty(Properties.ROW_TOOL_TIP_ID, rowToolTipId);
 	}
 
 	public String getVar() {
