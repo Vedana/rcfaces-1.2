@@ -440,7 +440,7 @@ var __members = {
 	f_performMessageChanges: function() {	
 		var messages=f_messageContext.ListMessages(this);
 		
-		var msg;
+		var msg=undefined;
 		for(var j=0;j<messages.length;j++) {
 			var m=messages[j];
 			
