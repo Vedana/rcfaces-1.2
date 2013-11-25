@@ -515,13 +515,13 @@ public final class ComponentTools extends ComponentTools0 {
     }
 
     public static UIComponent[] listChildren(FacesContext facesContext,
-            UIComponent component, String ids, Class childClass) {
+            UIComponent component, String ids, Class< ? > childClass) {
 
-        if (ids == null) {
-			if (true || childClass == null || childClass == UIComponent.class) {
+        if (ids == null || ids.length() == 0) {
+            if (childClass == null || childClass == UIComponent.class) {
                 return COMPONENT_EMPTY_ARRAY;
             }
-            return (UIComponent[]) Array.newInstance(childClass, 0);
+            return (UIComponent[]) Array.newInstance(UIComponent.class, 0);
         }
 
         StringTokenizer st = new StringTokenizer(ids, ",");
@@ -530,7 +530,7 @@ public final class ComponentTools extends ComponentTools0 {
             if (childClass == null || childClass == UIComponent.class) {
                 return COMPONENT_EMPTY_ARRAY;
             }
-			return (UIComponent[]) Array.newInstance(UIComponent.class , 0);
+            return (UIComponent[]) Array.newInstance(UIComponent.class, 0);
         }
 
         Object children[] = ComponentIterators.list(component, childClass)
@@ -571,7 +571,7 @@ public final class ComponentTools extends ComponentTools0 {
         }
 
         return (UIComponent[]) l.toArray((UIComponent[]) Array.newInstance(
-				UIComponent.class, l.size()));
+                UIComponent.class, l.size()));
     }
 
     public static void setChildren(UIComponent component,

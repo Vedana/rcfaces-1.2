@@ -340,7 +340,7 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
     }
 
     @Override
-    protected void addUnlockProperties(Set unlockedProperties) {
+    protected void addUnlockProperties(Set<String> unlockedProperties) {
         super.addUnlockProperties(unlockedProperties);
 
         unlockedProperties.add("cursor");
