@@ -17,14 +17,16 @@ import org.rcfaces.core.internal.component.Properties;
 public class SortTools {
 
     public static UIComponent[] getSortedChildren(FacesContext facesContext,
-            UIComponent component, IComponentEngine engine, Class classOfChild) {
+            UIComponent component, IComponentEngine engine,
+            Class< ? extends UIComponent> classOfChild) {
 
         return ComponentTools.listChildren(facesContext, component, engine,
                 classOfChild, Properties.SORTED_CHILDREN);
     }
 
     public static UIComponent getFirstSortedChild(FacesContext facesContext,
-            UIComponent component, IComponentEngine engine, Class classOfChild) {
+            UIComponent component, IComponentEngine engine,
+            Class< ? extends UIComponent> classOfChild) {
         UIComponent children[] = getSortedChildren(facesContext, component,
                 engine, classOfChild);
         if (children == null || children.length < 1) {
@@ -35,8 +37,8 @@ public class SortTools {
     }
 
     public static void setSortedChildren(FacesContext facesContext,
-            UIComponent component, IComponentEngine engine, Class classOfChild,
-            UIComponent[] children) {
+            UIComponent component, IComponentEngine engine,
+            Class< ? extends UIComponent> classOfChild, UIComponent[] children) {
 
         ComponentTools.setChildren(component, engine, classOfChild, children,
                 Properties.SORTED_CHILDREN);

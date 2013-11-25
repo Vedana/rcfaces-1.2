@@ -19,7 +19,6 @@ import org.apache.commons.logging.LogFactory;
  * @version $Revision$ $Date$
  */
 public class ComponentTools0 {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(ComponentTools0.class);
 
@@ -30,8 +29,8 @@ public class ComponentTools0 {
         MethodExpression binding = component.getActionExpression();
         if (binding != null) {
             try {
-                Object invokeResult = binding.invoke(facesContext
-                        .getELContext(), null);
+                Object invokeResult = binding.invoke(
+                        facesContext.getELContext(), null);
 
                 if (invokeResult != null) {
                     outcome = invokeResult.toString();
@@ -56,8 +55,9 @@ public class ComponentTools0 {
 
         // Invoke nav handling..
 
-        navHandler.handleNavigation(facesContext, (null != binding) ? binding
-                .getExpressionString() : null, outcome);
+        navHandler.handleNavigation(facesContext,
+                (null != binding) ? binding.getExpressionString() : null,
+                outcome);
 
         // Trigger a switch to Render Response if needed
         facesContext.renderResponse();
