@@ -3601,6 +3601,7 @@ var f_core = {
 			var documentElement=doc.documentElement;
 		
 			for (;;) {
+				
 				curTop += component.offsetTop;
 				curLeft += component.offsetLeft;
 				
@@ -3623,6 +3624,23 @@ var f_core = {
 		
 				offsetParent = component.offsetParent;
 			}
+		} else if (component.getBBox) {
+			// Du SVG ?
+			var box=component.getBBox();
+			var doc=component.ownerDocument;
+			var win=f_core.GetWindow(doc);
+			if (win.frameElement) {
+				var cs=f_core.GetAbsolutePosition(win.frameElement);
+				
+				if (cs) {
+					return {
+						x: cs.x+Math.floor(box.x),
+						y: cs.y+Math.floor(box.y)
+					};
+				}
+			}
+			
+			
 		} else {
 			// ???
 			if (component.x) {
@@ -4508,6 +4526,23 @@ var f_core = {
 				doc=document;
 			}
 		} 
+		
+		if (doc.documentElement.tagName.toLowerCase()!="html") {
+			
+			var win=f_core.GetWindow(doc);
+			var frameElement=win.frameElement;
+			if (frameElement) {
+				var cs=f_core.GetAbsolutePosition(frameElement);
+				
+				if (cs) {
+					return f_core.GetJsEventPosition({
+						clientX: event.clientX+cs.x,
+						clientY: event.clientY+cs.y
+					}, frameElement.ownerDocument);
+				}
+			}			
+		}
+		
  		if (f_core.IsInternetExplorer()) {
 			return { 
 				x: event.clientX + doc.documentElement.scrollLeft + doc.body.scrollLeft,
