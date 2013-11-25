@@ -32,18 +32,30 @@ var __members = {
 	 * @param HTMLElement element
 	 * @return Object
 	 */
-	fa_getToolTipForElement: function(element) {
-		var parent= element;
+	fa_getToolTipForElement: function(element, event) {
+		var parent = element;
 		
 		for (;parent;parent = parent.parentNode){
 			if (parent.nodeType==f_core.TEXT_NODE) {
 				continue;
 			}
 
+			if (parent.nodeType==f_core.DOCUMENT_NODE) {
+				if (parent.documentElement && parent.documentElement.tagName=="HTML") {
+					break;
+				}
+				
+				var win=f_core.GetWindow(parent);
+				if (!win.frameElement) {
+					break;
+				}
+				parent=win.frameElement;
+			}
+
 			if (parent.nodeType!=f_core.ELEMENT_NODE) {
 				break;
 			}
-			
+				
 			var tooltipClientId=undefined;		
 			var tooltipContent=undefined;
 
@@ -57,7 +69,10 @@ var __members = {
 			
 			if (!tooltipClientId) {			
 				tooltipClientId = parent._toolTipId;
-				tooltipContent = parent._toolTipContent;
+				
+				if (tooltipClientId) {		
+					tooltipContent = parent._toolTipContent;
+				}
 			}
 			
 			if (!tooltipClientId) {
