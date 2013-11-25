@@ -25,8 +25,23 @@
 	</component>
 
 	<component id="dataSVG" extends="SVG" renderKit="html">		
+		<implements id="org.rcfaces.core.internal.capability.IColumnsContainer"
+			importMethods="false" />
+		<implements id="org.rcfaces.core.internal.capability.IToolTipComponent" />
+
+		<capability id="IRowToolTipIdCapability" /> 
+
 		<attribute id="var" type="java.lang.String" />
 		<attribute id="dataModel" type="java.lang.Object" />
+
+		<method id="listColumns"
+			returnType="org.rcfaces.core.component.iterator.IColumnIterator">
+			<import>org.rcfaces.core.internal.tools.GridTools</import>
+			<code>
+				return GridTools.listColumns(this,
+					org.rcfaces.renderkit.svg.component.SVGDataColumnComponent.class);
+			</code>
+		</method>
 	</component>
 	
 	

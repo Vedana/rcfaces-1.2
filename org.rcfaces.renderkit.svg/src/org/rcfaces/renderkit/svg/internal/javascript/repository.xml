@@ -6,9 +6,21 @@
 			<class name="fsvg_svg">
 				<required-class name="f_box" />
 
+				<required-style name="fsvg_svg.css" />
+			</class>
+		</file>
+		<file name="svg/fsvg_dataSVG.js">
+			<class name="fsvg_dataSVG">
+				<required-class name="fsvg_svg" />
+
 				<required-class name="fa_items" />
+				<required-class name="fa_toolTipContainer" />
 
 				<required-style name="fsvg_svg.css" />
+
+				<required-class id="ajax" name="fa_asyncRender" />
+				<required-class id="ajax" name="f_httpRequest" />
+				<required-class id="ajax" name="f_waiting" />
 			</class>
 		</file>
 		<file name="svg/fsvg_image.js">

@@ -16,4 +16,6 @@ public class JavaScriptClasses {
 
     public static final String SVG = "fsvg_svg";
 
+    public static final String DATA_SVG = "fsvg_dataSVG";
+
 }
