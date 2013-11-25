@@ -35,6 +35,7 @@ import org.rcfaces.core.component.iterator.IComponentsColumnIterator;
 import org.rcfaces.core.component.iterator.IDataColumnIterator;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.RcfacesContext;
+import org.rcfaces.core.internal.capability.IColumnsContainer;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.capability.ISortedComponentsCapability;
 import org.rcfaces.core.internal.lang.StringAppender;
@@ -77,7 +78,7 @@ public class GridTools {
 
     @SuppressWarnings("unchecked")
     public static <T extends UIColumn> IColumnIterator listColumns(
-            IGridComponent component, Class<T> filter) {
+            IColumnsContainer component, Class<T> filter) {
         List<UIColumn> list = (List<UIColumn>) ComponentIterators.list(
                 (UIComponent) component, filter);
         if (list.isEmpty()) {
