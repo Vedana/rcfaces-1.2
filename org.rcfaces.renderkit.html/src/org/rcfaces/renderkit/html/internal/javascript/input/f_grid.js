@@ -304,9 +304,10 @@ var __statics = {
 
 			var details = f_event.NewDetail();
 
-			var col = dataGrid._searchColumnByElement(srcElement);
+			var cellRef = {};
+			var col = dataGrid._searchColumnByElement(srcElement, cellRef);
 			if (col) {
-				details = dataGrid._fillColumnDetails(details, col);
+				details = dataGrid._fillColumnDetails(details, col, cellRef.value);
 			}
 
 			dataGrid._cursorCellIdx = undefined;
@@ -383,9 +384,10 @@ var __statics = {
 
 			var details = f_event.NewDetail();
 
-			var col = dataGrid._searchColumnByElement(srcElement);
+			var cellRef = {};
+			var col = dataGrid._searchColumnByElement(srcElement, cellRef);
 			if (col) {
-				details = dataGrid._fillColumnDetails(details, col);
+				details = dataGrid._fillColumnDetails(details, col, cellRef.value);
 			}
 
 			dataGrid._cursorCellIdx = undefined;
@@ -572,8 +574,16 @@ var __statics = {
 			return f_core.CancelJsEvent(evt);
 		}
 
+		var srcElement = evt.target ? evt.target : evt.srcElement;
+
+		var cellRef = {};
+		var col = dataGrid._searchColumnByElement(srcElement, cellRef);
+
+		var details = f_event.NewDetail();
+		dataGrid._fillColumnDetails(details, col, cellRef.value);
+
 		dataGrid.f_fireEvent(f_event.DBLCLICK, evt, this, this._index,
-				dataGrid, dataGrid._fillColumnDetails());
+				dataGrid, details);
 
 		return f_core.CancelJsEvent(evt);
 	},
@@ -3593,7 +3603,7 @@ var __members = {
 				className.push(" f_grid_cell_selected");
 			}
 
-			if (col._cellClickable) {
+			if (col._cellClickable || td._clickable) {
 				// Sur le TD ! et c'est sur le Datagrid seulement !
 				className.push(" f_dataGrid_cell_clickable");
 			}
@@ -7227,9 +7237,10 @@ var __members = {
 	 * @method public
 	 * @param HTMLElement
 	 *            target
+	 * @param optional Object cellRef  Object.value will contain the cell which catches the event
 	 * @return String Identifier of column or <code>null</code> if not found.
 	 */
-	_searchColumnByElement : function(target) {
+	_searchColumnByElement : function(target, cellRef) {
 
 		f_core.Assert(target && target.nodeType == f_core.ELEMENT_NODE,
 				"f_grid.f_computeColumnIdByElement: Invalid target parameter '"
@@ -7273,6 +7284,10 @@ var __members = {
 					if (td != lastCell) {
 						index++;
 						continue;
+					}
+					
+					if (cellRef) {
+						cellRef.value=td;
 					}
 
 					var columns = this._columns;
@@ -7722,7 +7737,7 @@ var __members = {
 	 *            details
 	 * @return Object
 	 */
-	_fillColumnDetails : function(details, column) {
+	_fillColumnDetails : function(details, column, cell) {
 
 		return details;
 	}

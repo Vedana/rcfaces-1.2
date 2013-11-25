@@ -1120,7 +1120,7 @@ var __members = {
 		for(var i=0;i<this._columns.length;i++) {
 			var col=this._columns[i];
 
-			if (col._visibility===null) { // HiddenMode cot? serveur !
+			if (col._visibility===null) { // HiddenMode coté serveur !
 				if (onlyVisible) {
 					continue;
 				}
@@ -1131,7 +1131,7 @@ var __members = {
 	
 			var cell=cells[index++];
 
-			if (!col._visibility && onlyVisible) { // HiddenMode cot? client !
+			if (!col._visibility && onlyVisible) { // HiddenMode coté client !
 				continue;
 			}
 
@@ -1197,15 +1197,15 @@ var __members = {
 	/**
 	 * Returns the content of the cell specified by row and column.
 	 *
-	 * @method public
+	 * @method protected
 	 * @param any rowValue Row value, row object or the index of row the into table.
 	 * @param Number columnIndex Index of the column.
-	 * @return String
+	 * @return Object column and cell properties
 	 */
-	f_getCellValue: function(rowValue, columnIndex) {	
+	_getCellAndColumn: function(rowValue, columnIndex) {	
 		var row=this.f_getRowByValue(rowValue, true);
 		
-		var cells=row._cells;
+		var cells=(row && row._cells) || []; // On sécurise
 		var index=0;
 		
 		var columns=this._columns;
@@ -1215,13 +1215,18 @@ var __members = {
 	
 				if (col._visibility===null) { /* Hidden coté serveur ! */
 					if (columnIndex==i) {
-						return null;
+						return {
+							column: col
+						};
 					}
 					continue;
 				}
 
 				if (columnIndex==i) {
-					return cells[index]._text;
+					return {
+						cell: cells[index],
+						column: col
+					};
 				}
 		
 				index++;
@@ -1235,19 +1240,40 @@ var __members = {
 
 			if (col._visibility===null) { /* Hidden coté serveur ! */
 				if (col._id==columnIndex) {
-					return null;
+					return {
+						column: col
+					};
 				}
 				continue;
 			}
 
 			if (col._id==columnIndex) {
-				return cells[index]._text;
+				return {
+					cell: cells[index],
+					column: col
+				};
 			}
 	
 			index++;
 		}
 		
 		return null;
+	},	/**
+	 * Returns the content of the cell specified by row and column.
+	 *
+	 * @method public
+	 * @param any rowValue Row value, row object or the index of row the into table.
+	 * @param Number columnIndex Index of the column.
+	 * @return String
+	 */
+	f_getCellValue: function(rowValue, columnIndex) {	
+		var cv=this._getCellAndColumn(rowValue, columnIndex);
+		
+		if (!cv || !cv.cell) {
+			return null;
+		}
+
+		return cv.cell._text;
 	},
 	/**
 	 * @method protected
@@ -1988,8 +2014,9 @@ var __members = {
 			}
 			
 			if (properties._clickable) {
-				// TODO  PAS JOLI !
-				td._input.className+=" f_grid_cell_clickable";
+				
+				td._clickable=true;
+				//td._input.className+=" f_grid_cell_clickable";
 				// callUpdate=true;
 				
 				if (!col._cellClickable) {
@@ -2703,17 +2730,22 @@ var __members = {
 	 * @param Object details
 	 * @return Object 
 	 */
-	_fillColumnDetails: function(details, column) {
+	_fillColumnDetails: function(details, column, cell) {
 		details=this.f_super(arguments, details, column);
 		
 		if (!column) {
 			var cursorCellIdx=this._cursorCellIdx;
 			if (cursorCellIdx!==undefined) {
-				column = this._columns[cursorCellIdx];
+				var cs=this._getCellAndColumn(this._cursor, cursorCellIdx);
+				if (cs) {
+					column=cs.column;
+					cell=cs.cell;
+				}
+				
 			}
 		}
 			
-		if (column && column._cellClickable) {
+		if (column && (column._cellClickable || (cell && cell._clickable))) {
 			if (!details) {
 				details=f_event.NewDetail();
 			}
@@ -2721,6 +2753,8 @@ var __members = {
 			details.column=column;
 			details.columnId=column.f_getId();
 			details.columnIndex=column._index;
+			
+			details.cell=cell;
 		}
 		
 		return details;
