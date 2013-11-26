@@ -12,23 +12,22 @@ import java.util.Map;
  * @version $Revision$ $Date$
  */
 public class PropertiesRepository extends Properties {
-    private static final String REVISION = "$Revision$";
 
     private static final float MAP_LOAD_FACTOR = 0.9f;
 
-    private static Map propertyToKey;
+    private static Map<String, Integer> propertyToKey;
 
-    private static Map keyToProperty;
+    private static Map<Integer, String> keyToProperty;
 
     public static void declareProperties(String properties[]) {
 
-        propertyToKey = new HashMap(properties.length, MAP_LOAD_FACTOR);
-        keyToProperty = new HashMap(properties.length, MAP_LOAD_FACTOR);
+        propertyToKey = new HashMap<String, Integer>(properties.length, MAP_LOAD_FACTOR);
+        keyToProperty = new HashMap<Integer, String>(properties.length, MAP_LOAD_FACTOR);
 
         for (int i = 0; i < properties.length; i++) {
             String property = properties[i];
 
-            Integer previousKey = (Integer) propertyToKey.get(property);
+            Integer previousKey = propertyToKey.get(property);
 
             Integer key = (Integer) computeKey(property);
 
@@ -43,8 +42,8 @@ public class PropertiesRepository extends Properties {
             }
 
             for (;;) {
-                Integer old = (Integer) keyToProperty.put(key, property);
-                if (old == null || old.equals(key)) {
+                String old = keyToProperty.put(key, property);
+                if (old == null) {
                     break;
                 }
 
@@ -65,6 +64,6 @@ public class PropertiesRepository extends Properties {
     }
 
     public static String getPropertyFromKey(Object key) {
-        return (String) keyToProperty.get(key);
+        return keyToProperty.get(key);
     }
 }

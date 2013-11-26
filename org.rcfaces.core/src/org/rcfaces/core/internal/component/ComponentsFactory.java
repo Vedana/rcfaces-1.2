@@ -33,8 +33,8 @@ public class ComponentsFactory implements IFactory {
         return SINGLETON;
     }
 
-    public List< ? > createList(int size) {
-        return new ArrayList(size);
+    public <T> List<T> createList(int size) {
+        return new ArrayList<T>(size);
     }
 
     /*
@@ -42,11 +42,11 @@ public class ComponentsFactory implements IFactory {
      * 
      * @see org.rcfaces.core.internal.util.IContainerStrategies#createMap(int)
      */
-    public Map createMap(int size) {
-        return new HashMap(size);
+    public <T, U> Map<T, U> createMap(int size) {
+        return new HashMap<T, U>(size);
     }
 
-    public Object allocateObject(Class claz) {
+    public Object allocateObject(Class< ? > claz) {
         try {
             return claz.newInstance();
 

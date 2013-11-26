@@ -17,9 +17,9 @@ public interface IFactory {
 
     String getName();
 
-    List createList(int size);
+    <T> List<T> createList(int size);
 
-    Map createMap(int size);
+    <T, U> Map<T, U> createMap(int size);
 
     IComponentEngine createComponentEngine();
 
