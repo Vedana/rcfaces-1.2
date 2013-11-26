@@ -80,11 +80,12 @@ public class BasicPropertiesManager extends BasicPropertiesAccessor implements
         }
     }
 
-    public IPropertiesManager copyOriginalState() {
+    public IPropertiesManager copyOriginalState(FacesContext facesContext) {
         BasicPropertiesManager copy = new BasicPropertiesManager();
         copy.setCameliaFactory(factory);
 
-        copy.originalPropertiesAccessor = originalPropertiesAccessor;
+        copy.originalPropertiesAccessor = originalPropertiesAccessor
+                .copyOriginalProperties(facesContext);
 
         return copy;
     }
