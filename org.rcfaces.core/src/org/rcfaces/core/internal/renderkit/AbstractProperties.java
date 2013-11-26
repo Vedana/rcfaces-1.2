@@ -10,7 +10,6 @@ package org.rcfaces.core.internal.renderkit;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractProperties implements IProperties {
-    private static final String REVISION = "$Revision$";
 
     /*
      * (non-Javadoc)
