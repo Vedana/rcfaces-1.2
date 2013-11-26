@@ -174,6 +174,13 @@ public final class FilterPropertiesMap extends AbstractProperties implements
         return new HashMap<String, Object>(filterProperties.toMap());
     }
 
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("[FilterPropertiesMap map='").append(map).append("']");
+        return builder.toString();
+    }
+
     static {
         if (TEST_MAP_CONTENT) {
             LOG.info("TEST_MAP_CONTENT=" + TEST_MAP_CONTENT);
