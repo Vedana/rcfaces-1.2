@@ -23,7 +23,12 @@ var __members = {
 		
 		messageContext.f_addMessageListener(this);
 		
-		if (messageContext.f_containsMessagesFor(this.id)) {
+		var targetId=this.id;
+		if (this.f_getTargetMessageClientId) {
+			targetId=this.f_getTargetMessageClientId();
+		}
+		
+		if (targetId && messageContext.f_containsMessagesFor(targetId)) {
 			f_core.Debug(fa_message, "fa_message: message detected for component id='"+this.id+"'");
 
 			this.f_performMessageChanges(messageContext);
@@ -167,8 +172,17 @@ var __members = {
 	
 	/**
 	 * @method protected abstract
+	 * @param f_messageContext messageContext
+	 * @return void
 	 */
-	f_performMessageChanges: f_class.ABSTRACT	
+	f_performMessageChanges: f_class.ABSTRACT,
+	
+	
+	/**
+	 * @method protected optional abstract
+	 * @return String
+	 */
+	f_getTargetMessageClientId: f_class.OPTIONAL_ABSTRACT
 };
 
 new f_aspect("fa_message", {

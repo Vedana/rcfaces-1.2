@@ -82,22 +82,20 @@ var __members = {
 	},
 	f_performMessageChanges: function(messageContext, messageEvent) {
 		
-		switch(messageEvent.type) {
-		case f_messageContext.POST_CHECK_EVENT_TYPE:
-		//case f_messageContext.ADD_MESSAGE_EVENT_TYPE:
-			break;
-			
-		default:
-			return;
+		if (messageEvent) {
+			switch(messageEvent.type) {
+			case f_messageContext.POST_CHECK_EVENT_TYPE:
+			//case f_messageContext.ADD_MESSAGE_EVENT_TYPE:
+				break;
+				
+			default:
+				return;
+			}
 		}
-
-		var cid=this.f_getForClientId();
+		
+		var cid=this.f_getTargetMessageClientId();
 		if (!cid) {
 			return;
-		}
-		var pid=cid.lastIndexOf("::");
-		if (pid>0) {
-			cid=cid.substring(0, pid);
 		}
 
 		var messages=messageContext.f_listMessages(cid, false);
@@ -124,6 +122,19 @@ var __members = {
     	message=message.replace("%d", selectedMessage.f_getDetail());
 
 		this.fa_setAudioDescription(message, "error");
+	},
+	f_getTargetMessageClientId: function() {
+
+		var cid=this.f_getForClientId();
+		if (!cid) {
+			return null;
+		}
+		var pid=cid.lastIndexOf("::");
+		if (pid>0) {
+			cid=cid.substring(0, pid);
+		}
+
+		return cid;
 	}
 };
 
