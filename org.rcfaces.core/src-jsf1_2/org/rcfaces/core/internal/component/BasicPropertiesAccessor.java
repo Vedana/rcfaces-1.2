@@ -187,8 +187,7 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
         int i = 0;
         for (Iterator<Map.Entry<String, Object>> it = properties.entrySet()
                 .iterator(); it.hasNext();) {
-            Map.Entry<String, Object> entry = (Map.Entry<String, Object>) it
-                    .next();
+            Map.Entry<String, Object> entry = it.next();
 
             Object value = entry.getValue();
             if (value == null) {

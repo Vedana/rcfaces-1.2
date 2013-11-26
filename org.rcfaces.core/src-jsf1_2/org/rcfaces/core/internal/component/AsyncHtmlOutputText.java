@@ -15,6 +15,7 @@ import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
  */
 public class AsyncHtmlOutputText extends HtmlOutputText {
 
+    @Override
     public boolean isTransient() {
         if (super.isTransient() == false) {
             return false;

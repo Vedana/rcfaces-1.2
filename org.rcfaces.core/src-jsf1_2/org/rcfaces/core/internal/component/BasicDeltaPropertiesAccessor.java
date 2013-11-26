@@ -245,8 +245,9 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
 
         Object rets[] = new Object[properties.size() * 2];
         int i = 0;
-        for (Iterator it = properties.entrySet().iterator(); it.hasNext();) {
-            Map.Entry entry = (Map.Entry) it.next();
+        for (Iterator<Map.Entry<String, Object>> it = properties.entrySet()
+                .iterator(); it.hasNext();) {
+            Map.Entry<String, Object> entry = it.next();
 
             rets[i++] = entry.getKey();
 
@@ -280,7 +281,7 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
 
         Object datas[] = (Object[]) state;
 
-        properties = new HashMap(datas.length / 2);
+        properties = createMap(datas.length / 2);
 
         for (int i = 0; i < datas.length;) {
             String key = (String) datas[i++];
@@ -310,8 +311,7 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
 
         for (Iterator<Map.Entry<String, Object>> it = properties.entrySet()
                 .iterator(); it.hasNext();) {
-            Map.Entry<String, Object> entry = (Map.Entry<String, Object>) it
-                    .next();
+            Map.Entry<String, Object> entry = it.next();
 
             String key = entry.getKey();
             Object value = entry.getValue();
@@ -336,13 +336,14 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
             return parent.size();
         }
 
-        Set l = parent.keySet();
+        Set<String> l = parent.keySet();
 
         int cnt = l.size();
-        for (Iterator it = properties.entrySet().iterator(); it.hasNext();) {
-            Map.Entry entry = (Map.Entry) it.next();
+        for (Iterator<Map.Entry<String, Object>> it = properties.entrySet()
+                .iterator(); it.hasNext();) {
+            Map.Entry<String, Object> entry = it.next();
 
-            String key = (String) entry.getKey();
+            String key = entry.getKey();
             Object value = entry.getValue();
 
             boolean contains = l.contains(key);
@@ -367,18 +368,23 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
         return cnt;
     }
 
+    public IPropertiesAccessor copyOriginalState(FacesContext facesContext) {
+        throw new IllegalStateException("No copy original state");
+    }
+
+    @Override
     public String toString() {
         if (hasModifiedProperties() == false) {
             return "{Delta: NONE}";
         }
 
-        Set keys = keySet();
+        Set<String> keys = keySet();
 
         String s = "{Delta: ";
 
         boolean first = true;
-        for (Iterator it = keys.iterator(); it.hasNext();) {
-            String key = (String) it.next();
+        for (Iterator<String> it = keys.iterator(); it.hasNext();) {
+            String key = it.next();
 
             if (first) {
                 first = false;

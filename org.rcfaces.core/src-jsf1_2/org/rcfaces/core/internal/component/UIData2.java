@@ -80,7 +80,7 @@ public class UIData2 extends UIData0 {
 
     private transient List<int[]> decodedIndexes;
 
-    private Map saved = new HashMap();
+    private Map<Object, SavedState2> saved = new HashMap<Object, SavedState2>();
 
     private boolean saveCompleteState = true;
 
@@ -108,7 +108,7 @@ public class UIData2 extends UIData0 {
     @Override
     protected void iterate(FacesContext context, PhaseId phaseId) {
 
-        if (decodedIndexes == null) { //|| decodedIndexes.isEmpty()) {
+        if (decodedIndexes == null) { // || decodedIndexes.isEmpty()) {
             if (DEBUG_ENABLED) {
                 LOG.debug("Iterate default mode for phaseId=" + phaseId);
             }
@@ -197,11 +197,11 @@ public class UIData2 extends UIData0 {
 
     @Override
     public boolean isRowAvailable() {
-    	if (decodedIndexes != null && decodedIndexes.isEmpty() ) {
-    	    // OO: Rien a décoder
-    		return false;
-    	}
-    	
+        if (decodedIndexes != null && decodedIndexes.isEmpty()) {
+            // OO: Rien a décoder
+            return false;
+        }
+
         boolean rowAvailable = super.isRowAvailable();
 
         if (DEBUG_ENABLED) {
@@ -306,7 +306,7 @@ public class UIData2 extends UIData0 {
 
         Object[] ss = (Object[]) states[1];
 
-        saved = new HashMap(ss.length / 2);
+        saved = new HashMap<Object, SavedState2>(ss.length / 2);
         if (ss.length > 0) {
             for (int i = 0; i < ss.length;) {
                 Object key = ss[i++];
@@ -331,12 +331,12 @@ public class UIData2 extends UIData0 {
 
         if (ss.length > 0) {
             int index = 0;
-            for (Iterator it = saved.entrySet().iterator(); it.hasNext();) {
-                Map.Entry entry = (Map.Entry) it.next();
+            for (Iterator<Map.Entry<Object, SavedState2>> it = saved.entrySet()
+                    .iterator(); it.hasNext();) {
+                Map.Entry<Object, SavedState2> entry = it.next();
 
                 ss[index++] = entry.getKey();
-                ss[index++] = ((SavedState2) entry.getValue())
-                        .saveState(context);
+                ss[index++] = entry.getValue().saveState(context);
             }
         }
 
@@ -365,7 +365,7 @@ public class UIData2 extends UIData0 {
 
         if (component instanceof IRCFacesComponent) {
             String clientId = component.getClientId(context);
-            SavedState2 state = (SavedState2) saved.get(clientId);
+            SavedState2 state = saved.get(clientId);
 
             if (state != null) {
                 IComponentEngine componentEngine = state.getComponentEngine(
@@ -386,8 +386,8 @@ public class UIData2 extends UIData0 {
                     }
                 }
             } else {
-                ComponentEngineManager
-                        .cloneComponentEngine((IRCFacesComponent) component);
+                ComponentEngineManager.cloneComponentEngine(context,
+                        (IRCFacesComponent) component);
 
                 if (DEBUG_ENABLED) {
                     LOG.debug("Restore state of '" + clientId
@@ -423,7 +423,7 @@ public class UIData2 extends UIData0 {
 
                 String clientId = component.getClientId(context);
 
-                SavedState2 state = (SavedState2) saved.get(clientId);
+                SavedState2 state = saved.get(clientId);
                 if (state == null) {
                     state = new SavedState2();
                     saved.put(clientId, state);
@@ -574,9 +574,8 @@ public class UIData2 extends UIData0 {
 
         return sb.toString();
     }
-    
-    
+
     public void clearDecodedIndex() {
-    	decodedIndexes = null; 
+        decodedIndexes = null;
     }
 }
