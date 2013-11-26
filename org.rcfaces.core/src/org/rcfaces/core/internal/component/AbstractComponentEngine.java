@@ -43,6 +43,7 @@ public abstract class AbstractComponentEngine implements IComponentEngine {
         return (map == null) || (map.size() < 1);
     }
 
+    @SuppressWarnings("unchecked")
     protected static final <T> Iterator<T> iteratorList(Collection<T> list) {
         if (isListEmpty(list)) {
             return (Iterator<T>) EMPTY_ITERATOR;
