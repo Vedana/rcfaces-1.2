@@ -422,6 +422,10 @@ var f_core = {
 			}
 	
 			var log=f_log.GetLog(name);
+			if (!log) {
+				// On doit être en exiting ...
+				return false;
+			}
 			var fct=undefined;
 						
 			if (log) { 
@@ -547,7 +551,12 @@ var f_core = {
 			return (f_core.DebugMode);
 		}
 		
-		return f_log.GetLog(name).f_isDebugEnabled();
+		var log=f_log.GetLog(name);
+		if (!log) {
+			return false;
+		}
+		
+		return log.f_isDebugEnabled();
 	},
 	/**
 	 * @method public static
@@ -583,7 +592,13 @@ var f_core = {
 			return (f_core.DebugMode);
 		}
 		
-		return f_log.GetLog(name).f_isTraceEnabled();
+		
+		var log=f_log.GetLog(name);
+		if (!log) {
+			return false;
+		}
+		
+		return log.f_isTraceEnabled();
 	},
 	/**
 	 * @method public static
@@ -616,7 +631,13 @@ var f_core = {
 
 		f_core.Assert(typeof(name)=="string", "f_core.IsInfoEnabled: name parameter is invalid. ('"+name+"')");
 		
-		return f_log.GetLog(name).f_isInfoEnabled();
+		
+		var log=f_log.GetLog(name);
+		if (!log) {
+			return false;
+		}
+		
+		return log.f_isInfoEnabled();
 	},
 	/**
 	 * @method public static
@@ -649,7 +670,13 @@ var f_core = {
 
 		f_core.Assert(typeof(name)=="string", "f_core.IsWarnEnabled: name parameter is invalid. ('"+name+"')");
 		
-		return f_log.GetLog(name).f_isWarnEnabled();
+		
+		var log=f_log.GetLog(name);
+		if (!log) {
+			return false;
+		}
+		
+		return log.f_isWarnEnabled();
 	},
 	/**
 	 * @method public static
@@ -707,7 +734,13 @@ var f_core = {
 
 		f_core.Assert(typeof(name)=="string", "f_core.IsErrorEnabled: name parameter is invalid. ('"+name+"')");
 		
-		return f_log.GetLog(name).f_isErrorEnabled();
+		
+		var log=f_log.GetLog(name);
+		if (!log) {
+			return false;
+		}
+		
+		return log.f_isErrorEnabled();
 	},
 	/**
 	 * @method hidden static
