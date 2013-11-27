@@ -38,9 +38,18 @@ var __statics = {
 	CLEAR_MESSAGES_EVENT_TYPE : "CLEAR",
 
 	/**
+	 * Event sent at the end of the fields check  (validator)
+	 * 
 	 * @field public static final
 	 */
 	POST_CHECK_EVENT_TYPE : "POSTCHECK",
+
+	/**
+	 * Event sent when the page is loaded and all messages sent
+	 * 
+	 * @field public static final
+	 */
+	POST_PENDINGS_EVENT_TYPE : "POSTPENDINGS",
 
 	/**
 	 * @method public static
@@ -121,23 +130,29 @@ var __statics = {
 	 *            clientId
 	 * @param f_messageObject...
 	 *            messages
+	 * @return Boolean success
 	 */
 	AppendMessages : function(clientId, messages) {
+		if (!f_messageContext._DocumentCompleted) {
+			var pendings = f_messageContext._PendingsMessages;
+			if (!pendings) {
+				pendings = new Array;
+				f_messageContext._PendingsMessages = pendings;
+			}
+
+			pendings.push(clientId, f_core
+					.PushArguments(null, arguments, 1));
+			return true;
+		}
+		
 		var component = null;
 		var messageContext;
 		if (clientId) {
 			component = f_core.GetElementByClientId(clientId);
 
 			if (!component) {
-				var pendings = f_messageContext._PendingsMessages;
-				if (!pendings) {
-					pendings = new Array;
-					f_messageContext._PendingsMessages = pendings;
-				}
-
-				pendings.push(clientId, f_core
-						.PushArguments(null, arguments, 1));
-				return;
+				f_core.Error(f_messageContext, "AppendMessages: Can not find component '"+clientId+"' to associate messages '"+messages+"'");
+				return false;
 			}
 
 			messageContext = f_messageContext.Get(component);
@@ -147,8 +162,10 @@ var __statics = {
 		}
 
 		for ( var i = 1; i < arguments.length; i++) {
-			messageContext.f_addMessageObject(component, arguments[i]);
+			var message=arguments[i];
+			messageContext.f_addMessageObject(component, message);
 		}
+		return true;
 	},
 	/**
 	 * @method public static
@@ -284,30 +301,52 @@ var __statics = {
 	},
 
 	DocumentComplete : function() {
+		f_messageContext._DocumentCompleted=true;
+		
 		var pendings = f_messageContext._PendingsMessages;
 		if (!pendings) {
 			return;
 		}
 		f_messageContext._PendingsMessages = undefined;
-
+		
+		var messageContexts=new Array;
 		for ( var i = 0; i < pendings.length;) {
 			var clientId = pendings[i++];
 			var messages = pendings[i++];
 
-			var component = f_core.GetElementByClientId(clientId);
-			if (!component) {
-				// ca peut arriver a cause du focus sur un composant non visible
-				// !
-				// f_core.Error("Can not find component '"+clientId+"' to attach
-				// "+messages.length+" message(s) !");
-				continue;
+			var messageContext=undefined;
+			var component=null;
+			if (clientId) {
+				component = f_core.GetElementByClientId(clientId);
+				if (!component) {
+					// ca peut arriver a cause du focus sur un composant non visible
+					// !
+					// f_core.Error("Can not find component '"+clientId+"' to attach
+					// "+messages.length+" message(s) !");
+					continue;
+				}
+ 
+				messageContext = f_messageContext.Get(component);
+				
+			} else {
+				messageContext = f_messageContext.Get();
 			}
-
-			var messageContext = f_messageContext.Get(component);
 
 			for ( var j = 0; j < messages.length; j++) {
 				messageContext.f_addMessageObject(component, messages[j]);
 			}
+			
+			if (messageContexts.indexOf(messageContext)<0) {
+				messageContexts.push(messageContext);
+			}
+		}
+		
+		for(var i=0;i<messageContexts.length;i++) {
+			var messageContext=messageContexts[i];
+			
+			messageContext._fireMessageEvent({
+				type : f_messageContext.POST_PENDINGS_EVENT_TYPE
+			});
 		}
 	}
 };
@@ -572,19 +611,20 @@ var __members = {
 						"f_messageContext.f_containsMessagesFor: Component parameter must be an id !");
 
 		var messages = this._messages;
-		if (!messages) {
-			return false;
+		if (messages) {
+			var l = messages[componentId];
+			if (l) {
+				for (var dummy in l) {
+					return true;
+				}
+			}
 		}
-
-		var l = messages[componentId];
-		if (!l) {
-			return false;
+		
+		var parent = this._parent;
+		if (parent) {
+			return parent.f_containsMessagesFor(componentId);
 		}
-
-		for ( var dummy in l) {
-			return true;
-		}
-
+		
 		return false;
 	},
 
@@ -598,10 +638,10 @@ var __members = {
 	 * @param f_messageObject
 	 *            message
 	 * @param hidden
-	 *            optional Boolean performEvent
+	 *            optional String performEventType
 	 * @return void
 	 */
-	f_addMessageObject : function(component, message, performEvent) {
+	f_addMessageObject : function(component, message, performEventType) {
 		f_core
 				.Assert(
 						component === null || component === false
@@ -629,7 +669,7 @@ var __members = {
 			f_core.Debug(f_messageContext, "f_addMessageObject[" + this.form
 					+ "] Add message object to parent !");
 
-			this._parent.f_addMessageObject(null, message, performEvent);
+			this._parent.f_addMessageObject(null, message, performEventType);
 
 			return;
 		}
@@ -651,18 +691,22 @@ var __members = {
 
 		f_core.Info(f_messageContext, "f_addMessageObject[" + this.form
 				+ "] Add message object to component '" + id
-				+ "' performEvent=" + performEvent + "\nmessage=" + message);
+				+ "' performEventType=" + performEventType + "\nmessage=" + message);
 
 		l2.push(message);
 
 		this.f_getClass().f_getClassLoader().f_verifyOnMessage(this.form);
 
-		if (performEvent !== false) {
+		if (performEventType !== false) {
 			// On initialize le focusManager pour qu'il réagisse aux messages !
 			f_focusManager.Get();
 
+			if (!performEventType) {
+				performEventType=f_messageContext.ADD_MESSAGE_EVENT_TYPE;
+			}
+			
 			this._fireMessageEvent({
-				type : f_messageContext.ADD_MESSAGE_EVENT_TYPE,
+				type : performEventType,
 				message : message,
 				component : component
 			});

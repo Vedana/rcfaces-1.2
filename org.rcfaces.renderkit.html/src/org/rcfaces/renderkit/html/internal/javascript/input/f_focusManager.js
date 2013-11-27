@@ -566,7 +566,7 @@ var __members = {
 
 		switch (messageEvent.type) {
 		case f_messageContext.POST_CHECK_EVENT_TYPE:
-		case f_messageContext.ADD_MESSAGE_EVENT_TYPE:
+		case f_messageContext.POST_PENDINGS_EVENT_TYPE:
 			break;
 
 		default:
