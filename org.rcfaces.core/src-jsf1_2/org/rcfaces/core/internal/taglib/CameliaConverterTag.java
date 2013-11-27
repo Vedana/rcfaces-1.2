@@ -34,6 +34,7 @@ public class CameliaConverterTag extends ConverterELTag {
         this.defaultConverterId = converterId;
     }
 
+    @Override
     protected Converter createConverter() throws JspException {
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -80,6 +81,7 @@ public class CameliaConverterTag extends ConverterELTag {
         return converter;
     }
 
+    @Override
     public void release() {
         super.release();
 

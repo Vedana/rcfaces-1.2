@@ -72,15 +72,18 @@ public abstract class CameliaTag extends UIComponentELTag {
         return Double.parseDouble(value);
     }
 
+    @Override
     public void release() {
         myBinding = null;
         super.release();
     }
 
+    @Override
     public String getRendererType() {
         return null;
     }
 
+    @Override
     public int doAfterBody() throws JspException {
         try {
             return super.doAfterBody();
@@ -92,6 +95,7 @@ public abstract class CameliaTag extends UIComponentELTag {
         }
     }
 
+    @Override
     public int doEndTag() throws JspException {
         try {
             return super.doEndTag();
@@ -103,6 +107,7 @@ public abstract class CameliaTag extends UIComponentELTag {
         }
     }
 
+    @Override
     public void doInitBody() throws JspException {
         try {
             super.doInitBody();
@@ -115,6 +120,7 @@ public abstract class CameliaTag extends UIComponentELTag {
 
     }
 
+    @Override
     public int doStartTag() throws JspException {
         try {
             return super.doStartTag();
@@ -126,6 +132,7 @@ public abstract class CameliaTag extends UIComponentELTag {
         }
     }
 
+    @Override
     protected void setProperties(UIComponent component) {
 
         if (myBinding == null) {
@@ -160,12 +167,14 @@ public abstract class CameliaTag extends UIComponentELTag {
         super.setProperties(component);
     }
 
+    @Override
     public void setBinding(ValueExpression binding) throws JspException {
         this.myBinding = binding;
 
         super.setBinding(binding);
     }
 
+    @Override
     protected UIComponent findComponent(FacesContext context)
             throws JspException {
 
