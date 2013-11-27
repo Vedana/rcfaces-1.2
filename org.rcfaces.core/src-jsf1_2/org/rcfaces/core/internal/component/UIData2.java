@@ -382,7 +382,7 @@ public class UIData2 extends UIData0 {
                 }
             } else {
                 ComponentEngineManager
-                        .cloneComponentEngine((IRCFacesComponent) component);
+                        .cloneComponentEngine(context, (IRCFacesComponent) component);
 
                 if (DEBUG_ENABLED) {
                     LOG.debug("Restore state of '" + clientId

@@ -43,4 +43,6 @@ public interface IPropertiesAccessor {
     void putAll(FacesContext context,
             Set<Map.Entry<String, Object>> propertiesMapEntry, Object undefined);
 
+    IPropertiesAccessor copyOriginalProperties(FacesContext facesContext);
+
 }

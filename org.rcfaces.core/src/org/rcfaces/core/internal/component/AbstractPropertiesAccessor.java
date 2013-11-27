@@ -33,6 +33,16 @@ public abstract class AbstractPropertiesAccessor implements IPropertiesAccessor 
         return new BasicDeltaPropertiesAccessor(this);
     }
 
+    public IPropertiesAccessor copyOriginalProperties(FacesContext facesContext) {
+        BasicPropertiesAccessor bpa = new BasicPropertiesAccessor();
+
+        Object state = this.saveState(facesContext);
+
+        bpa.restoreState(facesContext, state);
+
+        return bpa;
+    }
+
     public void putAll(FacesContext context,
             Set<Map.Entry<String, Object>> entries, Object undefinedValue) {
         for (Iterator<Map.Entry<String, Object>> it = entries.iterator(); it

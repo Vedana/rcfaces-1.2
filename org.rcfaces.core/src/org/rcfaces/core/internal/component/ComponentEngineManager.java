@@ -8,6 +8,8 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.faces.context.FacesContext;
+
 import org.rcfaces.core.internal.capability.IComponentEngine;
 import org.rcfaces.core.internal.capability.IRCFacesComponent;
 
@@ -18,13 +20,16 @@ import org.rcfaces.core.internal.capability.IRCFacesComponent;
  */
 class ComponentEngineManager {
 
-    private static final Map fields = new HashMap(256);
+    private static final Map<Class< ? >, Field> fields = new HashMap<Class< ? >, Field>(
+            256);
 
-    private static final Map getters = new HashMap(256);
+    private static final Map<Class< ? >, Method> getters = new HashMap<Class< ? >, Method>(
+            256);
 
-    private static final Map setters = new HashMap(256);
+    private static final Map<Class< ? >, Method> setters = new HashMap<Class< ? >, Method>(
+            256);
 
-    private static final Class SETTER_PARAMETERS[] = new Class[] { IComponentEngine.class };
+    private static final Class< ? >[] SETTER_PARAMETERS = new Class[] { IComponentEngine.class };
 
     private static final String COMPONENT_ENGINE_GETTER_METHOD_NAME = "getComponentEngine";
 
@@ -32,6 +37,7 @@ class ComponentEngineManager {
 
     private static final String COMPONENT_ENGINE_FIELD_NAME = "engine";
 
+    @SuppressWarnings("unused")
     public static void setComponentEngine(IRCFacesComponent component,
             IComponentEngine componentEngine) {
 
@@ -58,6 +64,7 @@ class ComponentEngineManager {
         }
     }
 
+    @SuppressWarnings("unused")
     public static IComponentEngine getComponentEngine(
             IRCFacesComponent component) {
 
@@ -84,16 +91,16 @@ class ComponentEngineManager {
         }
     }
 
-    private static Method getGetter(Class componentClass) {
+    private static Method getGetter(Class< ? > componentClass) {
 
         synchronized (getters) {
-            Method method = (Method) getters.get(componentClass);
+            Method method = getters.get(componentClass);
             if (method != null) {
                 return method;
             }
 
             Throwable th = null;
-            for (Class cls = componentClass; cls != null; cls = cls
+            for (Class< ? > cls = componentClass; cls != null; cls = cls
                     .getSuperclass()) {
                 try {
                     method = cls
@@ -122,16 +129,16 @@ class ComponentEngineManager {
         }
     }
 
-    private static Method getSetter(Class componentClass) {
+    private static Method getSetter(Class< ? > componentClass) {
 
         synchronized (setters) {
-            Method method = (Method) setters.get(componentClass);
+            Method method = setters.get(componentClass);
             if (method != null) {
                 return method;
             }
 
             Throwable th = null;
-            for (Class cls = componentClass; cls != null; cls = cls
+            for (Class< ? > cls = componentClass; cls != null; cls = cls
                     .getSuperclass()) {
                 try {
                     method = cls.getDeclaredMethod(
@@ -159,16 +166,16 @@ class ComponentEngineManager {
         }
     }
 
-    private static Field getField(Class componentClass) {
+    private static Field getField(Class< ? > componentClass) {
 
         synchronized (fields) {
-            Field field = (Field) fields.get(componentClass);
+            Field field = fields.get(componentClass);
             if (field != null) {
                 return field;
             }
 
             Throwable th = null;
-            for (Class cls = componentClass; cls != null; cls = cls
+            for (Class< ? > cls = componentClass; cls != null; cls = cls
                     .getSuperclass()) {
                 try {
                     field = cls.getDeclaredField("engine");
@@ -194,11 +201,12 @@ class ComponentEngineManager {
         }
     }
 
-    public static void cloneComponentEngine(IRCFacesComponent component) {
+    public static void cloneComponentEngine(FacesContext facesContext,
+            IRCFacesComponent component) {
         IComponentEngine componentEngine = getComponentEngine(component);
 
         IComponentEngine newComponentEngine = componentEngine
-                .copyOriginalState();
+                .copyOriginalState(facesContext);
 
         setComponentEngine(component, newComponentEngine);
     }

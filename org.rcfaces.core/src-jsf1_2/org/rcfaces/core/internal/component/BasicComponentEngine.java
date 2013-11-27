@@ -58,7 +58,7 @@ public class BasicComponentEngine extends AbstractComponentEngine {
 
     private boolean converterSetted = false;
 
-    private Map transientAttributes;
+    private Map<String, Object> transientAttributes;
 
     private Map<String, IDataMapAccessor> dataAccessorsByName;
 
@@ -68,7 +68,8 @@ public class BasicComponentEngine extends AbstractComponentEngine {
         super(factory);
     }
 
-    protected BasicComponentEngine(BasicComponentEngine original) {
+    protected BasicComponentEngine(FacesContext facesContext,
+            BasicComponentEngine original) {
         this(original.factory);
 
         if (debugEnabled) {
@@ -76,7 +77,8 @@ public class BasicComponentEngine extends AbstractComponentEngine {
         }
 
         if (original.propertiesManager != null) {
-            propertiesManager = original.propertiesManager.copyOriginalState();
+            propertiesManager = original.propertiesManager
+                    .copyOriginalState(facesContext);
         }
 
         if (original.dataAccessorsByName != null
@@ -93,7 +95,7 @@ public class BasicComponentEngine extends AbstractComponentEngine {
                         .getValue();
 
                 BasicDataAccessor newDataAccessor = (BasicDataAccessor) originalDataAccessor
-                        .copyOriginalState();
+                        .copyOriginalState(facesContext);
 
                 dataAccessorsByName.put(entry.getKey(), newDataAccessor);
             }
@@ -201,10 +203,10 @@ public class BasicComponentEngine extends AbstractComponentEngine {
      * @param propertyName
      * @param requestedClass
      * @param facesContext
-     * @return
+     * @return The internal property
      */
     public final Object getInternalProperty(String propertyName,
-            Class requestedClass, FacesContext facesContext) {
+            Class< ? > requestedClass, FacesContext facesContext) {
 
         if (debugEnabled) {
             LOG.debug("getInternalProperty(\""
@@ -403,7 +405,7 @@ public class BasicComponentEngine extends AbstractComponentEngine {
             String name, boolean forceDelta) {
         IDataMapAccessor dataAccessor;
         if (dataAccessorsByName != null) {
-            dataAccessor = (IDataMapAccessor) dataAccessorsByName.get(name);
+            dataAccessor = dataAccessorsByName.get(name);
             if (dataAccessor != null) {
                 return dataAccessor;
             }
@@ -415,7 +417,8 @@ public class BasicComponentEngine extends AbstractComponentEngine {
 
         dataAccessor = createDataAccessor(context, name);
         if (dataAccessorsByName == null) {
-            dataAccessorsByName = new HashMap(DATA_ACCESSORS_INIT_SIZE);
+            dataAccessorsByName = new HashMap<String, IDataMapAccessor>(
+                    DATA_ACCESSORS_INIT_SIZE);
         }
 
         dataAccessorsByName.put(name, dataAccessor);
@@ -444,7 +447,8 @@ public class BasicComponentEngine extends AbstractComponentEngine {
         if (datas != null) {
             Object ds[] = (Object[]) datas;
 
-            dataAccessorsByName = new HashMap(ds.length / 2);
+            dataAccessorsByName = new HashMap<String, IDataMapAccessor>(
+                    ds.length / 2);
             for (int i = 0; i < ds.length;) {
                 String name = (String) ds[i++];
 
@@ -493,11 +497,12 @@ public class BasicComponentEngine extends AbstractComponentEngine {
 
         if (dataAccessorsByName != null
                 && dataAccessorsByName.isEmpty() == false) {
-            List l = new ArrayList(dataAccessorsByName.size() * 2);
+            List<Object> l = new ArrayList<Object>(
+                    dataAccessorsByName.size() * 2);
 
-            for (Iterator it = dataAccessorsByName.entrySet().iterator(); it
-                    .hasNext();) {
-                Map.Entry entry = (Map.Entry) it.next();
+            for (Iterator<Map.Entry<String, IDataMapAccessor>> it = dataAccessorsByName
+                    .entrySet().iterator(); it.hasNext();) {
+                Map.Entry<String, IDataMapAccessor> entry = it.next();
 
                 BasicDataAccessor dataAccessor = (BasicDataAccessor) entry
                         .getValue();
@@ -569,8 +574,8 @@ public class BasicComponentEngine extends AbstractComponentEngine {
     public void release() {
         if (dataAccessorsByName != null
                 && dataAccessorsByName.isEmpty() == false) {
-            for (Iterator it = dataAccessorsByName.values().iterator(); it
-                    .hasNext();) {
+            for (Iterator<IDataMapAccessor> it = dataAccessorsByName.values()
+                    .iterator(); it.hasNext();) {
                 BasicDataAccessor dataAccessor = (BasicDataAccessor) it.next();
 
                 dataAccessor.releaseDatas();
@@ -777,16 +782,17 @@ public class BasicComponentEngine extends AbstractComponentEngine {
         }
 
         @Override
-        public IPropertiesManager copyOriginalState() {
+        public IPropertiesManager copyOriginalState(FacesContext facesContext) {
             BasicDataAccessor copy = new BasicDataAccessor(name);
             if (this.propertiesManager != this) {
                 copy.propertiesManager = this.propertiesManager
-                        .copyOriginalState();
+                        .copyOriginalState(facesContext);
             } else {
                 copy.propertiesManager = copy;
             }
             copy.setCameliaFactory(factory);
-            copy.originalPropertiesAccessor = originalPropertiesAccessor;
+            copy.originalPropertiesAccessor = originalPropertiesAccessor
+                    .copyOriginalProperties(facesContext);
 
             return copy;
         }
@@ -945,13 +951,15 @@ public class BasicComponentEngine extends AbstractComponentEngine {
         return new BasicStateChildrenList();
     }
 
-    public IComponentEngine copyOriginalState() {
+    public IComponentEngine copyOriginalState(FacesContext facesContext) {
 
-        BasicComponentEngine newComponentEngine = new BasicComponentEngine(this);
+        BasicComponentEngine newComponentEngine = new BasicComponentEngine(
+                facesContext, this);
 
         return newComponentEngine;
     }
 
+    @Override
     public String toString() {
         String s = "";
 
@@ -976,9 +984,9 @@ public class BasicComponentEngine extends AbstractComponentEngine {
 
         if (dataAccessorsByName != null
                 && dataAccessorsByName.isEmpty() == false) {
-            for (Iterator it = dataAccessorsByName.entrySet().iterator(); it
-                    .hasNext();) {
-                Map.Entry entry = (Map.Entry) it.next();
+            for (Iterator<Map.Entry<String, IDataMapAccessor>> it = dataAccessorsByName
+                    .entrySet().iterator(); it.hasNext();) {
+                Map.Entry<String, IDataMapAccessor> entry = it.next();
 
                 if (s.length() > 0) {
                     s += ",";
