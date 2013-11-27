@@ -634,7 +634,7 @@ f_classLoader.prototype = {
 					var evaluatedFunction=evaluations[fct];
 					if (!evaluatedFunction) {
 						try {
-							evaluatedFunction=f_core.WindowScopeEval(fct)
+							evaluatedFunction=f_core.WindowScopeEval(fct);
 		
 						} catch (x) {
 							f_core.Error(f_classLoader, "f_initializeObjects: Failed to evaluate function '"+fct+"'.", x);					
@@ -768,7 +768,7 @@ f_classLoader.prototype = {
 			return undefined;
 		}
 		
-		var ret;
+		var ret=undefined;
 		
 		// On passe pas par un object Event pour des raisons de performances
 		for(var i=0;i<listeners.length;i++) {
@@ -870,9 +870,18 @@ f_classLoader.prototype = {
 	 * @return void
 	 */
 	f_initOnMessage: function(ids) {
-		
+
+		f_core.Debug(f_classLoader, "f_initOnMessage: ***********************"+ids);
+
 		if (f_core.IsDebugEnabled(f_classLoader)) {
 			f_core.Debug(f_classLoader, "f_initOnMessage: ("+ids.length+" components) ids="+ids.join());
+		}
+		
+		if (this._onMessageVerified) {
+			// On initialise tout de suite car on a des messages sur le feu !!!
+			
+			this._initializeIds(ids);
+			return;
 		}
 
 		var onMessageIds=this._onMessageIds;
@@ -883,7 +892,7 @@ f_classLoader.prototype = {
 			return;
 		}
 		
-		onMessageIds.push.apply(onMessageIds, ids);		
+		onMessageIds.push.apply(onMessageIds, ids);
 	},
 	/**
 	 * @method hidden final
@@ -891,6 +900,8 @@ f_classLoader.prototype = {
 	 * @return void
 	 */
 	f_verifyOnMessage: function(form) {
+		this._onMessageVerified=true;
+
 		var onMessageIds=this._onMessageIds;
 		if (!onMessageIds) {
 			return;
