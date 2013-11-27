@@ -791,8 +791,10 @@ public class BasicComponentEngine extends AbstractComponentEngine {
                 copy.propertiesManager = copy;
             }
             copy.setCameliaFactory(factory);
-            copy.originalPropertiesAccessor = originalPropertiesAccessor
-                    .copyOriginalProperties(facesContext);
+            if (originalPropertiesAccessor != null) {
+                copy.originalPropertiesAccessor = originalPropertiesAccessor
+                        .copyOriginalProperties(facesContext);
+            }
 
             return copy;
         }
