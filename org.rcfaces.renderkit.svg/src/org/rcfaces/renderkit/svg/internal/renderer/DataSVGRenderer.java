@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.el.ELContext;
+import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
@@ -87,7 +89,24 @@ public class DataSVGRenderer extends SVGRenderer {
             }
         }
 
-        SVGDataColumnComponent idColumn = columnById.get("id");
+        if (columnById.isEmpty()) {
+            addColumn(facesContext, component, columnById, "svgID", var);
+            addColumn(facesContext, component, columnById, "visibility", var);
+            addColumn(facesContext, component, columnById, "color", var);
+            addColumn(facesContext, component, columnById, "text", var);
+            addColumn(facesContext, component, columnById, "styleClass", var);
+            addColumn(facesContext, component, columnById, "fill", var);
+            addColumn(facesContext, component, columnById, "tooltipText", var);
+            addColumn(facesContext, component, columnById, "value", var);
+            addColumn(facesContext, component, columnById, "selectable", var);
+            addColumn(facesContext, component, columnById, "audioDescription",
+                    var);
+        }
+
+        SVGDataColumnComponent idColumn = columnById.get("svgID");
+        if (idColumn == null) {
+            throw new FacesException("svgID column must be defined !");
+        }
         SVGDataColumnComponent visibilityColumn = columnById.get("visibility");
         SVGDataColumnComponent colorColumn = columnById.get("color");
         SVGDataColumnComponent textColumn = columnById.get("text");
@@ -211,6 +230,8 @@ public class DataSVGRenderer extends SVGRenderer {
                 String tooltipId = null;
                 String tooltipContent = null;
                 if (tooltipComponent != null) {
+                    tooltipText = null;
+
                     if (tooltipComponent.getAsyncRenderMode(facesContext) == IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
                         tooltipContent = encodeToolTip(jsWriter,
                                 tooltipComponent);
@@ -303,6 +324,25 @@ public class DataSVGRenderer extends SVGRenderer {
         } finally {
             requestMap.put(var, oldValue);
         }
+    }
+
+    private void addColumn(FacesContext facesContext, DataSVGComponent grid,
+            Map<String, SVGDataColumnComponent> columnById, String fieldName,
+            String var) {
+
+        ELContext elContext = facesContext.getELContext();
+
+        ValueExpression valueExpression = facesContext
+                .getApplication()
+                .getExpressionFactory()
+                .createValueExpression(elContext,
+                        "#{" + var + "." + fieldName + "}", Object.class);
+
+        SVGDataColumnComponent column = new SVGDataColumnComponent(fieldName);
+        column.setValueExpression("value", valueExpression);
+
+        grid.getChildren().add(column);
+        columnById.put(fieldName, column);
     }
 
     protected String encodeToolTip(IJavaScriptWriter jsWriter,
