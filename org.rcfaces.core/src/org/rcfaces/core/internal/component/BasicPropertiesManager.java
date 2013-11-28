@@ -84,7 +84,7 @@ public class BasicPropertiesManager extends BasicPropertiesAccessor implements
         BasicPropertiesManager copy = new BasicPropertiesManager();
         copy.setCameliaFactory(factory);
 
-        if (copy.originalPropertiesAccessor != null) {
+        if (originalPropertiesAccessor != null) {
             copy.originalPropertiesAccessor = originalPropertiesAccessor
                     .copyOriginalProperties(facesContext);
         }
