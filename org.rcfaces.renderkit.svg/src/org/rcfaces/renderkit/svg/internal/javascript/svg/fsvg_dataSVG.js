@@ -232,9 +232,9 @@ var __members = {
 			}
 			
 			link._svg = this;
-			link.onclick = fsvg_svg._ItemOnClick;
-			link.onfocus = fsvg_svg._ItemOnFocus;
-			link.onblur = fsvg_svg._ItemOnBlur;
+			link.onclick = fsvg_dataSVG._ItemOnClick;
+			link.onfocus = fsvg_dataSVG._ItemOnFocus;
+			link.onblur = fsvg_dataSVG._ItemOnBlur;
 			link.tabIndex = 0;
 			link.className.baseVal="fsvg_link";
 
