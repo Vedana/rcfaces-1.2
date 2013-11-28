@@ -111,18 +111,31 @@ var __members = {
 				}
 			}
 		}
-		
-		if (!selectedMessage) {
+
+    	var message = this._getAudioDescriptionMessage();
+
+		if (!selectedMessage || !message) {
 			this.fa_removeAudioDescription("error");
 			return;
 		}
 		
-    	var message = f_resourceBundle.Get(f_text).f_get("ARIA_ERROR");
     	message=message.replace("%s", selectedMessage.f_getSummary());
     	message=message.replace("%d", selectedMessage.f_getDetail());
 
 		this.fa_setAudioDescription(message, "error");
 	},
+	/**
+	 * @method protected
+	 * @param message
+	 * @return String
+	 */
+	_getAudioDescriptionMessage: function() {
+		return f_resourceBundle.Get(f_text).f_get("ARIA_ERROR");
+	},
+	/**
+	 * @method protected
+	 * @return String
+	 */
 	f_getTargetMessageClientId: function() {
 
 		var cid=this.f_getForClientId();
