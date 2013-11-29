@@ -1236,6 +1236,11 @@
 				<required-class name="fa_eventTarget" />
 			</class>
 		</file>
+		<file name="input/fa_gridToolTipContainer.js">
+			<class name="fa_gridToolTipContainer">
+				<required-class name="fa_toolTipContainer" />
+			</class>
+		</file>
 		<file name="input/f_grid.js">
 			<class name="f_grid">
 				<required-class name="f_component" />
@@ -1267,7 +1272,7 @@
 			
 				<required-class id="dnd" name="f_dragAndDropEngine" />
 
-				<required-class name="fa_toolTipContainer" />				
+				<required-class name="fa_gridToolTipContainer" />				
 				<required-class id="toolTip" name="f_toolTipManager" />				
 
 				<required-style name="f_grid.css" />

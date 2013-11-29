@@ -10,14 +10,16 @@ import java.io.PrintWriter;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.render.Renderer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.capability.IColumnsContainer;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.HtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
-import org.rcfaces.renderkit.html.internal.renderer.AbstractGridRenderer;
+import org.rcfaces.renderkit.html.internal.renderer.IAdditionalInformationGridRenderer;
 
 /**
  * 
@@ -35,7 +37,7 @@ public class AdditionalInformationService extends AbtractGridService {
 
     private void writeAdditionalInformations(FacesContext facesContext,
             PrintWriter printWriter, IGridComponent gridComponent,
-            AbstractGridRenderer dgr, String rowValue, String rowIndex)
+            IAdditionalInformationGridRenderer dgr, String rowValue, String rowIndex)
             throws WriterException {
 
         CharArrayWriter cw = null;
@@ -73,11 +75,13 @@ public class AdditionalInformationService extends AbtractGridService {
 
     @Override
     protected void writeElement(FacesContext facesContext,
-            PrintWriter printWriter, IGridComponent component,
-            AbstractGridRenderer gridRenderer, String rowValue, String rowIndex)
+            PrintWriter printWriter, IColumnsContainer component,
+            Renderer gridRenderer, String rowValue, String rowIndex)
             throws WriterException {
 
         writeAdditionalInformations(facesContext, printWriter,
-                (IGridComponent) component, gridRenderer, rowValue, rowIndex);
+                (IGridComponent) component,
+                (IAdditionalInformationGridRenderer) gridRenderer, rowValue,
+                rowIndex);
     }
 }

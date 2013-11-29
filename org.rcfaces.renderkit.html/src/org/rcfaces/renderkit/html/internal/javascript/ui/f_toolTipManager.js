@@ -322,9 +322,13 @@ var __members = {
 		
 		var tooltipContainer = this._getToolTipContainerForElement(element);
 
-
 		console.log("_ElementOver: event="+evt+" target="+evt.target+" element="+element+" container="+tooltipContainer);
-
+		
+		if (element._tooltipElement) {
+			console.log("Our tooltip !");
+			return;
+		}
+		
 		var tooltipInfos = null;
 		if (tooltipContainer) {
 			tooltipInfos = tooltipContainer.fa_getToolTipForElement(element, evt);

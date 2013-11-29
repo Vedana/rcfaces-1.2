@@ -4,6 +4,7 @@ import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.ToolTipComponent;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
+import org.rcfaces.core.internal.converter.ToolTipPositionConverter;
 import org.rcfaces.core.internal.renderkit.IAsyncRenderer;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
@@ -36,10 +37,10 @@ public class ToolTipRenderer extends AbstractCssRenderer implements
         writeComponentAttributes(htmlWriter);
 
         htmlWriter.writeAttribute("role", "description");
-        
+
         htmlWriter.writeAttribute("aria-relevant", "additions all");
         htmlWriter.writeAttribute("aria-atomic", true);
-                
+
         htmlWriter.writeAttribute("aria-live", "polite");
     }
 
@@ -62,7 +63,18 @@ public class ToolTipRenderer extends AbstractCssRenderer implements
 
         String position = tooltipComponent.getPosition(facesContext);
         if (position != null && position.length() > 0) {
-            htmlWriter.writeAttribute("v:position", position);
+
+            int positionKey;
+            try {
+                positionKey = Integer.parseInt(position);
+
+            } catch (NumberFormatException ex) {
+                positionKey = ((Integer) ToolTipPositionConverter.SINGLETON
+                        .getAsObject(facesContext, tooltipComponent, position))
+                        .intValue();
+            }
+
+            htmlWriter.writeAttribute("v:position", positionKey);
         }
 
         String toolTipId = tooltipComponent.getToolTipId(facesContext);

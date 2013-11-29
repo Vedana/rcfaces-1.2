@@ -75,6 +75,7 @@ import org.rcfaces.core.internal.capability.IAdditionalInformationComponent;
 import org.rcfaces.core.internal.capability.ICellImageSettings;
 import org.rcfaces.core.internal.capability.ICellStyleClassSettings;
 import org.rcfaces.core.internal.capability.ICheckRangeComponent;
+import org.rcfaces.core.internal.capability.IColumnsContainer;
 import org.rcfaces.core.internal.capability.ICriteriaConfiguration;
 import org.rcfaces.core.internal.capability.ICriteriaContainer;
 import org.rcfaces.core.internal.capability.IDroppableGridComponent;
@@ -143,7 +144,8 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public abstract class AbstractGridRenderer extends AbstractCssRenderer {
+public abstract class AbstractGridRenderer extends AbstractCssRenderer
+        implements IAdditionalInformationGridRenderer, ITooltipGridRenderer {
 
     private static final Log LOG = LogFactory
             .getLog(AbstractGridRenderer.class);
@@ -426,7 +428,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                 ADDITIONAL_INFORMATIONS_RENDER_CONTEXT_STATE);
     }
 
-    public Object[] getTooltipsRenderContextState(IGridComponent component) {
+    public Object[] getTooltipsRenderContextState(IColumnsContainer component) {
         Object[] state = (Object[]) ((UIComponent) component).getAttributes()
                 .get(TOOLTIPS_RENDER_CONTEXT_STATE);
 
@@ -434,7 +436,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             return state;
         }
 
-        return getAdditionalInformationsRenderContextState(component);
+        return getAdditionalInformationsRenderContextState((IGridComponent) component);
     }
 
     protected boolean needAdditionalInformationContextState() {
@@ -688,9 +690,11 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
     }
 
     public void renderTooltip(IHtmlWriter htmlWriter,
-            IGridComponent gridComponent, String responseCharacterEncoding,
-            String rowValue2, String rowIndex, String tooltipId)
-            throws WriterException {
+            IColumnsContainer columnsContainer,
+            String responseCharacterEncoding, String rowValue2,
+            String rowIndex, String tooltipId) throws WriterException {
+
+        IGridComponent gridComponent = (IGridComponent) columnsContainer;
 
         IHtmlRenderContext htmlRenderContext = htmlWriter
                 .getHtmlComponentRenderContext().getHtmlRenderContext();

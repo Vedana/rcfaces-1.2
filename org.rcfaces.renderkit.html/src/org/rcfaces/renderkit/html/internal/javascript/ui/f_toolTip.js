@@ -35,10 +35,22 @@ var __statics = {
 	 * @field hidden static final Number
 	 */
 	RIGHT_COMPONENT: 16,
+	
 	/**
 	 * @field hidden static final Number
 	 */
 	BOTTOM_RIGHT_COMPONENT: 32,
+
+	/**
+	 * @field hidden static final Number
+	 */
+	MIDDLE_RIGHT_COMPONENT: 48,
+
+	/**
+	 * @field hidden static final Number
+	 */
+	MIDDLE_LEFT_COMPONENT: 12,
+	
 
 	/**
 	 * @field private static final Number
@@ -93,6 +105,7 @@ var __members = {
 		}
 
 		this._visible = false;
+		this._tooltipElement=true;
 	},
 
 	f_finalize: function() {
@@ -279,52 +292,83 @@ var __members = {
 		var offsetX = 0;
 		var offsetY = 0;
 		var offsetWidth= 0;
+		var offsetHeight=0;
 
 		if (component) {
 			var absPos = f_core.GetAbsolutePosition(component);
 			offsetX = absPos.x;
 			offsetY = absPos.y;
+			
+			if (component.getBBox) {
+				var bbox=component.getBBox();
+				
+				offsetWidth=Math.floor(bbox.width);
+				offsetHeight=Math.floor(bbox.height);
+				
+			} else {
+				offsetWidth=component.offsetWidth;
+				offsetHeight=component.offsetHeight;
+			}
 		}
 
 		switch (position) {
 
-		case f_toolTip.BOTTOM_COMPONENT:
-		case f_toolTip.BOTTOM_LEFT_COMPONENT:
-			offsetY += component.offsetHeight;
+		case f_toolTip.LEFT_COMPONENT:
 			break;
 
-		case f_toolTip.BOTTOM_RIGHT_COMPONENT:
-			offsetY += component.offsetHeight;
+		case f_toolTip.MIDDLE_LEFT_COMPONENT:
+			offsetY += offsetHeight/2;
+			break;
+
+		case f_toolTip.BOTTOM_COMPONENT:
+		case f_toolTip.BOTTOM_LEFT_COMPONENT:
+			offsetY += offsetHeight;
+			break;
 
 		case f_toolTip.MOUSE_POSITION:
 			var eventPos = f_core.GetJsEventPosition(jsEvent);
-			var cursorPos = f_core.GetAbsolutePosition(popup);
 
+			console.log("_computePosition: (mouse position) X="
+					+ offsetX + " Y=" + offsetY + " eventX=" + eventPos.x
+					+ " eventY=" + eventPos.y + " component="+component);
+
+			
 			offsetX = eventPos.x;// - cursorPos.x;
 			offsetY = eventPos.y;// - cursorPos.y;
 
+			offsetX+=8; // SInon la 
+			offsetY+=8;
+			
 			f_core.Debug(f_toolTip, "_computePosition: (mouse position) X="
 					+ offsetX + " Y=" + offsetY + " eventX=" + eventPos.x
-					+ " eventY=" + eventPos.y + " cursorPosX=" + cursorPos.x
-					+ " cursorPosY=" + cursorPos.y);
+					+ " eventY=" + eventPos.y);
 
 			break;
 
 		case f_toolTip.RIGHT_COMPONENT:
-			offsetX += component.offsetWidth;
+			offsetX += offsetWidth;
+			break;
+
+		case f_toolTip.MIDDLE_RIGHT_COMPONENT:
+			offsetY += offsetHeight/2;
+			offsetX += offsetWidth;
+			break;
+
+		case f_toolTip.BOTTOM_RIGHT_COMPONENT:
+			offsetY += offsetHeight;
+			offsetX += offsetWidth;
 			break;
 
 		case f_toolTip.MIDDLE_COMPONENT:
-			offsetX += component.offsetWidth / 2;
-			offsetY += component.offsetHeight / 2;
+			offsetX += offsetWidth / 2;
+			offsetY += offsetHeight / 2;
 			break;
 		}
 
 		if (f_core.IsDebugEnabled(f_toolTip) && component) {
 			f_core.Debug(f_toolTip, "_computePosition: X=" + offsetX + " Y="
-					+ offsetY + " cx=" + component.offsetLeft + " cy="
-					+ component.offsetTop + " cw=" + component.offsetWidth
-					+ " ch=" + component.offsetHeight);
+					+ offsetY + " cw=" + offsetWidth
+					+ " ch=" + offsetHeight);
 		}
 
 		if (positionInfos.deltaX) {
@@ -343,7 +387,7 @@ var __members = {
 			offsetHeight += positionInfos.deltaHeight;
 		}
 
-		offsetX += 2; // Border par défaut !
+		offsetX += 2; // Border du tooltip par défaut !
 
 		var positions = {
 			x: offsetX,

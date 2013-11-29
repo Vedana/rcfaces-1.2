@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.iterator.IColumnIterator;
-import org.rcfaces.core.internal.capability.IGridComponent;
+import org.rcfaces.core.internal.capability.IColumnsContainer;
 import org.rcfaces.core.internal.component.UIData2;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
@@ -32,7 +32,6 @@ import org.rcfaces.renderkit.html.internal.HtmlRequestContext;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
-import org.rcfaces.renderkit.html.internal.renderer.AbstractGridRenderer;
 
 /**
  * 
@@ -85,10 +84,10 @@ public abstract class AbtractGridService extends AbstractHtmlService {
             UIComponent component = localizedComponent.getComponent();
 
             try {
-                if ((component instanceof IGridComponent) == false) {
+                if ((component instanceof IColumnsContainer) == false) {
                     AbstractHtmlService.sendJsError(facesContext, componentId,
                             INVALID_PARAMETER_SERVICE_ERROR,
-                            "Can not find IAdditionalInformationProvider (id='"
+                            "Component is not a IColumnsContainer (id='"
                                     + componentId + "').", null);
                     return;
                 }
@@ -109,8 +108,7 @@ public abstract class AbtractGridService extends AbstractHtmlService {
                     return;
                 }
 
-                AbstractGridRenderer gridRenderer = getGridRenderer(
-                        facesContext, (IGridComponent) component);
+                Renderer gridRenderer = getGridRenderer(facesContext, component);
                 if (gridRenderer == null) {
                     sendJsError(
                             facesContext,
@@ -121,8 +119,9 @@ public abstract class AbtractGridService extends AbstractHtmlService {
                     return;
                 }
 
-                decodeSubComponents(facesContext, (IGridComponent) component,
-                        parameters, rowIndex, null);
+                decodeSubComponents(facesContext,
+                        (IColumnsContainer) component, parameters, rowIndex,
+                        null);
 
                 ServletResponse response = (ServletResponse) facesContext
                         .getExternalContext().getResponse();
@@ -157,8 +156,8 @@ public abstract class AbtractGridService extends AbstractHtmlService {
                     }
 
                     writeElement(facesContext, printWriter,
-                            (IGridComponent) component, gridRenderer, rowValue,
-                            rowIndex);
+                            (IColumnsContainer) component, gridRenderer,
+                            rowValue, rowIndex);
 
                     saveView(facesContext, null);
 
@@ -190,26 +189,25 @@ public abstract class AbtractGridService extends AbstractHtmlService {
     }
 
     protected abstract void writeElement(FacesContext facesContext,
-            PrintWriter printWriter, IGridComponent component,
-            AbstractGridRenderer gridRenderer, String rowValue, String rowIndex)
+            PrintWriter printWriter, IColumnsContainer component,
+            Renderer gridRenderer, String rowValue, String rowIndex)
             throws WriterException;
 
-    private AbstractGridRenderer getGridRenderer(FacesContext facesContext,
-            IGridComponent component) {
+    private Renderer getGridRenderer(FacesContext facesContext,
+            UIComponent component) {
 
-        Renderer renderer = getRenderer(facesContext, (UIComponent) component);
-
-        if ((renderer instanceof AbstractGridRenderer) == false) {
-            LOG.error("Renderer is not a valid type (AbstractGridRenderer) => "
-                    + renderer);
-            return null;
-        }
-
-        return (AbstractGridRenderer) renderer;
+        Renderer renderer = getRenderer(facesContext, component);
+        /*
+         * if ((renderer instanceof AbstractGridRenderer) == false) {
+         * LOG.error("Renderer is not a valid type (AbstractGridRenderer) => " +
+         * renderer); return null; }
+         */
+        return renderer;
     }
 
     protected void decodeSubComponents(FacesContext facesContext,
-            IGridComponent dgc, Map parameters, String rowIndex, String colIndex) {
+            IColumnsContainer dgc, Map parameters, String rowIndex,
+            String colIndex) {
 
         String eventSerial = (String) parameters
                 .get(HtmlRequestContext.EVENT_SERIAL);
