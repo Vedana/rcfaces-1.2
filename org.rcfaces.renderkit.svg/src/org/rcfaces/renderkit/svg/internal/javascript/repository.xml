@@ -14,7 +14,7 @@
 				<required-class name="fsvg_svg" />
 
 				<required-class name="fa_items" />
-				<required-class name="fa_toolTipContainer" />
+				<required-class name="fa_gridToolTipContainer" />				
 
 				<required-style name="fsvg_svg.css" />
 

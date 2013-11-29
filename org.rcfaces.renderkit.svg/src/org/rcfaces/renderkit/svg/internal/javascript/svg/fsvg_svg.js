@@ -79,6 +79,11 @@ var __members = {
 	f_appendStyleSheet : function(url) {
 		var doc = this.f_getSVGDocument();
 		
+		if (!doc) {
+			f_core.Error(fsvg_svg, "f_appendStyleSheet: SVG document is null for stylesheet '"+url+"'");
+			return;
+		}
+		
 		url=f_env.ResolveContentUrl(url, window);
 
 		var pi = doc.createProcessingInstruction('xml-stylesheet', 'href="'
@@ -94,6 +99,11 @@ var __members = {
 	 */
 	f_appendSVGStyle : function(styles) {
 		var doc = this.f_getSVGDocument();
+		
+		if (!doc) {
+			f_core.Error(fsvg_svg, "f_appendStyleSheet: SVG document is null for stylesheet '"+url+"'");
+			return;
+		}
 
 		var pi = doc.createElementNS(fsvg_svg.SVG_XMLNS, "style");
 		pi.setAttributeNS(null, "type", "text/css");

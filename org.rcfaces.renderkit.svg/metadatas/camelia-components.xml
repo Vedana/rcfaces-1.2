@@ -20,7 +20,6 @@
 		<attribute id="immediate" type="boolean" writeTag="false" />	
 		<attribute id="svgURL" type="java.lang.String" />	
 
-		<propertyValue>svgURL</propertyValue>
 		<property>value</property>
 	</component>
 
