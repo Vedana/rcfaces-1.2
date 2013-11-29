@@ -219,7 +219,7 @@ public class SVGTag extends AbstractOutputTag implements Tag {
 
 		if (svgURL != null) {
 			if (svgURL.isLiteralText()==false) {
-				component.setValueExpression(Properties.VALUE, svgURL);
+				component.setValueExpression(Properties.SVG_URL, svgURL);
 
 			} else {
 				component.setSvgURL(svgURL.getExpressionString());

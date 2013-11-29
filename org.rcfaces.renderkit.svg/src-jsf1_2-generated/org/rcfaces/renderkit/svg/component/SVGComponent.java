@@ -46,7 +46,6 @@ public class SVGComponent extends AbstractOutputComponent implements
 	static {
 		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"focusStyleClass","filterProperties","accessKey","blurListener","svgURL","tabIndex","keyUpListener","focusListener","caption","keyPressListener","unlockedClientAttributeNames","immediate","selectionListener","keyDownListener","disabled","validationListener"}));
 	}
-	protected static final String CAMELIA_VALUE_ALIAS="svgURL";
 
 	public SVGComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -331,9 +330,5 @@ public class SVGComponent extends AbstractOutputComponent implements
 
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
-	}
-
-	protected String getCameliaValueAlias() {
-		return CAMELIA_VALUE_ALIAS;
 	}
 }
