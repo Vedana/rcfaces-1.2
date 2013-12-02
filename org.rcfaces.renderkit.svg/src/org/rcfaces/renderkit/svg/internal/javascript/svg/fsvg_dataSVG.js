@@ -118,8 +118,17 @@ var __members = {
 
 		var svgDocument = this.f_getSVGDocument();
 		if (svgDocument) {
-			f_toolTipManager.UninstallOverCallbacks(svgDocument,
-					svgDocument.rootElement);
+			try {
+				f_key.UninstallDomEvent(svgDocument);
+			} catch (x) {
+				// Y a pas forcement de keyManager de dispo !
+			}
+			try {
+				f_toolTipManager.UninstallOverCallbacks(svgDocument,
+						svgDocument.rootElement);
+			} catch (x) {				
+				// Y a pas forcement de tooltipManager de dispo !
+			}
 		}
 
 		this.f_super(arguments);
@@ -128,8 +137,17 @@ var __members = {
 
 		var svgDocument = this.f_getSVGDocument();
 		if (svgDocument) {
-			f_toolTipManager.InstallOverCallbacks(svgDocument,
-					svgDocument.rootElement);
+			try {
+				f_toolTipManager.InstallOverCallbacks(svgDocument,
+						svgDocument.rootElement);
+			} catch (x) {
+				// Y a pas forcement de tooltipManager de dispo !
+			}
+			try {
+				f_key.InstallDomEvent(svgDocument);
+			} catch (x) {
+				// Y a pas forcement de keyManager de dispo !
+			}
 		}
 
 		this.f_super(arguments);
@@ -257,6 +275,11 @@ var __members = {
 			var hasTooltipMessage="";
 			if (modifs._toolTipId) {
 				hasTooltipMessage=" Une infobulle est disponible.";
+				link._toolTipId = modifs._toolTipId;
+
+				if (modifs._toolTipContent !== undefined) {
+					link._toolTipContent = modifs._toolTipContent;
+				}
 			}
 
 			if (modifs._audioDescription !== undefined) {
@@ -343,6 +366,8 @@ var __members = {
 	 */
 	_onFocus : function(jsEvent, item, link) {
 		link.className.baseVal = "fsvg_link fsvg_link_focus";
+		
+		fsvg_cursor.Show(link);
 	},
 	/**
 	 * @method protected
@@ -356,6 +381,8 @@ var __members = {
 	 */
 	_onBlur : function(jsEvent, item, link) {
 		link.className.baseVal = "fsvg_link";
+		
+		fsvg_cursor.Hide(link);
 	},
 	fa_setToolTipVisible : function(tooltip, show, jsEvent) {
 
@@ -383,7 +410,10 @@ var __members = {
 	 * @param String tooltipId
 	 * @return Object
 	 */
-	_computeTooltipRowContext: function(elementItem, tooltipId) {		
+	_computeTooltipRowContext: function(elementItem, tooltipId) {	
+		if (elementItem._item) {
+			elementItem=elementItem._item;
+		}
 		return {
 			_row: elementItem,
 			_rowValue: elementItem._value,
