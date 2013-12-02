@@ -4121,13 +4121,13 @@ var f_core = {
 			return ret;
 		} 
 		
-		if (component.getBBox) {
+		if (component.getBoundingClientRect) {
 			// DOM SVG
-			var box = component.getBBox();
+			var box = component.getBoundingClientRect();
 			
 			var ret = {
-				x: Math.floor(box.x),
-				y: Math.floor(box.y)
+				x: Math.floor(box.left),
+				y: Math.floor(box.top)
 			};
 			
 			var win = f_core.GetWindow(component.ownerDocument);
@@ -4136,15 +4136,18 @@ var f_core = {
 				var cs = f_core.GetAbsolutePosition(win.frameElement);
 
 				if (cs) {	
-					console.log("Absolute pos frameX="+cs.x+" frameY="+cs.y);
+					if (false) {
+						console.log("Absolute pos frameX="+cs.x+" frameY="+cs.y);
+					}
 					
 					ret.x+=cs.x;
 					ret.y+=cs.y;
 				}
 			}
 
-			console.log("Absolute pos retX="+ret.x+" retY="+ret.y+"  box.x="+box.x+" box.y="+box.y);
-
+			if (false) {
+				console.log("Absolute pos retX="+ret.x+" retY="+ret.y+"  box.x="+box.x+" box.y="+box.y);
+			}
 			return ret;
 
 		}
@@ -5141,7 +5144,9 @@ var f_core = {
 				doc = document;
 			}
 
-			console.log("GetJsEventPosition: Search position of '"+target+"' doc="+doc);
+			if (false) {
+				console.log("GetJsEventPosition: Search position of '"+target+"' doc="+doc);
+			}
 		}
 
 
@@ -5153,10 +5158,12 @@ var f_core = {
 			if (frameElement) {
 				var cs = f_core.GetAbsolutePosition(frameElement);
 
-				console.log("Frame absolute position x=" + cs.x + " y=" + cs.y
-						+ " event.x=" + event.clientX + " event.y="
-						+ event.clientY);
-
+				if (false) {
+					console.log("Frame absolute position x=" + cs.x + " y=" + cs.y
+							+ " event.x=" + event.clientX + " event.y="
+							+ event.clientY);
+				}
+				
 				return f_core.GetJsEventPosition({
 					clientX : event.clientX + cs.x,
 					clientY : event.clientY + cs.y
@@ -5179,8 +5186,9 @@ var f_core = {
 			y : win.scrollY + event.clientY
 		};
 		
-		console.log("GetJsEventPosition: Return position x="+ret.x+" y="+ret.y+" of "+event.scrElement);
-		
+		if (false) {
+			console.log("GetJsEventPosition: Return position x="+ret.x+" y="+ret.y+" of "+event.scrElement);
+		}
 		return ret;
 	},
 	/**

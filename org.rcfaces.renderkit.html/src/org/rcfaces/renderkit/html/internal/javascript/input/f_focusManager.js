@@ -379,8 +379,10 @@ var __members = {
 					+ "' => "+focusId);
 		}
 
-		if (window.console && window.console.log) {
-			console.log("Positionne le focus sur '"+focusId+"'");
+		if (false) {
+			if (window.console && window.console.log) {
+				console.log("Positionne le focus sur '"+focusId+"'");
+			}
 		}
 		
 		if (!focusId) {

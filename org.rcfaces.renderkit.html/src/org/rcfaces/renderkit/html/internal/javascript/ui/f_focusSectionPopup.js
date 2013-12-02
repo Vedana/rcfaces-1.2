@@ -181,7 +181,9 @@ var __statics = {
 
 				var target = evt.target || evt.srcElement;
 				
-				console.log("Event=", evt, " target=",target);
+				if (false) {
+					console.log("Event=", evt, " target=",target);
+				}
 				
 				if (target.nodeType==f_core.ELEMENT_NODE) {
 					return;

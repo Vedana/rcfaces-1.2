@@ -164,6 +164,11 @@ var __statics = {
 
 		f_core.AddEventListener(rootElement, "mouseout",
 				f_toolTipManager._ElementOut, doc);		
+
+		// Touches
+
+		f_core.AddEventListener(rootElement, "keydown",
+				f_toolTipManager._HideToolTip, doc);
 	},
 	
 	/**
@@ -178,6 +183,11 @@ var __statics = {
 
 		f_core.RemoveEventListener(rootElement, "mouseout",
 				f_toolTipManager._ElementOut, doc);		
+
+		// Touches
+
+		f_core.RemoveEventListener(rootElement, "keydown",
+				f_toolTipManager._HideToolTip, doc);
 	},	
 
 	/**
@@ -255,11 +265,6 @@ var __members = {
 
 		f_toolTipManager.InstallOverCallbacks(document, document.body);
 
-		// Touches
-
-		f_core.AddEventListener(document.body, "keydown",
-				f_toolTipManager._HideToolTip, document);
-
 		// Focus
 		f_core.AddEventListener(document.body, "focus",
 				f_toolTipManager._HideToolTip, document);
@@ -267,9 +272,6 @@ var __members = {
 		// Souris
 		f_core.AddEventListener(document.body, "mousedown",
 				f_toolTipManager._HideToolTip, document);
-
-		// f_core.AddEventListener(window, "mouseout",
-		// f_toolTipManager._HideToolTip, window);
 
 		this._listenerInstalled=true;
 		
@@ -290,12 +292,7 @@ var __members = {
 			this._listenerInstalled=undefined; 
 	
 			f_toolTipManager.UninstallOverCallbacks(document, document.body);
-	
-			// Touches
-	
-			f_core.RemoveEventListener(document.body, "keydown",
-					f_toolTipManager._HideToolTip, document);
-	
+		
 			// Focus
 			f_core.RemoveEventListener(document.body, "focus",
 					f_toolTipManager._HideToolTip, document);
@@ -322,10 +319,14 @@ var __members = {
 		
 		var tooltipContainer = this._getToolTipContainerForElement(element);
 
-		console.log("_ElementOver: event="+evt+" target="+evt.target+" element="+element+" container="+tooltipContainer);
+		if (false) {
+			console.log("_ElementOver: event="+evt+" target="+evt.target+" element="+element+" container="+tooltipContainer);
+		}
 		
 		if (element._tooltipElement) {
-			console.log("Our tooltip !");
+			if (false) {
+				console.log("Our tooltip !");
+			}
 			return;
 		}
 		

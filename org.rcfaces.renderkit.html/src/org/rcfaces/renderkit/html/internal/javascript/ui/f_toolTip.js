@@ -328,10 +328,11 @@ var __members = {
 		case f_toolTip.MOUSE_POSITION:
 			var eventPos = f_core.GetJsEventPosition(jsEvent);
 
-			console.log("_computePosition: (mouse position) X="
-					+ offsetX + " Y=" + offsetY + " eventX=" + eventPos.x
-					+ " eventY=" + eventPos.y + " component="+component);
-
+			if (false) {
+				console.log("_computePosition: (mouse position) X="
+						+ offsetX + " Y=" + offsetY + " eventX=" + eventPos.x
+						+ " eventY=" + eventPos.y + " component="+component);
+			}
 			
 			offsetX = eventPos.x;// - cursorPos.x;
 			offsetY = eventPos.y;// - cursorPos.y;
