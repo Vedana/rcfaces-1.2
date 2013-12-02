@@ -1,0 +1,36 @@
+/*
+ * $Id$
+ */
+
+/**
+ *
+ * @class fsvg_cursor
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+
+.fsvg_cursor {
+	border-style: dotted;
+	border-color: black;
+	border-width: 0;
+	position: absolute;
+	height: 0;
+	width: 0;
+}
+
+.fsvg_cursor_0 {
+	border-bottom-width: 1px;
+}
+
+.fsvg_cursor_1 {
+	border-left-width: 1px;
+}
+
+.fsvg_cursor_2 {
+	border-top-width: 1px;
+}
+
+.fsvg_cursor_3 {
+	border-right-width: 1px;
+}
