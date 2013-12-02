@@ -248,7 +248,7 @@ var __statics = {
 		f_key._CurrentScopes=undefined;
 		f_key._Scopes=undefined;
 
-		f_key._SetDomEvent(false);
+		f_key.UninstallDomEvent(document);
 	},
 	/**
 	 * @method hidden static final
@@ -337,12 +337,14 @@ var __statics = {
 			return scope;
 		}
 		
+		// Installation du scope MAIN
+		
 		// Le scope de base à besoin du alt pour les keyHandlers !
 		scope._altKey=true;
 		
 		f_key.EnterScope(scopeName);
 
-		f_key._SetDomEvent(true);
+		f_key.InstallDomEvent(document);
 		
 		return scope;
 	},
@@ -775,38 +777,38 @@ var __statics = {
 	},
 	
 	/**
-	 * @method private static
+	 * @method hidden static
+	 * @param Document doc
+	 * @return void
 	 */
-	_SetDomEvent: function(set) {
+	InstallDomEvent: function(doc) {
 		
-		f_core.Debug(f_key, "_SetDomEvent: Set dom events ("+set+")");
+		f_core.Debug(f_key, "InstallDomEvent: Install on document '"+doc+"'");
 
 		if (f_core.IsInternetExplorer()) {
-			if (set) {
-				document.onkeydown=f_key._PerformKey;
-				
-//				document.onkeypress=f_key._CatchKey; // Ca peut jamais arrivé, car on a changé le code touche !
-//				document.attachEvent("onkeydown", listener);
-				
-			} else  {
-				document.onkeydown=null;
-//				document.onkeypress=null;
-	//			document.detachEvent("onkeydown", listener);
-			}
-			
+			doc.onkeydown=f_key._PerformKey;
 			return;
 		}
 		
-		if (set) {
-			document.addEventListener("keydown", f_key._PerformKey, true);
-			document.addEventListener("keypress", f_key._CatchKey, true);
-			//window.addEventListener("keydown", listener, false);
-			
-		} else {
-			document.removeEventListener("keydown", f_key._PerformKey, true);
-			document.removeEventListener("keypress", f_key._CatchKey, true);
-			//window.removeEventListener("keydown", listener, false);
+		doc.addEventListener("keydown", f_key._PerformKey, true);
+		doc.addEventListener("keypress", f_key._CatchKey, true);
+	},
+	/**
+	 * @method hidden static
+	 * @param Document doc
+	 * @return void
+	 */
+	UninstallDomEvent: function(doc) {
+		
+		f_core.Debug(f_key, "UninstallDomEvent: Uninstall on document '"+doc+"'");
+
+		if (f_core.IsInternetExplorer()) {
+			doc.onkeydown=null;
+			return;
 		}
+
+		doc.removeEventListener("keydown", f_key._PerformKey, true);
+		doc.removeEventListener("keypress", f_key._CatchKey, true);
 	},
 	/**
 	 * @method hidden static
