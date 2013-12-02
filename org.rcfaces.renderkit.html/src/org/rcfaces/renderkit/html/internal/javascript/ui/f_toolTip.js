@@ -299,8 +299,8 @@ var __members = {
 			offsetX = absPos.x;
 			offsetY = absPos.y;
 			
-			if (component.getBBox) {
-				var bbox=component.getBBox();
+			if (component.getBoundingClientRect) {
+				var bbox=component.getBoundingClientRect();
 				
 				offsetWidth=Math.floor(bbox.width);
 				offsetHeight=Math.floor(bbox.height);
