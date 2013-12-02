@@ -38,7 +38,9 @@ var __members = {
 		
 		for(var i=0;i<4;i++) {
 			elts[i]=f_core.CreateElement(doc.body, "DIV", {
-				className: "fsvg_cursor fsvg_cursor_"+i
+				className: "fsvg_cursor fsvg_cursor_"+i,
+				"role": "presentation",
+				"aria-hidden": "true"
 			});
 		}
 	},
