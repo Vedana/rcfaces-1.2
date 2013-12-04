@@ -4353,7 +4353,8 @@ var __members = {
 	 */
 	_processRowLeftKey : function(evt) {
 		var additionalInformations = this._additionalInformations;
-		if (additionalInformations) {
+		
+		if (additionalInformations && (!this._cellFocusable || evt.ctrlKey)) {
 			var cursor = this._cursor;
 			if (cursor) {
 				this._keyHideAdditionalInformation(evt, cursor);
@@ -4371,7 +4372,7 @@ var __members = {
 	 */
 	_processRowRightKey : function(evt) {
 		var additionalInformations = this._additionalInformations;
-		if (additionalInformations) {
+		if (additionalInformations && (!this._cellFocusable || evt.ctrlKey)) {
 			var cursor = this._cursor;
 			if (cursor) {
 				this._keyShowAdditionalInformation(evt, cursor);

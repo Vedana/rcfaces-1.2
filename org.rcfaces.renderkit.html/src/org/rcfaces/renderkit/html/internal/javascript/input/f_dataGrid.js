@@ -2669,7 +2669,7 @@ var __members = {
 	 * @returns
 	 */
 	_processRowRightKey: function(evt) {		
-		if (this._cellFocusable && (evt.ctrlKey || !this._additionalInformations)) {
+		if (this._cellFocusable && !evt.ctrlKey) {
 			var cursorCellIdx=this._cursorCellIdx;
 			if (!cursorCellIdx) {
 				cursorCellIdx=0;
@@ -2702,7 +2702,7 @@ var __members = {
 	 * @returns
 	 */
 	_processRowLeftKey: function(evt) {		
-		if (this._cellFocusable && (evt.ctrlKey || !this._additionalInformations)) {
+		if (this._cellFocusable && !evt.ctrlKey) {
 			var cursorCellIdx=this._cursorCellIdx;
 			if (cursorCellIdx) {
 				var columns=this._columns;

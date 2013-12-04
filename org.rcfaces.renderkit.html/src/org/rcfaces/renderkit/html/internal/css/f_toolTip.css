@@ -13,6 +13,7 @@
  */
  
 
+
 .f_toolTip {
 	position: absolute;
 	display: none;
@@ -29,8 +30,9 @@
 	border-radius: 3px;
 	-moz-border-radius: 3px;
 	
+	/* A cause de l'accessibilité, pas d'opacité
 	opacity: 0.85;
-    
+    */
 	-ms-filter: "alpha(opacity=85)"; /* IE 8 */
     filter : alpha(opacity=85); /* IE < 8 */
 }
