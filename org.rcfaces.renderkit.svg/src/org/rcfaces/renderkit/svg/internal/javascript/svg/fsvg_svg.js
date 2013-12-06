@@ -90,10 +90,10 @@ var __members = {
 			
 			if (!dss) {
 				dss=[];
-				this._delayedStyleSheets=dds;
+				this._delayedStyleSheets=dss;
 			}
 			
-			dds.push(url);
+			dss.push(url);
 			return;
 		}
 		
@@ -118,10 +118,10 @@ var __members = {
 			
 			if (!dss) {
 				dss=[];
-				this._delayedStyles=dds;
+				this._delayedStyles=dss;
 			}
 			
-			dds.push(styles);
+			dss.push(styles);
 			return;
 		}
 
