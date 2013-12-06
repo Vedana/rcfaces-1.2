@@ -27,6 +27,12 @@ var __members = {
 		this.f_super(arguments);
 		
 	},
+	f_finalize: function() {
+		this._delayedStyleSheets=undefined;
+		this._delayedStyles=undefined;
+		
+		this.f_super(arguments);
+	},
 	/**
 	 * @method public
 	 * @return Document
@@ -80,7 +86,14 @@ var __members = {
 		var doc = this.f_getSVGDocument();
 		
 		if (!doc) {
-			f_core.Error(fsvg_svg, "f_appendStyleSheet: SVG document is null for stylesheet '"+url+"'");
+			var dss=this._delayedStyleSheets;
+			
+			if (!dss) {
+				dss=[];
+				this._delayedStyleSheets=dds;
+			}
+			
+			dds.push(url);
 			return;
 		}
 		
@@ -101,7 +114,14 @@ var __members = {
 		var doc = this.f_getSVGDocument();
 		
 		if (!doc) {
-			f_core.Error(fsvg_svg, "f_appendStyleSheet: SVG document is null for stylesheet '"+url+"'");
+			var dss=this._delayedStyles;
+			
+			if (!dss) {
+				dss=[];
+				this._delayedStyles=dds;
+			}
+			
+			dds.push(styles);
 			return;
 		}
 
@@ -112,6 +132,44 @@ var __members = {
 		pi.appendChild(pt);
 
 		doc.rootElement.insertBefore(pi, doc.rootElement.firstChild);
+	},
+	f_update : function() {
+		var ret=this.f_super(arguments);
+
+		var dss=this._delayedStyleSheets;
+		if (dds) {
+			this._delayedStyleSheets=undefined;
+
+			for(var i=0;i<dds.lenght) {
+				this.f_appendStyleSheet(dds[i]);
+			}
+		}
+
+		var ds=this._delayedStyles;
+		if (ds) {
+			this._delayedStyles=undefined;
+
+			for(var i=0;i<ds.lenght) {
+				this.f_appendSVGStyle(ds[i]);
+			}
+		}
+		
+		var svgDocument = this.f_getSVGDocument();
+		if (svgDocument) {
+			try {
+				f_toolTipManager.InstallOverCallbacks(svgDocument,
+						svgDocument.rootElement);
+			} catch (x) {
+				// Y a pas forcement de tooltipManager de dispo !
+			}
+			try {
+				f_key.InstallDomEvent(svgDocument);
+			} catch (x) {
+				// Y a pas forcement de keyManager de dispo !
+			}
+		}
+
+		return ret;
 	}
 }
 
