@@ -138,6 +138,18 @@ var __members = {
 		var svgDocument = this.f_getSVGDocument();
 		if (svgDocument) {
 			this.f_updateSVG(svgDocument);
+			
+		} else {
+			var self=this;
+			
+			this.addEventListener("load",function() {
+				self.removeEventListener("load", arguments.callee, false);
+
+				var doc = self.f_getSVGDocument();
+				
+				self.f_updateSVG(doc);
+				
+			 }, false);
 		}
 
 		this.f_super(arguments);

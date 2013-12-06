@@ -116,37 +116,45 @@ var __members = {
 			}
 		}
 
-		var svgDocument = this.f_getSVGDocument();
-		if (svgDocument) {
-			try {
-				f_key.UninstallDomEvent(svgDocument);
-			} catch (x) {
-				// Y a pas forcement de keyManager de dispo !
-			}
-			try {
-				f_toolTipManager.UninstallOverCallbacks(svgDocument,
-						svgDocument.rootElement);
-			} catch (x) {				
-				// Y a pas forcement de tooltipManager de dispo !
+		if (this._callbacksInstalled) {
+			this._callbacksInstalled=undefined;
+
+			var svgDocument = this.f_getSVGDocument();
+			if (svgDocument) {
+				try {
+					f_key.UninstallDomEvent(svgDocument);
+				} catch (x) {
+					// Y a pas forcement de keyManager de dispo !
+				}
+				try {
+					f_toolTipManager.UninstallOverCallbacks(svgDocument,
+							svgDocument.rootElement);
+				} catch (x) {				
+					// Y a pas forcement de tooltipManager de dispo !
+				}
 			}
 		}
-
+		
 		this.f_super(arguments);
 	},
 	f_updateSVG: function(svgDocument) {
 		this.f_super(arguments, svgDocument);
 
-		try {
-			f_toolTipManager.InstallOverCallbacks(svgDocument,
-					svgDocument.rootElement);
-		} catch (x) {
-			// Y a pas forcement de tooltipManager de dispo !
-		}
-
-		try {
-			f_key.InstallDomEvent(svgDocument);
-		} catch (x) {
-			// Y a pas forcement de keyManager de dispo !
+		if (!this._callbacksInstalled) {
+			this._callbacksInstalled=undefined;
+			
+			try {
+				f_toolTipManager.InstallOverCallbacks(svgDocument,
+						svgDocument.rootElement);
+			} catch (x) {
+				// Y a pas forcement de tooltipManager de dispo !
+			}
+	
+			try {
+				f_key.InstallDomEvent(svgDocument);
+			} catch (x) {
+				// Y a pas forcement de keyManager de dispo !
+			}
 		}
 	},
 	/**
