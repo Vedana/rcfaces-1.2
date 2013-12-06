@@ -133,24 +133,21 @@ var __members = {
 
 		this.f_super(arguments);
 	},
-	f_update : function() {
+	f_updateSVG: function(svgDocument) {
+		this.f_super(arguments, svgDocument);
 
-		var svgDocument = this.f_getSVGDocument();
-		if (svgDocument) {
-			try {
-				f_toolTipManager.InstallOverCallbacks(svgDocument,
-						svgDocument.rootElement);
-			} catch (x) {
-				// Y a pas forcement de tooltipManager de dispo !
-			}
-			try {
-				f_key.InstallDomEvent(svgDocument);
-			} catch (x) {
-				// Y a pas forcement de keyManager de dispo !
-			}
+		try {
+			f_toolTipManager.InstallOverCallbacks(svgDocument,
+					svgDocument.rootElement);
+		} catch (x) {
+			// Y a pas forcement de tooltipManager de dispo !
 		}
 
-		this.f_super(arguments);
+		try {
+			f_key.InstallDomEvent(svgDocument);
+		} catch (x) {
+			// Y a pas forcement de keyManager de dispo !
+		}
 	},
 	/**
 	 * @method protected

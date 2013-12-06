@@ -134,13 +134,20 @@ var __members = {
 		doc.rootElement.insertBefore(pi, doc.rootElement.firstChild);
 	},
 	f_update : function() {
-		var ret=this.f_super(arguments);
 
-		var dss=this._delayedStyleSheets;
+		var svgDocument = this.f_getSVGDocument();
+		if (svgDocument) {
+			this.f_updateSVG(svgDocument);
+		}
+
+		this.f_super(arguments);
+	},
+	f_updateSVG : function(svgDocument) {
+		var dds=this._delayedStyleSheets;
 		if (dds) {
 			this._delayedStyleSheets=undefined;
 
-			for(var i=0;i<dds.lenght) {
+			for(var i=0;i<dds.lenght;i++) {
 				this.f_appendStyleSheet(dds[i]);
 			}
 		}
@@ -149,27 +156,10 @@ var __members = {
 		if (ds) {
 			this._delayedStyles=undefined;
 
-			for(var i=0;i<ds.lenght) {
+			for(var i=0;i<ds.lenght;i++) {
 				this.f_appendSVGStyle(ds[i]);
 			}
 		}
-		
-		var svgDocument = this.f_getSVGDocument();
-		if (svgDocument) {
-			try {
-				f_toolTipManager.InstallOverCallbacks(svgDocument,
-						svgDocument.rootElement);
-			} catch (x) {
-				// Y a pas forcement de tooltipManager de dispo !
-			}
-			try {
-				f_key.InstallDomEvent(svgDocument);
-			} catch (x) {
-				// Y a pas forcement de keyManager de dispo !
-			}
-		}
-
-		return ret;
 	}
 }
 
