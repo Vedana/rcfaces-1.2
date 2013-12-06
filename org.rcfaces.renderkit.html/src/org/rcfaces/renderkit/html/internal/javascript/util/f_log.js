@@ -107,7 +107,7 @@ var __statics = {
 				return logs[logName];
 			}
 			
-			throw null;
+			return null;
 		}
 	
 		if (!logs) {
