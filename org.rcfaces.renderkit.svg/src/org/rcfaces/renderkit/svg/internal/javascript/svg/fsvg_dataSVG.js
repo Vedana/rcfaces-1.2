@@ -311,7 +311,7 @@ var __members = {
 				var th = c.ownerDocument.createElementNS(fsvg_svg.SVG_XMLNS,
 						"title");
 
-				f_core.SetText(th, modifs._tooltipText);
+				f_core.SetTextNode(th, modifs._tooltipText);
 
 				c.append(th);
 			}
