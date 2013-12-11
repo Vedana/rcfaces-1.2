@@ -23,10 +23,11 @@
 		<property>value</property>
 	</component>
 
-	<component id="dataSVG" extends="SVG" renderKit="html">		
+	<component id="dataSVG" extends="SVG" renderKit="html" >		
 		<implements id="org.rcfaces.core.internal.capability.IColumnsContainer"
 			importMethods="false" />
 		<implements id="org.rcfaces.core.internal.capability.IToolTipComponent" />
+		<implements id="javax.faces.component.NamingContainer" />
 
 		<capability id="IRowToolTipIdCapability" /> 
 
