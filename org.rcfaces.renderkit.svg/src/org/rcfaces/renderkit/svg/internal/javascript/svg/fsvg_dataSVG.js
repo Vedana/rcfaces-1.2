@@ -313,7 +313,7 @@ var __members = {
 
 				f_core.SetTextNode(th, modifs._tooltipText);
 
-				c.append(th);
+				c.appendChild(th);
 			}
 			if (modifs._audioDescription !== undefined) {
 				c.setAttribute("aria-label", modifs._audioDescription);
