@@ -75,7 +75,7 @@ public class MessageComponent extends AbstractMessageComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractMessageComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"imageHeight","text","fatalStyleClass","showIfMessage","styleClass","fatalImageURL","caption","showActiveComponentMessage","errorStyleClass","warnStyleClass","infoStyleClass","infoImageURL","warnImageURL","errorImageURL","imageURL","imageWidth"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"imageHeight","text","fatalStyleClass","showIfMessage","styleClass","fatalImageURL","caption","showActiveComponentMessage","errorStyleClass","warnStyleClass","infoStyleClass","infoImageURL","warnImageURL","errorImageURL","imageWidth","imageURL"}));
 	}
 
 	public MessageComponent() {

@@ -1,5 +1,6 @@
 package org.rcfaces.renderkit.svg.component;
 
+import javax.faces.component.NamingContainer;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.tools.ToolTipTools;
 import org.apache.commons.logging.LogFactory;
@@ -19,7 +20,8 @@ import org.rcfaces.renderkit.svg.component.SVGComponent;
 public class DataSVGComponent extends SVGComponent implements 
 	IRowToolTipIdCapability,
 	IToolTipComponent,
-	IColumnsContainer {
+	IColumnsContainer,
+	NamingContainer {
 
 	private static final Log LOG = LogFactory.getLog(DataSVGComponent.class);
 

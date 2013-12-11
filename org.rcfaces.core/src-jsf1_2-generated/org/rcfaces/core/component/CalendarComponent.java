@@ -2,9 +2,9 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.converter.CalendarLayoutConverter;
-import java.lang.String;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.ICalendarModeCapability;
+import java.lang.String;
 import org.rcfaces.core.component.capability.ICalendarLayoutCapability;
 import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.capability.IMultipleSelectCapability;

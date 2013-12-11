@@ -60,7 +60,7 @@ public class AdditionalInformationComponent extends CameliaColumnComponent imple
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaColumnComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"marginLeft","backgroundColor","errorListener","backgroundImageVerticalPosition","propertyChangeListener","loadListener","backgroundImageHorizontalPosition","ariaLevel","height","mouseOverListener","scopeValue","backgroundImageURL","headingZone","waiRole","foregroundColor","mouseOutListener","lookId","headingLevel","backgroundImageVerticalRepeat","userEventListener","marginTop","marginRight","styleClass","backgroundImageHorizontalRepeat","ariaLabel","initListener","marginBottom","scopeSaveValue","scopeVar","margins"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"backgroundColor","marginLeft","errorListener","backgroundImageVerticalPosition","propertyChangeListener","loadListener","backgroundImageHorizontalPosition","ariaLevel","height","mouseOverListener","scopeValue","backgroundImageURL","headingZone","waiRole","foregroundColor","mouseOutListener","lookId","headingLevel","backgroundImageVerticalRepeat","userEventListener","marginTop","marginRight","styleClass","backgroundImageHorizontalRepeat","ariaLabel","initListener","marginBottom","scopeSaveValue","scopeVar","margins"}));
 	}
 
 	public AdditionalInformationComponent() {

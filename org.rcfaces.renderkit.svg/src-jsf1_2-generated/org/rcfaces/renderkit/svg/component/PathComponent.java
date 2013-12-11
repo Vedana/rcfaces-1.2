@@ -17,7 +17,7 @@ public class PathComponent extends NodeComponent {
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(NodeComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"clipRule","stopOpacity","visibility","fontVariant","strokeOpacity","fillOpacity","clipPath","stroke","strokeLineJoin","textDecoration","strokeLineCap","stopColor","fillRule","writingMode","strokeDashOffset","opacity","textAlign","fontFamily","strokeWidth","clip","strokeMiterLimit","textAnchor","fill","textRendering","display","fontStyle","fontSize","strokeDashArray","fontWeight","color","overflow","fontSizeAdjust","wordSpacing","fontStretch"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"clipRule","stopOpacity","visibility","fontVariant","strokeOpacity","fillOpacity","clipPath","stroke","strokeLineJoin","textDecoration","strokeLineCap","stopColor","fillRule","writingMode","strokeDashOffset","opacity","textAlign","fontFamily","strokeWidth","clip","strokeMiterLimit","textAnchor","fill","textRendering","fontStyle","display","fontSize","strokeDashArray","fontWeight","color","overflow","fontSizeAdjust","wordSpacing","fontStretch"}));
 	}
 
 	public PathComponent() {

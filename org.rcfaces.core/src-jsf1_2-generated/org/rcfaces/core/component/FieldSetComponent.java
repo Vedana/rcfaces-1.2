@@ -2,29 +2,29 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IOverStyleClassCapability;
-import org.rcfaces.core.component.capability.IImageCapability;
-import org.rcfaces.core.component.familly.IContentAccessors;
-import org.rcfaces.core.component.capability.IImageSizeCapability;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IImageSizeCapability;
 import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import org.rcfaces.core.component.capability.IBorderTypeCapability;
-import org.rcfaces.core.component.capability.IAudioDescriptionCapability;
-import org.rcfaces.core.component.capability.IHeadingZoneCapability;
-import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import org.rcfaces.core.component.capability.ITextAlignmentCapability;
-import javax.el.ValueExpression;
-import java.util.HashSet;
 import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.IHeadingLevelCapability;
-import org.rcfaces.core.component.AbstractOutputComponent;
 import java.util.Set;
-import java.util.Arrays;
-import org.rcfaces.core.internal.capability.IVariableScopeCapability;
-import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
-import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
-import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.capability.IFontCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.component.capability.IImageCapability;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import org.rcfaces.core.component.capability.IHeadingZoneCapability;
+import org.rcfaces.core.component.capability.IAudioDescriptionCapability;
+import org.rcfaces.core.component.capability.IBorderTypeCapability;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
+import javax.el.ValueExpression;
+import org.rcfaces.core.component.capability.ITextAlignmentCapability;
+import java.util.HashSet;
+import org.rcfaces.core.component.AbstractOutputComponent;
+import java.util.Arrays;
+import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.rcfaces.core.internal.capability.IVariableScopeCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
 
 /**
  * <p>The fieldSet Component is a container with a title (text and/or picture).</p>

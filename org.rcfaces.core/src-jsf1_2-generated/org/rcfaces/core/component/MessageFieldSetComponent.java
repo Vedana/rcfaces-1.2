@@ -24,7 +24,7 @@ public class MessageFieldSetComponent extends FieldSetComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(FieldSetComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fatalStyleClass","for","styleClass","fatalImageURL","showActiveComponentMessage","setFocusIfMessage","errorStyleClass","warnStyleClass","infoStyleClass","infoImageURL","warnImageURL","errorImageURL","imageURL"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fatalStyleClass","for","styleClass","fatalImageURL","setFocusIfMessage","showActiveComponentMessage","errorStyleClass","warnStyleClass","infoStyleClass","infoImageURL","warnImageURL","errorImageURL","imageURL"}));
 	}
 
 	public MessageFieldSetComponent() {

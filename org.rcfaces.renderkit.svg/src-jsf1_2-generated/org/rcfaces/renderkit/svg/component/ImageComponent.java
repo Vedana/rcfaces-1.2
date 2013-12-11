@@ -68,7 +68,7 @@ public class ImageComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"curveFlatness","imageHeight","filterProperties","fontName","fontItalic","fontUnderline","alternateText","distanceTolerance","fontBold","fontSize","pixelUnitToMillimeter","imageWidth","imageURL"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"curveFlatness","imageHeight","fontName","filterProperties","distanceTolerance","fontBold","fontSize","pixelUnitToMillimeter","fontItalic","fontUnderline","alternateText","imageURL","imageWidth"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="imageURL";
 

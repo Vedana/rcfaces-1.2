@@ -59,7 +59,7 @@ public class ToolBarComponent extends AbstractBasicComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractBasicComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"verticalAlignment","controlImageWidth","separatorAlternateText","borderType","separatorImageHeight","separatorImageURL","locked","itemPadding","controlImageHeight","separatorImageWidth","controlAlternateText","controlImageURL","initListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"controlImageWidth","borderType","separatorImageHeight","separatorImageWidth","initListener","verticalAlignment","separatorAlternateText","separatorImageURL","locked","controlImageHeight","itemPadding","controlImageURL","controlAlternateText"}));
 	}
 
 	public ToolBarComponent() {
