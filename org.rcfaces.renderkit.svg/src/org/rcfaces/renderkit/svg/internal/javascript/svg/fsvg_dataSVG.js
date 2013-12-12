@@ -15,7 +15,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event
-	 *            event
+	 *            evt
 	 * @return Boolean
 	 * @context object:svg
 	 */
@@ -44,7 +44,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event
-	 *            event
+	 *            evt
 	 * @return Boolean
 	 * @context object:svg
 	 */
@@ -73,7 +73,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event
-	 *            event
+	 *            evt
 	 * @return Boolean
 	 * @context object:svg
 	 */
@@ -107,6 +107,8 @@ var __members = {
 
 	},
 	f_finalize : function() {
+		this._delayedUpdates=undefined; // Map<String, Object>
+		
 		var links = this._links;
 		if (links) {
 			this._links = undefined;
@@ -137,11 +139,26 @@ var __members = {
 		
 		this.f_super(arguments);
 	},
+	
+	/**
+	 *  @method protected
+	 *  @param Document svgDocument
+	 *  @return void
+	 */
 	f_updateSVG: function(svgDocument) {
 		this.f_super(arguments, svgDocument);
 
+		var delayedUpdates=this._delayedUpdates;
+		if (delayedUpdates) {
+			this._delayedUpdates=undefined;
+			
+			for(var id in delayedUpdates) {
+				this._updateItem(id, delayedUpdates[id]);
+			}
+		}
+		
 		if (!this._callbacksInstalled) {
-			this._callbacksInstalled=undefined;
+			this._callbacksInstalled=true;
 			
 			try {
 				f_toolTipManager.InstallOverCallbacks(svgDocument,
@@ -210,12 +227,46 @@ var __members = {
 
 		return element;
 	},
+	
+	/**
+	 *  @method protected
+	 *  @param String id
+	 *  @param Object properties
+	 *  @return void
+	 */
+
 	_update : function(id, modifs) {
+		var delayedUpdates=this._delayedUpdates;
+		if (delayedUpdates===undefined) {
+			var svgDocument = this.f_getSVGDocument();
+			if (svgDocument) {
+				delayedUpdates=null;
+			} else {
+				delayedUpdates={};
+			}
+			this._delayedUpdates=delayedUpdates;
+		}
+		
+		if (delayedUpdates===null) {
+			this._updateItem(id, modifs);
+			return;
+		}
+		
+		delayedUpdates[id]=modifs;
+	},
+	
+	/**
+	 *  @method protected
+	 *  @param String id
+	 *  @param Object properties
+	 *  @return void
+	 */
+
+	_updateItem: function(id, modifs) {
 		var c = this.f_getElementById(id);
 		if (!c) {
 			return;
 		}
-
 		c._rowIndex = modifs._rowIndex;
 
 		if (modifs._color !== undefined) {

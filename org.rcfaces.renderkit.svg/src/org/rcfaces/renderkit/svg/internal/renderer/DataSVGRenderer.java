@@ -315,39 +315,38 @@ public class DataSVGRenderer extends SVGRenderer implements
                     IObjectLiteralWriter objectLiteralWriter = jsWriter
                             .writeObjectLiteral(false);
 
-                    objectLiteralWriter.writeProperty("_rowIndex").writeInt(
-                            index);
+                    objectLiteralWriter.writeSymbol("_rowIndex")
+                            .writeInt(index);
 
                     if (visibility != null) {
-                        objectLiteralWriter.writeProperty("_visibility")
+                        objectLiteralWriter.writeSymbol("_visibility")
                                 .writeBoolean(visibility.booleanValue());
                     }
                     if (colorVar != null) {
-                        objectLiteralWriter.writeProperty("_color").write(
+                        objectLiteralWriter.writeSymbol("_color").write(
                                 colorVar);
                     }
                     if (styleClassVar != null) {
-                        objectLiteralWriter.writeProperty("_styleClass").write(
+                        objectLiteralWriter.writeSymbol("_styleClass").write(
                                 styleClassVar);
                     }
                     if (fillVar != null) {
-                        objectLiteralWriter.writeProperty("_fill").write(
-                                fillVar);
+                        objectLiteralWriter.writeSymbol("_fill").write(fillVar);
                     }
                     if (text != null) {
-                        objectLiteralWriter.writeProperty("_text").writeString(
+                        objectLiteralWriter.writeSymbol("_text").writeString(
                                 text);
                     }
                     if (value != null) {
-                        objectLiteralWriter.writeProperty("_value")
-                                .writeString(value);
+                        objectLiteralWriter.writeSymbol("_value").writeString(
+                                value);
                     }
                     if (selectable != null) {
-                        objectLiteralWriter.writeProperty("_selectable")
+                        objectLiteralWriter.writeSymbol("_selectable")
                                 .writeBoolean(selectable.booleanValue());
                     }
                     if (audioDescription != null) {
-                        objectLiteralWriter.writeProperty("_audioDescription")
+                        objectLiteralWriter.writeSymbol("_audioDescription")
                                 .writeString(audioDescription);
                     }
 
@@ -361,7 +360,7 @@ public class DataSVGRenderer extends SVGRenderer implements
                         }
 
                     } else if (tooltipText != null) {
-                        objectLiteralWriter.writeProperty("_tooltipText")
+                        objectLiteralWriter.writeSymbol("_tooltipText")
                                 .writeString(tooltipText);
                     }
 

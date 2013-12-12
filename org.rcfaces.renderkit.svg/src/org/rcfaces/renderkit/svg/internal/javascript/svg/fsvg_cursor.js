@@ -11,12 +11,29 @@
  */
 
 var __statics = {
+
+	/**
+	 * @method public static
+	 * @param Element element
+	 * @return void
+	 */
 	Show: function(element) {
 		fsvg_cursor.Get().f_show(element);
 	},
+
+	/**
+	 * @method public static
+	 * @param Element element
+	 * @return void
+	 */
 	Hide: function(element) {
 		fsvg_cursor.Get().f_hide(element);		
 	},
+
+	/**
+	 * @method public static
+	 * @return fsvg_cursor
+	 */
 	Get: function() {
 		var singleton=fsvg_cursor._Singleton;
 		if (singleton) {
@@ -44,6 +61,12 @@ var __members = {
 			});
 		}
 	},
+	
+	/**
+	 *  @method public
+	 *  @param Element element
+	 *  @return void
+	 */
 	f_show: function(element) {
 		var box=element.getBoundingClientRect();
 		var position=f_core.GetAbsolutePosition(element);
@@ -83,6 +106,11 @@ var __members = {
 		s4.top=y1;
 		s4.display="block";
 	},
+	
+	/**
+	 *  @method public
+	 *  @return void
+	 */
 	f_hide: function() {		
 		var elts=this._elements;
 		
