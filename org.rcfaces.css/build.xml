@@ -92,6 +92,11 @@
 		    javacchome="${javacc.home}"
 		/>
 		<javacc
+		    target="src/com/steadystate/css/parser/SACParserCSS3.jj"
+		    outputdirectory="src-generated/com/steadystate/css/parser/"
+		    javacchome="${javacc.home}"
+		/>
+		<javacc
 		    target="src/com/steadystate/css/parser/SACParserCSSmobileOKBasic1.jj"
 		    outputdirectory="src-generated/com/steadystate/css/parser/"
 		    javacchome="${javacc.home}"

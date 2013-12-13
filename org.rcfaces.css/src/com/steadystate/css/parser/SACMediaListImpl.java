@@ -32,20 +32,18 @@ import org.w3c.css.sac.SACMediaList;
 
 /**
  * Implementation of {@link SACMediaList}.
- * 
- * @author <a href="mailto:davidsch@users.sourceforge.net">David
- *         Schweinsberg</a>
+ *
+ * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
+ * @author rbri
  */
 public class SACMediaListImpl extends LocatableImpl implements SACMediaList {
 
-    private final List<String> media_ = new ArrayList<String>(10);
+    private List<String> media_ = new ArrayList<String>(10);
 
-    @Override
     public int getLength() {
         return media_.size();
     }
 
-    @Override
     public String item(final int index) {
         return media_.get(index);
     }

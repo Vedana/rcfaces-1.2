@@ -27,7 +27,6 @@
 package com.steadystate.css.dom;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.io.StringReader;
 
 import org.w3c.css.sac.CSSException;
@@ -43,8 +42,9 @@ import com.steadystate.css.util.LangUtils;
  * Implementation of {@link CSSCharsetRule}.
  *
  * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
+ * @author rbri
  */
-public class CSSCharsetRuleImpl extends AbstractCSSRuleImpl implements CSSCharsetRule, Serializable {
+public class CSSCharsetRuleImpl extends AbstractCSSRuleImpl implements CSSCharsetRule {
 
     private static final long serialVersionUID = -2472209213089007127L;
 
@@ -67,7 +67,7 @@ public class CSSCharsetRuleImpl extends AbstractCSSRuleImpl implements CSSCharse
     }
 
     public String getCssText() {
-        return "@charset \"" + this.getEncoding() + "\";";
+        return "@charset \"" + getEncoding() + "\";";
     }
 
     public void setCssText(final String cssText) throws DOMException {
@@ -108,7 +108,7 @@ public class CSSCharsetRuleImpl extends AbstractCSSRuleImpl implements CSSCharse
     }
 
     public String getEncoding() {
-        return this.encoding_;
+        return encoding_;
     }
 
     public void setEncoding(final String encoding) throws DOMException {
@@ -125,7 +125,7 @@ public class CSSCharsetRuleImpl extends AbstractCSSRuleImpl implements CSSCharse
         }
         final CSSCharsetRule ccr = (CSSCharsetRule) obj;
         return super.equals(obj)
-            && LangUtils.equals(this.getEncoding(), ccr.getEncoding());
+            && LangUtils.equals(getEncoding(), ccr.getEncoding());
     }
 
     @Override
@@ -137,7 +137,7 @@ public class CSSCharsetRuleImpl extends AbstractCSSRuleImpl implements CSSCharse
 
     @Override
     public String toString() {
-        return this.getCssText();
+        return getCssText();
     }
 
 }

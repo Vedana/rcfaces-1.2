@@ -37,6 +37,7 @@ import com.steadystate.css.parser.LocatableImpl;
 /**
  *
  * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
+ * @author rbri
  */
 public class AndConditionImpl extends LocatableImpl implements CombinatorCondition, Serializable {
 
@@ -64,9 +65,6 @@ public class AndConditionImpl extends LocatableImpl implements CombinatorConditi
         setSecondCondition(c2);
     }
 
-    public AndConditionImpl() {
-    }
-
     public short getConditionType() {
         return Condition.SAC_AND_CONDITION;
     }
@@ -79,6 +77,7 @@ public class AndConditionImpl extends LocatableImpl implements CombinatorConditi
         return secondCondition_;
     }
 
+    @Override
     public String toString() {
         return getFirstCondition().toString() + getSecondCondition().toString();
     }

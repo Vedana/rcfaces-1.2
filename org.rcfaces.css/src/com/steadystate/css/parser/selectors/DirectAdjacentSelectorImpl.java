@@ -37,6 +37,7 @@ import com.steadystate.css.parser.LocatableImpl;
 
 /**
  * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
+ * @author rbri
  */
 public class DirectAdjacentSelectorImpl extends LocatableImpl implements SiblingSelector, Serializable {
 
@@ -71,9 +72,6 @@ public class DirectAdjacentSelectorImpl extends LocatableImpl implements Sibling
         setSiblingSelector(directAdjacent);
     }
 
-    public DirectAdjacentSelectorImpl() {
-    }
-
     public short getNodeType() {
         return nodeType_;
     }
@@ -90,6 +88,7 @@ public class DirectAdjacentSelectorImpl extends LocatableImpl implements Sibling
         return siblingSelector_;
     }
 
+    @Override
     public String toString() {
         return selector_.toString() + " + " + siblingSelector_.toString();
     }

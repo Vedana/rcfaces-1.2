@@ -42,16 +42,17 @@ import com.steadystate.css.util.LangUtils;
 
 /**
  * Implementation of {@link CSSStyleDeclaration}.
- * 
- * @author <a href="mailto:davidsch@users.sourceforge.net">David
- *         Schweinsberg</a>
+ *
+ * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
+ * @author rbri
  */
-public class CSSStyleDeclarationImpl implements CSSStyleDeclaration,
-        Serializable {
+public class CSSStyleDeclarationImpl implements CSSStyleDeclaration, Serializable
+{
     private static final long serialVersionUID = -2373755821317100189L;
 
-    private CSSRule parentRule_;
+    private static final String PRIORITY_IMPORTANT = "important";
 
+    private CSSRule parentRule_;
     private List<Property> properties_ = new ArrayList<Property>();
 
     public void setParentRule(final CSSRule parentRule) {
@@ -74,7 +75,6 @@ public class CSSStyleDeclarationImpl implements CSSStyleDeclaration,
         // Empty.
     }
 
-    @Override
     public String getCssText() {
         final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < properties_.size(); ++i) {
@@ -89,36 +89,38 @@ public class CSSStyleDeclarationImpl implements CSSStyleDeclaration,
         return sb.toString();
     }
 
-    @Override
     public void setCssText(final String cssText) throws DOMException {
         try {
             final InputSource is = new InputSource(new StringReader(cssText));
             final CSSOMParser parser = new CSSOMParser();
             properties_.clear();
             parser.parseStyleDeclaration(this, is);
-        } catch (final Exception e) {
-            throw new DOMExceptionImpl(DOMException.SYNTAX_ERR,
-                    DOMExceptionImpl.SYNTAX_ERROR, e.getMessage());
+        }
+        catch (final Exception e) {
+            throw new DOMExceptionImpl(
+                DOMException.SYNTAX_ERR,
+                DOMExceptionImpl.SYNTAX_ERROR,
+                e.getMessage());
         }
     }
 
-    @Override
     public String getPropertyValue(final String propertyName) {
         final Property p = getPropertyDeclaration(propertyName);
-        return (p != null) ? p.getValue().toString() : "";
+        return (p == null) ? "" : p.getValue().toString();
     }
 
-    @Override
     public CSSValue getPropertyCSSValue(final String propertyName) {
         final Property p = getPropertyDeclaration(propertyName);
-        return (p != null) ? p.getValue() : null;
+        return (p == null) ? null : p.getValue();
     }
 
-    @Override
     public String removeProperty(final String propertyName) throws DOMException {
+        if (null == propertyName) {
+            return "";
+        }
         for (int i = 0; i < properties_.size(); i++) {
             final Property p = properties_.get(i);
-            if (p.getName().equalsIgnoreCase(propertyName)) {
+            if (p != null && propertyName.equalsIgnoreCase(p.getName())) {
                 properties_.remove(i);
                 return p.getValue().toString();
             }
@@ -126,50 +128,52 @@ public class CSSStyleDeclarationImpl implements CSSStyleDeclaration,
         return "";
     }
 
-    @Override
     public String getPropertyPriority(final String propertyName) {
         final Property p = getPropertyDeclaration(propertyName);
-        if (p != null) {
-            return p.isImportant() ? "important" : "";
+        if (p == null) {
+            return "";
         }
-        return "";
+        return p.isImportant() ? PRIORITY_IMPORTANT : "";
     }
 
-    @Override
-    public void setProperty(final String propertyName, final String value,
+    public void setProperty(
+            final String propertyName,
+            final String value,
             final String priority) throws DOMException {
         try {
             final InputSource is = new InputSource(new StringReader(value));
             final CSSOMParser parser = new CSSOMParser();
             final CSSValue expr = parser.parsePropertyValue(is);
             Property p = getPropertyDeclaration(propertyName);
-            final boolean important = (priority != null) ? "important"
-                    .equalsIgnoreCase(priority) : false;
+            final boolean important = (priority != null)
+                ? PRIORITY_IMPORTANT.equalsIgnoreCase(priority)
+                : false;
             if (p == null) {
                 p = new Property(propertyName, expr, important);
                 addProperty(p);
-            } else {
+            }
+            else {
                 p.setValue(expr);
                 p.setImportant(important);
             }
-        } catch (final Exception e) {
-            throw new DOMExceptionImpl(DOMException.SYNTAX_ERR,
-                    DOMExceptionImpl.SYNTAX_ERROR, e.getMessage());
+        }
+        catch (final Exception e) {
+            throw new DOMExceptionImpl(
+                    DOMException.SYNTAX_ERR,
+                    DOMExceptionImpl.SYNTAX_ERROR,
+                    e.getMessage());
         }
     }
 
-    @Override
     public int getLength() {
         return properties_.size();
     }
 
-    @Override
     public String item(final int index) {
         final Property p = properties_.get(index);
-        return (p != null) ? p.getName() : "";
+        return (p == null) ? "" : p.getName();
     }
 
-    @Override
     public CSSRule getParentRule() {
         return parentRule_;
     }
@@ -178,10 +182,13 @@ public class CSSStyleDeclarationImpl implements CSSStyleDeclaration,
         properties_.add(p);
     }
 
-    public Property getPropertyDeclaration(final String name) {
+    public Property getPropertyDeclaration(final String propertyName) {
+        if (null == propertyName) {
+            return null;
+        }
         for (int i = 0; i < properties_.size(); i++) {
             final Property p = properties_.get(i);
-            if (p.getName().equalsIgnoreCase(name)) {
+            if (p != null && propertyName.equalsIgnoreCase(p.getName())) {
                 return p;
             }
         }
@@ -215,16 +222,14 @@ public class CSSStyleDeclarationImpl implements CSSStyleDeclaration,
         for (int i = 0; i < getLength(); i++) {
             final String propertyName = item(i);
             // CSSValue propertyCSSValue1 = getPropertyCSSValue(propertyName);
-            // CSSValue propertyCSSValue2 =
-            // csd.getPropertyCSSValue(propertyName);
+            // CSSValue propertyCSSValue2 = csd.getPropertyCSSValue(propertyName);
             final String propertyValue1 = getPropertyValue(propertyName);
             final String propertyValue2 = csd.getPropertyValue(propertyName);
             if (!LangUtils.equals(propertyValue1, propertyValue2)) {
                 return false;
             }
             final String propertyPriority1 = getPropertyPriority(propertyName);
-            final String propertyPriority2 = csd
-                    .getPropertyPriority(propertyName);
+            final String propertyPriority2 = csd.getPropertyPriority(propertyName);
             if (!LangUtils.equals(propertyPriority1, propertyPriority2)) {
                 return false;
             }

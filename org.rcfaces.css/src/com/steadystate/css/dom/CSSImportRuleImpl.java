@@ -27,7 +27,6 @@
 package com.steadystate.css.dom;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.io.StringReader;
 
 import org.w3c.css.sac.CSSException;
@@ -43,19 +42,17 @@ import com.steadystate.css.util.LangUtils;
 
 /**
  * Implementation of {@link CSSImportRule}.
- * 
+ *
  * TODO: Implement getStyleSheet()
- * 
- * @author <a href="mailto:davidsch@users.sourceforge.net">David
- *         Schweinsberg</a>
+ *
+ * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
+ * @author rbri
  */
-public class CSSImportRuleImpl extends AbstractCSSRuleImpl implements
-        CSSImportRule, Serializable {
+public class CSSImportRuleImpl extends AbstractCSSRuleImpl implements CSSImportRule {
 
     private static final long serialVersionUID = 7807829682009179339L;
 
     private String href_;
-
     private MediaList media_;
 
     public void setHref(final String href) {
@@ -66,8 +63,11 @@ public class CSSImportRuleImpl extends AbstractCSSRuleImpl implements
         media_ = media;
     }
 
-    public CSSImportRuleImpl(final CSSStyleSheetImpl parentStyleSheet,
-            final CSSRule parentRule, final String href, final MediaList media) {
+    public CSSImportRuleImpl(
+            final CSSStyleSheetImpl parentStyleSheet,
+            final CSSRule parentRule,
+            final String href,
+            final MediaList media) {
         super(parentStyleSheet, parentRule);
         href_ = href;
         media_ = media;
@@ -77,15 +77,15 @@ public class CSSImportRuleImpl extends AbstractCSSRuleImpl implements
         super();
     }
 
-    @Override
     public short getType() {
         return IMPORT_RULE;
     }
 
-    @Override
     public String getCssText() {
         final StringBuilder sb = new StringBuilder();
-        sb.append("@import url(").append(getHref()).append(")");
+        sb.append("@import url(")
+            .append(getHref())
+            .append(")");
         if (getMedia().getLength() > 0) {
             sb.append(" ").append(getMedia().toString());
         }
@@ -93,13 +93,12 @@ public class CSSImportRuleImpl extends AbstractCSSRuleImpl implements
         return sb.toString();
     }
 
-    @Override
     public void setCssText(final String cssText) throws DOMException {
         final CSSStyleSheetImpl parentStyleSheet = getParentStyleSheetImpl();
         if (parentStyleSheet != null && parentStyleSheet.isReadOnly()) {
             throw new DOMExceptionImpl(
-                    DOMException.NO_MODIFICATION_ALLOWED_ERR,
-                    DOMExceptionImpl.READ_ONLY_STYLE_SHEET);
+                DOMException.NO_MODIFICATION_ALLOWED_ERR,
+                DOMExceptionImpl.READ_ONLY_STYLE_SHEET);
         }
 
         try {
@@ -111,31 +110,35 @@ public class CSSImportRuleImpl extends AbstractCSSRuleImpl implements
             if (r.getType() == CSSRule.IMPORT_RULE) {
                 href_ = ((CSSImportRuleImpl) r).href_;
                 media_ = ((CSSImportRuleImpl) r).media_;
-            } else {
-                throw new DOMExceptionImpl(
-                        DOMException.INVALID_MODIFICATION_ERR,
-                        DOMExceptionImpl.EXPECTING_IMPORT_RULE);
             }
-        } catch (final CSSException e) {
-            throw new DOMExceptionImpl(DOMException.SYNTAX_ERR,
-                    DOMExceptionImpl.SYNTAX_ERROR, e.getMessage());
-        } catch (final IOException e) {
-            throw new DOMExceptionImpl(DOMException.SYNTAX_ERR,
-                    DOMExceptionImpl.SYNTAX_ERROR, e.getMessage());
+            else {
+                throw new DOMExceptionImpl(
+                    DOMException.INVALID_MODIFICATION_ERR,
+                    DOMExceptionImpl.EXPECTING_IMPORT_RULE);
+            }
+        }
+        catch (final CSSException e) {
+            throw new DOMExceptionImpl(
+                DOMException.SYNTAX_ERR,
+                DOMExceptionImpl.SYNTAX_ERROR,
+                e.getMessage());
+        }
+        catch (final IOException e) {
+            throw new DOMExceptionImpl(
+                DOMException.SYNTAX_ERR,
+                DOMExceptionImpl.SYNTAX_ERROR,
+                e.getMessage());
         }
     }
 
-    @Override
     public String getHref() {
         return href_;
     }
 
-    @Override
     public MediaList getMedia() {
         return media_;
     }
 
-    @Override
     public CSSStyleSheet getStyleSheet() {
         return null;
     }
@@ -154,8 +157,9 @@ public class CSSImportRuleImpl extends AbstractCSSRuleImpl implements
             return false;
         }
         final CSSImportRule cir = (CSSImportRule) obj;
-        return super.equals(obj) && LangUtils.equals(getHref(), cir.getHref())
-                && LangUtils.equals(getMedia(), cir.getMedia());
+        return super.equals(obj)
+            && LangUtils.equals(getHref(), cir.getHref())
+            && LangUtils.equals(getMedia(), cir.getMedia());
     }
 
     @Override

@@ -107,59 +107,61 @@ public interface SACParserCSS2Constants {
   /** RegularExpression Id. */
   int FREQ_KHZ = 51;
   /** RegularExpression Id. */
-  int DIMEN = 52;
+  int PERCENTAGE = 52;
   /** RegularExpression Id. */
-  int PERCENTAGE = 53;
+  int DIMEN = 53;
   /** RegularExpression Id. */
   int NUMBER = 54;
   /** RegularExpression Id. */
   int RGB = 55;
   /** RegularExpression Id. */
-  int FUNCTION = 56;
+  int FUNCTION_LANG = 56;
   /** RegularExpression Id. */
-  int IDENT = 57;
+  int FUNCTION = 57;
   /** RegularExpression Id. */
-  int NAME = 58;
+  int IDENT = 58;
   /** RegularExpression Id. */
-  int NUM = 59;
+  int NAME = 59;
   /** RegularExpression Id. */
-  int UNICODERANGE = 60;
+  int NUM = 60;
   /** RegularExpression Id. */
-  int RANGE = 61;
+  int UNICODERANGE = 61;
   /** RegularExpression Id. */
-  int Q16 = 62;
+  int RANGE = 62;
   /** RegularExpression Id. */
-  int Q15 = 63;
+  int Q16 = 63;
   /** RegularExpression Id. */
-  int Q14 = 64;
+  int Q15 = 64;
   /** RegularExpression Id. */
-  int Q13 = 65;
+  int Q14 = 65;
   /** RegularExpression Id. */
-  int Q12 = 66;
+  int Q13 = 66;
   /** RegularExpression Id. */
-  int Q11 = 67;
+  int Q12 = 67;
   /** RegularExpression Id. */
-  int NMSTART = 68;
+  int Q11 = 68;
   /** RegularExpression Id. */
-  int NMCHAR = 69;
+  int NMSTART = 69;
   /** RegularExpression Id. */
-  int STRING1 = 70;
+  int NMCHAR = 70;
   /** RegularExpression Id. */
-  int STRING2 = 71;
+  int STRING1 = 71;
   /** RegularExpression Id. */
-  int NONASCII = 72;
+  int STRING2 = 72;
   /** RegularExpression Id. */
-  int ESCAPE = 73;
+  int NONASCII = 73;
   /** RegularExpression Id. */
-  int NL = 74;
+  int ESCAPE = 74;
   /** RegularExpression Id. */
-  int UNICODE = 75;
+  int NL = 75;
   /** RegularExpression Id. */
-  int HNUM = 76;
+  int UNICODE = 76;
   /** RegularExpression Id. */
-  int H = 77;
+  int HNUM = 77;
   /** RegularExpression Id. */
-  int UNKNOWN = 78;
+  int H = 78;
+  /** RegularExpression Id. */
+  int UNKNOWN = 79;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -220,10 +222,11 @@ public interface SACParserCSS2Constants {
     "<TIME_S>",
     "<FREQ_HZ>",
     "<FREQ_KHZ>",
-    "<DIMEN>",
     "<PERCENTAGE>",
+    "<DIMEN>",
     "<NUMBER>",
     "\"rgb(\"",
+    "\"lang(\"",
     "<FUNCTION>",
     "<IDENT>",
     "<NAME>",

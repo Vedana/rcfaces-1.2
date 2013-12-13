@@ -6,7 +6,7 @@ package com.steadystate.css.parser;
  * Describes the input token stream.
  */
 
-public class Token implements java.io.Serializable {
+@SuppressWarnings("all") public class Token implements java.io.Serializable {
 
   /**
    * The version identifier for this Serializable class.

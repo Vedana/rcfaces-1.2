@@ -12,6 +12,8 @@ import org.w3c.css.sac.SimpleSelector;
 
 /**
  * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
+ * @author waldbaer
+ * @author rbri
  * @version $Id$
  */
 public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Parser, SACParserCSSmobileOKBasic1Constants {
@@ -554,7 +556,7 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
         }
         jj_consume_token(S);
       }
-                           {if (true) return new LexicalUnitImpl(prev, LexicalUnit.SAC_OPERATOR_COMMA);}
+                           {if (true) return LexicalUnitImpl.createComma(prev);}
       break;
     default:
       jj_la1[25] = jj_gen;
@@ -688,6 +690,18 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
 
   final public SelectorList parseSelectorsInternal() throws ParseException {
     SelectorList selectors;
+    label_20:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case S:
+        ;
+        break;
+      default:
+        jj_la1[32] = jj_gen;
+        break label_20;
+      }
+      jj_consume_token(S);
+    }
     selectors = selectorList();
     jj_consume_token(0);
         {if (true) return selectors;}
@@ -702,41 +716,41 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
         {
             selList.setLocator(((Locatable) sel).getLocator());
         }
-    label_20:
+    label_21:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case COMMA:
         ;
         break;
       default:
-        jj_la1[32] = jj_gen;
-        break label_20;
+        jj_la1[33] = jj_gen;
+        break label_21;
       }
       jj_consume_token(COMMA);
-      label_21:
+      label_22:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case S:
           ;
           break;
         default:
-          jj_la1[33] = jj_gen;
-          break label_21;
+          jj_la1[34] = jj_gen;
+          break label_22;
         }
         jj_consume_token(S);
       }
                          selList.add(sel);
       sel = selector();
     }
-    label_22:
+    label_23:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case S:
         ;
         break;
       default:
-        jj_la1[34] = jj_gen;
-        break label_22;
+        jj_la1[35] = jj_gen;
+        break label_23;
       }
       jj_consume_token(S);
     }
@@ -755,12 +769,12 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
     SimpleSelector pseudoElementSel = null;
     try {
       sel = simpleSelector(null, ' ');
-      label_23:
+      label_24:
       while (true) {
         if (jj_2_1(2)) {
           ;
         } else {
-          break label_23;
+          break label_24;
         }
         jj_consume_token(S);
         sel = simpleSelector(sel, ' ');
@@ -771,7 +785,7 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
         pseudoElementSel = pseudoElement();
         break;
       default:
-        jj_la1[35] = jj_gen;
+        jj_la1[36] = jj_gen;
         ;
       }
             if (pseudoElementSel != null)
@@ -808,7 +822,7 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
           c = hash(c);
           break;
         default:
-          jj_la1[36] = jj_gen;
+          jj_la1[37] = jj_gen;
           ;
         }
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -816,7 +830,7 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
           c = _class(c);
           break;
         default:
-          jj_la1[37] = jj_gen;
+          jj_la1[38] = jj_gen;
           ;
         }
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -826,7 +840,7 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
           c = pseudoClass(c);
           break;
         default:
-          jj_la1[38] = jj_gen;
+          jj_la1[39] = jj_gen;
           ;
         }
         break;
@@ -838,7 +852,7 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
           c = _class(c);
           break;
         default:
-          jj_la1[39] = jj_gen;
+          jj_la1[40] = jj_gen;
           ;
         }
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -848,7 +862,7 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
           c = pseudoClass(c);
           break;
         default:
-          jj_la1[40] = jj_gen;
+          jj_la1[41] = jj_gen;
           ;
         }
         break;
@@ -862,7 +876,7 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
           c = pseudoClass(c);
           break;
         default:
-          jj_la1[41] = jj_gen;
+          jj_la1[42] = jj_gen;
           ;
         }
         break;
@@ -873,7 +887,7 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
         c = pseudoClass(c);
         break;
       default:
-        jj_la1[42] = jj_gen;
+        jj_la1[43] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -951,7 +965,7 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
             {if (true) return sel;}
         break;
       default:
-        jj_la1[43] = jj_gen;
+        jj_la1[44] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -981,7 +995,7 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
         t = jj_consume_token(ACTIVE_PSCLASS);
         break;
       default:
-        jj_la1[44] = jj_gen;
+        jj_la1[45] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1020,7 +1034,7 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
         t = jj_consume_token(FIRST_LINE);
         break;
       default:
-        jj_la1[45] = jj_gen;
+        jj_la1[46] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1059,29 +1073,29 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
       declaration();
       break;
     default:
-      jj_la1[46] = jj_gen;
+      jj_la1[47] = jj_gen;
       ;
     }
-    label_24:
+    label_25:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case SEMICOLON:
         ;
         break;
       default:
-        jj_la1[47] = jj_gen;
-        break label_24;
+        jj_la1[48] = jj_gen;
+        break label_25;
       }
       jj_consume_token(SEMICOLON);
-      label_25:
+      label_26:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case S:
           ;
           break;
         default:
-          jj_la1[48] = jj_gen;
-          break label_25;
+          jj_la1[49] = jj_gen;
+          break label_26;
         }
         jj_consume_token(S);
       }
@@ -1090,7 +1104,7 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
         declaration();
         break;
       default:
-        jj_la1[49] = jj_gen;
+        jj_la1[50] = jj_gen;
         ;
       }
     }
@@ -1111,15 +1125,15 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
       p = property();
             locator = this.getLocator();
       jj_consume_token(COLON);
-      label_26:
+      label_27:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case S:
           ;
           break;
         default:
-          jj_la1[50] = jj_gen;
-          break label_26;
+          jj_la1[51] = jj_gen;
+          break label_27;
         }
         jj_consume_token(S);
       }
@@ -1129,7 +1143,7 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
         priority = prio();
         break;
       default:
-        jj_la1[51] = jj_gen;
+        jj_la1[52] = jj_gen;
         ;
       }
             this.handleProperty(p, e, priority, locator);
@@ -1149,15 +1163,15 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
 //
   final public boolean prio() throws ParseException {
     jj_consume_token(IMPORTANT_SYM);
-    label_27:
+    label_28:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case S:
         ;
         break;
       default:
-        jj_la1[52] = jj_gen;
-        break label_27;
+        jj_la1[53] = jj_gen;
+        break label_28;
       }
       jj_consume_token(S);
     }
@@ -1178,7 +1192,7 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
     try {
       head = term(null);
                             body = head;
-      label_28:
+      label_29:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case IDENT:
@@ -1204,8 +1218,8 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
           ;
           break;
         default:
-          jj_la1[53] = jj_gen;
-          break label_28;
+          jj_la1[54] = jj_gen;
+          break label_29;
         }
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case COMMA:
@@ -1213,7 +1227,7 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
           body = operator(body);
           break;
         default:
-          jj_la1[54] = jj_gen;
+          jj_la1[55] = jj_gen;
           ;
         }
         body = term(body);
@@ -1244,7 +1258,7 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
       op = unaryOperator();
       break;
     default:
-      jj_la1[55] = jj_gen;
+      jj_la1[56] = jj_gen;
       ;
     }
         if (op != ' ')
@@ -1311,7 +1325,7 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
                               value = LexicalUnitImpl.createEx(prev, floatValue(op, t.image));
         break;
       default:
-        jj_la1[56] = jj_gen;
+        jj_la1[57] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1339,7 +1353,7 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
       value = hexcolor(prev);
       break;
     default:
-      jj_la1[57] = jj_gen;
+      jj_la1[58] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -1347,15 +1361,15 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
         {
             locator = this.getLocator();
         }
-    label_29:
+    label_30:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case S:
         ;
         break;
       default:
-        jj_la1[58] = jj_gen;
-        break label_29;
+        jj_la1[59] = jj_gen;
+        break label_30;
       }
       jj_consume_token(S);
     }
@@ -1376,15 +1390,15 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
     Token t;
     LexicalUnit params;
     t = jj_consume_token(RGB);
-    label_30:
+    label_31:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case S:
         ;
         break;
       default:
-        jj_la1[59] = jj_gen;
-        break label_30;
+        jj_la1[60] = jj_gen;
+        break label_31;
       }
       jj_consume_token(S);
     }
@@ -1499,42 +1513,7 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
   }
 
   private boolean jj_3R_38() {
-    if (jj_scan_token(DOT)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_37() {
     if (jj_scan_token(HASH)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_33() {
-    if (jj_3R_37()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_40() {
-    if (jj_scan_token(IDENT)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_32() {
-    if (jj_3R_36()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_35() {
-    if (jj_3R_39()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_36() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_40()) {
-    jj_scanpos = xsp;
-    if (jj_3R_41()) return true;
-    }
     return false;
   }
 
@@ -1544,33 +1523,63 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
   }
 
   private boolean jj_3R_41() {
+    if (jj_scan_token(IDENT)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_33() {
+    if (jj_3R_37()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_36() {
+    if (jj_3R_40()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_37() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_41()) {
+    jj_scanpos = xsp;
+    if (jj_3R_42()) return true;
+    }
+    return false;
+  }
+
+  private boolean jj_3R_35() {
+    if (jj_3R_39()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_42() {
     if (jj_scan_token(ASTERISK)) return true;
     return false;
   }
 
   private boolean jj_3_1() {
     if (jj_scan_token(S)) return true;
-    if (jj_3R_31()) return true;
+    if (jj_3R_32()) return true;
     return false;
   }
 
-  private boolean jj_3R_31() {
+  private boolean jj_3R_32() {
     Token xsp;
     xsp = jj_scanpos;
-    if (jj_3R_32()) {
-    jj_scanpos = xsp;
     if (jj_3R_33()) {
     jj_scanpos = xsp;
     if (jj_3R_34()) {
     jj_scanpos = xsp;
-    if (jj_3R_35()) return true;
+    if (jj_3R_35()) {
+    jj_scanpos = xsp;
+    if (jj_3R_36()) return true;
     }
     }
     }
     return false;
   }
 
-  private boolean jj_3R_39() {
+  private boolean jj_3R_40() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_scan_token(4)) {
@@ -1580,6 +1589,11 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
     if (jj_scan_token(6)) return true;
     }
     }
+    return false;
+  }
+
+  private boolean jj_3R_39() {
+    if (jj_scan_token(DOT)) return true;
     return false;
   }
 
@@ -1593,7 +1607,7 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
   private Token jj_scanpos, jj_lastpos;
   private int jj_la;
   private int jj_gen;
-  final private int[] jj_la1 = new int[60];
+  final private int[] jj_la1 = new int[61];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static private int[] jj_la1_2;
@@ -1603,13 +1617,13 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
       jj_la1_init_2();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x18000002,0x18000002,0x60012278,0x40012278,0x60012278,0x18000002,0x18000002,0x2,0x60012278,0x2,0x5000000,0x2,0x8,0x2,0x2,0x12278,0x1000,0x2,0x12278,0x2,0x12278,0x12278,0x2,0x2,0x2,0x21000,0xc0000,0x2,0x2,0x4000,0x2,0x8,0x1000,0x2,0x2,0x180,0x200,0x2000,0x70,0x2000,0x70,0x70,0x12278,0x10008,0x70,0x180,0x8,0x4000,0x2,0x8,0x2,0x80000000,0x2,0x50e1208,0x21000,0xc0000,0x0,0x5000208,0x2,0x2,};
+      jj_la1_0 = new int[] {0x18000002,0x18000002,0x60012278,0x40012278,0x60012278,0x18000002,0x18000002,0x2,0x60012278,0x2,0x5000000,0x2,0x8,0x2,0x2,0x12278,0x1000,0x2,0x12278,0x2,0x12278,0x12278,0x2,0x2,0x2,0x21000,0xc0000,0x2,0x2,0x4000,0x2,0x8,0x2,0x1000,0x2,0x2,0x180,0x200,0x2000,0x70,0x2000,0x70,0x70,0x12278,0x10008,0x70,0x180,0x8,0x4000,0x2,0x8,0x2,0x80000000,0x2,0x50e1208,0x21000,0xc0000,0x0,0x5000208,0x2,0x2,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x0,0x1,0x1,0x1,0x0,0x0,0x0,0x1,0x0,0x0,0x0,0x0,0x0,0x0,0x1,0x0,0x0,0x1,0x0,0x1,0x1,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x8ffe,0x0,0x0,0x7fe,0x8ffe,0x0,0x0,};
+      jj_la1_1 = new int[] {0x0,0x0,0x1,0x1,0x1,0x0,0x0,0x0,0x1,0x0,0x0,0x0,0x0,0x0,0x0,0x1,0x0,0x0,0x1,0x0,0x1,0x1,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x8ffe,0x0,0x0,0x7fe,0x8ffe,0x0,0x0,};
    }
    private static void jj_la1_init_2() {
-      jj_la1_2 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,};
+      jj_la1_2 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,};
    }
   final private JJCalls[] jj_2_rtns = new JJCalls[1];
   private boolean jj_rescan = false;
@@ -1621,7 +1635,7 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 60; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 61; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1631,7 +1645,7 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 60; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 61; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1641,7 +1655,7 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 60; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 61; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1651,7 +1665,7 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 60; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 61; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1768,7 +1782,7 @@ public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Par
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 60; i++) {
+    for (int i = 0; i < 61; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {

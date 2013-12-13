@@ -35,12 +35,11 @@ import org.w3c.css.sac.SelectorList;
 
 /**
  * Implementation of {@link SelectorList}.
- * 
- * @author <a href="mailto:davidsch@users.sourceforge.net">David
- *         Schweinsberg</a>
+ *
+ * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
+ * @author rbri
  */
-public class SelectorListImpl extends LocatableImpl implements SelectorList,
-        Serializable {
+public class SelectorListImpl extends LocatableImpl implements SelectorList, Serializable {
 
     private static final long serialVersionUID = 7313376916207026333L;
 
@@ -54,12 +53,10 @@ public class SelectorListImpl extends LocatableImpl implements SelectorList,
         selectors_ = selectors;
     }
 
-    @Override
     public int getLength() {
         return selectors_.size();
     }
 
-    @Override
     public Selector item(final int index) {
         return selectors_.get(index);
     }

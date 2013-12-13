@@ -61,6 +61,7 @@ import com.steadystate.css.dom.CSSValueImpl;
 import com.steadystate.css.dom.Property;
 import com.steadystate.css.parser.CSSOMParser;
 import com.steadystate.css.parser.LexicalUnitImpl;
+import com.steadystate.css.parser.SACParserCSS3;
 import com.steadystate.css.parser.selectors.SelectorsRule;
 
 /**
@@ -200,7 +201,7 @@ public class CssSteadyStateParser extends CssParserProvider implements
             final String styleSheetContent, IParserContext parserContext)
             throws IOException {
 
-        CSSOMParser parser = new CSSOMParser();
+        CSSOMParser parser = new CSSOMParser(new SACParserCSS3());
 
         InputSource inputSource = new InputSource(new StringReader(
                 styleSheetContent));
@@ -486,7 +487,7 @@ public class CssSteadyStateParser extends CssParserProvider implements
                         childContent));
                 inputSource.setTitle(importedPath);
 
-                CSSOMParser parser = new CSSOMParser();
+                CSSOMParser parser = new CSSOMParser(new SACParserCSS3());
 
                 CSSStyleSheet importedStyleSheet = parser.parseStyleSheet(
                         inputSource, null, importedPath);

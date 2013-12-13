@@ -27,6 +27,7 @@
 package com.steadystate.css.dom;
 
 import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +40,7 @@ import com.steadystate.css.util.LangUtils;
  * Implementation of {@link CSSRuleList}.
  *
  * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
+ * @author rbri
  */
 public class CSSRuleListImpl implements CSSRuleList, Serializable {
 
@@ -81,6 +83,7 @@ public class CSSRuleListImpl implements CSSRuleList, Serializable {
         getRules().remove(index);
     }
 
+    @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < getLength(); i++) {

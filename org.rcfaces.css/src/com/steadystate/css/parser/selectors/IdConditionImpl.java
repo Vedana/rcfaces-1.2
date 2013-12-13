@@ -35,6 +35,7 @@ import com.steadystate.css.parser.LocatableImpl;
 
 /**
  * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
+ * @author rbri
  */
 public class IdConditionImpl extends LocatableImpl implements AttributeCondition, Serializable {
 
@@ -43,14 +44,11 @@ public class IdConditionImpl extends LocatableImpl implements AttributeCondition
     private String value_;
 
     public void setValue(final String value) {
-        this.value_ = value;
+        value_ = value;
     }
 
     public IdConditionImpl(final String value) {
-        this.value_ = value;
-    }
-
-    public IdConditionImpl() {
+        setValue(value);
     }
 
     public short getConditionType() {
@@ -70,10 +68,15 @@ public class IdConditionImpl extends LocatableImpl implements AttributeCondition
     }
 
     public String getValue() {
-        return this.value_;
+        return value_;
     }
 
+    @Override
     public String toString() {
-        return "#" + this.getValue();
+        final String value = getValue();
+        if (value != null) {
+            return "#" + value;
+        }
+        return "#";
     }
 }

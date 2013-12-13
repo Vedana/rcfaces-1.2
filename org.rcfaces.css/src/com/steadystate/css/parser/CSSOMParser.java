@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Stack;
+import java.util.logging.Logger;
 
 import org.w3c.css.sac.CSSException;
 import org.w3c.css.sac.ErrorHandler;
@@ -65,8 +66,7 @@ import com.steadystate.css.sac.DocumentHandlerExt;
 import com.steadystate.css.userdata.UserDataConstants;
 
 /**
- * @author <a href="mailto:davidsch@users.sourceforge.net">David
- *         Schweinsberg</a>
+ * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
  */
 public class CSSOMParser {
 
@@ -75,25 +75,22 @@ public class CSSOMParser {
     private static String LastFailed_;
 
     private Parser parser_;
-
     private CSSStyleSheetImpl parentStyleSheet_;
 
     /** Creates new CSSOMParser */
     public CSSOMParser() {
-        this(null);
+        this (null);
     }
 
     /**
      * Creates new CSSOMParser.
-     * 
-     * @param parser
-     *            the SAC Parser
+     *
+     * @param parser the SAC Parser
      */
     public CSSOMParser(final Parser parser) {
         synchronized (DEFAULT_PARSER) {
             if (null != parser) {
-                System.setProperty("org.w3c.css.sac.parser", parser.getClass()
-                        .getCanonicalName());
+                System.setProperty("org.w3c.css.sac.parser", parser.getClass().getCanonicalName());
                 parser_ = parser;
                 return;
             }
@@ -104,19 +101,21 @@ public class CSSOMParser {
                 // use the direct method if we already failed once before
                 if (null != LastFailed_ && LastFailed_.equals(currentParser)) {
                     parser_ = new SACParserCSS21();
-                } else {
+                }
+                else {
                     if (null == currentParser) {
-                        System.setProperty("org.w3c.css.sac.parser",
-                                DEFAULT_PARSER);
+                        System.setProperty("org.w3c.css.sac.parser", DEFAULT_PARSER);
                         currentParser = DEFAULT_PARSER;
                     }
                     final ParserFactory factory = new ParserFactory();
                     parser_ = factory.makeParser();
                 }
-            } catch (final Exception e) {
-                System.err.println(e.getMessage());
-                e.printStackTrace();
-                System.err.println("using the default parser instead");
+            }
+            catch (final Exception e) {
+                final Logger log = Logger.getLogger("com.steadystate.css");
+                log.warning(e.toString());
+                log.warning("using the default 'SACParserCSS21' instead");
+                log.throwing("CSSOMParser", "consturctor", e);
                 LastFailed_ = currentParser;
                 parser_ = new SACParserCSS21();
             }
@@ -129,18 +128,14 @@ public class CSSOMParser {
 
     /**
      * Parses a SAC input source into a CSSOM style sheet.
-     * 
-     * @param source
-     *            the SAC input source
-     * @param ownerNode
-     *            the owner node (see the definition of <code>ownerNode</code>
-     *            in org.w3c.dom.css.StyleSheet)
-     * @param href
-     *            the href (see the definition of <code>href</code> in
-     *            org.w3c.dom.css.StyleSheet)
+     *
+     * @param source the SAC input source
+     * @param ownerNode the owner node (see the definition of
+     *   <code>ownerNode</code> in org.w3c.dom.css.StyleSheet)
+     * @param href the href (see the definition of <code>href</code> in
+     *   org.w3c.dom.css.StyleSheet)
      * @return the CSSOM style sheet
-     * @throws IOException
-     *             if the underlying SAC parser throws an IOException
+     * @throws IOException if the underlying SAC parser throws an IOException
      */
     public CSSStyleSheet parseStyleSheet(final InputSource source,
             final Node ownerNode, final String href) throws IOException {
@@ -158,22 +153,18 @@ public class CSSOMParser {
 
     /**
      * Parses a SAC input source into a CSSOM style declaration.
-     * 
-     * @param source
-     *            the SAC input source
+     *
+     * @param source the SAC input source
      * @return the CSSOM style declaration
-     * @throws IOException
-     *             if the underlying SAC parser throws an IOException
+     * @throws IOException if the underlying SAC parser throws an IOException
      */
-    public CSSStyleDeclaration parseStyleDeclaration(final InputSource source)
-            throws IOException {
+    public CSSStyleDeclaration parseStyleDeclaration(final InputSource source) throws IOException {
         final CSSStyleDeclarationImpl sd = new CSSStyleDeclarationImpl(null);
         parseStyleDeclaration(sd, source);
         return sd;
     }
 
-    public void parseStyleDeclaration(final CSSStyleDeclaration sd,
-            final InputSource source) throws IOException {
+    public void parseStyleDeclaration(final CSSStyleDeclaration sd, final InputSource source) throws IOException {
         final Stack<Object> nodeStack = new Stack<Object>();
         nodeStack.push(sd);
         final CSSOMHandler handler = new CSSOMHandler(nodeStack);
@@ -181,8 +172,7 @@ public class CSSOMParser {
         parser_.parseStyleDeclaration(source);
     }
 
-    public CSSValue parsePropertyValue(final InputSource source)
-            throws IOException {
+    public CSSValue parsePropertyValue(final InputSource source) throws IOException {
         final CSSOMHandler handler = new CSSOMHandler();
         parser_.setDocumentHandler(handler);
         final LexicalUnit lu = parser_.parsePropertyValue(source);
@@ -199,8 +189,7 @@ public class CSSOMParser {
         return (CSSRule) handler.getRoot();
     }
 
-    public SelectorList parseSelectors(final InputSource source)
-            throws IOException {
+    public SelectorList parseSelectors(final InputSource source) throws IOException {
         final HandlerBase handler = new HandlerBase();
         parser_.setDocumentHandler(handler);
         return parser_.parseSelectors(source);
@@ -225,11 +214,8 @@ public class CSSOMParser {
 
     class CSSOMHandler implements DocumentHandlerExt {
         private Stack<Object> nodeStack_;
-
         private Object root_;
-
         private Node ownerNode_;
-
         private String href_;
 
         private Node getOwnerNode() {
@@ -260,7 +246,6 @@ public class CSSOMParser {
             return root_;
         }
 
-        @Override
         public void startDocument(final InputSource source) throws CSSException {
             if (nodeStack_.empty()) {
                 final CSSStyleSheetImpl ss = new CSSStyleSheetImpl();
@@ -275,95 +260,96 @@ public class CSSOMParser {
                 ss.setCssRules(rules);
                 nodeStack_.push(ss);
                 nodeStack_.push(rules);
-            } else {
+            }
+            else {
                 // Error
             }
         }
 
-        @Override
         public void endDocument(final InputSource source) throws CSSException {
             // Pop the rule list and style sheet nodes
             nodeStack_.pop();
             root_ = nodeStack_.pop();
         }
 
-        @Override
         public void comment(final String text) throws CSSException {
+            // empty default impl
         }
 
-        @Override
         public void ignorableAtRule(final String atRule) throws CSSException {
             ignorableAtRule(atRule, null);
         }
 
-        @Override
-        public void ignorableAtRule(final String atRule, final Locator locator)
-                throws CSSException {
+        public void ignorableAtRule(final String atRule, final Locator locator) throws CSSException {
             // Create the unknown rule and add it to the rule list
             final CSSUnknownRuleImpl ir = new CSSUnknownRuleImpl(
-                    CSSOMParser.this.getParentStyleSheet(), getParentRule(),
-                    atRule);
+                CSSOMParser.this.getParentStyleSheet(),
+                getParentRule(),
+                atRule);
             addLocator(locator, ir);
             if (!nodeStack_.empty()) {
                 ((CSSRuleListImpl) nodeStack_.peek()).add(ir);
-            } else {
+            }
+            else {
                 root_ = ir;
             }
         }
 
-        @Override
-        public void namespaceDeclaration(final String prefix, final String uri)
-                throws CSSException {
+        public void namespaceDeclaration(final String prefix, final String uri) throws CSSException {
+            // empty default impl
         }
 
-        @Override
-        public void charset(final String characterEncoding,
-                final Locator locator) throws CSSException {
+        public void charset(final String characterEncoding, final Locator locator)
+            throws CSSException {
             final CSSCharsetRuleImpl cr = new CSSCharsetRuleImpl(
-                    CSSOMParser.this.getParentStyleSheet(), getParentRule(),
+                    CSSOMParser.this.getParentStyleSheet(),
+                    getParentRule(),
                     characterEncoding);
             addLocator(locator, cr);
             if (!nodeStack_.empty()) {
                 ((CSSRuleListImpl) nodeStack_.peek()).add(cr);
-            } else {
+            }
+            else {
                 root_ = cr;
             }
         }
 
-        @Override
-        public void importStyle(final String uri, final SACMediaList media,
+        public void importStyle(
+                final String uri,
+                final SACMediaList media,
                 final String defaultNamespaceURI) throws CSSException {
             importStyle(uri, media, defaultNamespaceURI, null);
         }
 
-        @Override
         public void importStyle(final String uri, final SACMediaList media,
-                final String defaultNamespaceURI, final Locator locator)
-                throws CSSException {
+            final String defaultNamespaceURI, final Locator locator) throws CSSException {
             // Create the import rule and add it to the rule list
             final CSSImportRuleImpl ir = new CSSImportRuleImpl(
-                    CSSOMParser.this.getParentStyleSheet(), getParentRule(),
-                    uri, new MediaListImpl(media));
+                CSSOMParser.this.getParentStyleSheet(),
+                getParentRule(),
+                uri,
+                new MediaListImpl(media));
             addLocator(locator, ir);
             if (!nodeStack_.empty()) {
                 ((CSSRuleListImpl) nodeStack_.peek()).add(ir);
-            } else {
+            }
+            else {
                 root_ = ir;
             }
         }
 
-        @Override
         public void startMedia(final SACMediaList media) throws CSSException {
             startMedia(media, null);
         }
 
-        @Override
         public void startMedia(final SACMediaList media, final Locator locator)
-                throws CSSException {
+            throws CSSException {
             final MediaListImpl ml = new MediaListImpl(media);
             // Create the media rule and add it to the rule list
             final CSSMediaRuleImpl mr = new CSSMediaRuleImpl(
-                    CSSOMParser.this.getParentStyleSheet(), getParentRule(), ml);
+                CSSOMParser.this.getParentStyleSheet(),
+                getParentRule(),
+                ml);
             addLocator(locator, mr);
             if (!nodeStack_.empty()) {
                 ((CSSRuleListImpl) nodeStack_.peek()).add(mr);
@@ -376,26 +362,22 @@ public class CSSOMParser {
             nodeStack_.push(rules);
         }
 
-        @Override
         public void endMedia(final SACMediaList media) throws CSSException {
             // Pop the rule list and media rule nodes
             nodeStack_.pop();
             root_ = nodeStack_.pop();
         }
 
-        @Override
-        public void startPage(final String name, final String pseudoPage)
-                throws CSSException {
+        public void startPage(final String name, final String pseudoPage) throws CSSException {
             startPage(name, pseudoPage, null);
         }
 
-        @Override
-        public void startPage(final String name, final String pseudoPage,
-                final Locator locator) throws CSSException {
+        public void startPage(final String name, final String pseudoPage, final Locator locator)
+            throws CSSException {
             // Create the page rule and add it to the rule list
             final CSSPageRuleImpl pr = new CSSPageRuleImpl(
-                    CSSOMParser.this.getParentStyleSheet(), getParentRule(),
-                    name, pseudoPage);
+                CSSOMParser.this.getParentStyleSheet(),
+                getParentRule(), name, pseudoPage);
             addLocator(locator, pr);
             if (!nodeStack_.empty()) {
                 ((CSSRuleListImpl) nodeStack_.peek()).add(pr);
@@ -408,57 +390,49 @@ public class CSSOMParser {
             nodeStack_.push(decl);
         }
 
-        @Override
-        public void endPage(final String name, final String pseudoPage)
-                throws CSSException {
+        public void endPage(final String name, final String pseudoPage) throws CSSException {
             // Pop both the style declaration and the page rule nodes
             nodeStack_.pop();
             root_ = nodeStack_.pop();
         }
 
-        @Override
         public void startFontFace() throws CSSException {
             startFontFace(null);
         }
 
-        @Override
         public void startFontFace(final Locator locator) throws CSSException {
             // Create the font face rule and add it to the rule list
             final CSSFontFaceRuleImpl ffr = new CSSFontFaceRuleImpl(
-                    CSSOMParser.this.getParentStyleSheet(), getParentRule());
+                CSSOMParser.this.getParentStyleSheet(),
+                getParentRule());
             addLocator(locator, ffr);
             if (!nodeStack_.empty()) {
                 ((CSSRuleListImpl) nodeStack_.peek()).add(ffr);
             }
 
             // Create the style declaration
-            final CSSStyleDeclarationImpl decl = new CSSStyleDeclarationImpl(
-                    ffr);
+            final CSSStyleDeclarationImpl decl = new CSSStyleDeclarationImpl(ffr);
             ffr.setStyle(decl);
             nodeStack_.push(ffr);
             nodeStack_.push(decl);
         }
 
-        @Override
         public void endFontFace() throws CSSException {
             // Pop both the style declaration and the font face rule nodes
             nodeStack_.pop();
             root_ = nodeStack_.pop();
         }
 
-        @Override
-        public void startSelector(final SelectorList selectors)
-                throws CSSException {
+        public void startSelector(final SelectorList selectors) throws CSSException {
             startSelector(selectors, null);
         }
 
-        @Override
-        public void startSelector(final SelectorList selectors,
-                final Locator locator) throws CSSException {
+        public void startSelector(final SelectorList selectors, final Locator locator)
+            throws CSSException {
             // Create the style rule and add it to the rule list
             final CSSStyleRuleImpl sr = new CSSStyleRuleImpl(
-                    CSSOMParser.this.getParentStyleSheet(), getParentRule(),
-                    selectors);
+                CSSOMParser.this.getParentStyleSheet(),
+                getParentRule(), selectors);
             addLocator(locator, sr);
             if (!nodeStack_.empty()) {
                 final Object o = nodeStack_.peek();
@@ -472,31 +446,28 @@ public class CSSOMParser {
             nodeStack_.push(decl);
         }
 
-        @Override
-        public void endSelector(final SelectorList selectors)
-                throws CSSException {
+        public void endSelector(final SelectorList selectors) throws CSSException {
             // Pop both the style declaration and the style rule nodes
             nodeStack_.pop();
             root_ = nodeStack_.pop();
         }
 
-        @Override
-        public void property(final String name, final LexicalUnit value,
-                final boolean important) throws CSSException {
+        public void property(final String name, final LexicalUnit value, final boolean important)
+            throws CSSException {
             property(name, value, important, null);
         }
 
-        @Override
-        public void property(final String name, final LexicalUnit value,
-                final boolean important, final Locator locator) {
-            final CSSStyleDeclarationImpl decl = (CSSStyleDeclarationImpl) nodeStack_
-                    .peek();
+        public void property(final String name, final LexicalUnit value, final boolean important,
+                final Locator locator) {
+            final CSSStyleDeclarationImpl decl =
+                (CSSStyleDeclarationImpl) nodeStack_.peek();
             try {
-                final Property property = new Property(name, new CSSValueImpl(
-                        value), important);
+                final Property property =
+                    new Property(name, new CSSValueImpl(value), important);
                 addLocator(locator, property);
                 decl.addProperty(property);
-            } catch (final DOMException e) {
+            }
+            catch (final DOMException e) {
                 // call ErrorHandler?
             }
         }
@@ -515,19 +486,24 @@ public class CSSOMParser {
             if (locator == null) {
                 final Parser parser = CSSOMParser.this.parser_;
                 try {
-                    final Method getLocatorMethod = parser.getClass()
-                            .getMethod("getLocator", (Class[]) null);
-                    locator = (Locator) getLocatorMethod.invoke(parser,
-                            (Object[]) null);
-                } catch (final SecurityException e) {
+                    final Method getLocatorMethod = parser.getClass().getMethod(
+                        "getLocator", (Class[]) null);
+                    locator = (Locator) getLocatorMethod.invoke(
+                        parser, (Object[]) null);
+                }
+                catch (final SecurityException e) {
                     // TODO
-                } catch (final NoSuchMethodException e) {
+                }
+                catch (final NoSuchMethodException e) {
                     // TODO
-                } catch (final IllegalArgumentException e) {
+                }
+                catch (final IllegalArgumentException e) {
                     // TODO
-                } catch (final IllegalAccessException e) {
+                }
+                catch (final IllegalAccessException e) {
                     // TODO
-                } catch (final InvocationTargetException e) {
+                }
+                catch (final InvocationTargetException e) {
                     // TODO
                 }
             }

@@ -66,7 +66,7 @@ public class ConditionFactoryImpl implements ConditionFactory {
             final String namespaceURI,
             final boolean specified,
             final String value) throws CSSException {
-        return new AttributeConditionImpl(localName, value);
+        return new AttributeConditionImpl(localName, value, specified);
     }
 
     public AttributeCondition createIdCondition(final String value) throws CSSException {
@@ -82,7 +82,7 @@ public class ConditionFactoryImpl implements ConditionFactory {
             final String namespaceURI,
             final boolean specified,
             final String value) throws CSSException {
-        return new OneOfAttributeConditionImpl(localName, value);
+        return new OneOfAttributeConditionImpl(localName, value, specified);
     }
 
     public AttributeCondition createBeginHyphenAttributeCondition(
@@ -90,7 +90,31 @@ public class ConditionFactoryImpl implements ConditionFactory {
             final String namespaceURI,
             final boolean specified,
             final String value) throws CSSException {
-        return new BeginHyphenAttributeConditionImpl(localName, value);
+        return new BeginHyphenAttributeConditionImpl(localName, value, specified);
+    }
+
+    public AttributeCondition createPrefixAttributeCondition(
+            final String localName,
+            final String namespaceURI,
+            final boolean specified,
+            final String value) throws CSSException {
+        return new PrefixAttributeConditionImpl(localName, value, specified);
+    }
+
+    public AttributeCondition createSuffixAttributeCondition(
+            final String localName,
+            final String namespaceURI,
+            final boolean specified,
+            final String value) throws CSSException {
+        return new SuffixAttributeConditionImpl(localName, value, specified);
+    }
+
+    public AttributeCondition createSubstringAttributeCondition(
+            final String localName,
+            final String namespaceURI,
+            final boolean specified,
+            final String value) throws CSSException {
+        return new SubstringAttributeConditionImpl(localName, value, specified);
     }
 
     public AttributeCondition createClassCondition(

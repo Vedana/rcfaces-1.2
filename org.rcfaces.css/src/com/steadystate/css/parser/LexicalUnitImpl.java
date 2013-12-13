@@ -35,9 +35,10 @@ import org.w3c.css.sac.LexicalUnit;
  * 
  * @author <a href="mailto:davidsch@users.sourceforge.net">David
  *         Schweinsberg</a>
+ * @author rbri
  */
 public class LexicalUnitImpl extends LocatableImpl implements LexicalUnit,
-        Serializable, Cloneable {
+        Serializable {
 
     private static final long serialVersionUID = -7260032046960116891L;
 
@@ -103,6 +104,7 @@ public class LexicalUnitImpl extends LocatableImpl implements LexicalUnit,
     }
 
     protected LexicalUnitImpl(final LexicalUnit previous, final short type) {
+        this();
         lexicalUnitType_ = type;
         previousLexicalUnit_ = previous;
         if (previousLexicalUnit_ != null) {
@@ -166,35 +168,29 @@ public class LexicalUnitImpl extends LocatableImpl implements LexicalUnit,
     /**
      * Default constructor.
      */
-    public LexicalUnitImpl() {
+    protected LexicalUnitImpl() {
     }
 
-    @Override
     public short getLexicalUnitType() {
         return lexicalUnitType_;
     }
 
-    @Override
     public LexicalUnit getNextLexicalUnit() {
         return nextLexicalUnit_;
     }
 
-    @Override
     public LexicalUnit getPreviousLexicalUnit() {
         return previousLexicalUnit_;
     }
 
-    @Override
     public int getIntegerValue() {
         return (int) floatValue_;
     }
 
-    @Override
     public float getFloatValue() {
         return floatValue_;
     }
 
-    @Override
     public String getDimensionUnitText() {
         switch (lexicalUnitType_) {
         case SAC_EM:
@@ -236,22 +232,18 @@ public class LexicalUnitImpl extends LocatableImpl implements LexicalUnit,
         }
     }
 
-    @Override
     public String getFunctionName() {
         return functionName_;
     }
 
-    @Override
     public LexicalUnit getParameters() {
         return parameters_;
     }
 
-    @Override
     public String getStringValue() {
         return stringValue_;
     }
 
-    @Override
     public LexicalUnit getSubValues() {
         return parameters_;
     }
@@ -389,7 +381,18 @@ public class LexicalUnitImpl extends LocatableImpl implements LexicalUnit,
                 sb.append(functName);
             }
             sb.append('(');
-            appendParams(sb, parameters_);
+            LexicalUnit l = parameters_;
+            while (l != null) {
+                sb.append(l.toString());
+                l = l.getNextLexicalUnit();
+
+                if (l != null && l.getLexicalUnitType() == 0
+                        && ",".equals(l.getStringValue())) {
+                    sb.append(',');
+                    continue;
+                }
+                sb.append(' ');
+            }
             sb.append(")");
             break;
         default:
@@ -600,7 +603,11 @@ public class LexicalUnitImpl extends LocatableImpl implements LexicalUnit,
             break;
         case SAC_FUNCTION:
             sb.append("SAC_FUNCTION(").append(getFunctionName()).append("(");
-            appendParams(sb, parameters_);
+            LexicalUnit l = parameters_;
+            while (l != null) {
+                sb.append(l.toString());
+                l = l.getNextLexicalUnit();
+            }
             sb.append("))");
             break;
         default:
@@ -613,8 +620,14 @@ public class LexicalUnitImpl extends LocatableImpl implements LexicalUnit,
         LexicalUnit l = first;
         boolean comma = false;
         while (l != null) {
+            if (l.getLexicalUnitType() == 0 && l.toString().equals(",")) {
+                comma = true;
+                l = l.getNextLexicalUnit();
+                continue;
+            }
+
             if (comma) {
-                sb.append(" ");
+                sb.append(",");
             }
             comma = true;
             sb.append(l.toString());

@@ -27,7 +27,6 @@
 package com.steadystate.css.dom;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.io.StringReader;
 
 import org.w3c.css.sac.CSSException;
@@ -43,17 +42,15 @@ import com.steadystate.css.util.LangUtils;
 
 /**
  * Implementation of {@link CSSStyleRule}.
- * 
- * @author <a href="mailto:davidsch@users.sourceforge.net">David
- *         Schweinsberg</a>
+ *
+ * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
+ * @author rbri
  */
-public class CSSStyleRuleImpl extends AbstractCSSRuleImpl implements
-        CSSStyleRule, Serializable {
+public class CSSStyleRuleImpl extends AbstractCSSRuleImpl implements CSSStyleRule {
 
     private static final long serialVersionUID = -697009251364657426L;
 
     private SelectorList selectors_;
-
     private CSSStyleDeclaration style_;
 
     public SelectorList getSelectors() {
@@ -65,7 +62,7 @@ public class CSSStyleRuleImpl extends AbstractCSSRuleImpl implements
     }
 
     public CSSStyleRuleImpl(final CSSStyleSheetImpl parentStyleSheet,
-            final CSSRule parentRule, final SelectorList selectors) {
+        final CSSRule parentRule, final SelectorList selectors) {
         super(parentStyleSheet, parentRule);
         selectors_ = selectors;
     }
@@ -74,12 +71,10 @@ public class CSSStyleRuleImpl extends AbstractCSSRuleImpl implements
         super();
     }
 
-    @Override
     public short getType() {
         return STYLE_RULE;
     }
 
-    @Override
     public String getCssText() {
         final String styleText = getStyle().getCssText();
         if (null == styleText || styleText.length() == 0) {
@@ -88,13 +83,12 @@ public class CSSStyleRuleImpl extends AbstractCSSRuleImpl implements
         return getSelectorText() + " { " + getStyle().getCssText() + " }";
     }
 
-    @Override
     public void setCssText(final String cssText) throws DOMException {
         final CSSStyleSheetImpl parentStyleSheet = getParentStyleSheetImpl();
         if (parentStyleSheet != null && parentStyleSheet.isReadOnly()) {
             throw new DOMExceptionImpl(
-                    DOMException.NO_MODIFICATION_ALLOWED_ERR,
-                    DOMExceptionImpl.READ_ONLY_STYLE_SHEET);
+                DOMException.NO_MODIFICATION_ALLOWED_ERR,
+                DOMExceptionImpl.READ_ONLY_STYLE_SHEET);
         }
 
         try {
@@ -106,49 +100,58 @@ public class CSSStyleRuleImpl extends AbstractCSSRuleImpl implements
             if (r.getType() == CSSRule.STYLE_RULE) {
                 selectors_ = ((CSSStyleRuleImpl) r).selectors_;
                 style_ = ((CSSStyleRuleImpl) r).style_;
-            } else {
-                throw new DOMExceptionImpl(
-                        DOMException.INVALID_MODIFICATION_ERR,
-                        DOMExceptionImpl.EXPECTING_STYLE_RULE);
             }
-        } catch (final CSSException e) {
-            throw new DOMExceptionImpl(DOMException.SYNTAX_ERR,
-                    DOMExceptionImpl.SYNTAX_ERROR, e.getMessage());
-        } catch (final IOException e) {
-            throw new DOMExceptionImpl(DOMException.SYNTAX_ERR,
-                    DOMExceptionImpl.SYNTAX_ERROR, e.getMessage());
+            else {
+                throw new DOMExceptionImpl(
+                    DOMException.INVALID_MODIFICATION_ERR,
+                    DOMExceptionImpl.EXPECTING_STYLE_RULE);
+            }
+        }
+        catch (final CSSException e) {
+            throw new DOMExceptionImpl(
+                DOMException.SYNTAX_ERR,
+                DOMExceptionImpl.SYNTAX_ERROR,
+                e.getMessage());
+        }
+        catch (final IOException e) {
+            throw new DOMExceptionImpl(
+                DOMException.SYNTAX_ERR,
+                DOMExceptionImpl.SYNTAX_ERROR,
+                e.getMessage());
         }
     }
 
-    @Override
     public String getSelectorText() {
         return selectors_.toString();
     }
 
-    @Override
     public void setSelectorText(final String selectorText) throws DOMException {
         final CSSStyleSheetImpl parentStyleSheet = getParentStyleSheetImpl();
         if (parentStyleSheet != null && parentStyleSheet.isReadOnly()) {
             throw new DOMExceptionImpl(
-                    DOMException.NO_MODIFICATION_ALLOWED_ERR,
-                    DOMExceptionImpl.READ_ONLY_STYLE_SHEET);
+                DOMException.NO_MODIFICATION_ALLOWED_ERR,
+                DOMExceptionImpl.READ_ONLY_STYLE_SHEET);
         }
 
         try {
-            final InputSource is = new InputSource(new StringReader(
-                    selectorText));
+            final InputSource is = new InputSource(new StringReader(selectorText));
             final CSSOMParser parser = new CSSOMParser();
             selectors_ = parser.parseSelectors(is);
-        } catch (final CSSException e) {
-            throw new DOMExceptionImpl(DOMException.SYNTAX_ERR,
-                    DOMExceptionImpl.SYNTAX_ERROR, e.getMessage());
-        } catch (final IOException e) {
-            throw new DOMExceptionImpl(DOMException.SYNTAX_ERR,
-                    DOMExceptionImpl.SYNTAX_ERROR, e.getMessage());
+        }
+        catch (final CSSException e) {
+            throw new DOMExceptionImpl(
+                DOMException.SYNTAX_ERR,
+                DOMExceptionImpl.SYNTAX_ERROR,
+                e.getMessage());
+        }
+        catch (final IOException e) {
+            throw new DOMExceptionImpl(
+                DOMException.SYNTAX_ERR,
+                DOMExceptionImpl.SYNTAX_ERROR,
+                e.getMessage());
         }
     }
 
-    @Override
     public CSSStyleDeclaration getStyle() {
         return style_;
     }
@@ -172,8 +175,8 @@ public class CSSStyleRuleImpl extends AbstractCSSRuleImpl implements
         }
         final CSSStyleRule csr = (CSSStyleRule) obj;
         return super.equals(obj)
-                && LangUtils.equals(getSelectorText(), csr.getSelectorText())
-                && LangUtils.equals(getStyle(), csr.getStyle());
+            && LangUtils.equals(getSelectorText(), csr.getSelectorText())
+            && LangUtils.equals(getStyle(), csr.getStyle());
     }
 
     @Override

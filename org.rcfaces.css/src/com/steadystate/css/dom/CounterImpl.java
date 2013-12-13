@@ -36,6 +36,7 @@ import org.w3c.dom.css.Counter;
  * Implementation of {@link Counter}.
  *
  * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
+ * @author rbri
  */
 public class CounterImpl implements Counter, Serializable {
 
@@ -62,7 +63,7 @@ public class CounterImpl implements Counter, Serializable {
      */
     public CounterImpl(final boolean separatorSpecified, final LexicalUnit lu) throws DOMException {
         LexicalUnit next = lu;
-        this.identifier_ = next.getStringValue();
+        identifier_ = next.getStringValue();
         next = next.getNextLexicalUnit();   // ','
         if (next != null) {
             if (next.getLexicalUnitType() != LexicalUnit.SAC_OPERATOR_COMMA) {
@@ -84,7 +85,7 @@ public class CounterImpl implements Counter, Serializable {
                 }
             }
             if (next != null) {
-                this.listStyle_ = next.getStringValue();
+                listStyle_ = next.getStringValue();
                 next = next.getNextLexicalUnit();
                 if (next != null) {
                     // error
@@ -111,9 +112,10 @@ public class CounterImpl implements Counter, Serializable {
         return separator_;
     }
 
+    @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
-        if (this.separator_ == null) {
+        if (separator_ == null) {
             // This is a 'counter()' function
             sb.append("counter(");
         }
@@ -123,10 +125,10 @@ public class CounterImpl implements Counter, Serializable {
         }
         sb.append(identifier_);
         if (separator_ != null) {
-            sb.append(", \"").append(this.separator_).append("\"");
+            sb.append(", \"").append(separator_).append("\"");
         }
         if (listStyle_ != null) {
-            sb.append(", ").append(this.listStyle_);
+            sb.append(", ").append(listStyle_);
         }
         sb.append(")");
         return sb.toString();

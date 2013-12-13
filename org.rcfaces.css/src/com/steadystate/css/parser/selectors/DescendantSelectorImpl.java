@@ -37,6 +37,7 @@ import com.steadystate.css.parser.LocatableImpl;
 
 /**
  * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
+ * @author rbri
  */
 public class DescendantSelectorImpl extends LocatableImpl implements DescendantSelector, Serializable {
 
@@ -64,9 +65,6 @@ public class DescendantSelectorImpl extends LocatableImpl implements DescendantS
         setSimpleSelector(simpleSelector);
     }
 
-    public DescendantSelectorImpl() {
-    }
-
     public short getSelectorType() {
         return Selector.SAC_DESCENDANT_SELECTOR;
     }
@@ -79,7 +77,16 @@ public class DescendantSelectorImpl extends LocatableImpl implements DescendantS
         return simpleSelector_;
     }
 
+    @Override
     public String toString() {
-        return getAncestorSelector().toString() + " " + getSimpleSelector().toString();
+        final StringBuilder result = new StringBuilder(getAncestorSelector().toString());
+        if (Selector.SAC_PSEUDO_ELEMENT_SELECTOR == getSimpleSelector().getSelectorType()) {
+            result.append(':');
+        }
+        else {
+            result.append(' ');
+        }
+        result.append(getSimpleSelector().toString());
+        return result.toString();
     }
 }

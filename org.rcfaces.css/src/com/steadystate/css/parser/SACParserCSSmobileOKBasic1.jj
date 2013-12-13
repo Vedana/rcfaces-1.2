@@ -48,6 +48,8 @@ import org.w3c.css.sac.SimpleSelector;
 
 /**
  * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
+ * @author waldbaer
+ * @author rbri
  * @version $Id: SACParserCSSmobileOKBasic1.jj,v 1.5 2010-05-19 13:26:51 waldbaer Exp $
  */
 public class SACParserCSSmobileOKBasic1 extends AbstractSACParser implements Parser {
@@ -466,7 +468,7 @@ LexicalUnit operator(LexicalUnit prev) :
 }
 {
   t = <SLASH> ( <S> )*   { return new LexicalUnitImpl(prev, LexicalUnit.SAC_OPERATOR_SLASH); }
-  | t = <COMMA> ( <S> )* { return new LexicalUnitImpl(prev, LexicalUnit.SAC_OPERATOR_COMMA); }
+  | t = <COMMA> ( <S> )* { return LexicalUnitImpl.createComma(prev); }
 }
 
 //
@@ -545,6 +547,7 @@ SelectorList parseSelectorsInternal() :
     SelectorList selectors;
 }
 {
+    ( <S> )*
     selectors = selectorList()
     <EOF>
     {

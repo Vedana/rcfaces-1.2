@@ -3,7 +3,7 @@
 package com.steadystate.css.parser;
 
 /** Token Manager Error. */
-public class TokenMgrError extends Error
+@SuppressWarnings("all") public class TokenMgrError extends Error
 {
 
   /**

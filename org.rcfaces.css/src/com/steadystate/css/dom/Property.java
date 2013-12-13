@@ -36,38 +36,31 @@ import com.steadystate.css.parser.CSSOMParser;
 import com.steadystate.css.util.LangUtils;
 
 /**
- * @author <a href="mailto:davidsch@users.sourceforge.net">David
- *         Schweinsberg</a>
+ * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
  * @author rbri
  */
 public class Property extends CSSOMObjectImpl {
     private static final long serialVersionUID = 8720637891949104989L;
 
     private String name_;
-
     private CSSValue value_;
-
     private boolean important_;
 
     /**
      * Creates new Property.
-     * 
-     * @param name
-     *            the name
-     * @param value
-     *            the value
-     * @param important
-     *            true if the important flag set
+     * @param name the name
+     * @param value the value
+     * @param important true if the important flag set
      */
-    public Property(final String name, final CSSValue value,
-            final boolean important) {
+    public Property(final String name, final CSSValue value, final boolean important) {
         name_ = name;
         value_ = value;
         important_ = important;
     }
 
     /**
-     * Constructor. The attributes are null.
+     * Constructor.
+     * The attributes are null.
      */
     public Property() {
         super();
@@ -75,7 +68,6 @@ public class Property extends CSSOMObjectImpl {
 
     /**
      * Returns the name.
-     * 
      * @return the name
      */
     public String getName() {
@@ -84,9 +76,7 @@ public class Property extends CSSOMObjectImpl {
 
     /**
      * Sets the name to a new value.
-     * 
-     * @param name
-     *            the new name
+     * @param name the new name
      */
     public void setName(final String name) {
         name_ = name;
@@ -94,7 +84,6 @@ public class Property extends CSSOMObjectImpl {
 
     /**
      * Returns the value.
-     * 
      * @return the value
      */
     public CSSValue getValue() {
@@ -103,7 +92,6 @@ public class Property extends CSSOMObjectImpl {
 
     /**
      * Returns true if the important flag is set.
-     * 
      * @return true or false
      */
     public boolean isImportant() {
@@ -112,9 +100,7 @@ public class Property extends CSSOMObjectImpl {
 
     /**
      * Sets the value to a new value.
-     * 
-     * @param value
-     *            the new CSSValue
+     * @param value the new CSSValue
      */
     public void setValue(final CSSValue value) {
         value_ = value;
@@ -122,9 +108,7 @@ public class Property extends CSSOMObjectImpl {
 
     /**
      * Sets the important flag to a new value.
-     * 
-     * @param important
-     *            the new flag value
+     * @param important the new flag value
      */
     public void setImportant(final boolean important) {
         important_ = important;
@@ -160,9 +144,10 @@ public class Property extends CSSOMObjectImpl {
             return false;
         }
         final Property p = (Property) obj;
-        return super.equals(obj) && (important_ == p.important_)
-                && LangUtils.equals(name_, p.name_)
-                && LangUtils.equals(value_, p.value_);
+        return super.equals(obj)
+            && (important_ == p.important_)
+            && LangUtils.equals(name_, p.name_)
+            && LangUtils.equals(value_, p.value_);
     }
 
     /**
@@ -178,7 +163,7 @@ public class Property extends CSSOMObjectImpl {
     }
 
     @Override
-    public Object clone() {
+    public Object clone()  {
 
         Property p = (Property) super.clone();
 
@@ -195,8 +180,6 @@ public class Property extends CSSOMObjectImpl {
         }
 
         p.value_ = newValue;
-
-        String newTest = newValue.toString();
 
         return p;
     }

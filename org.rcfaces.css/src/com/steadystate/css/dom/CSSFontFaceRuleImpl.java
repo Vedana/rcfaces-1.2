@@ -27,7 +27,6 @@
 package com.steadystate.css.dom;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.io.StringReader;
 
 import org.w3c.css.sac.CSSException;
@@ -44,8 +43,9 @@ import com.steadystate.css.util.LangUtils;
  * Implementation of {@link CSSFontFaceRule}.
  *
  * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
+ * @author rbri
  */
-public class CSSFontFaceRuleImpl extends AbstractCSSRuleImpl implements CSSFontFaceRule, Serializable {
+public class CSSFontFaceRuleImpl extends AbstractCSSRuleImpl implements CSSFontFaceRule {
 
     private static final long serialVersionUID = -3604191834588759088L;
 
@@ -134,6 +134,6 @@ public class CSSFontFaceRuleImpl extends AbstractCSSRuleImpl implements CSSFontF
 
     @Override
     public String toString() {
-        return this.getCssText();
+        return getCssText();
     }
 }

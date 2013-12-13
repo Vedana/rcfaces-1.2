@@ -35,6 +35,7 @@ import com.steadystate.css.parser.LocatableImpl;
 
 /**
  * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
+ * @author rbri
  */
 public class ElementSelectorImpl extends LocatableImpl implements ElementSelector, Serializable {
 
@@ -47,10 +48,7 @@ public class ElementSelectorImpl extends LocatableImpl implements ElementSelecto
     }
 
     public ElementSelectorImpl(final String localName) {
-        localName_ = localName;
-    }
-
-    public ElementSelectorImpl() {
+        setLocalName(localName);
     }
 
     public short getSelectorType() {
@@ -65,6 +63,7 @@ public class ElementSelectorImpl extends LocatableImpl implements ElementSelecto
         return localName_;
     }
 
+    @Override
     public String toString() {
         return (getLocalName() != null) ? getLocalName() : "*";
     }

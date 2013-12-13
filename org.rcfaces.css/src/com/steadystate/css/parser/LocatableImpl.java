@@ -29,19 +29,17 @@ import org.w3c.css.sac.Locator;
 
 /**
  * Implementation of {@link Locatable}
- * 
+ *
  * @author <a href="mailto:waldbaer@users.sourceforge.net">Johannes Koch</a>
  */
 public class LocatableImpl implements Locatable {
 
     private Locator locator_;
 
-    @Override
     public Locator getLocator() {
         return locator_;
     }
 
-    @Override
     public void setLocator(final Locator locator) {
         locator_ = locator;
     }

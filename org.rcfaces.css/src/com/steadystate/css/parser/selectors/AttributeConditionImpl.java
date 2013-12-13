@@ -35,6 +35,7 @@ import com.steadystate.css.parser.LocatableImpl;
 
 /**
  * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
+ * @author rbri
  */
 public class AttributeConditionImpl extends LocatableImpl implements AttributeCondition, Serializable {
 
@@ -42,6 +43,7 @@ public class AttributeConditionImpl extends LocatableImpl implements AttributeCo
 
     private String localName_;
     private String value_;
+    private boolean specified_;
 
     public void setLocaleName(final String localName) {
         localName_ = localName;
@@ -51,12 +53,14 @@ public class AttributeConditionImpl extends LocatableImpl implements AttributeCo
         value_ = value;
     }
 
-    public AttributeConditionImpl(final String localName, final String value) {
-        localName_ = localName;
-        value_ = value;
+    public void setSpecified(final boolean specified) {
+        specified_ = specified;
     }
 
-    public AttributeConditionImpl() {
+    public AttributeConditionImpl(final String localName, final String value, final boolean specified) {
+        setLocaleName(localName);
+        setValue(value);
+        setSpecified(specified);
     }
 
     public short getConditionType() {
@@ -72,16 +76,18 @@ public class AttributeConditionImpl extends LocatableImpl implements AttributeCo
     }
 
     public boolean getSpecified() {
-        return true;
+        return specified_;
     }
 
     public String getValue() {
         return value_;
     }
 
+    @Override
     public String toString() {
-        if (getValue() != null) {
-            return "[" + getLocalName() + "=\"" + getValue() + "\"]";
+        final String value = getValue();
+        if (value != null) {
+            return "[" + getLocalName() + "=\"" + value + "\"]";
         }
         return "[" + getLocalName() + "]";
     }

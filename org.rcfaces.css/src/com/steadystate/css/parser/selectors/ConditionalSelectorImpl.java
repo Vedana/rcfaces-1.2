@@ -38,24 +38,23 @@ import com.steadystate.css.parser.Locatable;
 import com.steadystate.css.parser.LocatableImpl;
 
 /**
- * 
- * @author <a href="mailto:davidsch@users.sourceforge.net">David
- *         Schweinsberg</a>
+ *
+ * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
+ * @author rbri
  */
-public class ConditionalSelectorImpl extends LocatableImpl implements
-        ConditionalSelector, Serializable {
+public class ConditionalSelectorImpl extends LocatableImpl implements ConditionalSelector, Serializable {
 
     private static final long serialVersionUID = 7217145899707580586L;
 
     private SimpleSelector simpleSelector_;
-
     private Condition condition_;
 
     public void setSimpleSelector(final SimpleSelector simpleSelector) {
         simpleSelector_ = simpleSelector;
         if (simpleSelector instanceof Locatable) {
             setLocator(((Locatable) simpleSelector).getLocator());
-        } else if (simpleSelector == null) {
+        }
+        else if (simpleSelector == null) {
             setLocator(null);
         }
     }
@@ -65,19 +64,16 @@ public class ConditionalSelectorImpl extends LocatableImpl implements
         if (getLocator() == null) {
             if (condition instanceof Locatable) {
                 setLocator(((Locatable) condition).getLocator());
-            } else if (condition == null) {
+            }
+            else if (condition == null) {
                 setLocator(null);
             }
         }
     }
 
-    public ConditionalSelectorImpl(final SimpleSelector simpleSelector,
-            final Condition condition) {
+    public ConditionalSelectorImpl(final SimpleSelector simpleSelector, final Condition condition) {
         setSimpleSelector(simpleSelector);
         setCondition(condition);
-    }
-
-    public ConditionalSelectorImpl() {
     }
 
     public short getSelectorType() {
@@ -92,6 +88,7 @@ public class ConditionalSelectorImpl extends LocatableImpl implements
         return condition_;
     }
 
+    @Override
     public String toString() {
         if (simpleSelector_.getSelectorType() == Selector.SAC_ELEMENT_NODE_SELECTOR
                 && condition_ != null) {

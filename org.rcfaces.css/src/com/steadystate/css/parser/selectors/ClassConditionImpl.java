@@ -36,6 +36,7 @@ import com.steadystate.css.parser.LocatableImpl;
 /**
  *
  * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
+ * @author rbri
  */
 public class ClassConditionImpl extends LocatableImpl implements AttributeCondition, Serializable {
 
@@ -48,10 +49,7 @@ public class ClassConditionImpl extends LocatableImpl implements AttributeCondit
     }
 
     public ClassConditionImpl(final String value) {
-        value_ = value;
-    }
-
-    public ClassConditionImpl() {
+        setValue(value);
     }
 
     public short getConditionType() {
@@ -74,7 +72,12 @@ public class ClassConditionImpl extends LocatableImpl implements AttributeCondit
         return value_;
     }
 
+    @Override
     public String toString() {
-        return "." + getValue();
+        final String value = getValue();
+        if (value != null) {
+            return "." + value;
+        }
+        return ".";
     }
 }

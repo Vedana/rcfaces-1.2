@@ -27,7 +27,6 @@
 package com.steadystate.css.dom;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.io.StringReader;
 
 import org.w3c.css.sac.CSSException;
@@ -46,8 +45,9 @@ import com.steadystate.css.util.LangUtils;
  * TODO: Implement setSelectorText()
  *
  * @author <a href="mailto:davidsch@users.sourceforge.net">David Schweinsberg</a>
+ * @author rbri
  */
-public class CSSPageRuleImpl extends AbstractCSSRuleImpl implements CSSPageRule, Serializable {
+public class CSSPageRuleImpl extends AbstractCSSRuleImpl implements CSSPageRule {
 
     private static final long serialVersionUID = -6007519872104320812L;
 

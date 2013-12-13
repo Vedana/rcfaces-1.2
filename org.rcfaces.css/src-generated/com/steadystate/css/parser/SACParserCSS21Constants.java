@@ -41,149 +41,145 @@ public interface SACParserCSS21Constants {
   /** RegularExpression Id. */
   int INHERIT = 18;
   /** RegularExpression Id. */
-  int EXPRESSION_SYM = 19;
+  int IDENT = 19;
   /** RegularExpression Id. */
-  int PROGID_SYM = 20;
+  int NAME = 20;
   /** RegularExpression Id. */
-  int IDENT = 21;
+  int NUM = 21;
   /** RegularExpression Id. */
-  int NAME = 22;
+  int STRING = 22;
   /** RegularExpression Id. */
-  int NUM = 23;
+  int URL = 23;
   /** RegularExpression Id. */
-  int STRING = 24;
+  int A_LETTER = 24;
   /** RegularExpression Id. */
-  int URL = 25;
+  int C_LETTER = 25;
   /** RegularExpression Id. */
-  int A_LETTER = 26;
+  int D_LETTER = 26;
   /** RegularExpression Id. */
-  int C_LETTER = 27;
+  int E_LETTER = 27;
   /** RegularExpression Id. */
-  int D_LETTER = 28;
+  int G_LETTER = 28;
   /** RegularExpression Id. */
-  int E_LETTER = 29;
+  int H_LETTER = 29;
   /** RegularExpression Id. */
-  int G_LETTER = 30;
+  int I_LETTER = 30;
   /** RegularExpression Id. */
-  int H_LETTER = 31;
+  int K_LETTER = 31;
   /** RegularExpression Id. */
-  int I_LETTER = 32;
+  int L_LETTER = 32;
   /** RegularExpression Id. */
-  int K_LETTER = 33;
+  int M_LETTER = 33;
   /** RegularExpression Id. */
-  int M_LETTER = 34;
+  int N_LETTER = 34;
   /** RegularExpression Id. */
-  int N_LETTER = 35;
+  int O_LETTER = 35;
   /** RegularExpression Id. */
-  int O_LETTER = 36;
+  int P_LETTER = 36;
   /** RegularExpression Id. */
-  int P_LETTER = 37;
+  int R_LETTER = 37;
   /** RegularExpression Id. */
-  int R_LETTER = 38;
+  int S_LETTER = 38;
   /** RegularExpression Id. */
-  int S_LETTER = 39;
+  int T_LETTER = 39;
   /** RegularExpression Id. */
-  int T_LETTER = 40;
+  int X_LETTER = 40;
   /** RegularExpression Id. */
-  int X_LETTER = 41;
+  int Z_LETTER = 41;
   /** RegularExpression Id. */
-  int Z_LETTER = 42;
+  int CDO = 42;
   /** RegularExpression Id. */
-  int CDO = 43;
+  int CDC = 43;
   /** RegularExpression Id. */
-  int CDC = 44;
+  int INCLUDES = 44;
   /** RegularExpression Id. */
-  int INCLUDES = 45;
+  int DASHMATCH = 45;
   /** RegularExpression Id. */
-  int DASHMATCH = 46;
+  int LBRACE = 46;
   /** RegularExpression Id. */
-  int LBRACE = 47;
+  int PLUS = 47;
   /** RegularExpression Id. */
-  int PLUS = 48;
+  int GREATER = 48;
   /** RegularExpression Id. */
-  int GREATER = 49;
+  int COMMA = 49;
   /** RegularExpression Id. */
-  int COMMA = 50;
+  int HASH = 50;
   /** RegularExpression Id. */
-  int HASH = 51;
+  int IMPORT_SYM = 51;
   /** RegularExpression Id. */
-  int IMPORT_SYM = 52;
+  int PAGE_SYM = 52;
   /** RegularExpression Id. */
-  int PAGE_SYM = 53;
+  int MEDIA_SYM = 53;
   /** RegularExpression Id. */
-  int MEDIA_SYM = 54;
+  int CHARSET_SYM = 54;
   /** RegularExpression Id. */
-  int CHARSET_SYM = 55;
+  int IMPORTANT_SYM = 55;
   /** RegularExpression Id. */
-  int IMPORTANT_SYM = 56;
+  int EMS = 56;
   /** RegularExpression Id. */
-  int EMS = 57;
+  int EXS = 57;
   /** RegularExpression Id. */
-  int EXS = 58;
+  int LENGTH_PX = 58;
   /** RegularExpression Id. */
-  int LENGTH_PX = 59;
+  int LENGTH_CM = 59;
   /** RegularExpression Id. */
-  int LENGTH_CM = 60;
+  int LENGTH_MM = 60;
   /** RegularExpression Id. */
-  int LENGTH_MM = 61;
+  int LENGTH_IN = 61;
   /** RegularExpression Id. */
-  int LENGTH_IN = 62;
+  int LENGTH_PT = 62;
   /** RegularExpression Id. */
-  int LENGTH_PT = 63;
+  int LENGTH_PC = 63;
   /** RegularExpression Id. */
-  int LENGTH_PC = 64;
+  int ANGLE_DEG = 64;
   /** RegularExpression Id. */
-  int ANGLE_DEG = 65;
+  int ANGLE_RAD = 65;
   /** RegularExpression Id. */
-  int ANGLE_RAD = 66;
+  int ANGLE_GRAD = 66;
   /** RegularExpression Id. */
-  int ANGLE_GRAD = 67;
+  int TIME_MS = 67;
   /** RegularExpression Id. */
-  int TIME_MS = 68;
+  int TIME_S = 68;
   /** RegularExpression Id. */
-  int TIME_S = 69;
+  int FREQ_HZ = 69;
   /** RegularExpression Id. */
-  int FREQ_HZ = 70;
+  int FREQ_KHZ = 70;
   /** RegularExpression Id. */
-  int FREQ_KHZ = 71;
+  int PERCENTAGE = 71;
   /** RegularExpression Id. */
   int DIMENSION = 72;
   /** RegularExpression Id. */
-  int PERCENTAGE = 73;
+  int URI = 73;
   /** RegularExpression Id. */
-  int URI = 74;
+  int FUNCTION_LANG = 74;
   /** RegularExpression Id. */
-  int PROGID_FUNC = 75;
+  int FUNCTION = 75;
   /** RegularExpression Id. */
-  int EXPRESSION_FUNC = 76;
+  int RBRACE = 76;
   /** RegularExpression Id. */
-  int FUNCTION = 77;
+  int DOT = 77;
   /** RegularExpression Id. */
-  int RBRACE = 78;
+  int SEMICOLON = 78;
   /** RegularExpression Id. */
-  int DOT = 79;
+  int COLON = 79;
   /** RegularExpression Id. */
-  int SEMICOLON = 80;
+  int ASTERISK = 80;
   /** RegularExpression Id. */
-  int COLON = 81;
+  int SLASH = 81;
   /** RegularExpression Id. */
-  int ASTERISK = 82;
+  int MINUS = 82;
   /** RegularExpression Id. */
-  int SLASH = 83;
+  int EQUALS = 83;
   /** RegularExpression Id. */
-  int MINUS = 84;
+  int LSQUARE = 84;
   /** RegularExpression Id. */
-  int EQUALS = 85;
+  int RSQUARE = 85;
   /** RegularExpression Id. */
-  int LSQUARE = 86;
+  int RROUND = 86;
   /** RegularExpression Id. */
-  int RSQUARE = 87;
+  int ATKEYWORD = 87;
   /** RegularExpression Id. */
-  int RROUND = 88;
-  /** RegularExpression Id. */
-  int ATKEYWORD = 89;
-  /** RegularExpression Id. */
-  int UNKNOWN = 90;
+  int UNKNOWN = 88;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -211,8 +207,6 @@ public interface SACParserCSS21Constants {
     "<COMMENT_>",
     "<NUMBER>",
     "\"inherit\"",
-    "\"expression\"",
-    "\"progid\"",
     "<IDENT>",
     "<NAME>",
     "<NUM>",
@@ -226,6 +220,7 @@ public interface SACParserCSS21Constants {
     "<H_LETTER>",
     "<I_LETTER>",
     "<K_LETTER>",
+    "<L_LETTER>",
     "<M_LETTER>",
     "<N_LETTER>",
     "<O_LETTER>",
@@ -264,11 +259,10 @@ public interface SACParserCSS21Constants {
     "<TIME_S>",
     "<FREQ_HZ>",
     "<FREQ_KHZ>",
-    "<DIMENSION>",
     "<PERCENTAGE>",
+    "<DIMENSION>",
     "<URI>",
-    "<PROGID_FUNC>",
-    "<EXPRESSION_FUNC>",
+    "<FUNCTION_LANG>",
     "<FUNCTION>",
     "\"}\"",
     "\".\"",
