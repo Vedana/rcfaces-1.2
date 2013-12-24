@@ -1328,6 +1328,9 @@ var __members = {
 					this._treeNodeFocus=label;
 					label.tabIndex=this.fa_getTabIndex();
 				}
+				if (node._disabled) {
+					fa_aria.SetElementAriaDisabled(label, true);
+				}
 				
 			} else {
 				fa_aria.SetElementAriaLabelledBy(focusComponent, label.id);
@@ -1971,7 +1974,7 @@ var __members = {
 		this.f_moveCursor(value, true);
 	},
 	fa_showElement: function(node, giveFocus) {
-		
+
 		var li=null;
 		if (node.nodeType==f_core.ELEMENT_NODE) {
 			li=node;
@@ -2011,6 +2014,9 @@ var __members = {
 
 		f_core.Assert(li && li.tagName, "f_tree.fa_showElement: Component associated to node parameter must be a LI tag ! ("+li+")");	
 	
+		if (false) {
+			console.log("fa_showElement: li="+li+" node="+node+" giveFocus="+giveFocus);
+		}
 		
 		var body=this._body;
 		var scrollContainer=this;
@@ -2131,6 +2137,12 @@ var __members = {
 			
 			if (this._cfocus && node==cursor){
 				fa_aria.SetElementAriaActiveDescendant(this._cfocus, li._divNode.id);
+			}
+			if (node._opened) {
+				fa_aria.SetElementAriaExpanded(li._focusComponent, true);
+				
+			} else if (node._container && !node._opened) {
+				fa_aria.SetElementAriaExpanded(li._focusComponent, false);
 			}
 			
 		} else {
@@ -4155,6 +4167,7 @@ var __members = {
 			if (!input || li._inputImage) {
 				return;
 			}
+			// TODO accessibilité !
 			input.disabled=set;
 		}, null, true);
 	},	
@@ -4170,6 +4183,7 @@ var __members = {
 			if (!input || li._inputImage) {
 				return;
 			}
+			// TODO accessibilité !
 			input.readOnly=set;
 		}, null, true);
 	},
