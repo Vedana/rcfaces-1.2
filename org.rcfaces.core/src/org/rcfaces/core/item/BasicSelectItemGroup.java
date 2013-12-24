@@ -52,6 +52,8 @@ public class BasicSelectItemGroup extends SelectItemGroup implements
     public BasicSelectItemGroup(Object value, String label, String description,
             boolean disabled, SelectItem selectItems[]) {
         super(label, description, disabled, selectItems);
+        
+        setValue(value);
     }
 
     public BasicSelectItemGroup(ISelectItem selectItem) {
