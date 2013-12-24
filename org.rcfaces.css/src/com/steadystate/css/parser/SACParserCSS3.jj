@@ -174,9 +174,11 @@ TOKEN_MGR_DECLS :
 
 | < INHERIT: "inherit" >
 
+| < PROGID: "progid:" ( ["_","a"-"z","0"-"9","-",":","."] )*  >
+
 // ident        -?{nmstart}{nmchar}*
 // {ident}         {return IDENT;}
-| < IDENT: ("-")? <NMSTART> ( <NMCHAR> )* >
+| < IDENT: ("-")? <NMSTART>  ( <NMCHAR> )*  >
 
 // name     {nmchar}+
 | < #NAME: ( <NMCHAR> )+ >
@@ -370,7 +372,7 @@ TOKEN_MGR_DECLS :
 | < FUNCTION_LANG: <L_LETTER> <A_LETTER> <N_LETTER> <G_LETTER> "(" >
 
 // {ident} "("          {return FUNCTION;}
-| < FUNCTION: <IDENT> "(" >
+| < FUNCTION: (<IDENT> | <PROGID>) "(" >
 
 | < RBRACE: "}" >
 | < DOT: "." >
