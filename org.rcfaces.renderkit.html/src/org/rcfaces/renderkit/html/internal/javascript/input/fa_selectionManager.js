@@ -286,7 +286,8 @@ var __members = {
 		if (selection) {
 			if (this.f_performElementSelection(element, show, evt, selection,
 					phaseName, selectOnMousedown, details) === false) {
-				show = false;
+				//show = false;
+				// On peut deplacer le curseur sans qu'une selection soit effective !!! (si disabled)
 			}
 		}
 
@@ -631,15 +632,17 @@ var __members = {
 			return false;
 		}
 
-		f_core.Debug(fa_selectionManager, "f_performElementSelection: "
-				+ " exclusive='"
-				+ ((selection & fa_selectionManager.EXCLUSIVE_SELECTION) > 0)
-				+ "'" + " append='"
-				+ ((selection & fa_selectionManager.APPEND_SELECTION) > 0)
-				+ "'" + " range='"
-				+ ((selection & fa_selectionManager.RANGE_SELECTION) > 0)
-				+ "'  disabled=" + this.fa_isElementDisabled(element));
-
+		if (f_core.IsDebugEnabled(fa_selectionManager)) {
+			f_core.Debug(fa_selectionManager, "f_performElementSelection: "
+					+ " exclusive='"
+					+ ((selection & fa_selectionManager.EXCLUSIVE_SELECTION) > 0)
+					+ "'" + " append='"
+					+ ((selection & fa_selectionManager.APPEND_SELECTION) > 0)
+					+ "'" + " range='"
+					+ ((selection & fa_selectionManager.RANGE_SELECTION) > 0)
+					+ "'  disabled=" + this.fa_isElementDisabled(element));
+		}
+		
 		if (this.fa_isElementDisabled(element)) {
 			return false;
 		}
