@@ -1239,7 +1239,7 @@ var __members = {
 	 * @method public
 	 * @return Number[] last mouse position
 	 */
-	f_getLastMousePosition: function() {
+	fa_getLastMousePosition: function() {
 		return this._lastMousePosition;
 	},
 	/**

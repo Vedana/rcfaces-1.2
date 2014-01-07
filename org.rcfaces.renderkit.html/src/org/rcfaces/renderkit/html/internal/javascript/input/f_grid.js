@@ -7360,7 +7360,7 @@ var __members = {
 		this.fa_uninstallAutoScroll();
 	},
 	fa_getLastMousePosition : function() {
-		return this._targetDragAndDropEngine.f_getLastMousePosition();
+		return this._targetDragAndDropEngine.fa_getLastMousePosition();
 	},
 
 	fa_getScrollableContainer : function() {
