@@ -616,6 +616,11 @@ var __members = {
 			pager.setAttribute("aria-relevant", "additions all");
 			pager.setAttribute("aria-atomic", "true");
 			pager.setAttribute("aria-live", "polite");
+			
+			if (this._searchInput) {
+				// ca met la zone !
+				//this._searchInput.setAttribute("aria-controls", pager.id);
+			}
 		}
 				
 		var self=this;
@@ -905,6 +910,14 @@ var __members = {
 		var suggestionDelayMs=this.f_getSuggestionDelayMs();		
 		if (suggestionDelayMs<1) {
 			return true;
+		}
+		
+		var pager=this._pager;
+		if (pager) {
+			// Pour la vocalisation ... il faut y aller franco !
+			for (; pager.firstChild;) {
+				pager.removeChild(pager.firstChild);
+			}
 		}
 		
 		f_core.Debug(fa_dataGridPopup, "_onSearchSuggest: Set timeout to "+suggestionDelayMs);
