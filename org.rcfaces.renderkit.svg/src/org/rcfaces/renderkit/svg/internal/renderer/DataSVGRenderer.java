@@ -50,6 +50,11 @@ import org.rcfaces.renderkit.html.internal.renderer.TooltipContainerRenderContex
 import org.rcfaces.renderkit.svg.component.DataSVGComponent;
 import org.rcfaces.renderkit.svg.component.SVGDataColumnComponent;
 
+/**
+ * 
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
+ */
 public class DataSVGRenderer extends SVGRenderer implements
         ITooltipGridRenderer {
 
