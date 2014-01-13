@@ -79,6 +79,7 @@
 				engine.setValue(Properties.VALUE, value);
 			</code>
 		</method>
+		<property>converter</property>
 	</component>
 		
 	<component id="image" extends="abstractOutput" renderKit="html">
