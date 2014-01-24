@@ -1251,7 +1251,10 @@ var __statics = {
 		bw+=scrollPosition.x;
 		bh+=scrollPosition.y;
 
-		var absPos=f_core.GetAbsolutePosition(popup.offsetParent);
+		var absPos={ x: 0, y: 0};
+		if (!component) {
+			absPos=f_core.GetAbsolutePosition(popup.offsetParent);
+		}
 
 		f_core.Debug(f_core, "Gecko_openPopup: bw="+bw+" bh="+bh+" absPos.x="+absPos.x+" absPos.y="+absPos.y+" positions.x="+positions.x+" positions.y="+positions.y+" popupWidth="+offsetWidth+" popupHeight="+popup.offsetHeight);
 
@@ -1265,7 +1268,7 @@ var __statics = {
 			positions.y=0;
 			positions.x=0;
 			
-		} else if (offsetHeight+positions.y+absPos.y>bh) {
+		} else if (offsetHeight+positions.y-absPos.y>bh) {
 			if (component) {
 				var aeAbs = f_core.GetAbsolutePosition(component);
 				positions.y=aeAbs.y-offsetHeight;
