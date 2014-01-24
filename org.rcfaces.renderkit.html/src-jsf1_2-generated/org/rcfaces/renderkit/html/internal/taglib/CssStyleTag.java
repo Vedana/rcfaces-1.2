@@ -1,7 +1,6 @@
 package org.rcfaces.renderkit.html.internal.taglib;
 
 import javax.faces.component.UIComponent;
-import org.rcfaces.core.internal.component.Properties;
 import javax.servlet.jsp.JspException;
 import org.apache.commons.logging.LogFactory;
 import javax.servlet.jsp.tagext.Tag;
@@ -14,6 +13,7 @@ import org.apache.commons.logging.Log;
 import javax.faces.component.UIViewRoot;
 import org.rcfaces.renderkit.html.component.CssStyleComponent;
 import org.rcfaces.core.internal.tools.ListenersTools1_2;
+import org.rcfaces.renderkit.html.component.Properties;
 import org.rcfaces.core.component.capability.ITextCapability;
 
 public class CssStyleTag extends CameliaTag implements Tag {
