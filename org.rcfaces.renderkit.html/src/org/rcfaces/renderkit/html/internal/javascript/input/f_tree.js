@@ -261,7 +261,7 @@ var __statics = {
 		if (!evt) {
 			evt=f_core.GetJsEvent(this);
 		}
-		if (tree.f_getEventLocked(evt)) {
+		if (tree.f_getEventLocked(evt, false)) {
 			return false;
 		}
 		
