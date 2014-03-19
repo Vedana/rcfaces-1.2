@@ -12,7 +12,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
  * @version $Revision$ $Date$
  */
 public class NoComboMarkBorderRenderer extends NoneBorderRenderer {
-    private static final String REVISION = "$Revision$";
+    
 
     protected boolean hasBorder() {
         return false;

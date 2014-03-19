@@ -10,7 +10,7 @@ package org.rcfaces.renderkit.html.internal.border;
  */
 public class RoundedFieldSetBorderRenderer extends
         AbstractFieldSetBorderRenderer {
-    private static final String REVISION = "$Revision$";
+    
 
     private static final String FIELDSET_BORDER_CLASS = "fb_rounded";
 

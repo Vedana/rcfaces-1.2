@@ -10,7 +10,6 @@ package org.rcfaces.renderkit.html.internal.border;
  * @version $Revision$ $Date$
  */
 public class ReliefBorderRenderer extends AbstractHtmlBorderRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final String RELIEF_BORDER_CLASS = "fb_relief";
 
