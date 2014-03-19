@@ -241,6 +241,11 @@ public abstract class AbstractJavaScriptRenderContext implements
 
         boolean trace = LOG.isTraceEnabled();
         for (int i = 0; i < requiredClasses.length; i++) {
+            if (requiredClasses[i] == null) {
+                throw new FacesException("Index #" + i
+                        + " is null for required class '" + className
+                        + "' requiredId=" + requiredId);
+            }
             if (trace) {
                 LOG.trace("Append required class '" + className
                         + "' requiredId='" + requiredId + "' => add '"
