@@ -304,13 +304,16 @@ var __statics = {
 
 			var details = f_event.NewDetail();
 
+			dataGrid._cursorCellIdx = undefined;
+
 			var cellRef = {};
 			var col = dataGrid._searchColumnByElement(srcElement, cellRef);
 			if (col) {
-				details = dataGrid._fillColumnDetails(details, col, cellRef.value);
-			}
+				details = dataGrid._fillColumnDetails(details, col,
+						cellRef.value);
 
-			dataGrid._cursorCellIdx = undefined;
+				dataGrid._cursorCellIdx = col._index;
+			}
 
 			dataGrid
 					.f_moveCursor(this, true, evt, selection,
@@ -387,10 +390,11 @@ var __statics = {
 			var cellRef = {};
 			var col = dataGrid._searchColumnByElement(srcElement, cellRef);
 			if (col) {
-				details = dataGrid._fillColumnDetails(details, col, cellRef.value);
+				details = dataGrid._fillColumnDetails(details, col,
+						cellRef.value);
 			}
 
-			dataGrid._cursorCellIdx = undefined;
+			//dataGrid._cursorCellIdx = undefined;
 
 			dataGrid.f_moveCursor(this, true, evt, selection,
 					fa_selectionManager.END_PHASE, undefined, details);
@@ -1270,7 +1274,7 @@ var __statics = {
 
 		case f_key.VK_HOME:
 			var columns = dataGrid._columns;
-			for ( var i = 0; i < columns.length; i++) {
+			for (var i = 0; i < columns.length; i++) {
 				var cl = columns[i];
 
 				if (!cl._visibility) {
@@ -1287,7 +1291,7 @@ var __statics = {
 
 		case f_key.VK_END:
 			var columns = dataGrid._columns;
-			for ( var i = columns.length - 1; i >= 0; i--) {
+			for (var i = columns.length - 1; i >= 0; i--) {
 				var cl = columns[i];
 
 				if (!cl._visibility) {
@@ -1305,7 +1309,7 @@ var __statics = {
 		case f_key.VK_LEFT:
 			var columns = dataGrid._columns;
 			var pred = null;
-			for ( var i = 0; i < columns.length; i++) {
+			for (var i = 0; i < columns.length; i++) {
 				var cl = columns[i];
 
 				if (!cl._visibility) {
@@ -1327,7 +1331,7 @@ var __statics = {
 		case f_key.VK_RIGHT:
 			var columns = dataGrid._columns;
 			var next = false;
-			for ( var i = 0; i < columns.length; i++) {
+			for (var i = 0; i < columns.length; i++) {
 				var cl = columns[i];
 
 				if (!cl._visibility) {
@@ -1720,7 +1724,7 @@ var __statics = {
 
 		var ths = dataGrid._title.getElementsByTagName("th");
 		// var c=this.style.cursor;
-		for ( var i = 0; i < ths.length; i++) {
+		for (var i = 0; i < ths.length; i++) {
 			ths[i].oldCursorStyle = ths[i].style.cursor;
 			ths[i].style.cursor = "e-resize";
 		}
@@ -1907,7 +1911,7 @@ var __statics = {
 
 			var totalCols = 0;
 			var columns = dataGrid._columns;
-			for ( var i = 0; i < columns.length; i++) {
+			for (var i = 0; i < columns.length; i++) {
 				var cl = columns[i];
 
 				if (!cl._visibility) {
@@ -1986,7 +1990,7 @@ var __statics = {
 			f_grid._DragOldCursor = undefined;
 
 			var ths = dataGrid._title.getElementsByTagName("th");
-			for ( var i = 0; i < ths.length; i++) {
+			for (var i = 0; i < ths.length; i++) {
 				ths[i].style.cursor = ths[i].oldCursorStyle;
 				ths[i].oldCursorStyle = undefined;
 			}
@@ -2159,7 +2163,7 @@ var __statics = {
 	 */
 	_ListCols : function(table) {
 		var l = new Array;
-		for ( var node = table.firstChild; node; node = node.nextSibling) {
+		for (var node = table.firstChild; node; node = node.nextSibling) {
 			if (node.tagName.toLowerCase() != "col") {
 				break;
 			}
@@ -2739,28 +2743,27 @@ var __members = {
 	f_getDefaultRowStyleClasses : function() {
 		return f_grid._DEFAULT_ROW_STYLE_CLASSES;
 	},
-	
-	
+
 	/**
 	 * @method private
 	 */
-	_normalizeIndexes : function() { 
-		
+	_normalizeIndexes : function() {
+
 		if (!this._additionalIndexes || !this._additionalIndexes.length) {
-			this._additionalIndexes = [0 ,0];
+			this._additionalIndexes = [ 0, 0 ];
 		}
 		if (!this._submittedIndexes || !this._submittedIndexes.length) {
-			this._submittedIndexes = [0 ,0];
+			this._submittedIndexes = [ 0, 0 ];
 		}
 	},
 
 	f_serialize : function() {
 		this._normalizeIndexes();
-		
+
 		if (this._resizable && this._titleLayout) {
 			var columns = this._columns;
 			var v = "";
-			for ( var i = 0; i < columns.length; i++) {
+			for (var i = 0; i < columns.length; i++) {
 				var col = columns[i];
 
 				if (!col._visibility || !col._resizable) {
@@ -2786,11 +2789,11 @@ var __members = {
 
 			this.f_setProperty(f_prop.SERIALIZED_INDEXES, submittedIndexes
 					.join(','));
-			
+
 			f_core.Debug(f_grid, "f_serialize: submittedIndexes="
 					+ submittedIndexes);
 		}
-		
+
 		var cursor = this._cursor;
 		var cursorValue = null;
 		if (cursor) {
@@ -2820,7 +2823,7 @@ var __members = {
 
 		var additionalIndexes = this.f_getAdditionalIndexes();
 		this._addIndexes(nStart, nLength, additionalIndexes);
-		
+
 		var submittedIndexes = this.f_getSubmittedIndexes();
 		this._addIndexes(nStart, nLength, submittedIndexes);
 
@@ -2835,12 +2838,12 @@ var __members = {
 	 * @return Number[]
 	 */
 	_addIndexes : function(nStart, nLength, serializedIndexes) {
-	
+
 		var nEnd = nStart + nLength;
 
 		var found = false;
 
-		for ( var i = 0; i < serializedIndexes.length; i += 2) {
+		for (var i = 0; i < serializedIndexes.length; i += 2) {
 			var aStart = serializedIndexes[i];
 			var aLength = serializedIndexes[i + 1];
 			var aEnd = aStart + aLength;
@@ -2885,7 +2888,7 @@ var __members = {
 		if (!found) {
 			serializedIndexes.push(nStart, nEnd - nStart);
 		}
-		
+
 		return serializedIndexes;
 	},
 
@@ -2906,14 +2909,13 @@ var __members = {
 		if (additionalIndexes) {
 			return additionalIndexes;
 		}
-		
+
 		additionalIndexes = new Array;
 		this._additionalIndexes = additionalIndexes;
 
 		return additionalIndexes;
 	},
-	
-	
+
 	/**
 	 * @method protected
 	 * @return Array
@@ -2924,14 +2926,14 @@ var __members = {
 		if (submittedIndexes) {
 			return submittedIndexes;
 		}
-		
+
 		submittedIndexes = new Array;
 		this._submittedIndexes = submittedIndexes;
-		
+
 		return submittedIndexes;
 	},
 
-	f_update: function() {
+	f_update : function() {
 		var rowCount = this._rowCount;
 
 		if (this._rows > 0 && !this._paged) {
@@ -3101,7 +3103,7 @@ var __members = {
 		var body = this._tbody;
 
 		var diff = this._rowCount - this._rows - shadows.length;
-		for ( var i = 0; i < diff; i++) {
+		for (var i = 0; i < diff; i++) {
 			var tr = doc.createElement("tr");
 			shadows.push(tr);
 			f_core.AppendChild(body, tr);
@@ -3306,7 +3308,7 @@ var __members = {
 		this._columns = columns;
 
 		var v = 0;
-		for ( var i = 0; i < arguments.length;) {
+		for (var i = 0; i < arguments.length;) {
 			var column = arguments[i++];
 
 			if (column) {
@@ -3371,7 +3373,7 @@ var __members = {
 
 		this.f_updateColumnsLayout();
 
-		for ( var i = 0; i < columns.length;) {
+		for (var i = 0; i < columns.length;) {
 			var column = columns[i++];
 
 			var sorter = column._sorter;
@@ -3550,20 +3552,22 @@ var __members = {
 					&& button.src != additionalImageURL) {
 				button.src = additionalImageURL;
 
-				var rb=f_resourceBundle.Get(f_grid);
-				
+				var rb = f_resourceBundle.Get(f_grid);
+
 				var additionalAlt = rb.f_formatParams(
-								(shown) ? "COLLAPSE_BUTTON" : "EXPAND_BUTTON",
-								{
-									value : row._lineHeader
-								});
+						(shown) ? "COLLAPSE_BUTTON" : "EXPAND_BUTTON", {
+							value : row._lineHeader
+						});
 
 				button.title = button.alt = additionalAlt;
 
-				var additionalRowMessage=rb.f_get((shown)?"COLLAPSABLE_ROW":"EXPANDABLE_ROW", "Ligne dépliable");			
+				var additionalRowMessage = rb.f_get((shown) ? "COLLAPSABLE_ROW"
+						: "EXPANDABLE_ROW", "Ligne dépliable");
 
-				fa_audioDescription.SetAudioDescription(row._input._label, additionalRowMessage, "additional", row._input._label.id);
-				
+				fa_audioDescription.SetAudioDescription(row._input._label,
+						additionalRowMessage, "additional",
+						row._input._label.id);
+
 				row._input.setAttribute("aria-expanded", shown);
 			}
 		}
@@ -3592,7 +3596,7 @@ var __members = {
 			firstOnly = false;
 		}
 
-		for ( var i = 0; i < cols.length && td; i++) {
+		for (var i = 0; i < cols.length && td; i++) {
 			var col = cols[i];
 			if (!col._visibility) {
 				continue;
@@ -3621,7 +3625,7 @@ var __members = {
 
 			if (cclassName) {
 				var cs = cclassName.split(" ");
-				for ( var j = 0; j < cs.length; j++) {
+				for (var j = 0; j < cs.length; j++) {
 					className.push(" ", cs[j]);
 					if (selected) {
 						className.push("_selected");
@@ -3694,7 +3698,7 @@ var __members = {
 		table.className = className;
 
 		var rows = this._table.rows;
-		for ( var i = 0; i < rows.length; i++) {
+		for (var i = 0; i < rows.length; i++) {
 			var row = rows[i];
 
 			if (row._index === undefined) {
@@ -3711,7 +3715,7 @@ var __members = {
 
 		if (this._headerVisible) {
 			var cols = this._columns;
-			for ( var i = 0; i < cols.length; i++) {
+			for (var i = 0; i < cols.length; i++) {
 				var col = cols[i];
 
 				if (!col._visibility) {
@@ -3799,7 +3803,7 @@ var __members = {
 			return null;
 		}
 
-		for ( var i = 0; i < rows.length; i++) {
+		for (var i = 0; i < rows.length; i++) {
 			var row = rows[i];
 
 			if (row._index != value) {
@@ -3871,7 +3875,7 @@ var __members = {
 				}
 
 			} else {
-				for ( var i = 0; i < rows.length; i++) {
+				for (var i = 0; i < rows.length; i++) {
 					if (rows[i]._index != rowIndex) {
 						continue;
 					}
@@ -4002,7 +4006,7 @@ var __members = {
 	},
 	_releaseColumns : function() {
 		var columns = this._columns;
-		for ( var i = 0; i < columns.length; i++) {
+		for (var i = 0; i < columns.length; i++) {
 			var column = columns[i];
 
 			var head = column._head;
@@ -4120,7 +4124,7 @@ var __members = {
 	 * @return void
 	 */
 	f_releaseRow : function() {
-		for ( var i = 0; i < arguments.length; i++) {
+		for (var i = 0; i < arguments.length; i++) {
 			var row = arguments[i];
 
 			if (row._index === undefined) {
@@ -4142,8 +4146,7 @@ var __members = {
 				input.ondblclick = null;
 				input.onfocus = null;
 				input.onblur = null;
-				input.onbeforeactivate=null;
-				
+				input.onbeforeactivate = null;
 
 				f_core.VerifyProperties(input);
 			}
@@ -4327,7 +4330,8 @@ var __members = {
 			break;
 
 		default:
-			if (this._keyRowSearch && f_key.IsLetterOrDigit(code) && !evt.ctrlKey && !evt.altKey && !evt.metaKey) {
+			if (this._keyRowSearch && f_key.IsLetterOrDigit(code)
+					&& !evt.ctrlKey && !evt.altKey && !evt.metaKey) {
 				this.f_searchRowNode(code, evt, selection);
 
 				// Dans tous les cas !
@@ -4353,7 +4357,7 @@ var __members = {
 	 */
 	_processRowLeftKey : function(evt) {
 		var additionalInformations = this._additionalInformations;
-		
+
 		if (additionalInformations && (!this._cellFocusable || evt.ctrlKey)) {
 			var cursor = this._cursor;
 			if (cursor) {
@@ -4422,7 +4426,7 @@ var __members = {
 
 		if (this.f_isSelectable()) {
 			var currentSelection = this._currentSelection;
-			for ( var i = 0; i < currentSelection.length; i++) {
+			for (var i = 0; i < currentSelection.length; i++) {
 				var r = currentSelection[i];
 				if (cursorRow == r) {
 					cursorRow = undefined;
@@ -4952,7 +4956,7 @@ var __members = {
 			this._currentSorts = currentSorts;
 		}
 
-		for ( var i = 0; i < arguments.length;) {
+		for (var i = 0; i < arguments.length;) {
 			var sortColumnIndex = arguments[i++];
 			var ascending = !!arguments[i++];
 
@@ -5038,7 +5042,7 @@ var __members = {
 
 			f_core.Debug(f_grid, "f_setColumnSort: Remove olds");
 
-			for ( var i = 0; i < currentSorts.length; i++) {
+			for (var i = 0; i < currentSorts.length; i++) {
 				var old = currentSorts[i];
 
 				old._ascendingOrder = undefined;
@@ -5069,7 +5073,7 @@ var __members = {
 		}
 
 		if (!append) {
-			for ( var i = 3; i < arguments.length;) {
+			for (var i = 3; i < arguments.length;) {
 				col = arguments[i++];
 				ascending = arguments[i++];
 
@@ -5123,7 +5127,7 @@ var __members = {
 
 			f_core.Debug(f_grid, "f_clearSort: Remove olds");
 
-			for ( var i = 0; i < currentSorts.length; i++) {
+			for (var i = 0; i < currentSorts.length; i++) {
 				var old = currentSorts[i];
 
 				old._ascendingOrder = undefined;
@@ -5410,7 +5414,7 @@ var __members = {
 		}
 		var serial = new Array;
 
-		for ( var i = 0; i < currentSorts.length; i++) {
+		for (var i = 0; i < currentSorts.length; i++) {
 			var col = currentSorts[i];
 			serial.push(col._index, col._ascendingOrder);
 		}
@@ -5440,7 +5444,7 @@ var __members = {
 
 		var serial = new Array;
 
-		for ( var i = 0; i < currentSorts.length; i++) {
+		for (var i = 0; i < currentSorts.length; i++) {
 			var col = currentSorts[i];
 
 			var method = col._method;
@@ -5453,7 +5457,7 @@ var __members = {
 
 			var columnIndex = col._index;
 			var tdIndex = 0;
-			for ( var j = 0; j < columns.length; j++) {
+			for (var j = 0; j < columns.length; j++) {
 				var col2 = columns[j];
 				if (!col2._visibility) {
 					continue;
@@ -5705,7 +5709,7 @@ var __members = {
 			var trs = new Array;
 			var childNodes = body.rows;
 			// var idx=0;
-			for ( var i = 0; i < childNodes.length; i++) {
+			for (var i = 0; i < childNodes.length; i++) {
 				var row = childNodes[i];
 				if (row._index === undefined) {
 					continue;
@@ -5829,7 +5833,7 @@ var __members = {
 		var isInternetExplorer = f_core.IsInternetExplorer();
 
 		var v = 0;
-		for ( var i = 0; i < columns.length;) {
+		for (var i = 0; i < columns.length;) {
 			var column = columns[i++];
 
 			if (!column._visibility) {
@@ -5978,7 +5982,7 @@ var __members = {
 		var totalZero = 0; // total colone sans taille donnee
 		var colToProcess = new Array();
 
-		for ( var i = 0; i < columns.length; i++) {
+		for (var i = 0; i < columns.length; i++) {
 			var column = columns[i];
 			if (column._visibility === false) {
 				continue;
@@ -6084,7 +6088,7 @@ var __members = {
 
 			var totalNonPx = clientWidth - total;
 
-			for ( var i = 0; i < colToProcess.length; i++) {
+			for (var i = 0; i < colToProcess.length; i++) {
 				var column = colToProcess[i];
 
 				column._tempWidth = 0;
@@ -6094,7 +6098,7 @@ var __members = {
 				var totalPercent = totalNonPx / 100;
 
 				// On affecte les %
-				for ( var i = 0; i < colToProcess.length; i++) {
+				for (var i = 0; i < colToProcess.length; i++) {
 					var column = colToProcess[i];
 
 					var percent = column._widthPercent;
@@ -6118,7 +6122,7 @@ var __members = {
 				}
 
 				// On verifie les mins ...
-				for ( var i = 0; i < colToProcess.length; i++) {
+				for (var i = 0; i < colToProcess.length; i++) {
 					var column = colToProcess[i];
 
 					var percent = column._widthPercent;
@@ -6152,7 +6156,7 @@ var __members = {
 				var cnt = totalZero;
 
 				// On affecte les colonnes sans taille !
-				for ( var i = 0; i < colToProcess.length; i++) {
+				for (var i = 0; i < colToProcess.length; i++) {
 					var column = colToProcess[i];
 
 					if (!column._widthComputed) {
@@ -6193,7 +6197,7 @@ var __members = {
 				}
 			}
 
-			for ( var i = 0; i < colToProcess.length; i++) {
+			for (var i = 0; i < colToProcess.length; i++) {
 				var column = colToProcess[i];
 
 				var w = column._tempWidth;
@@ -6811,7 +6815,7 @@ var __members = {
 
 		var exp = /\|/g;
 
-		for ( var i = 0; i < currentSorts.length; i++) {
+		for (var i = 0; i < currentSorts.length; i++) {
 			var col = currentSorts[i];
 
 			var index = col._index + (col._ascendingOrder ? "+" : "-");
@@ -6948,7 +6952,9 @@ var __members = {
 	 * @method public
 	 * @param HTMLElement
 	 *            target
-	 * @param optional Object cellRef  Object.value will contain the cell which catches the event
+	 * @param optional
+	 *            Object cellRef Object.value will contain the cell which
+	 *            catches the event
 	 * @return String Identifier of column or <code>null</code> if not found.
 	 */
 	_searchColumnByElement : function(target, cellRef) {
@@ -6982,7 +6988,7 @@ var __members = {
 
 				var tds = target.childNodes;
 				var index = 0;
-				for ( var i = 0; i < tds.length; i++) {
+				for (var i = 0; i < tds.length; i++) {
 					var td = tds[i];
 					if (td.nodeType != f_core.ELEMENT_NODE) {
 						continue;
@@ -6996,13 +7002,13 @@ var __members = {
 						index++;
 						continue;
 					}
-					
+
 					if (cellRef) {
-						cellRef.value=td;
+						cellRef.value = td;
 					}
 
 					var columns = this._columns;
-					for ( var i = 0; i < columns.length; i++) {
+					for (var i = 0; i < columns.length; i++) {
 						var cl = columns[i];
 
 						if (!cl._visibility) {
@@ -7060,7 +7066,7 @@ var __members = {
 		var elements = this.fa_listVisibleElements();
 		var values = new Array();
 
-		for ( var i = 0; i < elements.length; i++) {
+		for (var i = 0; i < elements.length; i++) {
 			var value = this.f_getRowValue(elements[i]);
 			if (value === undefined) {
 				continue;
@@ -7205,7 +7211,7 @@ var __members = {
 		var currentSelection = this._currentSelection;
 		var lastEffects = undefined;
 
-		for ( var i = 0; i < currentSelection.length; i++) {
+		for (var i = 0; i < currentSelection.length; i++) {
 
 			var row = currentSelection[i];
 
@@ -7496,11 +7502,12 @@ var __members = {
 	 * @method protected
 	 * @param Element
 	 *            elementItem
-	 * @param String tooltipId
+	 * @param String
+	 *            tooltipId
 	 * @return Object
 	 */
-	_computeTooltipRowContext: function(elementItem, tooltipId) {
-		var row=null;
+	_computeTooltipRowContext : function(elementItem, tooltipId) {
+		var row = null;
 		switch (elementItem.tagName.toUpperCase()) {
 		case "TR":
 			row = elementItem;
@@ -7508,7 +7515,7 @@ var __members = {
 				tooltipId = "#row";
 			}
 			break;
-	
+
 		case "TD":
 		case "TH":
 			row = elementItem.parentNode;
@@ -7517,12 +7524,12 @@ var __members = {
 			}
 			break;
 		}
-		
+
 		return {
-			_row: row,
-			_rowValue: row._index,
-			_rowIndex: row._rowIndex,
-			_tooltipId: tooltipId
+			_row : row,
+			_rowValue : row._index,
+			_rowIndex : row._rowIndex,
+			_tooltipId : tooltipId
 		};
 	}
 };

@@ -2604,7 +2604,7 @@ var __members = {
 	 * @method protected
 	 */
 	fa_showElement : function(row, giveFocus) {
-		this.f_super(arguments, row);
+//		this.f_super(arguments, row);
 		
 		if (!giveFocus || this._ignoreFocus) {
 			return;
@@ -2642,7 +2642,7 @@ var __members = {
 			f_core.Debug(f_dataGrid, "fa_showElement: give focus to "+input);
 
 			var deltaFocus=undefined;
-			// On s'assure que le focus soit visible
+			/*
 			if (this._scrollBody && this._checkable && this._scrollBody.scrollLeft) {
 				var sl=this._scrollBody.scrollLeft;
 				sl-=input.offsetLeft;
@@ -2651,7 +2651,7 @@ var __members = {
 						x: sl
 					};
 				}
-			}
+			}*/
 			
 			f_core.SetFocus(input, true, deltaFocus);
 		}
