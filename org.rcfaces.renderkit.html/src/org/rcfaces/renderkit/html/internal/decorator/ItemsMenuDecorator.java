@@ -19,7 +19,7 @@ import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
  * @version $Revision$ $Date$
  */
 public class ItemsMenuDecorator extends MenuDecorator {
-    private static final String REVISION = "$Revision$";
+    
 
     private static final String MENU_POPUPID = "popup";
 
