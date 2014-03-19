@@ -7,7 +7,7 @@
  *
  * @class f_tree extends f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager<String[]>, fa_checkManager, fa_itemClientDatas, fa_scrollPositions, fa_overStyleClass, fa_filterProperties, fa_treeDnd, fa_tabIndex, fa_outlinedLabel
  * @author olivier Oeuillot
- * @version $REVISION: $
+ * @version $Revision$
  */
  
 var __statics = {
@@ -1443,15 +1443,15 @@ var __members = {
 			this._showAndOutlineNodes(text, function(type, request, parameter) {
 				switch(type) {
 				case "response":
-					tree.f_fireEvent(f_tree.OUTLINED_LABEL_SEARCH_DOWNLOADED_EVENT, null, null, parameter, null, {
+					tree.f_fireEvent(f_tree.OUTLINED_LABEL_SEARCH_DOWNLOADED_EVENT, null, null, parameter, null, f_event.NewDetail({
 						text: text
-					});
+					}));
 					return;
 					
 				case "complete":
-					tree.f_fireEvent(f_tree.OUTLINED_LABEL_SEARCH_RESULT_EVENT, null, null, parameter, null, {
+					tree.f_fireEvent(f_tree.OUTLINED_LABEL_SEARCH_RESULT_EVENT, null, null, parameter, null, f_event.NewDetail({
 						text: text
-					});
+					}));
 					return;
 					
 				}
@@ -1461,9 +1461,9 @@ var __members = {
 				this.f_revealNode(nodesFound[i]);
 			}
 			
-			this.f_fireEvent(f_tree.OUTLINED_LABEL_SEARCH_RESULT_EVENT, null, null, nodesFound, null,  {
+			this.f_fireEvent(f_tree.OUTLINED_LABEL_SEARCH_RESULT_EVENT, null, null, nodesFound, null, f_event.NewDetail({
 				text: text
-			});
+			}));
 		}
 	},
 	/**
@@ -3752,7 +3752,7 @@ var __members = {
 			var li=lis[i];
 			
 			var n=li._node;
-			if (!n || (n!=nodeOrValue && n._value!=nodeOrValue)) {
+			if (!n || (n!==nodeOrValue && n._value!==nodeOrValue)) {
 				continue;
 			}
 			
