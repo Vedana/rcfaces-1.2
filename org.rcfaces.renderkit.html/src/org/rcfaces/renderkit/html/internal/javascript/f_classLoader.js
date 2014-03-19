@@ -577,7 +577,8 @@ f_classLoader.prototype = {
 	 */
 	f_initializeObjects: function() {
 		if (this._interactiveMode) {
-			return;
+			// Non ... on peut avoir des interactives lors avant le OnInit !
+			// return;
 		}
 	
 		if (this._exiting) {
