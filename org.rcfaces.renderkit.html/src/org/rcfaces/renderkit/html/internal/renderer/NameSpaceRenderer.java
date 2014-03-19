@@ -21,7 +21,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
  */
 public class NameSpaceRenderer extends AbstractHtmlRenderer {
 
-    private static final String REVISION = "$Revision$";
+    
 
     private static final Log LOG = LogFactory.getLog(NameSpaceRenderer.class);
 
