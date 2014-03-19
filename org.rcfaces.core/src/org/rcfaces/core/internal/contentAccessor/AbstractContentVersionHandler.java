@@ -10,8 +10,8 @@ package org.rcfaces.core.internal.contentAccessor;
  */
 public abstract class AbstractContentVersionHandler implements
         IContentVersionHandler {
-    private static final String REVISION = "$Revision$";
 
+    @Override
     public boolean equals(Object obj) {
         if (obj == null
                 || (obj instanceof AbstractContentVersionHandler) == false) {
@@ -21,10 +21,12 @@ public abstract class AbstractContentVersionHandler implements
         return getId().equals(((AbstractContentVersionHandler) obj).getId());
     }
 
+    @Override
     public int hashCode() {
         return getId().hashCode();
     }
 
+    @Override
     public String toString() {
         return "[AbstractContentVersionHandler '" + getId() + "']";
     }

@@ -15,8 +15,6 @@ import org.rcfaces.core.internal.listener.IScriptListener;
  * @version $Revision$ $Date$
  */
 abstract class CameliaEvent extends FacesEvent implements ITypedEvent {
-    private static final String REVISION = "$Revision$";
-
     private static final long serialVersionUID = -2844437297380361681L;
 
     protected final int type;
@@ -35,6 +33,7 @@ abstract class CameliaEvent extends FacesEvent implements ITypedEvent {
         return type;
     }
 
+    @Override
     public boolean isAppropriateListener(FacesListener listener) {
         if (listener instanceof IScriptListener) {
             return false;

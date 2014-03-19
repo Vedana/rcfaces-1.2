@@ -2,7 +2,6 @@ package org.rcfaces.renderkit.html.internal.taglib;
 
 import javax.faces.component.UIComponent;
 import org.rcfaces.renderkit.html.component.NameSpaceComponent;
-import org.rcfaces.core.internal.component.Properties;
 import org.apache.commons.logging.LogFactory;
 import javax.servlet.jsp.tagext.Tag;
 import org.rcfaces.core.internal.taglib.CameliaTag;
@@ -13,6 +12,7 @@ import javax.el.ValueExpression;
 import org.apache.commons.logging.Log;
 import javax.faces.component.UIViewRoot;
 import org.rcfaces.core.internal.tools.ListenersTools1_2;
+import org.rcfaces.renderkit.html.component.Properties;
 
 public class NameSpaceTag extends CameliaTag implements Tag {
 
@@ -25,11 +25,11 @@ public class NameSpaceTag extends CameliaTag implements Tag {
 		return NameSpaceComponent.COMPONENT_TYPE;
 	}
 
-	public final void setUri(ValueExpression uri) {
+	public void setUri(ValueExpression uri) {
 		this.uri = uri;
 	}
 
-	public final void setPrefix(ValueExpression prefix) {
+	public void setPrefix(ValueExpression prefix) {
 		this.prefix = prefix;
 	}
 

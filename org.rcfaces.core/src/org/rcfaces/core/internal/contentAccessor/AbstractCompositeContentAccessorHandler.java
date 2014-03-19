@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.provider.AbstractProvider;
 
@@ -19,9 +21,10 @@ import org.rcfaces.core.provider.AbstractProvider;
  */
 public abstract class AbstractCompositeContentAccessorHandler extends
         AbstractProvider implements ICompositeContentAccessorHandler {
-    private static final String REVISION = "$Revision$";
+    private static final Log LOG = LogFactory
+            .getLog(AbstractCompositeContentAccessorHandler.class);
 
-    private static final Set DEFAULT_CHARSETS = new HashSet(8);
+    private static final Set<String> DEFAULT_CHARSETS = new HashSet<String>(8);
     static {
         DEFAULT_CHARSETS.add("utf8");
         DEFAULT_CHARSETS.add("utf-8");
@@ -46,7 +49,6 @@ public abstract class AbstractCompositeContentAccessorHandler extends
         compositeURLDescriptor.parse(compositeURL);
 
         return compositeURLDescriptor;
-
     }
 
     /**
@@ -124,7 +126,8 @@ public abstract class AbstractCompositeContentAccessorHandler extends
                 mainCharSet = decodeParameter(nextToken);
             }
 
-            List urls = new ArrayList(st.countTokens() / 2);
+            List<IURLInformation> us = new ArrayList<IURLInformation>(
+                    st.countTokens() / 2);
             for (; st.hasMoreTokens();) {
                 String urlCharSet = null;
                 nextToken = st.nextToken();
@@ -137,7 +140,7 @@ public abstract class AbstractCompositeContentAccessorHandler extends
                 final String _charSet = urlCharSet;
                 final String url = decodeParameter(nextToken);
 
-                urls.add(new IURLInformation() {
+                us.add(new IURLInformation() {
 
                     public String getCharSet() {
                         return _charSet;
@@ -148,6 +151,8 @@ public abstract class AbstractCompositeContentAccessorHandler extends
                     }
                 });
             }
+
+            this.urls = us.toArray(new IURLInformation[us.size()]);
         }
 
         private void encodeParameter(StringAppender sa, String value) {

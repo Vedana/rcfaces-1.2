@@ -23,10 +23,10 @@ import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
  * @version $Revision$ $Date$
  */
 public class JavaScriptTools {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(JavaScriptTools.class);
 
+    @SuppressWarnings("unused")
     public static String writeMessage(FacesContext facesContext,
             IJavaScriptWriter js, FacesMessage facesMessage)
             throws WriterException {
@@ -57,8 +57,8 @@ public class JavaScriptTools {
             detail = js.allocateString(detail);
         }
 
-        js.write("var ").write(key).write('=').writeConstructor(
-                "f_messageObject");
+        js.write("var ").write(key).write('=')
+                .writeConstructor("f_messageObject");
 
         IObjectLiteralWriter objectLiteralWriter = js.writeObjectLiteral(true);
 

@@ -30,7 +30,8 @@ var __statics = {
 		
 		return true;
 	}
-}
+};
+
 var __members = {
 /*
 	f_messages: function() {
@@ -63,7 +64,7 @@ var __members = {
 			return this._globalOnly;
 		}
 		
-		var b=f_core.GetBooleanAttribute(this, "v:globalOnly", false);
+		var b=f_core.GetBooleanAttributeNS(this,"globalOnly", false);
 		this._globalOnly=b;
 		return b;
 	},
@@ -116,7 +117,7 @@ var __members = {
 		
 		var messageLength = messages.length;
 		
-		var maxCount=f_core.GetNumberAttribute(this, "v:maxCount", 0);
+		var maxCount=f_core.GetNumberAttributeNS(this,"maxCount", 0);
 		if (maxCount>0 && messageLength>maxCount) {
 			messageLength=maxCount;
 		}
@@ -151,6 +152,6 @@ var __members = {
 			f_core.AppendChild(this, tbody);
 		}
 	}
-}
+};
 
 new f_class("f_messages", null, __statics, __members, f_component, fa_messageText);

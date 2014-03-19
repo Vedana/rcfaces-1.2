@@ -15,8 +15,6 @@ import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
  * @version $Revision$ $Date$
  */
 public class JavaScriptObjectLiteralWriter implements IObjectLiteralWriter {
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory
             .getLog(JavaScriptObjectLiteralWriter.class);
 
@@ -56,7 +54,7 @@ public class JavaScriptObjectLiteralWriter implements IObjectLiteralWriter {
 
             } else {
                 for (int i = 1; i < chs.length; i++) {
-                    if (Character.isJavaIdentifierPart(chs[i]) == false) {
+                    if (Character.isJavaIdentifierPart(chs[i]) == false && Character.isDigit(chs[0]) == false) {
                         directWriter = false;
 
                         break;

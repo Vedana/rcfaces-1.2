@@ -206,7 +206,7 @@ var __statics = {
 		
 		return code;
 	}
-}
+};
 
 new f_class("f_error", {
 	statics: __statics,

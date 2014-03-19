@@ -22,13 +22,13 @@ import org.apache.commons.logging.LogFactory;
  */
 public abstract class AbstractBufferedImageOperation extends
         AbstractImageOperation implements IImageIOOperation {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(AbstractBufferedImageOperation.class);
 
     /* packaged */RasterOp imageOperation;
 
+    @Override
     public void configure(Map configuration) {
         this.imageOperation = getImageOperation(null, configuration);
     }
@@ -68,8 +68,8 @@ public abstract class AbstractBufferedImageOperation extends
                 LOG.trace("Convert image to type '" + type + "'.");
             }
 
-            destination = new BufferedImage((int) dest.getWidth(), (int) dest
-                    .getHeight(), type);
+            destination = new BufferedImage((int) dest.getWidth(),
+                    (int) dest.getHeight(), type);
         }
 
         filter0(imageOperation, source, destination);
@@ -93,8 +93,6 @@ public abstract class AbstractBufferedImageOperation extends
      * @version $Revision$ $Date$
      */
     protected static class ParametredRasterOp implements RasterOp {
-        private static final String REVISION = "$Revision$";
-
         protected final RasterOp parent;
 
         protected ParametredRasterOp(RasterOp parent) {

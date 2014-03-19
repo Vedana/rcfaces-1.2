@@ -12,7 +12,7 @@ var __members = {
 	f_styledMessage: function() {		
 		this.f_super(arguments);
 
-		this._showIfMessage=f_core.GetAttribute(this, "v:showIfMessage");
+		this._showIfMessage=f_core.GetAttributeNS(this,"showIfMessage");
 	},
 	
 	/*
@@ -27,7 +27,7 @@ var __members = {
 	 * @method protected
 	 */
 	fa_updateMessages: function() {
-		var className;
+		var className=undefined;
 		var currentMessage=this._currentMessage;
 		if (currentMessage) {
 			className=this.f_getStyleClassFromSeverity(currentMessage.f_getSeverity());	
@@ -45,7 +45,7 @@ var __members = {
 			this.f_setVisible(currentMessage!=null);
 		}
 	}
-}
+};
  
 new f_class("f_styledMessage", {
 	extend: f_component,

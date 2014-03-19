@@ -248,12 +248,6 @@ var __members = {
 				if (menu._filterKey("down", evt)===true) {
 					return true;
 				}
-			
-				switch(evt.keyCode) {
-				case f_key.VK_RETURN:
-			 	case f_key.VK_ENTER:
-			 		return true;
-				}
 				
 				return fa_menuCore.OnKeyDown(menu, evt);
 			},
@@ -270,12 +264,12 @@ var __members = {
 				switch(evt.keyCode) {
 				case f_key.VK_RETURN:
 			 	case f_key.VK_ENTER:
-			 		return fa_menuCore.OnKeyDown(menu, evt);
+			 		//return fa_menuCore.OnKeyDown(menu, evt);
 				}
 				
 				return true;
 			}
-		}
+		};
 	},
 	
 	fa_getMenuScopeName: function(menuItem) {
@@ -297,8 +291,7 @@ var __members = {
 	toString: function() {
 		return "[f_menu id="+this.id+" menuId="+this._menuId+" component="+this._component+"]";
 	}
-}
-
+};
 
 new f_class("f_menu", {
 	extend: f_menuBase,

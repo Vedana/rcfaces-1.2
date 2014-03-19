@@ -115,8 +115,7 @@ var __members = {
 			
 			window._ignoreLog=true;
 			
-			var url=f_env.GetViewURI();
-			var request=new f_httpRequest(document, url, null, true);
+			var request=new f_httpRequest(document, null, null, null, true);
 			
 			var self=this;
 			

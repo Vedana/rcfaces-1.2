@@ -29,7 +29,7 @@ var __members = {
 		
 		var imageURL=this.fa_getInitialImageURL();
 		
-		var v_imageURL=f_core.GetAttribute(this, "v:imageURL");
+		var v_imageURL=f_core.GetAttributeNS(this, "imageURL");
 		if (v_imageURL) {
 			if (this.fa_getInitialDisabled && this.fa_getInitialDisabled()) {
 				this._disabledImageURL=imageURL;
@@ -44,12 +44,12 @@ var __members = {
 		} else if (this.fa_getInitialDisabled && this.fa_getInitialDisabled()) {
 			// Il n'y a que le disabled qui est spécifié !
 			this._disabledImageURL=imageURL;
-			imageURL=null;
+//			imageURL=null;
 			
 		} else if (this.fa_getInitialSelection && this.fa_getInitialSelection()) {
 			// Il n'y a que le selected qui est spécifié !
 			this._selectedImageURL=imageURL;
-			imageURL=null;
+//			imageURL=null;
 		}
 		
 		if (imageURL===undefined) {
@@ -58,7 +58,7 @@ var __members = {
 		this._imageURL=imageURL;
 		
 		if (!this._disabledImageURL) {
-			var v_disabledImageURL=f_core.GetAttribute(this, "v:disabledImageURL");
+			var v_disabledImageURL=f_core.GetAttributeNS(this, "disabledImageURL");
 			if (v_disabledImageURL) {
 				this._disabledImageURL=v_disabledImageURL;
 				f_imageRepository.PrepareImage(v_disabledImageURL);
@@ -66,14 +66,14 @@ var __members = {
 		}
 		
 		if (!this._selectedImageURL) {
-			var v_selectedImageURL=f_core.GetAttribute(this, "v:selectedImageURL");
+			var v_selectedImageURL=f_core.GetAttributeNS(this, "selectedImageURL");
 			if (v_selectedImageURL) {
 				this._selectedImageURL=v_selectedImageURL;
 				f_imageRepository.PrepareImage(v_selectedImageURL);
 			}
 		}	
 
-		var v_hoverImageURL=f_core.GetAttribute(this, "v:hoverImageURL");
+		var v_hoverImageURL=f_core.GetAttributeNS(this, "hoverImageURL");
 		if (v_hoverImageURL) {
 			this._hoverImageURL=v_hoverImageURL;
 			f_imageRepository.PrepareImage(v_hoverImageURL);
@@ -225,7 +225,7 @@ var __members = {
 			return this._hoverImageURL!==undefined;
 		}
 				
-		return f_core.GetAttribute(this, "v:hoverImageURL")!=null;
+		return f_core.GetAttributeNS(this, "hoverImageURL")!=null;
 	},
 	
 	/**

@@ -16,7 +16,6 @@ import org.apache.commons.logging.LogFactory;
  * @version $Revision$ $Date$
  */
 public final class StringAppender2 {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(StringAppender2.class);
 
@@ -276,6 +275,7 @@ public final class StringAppender2 {
         return append(String.valueOf(f));
     }
 
+    @Override
     public String toString() {
         if (value == null) {
             return initialValue;
@@ -392,8 +392,8 @@ public final class StringAppender2 {
         value = new char[initialSize];
         if (initialValue != null) {
             if (initialSize > 0 && initialValue.length() > 0) {
-                initialValue.getChars(0, Math.min(initialValue.length(),
-                        initialSize), value, 0);
+                initialValue.getChars(0,
+                        Math.min(initialValue.length(), initialSize), value, 0);
             }
 
             initialValue = null;
@@ -402,14 +402,16 @@ public final class StringAppender2 {
 
     public Writer createWriter() {
         return new Writer() {
-            private static final String REVISION = "$Revision$";
 
+            @Override
             public void close() {
             }
 
+            @Override
             public void flush() {
             }
 
+            @Override
             public void write(char[] cbuf, int off, int len) {
                 StringAppender2.this.append(cbuf, off, len);
             }
@@ -418,10 +420,12 @@ public final class StringAppender2 {
                 StringAppender2.this.append(c);
             }
 
+            @Override
             public void write(String s, int off, int len) {
                 StringAppender2.this.append(s, off, len);
             }
 
+            @Override
             public void write(String s) {
                 StringAppender2.this.append(s);
             }

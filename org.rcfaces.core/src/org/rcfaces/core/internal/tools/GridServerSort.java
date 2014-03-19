@@ -36,7 +36,6 @@ import org.rcfaces.core.model.ISortedComponent;
  * @version $Revision$ $Date$
  */
 public final class GridServerSort {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(GridServerSort.class);
 
@@ -44,7 +43,8 @@ public final class GridServerSort {
 
     private static final Double DOUBLE_0 = new Double(0.0);
 
-    private static final Map SORT_ALIASES = new HashMap(8);
+    private static final Map<String, ISortMethod> SORT_ALIASES = new HashMap<String, ISortMethod>(
+            8);
 
     static {
         SORT_ALIASES.put(ISortEventCapability.SORT_INTEGER, new SortLong());
@@ -60,7 +60,7 @@ public final class GridServerSort {
             IGridComponent data, DataModel dataModel,
             ISortedComponent sortedComponents[]) {
 
-        ISortMethod sortMethods[] = new ISortMethod[sortedComponents.length];
+        ISortMethod< ? > sortMethods[] = new ISortMethod[sortedComponents.length];
 
         for (int i = 0; i < sortMethods.length; i++) {
             UIColumn columnComponent = (UIColumn) sortedComponents[i]
@@ -76,13 +76,13 @@ public final class GridServerSort {
 
         int rowCount = data.getRowCount();
 
-        List datas[] = new List[sortedComponents.length];
+        List<Object> datas[] = new List[sortedComponents.length];
         for (int i = 0; i < datas.length; i++) {
             if (rowCount > 0) {
-                datas[i] = new ArrayList(rowCount);
+                datas[i] = new ArrayList<Object>(rowCount);
 
             } else {
-                datas[i] = new ArrayList();
+                datas[i] = new ArrayList<Object>();
             }
         }
 
@@ -111,7 +111,12 @@ public final class GridServerSort {
                         value = ValuesTools.getValue(column);
                     }
 
-                    ISortMethod sortMethod = sortMethods[i];
+                    ISortMethod< ? > sortMethod = sortMethods[i];
+                    if (sortMethod == null) {
+                        throw new FacesException(
+                                "Can not get sort method for column #" + i
+                                        + " id=" + column.getId());
+                    }
                     value = sortMethod
                             .convertValue(facesContext, column, value);
 
@@ -121,8 +126,12 @@ public final class GridServerSort {
 
                             rowData = data.getRowData();
                         }
-
-                        value = rowData;
+                        // Avoid crahes when compare
+                        // then WHY get the full row Data when the column value
+                        // is null ?
+                        if (rowData instanceof Comparable) {
+                            value = rowData;
+                        }
                     }
 
                     datas[i].add(value);
@@ -141,7 +150,7 @@ public final class GridServerSort {
         }
 
         Object ds[][] = new Object[datas.length][];
-        Comparator comparators[] = new Comparator[datas.length];
+        Comparator<Object> comparators[] = new Comparator[datas.length];
         boolean sortOrders[] = new boolean[datas.length];
         for (int i = 0; i < ds.length; i++) {
             ds[i] = datas[i].toArray();
@@ -206,7 +215,7 @@ public final class GridServerSort {
         return translations;
     }
 
-    private static ISortMethod getSortMethod(
+    private static ISortMethod< ? > getSortMethod(
             ISortEventCapability columnComponent, IGridComponent gridComponent) {
 
         FacesListener facesListeners[] = columnComponent.listSortListeners();
@@ -227,7 +236,7 @@ public final class GridServerSort {
 
             IScriptListener scriptListener = (IScriptListener) facesListener;
 
-            ISortMethod sortMethod = (ISortMethod) SORT_ALIASES
+            ISortMethod< ? > sortMethod = (ISortMethod< ? >) SORT_ALIASES
                     .get(scriptListener.getCommand());
             if (sortMethod == null) {
                 continue;
@@ -244,9 +253,9 @@ public final class GridServerSort {
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
-    private interface ISortMethod {
+    private interface ISortMethod<T> {
 
-        Comparator getComparator();
+        Comparator<T> getComparator();
 
         Object convertValue(FacesContext facesContext, UIComponent component,
                 Object value);
@@ -258,15 +267,14 @@ public final class GridServerSort {
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
-    private static abstract class AbstractSortMethod implements ISortMethod,
-            Comparator {
-        private static final String REVISION = "$Revision$";
+    private static abstract class AbstractSortMethod<T> implements
+            ISortMethod<T>, Comparator<T> {
 
-        public Comparator getComparator() {
+        public Comparator<T> getComparator() {
             return this;
         }
 
-        public int compare(Object o1, Object o2) {
+        public int compare(T o1, T o2) {
             if (o1 == null) {
                 return (o2 == null) ? 0 : -1;
 
@@ -274,7 +282,7 @@ public final class GridServerSort {
                 return 1;
             }
 
-            return ((Comparable) o1).compareTo(o2);
+            return ((Comparable<T>) o1).compareTo(o2);
         }
     }
 
@@ -284,8 +292,6 @@ public final class GridServerSort {
      * @version $Revision$ $Date$
      */
     private static class SortLong extends AbstractSortMethod {
-
-        private static final String REVISION = "$Revision$";
 
         public Object convertValue(FacesContext facesContext,
                 UIComponent component, Object value) {
@@ -321,7 +327,6 @@ public final class GridServerSort {
      * @version $Revision$ $Date$
      */
     private static class SortDouble extends AbstractSortMethod {
-        private static final String REVISION = "$Revision$";
 
         public Object convertValue(FacesContext facesContext,
                 UIComponent component, Object value) {
@@ -357,7 +362,6 @@ public final class GridServerSort {
      * @version $Revision$ $Date$
      */
     private static class SortAlpha extends AbstractSortMethod {
-        private static final String REVISION = "$Revision$";
 
         public Object convertValue(FacesContext facesContext,
                 UIComponent component, Object value) {
@@ -385,7 +389,6 @@ public final class GridServerSort {
      * @version $Revision$ $Date$
      */
     private static class SortAlphaIgnoreCase extends AbstractSortMethod {
-        private static final String REVISION = "$Revision$";
 
         public Object convertValue(FacesContext facesContext,
                 UIComponent component, Object value) {
@@ -412,7 +415,6 @@ public final class GridServerSort {
      * @version $Revision$ $Date$
      */
     private static class SortDate extends AbstractSortMethod {
-        private static final String REVISION = "$Revision$";
 
         public Object convertValue(FacesContext facesContext,
                 UIComponent component, Object value) {
@@ -436,7 +438,6 @@ public final class GridServerSort {
      * @version $Revision$ $Date$
      */
     private static class SortAction extends AbstractSortMethod {
-        private static final String REVISION = "$Revision$";
 
         private final Comparator comparator;
 

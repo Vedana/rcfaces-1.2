@@ -27,23 +27,23 @@ public class SelectImageItemTag extends CameliaTag implements Tag {
 		return SelectImageItemComponent.COMPONENT_TYPE;
 	}
 
-	public final void setImageURL(ValueExpression imageURL) {
+	public void setImageURL(ValueExpression imageURL) {
 		this.imageURL = imageURL;
 	}
 
-	public final void setItemValue(ValueExpression itemValue) {
+	public void setItemValue(ValueExpression itemValue) {
 		this.itemValue = itemValue;
 	}
 
-	public final void setItemDescription(ValueExpression itemDescription) {
+	public void setItemDescription(ValueExpression itemDescription) {
 		this.itemDescription = itemDescription;
 	}
 
-	public final void setItemLabel(ValueExpression itemLabel) {
+	public void setItemLabel(ValueExpression itemLabel) {
 		this.itemLabel = itemLabel;
 	}
 
-	public final void setItemDisabled(ValueExpression itemDisabled) {
+	public void setItemDisabled(ValueExpression itemDisabled) {
 		this.itemDisabled = itemDisabled;
 	}
 

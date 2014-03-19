@@ -22,6 +22,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -29,13 +30,13 @@ import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
  * @version $Revision$ $Date$
  */
 public class TextEditorImageButtonRenderer extends ImageButtonRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final int TEXT_EDITOR_IMAGE_BUTTON_WIDTH = 16;
 
     private static final int TEXT_EDITOR_IMAGE_BUTTON_HEIGHT = 16;
 
-    private static final Map IMAGE_URL_BY_TYPE = new HashMap(24);
+    private static final Map<String, String> IMAGE_URL_BY_TYPE = new HashMap<String, String>(
+            24);
     static {
         IMAGE_URL_BY_TYPE
                 .put(ITextEditorButtonType.BOLD, "textEditor/bold.gif");
@@ -116,9 +117,9 @@ public class TextEditorImageButtonRenderer extends ImageButtonRenderer {
                     + "' for an ImageTextEditorButton.");
         }
 
-        ((IHtmlWriter)writer).getJavaScriptEnableMode().enableOnInit();
+        ((IHtmlWriter) writer).getJavaScriptEnableMode().enableOnInit();
 
-        super.encodeEnd(writer);        
+        super.encodeEnd(writer);
     }
 
     protected int getTextEditorImageWidth(IHtmlWriter htmlWriter) {
@@ -138,7 +139,7 @@ public class TextEditorImageButtonRenderer extends ImageButtonRenderer {
                 .getComponentRenderContext().getComponent())
                 .getType(htmlRenderContext.getFacesContext());
 
-        String imageURL = (String) IMAGE_URL_BY_TYPE.get(type.toLowerCase());
+        String imageURL = IMAGE_URL_BY_TYPE.get(type.toLowerCase());
         if (imageURL == null) {
             return null;
         }
@@ -163,7 +164,6 @@ public class TextEditorImageButtonRenderer extends ImageButtonRenderer {
      * @version $Revision$ $Date$
      */
     protected class TextEditorImageButtonDecorator extends ImageButtonDecorator {
-        private static final String REVISION = "$Revision$";
 
         private IContentAccessor imageAccessor;
 
@@ -180,12 +180,12 @@ public class TextEditorImageButtonRenderer extends ImageButtonRenderer {
 
             String type = button.getType(facesContext);
             if (type != null) {
-                writer.writeAttribute("v:type", type);
+                writer.writeAttributeNS("type", type);
             }
 
             String forProperty = button.getFor(facesContext);
             if (forProperty != null) {
-                writer.writeAttribute("v:for", forProperty);
+                writer.writeAttributeNS("for", forProperty);
             }
         }
 
@@ -228,5 +228,11 @@ public class TextEditorImageButtonRenderer extends ImageButtonRenderer {
         protected boolean useImageFilterIfNecessery() {
             return true;
         }
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "type", "for" });
     }
 }

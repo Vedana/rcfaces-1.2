@@ -36,8 +36,6 @@ import org.rcfaces.core.internal.service.AbstractAsyncRenderService;
  */
 public class HtmlRenderContext extends AbstractRenderContext implements
         IHtmlRenderContext {
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory.getLog(HtmlRenderContext.class);
 
     private static final String META_DATA_INITIALIZED_PROPERTY = "org.rcfaces.renderkit.html.META_DATA_INITIALIZED";
@@ -48,7 +46,7 @@ public class HtmlRenderContext extends AbstractRenderContext implements
 
     private static final int INTERACTIVE_RENDER_COMPONENTS_INITIAL_SIZE = 4 * 3;
 
-    private List interactiveRenderComponents;
+    private List<Object> interactiveRenderComponents;
 
     private UIComponent lastInteractiveRenderComponent;
 
@@ -66,7 +64,7 @@ public class HtmlRenderContext extends AbstractRenderContext implements
 
     private boolean disabledContentMenu;
 
-    private Set clientMessageIdFilter;
+    private Set<String> clientMessageIdFilter;
 
     private boolean clientMessageIdFilterReadOnly;
 
@@ -75,6 +73,8 @@ public class HtmlRenderContext extends AbstractRenderContext implements
     private String waiRolesNS = null;
 
     private boolean clientValidation = true;
+
+    private int void0;
 
     public void initialize(FacesContext facesContext) {
         super.initialize(facesContext);
@@ -105,7 +105,8 @@ public class HtmlRenderContext extends AbstractRenderContext implements
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
-        Map requestMap = facesContext.getExternalContext().getRequestMap();
+        Map<String, Object> requestMap = facesContext.getExternalContext()
+                .getRequestMap();
 
         javaScriptRenderContext = (IJavaScriptRenderContext) requestMap
                 .get(JAVASCRIPT_CONTEXT_PROPERTY);
@@ -159,7 +160,7 @@ public class HtmlRenderContext extends AbstractRenderContext implements
             IJavaScriptRenderContext newJavaScriptRenderContext)
             throws WriterException {
         if (interactiveRenderComponents == null) {
-            interactiveRenderComponents = new ArrayList(
+            interactiveRenderComponents = new ArrayList<Object>(
                     INTERACTIVE_RENDER_COMPONENTS_INITIAL_SIZE);
         }
 
@@ -268,8 +269,8 @@ public class HtmlRenderContext extends AbstractRenderContext implements
                     }
                 }
 
-                return brotherComponentId.substring(0, idx
-                        + separatorChar.length())
+                return brotherComponentId.substring(0,
+                        idx + separatorChar.length())
                         + componentId;
             }
         }
@@ -298,7 +299,6 @@ public class HtmlRenderContext extends AbstractRenderContext implements
      * @version $Revision$ $Date$
      */
     protected static class HtmlWriterImpl extends AbstractHtmlWriter {
-        private static final String REVISION = "$Revision$";
 
         private static final String ENABLE_JAVASCRIPT_PROPERTY = "camelia.html.javascript.enable";
 
@@ -372,7 +372,7 @@ public class HtmlRenderContext extends AbstractRenderContext implements
         return clientMessageIdFilter;
     }
 
-    public void setClientMessageId(Set ids) {
+    public void setClientMessageId(Set<String> ids) {
         clientMessageIdFilter = ids;
         clientMessageIdFilterReadOnly = true;
     }
@@ -383,10 +383,10 @@ public class HtmlRenderContext extends AbstractRenderContext implements
         }
 
         if (clientMessageIdFilter == null) {
-            clientMessageIdFilter = new HashSet(ids.size());
+            clientMessageIdFilter = new HashSet<String>(ids.size());
 
         } else if (clientMessageIdFilterReadOnly) {
-            clientMessageIdFilter = new HashSet(clientMessageIdFilter);
+            clientMessageIdFilter = new HashSet<String>(clientMessageIdFilter);
             clientMessageIdFilterReadOnly = false;
         }
 
@@ -431,10 +431,9 @@ public class HtmlRenderContext extends AbstractRenderContext implements
             mode = IAsyncRenderModeCapability.TREE_ASYNC_RENDER_MODE;
 
             if (LOG.isDebugEnabled()) {
-                LOG
-                        .debug("BUFFER_ASYNC_RENDER_MODE can not be used with JSF 1_2 (componentId='"
-                                + ((UIComponent) asyncRenderModeCapability)
-                                        .getId() + "'");
+                LOG.debug("BUFFER_ASYNC_RENDER_MODE can not be used with JSF 1_2 (componentId='"
+                        + ((UIComponent) asyncRenderModeCapability).getId()
+                        + "'");
             }
         }
 
@@ -459,7 +458,8 @@ public class HtmlRenderContext extends AbstractRenderContext implements
             context = FacesContext.getCurrentInstance();
         }
 
-        Map requestMap = context.getExternalContext().getRequestMap();
+        Map<String, Object> requestMap = context.getExternalContext()
+                .getRequestMap();
 
         IHtmlRenderContext renderContext = (IHtmlRenderContext) requestMap
                 .get(RENDER_CONTEXT_PROPERTY);
@@ -481,8 +481,8 @@ public class HtmlRenderContext extends AbstractRenderContext implements
     }
 
     public static void setMetaDataInitialized(FacesContext facesContext) {
-        facesContext.getExternalContext().getRequestMap().put(
-                META_DATA_INITIALIZED_PROPERTY, Boolean.TRUE);
+        facesContext.getExternalContext().getRequestMap()
+                .put(META_DATA_INITIALIZED_PROPERTY, Boolean.TRUE);
     }
 
     public void setUserAgentVary(boolean userAgentVary) {
@@ -491,6 +491,10 @@ public class HtmlRenderContext extends AbstractRenderContext implements
 
     public boolean isUserAgentVary() {
         return userAgentVary;
+    }
+
+    public int allocateJavaScriptVoid0() {
+        return void0++;
     }
 
 }

@@ -1,6 +1,88 @@
-<camelia-components>	
+<camelia-components package="svg">	
 
-	<component id="image" extends="abstractOutput" renderKit="svg">
+	<component id="SVG" extends="abstractOutput" renderKit="html">		
+		<capability id="IDisabledCapability" />
+		<capability id="IAccessKeyCapability" />
+		<capability id="ITabIndexCapability" />
+		<capability id="IFocusBlurEventCapability" />
+		<capability id="IKeyEventCapability" />
+		<capability id="IUnlockedClientAttributesCapability" />
+		<capability id="IImmediateCapability" />			
+		<capability id="IValidationEventCapability" />		
+		<capability id="ISelectionEventCapability" />
+		<capability id="IFocusStyleClassCapability" />
+		<capability id="ICaptionCapability" />
+	
+		<capability id="IFilterCapability"/>
+		
+		<method id="setFilterProperties(String)" returnType="void" />
+		
+		<attribute id="immediate" type="boolean" writeTag="false" />	
+		<attribute id="svgURL" type="java.lang.String" />	
+
+		<property>value</property>
+	</component>
+
+	<component id="dataSVG" extends="SVG" renderKit="html" >		
+		<implements id="org.rcfaces.core.internal.capability.IColumnsContainer"
+			importMethods="false" />
+		<implements id="org.rcfaces.core.internal.capability.IToolTipComponent" />
+		<implements id="javax.faces.component.NamingContainer" />
+
+		<capability id="IRowToolTipIdCapability" /> 
+
+		<attribute id="var" type="java.lang.String" />
+		<attribute id="dataModel" type="java.lang.Object" />
+
+		<method id="listColumns"
+			returnType="org.rcfaces.core.component.iterator.IColumnIterator">
+			<import>org.rcfaces.core.internal.tools.GridTools</import>
+			<code>
+				return GridTools.listColumns(this,
+					org.rcfaces.renderkit.svg.component.SVGDataColumnComponent.class);
+			</code>
+		</method>
+	</component>
+	
+	
+	<component id="SVGDataColumn" extends="cameliaValueColumn" render="false" converter="true">
+
+		<attribute id="value" type="java.lang.Object"
+			writeComponent="false" />
+		
+		<method id="setConverter(String)" />
+		<method id="setConverter(javax.faces.context.FacesContext, String)" />
+
+		<method id="setConverter(javax.faces.convert.Converter)" />
+		<method id="getConverter()" />
+
+		<method id="getLocalValue" returnType="java.lang.Object">
+			<code>
+				return engine.getLocalValue(Properties.VALUE);
+			</code>
+		</method>
+
+		<method id="getValue" returnType="java.lang.Object">
+			<code>
+				return getValue(null);
+			</code>
+		</method>
+		<method id="getValue" returnType="java.lang.Object">
+			<parameter type="javax.faces.context.FacesContext" name="context" />
+			<code>
+				return engine.getValue(Properties.VALUE, context);
+			</code>
+		</method>
+		<method id="setValue">
+			<parameter type="java.lang.Object" name="value" />
+			<code>
+				engine.setValue(Properties.VALUE, value);
+			</code>
+		</method>
+		<property>converter</property>
+	</component>
+		
+	<component id="image" extends="abstractOutput" renderKit="html">
 		<implements id="org.rcfaces.core.internal.capability.IImageAccessorsCapability" />
 		<capability id="IImageCapability" />
 		<capability id="IImageSizeCapability" />
@@ -31,7 +113,7 @@
 		<property>value</property>
 	</component>
 
-	<component id="imageButton" extends="image" renderKit="svg">
+	<component id="imageButton" extends="image" renderKit="html">
 		<capability id="IDisabledCapability" />
 		<capability id="IAccessKeyCapability" />
 		<capability id="ITabIndexCapability" />
@@ -47,7 +129,7 @@
 				
 	</component>
 
-	<component id="node" abstract="true" extends="cameliaItem" renderKit="svg">
+	<component id="node" abstract="true" renderKit="html" extends="cameliaItem" render="false">
 		<tagAttribute id="targetId" type="java.lang.String" generate="true" required="true"/>
 
 		<capability id="IAlternateTextCapability" />
@@ -100,10 +182,10 @@
 		
 	</component>
 	
-	<component id="group" extends="node" renderKit="svg" render="false">
+	<component id="group" extends="node" renderKit="html" render="false">
 	</component>
 	
-	<component id="path" extends="node" renderKit="svg" render="false">
+	<component id="path" extends="node" renderKit="html" render="false">
 		<attribute id="clip" type="java.lang.String"/>		
 		<attribute id="clipPath" type="java.lang.String"/>		
 		<attribute id="clipRule" type="java.lang.String"/>		

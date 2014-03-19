@@ -1,5 +1,5 @@
 /*
- * $Id$
+* * $Id$
  */
  
 /** 
@@ -98,7 +98,7 @@ var __statics = {
 	GetDefaultHiddenMode: function() {
 		return f_component.DEFAULT_HIDDEN_MODE;
 	}
-}
+};
 
 var __members = {
 
@@ -110,7 +110,7 @@ var __members = {
 		this.f_super(arguments);
 		this.fa_componentUpdated = false;
 		
-		var accessKey=f_core.GetAttribute(this, "v:accessKey");
+		var accessKey=f_core.GetAttributeNS(this,"accessKey");
 		if (!accessKey) {
 			accessKey=this.accessKey;
 		}
@@ -161,7 +161,7 @@ var __members = {
 	 */
 	_getSize: function(size) {
 		if (!size) {
-			return null;
+			return undefined;
 		}
 		
 		return parseInt(size, 10);
@@ -172,9 +172,14 @@ var __members = {
 	 * @return void
 	 */
 	f_setX: function(x) {
-		f_core.Assert(typeof(x)=="number", "f_component.f_setX: x parameter must be a number ! ("+x+")");
+		f_core.Assert(typeof(x)=="number" || x===undefined, "f_component.f_setX: x parameter must be a number ! ("+x+")");
 		
-		this.style.left = x+"px";
+
+		if (y===undefined) {
+			this.style.left="auto";
+		} else {
+			this.style.left = x+"px";
+		}
 		this.f_setProperty(f_prop.X,x);
 	},
 	/**
@@ -190,9 +195,13 @@ var __members = {
 	 * @return void
 	 */
 	f_setY: function(y) {
-		f_core.Assert(typeof(y)=="number", "f_component.f_setY: y parameter must be a number ! ("+y+")");
+		f_core.Assert(typeof(y)=="number" || y===undefined, "f_component.f_setY: y parameter must be a number ! ("+y+")");
 
-		this.style.top = y+"px";
+		if (y===undefined) {
+			this.style.top="auto";
+		} else {
+			this.style.top = y+"px";
+		}
 		this.f_setProperty(f_prop.Y,y);
 	},
 	/**
@@ -208,14 +217,32 @@ var __members = {
 	 * Set the width of the component
 	 *
 	 * @method public
+	 * @param Number width Width of the component.  (undefined value is supported)
+	 * @param hidden Boolean persistence
+	 * @return void
+	 */
+	f_setWidth: function(width, persistence) {
+		f_core.Assert(typeof(width)=="number" || width===undefined, "f_component.f_setWidth: w parameter must be a number ! ("+width+")");
+		
+		this.f_updateWidth(width);
+		
+		if (persistence!==false) {
+			this.f_setProperty(f_prop.WIDTH, width);
+		}
+	},
+	/**
+	 * Update the width of the component
+	 *
+	 * @method protected
 	 * @param Number width Width of the component.
 	 * @return void
 	 */
-	f_setWidth: function(width) {
-		f_core.Assert(typeof(width)=="number", "f_component.f_setWidth: w parameter must be a number ! ("+width+")");
-
-		this.style.width = width+"px";
-		this.f_setProperty(f_prop.WIDTH, width);
+	f_updateWidth: function(width) {
+		if (width===undefined) {
+			this.style.width="auto";
+			return;
+		}
+		this.style.width = width+"px";		
 	},
 	/**
 	 * Returns the height of the component.
@@ -231,13 +258,31 @@ var __members = {
 	 * 
 	 * @method public
 	 * @param Number height Height of the component.
+	 * @param hidden Boolean persistence
 	 * @return void
 	 */
-	f_setHeight: function(height) {
-		f_core.Assert(typeof(height)=="number", "f_component.f_setHeight: h parameter must be a number ! ("+height+")");
+	f_setHeight: function(height, persistence) {
+		f_core.Assert(typeof(height)=="number" || height===undefined, "f_component.f_setHeight: h parameter must be a number ! ("+height+")");
 
-		this.style.height = height+"px";
-		this.f_setProperty(f_prop.HEIGHT, height);
+		this.f_updateHeight(height);
+
+		if (persistence!==false) {
+			this.f_setProperty(f_prop.HEIGHT, height);
+		}
+	},
+	/**
+	 * Update the height of the component
+	 *
+	 * @method protected
+	 * @param Number width Height of the component.
+	 * @return void
+	 */
+	f_updateHeight: function(height) {
+		if (height===undefined) {
+			this.style.height="auto";
+			return;
+		}
+		this.style.height = height+"px";		
 	},
 	/**
 	 *  Returns the background color of the component.
@@ -370,7 +415,9 @@ var __members = {
 		
 		this.f_updateVisibility(visible);
 
-		this.f_getClass().f_getClassLoader().fireVisibleEvent(this);
+		if (visible===true) {
+			this.f_getClass().f_getClassLoader().fireVisibleEvent(this);
+		}
 
 		this.f_setProperty(f_prop.VISIBLE, visible);		
 	},
@@ -437,7 +484,7 @@ var __members = {
 			return hiddenMode;
 		}
 
-		hiddenMode=f_core.GetAttribute(this, "v:hiddenMode");
+		hiddenMode=f_core.GetAttributeNS(this,"hiddenMode");
 		if (hiddenMode) {
 			hiddenMode=parseInt(hiddenMode, 10);
 
@@ -445,7 +492,7 @@ var __members = {
 			hiddenMode=f_component.GetDefaultHiddenMode();
 		}
 		
-		this._hiddenMode=hiddenMode
+		this._hiddenMode=hiddenMode;
 
 		return hiddenMode;
 	},
@@ -459,7 +506,7 @@ var __members = {
 			return helpURL;
 		}
 		
-		var helpURL=f_core.GetAttribute(this, "v:helpURL", null);
+		var helpURL=f_core.GetAttributeNS(this,"helpURL", null);
 
 		this._helpURL=helpURL;
 		
@@ -505,7 +552,7 @@ var __members = {
 			return helpMessage;
 		}
 		
-		helpMessage=f_core.GetAttribute(this, "v:helpMessage", null);
+		helpMessage=f_core.GetAttributeNS(this,"helpMessage", null);
 		this._helpMessage=helpMessage;		
 		
 		return helpMessage;
@@ -566,7 +613,7 @@ var __members = {
 			return styleClass;
 		}
 		
-		styleClass=f_core.GetAttribute(this, "v:styleClass");
+		styleClass=f_core.GetAttributeNS(this,"styleClass");
 		if (!styleClass) {
 			styleClass=null;
 		}
@@ -589,21 +636,34 @@ var __members = {
 	 */
 	f_computeStyleClass: function(suffix) {				
 		if (suffix) {
+			var c=[];
 			// Un suffix, pas de cache !
 			var mainStyleClass=this.f_getMainStyleClass();
 			
-			var computedStyleClass=mainStyleClass+" "+mainStyleClass+suffix;
+			var ss=mainStyleClass.split(" ");
+			for(var i=0;i<ss.length;i++) {
+				var clazz=ss[i];
+				
+				c.push(clazz);
+				c.push(clazz+suffix);
+			}
 			
 			var styleClass=this.f_getStyleClass();
 			if (styleClass) {
-				computedStyleClass+=" "+styleClass+" "+styleClass+suffix;
+				var ss=styleClass.split(" ");
+				for(var i=0;i<ss.length;i++) {
+					var clazz=ss[i];
+					
+					c.push(clazz);
+					c.push(clazz+suffix);
+				}
 			}
 			
-			return computedStyleClass;	
+			return c.join(" ");	
 		}
 
 		var computedStyleClass=this._computedStyleClass;
-		if (!computedStyleClass) {
+		if (computedStyleClass===undefined) {
 			computedStyleClass=this.f_getMainStyleClass();
 			
 			var styleClass=this.f_getStyleClass();
@@ -658,7 +718,21 @@ var __members = {
 	 * @return HTMLElement
 	 */
 	f_getParent: function() {
-		return this.parentNode;
+		var parent = this.parentNode;
+		if (!parent) {
+			return parent;
+		}		
+		
+		var parentComponent = this.f_getClass().f_getClassLoader().f_init(parent, true, true);
+		
+		return parentComponent;
+	},
+	/**
+	 * @method public
+	 * @return f_component
+	 */
+	f_getParentComponent: function() {
+		return f_core.GetParentComponent(this);
 	},
 	/**
 	 *
@@ -838,7 +912,7 @@ var __members = {
 		
 		return s+"]";
 	}
-}
+};
 
 new f_class("f_component", {
 	extend: f_eventTarget,

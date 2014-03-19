@@ -30,6 +30,7 @@ import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -37,8 +38,6 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  * @version $Revision$ $Date$
  */
 public class ToolFolderRenderer extends AbstractCssRenderer {
-
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(ToolFolderRenderer.class);
 
@@ -98,11 +97,12 @@ public class ToolFolderRenderer extends AbstractCssRenderer {
         IHtmlWriter htmlWriter = (IHtmlWriter) renderContext
                 .getComponentWriter();
 
-        List childrenList = htmlWriter.getComponentRenderContext()
+        List<UIComponent> childrenList = htmlWriter.getComponentRenderContext()
                 .getComponent().getChildren();
-        List originalChildrenList = new ArrayList(childrenList);
+        List<UIComponent> originalChildrenList = new ArrayList<UIComponent>(
+                childrenList);
 
-        List computedChildrenList = getChildren(htmlWriter);
+        List<UIComponent> computedChildrenList = getChildren(htmlWriter);
 
         for (Iterator it = computedChildrenList.iterator(); it.hasNext();) {
             UIComponent child = (UIComponent) it.next();
@@ -115,7 +115,7 @@ public class ToolFolderRenderer extends AbstractCssRenderer {
         childrenList.retainAll(originalChildrenList);
     }
 
-    protected List getChildren(IHtmlWriter htmlWriter) {
+    protected List<UIComponent> getChildren(IHtmlWriter htmlWriter) {
         return htmlWriter.getComponentRenderContext().getComponent()
                 .getChildren();
     }
@@ -208,7 +208,7 @@ public class ToolFolderRenderer extends AbstractCssRenderer {
             }
         }
 
-        htmlWriter.writeAttribute("v:separator", true);
+        htmlWriter.writeAttributeNS("separator", true);
 
         if (separatorImageURL != null) {
 
@@ -260,5 +260,11 @@ public class ToolFolderRenderer extends AbstractCssRenderer {
 
     protected int getToolItemSeparatorWidth(SelectItem selectItem) {
         return ToolBarRenderer.DEFAULT_TOOL_ITEM_SEPARATOR_WIDTH;
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "separator" });
     }
 }

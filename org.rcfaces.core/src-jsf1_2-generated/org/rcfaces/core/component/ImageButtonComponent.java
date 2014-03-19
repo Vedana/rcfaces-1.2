@@ -2,6 +2,8 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.ButtonComponent;
+import org.rcfaces.core.internal.converter.TextPositionConverter
+			;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import java.lang.String;
 import org.apache.commons.logging.LogFactory;
@@ -16,7 +18,6 @@ import java.util.Set;
 import java.util.Arrays;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
-import org.rcfaces.core.internal.converter.TextPositionConverter;
 
 /**
  * <p>The imageButton Component is a <a href="/comps/buttonComponent.html">button Component</a> that can show an image.</p>

@@ -18,7 +18,6 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
  * @version $Revision$ $Date$
  */
 public class TreeRenderContext extends SelectItemsJsContext {
-    private static final String REVISION = "$Revision$";
 
     private final boolean checkable;
 
@@ -31,6 +30,8 @@ public class TreeRenderContext extends SelectItemsJsContext {
     private final boolean writeCheckState;
 
     private String lastInteractiveParent = null;
+
+    private final boolean schrodingerCheckable;
 
     public TreeRenderContext(ISelectItemNodeWriter renderer,
             IComponentRenderContext componentRenderContext,
@@ -55,6 +56,9 @@ public class TreeRenderContext extends SelectItemsJsContext {
         } else {
             writeSelectionState = false;
         }
+
+        schrodingerCheckable = treeComponent
+                .isSchrodingerCheckable(facesContext);
 
         userExpandable = treeComponent.isExpandable(facesContext);
 
@@ -85,6 +89,11 @@ public class TreeRenderContext extends SelectItemsJsContext {
         if (containerVarId != null) {
             pushVarId(containerVarId);
         }
+    }
+
+    @Override
+    protected boolean isCheckValuesAlterable() {
+        return isSchrodingerCheckable();
     }
 
     protected void initializeValue(UIComponent component, Object value) {
@@ -153,4 +162,9 @@ public class TreeRenderContext extends SelectItemsJsContext {
     public boolean isSelectable() {
         return selectable;
     }
+
+    public boolean isSchrodingerCheckable() {
+        return schrodingerCheckable;
+    }
+
 }

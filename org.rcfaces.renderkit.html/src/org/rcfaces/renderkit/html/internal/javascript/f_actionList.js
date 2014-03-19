@@ -83,7 +83,7 @@ var __statics= {
 		//alert(s);
 		f_core.Error(f_actionList, s, ex);
 	}
-}
+};
 
 var __members= {
 	/**
@@ -128,7 +128,7 @@ var __members= {
 	 * @method hidden
 	 */
 	f_addAction: function(action) {
-		var as=this._actions
+		var as=this._actions;
 		if (!as) {
 			as = new Array;
 			this._actions = as;
@@ -158,8 +158,8 @@ var __members= {
 	 * @method hidden
 	 */
 	f_removeAction: function(listeners) {
-		var actions=this._actions
-		var firsts=this._firsts
+		var actions=this._actions;
+		var firsts=this._firsts;
 		if (!actions && !firsts) {
 			return;
 		}
@@ -173,7 +173,7 @@ var __members= {
 				continue;
 			}
 			if (firsts) {
-				firsts.f_removeElement(action)
+				firsts.f_removeElement(action);
 			}
 		}
 	},
@@ -225,7 +225,7 @@ var __members= {
 	 * @method hidden
 	 */
 	f_addActionFirst: function(actions) {
-		var as=this._firsts
+		var as=this._firsts;
 		if (!as) {
 			as = new Array;
 			this._firsts = as;
@@ -277,7 +277,7 @@ var __members= {
 				continue;
 			}
 	
-			var oldEvent=null;
+			var oldEvent=undefined;
 			try {
 				oldEvent=f_event.SetEvent(evt);
 				
@@ -298,7 +298,7 @@ var __members= {
 				ret=false;
 				
 			} finally {
-				if (!win._rcfacesExiting && f_event && f_event.SetEvent) {
+				if (!win._rcfacesExiting && win.f_event && f_event.SetEvent) {
 					f_event.SetEvent(oldEvent);
 				}
 			}
@@ -337,7 +337,7 @@ var __members= {
 	toString: function() {
 		return "[f_actionList type="+this._type+"]";
 	}
-}
+};
 
 new f_class("f_actionList", {
 	statics: __statics, 

@@ -3,11 +3,8 @@
  */
 package org.rcfaces.core.util;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItem;
@@ -19,8 +16,17 @@ import javax.faces.model.SelectItemGroup;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IImageCapability;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.item.BasicImagesSelectItem;
 import org.rcfaces.core.item.BasicSelectItem;
+import org.rcfaces.core.item.ISelectItem;
+import org.rcfaces.core.item.ISelectItemGroup;
+import org.rcfaces.core.lang.IAdaptable;
+import org.rcfaces.core.model.IFilterProperties;
+import org.rcfaces.core.model.IFiltredCollection;
+import org.rcfaces.core.model.IFiltredCollection.IFiltredIterator;
+import org.rcfaces.core.model.IFiltredCollection2;
 
 /**
  * 
@@ -29,109 +35,93 @@ import org.rcfaces.core.item.BasicSelectItem;
  */
 public class SelectItemTools {
 
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory.getLog(SelectItemTools.class);
 
-    public static SelectItemNode listSelectItems(UIComponent component) {
-        return listSelectItems(null, component);
-    }
+    public static <T> T traverseSelectItemTree(FacesContext facesContext,
+            UIComponent component, IFilterProperties filterProperties,
+            ISelectItemNodeHandler<T> handler) {
 
-    public static SelectItemNode listSelectItems(FacesContext facesContext,
-            UIComponent component) {
         if (facesContext == null) {
             facesContext = FacesContext.getCurrentInstance();
         }
 
-        SelectItemNode root = new SelectItemNode(null, null, null, 0);
+        SelectItemWalker<T> walker = new SelectItemWalker<T>(facesContext,
+                component, filterProperties, handler);
 
-        Set selectItemIds = new HashSet();
-
-        List children = component.getChildren();
-        for (Iterator it = children.iterator(); it.hasNext();) {
-            UIComponent child = (UIComponent) it.next();
-
-            listSelectItems(facesContext, child, selectItemIds, root);
+        if (handler != null) {
+            T t = handler.beginTree(component);
+            if (t != null) {
+                return t;
+            }
         }
 
-        return root;
+        List<UIComponent> children = component.getChildren();
+        for (UIComponent child : children) {
+            T t = walker.processComponent(child);
+            if (t != null) {
+                return t;
+            }
+        }
+
+        if (handler != null) {
+            T t = handler.endTree(component);
+            if (t != null) {
+                return t;
+            }
+        }
+
+        return null;
     }
 
-    private static void listSelectItems(FacesContext facesContext,
-            UIComponent component, Set selectItemIds, SelectItemNode root) {
-        if (component instanceof UISelectItem) {
-            UISelectItem uiSelectItem = (UISelectItem) component;
-
-            SelectItemNode singleItemNode = null;
-
-            Object value = uiSelectItem.getValue();
-            if (value instanceof SelectItem) {
-
-                singleItemNode = addSelectItem(facesContext, root, component,
-                        selectItemIds, (SelectItem) value);
-
-            } else if (value instanceof SelectItem[]) {
-                SelectItem selectItems[] = (SelectItem[]) value;
-                for (int i = 0; i < selectItems.length; i++) {
-                    addSelectItem(facesContext, root, component, selectItemIds,
-                            selectItems[i]);
-                }
-
-            } else if (value instanceof SelectItemGroup[]) {
-                SelectItemGroup selectItems[] = (SelectItemGroup[]) value;
-                for (int i = 0; i < selectItems.length; i++) {
-                    addSelectItem(facesContext, root, component, selectItemIds,
-                            selectItems[i]);
-                }
-
-            } else if (value == null) {
-                SelectItem selectItem;
-                if (uiSelectItem instanceof IImageCapability) {
-                    selectItem = new BasicImagesSelectItem(uiSelectItem);
-
-                } else {
-                    selectItem = new BasicSelectItem(uiSelectItem);
-                }
-
-                singleItemNode = addSelectItem(facesContext, root, component,
-                        selectItemIds, selectItem);
-            }
-
-            if (singleItemNode != null && component.getChildCount() > 0) {
-                List children = component.getChildren();
-                for (Iterator it = children.iterator(); it.hasNext();) {
-                    UIComponent child = (UIComponent) it.next();
-
-                    listSelectItems(facesContext, child, selectItemIds,
-                            singleItemNode);
-                }
-            }
-
-        } else if (component instanceof UISelectItems) {
-            Object value = ((UISelectItems) component).getValue();
-            if (value instanceof SelectItem[]) {
-                SelectItem selectItems[] = (SelectItem[]) value;
-                for (int i = 0; i < selectItems.length; i++) {
-                    addSelectItem(facesContext, root, component, selectItemIds,
-                            selectItems[i]);
-                }
-            }
-        }
-    }
-
-    private static SelectItemNode addSelectItem(FacesContext facesContext,
-            SelectItemNode root, UIComponent component, Set selectItemIds,
-            SelectItem value) {
-        String id = component.getClientId(facesContext);
-
-        if (selectItemIds.add(id) == false) {
-            id += "::" + selectItemIds.size();
-            selectItemIds.add(id);
+    public static SelectItem convertToSelectItem(FacesContext facesContext,
+            Object value) {
+        if ((value == null) || (value instanceof SelectItem)) {
+            return (SelectItem) value;
         }
 
-        SelectItemNode node = root.addChild(id, value);
+        if (value instanceof ISelectItem) {
+            if (value instanceof ISelectItemGroup) {
+                ISelectItemGroup selectItemGroup = (ISelectItemGroup) value;
 
-        return node;
+                SelectItemGroup sig = new SelectItemGroup(
+                        selectItemGroup.getLabel(),
+                        selectItemGroup.getDescription(),
+                        selectItemGroup.isDisabled(),
+                        selectItemGroup.getSelectItems());
+
+                sig.setValue(selectItemGroup.getValue());
+
+                return sig;
+            }
+
+            ISelectItem selectItem = (ISelectItem) value;
+
+            return new SelectItem(selectItem.getValue(), selectItem.getLabel(),
+                    selectItem.getDescription(), selectItem.isDisabled());
+        }
+
+        if (value instanceof IAdaptable) {
+            IAdaptable adaptable = (IAdaptable) value;
+
+            SelectItem selectItem = adaptable
+                    .getAdapter(SelectItem.class, null);
+            if (selectItem != null) {
+                return selectItem;
+            }
+        }
+
+        if (Constants.ADAPT_SELECT_ITEMS) {
+            RcfacesContext rcfacesContext = RcfacesContext
+                    .getInstance(facesContext);
+
+            SelectItem selectItem = rcfacesContext.getAdapterManager()
+                    .getAdapter(value, SelectItem.class, null);
+            if (selectItem != null) {
+                return selectItem;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -139,145 +129,240 @@ public class SelectItemTools {
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
-    public static class SelectItemNode {
-        private static final SelectItemNode[] EMPTY_ARRAY = new SelectItemNode[0];
+    public interface ISelectItemNodeHandler<T> {
+        T beginTree(UIComponent component);
 
-        private final SelectItem selectItem;
+        T beginNode(UIComponent component, SelectItem selectItem);
 
-        private List children = null;
+        T endNode(UIComponent component, SelectItem selectItem);
 
-        private final String id;
-
-        private final int depth;
-
-        private final SelectItemNode parent;
-
-        SelectItemNode(SelectItemNode parent, String id, SelectItem selectItem,
-                int depth) {
-            this.parent = parent;
-            this.selectItem = selectItem;
-            this.id = id;
-            this.depth = depth;
-        }
-
-        public SelectItemNode addChild(String id, SelectItem selectItem) {
-            SelectItemNode child = new SelectItemNode(this, id, selectItem,
-                    depth + 1);
-
-            if (children == null) {
-                children = new ArrayList();
-            }
-            children.add(child);
-
-            return child;
-        }
-
-        public SelectItem getSelectItem() {
-            return selectItem;
-        }
-
-        public SelectItemNode[] getChildren() {
-            if (children == null) {
-                return EMPTY_ARRAY;
-            }
-            return (SelectItemNode[]) children
-                    .toArray(new SelectItemNode[children.size()]);
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public SelectItemNode getParent() {
-            return parent;
-        }
-
-        public int getDepth() {
-            return depth;
-        }
-
-        public SelectItemNode searchById(String id) {
-            if (id.equals(getId())) {
-                return this;
-            }
-
-            SelectItemNode chilren[] = getChildren();
-            for (int i = 0; i < chilren.length; i++) {
-                SelectItemNode si = chilren[i].searchById(id);
-                if (si != null) {
-                    return si;
-                }
-            }
-
-            return null;
-        }
-
-        public SelectItemNode searchByValue(Object value) {
-            if (selectItem != null && value.equals(selectItem.getValue())) {
-                return this;
-            }
-
-            SelectItemNode chilren[] = getChildren();
-            for (int i = 0; i < chilren.length; i++) {
-                SelectItemNode si = chilren[i].searchByValue(value);
-                if (si != null) {
-                    return si;
-                }
-            }
-
-            return null;
-        }
-
-        public SelectItemNode getRoot() {
-            SelectItemNode node = this;
-            for (; node.getParent() != null; node = node.getParent()) {
-            }
-
-            return node;
-        }
-
-        @Override
-        public int hashCode() {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result + depth;
-            result = prime * result + ((id == null) ? 0 : id.hashCode());
-            return result;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (obj == null) {
-                return false;
-            }
-            if (!(obj instanceof SelectItemNode)) {
-                return false;
-            }
-            SelectItemNode other = (SelectItemNode) obj;
-            if (depth != other.depth) {
-                return false;
-            }
-            if (id == null) {
-                if (other.id != null) {
-                    return false;
-                }
-            } else if (!id.equals(other.id)) {
-                return false;
-            }
-            return true;
-        }
-
+        T endTree(UIComponent component);
     }
 
-    public static SelectItem searchId(SelectItemNode node, String id) {
-        SelectItemNode sn = node.searchById(id);
-        if (sn == null) {
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    public static class DefaultSelectItemNodeHandler<T> implements
+            ISelectItemNodeHandler<T> {
+
+        public T beginTree(UIComponent component) {
             return null;
         }
 
-        return sn.getSelectItem();
+        public T beginNode(UIComponent component, SelectItem selectItem) {
+            return null;
+        }
+
+        public T endNode(UIComponent component, SelectItem selectItem) {
+            return null;
+        }
+
+        public T endTree(UIComponent component) {
+            return null;
+        }
     }
+
+    private static class SelectItemWalker<T> {
+
+        private final FacesContext facesContext;
+
+        private final UIComponent mainComponent;
+
+        private final IFilterProperties filterProperties;
+
+        private final ISelectItemNodeHandler<T> handler;
+
+        public SelectItemWalker(FacesContext facesContext,
+                UIComponent mainComponent, IFilterProperties filterProperties,
+                ISelectItemNodeHandler<T> handler) {
+
+            this.facesContext = facesContext;
+            this.mainComponent = mainComponent;
+            this.filterProperties = filterProperties;
+            this.handler = handler;
+        }
+
+        protected T processComponent(UIComponent component) {
+
+            if (component instanceof UISelectItem) {
+                UISelectItem uiSelectItem = (UISelectItem) component;
+
+                Object value = uiSelectItem.getValue();
+                if (value instanceof SelectItem) {
+                    T t = processSelectItem(component, (SelectItem) value, true);
+                    if (t != null) {
+                        return t;
+                    }
+
+                } else if (value instanceof SelectItem[]) {
+                    SelectItem selectItems[] = (SelectItem[]) value;
+                    for (SelectItem selectItem : selectItems) {
+                        T t = processSelectItem(component, selectItem, false);
+                        if (t != null) {
+                            return t;
+                        }
+                    }
+
+                } else if (value instanceof SelectItemGroup[]) {
+                    SelectItemGroup[] selectItems = (SelectItemGroup[]) value;
+                    for (SelectItem selectItem : selectItems) {
+                        T t = processSelectItem(component, selectItem, false);
+                        if (t != null) {
+                            return t;
+                        }
+                    }
+
+                } else if ((value instanceof IFiltredCollection)
+                        || (value instanceof IFiltredCollection2)) {
+
+                    T t = processCollection(facesContext, component,
+                            filterProperties, value);
+                    if (t != null) {
+                        return t;
+                    }
+
+                } else if (value == null) {
+                    SelectItem selectItem;
+                    if (uiSelectItem instanceof IImageCapability) {
+                        selectItem = new BasicImagesSelectItem(uiSelectItem);
+
+                    } else {
+                        selectItem = new BasicSelectItem(uiSelectItem);
+                    }
+
+                    T t = processSelectItem(component, selectItem, true);
+                    if (t != null) {
+                        return t;
+                    }
+
+                } else {
+                    SelectItem selectItem = convertToSelectItem(facesContext,
+                            value);
+
+                    if (selectItem != null) {
+                        T t = processSelectItem(component, selectItem, true);
+                        if (t != null) {
+                            return t;
+                        }
+                    } else {
+                        if (LOG.isErrorEnabled()) {
+                            LOG.error("Unknown type of selectItem value '"
+                                    + value + "'");
+                        }
+                    }
+                }
+
+            } else if (component instanceof UISelectItems) {
+                Object value = ((UISelectItems) component).getValue();
+
+                if (value instanceof SelectItem[]) {
+                    SelectItem selectItems[] = (SelectItem[]) value;
+                    for (SelectItem selectItem : selectItems) {
+                        T t = processSelectItem(component, selectItem, false);
+                        if (t != null) {
+                            return t;
+                        }
+                    }
+
+                } else if ((value instanceof IFiltredCollection)
+                        || (value instanceof IFiltredCollection2)) {
+
+                    T t = processCollection(facesContext, component,
+                            filterProperties, value);
+                    if (t != null) {
+                        return t;
+                    }
+                } else {
+                    if (LOG.isErrorEnabled()) {
+                        LOG.error("Unknown type of selectItems value '" + value
+                                + "'");
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        private T processSelectItem(UIComponent component,
+                SelectItem selectItem, boolean searchComponentChildren) {
+
+            if (handler != null) {
+                T t = handler.beginNode(component, selectItem);
+                if (t != null) {
+                    return t;
+                }
+            }
+
+            if (selectItem instanceof SelectItemGroup) {
+                SelectItemGroup group = (SelectItemGroup) selectItem;
+
+                for (SelectItem child : group.getSelectItems()) {
+                    processSelectItem(component, child, false);
+                }
+
+            }
+
+            if (searchComponentChildren && component.getChildCount() > 0) {
+                List<UIComponent> children = component.getChildren();
+                for (UIComponent child : children) {
+
+                    T t = processComponent(child);
+                    if (t != null) {
+                        return t;
+                    }
+                }
+            }
+
+            if (handler != null) {
+                T t = handler.endNode(component, selectItem);
+                if (t != null) {
+                    return t;
+                }
+            }
+
+            return null;
+        }
+
+        protected T processCollection(FacesContext facesContext,
+                UIComponent component, IFilterProperties filterProperties,
+                Object value) {
+
+            Iterator< ? > it;
+            if (value instanceof IFiltredCollection2) {
+                it = ((IFiltredCollection2< ? >) value).iterator(component,
+                        filterProperties, -1);
+            } else {
+                it = ((IFiltredCollection< ? >) value).iterator(
+                        filterProperties, -1);
+            }
+
+            try {
+                for (; it.hasNext();) {
+                    Object item = it.next();
+                    if ((item instanceof SelectItem) == false) {
+                        item = convertToSelectItem(facesContext, item);
+
+                        if (item == null) {
+                            continue;
+                        }
+                    }
+
+                    T t = processSelectItem(component, (SelectItem) item, false);
+                    if (t != null) {
+                        return t;
+                    }
+                }
+
+            } finally {
+                if (it instanceof IFiltredIterator) {
+                    ((IFiltredIterator< ? >) it).release();
+                }
+            }
+
+            return null;
+        }
+    }
+
 }

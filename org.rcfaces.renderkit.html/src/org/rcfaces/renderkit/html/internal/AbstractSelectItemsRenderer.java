@@ -14,7 +14,6 @@ import javax.faces.context.FacesContext;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractSelectItemsRenderer extends AbstractCssRenderer {
-    private static final String REVISION = "$Revision$";
 
     protected final boolean hasComponenDecoratorSupport() {
         return true;
@@ -26,7 +25,7 @@ public abstract class AbstractSelectItemsRenderer extends AbstractCssRenderer {
 
     public void encodeChildren(FacesContext facesContext, UIComponent component)
             throws IOException {
-        
+
         // Les enfants ne doivent pas être rendus
     }
 }

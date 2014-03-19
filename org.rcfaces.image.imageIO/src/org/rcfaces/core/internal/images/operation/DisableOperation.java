@@ -58,7 +58,7 @@ public class DisableOperation extends GrayOperation implements
         return disableOperation.filter(dest, destination);
     }
 
-    public IndexColorModel filter(Map requestParameter, IndexColorModel source,
+    public IndexColorModel filter(Map<String, Object> requestParameter, IndexColorModel source,
             BufferedImage sourceImage) {
         IndexColorModel dest = super.filter(requestParameter, source,
                 sourceImage);

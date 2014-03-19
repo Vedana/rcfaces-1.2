@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.digester.Digester;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.core.provider.AbstractProvider;
@@ -22,11 +24,13 @@ import org.rcfaces.core.provider.AbstractProvider;
  */
 public class ContentAccessorsRegistryImpl extends AbstractProvider implements
         IContentAccessorRegistry {
-    private static final String REVISION = "$Revision$";
+    private static final Log LOG = LogFactory
+            .getLog(ContentAccessorsRegistryImpl.class);
 
     private static final IContentAccessorHandler[] CONTENT_ACCESSOR_HANDLER_EMPTY_ARRAY = new IContentAccessorHandler[0];
 
-    private final Map contentAccessorsByType = new HashMap(8);
+    private final Map<IContentFamily, IContentAccessorHandler[]> contentAccessorsByType = new HashMap<IContentFamily, IContentAccessorHandler[]>(
+            8);
 
     private IContentAccessorHandler defaultContentAccessors[] = CONTENT_ACCESSOR_HANDLER_EMPTY_ARRAY;
 
@@ -45,7 +49,7 @@ public class ContentAccessorsRegistryImpl extends AbstractProvider implements
 
     public IContentAccessorHandler[] listContentAccessorHandlers(
             IContentFamily type) {
-        IContentAccessorHandler contentAccessorHandlers[] = (IContentAccessorHandler[]) contentAccessorsByType
+        IContentAccessorHandler contentAccessorHandlers[] = contentAccessorsByType
                 .get(type);
         if (contentAccessorHandlers == null) {
             return defaultContentAccessors;
@@ -59,10 +63,10 @@ public class ContentAccessorsRegistryImpl extends AbstractProvider implements
 
         if (contentFamily == null) {
             // On fait l'ajout
-            for (Iterator it = contentAccessorsByType.keySet().iterator(); it
-                    .hasNext();) {
+            for (Iterator<IContentFamily> it = contentAccessorsByType.keySet()
+                    .iterator(); it.hasNext();) {
 
-                contentFamily = (IContentFamily) it.next();
+                contentFamily = it.next();
 
                 declareContentAccessorHandler(contentFamily,
                         contentAccessorHandler);
@@ -70,15 +74,16 @@ public class ContentAccessorsRegistryImpl extends AbstractProvider implements
 
             // Puis on declare les defaults
 
-            List l = new ArrayList(Arrays.asList(defaultContentAccessors));
+            List<IContentAccessorHandler> l = new ArrayList<IContentAccessorHandler>(
+                    Arrays.asList(defaultContentAccessors));
             l.add(contentAccessorHandler);
-            defaultContentAccessors = (IContentAccessorHandler[]) l
-                    .toArray(new IContentAccessorHandler[l.size()]);
+            defaultContentAccessors = l.toArray(new IContentAccessorHandler[l
+                    .size()]);
 
             return;
         }
 
-        List l = new ArrayList();
+        List<IContentAccessorHandler> l = new ArrayList<IContentAccessorHandler>();
         IContentAccessorHandler cah[] = listContentAccessorHandlers(contentFamily);
         if (cah.length > 0) {
             l.addAll(Arrays.asList(cah));
@@ -88,11 +93,12 @@ public class ContentAccessorsRegistryImpl extends AbstractProvider implements
         }
         l.add(contentAccessorHandler);
 
-        contentAccessorsByType.put(contentFamily, l
-                .toArray(new IContentAccessorHandler[l.size()]));
+        contentAccessorsByType.put(contentFamily,
+                l.toArray(new IContentAccessorHandler[l.size()]));
 
     }
 
+    @Override
     public void configureRules(Digester digester) {
         super.configureRules(digester);
 

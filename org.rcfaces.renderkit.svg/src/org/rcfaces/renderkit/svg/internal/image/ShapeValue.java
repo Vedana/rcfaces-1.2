@@ -26,7 +26,6 @@ import org.rcfaces.renderkit.svg.item.INodeItem;
  * @version $Revision$ $Date$
  */
 public class ShapeValue implements StateHolder {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(ShapeValue.class);
 
@@ -44,7 +43,7 @@ public class ShapeValue implements StateHolder {
 
     private boolean transientState;
 
-    private Map clientDatas;
+    private Map<String, String> clientDatas;
 
     public ShapeValue(Shape shape, INodeItem nodeItem) {
         this.shape = shape;
@@ -85,9 +84,9 @@ public class ShapeValue implements StateHolder {
         return alternateText;
     }
 
-    public final Map getClientDatas() {
+    public final Map<String, String> getClientDatas() {
         if (clientDatas == null) {
-            return Collections.EMPTY_MAP;
+            return Collections.emptyMap();
         }
         return clientDatas;
     }
@@ -97,7 +96,7 @@ public class ShapeValue implements StateHolder {
 
         StringAppender sa = new StringAppender(256);
 
-        List l = null;
+        List<String> l = null;
 
         float fs[] = new float[6];
         for (; pathIterator.isDone() == false; pathIterator.next()) {
@@ -112,14 +111,14 @@ public class ShapeValue implements StateHolder {
                 // Le premier !
 
                 if (sa.length() > 0) {
-                    l = new ArrayList();
+                    l = new ArrayList<String>();
                     l.add(sa.toString());
 
                     sa.setLength(0);
                 }
 
-                sa.append(String.valueOf((int) fs[0])).append(',').append(
-                        String.valueOf((int) fs[1]));
+                sa.append(String.valueOf((int) fs[0])).append(',')
+                        .append(String.valueOf((int) fs[1]));
 
                 continue;
             }
@@ -146,7 +145,7 @@ public class ShapeValue implements StateHolder {
             l.add(sa.toString());
         }
 
-        return (String[]) l.toArray(new String[l.size()]);
+        return l.toArray(new String[l.size()]);
     }
 
     public boolean isTransient() {
@@ -157,6 +156,7 @@ public class ShapeValue implements StateHolder {
         this.transientState = transientState;
     }
 
+    @SuppressWarnings("unchecked")
     public void restoreState(FacesContext facesContext, Object state) {
         Object states[] = (Object[]) state;
 
@@ -174,8 +174,8 @@ public class ShapeValue implements StateHolder {
         alternateText = (String) states[5];
 
         if (states[6] != null) {
-            clientDatas = (Map) UIComponentBase.restoreAttachedState(
-                    facesContext, states[6]);
+            clientDatas = (Map<String, String>) UIComponentBase
+                    .restoreAttachedState(facesContext, states[6]);
         }
 
     }

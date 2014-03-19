@@ -192,14 +192,15 @@ public abstract class AbstractContentAccessor extends AbstractContentPath
         return null;
     }
 
-    public Map getAttributes() {
+    public Map<String, Object> getAttributes() {
         if (parentContentAccessor != null) {
             return parentContentAccessor.getAttributes();
         }
 
-        return Collections.EMPTY_MAP;
+        return Collections.emptyMap();
     }
 
+    @Override
     public String toString() {
         return "[AbstractContentAccessor contentType=" + contentFamily
                 + " pathType="

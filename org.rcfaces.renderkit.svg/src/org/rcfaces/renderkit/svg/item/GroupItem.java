@@ -11,7 +11,6 @@ import org.rcfaces.renderkit.svg.component.GroupComponent;
  * @version $Revision$ $Date$
  */
 public class GroupItem extends NodeItem implements IGroupItem {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = -3180958048094512452L;
 

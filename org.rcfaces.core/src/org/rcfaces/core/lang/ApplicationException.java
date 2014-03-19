@@ -10,33 +10,31 @@ package org.rcfaces.core.lang;
  */
 public class ApplicationException extends RuntimeException {
 
-    private static final String REVISION = "$Revision$";
+	private static final long serialVersionUID = -1121873372303775679L;
 
-    private static final long serialVersionUID = -1121873372303775679L;
+	private final int errorCode;
 
-    private final int errorCode;
+	private final String errorMessage;
 
-    private final String errorMessage;
+	public ApplicationException(String message, Throwable cause, int errorCode,
+			String errorMessage) {
+		super(message, cause);
 
-    public ApplicationException(String message, Throwable cause, int errorCode,
-            String errorMessage) {
-        super(message, cause);
+		this.errorCode = errorCode;
+		this.errorMessage = errorMessage;
+	}
 
-        this.errorCode = errorCode;
-        this.errorMessage = errorMessage;
-    }
+	public ApplicationException(int errorCode, String errorMessage) {
+		this.errorCode = errorCode;
+		this.errorMessage = errorMessage;
+	}
 
-    public ApplicationException(int errorCode, String errorMessage) {
-        this.errorCode = errorCode;
-        this.errorMessage = errorMessage;
-    }
+	public final int getErrorCode() {
+		return errorCode;
+	}
 
-    public final int getErrorCode() {
-        return errorCode;
-    }
-
-    public final String getErrorMessage() {
-        return errorMessage;
-    }
+	public final String getErrorMessage() {
+		return errorMessage;
+	}
 
 }

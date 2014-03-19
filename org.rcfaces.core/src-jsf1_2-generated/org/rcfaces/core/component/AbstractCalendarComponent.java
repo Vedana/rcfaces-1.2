@@ -10,6 +10,8 @@ import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IComponentTimeZoneCapability;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.converter.LiteralDateConverter
+			;
 import org.rcfaces.core.internal.converter.TimeZoneConverter;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import javax.faces.FacesException;
@@ -50,25 +52,25 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 
 	public Date getDate() {
 
-
+			
 				Object submittedValue=getSubmittedExternalValue();
 				if (submittedValue!=null) {
 					return (Date)submittedValue;
 				}
-			
+
 				Object value=getValue();
 
 				if (value==null) {
 					return null;
-				}			
+				}
 
 				if (value instanceof Date) {
 					return (Date)value;
 				}
-								
+
 				if (value instanceof String) {
 					return (Date)LiteralDateConverter.SINGLETON.getAsObject(null, this, (String)value);
-				}				
+				}
 
 				if (value instanceof IAdaptable) {
 					Date adapted=(Date)((IAdaptable)value).getAdapter(Date.class, this);

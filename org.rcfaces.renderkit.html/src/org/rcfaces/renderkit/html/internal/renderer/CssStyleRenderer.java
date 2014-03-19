@@ -7,6 +7,7 @@ package org.rcfaces.renderkit.html.internal.renderer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.faces.FacesException;
@@ -30,13 +31,15 @@ import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
+import org.rcfaces.renderkit.html.internal.agent.UserAgentRuleTools;
 import org.rcfaces.renderkit.html.internal.css.ICssConfig;
 import org.rcfaces.renderkit.html.internal.css.StylesheetsServlet;
 import org.rcfaces.renderkit.html.internal.decorator.CssFilesCollectorDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.FilesCollectorDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
+import org.rcfaces.renderkit.html.internal.style.CssFilesCollectorGenerationInformation;
+import org.rcfaces.renderkit.html.internal.style.CssGenerationInformation;
 import org.rcfaces.renderkit.html.internal.util.FileItemSource;
-import org.rcfaces.renderkit.html.internal.util.UserAgentTools;
 
 /**
  * 
@@ -44,7 +47,6 @@ import org.rcfaces.renderkit.html.internal.util.UserAgentTools;
  * @version $Revision$ $Date$
  */
 public class CssStyleRenderer extends AbstractFilesCollectorRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(CssStyleRenderer.class);
 
@@ -71,7 +73,7 @@ public class CssStyleRenderer extends AbstractFilesCollectorRenderer {
                         "In order to use userAgentVary property, you must declare <v:init userAgentVary=\"true\" ...>");
             }
 
-            if (UserAgentTools.accept(facesContext, cssStyleComponent) == false) {
+            if (UserAgentRuleTools.accept(facesContext, cssStyleComponent) == false) {
                 return;
             }
         }
@@ -88,16 +90,35 @@ public class CssStyleRenderer extends AbstractFilesCollectorRenderer {
             sources = filesCollectorDecorator.listSources();
         }
 
+        boolean mergeStyles = cssStyleComponent.isMergeStyles(facesContext);
+        boolean processRules = cssStyleComponent.isProcessRules(facesContext);
+
         String requiredModules = cssStyleComponent
                 .getRequiredModules(facesContext);
-
         String requiredSets = cssStyleComponent.getRequiredSets(facesContext);
         if (requiredModules != null || requiredSets != null) {
             sources = addRequired(htmlWriter, sources, requiredModules,
                     requiredSets);
-        }
 
-        boolean mergeStyles = cssStyleComponent.isMergeStyles(facesContext);
+            if (processRules == false) {
+                Set<String> forceProcessRules = htmlProcessContext
+                        .listCssProcessRulesForced();
+                if (forceProcessRules != null
+                        && forceProcessRules.isEmpty() == false) {
+
+                    if (requiredModules != null
+                            && containsProcessRulesId(forceProcessRules,
+                                    requiredModules)) {
+                        processRules = true;
+
+                    } else if (requiredSets != null
+                            && containsProcessRulesId(forceProcessRules,
+                                    requiredSets)) {
+                        processRules = true;
+                    }
+                }
+            }
+        }
 
         if (src != null || (sources != null && sources.length > 0)) {
 
@@ -125,7 +146,7 @@ public class CssStyleRenderer extends AbstractFilesCollectorRenderer {
 
                     if (sources != null) {
                         generationInformation = new CssFilesCollectorGenerationInformation(
-                                sources, false);
+                                sources, false, processRules);
                     }
                 }
 
@@ -143,18 +164,25 @@ public class CssStyleRenderer extends AbstractFilesCollectorRenderer {
                 srcFiltred = true;
 
                 sources = null;
+
+                processRules = false; // Déjà fait !
             }
 
             if (src != null && srcFiltred == false) {
+                if (processRules) {
+                    src = IStyleContentAccessorHandler.PROCESS_FILTER_NAME
+                            + IContentAccessor.FILTER_SEPARATOR + src;
+                }
+
                 IContentAccessor contentAccessor = ContentAccessorFactory
                         .createFromWebResource(facesContext, src,
                                 IContentFamily.STYLE);
 
-                src = contentAccessor.resolveURL(facesContext, null, null);
+                src = contentAccessor.resolveURL(facesContext, null,
+                        new CssGenerationInformation(processRules));
             }
 
             if (src != null) {
-
                 htmlWriter.startElement(IHtmlWriter.LINK);
                 htmlWriter.writeRel(IHtmlRenderContext.STYLESHEET_REL);
                 if (useMetaContentStyleType == false) {
@@ -183,12 +211,16 @@ public class CssStyleRenderer extends AbstractFilesCollectorRenderer {
                     }
 
                     String itemSrc = source.getSource();
+                    if (srcFiltred == false && processRules) {
+                        itemSrc = IStyleContentAccessorHandler.PROCESS_FILTER_NAME
+                                + IContentAccessor.FILTER_SEPARATOR + itemSrc;
+                    }
                     IContentAccessor contentAccessor = ContentAccessorFactory
                             .createFromWebResource(facesContext, itemSrc,
                                     IContentFamily.STYLE);
 
                     CssFilesCollectorGenerationInformation generation = new CssFilesCollectorGenerationInformation(
-                            null, source.isFrameworkResource());
+                            null, source.isFrameworkResource(), processRules);
 
                     itemSrc = contentAccessor.resolveURL(facesContext, null,
                             generation);
@@ -214,6 +246,22 @@ public class CssStyleRenderer extends AbstractFilesCollectorRenderer {
         }
     }
 
+    private static boolean containsProcessRulesId(
+            Set<String> forceProcessRules, String ids) {
+
+        StringTokenizer st = new StringTokenizer(ids, ", ");
+        for (; st.hasMoreTokens();) {
+            String token = st.nextToken();
+            if (forceProcessRules.contains(token) == false) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
     private FileItemSource[] addRequired(IHtmlWriter writer,
             FileItemSource[] sources, String requiredModules,
             String requiredSets) {
@@ -222,7 +270,8 @@ public class CssStyleRenderer extends AbstractFilesCollectorRenderer {
                 .getHtmlComponentRenderContext().getHtmlRenderContext()
                 .getHtmlProcessContext();
 
-        List sl = new ArrayList(Arrays.asList(sources));
+        List<FileItemSource> sl = new ArrayList<FileItemSource>(
+                Arrays.asList(sources));
 
         if (requiredModules != null) {
             StringTokenizer st = new StringTokenizer(requiredModules, ",");
@@ -255,7 +304,7 @@ public class CssStyleRenderer extends AbstractFilesCollectorRenderer {
 
         }
 
-        return (FileItemSource[]) sl.toArray(new FileItemSource[sl.size()]);
+        return sl.toArray(new FileItemSource[sl.size()]);
     }
 
     public boolean getRendersChildren() {
@@ -268,35 +317,6 @@ public class CssStyleRenderer extends AbstractFilesCollectorRenderer {
     protected IComponentDecorator createComponentDecorator(
             FacesContext facesContext, UIComponent component) {
         return new CssFilesCollectorDecorator(component);
-    }
-
-    public static class CssFilesCollectorGenerationInformation extends
-            FilesCollectorGenerationInformation implements
-            IFrameworkResourceGenerationInformation {
-
-        private static final String FRAMEWORK_ATTRIBUTE = "org.rcfaces.FrameworkResource";
-
-        public CssFilesCollectorGenerationInformation(FileItemSource[] sources,
-                boolean frameworkResource) {
-            super(sources);
-
-            if (sources != null && frameworkResource == false) {
-                for (int i = 0; i < sources.length; i++) {
-                    if (sources[i].isFrameworkResource()) {
-                        frameworkResource = true;
-                        break;
-                    }
-                }
-            }
-
-            if (frameworkResource) {
-                setAttribute(FRAMEWORK_ATTRIBUTE, Boolean.TRUE);
-            }
-        }
-
-        public boolean isFrameworkResource() {
-            return Boolean.TRUE.equals(getAttribute(FRAMEWORK_ATTRIBUTE));
-        }
     }
 
 }

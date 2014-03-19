@@ -35,6 +35,7 @@ import org.rcfaces.core.component.iterator.IComponentsColumnIterator;
 import org.rcfaces.core.component.iterator.IDataColumnIterator;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.RcfacesContext;
+import org.rcfaces.core.internal.capability.IColumnsContainer;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.capability.ISortedComponentsCapability;
 import org.rcfaces.core.internal.lang.StringAppender;
@@ -51,7 +52,6 @@ import org.rcfaces.core.model.ISortedComponent;
  * @version $Revision$ $Date$
  */
 public class GridTools {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(GridTools.class);
 
@@ -60,13 +60,13 @@ public class GridTools {
     public static final int CHECK_VALUES_TYPE = 2;
 
     private static final IDataColumnIterator EMPTY_DATA_COLUMN_ITERATOR = new DataColumnListIterator(
-            Collections.EMPTY_LIST);
+            Collections.<DataColumnComponent> emptyList());
 
     private static final IColumnIterator EMPTY_COLUMNS_ITERATOR = new ColumnListIterator(
-            Collections.EMPTY_LIST);
+            Collections.<UIColumn> emptyList());
 
     private static final IComponentsColumnIterator EMPTY_COMPONENTS_COLUMN_ITERATOR = new ComponentsColumnListIterator(
-            Collections.EMPTY_LIST);
+            Collections.<ComponentsColumnComponent> emptyList());
 
     private static final String ALL_INDEX = "all";
 
@@ -76,9 +76,11 @@ public class GridTools {
 
     private static final UIComponent[] COMPONENT_EMPTY_ARRAY = new UIComponent[0];
 
-    public static IColumnIterator listColumns(IGridComponent component,
-            Class filter) {
-        List list = ComponentIterators.list((UIComponent) component, filter);
+    @SuppressWarnings("unchecked")
+    public static <T extends UIColumn> IColumnIterator listColumns(
+            IColumnsContainer component, Class<T> filter) {
+        List<UIColumn> list = (List<UIColumn>) ComponentIterators.list(
+                (UIComponent) component, filter);
         if (list.isEmpty()) {
             return EMPTY_COLUMNS_ITERATOR;
         }
@@ -87,8 +89,8 @@ public class GridTools {
     }
 
     public static IDataColumnIterator listDataColumns(IGridComponent component) {
-        List list = ComponentIterators.list((UIComponent) component,
-                DataColumnComponent.class);
+        List<DataColumnComponent> list = ComponentIterators.list(
+                (UIComponent) component, DataColumnComponent.class);
         if (list.isEmpty()) {
             return EMPTY_DATA_COLUMN_ITERATOR;
         }
@@ -98,8 +100,8 @@ public class GridTools {
 
     public static IComponentsColumnIterator listComponentsColumns(
             IGridComponent component) {
-        List list = ComponentIterators.list((UIComponent) component,
-                ComponentsColumnComponent.class);
+        List<ComponentsColumnComponent> list = ComponentIterators.list(
+                (UIComponent) component, ComponentsColumnComponent.class);
         if (list.isEmpty()) {
             return EMPTY_COMPONENTS_COLUMN_ITERATOR;
         }
@@ -113,16 +115,15 @@ public class GridTools {
      * @version $Revision$ $Date$
      */
     private static final class DataColumnListIterator extends
-            ComponentIterators.ComponentListIterator implements
-            IDataColumnIterator {
-        private static final String REVISION = "$Revision$";
+            ComponentIterators.ComponentListIterator<DataColumnComponent>
+            implements IDataColumnIterator {
 
-        public DataColumnListIterator(List list) {
+        public DataColumnListIterator(List<DataColumnComponent> list) {
             super(list);
         }
 
         public final DataColumnComponent next() {
-            return (DataColumnComponent) nextComponent();
+            return nextComponent();
         }
 
         public DataColumnComponent[] toArray() {
@@ -137,16 +138,15 @@ public class GridTools {
      * @version $Revision$ $Date$
      */
     private static final class ComponentsColumnListIterator extends
-            ComponentIterators.ComponentListIterator implements
-            IComponentsColumnIterator {
-        private static final String REVISION = "$Revision$";
+            ComponentIterators.ComponentListIterator<ComponentsColumnComponent>
+            implements IComponentsColumnIterator {
 
-        public ComponentsColumnListIterator(List list) {
+        public ComponentsColumnListIterator(List<ComponentsColumnComponent> list) {
             super(list);
         }
 
         public final ComponentsColumnComponent next() {
-            return (ComponentsColumnComponent) nextComponent();
+            return nextComponent();
         }
 
         public ComponentsColumnComponent[] toArray() {
@@ -161,15 +161,15 @@ public class GridTools {
      * @version $Revision$ $Date$
      */
     private static final class ColumnListIterator extends
-            ComponentIterators.ComponentListIterator implements IColumnIterator {
-        private static final String REVISION = "$Revision$";
+            ComponentIterators.ComponentListIterator<UIColumn> implements
+            IColumnIterator {
 
-        public ColumnListIterator(List list) {
+        public ColumnListIterator(List<UIColumn> list) {
             super(list);
         }
 
         public final UIColumn next() {
-            return (UIColumn) nextComponent();
+            return nextComponent();
         }
 
         public UIColumn[] toArray() {
@@ -189,8 +189,8 @@ public class GridTools {
      * 
      * if (value == null) { return new ArrayIndexesModel(); }
      * 
-     * Class valueClass = value.getClass(); if (valueClass.isArray()) { int size =
-     * Array.getLength(value);
+     * Class valueClass = value.getClass(); if (valueClass.isArray()) { int size
+     * = Array.getLength(value);
      * 
      * return IndexesModels.selectAll(size); }
      * 
@@ -227,7 +227,8 @@ public class GridTools {
         UIColumn columns[] = ((IGridComponent) dataGridComponent).listColumns()
                 .toArray();
 
-        List l = new ArrayList(sortedColumns.length);
+        List<ISortedComponent> l = new ArrayList<ISortedComponent>(
+                sortedColumns.length);
         for (int i = 0; i < sortedColumns.length; i++) {
 
             UIColumn column = (UIColumn) sortedColumns[i];
@@ -255,7 +256,7 @@ public class GridTools {
 
         }
 
-        return (ISortedComponent[]) l.toArray(new ISortedComponent[l.size()]);
+        return l.toArray(new ISortedComponent[l.size()]);
     }
 
     public static DataModel getDataModel(Object current, UIComponent component,
@@ -288,7 +289,7 @@ public class GridTools {
                         + ", return a ListDataModel.");
             }
 
-            return new ListDataModel((List) current);
+            return new ListDataModel((List< ? >) current);
         }
 
         if (Object[].class.isAssignableFrom(current.getClass())) {
@@ -329,7 +330,7 @@ public class GridTools {
                             + ", return an ArrayDataModel.");
                 }
 
-                return new ArrayDataModel(((Collection) current).toArray());
+                return new ArrayDataModel(((Collection< ? >) current).toArray());
             }
         }
 
@@ -345,16 +346,14 @@ public class GridTools {
 
         if (Constants.ADAPTABLE_DATAMODEL_SUPPORT) {
             if (current instanceof IAdaptable) {
-                DataModel dataModel = (DataModel) ((IAdaptable) current)
-                        .getAdapter(DataModel.class, component);
+                DataModel dataModel = ((IAdaptable) current).getAdapter(
+                        DataModel.class, component);
                 if (dataModel != null) {
                     if (LOG.isDebugEnabled()) {
-                        LOG
-                                .debug("DataModel conversion: IAdaptable value type '"
-                                        + current
-                                        + "' for component '"
-                                        + component.getId()
-                                        + ", return a DataModel.");
+                        LOG.debug("DataModel conversion: IAdaptable value type '"
+                                + current
+                                + "' for component '"
+                                + component.getId() + ", return a DataModel.");
                     }
 
                     return dataModel;
@@ -364,18 +363,16 @@ public class GridTools {
             RcfacesContext rcfacesContext = RcfacesContext
                     .getInstance(facesContext);
 
-            DataModel dataModel = (DataModel) rcfacesContext
-                    .getAdapterManager().getAdapter(current, DataModel.class,
-                            component);
+            DataModel dataModel = rcfacesContext.getAdapterManager()
+                    .getAdapter(current, DataModel.class, component);
 
             if (dataModel != null) {
                 if (LOG.isDebugEnabled()) {
-                    LOG
-                            .debug("DataModel conversion: AdaptableFactory response for type '"
-                                    + current
-                                    + "' for component '"
-                                    + component.getId()
-                                    + ", return a DataModel.");
+                    LOG.debug("DataModel conversion: AdaptableFactory response for type '"
+                            + current
+                            + "' for component '"
+                            + component.getId()
+                            + ", return a DataModel.");
                 }
 
                 return dataModel;
@@ -397,7 +394,6 @@ public class GridTools {
      * @version $Revision$ $Date$
      */
     static final class DataModelWrapper extends DataModel implements IDataModel {
-        private static final String REVISION = "$Revision$";
 
         private final IDataModel dataModel;
 
@@ -405,30 +401,37 @@ public class GridTools {
             this.dataModel = dataModel;
         }
 
+        @Override
         public int getRowCount() {
             return dataModel.getRowCount();
         }
 
+        @Override
         public Object getRowData() {
             return dataModel.getRowData();
         }
 
+        @Override
         public int getRowIndex() {
             return dataModel.getRowIndex();
         }
 
+        @Override
         public Object getWrappedData() {
             return dataModel.getWrappedData();
         }
 
+        @Override
         public boolean isRowAvailable() {
             return dataModel.isRowAvailable();
         }
 
+        @Override
         public void setRowIndex(int rowIndex) {
             dataModel.setRowIndex(rowIndex);
         }
 
+        @Override
         public void setWrappedData(Object data) {
             dataModel.setWrappedData(data);
         }
@@ -462,7 +465,8 @@ public class GridTools {
             UIColumn columns[] = gridComponent.listColumns().toArray();
 
             StringTokenizer st = new StringTokenizer(sortedColumnIds, ",");
-            List components = new ArrayList(st.countTokens());
+            List<UIColumn> components = new ArrayList<UIColumn>(
+                    st.countTokens());
 
             for (; st.hasMoreTokens();) {
                 String id = st.nextToken().trim();
@@ -505,16 +509,15 @@ public class GridTools {
                     continue;
                 }
 
-                components.add(component);
+                components.add((UIColumn) component);
 
                 if (component instanceof IOrderCapability) {
                     ((IOrderCapability) component).setAscending(ascending);
                 }
             }
 
-            sortedChildrenCapability
-                    .setSortedChildren((UIComponent[]) components
-                            .toArray(new UIComponent[components.size()]));
+            sortedChildrenCapability.setSortedChildren(components
+                    .toArray(new UIComponent[components.size()]));
             return;
         }
 
@@ -580,13 +583,12 @@ public class GridTools {
     }
 
     public static final IComponentValueType DATA_GRID_VALUE_TYPE = new IComponentValueType() {
-        private static final String REVISION = "$Revision$";
 
         public Object createNewValue(UIComponent component) {
             DataGridComponent dataGridComponent = (DataGridComponent) component;
 
             if (dataGridComponent.isRowValueColumnIdSetted()) {
-                return new OrderedSet();
+                return new OrderedSet<Object>();
             }
 
             return new ArrayIndexesModel();
@@ -596,13 +598,12 @@ public class GridTools {
     public static final IComponentValueType COMBO_GRID_VALUE_TYPE = DATA_GRID_VALUE_TYPE;
 
     public static final IComponentValueType COMPONENTS_GRID_VALUE_TYPE = new IComponentValueType() {
-        private static final String REVISION = "$Revision$";
 
         public Object createNewValue(UIComponent component) {
             ComponentsGridComponent gridComponent = (ComponentsGridComponent) component;
 
             if (gridComponent.isRowValueSetted()) {
-                return new OrderedSet();
+                return new OrderedSet<Object>();
             }
 
             return new ArrayIndexesModel();

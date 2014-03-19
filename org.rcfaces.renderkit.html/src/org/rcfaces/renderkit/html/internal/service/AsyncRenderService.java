@@ -47,9 +47,9 @@ import org.rcfaces.core.internal.webapp.ExtendedHttpServlet;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
+import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
-import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 
 /**
  * 
@@ -57,7 +57,6 @@ import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
  * @version $Revision$ $Date$
  */
 public class AsyncRenderService extends AbstractAsyncRenderService {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(AsyncRenderService.class);
 
@@ -66,8 +65,7 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
     private static final String INTERACTIVE_KEY = "vfc.itrv";
 
     private static final String INTERACTIVE_RENDERER_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".INTERACTIVE_RENDER";
+            .getPackagePrefix() + ".INTERACTIVE_RENDER";
 
     // private static final Integer TREE_ASYNC_MODE = new
     // Integer(IAsyncRenderModeCapability.TREE_ASYNC_RENDER_MODE);
@@ -254,7 +252,7 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
             IHtmlComponentRenderContext htmlComponentRenderContext,
             int asyncRender) {
         UIComponent component = htmlComponentRenderContext.getComponent();
-        Map map = component.getAttributes();
+        Map<String, Object> map = component.getAttributes();
 
         if (asyncRender == IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
             if (map.remove(INTERACTIVE_KEY) != null) {
@@ -273,8 +271,7 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
 
         if (asyncRender != IAsyncRenderModeCapability.TREE_ASYNC_RENDER_MODE) {
             if (RcfacesContext.isJSF1_2()) {
-                LOG
-                        .debug("Force TREE_ASYNC_RENDER_MODE, jsf 1.2 does not support other value");
+                LOG.debug("Force TREE_ASYNC_RENDER_MODE, jsf 1.2 does not support other value");
 
                 asyncRender = IAsyncRenderModeCapability.TREE_ASYNC_RENDER_MODE;
             }
@@ -425,8 +422,6 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
     public static final class InteractiveBuffer extends AbstractInteractive
             implements Externalizable {
 
-        private static final String REVISION = "$Revision$";
-
         private static final long serialVersionUID = -8520292309943559285L;
 
         private static final byte[] NO_GZIPPED_CONTENT = new byte[0];
@@ -493,8 +488,7 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
                 if (gzippedContent != null && useGzip) {
 
                     if (LOG.isDebugEnabled()) {
-                        LOG
-                                .debug("Send an already gzipped interactive buffer. (no state field marker)");
+                        LOG.debug("Send an already gzipped interactive buffer. (no state field marker)");
                     }
                     ExtendedHttpServlet.setGzipContentEncoding(
                             (HttpServletResponse) response, true);
@@ -542,16 +536,14 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
                     outputStream = new GZIPOutputStream(bos, content.length());
 
                     if (LOG.isDebugEnabled()) {
-                        LOG
-                                .debug("GZip content of interactive buffer and keep result. (no state field marker)");
+                        LOG.debug("GZip content of interactive buffer and keep result. (no state field marker)");
                     }
                 } else {
-                    outputStream = new GZIPOutputStream(outputStream, content
-                            .length());
+                    outputStream = new GZIPOutputStream(outputStream,
+                            content.length());
 
                     if (LOG.isDebugEnabled()) {
-                        LOG
-                                .debug("GZip content of interactive buffer. (state field marker presn");
+                        LOG.debug("GZip content of interactive buffer. (state field marker presn");
                     }
                 }
             } else {
@@ -600,8 +592,7 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
                 // Test le GZIP
 
                 if (LOG.isDebugEnabled()) {
-                    LOG
-                            .debug("saveState of interactive buffer (not already gzipped)");
+                    LOG.debug("saveState of interactive buffer (not already gzipped)");
                 }
 
                 int length = content.length();
@@ -612,9 +603,8 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
                                 content.length());
                         GZIPOutputStream out = new GZIPOutputStream(bos, 4096);
 
-                        out
-                                .write(content
-                                        .getBytes(AbstractHtmlService.RESPONSE_CHARSET));
+                        out.write(content
+                                .getBytes(AbstractHtmlService.RESPONSE_CHARSET));
 
                         out.close();
 
@@ -631,10 +621,9 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
                                         + " %)");
 
                             } else {
-                                LOG
-                                        .debug("Compression: bad performance, ignore compression ! ("
-                                                + (gzipped.length * 100 / length)
-                                                + " %)");
+                                LOG.debug("Compression: bad performance, ignore compression ! ("
+                                        + (gzipped.length * 100 / length)
+                                        + " %)");
 
                             }
                         }
@@ -643,12 +632,11 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
                     }
                 } else {
                     if (LOG.isDebugEnabled()) {
-                        LOG
-                                .debug("Buffer is too small to try compression ! ("
-                                        + length
-                                        + "<"
-                                        + org.rcfaces.core.internal.Constants.MINIMUM_GZIP_BUFFER_SIZE
-                                        + ")");
+                        LOG.debug("Buffer is too small to try compression ! ("
+                                + length
+                                + "<"
+                                + org.rcfaces.core.internal.Constants.MINIMUM_GZIP_BUFFER_SIZE
+                                + ")");
 
                     }
                 }

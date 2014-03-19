@@ -31,31 +31,31 @@ public class MenuTag extends CameliaTag implements Tag {
 		return MenuComponent.COMPONENT_TYPE;
 	}
 
-	public final void setPreloadedLevelDepth(ValueExpression preloadedLevelDepth) {
+	public void setPreloadedLevelDepth(ValueExpression preloadedLevelDepth) {
 		this.preloadedLevelDepth = preloadedLevelDepth;
 	}
 
-	public final void setMenuListener(ValueExpression menuListeners) {
+	public void setMenuListener(ValueExpression menuListeners) {
 		this.menuListeners = menuListeners;
 	}
 
-	public final void setSelectionListener(ValueExpression selectionListeners) {
+	public void setSelectionListener(ValueExpression selectionListeners) {
 		this.selectionListeners = selectionListeners;
 	}
 
-	public final void setCheckListener(ValueExpression checkListeners) {
+	public void setCheckListener(ValueExpression checkListeners) {
 		this.checkListeners = checkListeners;
 	}
 
-	public final void setCheckedValues(ValueExpression checkedValues) {
+	public void setCheckedValues(ValueExpression checkedValues) {
 		this.checkedValues = checkedValues;
 	}
 
-	public final void setMenuId(ValueExpression menuId) {
+	public void setMenuId(ValueExpression menuId) {
 		this.menuId = menuId;
 	}
 
-	public final void setRemoveAllWhenShown(ValueExpression removeAllWhenShown) {
+	public void setRemoveAllWhenShown(ValueExpression removeAllWhenShown) {
 		this.removeAllWhenShown = removeAllWhenShown;
 	}
 

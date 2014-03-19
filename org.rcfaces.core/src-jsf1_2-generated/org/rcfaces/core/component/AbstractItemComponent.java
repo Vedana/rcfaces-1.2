@@ -81,14 +81,14 @@ public abstract class AbstractItemComponent extends CameliaItemComponent impleme
 	public void setDisabled(boolean disabled) {
 
 
-			setItemDisabled(disabled);
+				setItemDisabled(disabled);
 			
 	}
 
 	public boolean isDisabled() {
 
 
-			return isItemDisabled();
+				return isItemDisabled();
 			
 	}
 
@@ -107,12 +107,28 @@ public abstract class AbstractItemComponent extends CameliaItemComponent impleme
 	public Object getServerData(String name, FacesContext facesContext) {
 
 
+<<<<<<< HEAD
 		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
+=======
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		if (dataMapAccessor==null) {
 			return null;
 		}
 		
 		return dataMapAccessor.getData(name, facesContext);
+		
+	}
+
+	public ValueExpression getServerDataValueExpression(String name, FacesContext facesContext) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
+		if (dataMapAccessor==null) {
+			return null;
+		}
+		
+		return dataMapAccessor.getValueExpression(name);
 		
 	}
 
@@ -169,6 +185,16 @@ public abstract class AbstractItemComponent extends CameliaItemComponent impleme
 		
 		return dataMapAccessor.listDataKeys(facesContext);
 		
+	}
+
+	public void setValueExpression(String name, ValueExpression binding) {
+
+
+				if(name.equals(Properties.DISABLED)){
+				name = Properties.ITEM_DISABLED;
+				}
+				super.setValueExpression(name, binding);
+			
 	}
 
 	/**

@@ -14,7 +14,6 @@ import org.rcfaces.core.internal.contentAccessor.BasicGeneratedResourceInformati
  */
 public class GeneratedImageInformation extends
         BasicGeneratedResourceInformation implements IGeneratedImageInformation {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(GeneratedImageInformation.class);

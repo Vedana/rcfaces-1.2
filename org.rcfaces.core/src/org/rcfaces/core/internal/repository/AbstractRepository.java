@@ -8,13 +8,17 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import javax.faces.component.UIComponentBase;
+import javax.faces.context.FacesContext;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.repository.IHierarchicalRepository.IHierarchicalFile;
+import org.rcfaces.core.internal.repository.IHierarchicalRepository.IModule;
+import org.rcfaces.core.internal.repository.IHierarchicalRepository.ISet;
 import org.rcfaces.core.internal.webapp.URIParameters;
 
 /**
@@ -24,19 +28,17 @@ import org.rcfaces.core.internal.webapp.URIParameters;
  */
 public abstract class AbstractRepository implements IRepository {
 
-    private static final String REVISION = "$Revision$";
-
     private static final long serialVersionUID = -3328226384749670660L;
 
     private static final Log LOG = LogFactory.getLog(AbstractRepository.class);
 
     protected static final IFile[] FILE_EMPTY_ARRAY = new IFile[0];
 
-    private static final Object[] OBJECT_EMPTY_ARRAY = new Object[0];
+    private static final IContentRef[] CONTENT_REF_EMPTY_ARRAY = new IContentRef[0];
 
-    protected final Map filesByName = new HashMap();
+    protected final Map<String, IFile> filesByName = new HashMap<String, IFile>();
 
-    protected final Map filesByURI = new HashMap();
+    protected final Map<String, IFile> filesByURI = new HashMap<String, IFile>();
 
     protected final String repositoryVersion;
 
@@ -61,15 +63,19 @@ public abstract class AbstractRepository implements IRepository {
     }
 
     public IFile getFileByURI(String uri) {
-        return (IFile) filesByURI.get(uri);
+        return filesByURI.get(uri);
     }
 
     public IFile getFileByName(String name) {
-        return (IFile) filesByName.get(name);
+        return filesByName.get(name);
     }
 
-    public IContext createContext(Locale locale) {
-        return new ContextImpl(locale);
+    public IContext createContext(ICriteria criteria) {
+        ContextImpl contextImpl = new ContextImpl();
+
+        contextImpl.setCriteria(criteria);
+
+        return contextImpl;
     }
 
     protected abstract IContentProvider getDefaultContentProvider();
@@ -80,18 +86,19 @@ public abstract class AbstractRepository implements IRepository {
      * @version $Revision$ $Date$
      */
     protected static class ContextImpl implements IContext {
-        private static final String REVISION = "$Revision$";
+        private final Set<IFile> files = new HashSet<IFile>(32);
 
-        private final Set files = new HashSet(32);
+        private ICriteria criteria;
 
-        private final Locale locale;
-
-        public ContextImpl(Locale locale) {
-            this.locale = locale;
+        public ContextImpl() {
         }
 
-        public Locale getLocale() {
-            return locale;
+        public void setCriteria(ICriteria criteria) {
+            this.criteria = criteria;
+        }
+
+        public ICriteria getCriteria() {
+            return criteria;
         }
 
         public boolean contains(IFile file) {
@@ -103,19 +110,25 @@ public abstract class AbstractRepository implements IRepository {
         }
 
         public IContext copy() {
-            ContextImpl ctx = new ContextImpl(locale);
+            ContextImpl ctx = new ContextImpl();
+            ctx.criteria = criteria;
             ctx.files.addAll(files);
 
             return ctx;
         }
 
-        public void restoreState(IRepository repository, Object state) {
+        public void restoreState(FacesContext facesContext,
+                IRepository repository, Object state) {
             if (state == null) {
                 return;
             }
 
             Object fs[] = (Object[]) state;
-            for (int i = 0; i < fs.length; i++) {
+
+            criteria = (ICriteria) UIComponentBase.restoreAttachedState(
+                    facesContext, fs[0]);
+
+            for (int i = 1; i < fs.length; i++) {
                 IFile file = ((BasicHierarchicalRepository) repository)
                         .getFileById((String) fs[i]);
 
@@ -127,15 +140,17 @@ public abstract class AbstractRepository implements IRepository {
             }
         }
 
-        public Object saveState() {
+        public Object saveState(FacesContext facesContext) {
             if (files.isEmpty()) {
                 return null;
             }
 
-            Iterator it = files.iterator();
-            Object ret[] = new Object[files.size()];
-            for (int i = 0; it.hasNext();) {
-                IFile file = (IFile) it.next();
+            Iterator<IFile> it = files.iterator();
+            Object ret[] = new Object[files.size() + 1];
+            ret[0] = UIComponentBase.saveAttachedState(facesContext, criteria);
+
+            for (int i = 1; it.hasNext();) {
+                IFile file = it.next();
 
                 ret[i++] = ((File) file).getId();
             }
@@ -144,8 +159,15 @@ public abstract class AbstractRepository implements IRepository {
         }
     }
 
-    protected Locale adaptLocale(Locale locale, IFile file) {
-        return locale;
+    protected ICriteria adaptCriteria(ICriteria criteria, IFile file) {
+        return criteria;
+    }
+
+    protected FileByCriteria createFileByCriteria(IFile file,
+            IContentProvider contentProvider, ICriteria criteria, String uri,
+            IContentRef noCriteriaContentLocation) {
+        return new FileByCriteria(file, contentProvider, criteria, uri,
+                noCriteriaContentLocation);
     }
 
     /**
@@ -155,33 +177,31 @@ public abstract class AbstractRepository implements IRepository {
      */
     protected class File implements IFile {
 
-        private static final String REVISION = "$Revision$";
-
         private static final long serialVersionUID = -8396517787887070898L;
 
         private final String id;
 
         private final String filename;
 
-        private final Object unlocalizedContentLocation;
+        private final IContentRef noCriteriaContentRef;
 
-        private final String unlocalizedURI;
+        private final String noCriteriaURI;
 
         private final IContentProvider contentProvider;
 
         private final int hashCode;
 
-        private LocalizedFile unlocalizedFile;
+        private FileByCriteria noCriteriaFile;
 
-        private Map localizedFiles;
+        private Map<ICriteria, FileByCriteria> criteriaFiles;
 
-        public File(String name, String filename, String unlocalizedURI,
-                Object unlocalizedContentLocation,
+        public File(String name, String filename, String noCriteriaURI,
+                IContentRef noCriteriaContentRef,
                 IContentProvider contentProvider) {
             this.id = name;
             this.filename = filename;
-            this.unlocalizedURI = unlocalizedURI;
-            this.unlocalizedContentLocation = unlocalizedContentLocation;
+            this.noCriteriaURI = noCriteriaURI;
+            this.noCriteriaContentRef = noCriteriaContentRef;
             this.contentProvider = contentProvider;
             this.hashCode = filename.hashCode();
         }
@@ -194,10 +214,10 @@ public abstract class AbstractRepository implements IRepository {
             return id;
         }
 
-        public Object[] getContentReferences(Locale locale) {
-            LocalizedFile localizedFile = getLocalizedFile(locale);
+        public IContentRef[] getContentReferences(ICriteria criteria) {
+            FileByCriteria localizedFile = getCriteriaFile(criteria);
 
-            return localizedFile.getContentLocations();
+            return localizedFile.getContentRefs();
         }
 
         public String getFilename() {
@@ -216,42 +236,64 @@ public abstract class AbstractRepository implements IRepository {
             return getDefaultContentProvider();
         }
 
-        public String getURI(Locale locale) {
-            LocalizedFile localizedFile = getLocalizedFile(locale);
+        public String getURI(ICriteria criteria) {
+            FileByCriteria criteriaFile = getCriteriaFile(criteria);
 
-            return localizedFile.getURI();
+            return criteriaFile.getURI();
         }
 
-        protected synchronized LocalizedFile getLocalizedFile(Locale locale) {
-            if (locale == null) {
-                if (unlocalizedFile != null) {
-                    return unlocalizedFile;
+        public ICriteria getSupportedCriteria(ICriteria criteria) {
+            FileByCriteria criteriaFile = getCriteriaFile(criteria);
+            if (criteriaFile == null) {
+                return null;
+            }
+
+            return criteriaFile.getSelectedCriteria();
+        }
+
+        protected FileByCriteria getCriteriaFile(ICriteria criteria) {
+            // On joue avec la synchro ... on bloque un minimum
+            if (criteria == null) {
+                if (noCriteriaFile != null) {
+                    return noCriteriaFile;
                 }
 
-                unlocalizedFile = new LocalizedFile(getContentProvider(), null,
-                        unlocalizedURI, unlocalizedContentLocation);
-                return unlocalizedFile;
+                noCriteriaFile = createFileByCriteria(this,
+                        getContentProvider(), null, noCriteriaURI,
+                        noCriteriaContentRef);
+                return noCriteriaFile;
             }
 
-            locale = adaptLocale(locale, this);
+            criteria = adaptCriteria(criteria, this);
 
-            if (localizedFiles == null) {
-                localizedFiles = new HashMap(4);
+            FileByCriteria criteriaFile;
+            synchronized (this) {
+                if (criteriaFiles == null) {
+                    criteriaFiles = new HashMap<ICriteria, FileByCriteria>(4);
+                }
+
+                criteriaFile = criteriaFiles.get(criteria);
             }
 
-            LocalizedFile localizedFile = (LocalizedFile) localizedFiles
-                    .get(locale);
-            if (localizedFile != null) {
-                return localizedFile;
+            if (criteriaFile != null) {
+                return criteriaFile;
             }
 
-            localizedFile = new LocalizedFile(getContentProvider(), locale,
-                    unlocalizedURI, unlocalizedContentLocation);
-            localizedFiles.put(locale, localizedFile);
+            criteriaFile = createFileByCriteria(this, getContentProvider(),
+                    criteria, noCriteriaURI, noCriteriaContentRef);
 
-            return localizedFile;
+            synchronized (this) {
+                criteriaFiles.put(criteria, criteriaFile);
+            }
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Save file='" + filename + "' criteria '" + criteria
+                        + "' => " + criteriaFile);
+            }
+
+            return criteriaFile;
         }
 
+        @Override
         public boolean equals(Object obj) {
             if (obj == this) {
                 return true;
@@ -265,9 +307,14 @@ public abstract class AbstractRepository implements IRepository {
             return f.filename.equals(filename);
         }
 
+        @Override
         public int hashCode() {
             return hashCode;
         }
+    }
+
+    protected ICriteria getDefaultRepositoryCriteria() {
+        return null;
     }
 
     /**
@@ -275,84 +322,142 @@ public abstract class AbstractRepository implements IRepository {
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
-    protected static class LocalizedFile {
-        private static final String REVISION = "$Revision$";
+    protected class FileByCriteria {
 
-        private final String uri;
+        protected final IFile file;
 
-        private final Object[] contentLocations;
+        protected String uri;
 
-        public LocalizedFile(IContentProvider contentProvider, Locale locale,
-                String uri, Object unlocalizedContentLocation) {
-            Object localizedContentLocation = null;
+        protected IContentRef[] contentRefs;
 
-            if (locale != null) {
-                URIParameters uriParameters = new URIParameters(uri);
+        protected ICriteria selectedCriteria;
 
-                if (locale != null) {
-                    uriParameters.appendLocale(locale);
+        public FileByCriteria(IFile file, IContentProvider contentProvider,
+                ICriteria criteria, String uri, IContentRef noCriteriaContentRef) {
+            this.file = file;
+
+            searchCriteriaSupport(contentProvider, criteria, uri,
+                    noCriteriaContentRef);
+        }
+
+        protected void searchCriteriaSupport(IContentProvider contentProvider,
+                ICriteria proposedCriteria, String uri,
+                IContentRef noCriteriaContentRef) {
+
+            ICriteria selectedCriteria = null;
+
+            if ((file instanceof IModule) || (file instanceof ISet)) {
+                IHierarchicalFile[] hfs = ((IHierarchicalFile) file)
+                        .listDependencies();
+                ICriteria childCriteria = null;
+
+                for (IHierarchicalFile hf : hfs) {
+                    FileByCriteria criteriaFile = ((AbstractRepository.File) hf)
+                            .getCriteriaFile(proposedCriteria);
+                    if (criteriaFile == null
+                            || criteriaFile.getSelectedCriteria() == null) {
+                        continue;
+                    }
+
+                    if (childCriteria == null) {
+                        childCriteria = criteriaFile.getSelectedCriteria();
+
+                    } else {
+                        childCriteria = childCriteria.merge(criteriaFile
+                                .getSelectedCriteria());
+                    }
                 }
+
+                if (childCriteria != null) {
+                    selectedCriteria = childCriteria;
+                }
+
+            } else {
+
+                IContentRef[] criteriaContentRefs = null;
+
+                if (proposedCriteria != null && noCriteriaContentRef != null) {
+                    criteriaContentRefs = contentProvider
+                            .searchCriteriaContentReference(
+                                    noCriteriaContentRef, proposedCriteria);
+
+                    if (criteriaContentRefs != null) {
+                        selectedCriteria = proposedCriteria;
+
+                    } else {
+                        ICriteria defaultCriteria = getDefaultRepositoryCriteria();
+
+                        if (defaultCriteria != null
+                                && defaultCriteria.equals(proposedCriteria) == false) {
+                            if (LOG.isTraceEnabled()) {
+                                LOG.trace("Use default criteria: "
+                                        + proposedCriteria);
+                            }
+
+                            criteriaContentRefs = contentProvider
+                                    .searchCriteriaContentReference(
+                                            noCriteriaContentRef,
+                                            proposedCriteria);
+                            if (criteriaContentRefs != null) {
+                                selectedCriteria = defaultCriteria;
+                            }
+                        }
+                    }
+
+                    if (LOG.isTraceEnabled()) {
+                        if (proposedCriteria != null
+                                && criteriaContentRefs != null) {
+                            LOG.trace("Find criteria version ("
+                                    + proposedCriteria + ") of '" + uri
+                                    + "' => " + criteriaContentRefs);
+
+                        } else {
+                            LOG.trace("Can not find criteria version ("
+                                    + proposedCriteria + ") of '" + uri + "'.");
+                        }
+                    }
+                }
+
+                if (noCriteriaContentRef == null) {
+                    contentRefs = CONTENT_REF_EMPTY_ARRAY;
+
+                } else if (criteriaContentRefs == null) {
+                    contentRefs = new IContentRef[] { noCriteriaContentRef };
+
+                } else {
+                    contentRefs = criteriaContentRefs;
+                }
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Content locations of " + this + " => "
+                            + Arrays.asList(contentRefs));
+                }
+            }
+
+            if (selectedCriteria != null) {
+                URIParameters uriParameters = URIParameters.parseURI(uri);
+
+                selectedCriteria.appendSuffix(uriParameters);
 
                 uri = uriParameters.computeParametredURI();
             }
 
-            if (locale != null) {
-                if (unlocalizedContentLocation != null) {
-                    localizedContentLocation = contentProvider
-                            .searchLocalizedContentReference(
-                                    unlocalizedContentLocation, locale);
-
-                    if (localizedContentLocation == null) {
-                        locale = Constants.REPOSITORY_DEFAULT_LOCALE;
-
-                        localizedContentLocation = contentProvider
-                                .searchLocalizedContentReference(
-                                        unlocalizedContentLocation, locale);
-                    }
-
-                    if (localizedContentLocation != null) {
-                        if (LOG.isTraceEnabled()) {
-                            LOG.trace("Find localized version (" + locale
-                                    + ") of '" + uri + "' => "
-                                    + localizedContentLocation);
-
-                        }
-                    } else {
-                        if (LOG.isTraceEnabled()) {
-                            LOG.trace("Can not find localized version ("
-                                    + locale + ") of '" + uri + "'.");
-
-                        }
-                    }
-                }
-            }
-
-            if (unlocalizedContentLocation == null) {
-                contentLocations = OBJECT_EMPTY_ARRAY;
-
-            } else if (localizedContentLocation == null) {
-                contentLocations = new Object[] { unlocalizedContentLocation };
-
-            } else {
-                contentLocations = new Object[] { unlocalizedContentLocation,
-                        localizedContentLocation };
-            }
-
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Content locations of " + this + " => "
-                        + Arrays.asList(contentLocations));
-            }
-
+            this.selectedCriteria = selectedCriteria;
             this.uri = uri;
         }
 
-        public Object[] getContentLocations() {
-            return contentLocations;
+        public IContentRef[] getContentRefs() {
+            return contentRefs;
         }
 
         public String getURI() {
             return uri;
         }
+
+        public ICriteria getSelectedCriteria() {
+            return selectedCriteria;
+        }
+
     }
 
     /**
@@ -361,7 +466,6 @@ public abstract class AbstractRepository implements IRepository {
      * @version $Revision$ $Date$
      */
     public static abstract class AbstractContent implements IContent {
-        private static final String REVISION = "$Revision$";
 
         public long getLastModified() throws IOException {
             return -1;

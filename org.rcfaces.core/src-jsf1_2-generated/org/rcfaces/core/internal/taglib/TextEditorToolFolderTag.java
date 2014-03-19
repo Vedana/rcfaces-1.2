@@ -26,19 +26,19 @@ public class TextEditorToolFolderTag extends ToolFolderTag implements Tag {
 		return TextEditorToolFolderComponent.COMPONENT_TYPE;
 	}
 
-	public final void setItemTypes(ValueExpression itemTypes) {
+	public void setItemTypes(ValueExpression itemTypes) {
 		this.itemTypes = itemTypes;
 	}
 
-	public final void setFontSizes(ValueExpression fontSizes) {
+	public void setFontSizes(ValueExpression fontSizes) {
 		this.fontSizes = fontSizes;
 	}
 
-	public final void setFontNames(ValueExpression fontNames) {
+	public void setFontNames(ValueExpression fontNames) {
 		this.fontNames = fontNames;
 	}
 
-	public final void setFor(ValueExpression forVal) {
+	public void setFor(ValueExpression forVal) {
 		this.forVal = forVal;
 	}
 

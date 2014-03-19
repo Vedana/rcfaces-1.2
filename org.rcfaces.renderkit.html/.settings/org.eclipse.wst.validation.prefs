@@ -1,10 +1,10 @@
-#Thu Aug 28 17:24:27 CEST 2008
+#Mon Dec 20 14:47:14 CET 2010
 DELEGATES_PREFERENCE=delegateValidatorList
 USER_BUILD_PREFERENCE=enabledBuildValidatorList
-USER_MANUAL_PREFERENCE=enabledManualValidatorListorg.eclipse.wst.jsdt.web.core.internal.validation.JsBatchValidator;
-USER_PREFERENCE=overrideGlobalPreferencestruedisableAllValidationfalseversion1.2.0.v200806051402
+USER_MANUAL_PREFERENCE=enabledManualValidatorList
+USER_PREFERENCE=overrideGlobalPreferencesfalse
 eclipse.preferences.version=1
-override=true
+override=false
 suspend=false
 vals/org.eclipse.wst.xsd.core.xsd/global=TF02162org.eclipse.wst.xsd.core.internal.validation.eclipse.Validator
 vf.version=3

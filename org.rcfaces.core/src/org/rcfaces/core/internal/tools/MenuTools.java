@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UISelectItem;
 
 import org.rcfaces.core.component.AbstractMenuComponent;
 import org.rcfaces.core.component.IMenuComponent;
@@ -29,13 +28,12 @@ import org.rcfaces.core.lang.OrderedSet;
  * @version $Revision$ $Date$
  */
 public class MenuTools {
-    private static final String REVISION = "$Revision$";
 
     private static final IMenuItemIterator EMPTY_MENU_ITEM_ITERATOR = new MenuItemListIterator(
-            Collections.EMPTY_LIST);
+            Collections.<MenuItemComponent> emptyList());
 
     private static final IMenuIterator EMPTY_MENU_ITERATOR = new MenuListIterator(
-            Collections.EMPTY_LIST);
+            Collections.<MenuComponent> emptyList());
 
     private static final String MENU_FACET = "popup";
 
@@ -55,8 +53,8 @@ public class MenuTools {
 
     private static IMenuItemIterator listMenuItems(IContainerManager manager) {
 
-        List list = ComponentIterators.list((UIComponent) manager,
-                UISelectItem.class);
+        List<MenuItemComponent> list = ComponentIterators.list(
+                (UIComponent) manager, MenuItemComponent.class);
         if (list.isEmpty()) {
             return EMPTY_MENU_ITEM_ITERATOR;
         }
@@ -70,16 +68,15 @@ public class MenuTools {
      * @version $Revision$ $Date$
      */
     private static final class MenuItemListIterator extends
-            ComponentIterators.ComponentListIterator implements
-            IMenuItemIterator {
-        private static final String REVISION = "$Revision$";
+            ComponentIterators.ComponentListIterator<MenuItemComponent>
+            implements IMenuItemIterator {
 
-        public MenuItemListIterator(List list) {
+        public MenuItemListIterator(List<MenuItemComponent> list) {
             super(list);
         }
 
         public final MenuItemComponent next() {
-            return (MenuItemComponent) nextComponent();
+            return nextComponent();
         }
 
         public MenuItemComponent[] toArray() {
@@ -116,13 +113,13 @@ public class MenuTools {
 
     private static IMenuComponent searchMenu(UIComponent container,
             String menuId) {
-        List children = container.getChildren();
+        List<UIComponent> children = container.getChildren();
         if (children.isEmpty()) {
             return null;
         }
 
-        for (Iterator it = children.iterator(); it.hasNext();) {
-            UIComponent child = (UIComponent) it.next();
+        for (Iterator<UIComponent> it = children.iterator(); it.hasNext();) {
+            UIComponent child = it.next();
 
             if ((child instanceof IMenuComponent) == false) {
                 continue;
@@ -147,15 +144,15 @@ public class MenuTools {
      * @version $Revision$ $Date$
      */
     private static final class MenuListIterator extends
-            ComponentIterators.ComponentListIterator implements IMenuIterator {
-        private static final String REVISION = "$Revision$";
+            ComponentIterators.ComponentListIterator<MenuComponent> implements
+            IMenuIterator {
 
-        public MenuListIterator(List list) {
+        public MenuListIterator(List<MenuComponent> list) {
             super(list);
         }
 
         public final MenuComponent next() {
-            return (MenuComponent) nextComponent();
+            return nextComponent();
         }
 
         public MenuComponent[] toArray() {
@@ -164,21 +161,22 @@ public class MenuTools {
     }
 
     public static IMenuIterator listMenus(IContainerManager component) {
-        Map facets = ((UIComponent) component).getFacets();
+        Map<String, UIComponent> facets = ((UIComponent) component).getFacets();
         if (facets != null && facets.isEmpty() == false) {
-            List popups = null;
+            List<MenuComponent> popups = null;
             int i = 0;
-            for (Iterator it = facets.values().iterator(); it.hasNext();) {
-                UIComponent child = (UIComponent) it.next();
+            for (Iterator<UIComponent> it = facets.values().iterator(); it
+                    .hasNext();) {
+                UIComponent child = it.next();
 
                 if ((child instanceof MenuComponent) == false) {
                     continue;
                 }
 
                 if (popups == null) {
-                    popups = new ArrayList(facets.size() - i);
+                    popups = new ArrayList<MenuComponent>(facets.size() - i);
                 }
-                popups.add(child);
+                popups.add((MenuComponent) child);
             }
 
             if (popups == null) {
@@ -188,8 +186,8 @@ public class MenuTools {
             return new MenuListIterator(popups);
         }
 
-        List list = ComponentIterators.list((UIComponent) component,
-                MenuComponent.class);
+        List<MenuComponent> list = ComponentIterators.list(
+                (UIComponent) component, MenuComponent.class);
         if (list.isEmpty()) {
             return EMPTY_MENU_ITERATOR;
         }
@@ -198,10 +196,9 @@ public class MenuTools {
     }
 
     public static final IComponentValueType MENU_VALUE_TYPE = new IComponentValueType() {
-        private static final String REVISION = "$Revision$";
 
         public Object createNewValue(UIComponent component) {
-            return new OrderedSet();
+            return new OrderedSet<Object>();
         }
     };
 }

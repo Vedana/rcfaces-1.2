@@ -22,19 +22,19 @@ public abstract class ExpandableItemTag extends UIImageItemTag implements Tag {
 	private ValueExpression foregroundColor;
 	private ValueExpression text;
 	private ValueExpression expandedImageURL;
-	public final void setBackgroundColor(ValueExpression backgroundColor) {
+	public void setBackgroundColor(ValueExpression backgroundColor) {
 		this.backgroundColor = backgroundColor;
 	}
 
-	public final void setForegroundColor(ValueExpression foregroundColor) {
+	public void setForegroundColor(ValueExpression foregroundColor) {
 		this.foregroundColor = foregroundColor;
 	}
 
-	public final void setText(ValueExpression text) {
+	public void setText(ValueExpression text) {
 		this.text = text;
 	}
 
-	public final void setExpandedImageURL(ValueExpression expandedImageURL) {
+	public void setExpandedImageURL(ValueExpression expandedImageURL) {
 		this.expandedImageURL = expandedImageURL;
 	}
 

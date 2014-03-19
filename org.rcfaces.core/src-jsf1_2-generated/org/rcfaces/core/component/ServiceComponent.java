@@ -1,6 +1,7 @@
 package org.rcfaces.core.component;
 
 import java.util.TimeZone;
+import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
 import java.util.Map;
 import org.rcfaces.core.component.capability.IComponentLocaleCapability;
@@ -12,8 +13,8 @@ import org.rcfaces.core.component.capability.IServiceEventCapability;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
-import org.rcfaces.core.component.capability.IServerDataCapability;
 import org.rcfaces.core.internal.converter.TimeZoneConverter;
+import org.rcfaces.core.component.capability.IServerDataCapability;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import org.apache.commons.logging.Log;
 import org.rcfaces.core.internal.converter.LocaleConverter;
@@ -25,6 +26,7 @@ import java.lang.String;
 import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
 import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.internal.manager.IServerDataManager;
+import org.rcfaces.core.component.capability.IErrorEventCapability;
 import javax.el.ValueExpression;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.IFilterCapability;
@@ -47,6 +49,8 @@ public class ServiceComponent extends CameliaBaseComponent implements
 	IPropertyChangeEventCapability,
 	IServiceEventCapability,
 	IFilterCapability,
+	IErrorEventCapability,
+	IVisibilityCapability,
 	IComponentLocaleCapability,
 	IComponentTimeZoneCapability,
 	IClientDataManager,
@@ -58,7 +62,7 @@ public class ServiceComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"enableViewState","filterProperties","serviceId","componentTimeZone","componentLocale","serviceEventListener","propertyChangeListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"enableViewState","filterProperties","serviceId","visible","componentTimeZone","componentLocale","errorListener","serviceEventListener","propertyChangeListener"}));
 	}
 
 	public ServiceComponent() {
@@ -135,12 +139,28 @@ public class ServiceComponent extends CameliaBaseComponent implements
 	public Object getServerData(String name, FacesContext facesContext) {
 
 
+<<<<<<< HEAD
 		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
+=======
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		if (dataMapAccessor==null) {
 			return null;
 		}
 		
 		return dataMapAccessor.getData(name, facesContext);
+		
+	}
+
+	public ValueExpression getServerDataValueExpression(String name, FacesContext facesContext) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
+		if (dataMapAccessor==null) {
+			return null;
+		}
+		
+		return dataMapAccessor.getValueExpression(name);
 		
 	}
 
@@ -205,6 +225,17 @@ public class ServiceComponent extends CameliaBaseComponent implements
 			IFilterProperties filterProperties=(IFilterProperties)FilterPropertiesConverter.SINGLETON.getAsObject(null, this, properties);
 			
 			setFilterProperties(filterProperties);
+		
+	}
+
+	public Boolean getVisibleState(FacesContext facesContext) {
+
+
+			if (engine.isPropertySetted(Properties.VISIBLE)==false) {
+				return null;
+			}
+			
+			return Boolean.valueOf(isVisible(facesContext));
 		
 	}
 
@@ -350,6 +381,48 @@ public class ServiceComponent extends CameliaBaseComponent implements
 		engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
 	}
 
+	public final void addErrorListener(org.rcfaces.core.event.IErrorListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeErrorListener(org.rcfaces.core.event.IErrorListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listErrorListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IErrorListener.class);
+	}
+
+	public boolean isVisible() {
+		return isVisible(null);
+	}
+
+	/**
+	 * See {@link #isVisible() isVisible()} for more details
+	 */
+	public boolean isVisible(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.VISIBLE, true, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "visible" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isVisibleSetted() {
+		return engine.isPropertySetted(Properties.VISIBLE);
+	}
+
+	public void setVisible(boolean visible) {
+		engine.setProperty(Properties.VISIBLE, visible);
+	}
+
+	public Boolean getVisibleState() {
+
+
+			return getVisibleState(null);
+		
+	}
+
 	public java.util.Locale getComponentLocale() {
 		return getComponentLocale(null);
 	}
@@ -409,7 +482,8 @@ public class ServiceComponent extends CameliaBaseComponent implements
 	 * @return service id
 	 */
 	public String getServiceId(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.SERVICE_ID, facesContext);
+		String s = engine.getStringProperty(Properties.SERVICE_ID, facesContext);
+		return s;
 	}
 
 	/**

@@ -34,3 +34,9 @@
 	background: url("suggestTextEntry/waiting.gif") no-repeat right center;
 }
 
+.f_suggestTextEntry_live {
+	position: absolute;
+	left: -10000px;
+	top: -10000px;
+}
+

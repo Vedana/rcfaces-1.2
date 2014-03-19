@@ -20,7 +20,6 @@ import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
  */
 public class BasicImagesSelectItem extends BasicSelectItem implements
         IImagesItem {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = 3611551357173361214L;
 

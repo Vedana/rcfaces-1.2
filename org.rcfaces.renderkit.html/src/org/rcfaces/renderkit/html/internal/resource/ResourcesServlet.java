@@ -28,7 +28,6 @@ import org.rcfaces.renderkit.html.internal.javascript.JavaScriptRepositoryServle
  * @version $Revision$ $Date$
  */
 public class ResourcesServlet extends HttpServlet {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = 6219013927491730293L;
 
@@ -70,8 +69,8 @@ public class ResourcesServlet extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
-        resourcesURI = ServletTools.computeResourceURI(config
-                .getServletContext(), DEFAULT_RESOURCES_URI, getClass());
+        resourcesURI = ServletTools.computeResourceURI(
+                config.getServletContext(), DEFAULT_RESOURCES_URI, getClass());
 
         javascriptServlet = createJavaScriptServlet();
 
@@ -98,7 +97,6 @@ public class ResourcesServlet extends HttpServlet {
      * @version $Revision$ $Date$
      */
     private static final class ResourcesServletConfig implements ServletConfig {
-        private static final String REVISION = "$Revision$";
 
         private final ServletConfig config;
 

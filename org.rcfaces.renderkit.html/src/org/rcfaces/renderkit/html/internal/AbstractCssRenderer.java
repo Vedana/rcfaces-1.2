@@ -11,7 +11,9 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IBackgroundImageCapability;
 import org.rcfaces.core.component.capability.IFontCapability;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
+import org.rcfaces.core.component.capability.IHeightCapability;
 import org.rcfaces.core.component.capability.IHiddenModeCapability;
+import org.rcfaces.core.component.capability.ILayoutPositionCapability;
 import org.rcfaces.core.component.capability.IMarginCapability;
 import org.rcfaces.core.component.capability.IPositionCapability;
 import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
@@ -19,7 +21,9 @@ import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.component.capability.ITextAlignmentCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
+import org.rcfaces.core.component.capability.IWidthCapability;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 import org.rcfaces.renderkit.html.internal.renderer.ICssStyleClasses;
 
 /**
@@ -28,8 +32,6 @@ import org.rcfaces.renderkit.html.internal.renderer.ICssStyleClasses;
  */
 public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
         implements ICssRenderer {
-
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(AbstractCssRenderer.class);
 
@@ -48,6 +50,8 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
     protected static final int CSS_SIZE_MASK = 2;
 
     protected static final int SEVERITY_CLASSES_MASK = 4;
+
+    protected static final int INIT_LAYOUT_MASK = 4;
 
     /**
      * @param htmlWriter
@@ -97,7 +101,7 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
 
             String sc = cssStyleClasses.constructUserStyleClasses();
             if (sc != null && sc.length() > 0) {
-                writer.writeAttribute("v:styleClass", sc);
+                writer.writeAttributeNS("styleClass", sc);
             }
         }
 
@@ -137,22 +141,22 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
                 CSS_ALL_MASK);
     }
 
-    protected final IHtmlWriter writeCssAttributes(IHtmlWriter writer,
+    protected final IHtmlWriter writeCssAttributes(IHtmlWriter htmlWriter,
             ICssStyleClasses cssStyleClasses, int attributesMask)
             throws WriterException {
-        UIComponent component = writer.getComponentRenderContext()
+        UIComponent component = htmlWriter.getComponentRenderContext()
                 .getComponent();
 
-        writeStyleClass(writer, cssStyleClasses);
+        writeStyleClass(htmlWriter, cssStyleClasses);
 
         if ((attributesMask & SEVERITY_CLASSES_MASK) != 0) {
             if (component instanceof ISeverityStyleClassCapability) {
-                writeSeverityStyleClasses(writer,
+                writeSeverityStyleClasses(htmlWriter,
                         (ISeverityStyleClassCapability) component);
             }
         }
 
-        ICssWriter cssWriter = writer.writeStyle();
+        ICssWriter cssWriter = htmlWriter.writeStyle();
 
         int hiddenMode = DEFAULT_RENDERED_HIDDEN_MODE;
 
@@ -181,15 +185,7 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
             cssWriter.writeTextAlignment((ITextAlignmentCapability) component);
         }
 
-        if (component instanceof IPositionCapability) {
-            cssWriter.writePosition((IPositionCapability) component);
-        }
-
-        if ((attributesMask & CSS_SIZE_MASK) != 0) {
-            if (component instanceof ISizeCapability) {
-                cssWriter.writeSize((ISizeCapability) component);
-            }
-        }
+        writeComponentPosition(htmlWriter, cssWriter, component, attributesMask);
 
         if (component instanceof IMarginCapability) {
             cssWriter.writeMargin((IMarginCapability) component);
@@ -213,13 +209,155 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
                     backgroundImageCapability);
         }
 
-        writeCustomCss(writer, cssWriter);
+        writeCustomCss(htmlWriter, cssWriter);
 
         if (hiddenMode != DEFAULT_RENDERED_HIDDEN_MODE) {
-            writer.writeAttribute("v:hiddenMode", hiddenMode);
+            htmlWriter.writeAttributeNS("hiddenMode", hiddenMode);
         }
 
-        return writer;
+        return htmlWriter;
+    }
+
+    protected void writeComponentPosition(IHtmlWriter htmlWriter,
+            ICssWriter cssWriter, UIComponent component, int attributesMask)
+            throws WriterException {
+
+        boolean positionSetted = false;
+        if (component instanceof IPositionCapability) {
+            IPositionCapability positionCapability = (IPositionCapability) component;
+
+            if (positionCapability.getX() != null
+                    || positionCapability.getY() != null) {
+                cssWriter.writePosition((IPositionCapability) component);
+                positionSetted = true;
+            }
+        }
+
+        if (positionSetted == false
+                && (component instanceof ILayoutPositionCapability)) {
+            ILayoutPositionCapability layoutPositionCapability = (ILayoutPositionCapability) component;
+
+            writeLayoutPosition(htmlWriter, cssWriter, layoutPositionCapability);
+        }
+
+        if ((attributesMask & CSS_SIZE_MASK) != 0) {
+            if (component instanceof ISizeCapability) {
+                cssWriter.writeSize((ISizeCapability) component);
+            }
+        }
+    }
+
+    protected boolean needInitLayout() {
+        return false;
+    }
+
+    protected void writeLayoutPosition(IHtmlWriter writer,
+            ICssWriter cssWriter,
+            ILayoutPositionCapability layoutPositionCapability)
+            throws WriterException {
+
+        String width = null;
+        if (layoutPositionCapability instanceof IWidthCapability) {
+            width = ((IWidthCapability) layoutPositionCapability).getWidth();
+        }
+
+        String height = null;
+        if (layoutPositionCapability instanceof IHeightCapability) {
+            height = ((IHeightCapability) layoutPositionCapability).getHeight();
+        }
+
+        int needLayout = 0;
+        boolean positionned = false;
+
+        Number verticalCenter = layoutPositionCapability.getVerticalCenter();
+        if (verticalCenter != null) {
+            needLayout |= 0x01;
+            positionned = true;
+
+            writer.writeAttribute("v:verticalCenter",
+                    verticalCenter.longValue());
+
+            if (height != null) {
+                writer.writeAttribute("v:height", height);
+            }
+
+        } else {
+            Number top = layoutPositionCapability.getTop();
+            if (top != null) {
+                positionned = true;
+                writer.writeAttribute("v:top", top.intValue());
+
+                cssWriter.writeTopPx(top.intValue());
+            }
+
+            Number bottom = layoutPositionCapability.getBottom();
+            if (bottom != null && (top == null || height == null)) {
+                positionned = true;
+                writer.writeAttribute("v:bottom", bottom.intValue());
+
+                if (top == null) {
+                    cssWriter.writeBottomPx(bottom.intValue());
+                } else {
+                    needLayout |= 0x10;
+                }
+            } else if (height != null) {
+                writer.writeAttribute("v:height", height);
+            }
+        }
+
+        Number horizontalCenter = layoutPositionCapability
+                .getHorizontalCenter();
+        if (horizontalCenter != null) {
+            needLayout |= 0x02;
+            positionned = true;
+
+            writer.writeAttribute("v:horizontalCenter",
+                    horizontalCenter.longValue());
+
+            if (width != null) {
+                writer.writeAttribute("v:width", width);
+            }
+
+        } else {
+            Number left = layoutPositionCapability.getLeft();
+            if (left != null) {
+                positionned = true;
+                writer.writeAttribute("v:left", left.intValue());
+
+                cssWriter.writeLeftPx(left.intValue());
+            }
+
+            Number right = layoutPositionCapability.getRight();
+            if (right != null && (left == null || width == null)) {
+                positionned = true;
+                writer.writeAttribute("v:right", right.intValue());
+
+                if (left == null) {
+                    cssWriter.writeRightPx(right.intValue());
+
+                } else {
+                    // La taille doit être calculée !
+                    needLayout |= 0x20;
+                }
+            } else if (width != null) {
+                writer.writeAttribute("v:width", width);
+            }
+        }
+
+        if (positionned) {
+            cssWriter.writePosition(ICssWriter.ABSOLUTE);
+        }
+
+        if (needLayout > 0) {
+            if (needInitLayout()) {
+                needLayout |= 0x100;
+            }
+
+            writer.writeAttribute("v:layout", needLayout);
+
+            writer.getJavaScriptEnableMode().enableOnLayout();
+        }
+
     }
 
     protected void writeCustomCss(IHtmlWriter writer, ICssWriter cssWriter) {
@@ -305,6 +443,7 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
         }
     }
 
+    @SuppressWarnings("unused")
     protected static String normalizeMarginValue(String value) {
         value = value.trim();
 
@@ -429,7 +568,7 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
             IHtmlComponentRenderContext htmlComponentContext) {
         return true;
     }
-    
+
     protected final String computeBlankImageURL(IHtmlWriter writer) {
 
         IHtmlRenderContext htmlRenderContext = writer
@@ -437,5 +576,12 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
 
         return htmlRenderContext.getHtmlProcessContext().getStyleSheetURI(
                 AbstractCssRenderer.BLANK_IMAGE_URL, true);
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "styleClass",
+                "hiddenMode" });
     }
 }

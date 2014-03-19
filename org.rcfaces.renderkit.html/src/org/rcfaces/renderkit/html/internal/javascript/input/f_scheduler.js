@@ -3,7 +3,6 @@
  * 
  * @class f_scheduler extends f_component, fa_items, fa_selectionManager
  * @author jb.meslin@vedana.com
- * @version $Revision: 1.0
  */
 var __statics = {
 	/**
@@ -125,21 +124,20 @@ var __members = {
 			return;
 		}
 	
-		var columnNumber = f_core.GetNumberAttribute(this, "v:columnNumber");
-		var tabIndex = f_core.GetNumberAttribute(this, "v:tabIndex");
-		var dateBegin = f_core.GetAttribute(this, "v:dateBegin");
+		var columnNumber = f_core.GetNumberAttributeNS(this,"columnNumber");
+		var tabIndex = f_core.GetNumberAttributeNS(this,"tabIndex");
+		var dateBegin = f_core.GetAttributeNS(this,"dateBegin");
 		if (dateBegin) {
 			dateBegin = f_core.DeserializeDate(dateBegin);
 		}
 		var dayBegin = dateBegin.getDay();
 		var dateEnd =  new Date(dateBegin.getTime());
 		dateEnd.setTime(dateEnd.getTime()+ (columnNumber * 24 * 3600 * 1000));
-		var minutesDayBegin = f_core.GetNumberAttribute(this,
-				"v:minutesDayBegin");
-		var minutesDayEnd = f_core.GetNumberAttribute(this, "v:minutesDayEnd");
+		var minutesDayBegin = f_core.GetNumberAttributeNS(this,"minutesDayBegin");
+		var minutesDayEnd = f_core.GetNumberAttributeNS(this,"minutesDayEnd");
 
-		var minPerPx = parseFloat(f_core.GetAttribute(this, "v:minPerPx"));
-		var columnWidth = f_core.GetNumberAttribute(this, "v:columnWidth");
+		var minPerPx = parseFloat(f_core.GetAttributeNS(this,"minPerPx"));
+		var columnWidth = f_core.GetNumberAttributeNS(this,"columnWidth");
 
 		var div = this.ownerDocument.getElementById(this.id + "::periods");
 
@@ -225,7 +223,16 @@ var __members = {
 				});
 				
 				period._divNode = divNode;
+				var type = period._periodType;
+				if (!type ){
+					type ="";
+				}
 				
+				var ariaLabel = f_dateFormat.FormatDate(begin,"EEEE dd MMM yyyy")
+					+ " "+ f_resourceBundle.Get(f_scheduler).f_get("FROM") + " "
+					+ begin.getHours()+"h" +begin.getMinutes()
+					+ " " +f_resourceBundle.Get(f_scheduler).f_get("TO") + " "
+					+end.getHours()+"h" +end.getMinutes()+" "+type ;
 				var labelNode = f_core.CreateElement(divNode2, "label", {
 					textnode : period._label,
 					cssWidth : width + "px",
@@ -233,6 +240,7 @@ var __members = {
 					className : period._periodStyle+"_label"
 
 				});
+				fa_aria.SetElementAriaLabel(labelNode,ariaLabel);
 				period._labelNode = labelNode;
 				divNode._period = period;
 				divNode._scheduler = this;
@@ -290,7 +298,7 @@ var __members = {
 	fa_updateElementStyle: function(divNode) {
 		var period = divNode._period;
 		var style = f_scheduler._PERIOD_STYLE;
-		var periodStyle;
+		var periodStyle=undefined;
 		if (period._periodStyle){
 			periodStyle  = period._periodStyle;
 		}
@@ -372,7 +380,7 @@ var __members = {
 	 */
 	fa_setElementSelected:  function(divNode, selected) {
 		divNode._selected = selected;
-		fa_aria.SetElementAriaSelected(divNode, selected);
+		//fa_aria.SetElementAriaSelected(divNode, selected);
 	},
 	
 	/**
@@ -401,8 +409,7 @@ var __members = {
 		
 		this.f_super(arguments, type, target);
 	}
-
-}
+};
 
 new f_class("f_scheduler", {
 	extend : f_component,

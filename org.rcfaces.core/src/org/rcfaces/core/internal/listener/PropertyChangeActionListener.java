@@ -15,9 +15,8 @@ import org.rcfaces.core.event.PropertyChangeEvent;
  */
 public class PropertyChangeActionListener extends AbstractActionListener
         implements IPropertyChangeListener {
-    private static final String REVISION = "$Revision$";
 
-    private static final Class actionParameters[] = { PropertyChangeEvent.class };
+    private static final Class< ? >[] actionParameters = { PropertyChangeEvent.class };
 
     public PropertyChangeActionListener() {
     }
@@ -43,7 +42,8 @@ public class PropertyChangeActionListener extends AbstractActionListener
         process(event);
     }
 
-    protected Class[] listParameterClasses() {
+    @Override
+    protected Class< ? >[] listParameterClasses() {
         return actionParameters;
     }
 }

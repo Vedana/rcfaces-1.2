@@ -18,9 +18,15 @@ public interface IHtmlElements {
 
     String BR = "br";
 
+    String CAPTION = "caption";
+
     String COL = "col";
 
+    String COLGROUP = "colgroup";
+
     String DIV = "div";
+
+    String H_BASE = "h";
 
     String HR = "hr";
 
@@ -41,6 +47,8 @@ public interface IHtmlElements {
     String META = "meta";
 
     String NOSCRIPT = "noscript";
+
+    String OBJECT = "object";
 
     String OPTGROUP = "optgroup";
 
@@ -94,7 +102,9 @@ public interface IHtmlElements {
 
     String TEXT_INPUT_TYPE = "text";
 
-    String JAVASCRIPT_VOID = "javascript:void(0)";
+    // String JAVASCRIPT_VOID = "javascript:void(0)";
 
     String AUTOCOMPLETE_OFF = "off";
+
+    int MAX_HEADING_LEVEL = 6;
 }

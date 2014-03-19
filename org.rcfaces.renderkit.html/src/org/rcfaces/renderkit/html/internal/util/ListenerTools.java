@@ -12,6 +12,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.event.FacesListener;
 
 import org.rcfaces.core.component.capability.ICheckEventCapability;
+import org.rcfaces.core.component.capability.IClickEventCapability;
 import org.rcfaces.core.component.capability.ICloseEventCapability;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import org.rcfaces.core.component.capability.IDragEventCapability;
@@ -44,14 +45,11 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  */
 public final class ListenerTools {
 
-    private static final String REVISION = "$Revision$";
-
     /**
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
     public static final INameSpace JAVASCRIPT_NAME_SPACE = new INameSpace() {
-        private static final String REVISION = "$Revision$";
 
         public String getSelectionEventName() {
             return JavaScriptClasses.EVENT_SELECTION_CST;
@@ -77,6 +75,10 @@ public final class ListenerTools {
             return JavaScriptClasses.EVENT_VALUE_CHANGE_CST;
         }
 
+        public String getClickEventName() {
+            return JavaScriptClasses.EVENT_CLICK_CST;
+        }
+
         public String getDoubleClickEventName() {
             return JavaScriptClasses.EVENT_DBLCLICK_CST;
         }
@@ -96,7 +98,7 @@ public final class ListenerTools {
         public String getMouseOverEventName() {
             return JavaScriptClasses.EVENT_MOUSEOVER_CST;
         }
-        
+
         public String getPreSelectionEventName() {
             return JavaScriptClasses.EVENT_PRE_SELECTION_CST;
         }
@@ -168,10 +170,13 @@ public final class ListenerTools {
      * @version $Revision$ $Date$
      */
     public static final INameSpace ATTRIBUTE_NAME_SPACE = new INameSpace() {
-        private static final String REVISION = "$Revision$";
 
         public String getSelectionEventName() {
             return JavaScriptClasses.EVENT_SELECTION_ATTRIBUTE;
+        }
+
+        public String getClickEventName() {
+            return JavaScriptClasses.EVENT_CLICK_ATTRIBUTE;
         }
 
         public String getCheckEventName() {
@@ -213,7 +218,7 @@ public final class ListenerTools {
         public String getMouseOverEventName() {
             return JavaScriptClasses.EVENT_MOUSEOVER_ATTRIBUTE;
         }
-        
+
         public String getPreSelectionEventName() {
             return JavaScriptClasses.EVENT_PRE_SELECTION_ATTRIBUTE;
         }
@@ -280,9 +285,9 @@ public final class ListenerTools {
 
     };
 
-    public static final Map getListenersByType(INameSpace nameSpace,
-            UIComponent component) {
-        Map map = null;
+    public static final Map<String, FacesListener[]> getListenersByType(
+            INameSpace nameSpace, UIComponent component) {
+        Map<String, FacesListener[]> map = null;
 
         if (component instanceof ISelectionEventCapability) {
             ISelectionEventCapability selectEventCapability = (ISelectionEventCapability) component;
@@ -291,7 +296,7 @@ public final class ListenerTools {
                     .listSelectionListeners();
             if (fls.length > 0) {
                 if (map == null) {
-                    map = new HashMap(4);
+                    map = new HashMap<String, FacesListener[]>(4);
                 }
 
                 map.put(nameSpace.getSelectionEventName(), fls);
@@ -304,7 +309,7 @@ public final class ListenerTools {
             FacesListener fls[] = checkEventCapability.listCheckListeners();
             if (fls.length > 0) {
                 if (map == null) {
-                    map = new HashMap(4);
+                    map = new HashMap<String, FacesListener[]>(4);
                 }
 
                 map.put(nameSpace.getCheckEventName(), fls);
@@ -318,7 +323,7 @@ public final class ListenerTools {
                     .listValueChangeListeners();
             if (fls.length > 0) {
                 if (map == null) {
-                    map = new HashMap(4);
+                    map = new HashMap<String, FacesListener[]>(4);
                 }
 
                 map.put(nameSpace.getValueChangeEventName(), fls);
@@ -332,10 +337,23 @@ public final class ListenerTools {
                     .listDoubleClickListeners();
             if (fls.length > 0) {
                 if (map == null) {
-                    map = new HashMap(4);
+                    map = new HashMap<String, FacesListener[]>(4);
                 }
 
                 map.put(nameSpace.getDoubleClickEventName(), fls);
+            }
+        }
+
+        if (component instanceof IClickEventCapability) {
+            IClickEventCapability clickEventCapability = (IClickEventCapability) component;
+
+            FacesListener fls[] = clickEventCapability.listClickListeners();
+            if (fls.length > 0) {
+                if (map == null) {
+                    map = new HashMap<String, FacesListener[]>(4);
+                }
+
+                map.put(nameSpace.getClickEventName(), fls);
             }
         }
 
@@ -345,7 +363,7 @@ public final class ListenerTools {
             FacesListener fls[] = focusBlurEventCapability.listBlurListeners();
             if (fls.length > 0) {
                 if (map == null) {
-                    map = new HashMap(4);
+                    map = new HashMap<String, FacesListener[]>(4);
                 }
 
                 map.put(nameSpace.getBlurEventName(), fls);
@@ -354,7 +372,7 @@ public final class ListenerTools {
             fls = focusBlurEventCapability.listFocusListeners();
             if (fls.length > 0) {
                 if (map == null) {
-                    map = new HashMap(4);
+                    map = new HashMap<String, FacesListener[]>(4);
                 }
 
                 map.put(nameSpace.getFocusEventName(), fls);
@@ -367,7 +385,7 @@ public final class ListenerTools {
             FacesListener fls[] = mouseEventCapability.listMouseOutListeners();
             if (fls.length > 0) {
                 if (map == null) {
-                    map = new HashMap(4);
+                    map = new HashMap<String, FacesListener[]>(4);
                 }
 
                 map.put(nameSpace.getMouseOutEventName(), fls);
@@ -376,21 +394,21 @@ public final class ListenerTools {
             fls = mouseEventCapability.listMouseOverListeners();
             if (fls.length > 0) {
                 if (map == null) {
-                    map = new HashMap(4);
+                    map = new HashMap<String, FacesListener[]>(4);
                 }
 
                 map.put(nameSpace.getMouseOverEventName(), fls);
             }
         }
-        
-        if (component instanceof IPreSelectionEventCapability) {
-        	IPreSelectionEventCapability preSelectionEventCapability =
-        			(IPreSelectionEventCapability) component;
 
-            FacesListener fls[] = preSelectionEventCapability.listPreSelectionListeners();
+        if (component instanceof IPreSelectionEventCapability) {
+            IPreSelectionEventCapability preSelectionEventCapability = (IPreSelectionEventCapability) component;
+
+            FacesListener fls[] = preSelectionEventCapability
+                    .listPreSelectionListeners();
             if (fls.length > 0) {
                 if (map == null) {
-                    map = new HashMap(4);
+                    map = new HashMap<String, FacesListener[]>(4);
                 }
 
                 map.put(nameSpace.getPreSelectionEventName(), fls);
@@ -403,7 +421,7 @@ public final class ListenerTools {
             FacesListener fls[] = keyEventCapability.listKeyDownListeners();
             if (fls.length > 0) {
                 if (map == null) {
-                    map = new HashMap(4);
+                    map = new HashMap<String, FacesListener[]>(4);
                 }
 
                 map.put(nameSpace.getKeyDownEventName(), fls);
@@ -415,7 +433,7 @@ public final class ListenerTools {
             FacesListener fls[] = keyEventCapability.listKeyPressListeners();
             if (fls.length > 0) {
                 if (map == null) {
-                    map = new HashMap(4);
+                    map = new HashMap<String, FacesListener[]>(4);
                 }
 
                 map.put(nameSpace.getKeyPressEventName(), fls);
@@ -427,7 +445,7 @@ public final class ListenerTools {
             FacesListener fls[] = keyEventCapability.listKeyUpListeners();
             if (fls.length > 0) {
                 if (map == null) {
-                    map = new HashMap(4);
+                    map = new HashMap<String, FacesListener[]>(4);
                 }
 
                 map.put(nameSpace.getKeyUpEventName(), fls);
@@ -440,7 +458,7 @@ public final class ListenerTools {
             FacesListener fls[] = resetEventCapability.listResetListeners();
             if (fls.length > 0) {
                 if (map == null) {
-                    map = new HashMap(4);
+                    map = new HashMap<String, FacesListener[]>(4);
                 }
 
                 map.put(nameSpace.getResetEventName(), fls);
@@ -453,7 +471,7 @@ public final class ListenerTools {
             FacesListener fls[] = menuEventCapability.listMenuListeners();
             if (fls.length > 0) {
                 if (map == null) {
-                    map = new HashMap(4);
+                    map = new HashMap<String, FacesListener[]>(4);
                 }
 
                 map.put(nameSpace.getMenuEventName(), fls);
@@ -466,7 +484,7 @@ public final class ListenerTools {
             FacesListener fls[] = userEventCapability.listUserEventListeners();
             if (fls.length > 0) {
                 if (map == null) {
-                    map = new HashMap(4);
+                    map = new HashMap<String, FacesListener[]>(4);
                 }
 
                 map.put(nameSpace.getUserEventName(), fls);
@@ -479,7 +497,7 @@ public final class ListenerTools {
             FacesListener fls[] = initEventCapability.listInitListeners();
             if (fls.length > 0) {
                 if (map == null) {
-                    map = new HashMap(4);
+                    map = new HashMap<String, FacesListener[]>(4);
                 }
 
                 map.put(nameSpace.getInitEventName(), fls);
@@ -493,7 +511,7 @@ public final class ListenerTools {
                     .listPropertyChangeListeners();
             if (fls.length > 0) {
                 if (map == null) {
-                    map = new HashMap(4);
+                    map = new HashMap<String, FacesListener[]>(4);
                 }
 
                 map.put(nameSpace.getPropertyChangeEventName(), fls);
@@ -507,7 +525,7 @@ public final class ListenerTools {
                     .listSuggestionListeners();
             if (fls.length > 0) {
                 if (map == null) {
-                    map = new HashMap(4);
+                    map = new HashMap<String, FacesListener[]>(4);
                 }
 
                 map.put(nameSpace.getSuggestionEventName(), fls);
@@ -520,7 +538,7 @@ public final class ListenerTools {
             FacesListener fls[] = loadEventCapability.listLoadListeners();
             if (fls.length > 0) {
                 if (map == null) {
-                    map = new HashMap(4);
+                    map = new HashMap<String, FacesListener[]>(4);
                 }
 
                 map.put(nameSpace.getLoadEventName(), fls);
@@ -533,7 +551,7 @@ public final class ListenerTools {
             FacesListener fls[] = errorListenerCapability.listErrorListeners();
             if (fls.length > 0) {
                 if (map == null) {
-                    map = new HashMap(4);
+                    map = new HashMap<String, FacesListener[]>(4);
                 }
 
                 map.put(nameSpace.getErrorEventName(), fls);
@@ -546,7 +564,7 @@ public final class ListenerTools {
             FacesListener fls[] = expandEventCapability.listExpandListeners();
             if (fls.length > 0) {
                 if (map == null) {
-                    map = new HashMap(4);
+                    map = new HashMap<String, FacesListener[]>(4);
                 }
 
                 map.put(nameSpace.getExpandEventName(), fls);
@@ -559,7 +577,7 @@ public final class ListenerTools {
             FacesListener fls[] = sortListenerCapability.listSortListeners();
             if (fls.length > 0) {
                 if (map == null) {
-                    map = new HashMap(4);
+                    map = new HashMap<String, FacesListener[]>(4);
                 }
 
                 map.put(nameSpace.getSortEventName(), fls);
@@ -572,7 +590,7 @@ public final class ListenerTools {
             FacesListener fls[] = closeListenerCapability.listCloseListeners();
             if (fls.length > 0) {
                 if (map == null) {
-                    map = new HashMap(4);
+                    map = new HashMap<String, FacesListener[]>(4);
                 }
 
                 map.put(nameSpace.getCloseEventName(), fls);
@@ -585,7 +603,7 @@ public final class ListenerTools {
             FacesListener fls[] = closeListenerCapability.listDropListeners();
             if (fls.length > 0) {
                 if (map == null) {
-                    map = new HashMap(4);
+                    map = new HashMap<String, FacesListener[]>(4);
                 }
 
                 map.put(nameSpace.getDropEventName(), fls);
@@ -599,7 +617,7 @@ public final class ListenerTools {
                     .listDropCompleteListeners();
             if (fls.length > 0) {
                 if (map == null) {
-                    map = new HashMap(4);
+                    map = new HashMap<String, FacesListener[]>(4);
                 }
 
                 map.put(nameSpace.getDropCompleteEventName(), fls);
@@ -612,7 +630,7 @@ public final class ListenerTools {
             FacesListener fls[] = closeListenerCapability.listDragListeners();
             if (fls.length > 0) {
                 if (map == null) {
-                    map = new HashMap(4);
+                    map = new HashMap<String, FacesListener[]>(4);
                 }
 
                 map.put(nameSpace.getDragEventName(), fls);
@@ -626,7 +644,7 @@ public final class ListenerTools {
                     .listValidationListeners();
             if (fls.length > 0) {
                 if (map == null) {
-                    map = new HashMap(4);
+                    map = new HashMap<String, FacesListener[]>(4);
                 }
 
                 map.put(nameSpace.getValidationEventName(), fls);
@@ -634,7 +652,7 @@ public final class ListenerTools {
         }
 
         if (map == null) {
-            return Collections.EMPTY_MAP;
+            return Collections.emptyMap();
         }
         return map;
     }
@@ -650,6 +668,8 @@ public final class ListenerTools {
         String getValidationEventName();
 
         String getCheckEventName();
+
+        String getClickEventName();
 
         String getDoubleClickEventName();
 
@@ -674,7 +694,7 @@ public final class ListenerTools {
         String getMouseOutEventName();
 
         String getMouseOverEventName();
-        
+
         String getPreSelectionEventName();
 
         String getSuggestionEventName();

@@ -4,8 +4,12 @@
  */
 package org.rcfaces.renderkit.html.internal;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
 
+import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
@@ -18,9 +22,13 @@ import org.rcfaces.core.internal.contentAccessor.IContentPath;
 import org.rcfaces.core.internal.contentProxy.IResourceProxyHandler;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
+import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.lang.IContentFamily;
+import org.rcfaces.renderkit.html.internal.agent.ClientBrowserFactory;
+import org.rcfaces.renderkit.html.internal.agent.IClientBrowser;
 import org.rcfaces.renderkit.html.internal.css.ICssConfig;
 import org.rcfaces.renderkit.html.internal.css.StylesheetsServlet;
+import org.rcfaces.renderkit.html.internal.util.CarriageReturnNormalizerMode;
 
 /**
  * 
@@ -30,12 +38,14 @@ import org.rcfaces.renderkit.html.internal.css.StylesheetsServlet;
 public class HtmlProcessContextImpl extends AbstractProcessContext implements
         IHtmlProcessContext {
 
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory
             .getLog(HtmlProcessContextImpl.class);
 
     private static final String NAMESPACE_URI = "rcfaces.xsd";
+
+    private static final String HTML_ESCAPING_DISABLED_ATTRIBUTE = "org.rcfaces.html.HTML_ESCAPING_DISABLED";
+
+    private static final String CARRIAGE_RETURN_NORMALIZER_PARAMETER = "org.rcfaces.html.CARRIAGE_RETURN_NORMALIZER";
 
     private String styleSheetURI;
 
@@ -53,6 +63,8 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
 
     private final boolean useMetaContentStyleType;
 
+    private final Set<String> systemParametersNames;
+
     // private final boolean keepDisabledState;
 
     private Boolean multiWindowMode;
@@ -62,6 +74,12 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
     private Boolean profilerMode;
 
     private IClientBrowser clientBrowser;
+
+    private boolean htmlEscapingDisabled;
+
+    private Set<String> cssProcessRulesForce;
+
+    private CarriageReturnNormalizerMode carriageReturnNormalizerMode;
 
     public HtmlProcessContextImpl(FacesContext facesContext) {
         super(facesContext);
@@ -83,6 +101,17 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
 
         useFlatIdentifier = "true".equalsIgnoreCase((String) applicationMap
                 .get(HTML_FLAT_IDENTIFIER_PARAMETER));
+
+        String prf = (String) applicationMap
+                .get(HTML_PROCESS_RULES_FORCED_PARAMETER);
+        if (prf != null) {
+            StringTokenizer st = new StringTokenizer(prf, ",; ");
+
+            cssProcessRulesForce = new HashSet<String>(8);
+            for (; st.hasMoreTokens();) {
+                cssProcessRulesForce.add(st.nextToken());
+            }
+        }
 
         // keepDisabledState = "true".equalsIgnoreCase((String)
         // applicationMap.get(KEEP_DISABLED_STATE_PARAMETER));
@@ -108,6 +137,18 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
                     .equalsIgnoreCase(multiWindowModeParam));
         }
 
+        systemParametersNames = new HashSet<String>();
+        String systemParametersNamesParam = (String) applicationMap
+                .get(SYSTEM_PARAMETERS_NAMES_APPLICATION_PARAMETER);
+        if (systemParametersNamesParam != null) {
+            StringTokenizer st = new StringTokenizer(
+                    systemParametersNamesParam, ",; ");
+
+            for (; st.hasMoreTokens();) {
+                systemParametersNames.add(st.nextToken());
+            }
+        }
+
         separatorChar = getHtmlSeparatorChar(externalContext);
 
         ICssConfig cssConfig = StylesheetsServlet.getConfig(this);
@@ -125,21 +166,120 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
 
         if (styleSheetURIWithContextPath == null) {
             styleSheetURIWithContextPath = externalContext
-                    .getRequestContextPath()
-                    + styleSheetURI;
+                    .getRequestContextPath() + styleSheetURI;
+        }
+
+        htmlEscapingDisabled = "true".equalsIgnoreCase((String) applicationMap
+                .get(HTML_ESCAPING_DISABLED_ATTRIBUTE));
+
+        String crNormalizerMode = (String) applicationMap
+                .get(CARRIAGE_RETURN_NORMALIZER_PARAMETER);
+        if (crNormalizerMode != null) {
+            if ("cr".equalsIgnoreCase(crNormalizerMode)) {
+                carriageReturnNormalizerMode = CarriageReturnNormalizerMode.NormalizeToCR;
+
+            } else if ("lf".equalsIgnoreCase(crNormalizerMode)) {
+                carriageReturnNormalizerMode = CarriageReturnNormalizerMode.NormalizeToLF;
+
+            } else if ("crlf".equalsIgnoreCase(crNormalizerMode)) {
+                carriageReturnNormalizerMode = CarriageReturnNormalizerMode.NormalizeToCRLF;
+
+            } else if ("none".equalsIgnoreCase(crNormalizerMode)
+                    || "false".equalsIgnoreCase(crNormalizerMode)) {
+                carriageReturnNormalizerMode = CarriageReturnNormalizerMode.None;
+
+            } else {
+                throw new FacesException("Invalid value ('" + crNormalizerMode
+                        + "') for application parameter '"
+                        + CARRIAGE_RETURN_NORMALIZER_PARAMETER + "'.");
+            }
         }
 
         if (LOG.isDebugEnabled()) {
-            LOG
-                    .debug("Initialize htmlRenderExternalContext useMetaContentScriptType="
-                            + useMetaContentScriptType
-                            + ", useScriptCData="
-                            + useScriptCData
-                            + ", useFlatIdentifier="
-                            + useFlatIdentifier
-                            + ", separatorChar='"
-                            + separatorChar + "'.");
+            LOG.debug("Initialize htmlRenderExternalContext useMetaContentScriptType="
+                    + useMetaContentScriptType
+                    + ", useScriptCData="
+                    + useScriptCData
+                    + ", useFlatIdentifier="
+                    + useFlatIdentifier
+                    + ", separatorChar='"
+                    + separatorChar
+                    + "'.");
         }
+    }
+
+    public IContentAccessor getModuleStyleSheetContentAccessor(
+            String moduleName, String uri, IContentFamily contentType) {
+        String url = getModuleStyleSheetURI(moduleName, uri, false);
+        if (url == null) {
+            return null;
+        }
+
+        IContentAccessor contentAccessor = ContentAccessorFactory
+                .createFromWebResource(getFacesContext(), url, contentType);
+
+        contentAccessor.setContentVersionHandler(null); // Pas besoin de version
+        // !
+        contentAccessor.setPathType(IContentPath.CONTEXT_PATH_TYPE);
+
+        return contentAccessor;
+    }
+
+    public final String getModuleStyleSheetURI(String moduleName, String uri,
+            boolean containsContextPath) {
+
+        ICssConfig cssConfig = StylesheetsServlet.getConfig(this, moduleName);
+
+        String styleSheetURI = cssConfig.getDefaultStyleSheetURI();
+        String path = null;
+
+        if (containsContextPath) {
+            IResourceProxyHandler resourceProxyHandler = RcfacesContext
+                    .getInstance(facesContext).getResourceProxyHandler();
+            if (resourceProxyHandler != null
+                    && resourceProxyHandler.isEnabled()
+                    && resourceProxyHandler.isFrameworkResourcesEnabled()) {
+
+                path = resourceProxyHandler.computeProxyedURL(facesContext,
+                        null, null, styleSheetURI);
+            }
+
+            if (path == null) {
+                path = FacesContext.getCurrentInstance().getExternalContext()
+                        .getRequestContextPath()
+                        + styleSheetURI;
+            }
+        } else {
+            path = styleSheetURI;
+        }
+
+        if (uri == null) {
+            return path;
+        }
+
+        StringAppender u = new StringAppender(path, uri.length() + 2);
+
+        if (uri != null && uri.length() > 0) {
+            if (uri.startsWith("/") == false) {
+                u.append('/');
+
+            } else if (u.charAt(u.length() - 1) != '/') {
+                u.append('/');
+            }
+            u.append(uri);
+        } else {
+            u.append('/');
+        }
+
+        String ret = u.toString();
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Compute stylesheet uri '" + uri
+                    + "' (containsContextPath=" + containsContextPath
+                    + ") => '" + ret + "'.");
+        }
+
+        return ret;
     }
 
     public IContentAccessor getStyleSheetContentAccessor(String uri,
@@ -162,9 +302,8 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
     public final String getStyleSheetURI(String uri, boolean containsContextPath) {
         String ret = null;
         if (uri != null) {
-            StringAppender u = new StringAppender(styleSheetURIWithContextPath
-                    .length()
-                    + uri.length() + 2);
+            StringAppender u = new StringAppender(
+                    styleSheetURIWithContextPath.length() + uri.length() + 2);
 
             if (containsContextPath) {
                 u.append(styleSheetURIWithContextPath);
@@ -252,12 +391,14 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
     public static IHtmlProcessContext getHtmlProcessContext(
             FacesContext facesContext) {
 
-        IHtmlProcessContext htmlProcessContext = (IHtmlProcessContext) getProcessContext(facesContext);
-        if (htmlProcessContext != null) {
-            return htmlProcessContext;
+        IProcessContext processContext = getProcessContext(facesContext);
+
+        if (processContext instanceof IHtmlProcessContext) {
+            return (IHtmlProcessContext) processContext;
         }
 
-        htmlProcessContext = new HtmlProcessContextImpl(facesContext);
+        IHtmlProcessContext htmlProcessContext = new HtmlProcessContextImpl(
+                facesContext);
         setProcessContext(htmlProcessContext);
 
         return htmlProcessContext;
@@ -275,6 +416,22 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
         clientBrowser = ClientBrowserFactory.Get().get(getFacesContext());
 
         return clientBrowser;
+    }
+
+    public Set<String> getSystemParametersNames() {
+        return systemParametersNames;
+    }
+
+    public boolean isHtmlEscapingDisabled() {
+        return htmlEscapingDisabled;
+    }
+
+    public Set<String> listCssProcessRulesForced() {
+        return cssProcessRulesForce;
+    }
+
+    public CarriageReturnNormalizerMode getCarriageReturnNormalizerMode() {
+        return carriageReturnNormalizerMode;
     }
 
     // public boolean keepDisabledState() {

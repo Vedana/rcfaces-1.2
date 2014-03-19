@@ -15,8 +15,6 @@ import org.apache.commons.logging.LogFactory;
  */
 public class AbstractBufferOperation implements IBufferOperation {
 
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory
             .getLog(AbstractBufferOperation.class);
 
@@ -30,7 +28,7 @@ public class AbstractBufferOperation implements IBufferOperation {
         this.name = name;
     }
 
-    public void configure(Map configuration) {
+    public void configure(Map<String, Object> configuration) {
     }
 
 }

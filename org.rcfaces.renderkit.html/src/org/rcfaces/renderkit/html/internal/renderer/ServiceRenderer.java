@@ -18,6 +18,7 @@ import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -25,7 +26,6 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  * @version $Revision$ $Date$
  */
 public class ServiceRenderer extends AbstractJavaScriptRenderer {
-    private static final String REVISION = "$Revision$";
 
     public void encodeBegin(IComponentWriter writer) throws WriterException {
         super.encodeBegin(writer);
@@ -40,16 +40,16 @@ public class ServiceRenderer extends AbstractJavaScriptRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.startElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
+        htmlWriter.startElementNS(LAZY_INIT_TAG);
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
 
         String serviceId = focusManagerComponent.getServiceId(facesContext);
         if (serviceId != null) {
-            htmlWriter.writeAttribute("v:serviceId", serviceId);
+            htmlWriter.writeAttributeNS("serviceId", serviceId);
         }
 
-        htmlWriter.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
+        htmlWriter.endElementNS(LAZY_INIT_TAG);
 
         declareLazyJavaScriptRenderer(htmlWriter);
     }
@@ -83,5 +83,13 @@ public class ServiceRenderer extends AbstractJavaScriptRenderer {
     protected boolean sendCompleteComponent(
             IHtmlComponentRenderContext htmlComponentContext) {
         return false;
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addComponent(LAZY_INIT_TAG);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "serviceId" });
     }
 }

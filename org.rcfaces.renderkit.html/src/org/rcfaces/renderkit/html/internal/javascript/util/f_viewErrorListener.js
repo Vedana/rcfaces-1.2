@@ -17,7 +17,7 @@ var __statics = {
 			propertyChange: f_event.PROPERTY_CHANGE,
 			user: f_event.USER
 	}
-}
+};
 
 
 var __members = {
@@ -34,13 +34,13 @@ var __members = {
 		});
 		
 		if (this.nodeType==f_core.ELEMENT_NODE) {
-			var events=f_core.GetAttribute(this, "v:events");
+			var events=f_core.GetAttributeNS(this,"events");
 			if (events) {
 				this.f_initEventAtts(f_viewErrorListener._EVENTS, events);
 			}
 		}
 	}
-}
+};
 
 new f_class("f_viewErrorListener", {
 	extend: f_object,

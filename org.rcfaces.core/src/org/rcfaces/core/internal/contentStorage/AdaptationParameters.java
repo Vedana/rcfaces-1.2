@@ -42,7 +42,7 @@ public class AdaptationParameters implements IAdaptable {
         return generatedResourceInformation;
     }
 
-    public Object getAdapter(Class adapter, Object parameter) {
+    public <T> T getAdapter(Class<T> adapter, Object parameter) {
         if (contentModel instanceof IAdaptable) {
             return ((IAdaptable) contentModel).getAdapter(adapter, parameter);
         }

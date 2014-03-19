@@ -7,7 +7,6 @@ package org.rcfaces.core.internal.repository;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Enumeration;
-import java.util.Locale;
 import java.util.StringTokenizer;
 
 import javax.servlet.ServletConfig;
@@ -16,6 +15,7 @@ import javax.servlet.ServletException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.repository.IHierarchicalRepository.ISet;
+import org.rcfaces.core.internal.repository.IRepository.ICriteria;
 import org.rcfaces.core.internal.repository.IRepository.IFile;
 import org.rcfaces.core.lang.OrderedSet;
 
@@ -24,8 +24,6 @@ import org.rcfaces.core.lang.OrderedSet;
  * @version $Revision$ $Date$
  */
 public abstract class HierarchicalRepositoryServlet extends RepositoryServlet {
-
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = -8178257331664082960L;
 
@@ -40,6 +38,8 @@ public abstract class HierarchicalRepositoryServlet extends RepositoryServlet {
 
     private static final String BOOT_SET_DEFAULT_VALUE = null;
 
+    @SuppressWarnings("unchecked")
+    @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
@@ -128,10 +128,10 @@ public abstract class HierarchicalRepositoryServlet extends RepositoryServlet {
             hierarchicalRepository.setBootSet(set);
         }
 
-        Enumeration parameterNames = config.getInitParameterNames();
+        Enumeration<String> parameterNames = config.getInitParameterNames();
         String setPrefix = getParameterPrefix() + SET_PREFIX;
         for (; parameterNames.hasMoreElements();) {
-            String parameterName = (String) parameterNames.nextElement();
+            String parameterName = parameterNames.nextElement();
 
             if (parameterName.startsWith(setPrefix) == false) {
                 continue;
@@ -169,7 +169,7 @@ public abstract class HierarchicalRepositoryServlet extends RepositoryServlet {
 
     private ISet initializeModuleSet(String setName, String moduleNames) {
 
-        Collection l = new OrderedSet();
+        Collection<String> l = new OrderedSet<String>();
 
         if ("all".equals(moduleNames.trim())) {
             /*
@@ -193,7 +193,7 @@ public abstract class HierarchicalRepositoryServlet extends RepositoryServlet {
         String uri = getSetURI(setName);
 
         return getHierarchicalRepository().declareSet(setName, uri,
-                (String[]) l.toArray(new String[l.size()]));
+                l.toArray(new String[l.size()]));
     }
 
     protected ISet initializeDefaultSet() {
@@ -208,12 +208,12 @@ public abstract class HierarchicalRepositoryServlet extends RepositoryServlet {
      * @version $Revision$ $Date$
      */
     protected abstract class HierarchicalRecord extends Record {
-        private static final String REVISION = "$Revision$";
 
-        public HierarchicalRecord(IFile file, Locale locale) {
-            super(file, locale);
+        public HierarchicalRecord(IFile file, ICriteria criteria) {
+            super(file, criteria);
         }
 
+        @Override
         public void verifyModifications() {
 
             boolean modified = false;
@@ -245,6 +245,7 @@ public abstract class HierarchicalRepositoryServlet extends RepositoryServlet {
             return verifyFilesModifications(set.listDependencies());
         }
 
+        @Override
         public byte[] getBuffer() throws IOException {
             if (buffer != null) {
                 return buffer;

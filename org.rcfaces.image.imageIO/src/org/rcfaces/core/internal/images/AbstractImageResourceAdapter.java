@@ -20,7 +20,6 @@ import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
  */
 public abstract class AbstractImageResourceAdapter implements
         IImageIOResourceAdapter {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(AbstractImageResourceAdapter.class);

@@ -7,17 +7,21 @@ import org.rcfaces.core.component.ToolBarComponent;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import org.rcfaces.core.internal.converter.InputTypeConverter;
 import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.capability.IHeadingLevelCapability;
 import java.util.Set;
 import org.rcfaces.core.component.capability.IInitEventCapability;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import org.rcfaces.core.internal.tools.CheckTools;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.component.capability.ICheckedValuesCapability;
+import org.rcfaces.core.internal.converter.TextPositionConverter
+			;
 import java.lang.String;
+import org.rcfaces.core.component.capability.IHeadingZoneCapability;
 import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
 import org.rcfaces.core.component.capability.IBorderTypeCapability;
-import org.rcfaces.core.component.capability.ICheckEventCapability;
 import javax.faces.convert.Converter;
+import org.rcfaces.core.component.capability.ICheckEventCapability;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.ITextPositionCapability;
@@ -27,9 +31,10 @@ import org.rcfaces.core.internal.tools.ToolBarTools;
 import java.util.Arrays;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import org.rcfaces.core.component.AbstractInputComponent;
-import org.rcfaces.core.internal.converter.TextPositionConverter;
 
 public class ItemsListComponent extends AbstractInputComponent implements 
+	IHeadingZoneCapability,
+	IHeadingLevelCapability,
 	IInitEventCapability,
 	IMouseEventCapability,
 	IDoubleClickEventCapability,
@@ -48,7 +53,7 @@ public class ItemsListComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"checkListener","defaultHoverImageURL","defaultItemLookId","defaultDisabledImageURL","itemHiddenMode","defaultItemGroupName","textPosition","borderType","defaultImageURL","doubleClickListener","initListener","checkedValues","selectionListener","readOnly","mouseOverListener","defaultItemInputType","defaultSelectedImageURL","itemPadding","defaultItemStyleClass","mouseOutListener","disabled"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"checkListener","defaultHoverImageURL","headingLevel","defaultItemLookId","defaultDisabledImageURL","itemHiddenMode","defaultItemGroupName","defaultImageURL","textPosition","borderType","doubleClickListener","initListener","checkedValues","selectionListener","readOnly","mouseOverListener","defaultItemInputType","defaultSelectedImageURL","headingZone","itemPadding","defaultItemStyleClass","mouseOutListener","disabled"}));
 	}
 
 	public ItemsListComponent() {
@@ -93,6 +98,52 @@ public class ItemsListComponent extends AbstractInputComponent implements
 
 		return (ToolBarComponent)getParent();
 		
+	}
+
+	public boolean isHeadingZone() {
+		return isHeadingZone(null);
+	}
+
+	/**
+	 * See {@link #isHeadingZone() isHeadingZone()} for more details
+	 */
+	public boolean isHeadingZone(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.HEADING_ZONE, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "headingZone" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHeadingZoneSetted() {
+		return engine.isPropertySetted(Properties.HEADING_ZONE);
+	}
+
+	public void setHeadingZone(boolean headingZone) {
+		engine.setProperty(Properties.HEADING_ZONE, headingZone);
+	}
+
+	public java.lang.String getHeadingLevel() {
+		return getHeadingLevel(null);
+	}
+
+	/**
+	 * See {@link #getHeadingLevel() getHeadingLevel()} for more details
+	 */
+	public java.lang.String getHeadingLevel(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.HEADING_LEVEL, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "headingLevel" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHeadingLevelSetted() {
+		return engine.isPropertySetted(Properties.HEADING_LEVEL);
+	}
+
+	public void setHeadingLevel(java.lang.String headingLevel) {
+		engine.setProperty(Properties.HEADING_LEVEL, headingLevel);
 	}
 
 	public final void addDoubleClickListener(org.rcfaces.core.event.IDoubleClickListener listener) {
@@ -271,7 +322,8 @@ public class ItemsListComponent extends AbstractInputComponent implements
 	 * @return image url
 	 */
 	public String getDefaultImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_IMAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_IMAGE_URL, facesContext);
+		return s;
 	}
 
 	/**
@@ -307,7 +359,8 @@ public class ItemsListComponent extends AbstractInputComponent implements
 	 * @return selected image url
 	 */
 	public String getDefaultSelectedImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_SELECTED_IMAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_SELECTED_IMAGE_URL, facesContext);
+		return s;
 	}
 
 	/**
@@ -335,7 +388,8 @@ public class ItemsListComponent extends AbstractInputComponent implements
 	}
 
 	public String getDefaultHoverImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_HOVER_IMAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_HOVER_IMAGE_URL, facesContext);
+		return s;
 	}
 
 	public void setDefaultHoverImageURL(String defaultHoverImageURL) {
@@ -363,7 +417,8 @@ public class ItemsListComponent extends AbstractInputComponent implements
 	 * @return disabled image url
 	 */
 	public String getDefaultDisabledImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_DISABLED_IMAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_DISABLED_IMAGE_URL, facesContext);
+		return s;
 	}
 
 	/**
@@ -411,7 +466,8 @@ public class ItemsListComponent extends AbstractInputComponent implements
 	}
 
 	public String getDefaultItemLookId(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_ITEM_LOOK_ID, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_ITEM_LOOK_ID, facesContext);
+		return s;
 	}
 
 	public void setDefaultItemLookId(String defaultItemLookId) {
@@ -431,7 +487,8 @@ public class ItemsListComponent extends AbstractInputComponent implements
 	}
 
 	public String getDefaultItemStyleClass(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_ITEM_STYLE_CLASS, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_ITEM_STYLE_CLASS, facesContext);
+		return s;
 	}
 
 	public void setDefaultItemStyleClass(String defaultItemStyleClass) {
@@ -451,7 +508,8 @@ public class ItemsListComponent extends AbstractInputComponent implements
 	}
 
 	public String getDefaultItemGroupName(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_ITEM_GROUP_NAME, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_ITEM_GROUP_NAME, facesContext);
+		return s;
 	}
 
 	public void setDefaultItemGroupName(String defaultItemGroupName) {

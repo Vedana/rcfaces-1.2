@@ -23,8 +23,11 @@ import org.rcfaces.core.internal.lang.ByteBufferInputStream;
 import org.rcfaces.core.internal.lang.ByteBufferOutputStream;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.repository.AbstractContentRef;
 import org.rcfaces.core.internal.repository.AbstractRepository;
+import org.rcfaces.core.internal.repository.IContentRef;
 import org.rcfaces.core.internal.repository.IRepository;
+import org.rcfaces.core.internal.repository.LocaleCriteria;
 import org.rcfaces.core.internal.version.HashCodeTools;
 import org.rcfaces.core.internal.webapp.URIParameters;
 import org.rcfaces.renderkit.html.internal.Constants;
@@ -38,7 +41,6 @@ import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
  */
 class ClientBundleRepository extends AbstractRepository implements
         IClientBundleRepository {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = -2753241645405120653L;
 
@@ -49,19 +51,27 @@ class ClientBundleRepository extends AbstractRepository implements
 
     private static final boolean VERIFY_BUNDLE_KEY = true;
 
-    private final IContentProvider contentProvider = new IContentProvider() {
-        private static final String REVISION = "$Revision$";
+    private final IContentProvider bundleContentProvider = new IContentProvider() {
 
-        public IContent getContent(Object contentReference, Locale locale) {
-            String baseName = ((ResourceFile) contentReference).getFilename();
+        public IContent getContent(IContentRef contentRef) {
+            String baseName = ((ResourceContentRef) contentRef)
+                    .getResourceFile().getFilename();
+
+            ICriteria criteria = contentRef.getCriteria();
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Get resourceBundle name='" + baseName + "' locale='"
-                        + locale + "'.");
+                        + criteria + "'.");
             }
 
             ClassLoader classLoader = Thread.currentThread()
                     .getContextClassLoader();
+
+            Locale locale = LocaleCriteria.getLocale(criteria);
+            if (locale == null) {
+                LOG.error("Can not get locale from criteria '" + criteria + "'");
+                return null;
+            }
 
             try {
                 ResourceBundle resourceBundle = ResourceBundle.getBundle(
@@ -71,15 +81,15 @@ class ClientBundleRepository extends AbstractRepository implements
 
             } catch (MissingResourceException ex) {
                 LOG.error("Can not find resource bundle: basename='" + baseName
-                        + "' locale='" + locale + "' classLoader='"
+                        + "' locale='" + criteria + "' classLoader='"
                         + classLoader + "'.", ex);
             }
 
             return null;
         }
 
-        public Object searchLocalizedContentReference(Object contentReference,
-                Locale locale) {
+        public IContentRef[] searchCriteriaContentReference(
+                IContentRef contentReference, ICriteria criteria) {
             return null;
         }
 
@@ -95,7 +105,7 @@ class ClientBundleRepository extends AbstractRepository implements
     }
 
     protected IContentProvider getDefaultContentProvider() {
-        return contentProvider;
+        return bundleContentProvider;
     }
 
     public IFile getFileByName(String name) {
@@ -118,12 +128,9 @@ class ClientBundleRepository extends AbstractRepository implements
      * @version $Revision$ $Date$
      */
     private class ResourceContent extends AbstractContent {
-        private static final String REVISION = "$Revision$";
-
         private final byte buffer[];
 
         public ResourceContent(ResourceBundle resourceBundle, String baseName) {
-
             buffer = createBuffer(resourceBundle, baseName);
         }
 
@@ -147,28 +154,26 @@ class ClientBundleRepository extends AbstractRepository implements
      */
     private final class ResourceFile implements IFile {
 
-        private static final String REVISION = "$Revision$";
-
         private static final long serialVersionUID = -1983757389992719786L;
 
         private static final String ERROR_VERSION = "ERR";
 
         private final String baseName;
 
-        private String uri;
+        private String noCriteriaURI;
 
-        private Map localizedUris;
+        private Map<ICriteria, String> localizedUris;
 
         public ResourceFile(String baseName) {
             this.baseName = baseName;
         }
 
         public IContentProvider getContentProvider() {
-            return contentProvider;
+            return bundleContentProvider;
         }
 
-        public Object[] getContentReferences(Locale locale) {
-            return new Object[] { this };
+        public IContentRef[] getContentReferences(ICriteria criteria) {
+            return new IContentRef[] { new ResourceContentRef(criteria, this) };
         }
 
         public String getFilename() {
@@ -179,13 +184,13 @@ class ClientBundleRepository extends AbstractRepository implements
             return ClientBundleRepository.this;
         }
 
-        public synchronized String getURI(Locale locale) {
-            if (locale == null) {
-                if (uri != null) {
-                    return uri;
+        public synchronized String getURI(ICriteria criteria) {
+            if (criteria == null) {
+                if (noCriteriaURI != null) {
+                    return noCriteriaURI;
                 }
             } else if (localizedUris != null) {
-                String luri = (String) localizedUris.get(locale);
+                String luri = localizedUris.get(criteria);
                 if (luri != null) {
                     return luri;
                 }
@@ -198,7 +203,7 @@ class ClientBundleRepository extends AbstractRepository implements
             if (Constants.VERSIONED_CLIENT_BUNDLE_SUPPORT) {
                 sa.append('/');
 
-                String hashCode = computeHashCode(locale);
+                String hashCode = computeHashCode(criteria);
 
                 if (hashCode == null) {
                     hashCode = ERROR_VERSION;
@@ -210,36 +215,34 @@ class ClientBundleRepository extends AbstractRepository implements
             sa.append(baseName);
             sa.append(".js");
 
-            String ret;
-            if (locale != null) {
-                URIParameters p = new URIParameters(sa.toString());
-                p.appendLocale(locale);
+            String ret = sa.toString();
+            if (criteria != null) {
+                URIParameters p = URIParameters.parseURI(ret);
+
+                criteria.appendSuffix(p);
 
                 ret = p.computeParametredURI();
-
-            } else {
-                ret = sa.toString();
             }
 
-            if (locale == null) {
-                uri = ret;
+            if (criteria == null) {
+                noCriteriaURI = ret;
             } else {
                 if (localizedUris == null) {
-                    localizedUris = new HashMap(4);
+                    localizedUris = new HashMap<ICriteria, String>(4);
                 }
 
-                localizedUris.put(locale, ret);
+                localizedUris.put(criteria, ret);
             }
 
             return ret;
         }
 
-        private String computeHashCode(Locale locale) {
+        private String computeHashCode(ICriteria criteria) {
             ResourceContent content = (ResourceContent) getContentProvider()
-                    .getContent(this, locale);
+                    .getContent(new ResourceContentRef(criteria, this));
             if (content == null) {
                 LOG.error("Can not get content of client bundle '"
-                        + getFilename() + "' for locale '" + locale + "'.");
+                        + getFilename() + "' for criteria '" + criteria + "'.");
 
                 return null;
             }
@@ -258,6 +261,23 @@ class ClientBundleRepository extends AbstractRepository implements
         }
     }
 
+    private class ResourceContentRef extends AbstractContentRef {
+
+        private final ResourceFile resourceFile;
+
+        protected ResourceContentRef(ICriteria criteria,
+                ResourceFile resourceFile) {
+            super(criteria);
+
+            this.resourceFile = resourceFile;
+        }
+
+        public ResourceFile getResourceFile() {
+            return resourceFile;
+        }
+
+    }
+
     private byte[] createBuffer(ResourceBundle resourceBundle, String baseName) {
         ByteBufferOutputStream out = new ByteBufferOutputStream(
                 BUNDLE_BUFFER_INITIAL_SIZE);
@@ -269,6 +289,9 @@ class ClientBundleRepository extends AbstractRepository implements
 
         } catch (UnsupportedEncodingException ex) {
             LOG.error(ex);
+
+            out.close();
+
             throw new FacesException(
                     "Can not write DefineRequested method content.", ex);
         }
@@ -325,6 +348,7 @@ class ClientBundleRepository extends AbstractRepository implements
         return out.toByteArray();
     }
 
+    @SuppressWarnings("unused")
     private void verifyBundleKey(String key) {
         if (key.length() < 1) {
             throw new FacesException("Key of bundle can not be empty !");

@@ -73,7 +73,7 @@ var __members = {
 		var link=f_core.GetFirstElementByTagName(this, "a", true);
 		if (link) {
 			this._link=link;
-			link.href=f_core.JAVASCRIPT_VOID;
+			link.href=f_core.CreateJavaScriptVoid0();
 			if (this.tabIndex) {
 				link.tabIndex=this.tabIndex;
 			}
@@ -345,7 +345,7 @@ var __members = {
 		
 		return ret;
 	}	
-}
+};
 
 new f_class("f_customButton", {
 	extend: f_component,

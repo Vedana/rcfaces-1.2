@@ -28,7 +28,7 @@ var __members = {
 
 	 	if (clientValidatorParameters===undefined) {
 	 		clientValidatorParameters=null;
-			var params=f_core.GetAttribute(this, "v:clientValidator", null);
+			var params=f_core.GetAttributeNS(this, "clientValidator", null);
 			if (params) { // Il peut être "" !
 				clientValidatorParameters=f_core.ParseParameters(params);
 			}
@@ -42,7 +42,7 @@ var __members = {
 	 	
 	 	return clientValidatorParameters[key];
 	 }
-}
+};
 
 new f_aspect("fa_clientValidatorParameters", {
 	members: __members

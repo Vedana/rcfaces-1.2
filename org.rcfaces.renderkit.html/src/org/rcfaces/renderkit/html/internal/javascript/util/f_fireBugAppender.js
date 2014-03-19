@@ -26,7 +26,7 @@ var __statics={
 	Initializer: function() {	
 	
 		try {
-			if (!window.console || !window.console.firebug) {
+			if (!window.console || !window.console.log) {
 				return;
 			}
 		} catch (x) {
@@ -41,7 +41,7 @@ var __statics={
 		}
 		
 		f_fireBugAppender._oldAssert=f_core.Assert;
-		//f_core.Assert=f_fireBugAppender.Assert;
+		//f_core.Assert=window.console.assert;
 	},
 	/**
 	 * @method public static 
@@ -61,9 +61,9 @@ var __statics={
 		}
 		
 		f_fireBugAppender._oldAssert.call(f_core, test, message);
-	}
-	
-}
+	}	
+};
+
 var __members = {
 	f_fireBugAppender: function() {
 		this.f_super(arguments);
@@ -127,7 +127,11 @@ var __members = {
 		method.apply(console, param);
 		
 		if (event.exception) {
-			console.exception("Exception of previous message", event.exception);
+			if (console.exception) {
+				console.exception("Exception of previous message", event.exception);
+			} else {
+				console.error("Exception of previous message", event.exception);
+			}
 		}
 	}
 };

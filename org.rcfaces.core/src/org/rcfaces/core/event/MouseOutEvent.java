@@ -12,7 +12,6 @@ import javax.faces.event.FacesListener;
  * @version $Revision$ $Date$
  */
 public class MouseOutEvent extends CameliaEvent {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = 1761760554536698015L;
 
@@ -23,8 +22,11 @@ public class MouseOutEvent extends CameliaEvent {
     /*
      * (non-Javadoc)
      * 
-     * @see javax.faces.event.FacesEvent#isAppropriateListener(javax.faces.event.FacesListener)
+     * @see
+     * javax.faces.event.FacesEvent#isAppropriateListener(javax.faces.event.
+     * FacesListener)
      */
+    @Override
     public boolean isAppropriateListener(FacesListener listener) {
         return (listener instanceof IMouseOutListener);
     }
@@ -32,8 +34,11 @@ public class MouseOutEvent extends CameliaEvent {
     /*
      * (non-Javadoc)
      * 
-     * @see javax.faces.event.FacesEvent#processListener(javax.faces.event.FacesListener)
+     * @see
+     * javax.faces.event.FacesEvent#processListener(javax.faces.event.FacesListener
+     * )
      */
+    @Override
     public void processListener(FacesListener listener) {
         ((IMouseOutListener) listener).processMouseOut(this);
     }

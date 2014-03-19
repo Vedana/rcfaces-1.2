@@ -13,7 +13,6 @@ import javax.faces.event.FacesListener;
  * @version $Revision$ $Date$
  */
 public class ErrorEvent extends ActionEvent {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = -1530737844134123632L;
 
@@ -21,10 +20,12 @@ public class ErrorEvent extends ActionEvent {
         super(component);
     }
 
+    @Override
     public boolean isAppropriateListener(FacesListener listener) {
         return (listener instanceof IErrorListener);
     }
 
+    @Override
     public void processListener(FacesListener listener) {
         ((IErrorListener) listener).processError(this);
     }

@@ -11,13 +11,29 @@
  */
 var __members = {
 	fa_asyncRender: function() {
-		this._interactive=f_core.GetBooleanAttribute(this, "v:asyncRender");
+		if (this.nodeType==f_core.ELEMENT_NODE) {
+			this._interactive=f_core.GetBooleanAttributeNS(this, "asyncRender");
+		}
 	},
 	f_finalize: function() {
 //		this._interactive=undefined; // boolean
 //		this._intLoading=undefined; // boolean
 		this._intWaiting=undefined; // f_waiting
 //		this._asyncDecoded=undefined; // boolean
+	},
+	/**
+	 * @method hidden
+	 * @return Boolean
+	 */
+	f_isInteractiveRenderer: function() {
+		return this._interactive;
+	},
+	/**
+	 * @method hidden
+	 * @return void
+	 */
+	f_setInteractiveRenderer: function(state) {
+		this._interactive=state;
 	},
 	f_updateVisibility: {
 		after: function(visible) {
@@ -29,10 +45,9 @@ var __members = {
 	/**
 	 * @method public
 	 * @param Boolean synch Wait preparation if necessary.
-	 * @param optional Function parent Function returns parent node.
 	 * @return Boolean <code>true</code> if component is prepared !
 	 */
-	f_prepare: function(synch, parent) {
+	f_prepare: function(synch) {
 		if (!this._interactive) {
 			return true;
 		}
@@ -48,7 +63,8 @@ var __members = {
  			if (lock) {
  				return;
  			}
- 			component._callAsyncRender(parent);
+ 			component._callAsyncRender();
+ 			component=null;
 		}, 12);		
 		
 		return false;
@@ -59,62 +75,39 @@ var __members = {
 	 * @param component.
 	 * @return void
 	 */
-	_callAsyncRender: function(parent) {
+	_callAsyncRender: function() {
 		if (window._rcfacesExiting) {
 			return;
 		}
 		var component = this;
-		var url=f_env.GetViewURI();
-		var request=new f_httpRequest(component, url, f_httpRequest.TEXT_HTML_MIME_TYPE);
-		
-		if (!parent) {
-			if (typeof(component.fa_getInteractiveParent)=="function") {
-				parent=component.fa_getInteractiveParent();
-			}
-			
-			if (!parent) {
-				parent=component;
-			}
-		}
+		var request=new f_httpRequest(component, f_httpRequest.TEXT_HTML_MIME_TYPE);
 		
 		if (!component.style.height || component.offsetHeight<f_waiting.HEIGHT) {
 			component._removeStyleHeight=true;
 			component.style.height=f_waiting.HEIGHT+"px";
 		}
 		
+		var self=this;
 		request.f_setListener({
 	 		onInit: function(request) {
-	 			var waiting=component._intWaiting;
-	 			if (!waiting) {	
-	 				waiting=f_waiting.Create(parent);
-	 				component._intWaiting=waiting;
-	 			}
-	 			
-	 			waiting.f_setText(f_waiting.GetLoadingMessage());
-	 			waiting.f_show();
+	 			self.f_asyncShowWaiting();
 	 		},
 			/* *
 			 * @method public
 			 */
 	 		onError: function(request, status, text) {
-				component._intLoading=false;		
 				
-	 			var waiting=component._intWaiting;
-				if (waiting) {
-					waiting.f_hide();
-				}
 				f_core.Info(fa_asyncRender, "f_prepare.onError: Bad status: "+status);
 				
-				component.f_performAsyncErrorEvent(request, f_error.HTTP_ERROR, text);
+				self.f_asyncHideWaiting(true);
+				
+				self.f_performAsyncErrorEvent(request, f_error.HTTP_ERROR, text);
 	 		},
 			/* *
 			 * @method public
 			 */
 	 		onProgress: function(request, content, length, contentType) {
-	 			var waiting=component._intWaiting;
-				if (waiting) {
-					waiting.f_setText(f_waiting.GetReceivingMessage());
-				}	 			
+	 			self.f_asyncShowMessageWaiting(f_waiting.GetReceivingMessage());
 	 		},
 			/* *
 			 * @method public
@@ -127,17 +120,18 @@ var __members = {
 					}
 				}
 	
-
-	 			var waiting=component._intWaiting;
 				try {
+					self.f_asyncHideWaiting(true);
+					self.f_asyncDestroyWaiting();
+
 					if (request.f_getStatus()!=f_httpRequest.OK_STATUS) {
-						component.f_performAsyncErrorEvent(request, f_error.INVALID_RESPONSE_ASYNC_RENDER_ERROR, "Bad http response status ! ("+request.f_getStatusText()+")");
+						self.f_performAsyncErrorEvent(request, f_error.INVALID_RESPONSE_ASYNC_RENDER_ERROR, "Bad http response status ! ("+request.f_getStatusText()+")");
 						return;
 					}
 
 					var cameliaServiceVersion=request.f_getResponseHeader(f_httpRequest.CAMELIA_RESPONSE_HEADER);
 					if (!cameliaServiceVersion) {
-						component.f_performAsyncErrorEvent(request, f_error.INVALID_SERVICE_RESPONSE_ERROR, "Not a service response !");
+						self.f_performAsyncErrorEvent(request, f_error.INVALID_SERVICE_RESPONSE_ERROR, "Not a service response !");
 						return;					
 					}
 					
@@ -148,16 +142,18 @@ var __members = {
 					if (responseContentType.indexOf(f_error.APPLICATION_ERROR_MIME_TYPE)>=0) {
 						var code=f_error.ComputeApplicationErrorCode(request);
 				
-				 		component.f_performErrorEvent(request, code, content);
+						self.f_performErrorEvent(request, code, content);
 						return;
 					}
 				
 					if (responseContentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)>=0) {
+			 			self.f_asyncHideWaiting();
+
 						try {
 							f_core.WindowScopeEval(ret);
 							
 						} catch (x) {
-				 			component.f_performAsyncErrorEvent(x, f_error.RESPONSE_EVALUATION_ASYNC_RENDER_ERROR, "Evaluation exception");
+							self.f_performAsyncErrorEvent(x, f_error.RESPONSE_EVALUATION_ASYNC_RENDER_ERROR, "Evaluation exception");
 						}
 						
 						component.fa_contentLoaded(ret, responseContentType, parent);
@@ -165,32 +161,23 @@ var __members = {
 					}
 					
 					if (responseContentType.indexOf(f_httpRequest.TEXT_HTML_MIME_TYPE)>=0) {
-						if (waiting) {
-							waiting.f_hide();
-							waiting.f_close();
-							waiting=null;
-						}
 						
 						try {
-							component.f_getClass().f_getClassLoader().f_loadContent(component, component, component.innerHTML+ret);
+							self._asyncSetContent(ret);
 							
-							component.fa_contentLoaded(ret, responseContentType, parent);
+							self.fa_contentLoaded(ret, responseContentType, parent);
+							
 						} catch (x) {
-				 			component.f_performAsyncErrorEvent(x, f_error.RESPONSE_EVALUATION_ASYNC_RENDER_ERROR, "Evaluation exception");
+							self.f_performAsyncErrorEvent(x, f_error.RESPONSE_EVALUATION_ASYNC_RENDER_ERROR, "Evaluation exception");
 						}
 						return;
 					}
 					
-				 	component.f_performAsyncErrorEvent(request, f_error.RESPONSE_TYPE_ASYNC_RENDER_ERROR, "Unsupported content type: "+responseContentType);
+					self.f_performAsyncErrorEvent(request, f_error.RESPONSE_TYPE_ASYNC_RENDER_ERROR, "Unsupported content type: "+responseContentType);
 					
 				} finally {				
-					component._intLoading=false;
-
-					if (waiting) {
-						waiting.f_hide();
-					}
 				}
-	 		}			
+			}
 		});
 
 		component._intLoading=true;
@@ -208,7 +195,108 @@ var __members = {
 	f_performAsyncErrorEvent: function(param, messageCode, message) {
 		return f_error.PerformErrorEvent(this, messageCode, message, param);
 	},
+	/**
+	 * @method protected
+	 * @return HTMLElement
+	 */
+	f_asyncGetParentContent: function() {
+		var component=this;
+		var parent;
 		
+		if (typeof(component.fa_getInteractiveParent)=="function") {
+			parent=component.fa_getInteractiveParent();
+		}
+		
+		if (!parent) {
+			parent=component;
+		}
+		
+		return parent;
+	},
+	/**
+	 * @method private
+	 * @param String content
+	 * @return void
+	 */
+	_asyncSetContent: function(content) {
+		if (this.f_asyncSetContent) {
+			return this.f_asyncSetContent(content);
+		}
+		
+		var component = this;
+		
+		this.f_getClass().f_getClassLoader().f_loadContent(component, component, component.innerHTML+content);		
+	},
+	/**
+	 * @method hidden
+	 * @param optional String text
+	 * @return void
+	 */
+	f_asyncShowWaiting:function(text) {
+		var component=this;
+	
+		var waiting=component._intWaiting;
+		if (!waiting) {	
+			var parent=this.f_asyncGetParentContent();
+			
+			waiting=f_waiting.Create(parent);
+			component._intWaiting=waiting;
+		}
+		
+		if (text===undefined) {
+			text=f_waiting.GetLoadingMessage();
+		}
+		
+		waiting.f_setText(text);
+		waiting.f_show();
+	},	
+	/**
+	 * @method hidden
+	 * @param Boolean immediate
+	 * @return void
+	 */
+	f_asyncHideWaiting: function (immediate) {
+		var component=this;
+
+		var waiting=component._intWaiting;
+		if (waiting) {
+			waiting.f_hide(immediate);
+			
+			if (immediate) {
+				waiting.f_close();
+		
+			}
+		}
+	},
+	/**
+	 * @method hidden
+	 * @param String text
+	 * @return void
+	 */
+	f_asyncShowMessageWaiting: function (text) {
+		var component=this;
+
+		var waiting=component._intWaiting;
+		if (waiting) {
+			waiting.f_setText(text);
+		}	 			
+	},
+	
+	/**
+	 * @method hidden
+	 */
+	f_asyncDestroyWaiting:function() {
+		var component=this;
+
+		var waiting=component._intWaiting;
+		if (waiting) {
+			waiting.f_hide();
+			component._intWaiting=undefined;
+			
+			f_classLoader.Destroy(waiting);
+		}
+	},
+	
 	/**
 	 * @method protected
 	 * @param String content
@@ -217,7 +305,7 @@ var __members = {
 	 * @return void
 	 */
 	fa_contentLoaded: function() {
-		if (f_core.GetBooleanAttribute(this, "v:asyncDecode") && !this._asyncDecoded) {
+		if (f_core.GetBooleanAttributeNS(this, "asyncDecode") && !this._asyncDecoded) {
 			// On ajoute un tag comme quoi le composant est a décoder !
 			
 			this._asyncDecoded=true;
@@ -237,7 +325,7 @@ var __members = {
 	 * @return HTMLElement
 	 */
 	fa_getInteractiveParent: f_class.ABSTRACT
-}
+};
 
 new f_aspect("fa_asyncRender", {
 	members: __members

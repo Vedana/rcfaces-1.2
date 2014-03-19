@@ -24,6 +24,7 @@ import org.xml.sax.Attributes;
 public class BorderRenderersRegistryImpl extends AbstractRenderKitRegistryImpl
         implements IBorderRenderersRegistry {
 
+    @Override
     protected AbstractRenderKitRegistryImpl.RenderKit createRenderKit() {
         return new RenderKit();
     }
@@ -63,11 +64,11 @@ public class BorderRenderersRegistryImpl extends AbstractRenderKitRegistryImpl
      */
     public static class RenderKit extends
             AbstractRenderKitRegistryImpl.RenderKit {
-        private static final String REVISION = "$Revision$";
 
-        private final Map bordersById = new HashMap();
+        private final Map<String, BorderRendererFacade> bordersById = new HashMap<String, BorderRendererFacade>();
 
-        private final Map families = new HashMap(4);
+        private final Map<String, Family> families = new HashMap<String, Family>(
+                4);
 
         private final Family defaultFamily = new Family();
 
@@ -75,11 +76,11 @@ public class BorderRenderersRegistryImpl extends AbstractRenderKitRegistryImpl
                 String componentType, String borderId) {
 
             if (borderId != null) {
-                return (BorderRendererFacade) bordersById.get(borderId);
+                return bordersById.get(borderId);
             }
 
             if (familyId != null) {
-                Family family = (Family) families.get(familyId);
+                Family family = families.get(familyId);
                 if (family != null) {
                     BorderRendererFacade facade = family
                             .getBorderRendererFacade(this, componentType,
@@ -99,7 +100,7 @@ public class BorderRenderersRegistryImpl extends AbstractRenderKitRegistryImpl
         }
 
         public BorderRendererFacade getBorderById(String borderId) {
-            return (BorderRendererFacade) bordersById.get(borderId);
+            return bordersById.get(borderId);
         }
 
         public void addDefaultBorder(DefaultBorder defaultBorder) {
@@ -107,7 +108,7 @@ public class BorderRenderersRegistryImpl extends AbstractRenderKitRegistryImpl
 
             String fm = defaultBorder.getFamily();
             if (fm != null) {
-                f = (Family) families.get(fm);
+                f = families.get(fm);
                 if (f == null) {
                     f = new Family();
 
@@ -126,9 +127,8 @@ public class BorderRenderersRegistryImpl extends AbstractRenderKitRegistryImpl
      */
     public static class Family {
 
-        private static final String REVISION = "$Revision$";
-
-        private final Map componentTypes = new HashMap(32);
+        private final Map<String, Object> componentTypes = new HashMap<String, Object>(
+                32);
 
         public synchronized BorderRendererFacade getBorderRendererFacade(
                 RenderKit renderKit, String componentType, String borderId) {
@@ -167,7 +167,6 @@ public class BorderRenderersRegistryImpl extends AbstractRenderKitRegistryImpl
      * @version $Revision$ $Date$
      */
     public static class BorderRendererFacade {
-        private static final String REVISION = "$Revision$";
 
         private IBorderRenderer threadSafeObject;
 
@@ -177,7 +176,7 @@ public class BorderRenderersRegistryImpl extends AbstractRenderKitRegistryImpl
 
         private String className;
 
-        private Class borderClass;
+        private Class< ? extends IBorderRenderer> borderClass;
 
         public final String getId() {
             return id;
@@ -215,7 +214,8 @@ public class BorderRenderersRegistryImpl extends AbstractRenderKitRegistryImpl
                 className = null;
 
                 try {
-                    borderClass = ClassLocator.load(cls, this, facesContext);
+                    borderClass = ClassLocator.load(cls, this, facesContext,
+                            IBorderRenderer.class);
 
                 } catch (Throwable th) {
                     throw new FacesException("Can not load border class '"
@@ -231,7 +231,7 @@ public class BorderRenderersRegistryImpl extends AbstractRenderKitRegistryImpl
 
             IBorderRenderer borderRenderer;
             try {
-                borderRenderer = (IBorderRenderer) borderClass.newInstance();
+                borderRenderer = borderClass.newInstance();
 
             } catch (FacesException ex) {
                 throw ex;
@@ -250,7 +250,6 @@ public class BorderRenderersRegistryImpl extends AbstractRenderKitRegistryImpl
      * @version $Revision$ $Date$
      */
     public static final class DefaultBorder {
-        private static final String REVISION = "$Revision$";
 
         private String borderId;
 
@@ -287,8 +286,8 @@ public class BorderRenderersRegistryImpl extends AbstractRenderKitRegistryImpl
     public void configureRules(Digester digester) {
 
         digester.addRule("rcfaces-config/borders/render-kit", new Rule() {
-            private static final String REVISION = "$Revision$";
 
+            @Override
             public void begin(String namespace, String name,
                     Attributes attributes) throws Exception {
 
@@ -299,6 +298,7 @@ public class BorderRenderersRegistryImpl extends AbstractRenderKitRegistryImpl
                 super.digester.push(renderKit);
             }
 
+            @Override
             public void end(String namespace, String name) throws Exception {
                 super.digester.pop();
             }
@@ -312,15 +312,13 @@ public class BorderRenderersRegistryImpl extends AbstractRenderKitRegistryImpl
                 "rcfaces-config/borders/render-kit/border-renderer/border-id",
                 "id");
 
-        digester
-                .addSetProperties(
-                        "rcfaces-config/borders/render-kit/border-renderer/renderer-class",
-                        "threadSafe", "threadSafe");
+        digester.addSetProperties(
+                "rcfaces-config/borders/render-kit/border-renderer/renderer-class",
+                "threadSafe", "threadSafe");
 
-        digester
-                .addBeanPropertySetter(
-                        "rcfaces-config/borders/render-kit/border-renderer/renderer-class",
-                        "className");
+        digester.addBeanPropertySetter(
+                "rcfaces-config/borders/render-kit/border-renderer/renderer-class",
+                "className");
 
         digester.addSetNext(
                 "rcfaces-config/borders/render-kit/border-renderer",
@@ -334,15 +332,13 @@ public class BorderRenderersRegistryImpl extends AbstractRenderKitRegistryImpl
                 "rcfaces-config/borders/render-kit/default-border/border-id",
                 "borderId");
 
-        digester
-                .addBeanPropertySetter(
-                        "rcfaces-config/borders/render-kit/default-border/component-family",
-                        "family");
+        digester.addBeanPropertySetter(
+                "rcfaces-config/borders/render-kit/default-border/component-family",
+                "family");
 
-        digester
-                .addBeanPropertySetter(
-                        "rcfaces-config/borders/render-kit/default-border/renderer-type",
-                        "renderType");
+        digester.addBeanPropertySetter(
+                "rcfaces-config/borders/render-kit/default-border/renderer-type",
+                "renderType");
 
         digester.addSetNext("rcfaces-config/borders/render-kit/default-border",
                 "addDefaultBorder");

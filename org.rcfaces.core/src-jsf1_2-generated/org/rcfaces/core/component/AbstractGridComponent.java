@@ -3,6 +3,7 @@ package org.rcfaces.core.component;
 import org.rcfaces.core.internal.component.CameliaGridComponent;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.ILayoutPositionCapability;
 import java.util.Map;
 import org.rcfaces.core.component.capability.IUserEventCapability;
 import java.util.Collections;
@@ -75,7 +76,11 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 	IStyleClassCapability,
 	ISizeCapability,
 	IWAIRoleCapability,
+<<<<<<< HEAD
 	IAnchoredPositionCapability,
+=======
+	ILayoutPositionCapability,
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	IInitEventCapability,
 	IHiddenModeCapability,
 	IClientDataManager,
@@ -88,7 +93,11 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 	 private transient String var;
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaGridComponent.CAMELIA_ATTRIBUTES);
 	static {
+<<<<<<< HEAD
 		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"bottomPosition","blurListener","visible","backgroundColor","marginLeft","var","tabIndex","errorListener","focusListener","leftPosition","propertyChangeListener","helpURL","ariaLevel","topPosition","height","keyDownListener","hiddenMode","mouseOverListener","waiRole","mouseOutListener","foregroundColor","lookId","rightPosition","helpMessage","userEventListener","marginTop","width","styleClass","marginRight","partialRendering","keyUpListener","keyPressListener","resetListener","ariaLabel","rows","initListener","unlockedClientAttributeNames","marginBottom","toolTipText","first","y","sortManager","margins","x"}));
+=======
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"blurListener","visible","backgroundColor","marginLeft","var","tabIndex","errorListener","focusListener","propertyChangeListener","helpURL","ariaLevel","height","keyDownListener","hiddenMode","mouseOverListener","left","right","waiRole","mouseOutListener","foregroundColor","top","lookId","helpMessage","userEventListener","marginTop","width","styleClass","marginRight","partialRendering","keyUpListener","keyPressListener","resetListener","ariaLabel","rows","initListener","verticalCenter","unlockedClientAttributeNames","marginBottom","bottom","toolTipText","first","horizontalCenter","y","sortManager","margins","x"}));
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	}
 
 
@@ -108,6 +117,18 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 			map=Collections.unmodifiableMap(map);
 		}
 		return map;
+		
+	}
+
+	public ValueExpression getServerDataValueExpression(String name, FacesContext facesContext) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
+		if (dataMapAccessor==null) {
+			return null;
+		}
+		
+		return dataMapAccessor.getValueExpression(name);
 		
 	}
 
@@ -142,7 +163,7 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 	public int getRowIndex() {
 
 
-			return rowIndex;
+				return rowIndex;
 			
 	}
 
@@ -200,7 +221,11 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 	public Object getServerData(String name, FacesContext facesContext) {
 
 
+<<<<<<< HEAD
 		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
+=======
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		if (dataMapAccessor==null) {
 			return null;
 		}
@@ -238,35 +263,35 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 	public void setRowIndex(int rowIndex, FacesContext context) {
 
 
-			this.rowIndex=rowIndex;
-			
-			if (context==null) {
-				context=FacesContext.getCurrentInstance();
-			}
-			
-			DataModel dataModel=getDataModel(context);
-			dataModel.setRowIndex(rowIndex);
+				this.rowIndex=rowIndex;
 
-			String var = this.var;
-			if (var == null) {
+				if (context==null) {
+				context=FacesContext.getCurrentInstance();
+				}
+
+				DataModel dataModel=getDataModel(context);
+				dataModel.setRowIndex(rowIndex);
+
+				String var = this.var;
+				if (var == null) {
 				var = getVar(context);
-			}
-	        // Clear or expose the current row data as a request scope attribute
-    	    if (var != null) {
-	            Map requestMap = context.getExternalContext().getRequestMap();
-	            
-	            if (rowIndex == -1) {
-    	            requestMap.remove(var);
-    	            
-        	    } else if (dataModel.isRowAvailable()) {
-        	    	Object rowData=dataModel.getRowData();
-					requestMap.put(var, rowData);
-					
-			    } else {
-					requestMap.remove(var);
-	            }
-    	    }
-			
+				}
+				// Clear or expose the current row data as a request scope attribute
+				if (var != null) {
+				Map requestMap = context.getExternalContext().getRequestMap();
+
+				if (rowIndex == -1) {
+				requestMap.remove(var);
+
+				} else if (dataModel.isRowAvailable()) {
+				Object rowData=dataModel.getRowData();
+				requestMap.put(var, rowData);
+
+				} else {
+				requestMap.remove(var);
+				}
+				}
+
 			
 	}
 
@@ -629,6 +654,7 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 	public int getServerDataCount() {
 
 
+<<<<<<< HEAD
 		 IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
 		 if (dataMapAccessor==null) {
 		 	return 0;
@@ -654,6 +680,33 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 
 
 		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
+=======
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		 if (dataMapAccessor==null) {
+		 	return 0;
+		 }
+            
+		return dataMapAccessor.getDataCount();
+		
+	}
+
+	public Object getServerData(String name) {
+
+
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		 if (dataMapAccessor==null) {
+		 	return null;
+		 }
+            
+		return dataMapAccessor.getData(name, null);
+		
+	}
+
+	public Object removeServerData(String name) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		if (dataMapAccessor==null) {
 		 	return null;
 		}
@@ -1044,71 +1097,151 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		engine.setProperty(Properties.WAI_ROLE, waiRole);
 	}
 
+<<<<<<< HEAD
 	public int getBottomPosition() {
 		return getBottomPosition(null);
+=======
+	public java.lang.Number getBottom() {
+		return getBottom(null);
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	}
 
 	/**
+<<<<<<< HEAD
 	 * See {@link #getBottomPosition() getBottomPosition()} for more details
+=======
+	 * See {@link #getBottom() getBottom()} for more details
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	 */
+<<<<<<< HEAD
 	public int getBottomPosition(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.BOTTOM_POSITION,0, facesContext);
+=======
+	public java.lang.Number getBottom(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.BOTTOM, facesContext);
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Returns <code>true</code> if the attribute "bottomPosition" is set.
+=======
+	 * Returns <code>true</code> if the attribute "bottom" is set.
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	 * @return <code>true</code> if the attribute is set.
 	 */
+<<<<<<< HEAD
 	public final boolean isBottomPositionSetted() {
 		return engine.isPropertySetted(Properties.BOTTOM_POSITION);
+=======
+	public final boolean isBottomSetted() {
+		return engine.isPropertySetted(Properties.BOTTOM);
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	}
 
+<<<<<<< HEAD
 	public void setBottomPosition(int bottomPosition) {
 		engine.setProperty(Properties.BOTTOM_POSITION, bottomPosition);
+=======
+	public void setBottom(java.lang.Number bottom) {
+		engine.setProperty(Properties.BOTTOM, bottom);
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	}
 
+<<<<<<< HEAD
 	public int getLeftPosition() {
 		return getLeftPosition(null);
+=======
+	public java.lang.Number getHorizontalCenter() {
+		return getHorizontalCenter(null);
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	}
 
 	/**
+<<<<<<< HEAD
 	 * See {@link #getLeftPosition() getLeftPosition()} for more details
+=======
+	 * See {@link #getHorizontalCenter() getHorizontalCenter()} for more details
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	 */
+<<<<<<< HEAD
 	public int getLeftPosition(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.LEFT_POSITION,0, facesContext);
+=======
+	public java.lang.Number getHorizontalCenter(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.HORIZONTAL_CENTER, facesContext);
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Returns <code>true</code> if the attribute "leftPosition" is set.
+=======
+	 * Returns <code>true</code> if the attribute "horizontalCenter" is set.
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	 * @return <code>true</code> if the attribute is set.
 	 */
+<<<<<<< HEAD
 	public final boolean isLeftPositionSetted() {
 		return engine.isPropertySetted(Properties.LEFT_POSITION);
+=======
+	public final boolean isHorizontalCenterSetted() {
+		return engine.isPropertySetted(Properties.HORIZONTAL_CENTER);
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	}
 
+<<<<<<< HEAD
 	public void setLeftPosition(int leftPosition) {
 		engine.setProperty(Properties.LEFT_POSITION, leftPosition);
+=======
+	public void setHorizontalCenter(java.lang.Number horizontalCenter) {
+		engine.setProperty(Properties.HORIZONTAL_CENTER, horizontalCenter);
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	}
 
+<<<<<<< HEAD
 	public int getRightPosition() {
 		return getRightPosition(null);
+=======
+	public java.lang.Number getLeft() {
+		return getLeft(null);
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	}
 
 	/**
+<<<<<<< HEAD
 	 * See {@link #getRightPosition() getRightPosition()} for more details
+=======
+	 * See {@link #getLeft() getLeft()} for more details
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	 */
+<<<<<<< HEAD
 	public int getRightPosition(javax.faces.context.FacesContext facesContext) {
 		return engine.getIntProperty(Properties.RIGHT_POSITION,0, facesContext);
+=======
+	public java.lang.Number getLeft(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.LEFT, facesContext);
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Returns <code>true</code> if the attribute "rightPosition" is set.
+=======
+	 * Returns <code>true</code> if the attribute "left" is set.
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	 * @return <code>true</code> if the attribute is set.
 	 */
+<<<<<<< HEAD
 	public final boolean isRightPositionSetted() {
 		return engine.isPropertySetted(Properties.RIGHT_POSITION);
+=======
+	public final boolean isLeftSetted() {
+		return engine.isPropertySetted(Properties.LEFT);
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	}
 
+<<<<<<< HEAD
 	public void setRightPosition(int rightPosition) {
 		engine.setProperty(Properties.RIGHT_POSITION, rightPosition);
 	}
@@ -1134,6 +1267,79 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 
 	public void setTopPosition(int topPosition) {
 		engine.setProperty(Properties.TOP_POSITION, topPosition);
+=======
+	public void setLeft(java.lang.Number left) {
+		engine.setProperty(Properties.LEFT, left);
+	}
+
+	public java.lang.Number getRight() {
+		return getRight(null);
+	}
+
+	/**
+	 * See {@link #getRight() getRight()} for more details
+	 */
+	public java.lang.Number getRight(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.RIGHT, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "right" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isRightSetted() {
+		return engine.isPropertySetted(Properties.RIGHT);
+	}
+
+	public void setRight(java.lang.Number right) {
+		engine.setProperty(Properties.RIGHT, right);
+	}
+
+	public java.lang.Number getTop() {
+		return getTop(null);
+	}
+
+	/**
+	 * See {@link #getTop() getTop()} for more details
+	 */
+	public java.lang.Number getTop(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.TOP, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "top" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTopSetted() {
+		return engine.isPropertySetted(Properties.TOP);
+	}
+
+	public void setTop(java.lang.Number top) {
+		engine.setProperty(Properties.TOP, top);
+	}
+
+	public java.lang.Number getVerticalCenter() {
+		return getVerticalCenter(null);
+	}
+
+	/**
+	 * See {@link #getVerticalCenter() getVerticalCenter()} for more details
+	 */
+	public java.lang.Number getVerticalCenter(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.VERTICAL_CENTER, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "verticalCenter" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isVerticalCenterSetted() {
+		return engine.isPropertySetted(Properties.VERTICAL_CENTER);
+	}
+
+	public void setVerticalCenter(java.lang.Number verticalCenter) {
+		engine.setProperty(Properties.VERTICAL_CENTER, verticalCenter);
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	}
 
 	public final void addInitListener(org.rcfaces.core.event.IInitListener listener) {
@@ -1191,6 +1397,28 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return engine.isPropertySetted(Properties.ROWS);
 	}
 
+	public String getVar() {
+		return getVar(null);
+	}
+
+	public String getVar(javax.faces.context.FacesContext facesContext) {
+		String s = engine.getStringProperty(Properties.VAR, facesContext);
+		return s;
+	}
+
+	public void setVar(String var) {
+		engine.setProperty(Properties.VAR, var);
+		this.var=var;
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "var" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isVarSetted() {
+		return engine.isPropertySetted(Properties.VAR);
+	}
+
 	public int getFirst() {
 		return getFirst(null);
 	}
@@ -1209,27 +1437,6 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 	 */
 	public boolean isFirstSetted() {
 		return engine.isPropertySetted(Properties.FIRST);
-	}
-
-	public String getVar() {
-		return getVar(null);
-	}
-
-	public String getVar(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.VAR, facesContext);
-	}
-
-	public void setVar(String var) {
-		engine.setProperty(Properties.VAR, var);
-		this.var=var;
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "var" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public boolean isVarSetted() {
-		return engine.isPropertySetted(Properties.VAR);
 	}
 
 	protected Set getCameliaFields() {

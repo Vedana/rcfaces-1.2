@@ -80,8 +80,12 @@ public class UIData2 extends UIData0 {
 
     private transient List<int[]> decodedIndexes;
 
+<<<<<<< HEAD
     @SuppressWarnings({ "CollectionWithoutInitialCapacity" })
     private Map<String, SavedState2> saved = new HashMap<String, SavedState2>();
+=======
+    private Map<Object, SavedState2> saved = new HashMap<Object, SavedState2>();
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 
     private boolean saveCompleteState = true;
 
@@ -108,14 +112,19 @@ public class UIData2 extends UIData0 {
 
     @Override
     protected void iterate(FacesContext context, PhaseId phaseId) {
-        if (decodedIndexes == null || decodedIndexes.isEmpty()) {
+
+        if (decodedIndexes == null) { // || decodedIndexes.isEmpty()) {
+            if (DEBUG_ENABLED) {
+                LOG.debug("Iterate default mode for phaseId=" + phaseId);
+            }
+
             super.iterate(context, phaseId);
             return;
         }
 
         if (true) {
-            super.iterate(context, phaseId);
-            return;
+            // super.iterate(context, phaseId);
+            // return;
         }
 
         iterateModeFirst = 0;
@@ -126,9 +135,13 @@ public class UIData2 extends UIData0 {
             iterateModeRows += is[1];
         }
 
+        if (DEBUG_ENABLED) {
+            LOG.debug("Iterate phaseId=" + phaseId + " iterateModeRows="
+                    + iterateModeRows + "  decodedIndexes=" + decodedIndexes);
+        }
+
         iterateMode = true;
         try {
-
             super.iterate(context, phaseId);
 
         } finally {
@@ -189,6 +202,11 @@ public class UIData2 extends UIData0 {
 
     @Override
     public boolean isRowAvailable() {
+        if (decodedIndexes != null && decodedIndexes.isEmpty()) {
+            // OO: Rien a décoder
+            return false;
+        }
+
         boolean rowAvailable = super.isRowAvailable();
 
         if (DEBUG_ENABLED) {
@@ -293,10 +311,17 @@ public class UIData2 extends UIData0 {
 
         Object[] ss = (Object[]) states[1];
 
+<<<<<<< HEAD
         saved = new HashMap(ss.length / 2);
         if (ss.length > 0) {
             for (int i = 0; i < ss.length;) {
                 String key = (String) ss[i++];
+=======
+        saved = new HashMap<Object, SavedState2>(ss.length / 2);
+        if (ss.length > 0) {
+            for (int i = 0; i < ss.length;) {
+                Object key = ss[i++];
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 
                 SavedState2 ss2 = new SavedState2();
                 ss2.restoreState(context, ss[i++]);
@@ -318,12 +343,21 @@ public class UIData2 extends UIData0 {
 
         if (ss.length > 0) {
             int index = 0;
+<<<<<<< HEAD
             for (Iterator it = saved.entrySet().iterator(); it.hasNext();) {
                 Map.Entry entry = (Map.Entry) it.next();
 
                 ss[index++] = entry.getKey();
                 ss[index++] = ((SavedState2) entry.getValue())
                         .saveState(context);
+=======
+            for (Iterator<Map.Entry<Object, SavedState2>> it = saved.entrySet()
+                    .iterator(); it.hasNext();) {
+                Map.Entry<Object, SavedState2> entry = it.next();
+
+                ss[index++] = entry.getKey();
+                ss[index++] = entry.getValue().saveState(context);
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
             }
         }
 
@@ -341,6 +375,10 @@ public class UIData2 extends UIData0 {
      * @param context
      *            {@link FacesContext} for the current request
      */
+<<<<<<< HEAD
+=======
+
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
     @Override
     protected void restoreDescendantState(UIComponent component,
             FacesContext context) {
@@ -359,14 +397,26 @@ public class UIData2 extends UIData0 {
                 if (componentEngine != null) {
                     ComponentEngineManager.setComponentEngine(
                             (IRCFacesComponent) component, componentEngine);
+
+                    if (DEBUG_ENABLED) {
+                        LOG.debug("Restore state of '" + clientId
+                                + "' =>  set componentEngine => " + state);
+                    }
+
+                } else {
+                    if (DEBUG_ENABLED) {
+                        LOG.debug("Restore state of '" + clientId
+                                + "' => no component engine");
+                    }
                 }
             } else {
-                ComponentEngineManager
-                        .cloneComponentEngine((IRCFacesComponent) component);
-            }
+                ComponentEngineManager.cloneComponentEngine(context,
+                        (IRCFacesComponent) component);
 
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Restore state of '" + clientId + "' => " + state);
+                if (DEBUG_ENABLED) {
+                    LOG.debug("Restore state of '" + clientId
+                            + "' => NO STATE, clone component engine");
+                }
             }
         }
 
@@ -383,6 +433,10 @@ public class UIData2 extends UIData0 {
      * @param context
      *            {@link FacesContext} for the current request
      */
+<<<<<<< HEAD
+=======
+
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
     @Override
     protected void saveDescendantState(UIComponent component,
             FacesContext context) {
@@ -404,7 +458,7 @@ public class UIData2 extends UIData0 {
 
                 state.setComponentEngine(componentEngine);
 
-                if (LOG.isDebugEnabled()) {
+                if (DEBUG_ENABLED) {
                     LOG.debug("Save state of '" + clientId + "' => " + state);
                 }
             }
@@ -497,14 +551,14 @@ public class UIData2 extends UIData0 {
 
     public boolean decodeAdditionalInformation(
             IAdditionalInformationContainer additionalInformationComponent) {
-        if (decodedIndexes == null) {
+        if (decodedIndexes == null || decodedIndexes.isEmpty()) {
             if (DEBUG_ENABLED) {
                 int rowIndex = getRowIndex();
 
                 LOG.debug("Decode additional #" + rowIndex + " ("
                         + decodedIndexesToString() + ") => FALSE");
             }
-            return false;
+            return true;
         }
 
         int rowIndex = getRowIndex();
@@ -546,5 +600,9 @@ public class UIData2 extends UIData0 {
         }
 
         return sb.toString();
+    }
+
+    public void clearDecodedIndex() {
+        decodedIndexes = null;
     }
 }

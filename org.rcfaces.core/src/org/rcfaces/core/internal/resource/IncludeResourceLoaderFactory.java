@@ -10,7 +10,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.HttpRetryException;
 import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
@@ -33,7 +32,6 @@ import org.rcfaces.core.internal.util.IncludeHttpServletResponse;
  */
 
 public class IncludeResourceLoaderFactory extends AbstractResourceLoaderFactory {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(IncludeResourceLoaderFactory.class);
@@ -53,8 +51,6 @@ public class IncludeResourceLoaderFactory extends AbstractResourceLoaderFactory 
      * @version $Revision$ $Date$
      */
     private static class IncludeResourceLoader implements IResourceLoader {
-        private static final String REVISION = "$Revision$";
-
         private static final String TEMP_FILE_PREFIX = "include-resource.";
 
         private static final String TEMP_FILE_SUFFIX = ".tmp";
@@ -248,17 +244,15 @@ public class IncludeResourceLoaderFactory extends AbstractResourceLoaderFactory 
                 this.contentType = response.getContentType();
 
                 if (LOG.isDebugEnabled()) {
-                    LOG
-                            .debug("Resource '"
-                                    + uri
-                                    + "' contentType='"
-                                    + contentType
-                                    + "' contentLength="
-                                    + contentLength
-                                    + " lastModified="
-                                    + ((lastModified > 0) ? new Date(
-                                            lastModified).toString() : String
-                                            .valueOf(lastModified)));
+                    LOG.debug("Resource '"
+                            + uri
+                            + "' contentType='"
+                            + contentType
+                            + "' contentLength="
+                            + contentLength
+                            + " lastModified="
+                            + ((lastModified > 0) ? new Date(lastModified)
+                                    .toString() : String.valueOf(lastModified)));
                 }
 
                 if (fileTemp != null) {
@@ -277,6 +271,7 @@ public class IncludeResourceLoaderFactory extends AbstractResourceLoaderFactory 
             }
         }
 
+        @Override
         protected void finalize() throws Throwable {
             if (bufferFile != null) {
                 if (LOG.isDebugEnabled()) {
@@ -287,8 +282,9 @@ public class IncludeResourceLoaderFactory extends AbstractResourceLoaderFactory 
                     bufferFile.delete();
 
                 } catch (Throwable th) {
-                    LOG.error("Can not delete file '"
-                            + bufferFile.getAbsolutePath() + "'.", th);
+                    LOG.error(
+                            "Can not delete file '"
+                                    + bufferFile.getAbsolutePath() + "'.", th);
                 }
                 bufferFile = null;
             }

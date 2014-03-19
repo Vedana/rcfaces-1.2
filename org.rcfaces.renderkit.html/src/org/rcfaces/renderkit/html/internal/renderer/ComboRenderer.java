@@ -24,6 +24,7 @@ import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.ComboDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
 
 /**
@@ -33,7 +34,6 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
  */
 public class ComboRenderer extends AbstractSelectItemsRenderer implements
         IFilteredItemsRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final String FILTRED_COLLECTION_PROPERTY = "camelia.combo.filtredCollection";
 
@@ -90,7 +90,7 @@ public class ComboRenderer extends AbstractSelectItemsRenderer implements
                 htmlWriter.getComponentRenderContext().setAttribute(
                         FILTRED_COLLECTION_PROPERTY, Boolean.TRUE);
 
-                htmlWriter.writeAttribute("v:filtred", true);
+                htmlWriter.writeAttributeNS("filtred", true);
             }
         }
     }
@@ -178,13 +178,19 @@ public class ComboRenderer extends AbstractSelectItemsRenderer implements
             IFilterProperties filterProperties, int maxResultNumber)
             throws WriterException {
 
-        IComponentDecorator componentDecorator = createComboDecorator(jsWriter
-                .getFacesContext(), (UIComponent) comboComponent,
+        IComponentDecorator componentDecorator = createComboDecorator(
+                jsWriter.getFacesContext(), (UIComponent) comboComponent,
                 filterProperties, true);
         if (componentDecorator == null) {
             return;
         }
 
         componentDecorator.encodeJavaScript(jsWriter);
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "filtred" });
     }
 }

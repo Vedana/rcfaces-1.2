@@ -14,9 +14,8 @@ import javax.faces.event.ValueChangeListener;
  */
 public class ChangeActionListener extends AbstractActionListener implements
         ValueChangeListener {
-    private static final String REVISION = "$Revision$";
 
-    private final static Class actionParameters[] = { ValueChangeEvent.class };
+    private final static Class< ? > actionParameters[] = { ValueChangeEvent.class };
 
     public ChangeActionListener() {
     }
@@ -34,7 +33,8 @@ public class ChangeActionListener extends AbstractActionListener implements
         process(event);
     }
 
-    protected Class[] listParameterClasses() {
+    @Override
+    protected Class< ? >[] listParameterClasses() {
         return actionParameters;
     }
 }

@@ -79,6 +79,22 @@ var __statics = {
 		this._selected=false;
 		
 		shellDecorator._updateTitleButton(button);
+	},
+	
+	/**
+	 * @method private static
+	 * @param Event evt
+	 * @return void
+	 * @context object:shellDecorator
+	 */
+	_TitleButton_onclick: function(evt) {
+		var button=this;
+		var shellDecorator=button._shellDecorator;
+		
+		if (!evt) {
+			evt=f_core.GetJsEvent(this);
+		}
+		
 		shellDecorator._performTitleButton(button, evt);		
 	},
 	
@@ -253,7 +269,7 @@ var __statics = {
 		f_shellDecorator._decoratorDragged=undefined; // f_shellDecorator
 		f_shellDecorator._FrameShells=undefined; // Map<id, shell>
 	}
-}
+};
 
 var __members = {
 	
@@ -283,7 +299,12 @@ var __members = {
 			for(var name in buttons) {
 				var button=buttons[name];
 				
-				this.f_clearButton(button);
+				try {
+					this.f_clearButton(button);
+					
+				} catch (x) {
+					// Le composant peut ne plus être rattaché !
+				}
 			}
 		}
 		
@@ -311,20 +332,34 @@ var __members = {
 	
 	/**
 	 * @method protected
-	 * @param HTMLElement button
+	 * @param Object button
 	 * @return void
 	 */
 	f_clearButton: function(button) {
-//		button._over=undefined; // boolean
-//		button._selected=undefined; // boolean
-//		button._className=undefined; // String
-//		button._eventName=undefined; // String
-//		button._name=undefined; // String
-		button._shellDecorator=undefined; // f_shellDecorator		
-		button.onmousedown=null;
-		button.onmouseup=null;
-		button.onmouseover=null;
-		button.onmouseout=null;		
+		var img = button._img;
+		if (img) {
+			button._img=undefined;
+			
+	//		img._over=undefined; // boolean
+	//		img._selected=undefined; // boolean
+	//		img._className=undefined; // String
+	//		img._eventName=undefined; // String
+	//		img._name=undefined; // String
+			img._shellDecorator=undefined; // f_shellDecorator		
+			img.onmousedown=null;
+			img.onmouseup=null;
+			img.onmouseover=null;
+			img.onmouseout=null;
+		}
+		
+		var link = button._link;
+		if (link) {
+			button._link=undefined;
+			
+			link._shellDecorator=undefined; // f_shellDecorator	
+			link.onclick=undefined;
+			//		link._name=undefined; // String		
+		}
 	},
 	/**
 	 * @method public
@@ -506,10 +541,18 @@ var __members = {
 			this._blankImageURL=blankImageURL;
 		}
 
-		var img=f_core.CreateElement(parent, "img", {
+		var link=f_core.CreateElement(parent, "a", {
+			title: tooltip,
+			href: f_core.CreateJavaScriptVoid0()
+		});
+		link._shellDecorator=this;
+		link.onclick=f_shellDecorator._TitleButton_onclick;
+		link._name=name;
+		
+		var img=f_core.CreateElement(link, "img", {
 			className: className,
 			src: blankImageURL,
-			title: tooltip
+			alt: tooltip
 		});
 		
 		img.onmousedown=f_shellDecorator._TitleButton_onmousedown;
@@ -521,11 +564,16 @@ var __members = {
 		img._eventName=eventName;
 		img._name=name;
 		
-		if (!this._buttons) {
-			this._buttons=new Object;
+		var buttons=this._buttons;
+		if (!buttons) {
+			buttons=new Object;
+			this._buttons=buttons;
 		}
 		
-		this._buttons[name]=className;
+		buttons[name]={
+			_link: link,
+			_img: img
+		};
 	},
 	/**
 	 * @method hidden
@@ -592,6 +640,8 @@ var __members = {
 			}
 		}
 		
+		f_core.Debug(f_shellDecorator, "_performTitleButton: Perform button '"+button._name+"'");
+		
 		switch(button._name) {
 		case "close":
 			shell.f_close();
@@ -639,9 +689,22 @@ var __members = {
 	 */
 	f_getBottomHeight : function(){
 		return  0;
-	}
-}
+	},
+	
+	/**
+	 * @method public
+	 * @return String
+	 */
+	f_getTitle: function() {
+		if (!this._decorationValues) {
+			return null;
+		}
+		
+		var title=this._decorationValues[f_shellDecorator.TITLE_DECORATOR];
 
+		return title;
+	}
+};
 
 new f_class("f_shellDecorator", {
 	extend: f_object,

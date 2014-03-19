@@ -25,22 +25,24 @@ import org.rcfaces.core.internal.tools.BindingTools;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractRenderContext implements IRenderContext {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(AbstractRenderContext.class);
+
+    private static final boolean LOG_DEBUG = LOG.isDebugEnabled();
 
     private static final int COMPONENT_STACK_INITIAL_DEPTH = 16;
 
     private static final int SCOPE_VAR_INITIAL_SIZE = 4;
 
-    private final List stack = new ArrayList(COMPONENT_STACK_INITIAL_DEPTH * 3);
+    private final List<Object> stack = new ArrayList<Object>(
+            COMPONENT_STACK_INITIAL_DEPTH * 3);
 
-    private List scopeVars = null;
+    private List<VarScopeState> scopeVars = null;
 
     private FacesContext facesContext;
 
-    private Map attributes;
+    private Map<String, Object> attributes;
 
     private boolean transientState;
 
@@ -88,10 +90,10 @@ public abstract class AbstractRenderContext implements IRenderContext {
         stack.add(componentClientId);
         stack.add(Boolean.FALSE);
 
-        if (LOG.isDebugEnabled()) {
+        if (LOG_DEBUG) {
             StringBuffer sb = new StringBuffer();
 
-            for (Iterator it = stack.iterator(); it.hasNext();) {
+            for (Iterator<Object> it = stack.iterator(); it.hasNext();) {
                 it.next();
                 sb.append(" / " + it.next());
                 it.next();
@@ -101,6 +103,7 @@ public abstract class AbstractRenderContext implements IRenderContext {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void popComponent(UIComponent component) {
 
         int level = getStackLevel();
@@ -108,13 +111,13 @@ public abstract class AbstractRenderContext implements IRenderContext {
         String componentClientId = (String) stack.remove(level);
         Object componentContextAttributes = stack.remove(level);
         if (componentContextAttributes != Boolean.FALSE) {
-            releaseMap((Map) componentContextAttributes);
+            releaseMap((Map<String, Object>) componentContextAttributes);
         }
 
-        if (LOG.isDebugEnabled()) {
+        if (LOG_DEBUG) {
             StringBuffer sb = new StringBuffer();
 
-            for (Iterator it = stack.iterator(); it.hasNext();) {
+            for (Iterator<Object> it = stack.iterator(); it.hasNext();) {
                 it.next();
                 sb.append(" / " + it.next());
                 it.next();
@@ -135,7 +138,7 @@ public abstract class AbstractRenderContext implements IRenderContext {
      * protected void releaseComponentAttributes(Map map) { map.clear(); }
      */
 
-    private void releaseMap(Map map) {
+    private void releaseMap(Map< ? , ? > map) {
         map.clear();
     }
 
@@ -146,8 +149,10 @@ public abstract class AbstractRenderContext implements IRenderContext {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.IRenderContext#getComponentContext()
+     * @see
+     * org.rcfaces.core.internal.renderkit.IRenderContext#getComponentContext()
      */
+    @SuppressWarnings("unchecked")
     public final Object getComponentContextAttribute(String key) {
         int componentContextLevel = getStackLevel() + 2;
 
@@ -156,11 +161,12 @@ public abstract class AbstractRenderContext implements IRenderContext {
             return null;
         }
 
-        Map map = (Map) object;
+        Map<String, Object> map = (Map<String, Object>) object;
 
         return map.get(key);
     }
 
+    @SuppressWarnings("unchecked")
     public final boolean containsComponentContextAttribute(String key) {
         int componentContextLevel = getStackLevel() + 2;
 
@@ -169,25 +175,27 @@ public abstract class AbstractRenderContext implements IRenderContext {
             return false;
         }
 
-        Map map = (Map) object;
+        Map<String, Object> map = (Map<String, Object>) object;
 
         return map.containsKey(key);
     }
 
+    @SuppressWarnings("unchecked")
     public final Object setComponentContextAttribute(String key, Object value) {
         int componentContextLevel = getStackLevel() + 2;
 
         Object object = stack.get(componentContextLevel);
         if (object == Boolean.FALSE) {
-            object = new HashMap();
+            object = new HashMap<String, Object>();
             stack.set(componentContextLevel, object);
         }
 
-        Map map = (Map) object;
+        Map<String, Object> map = (Map<String, Object>) object;
 
         return map.put(key, value);
     }
 
+    @SuppressWarnings("unchecked")
     public final Object removeComponentContextAttribute(String key) {
         int componentContextLevel = getStackLevel() + 2;
 
@@ -196,7 +204,7 @@ public abstract class AbstractRenderContext implements IRenderContext {
             return null;
         }
 
-        Map map = (Map) object;
+        Map<String, Object> map = (Map<String, Object>) object;
 
         return map.remove(key);
     }
@@ -211,7 +219,7 @@ public abstract class AbstractRenderContext implements IRenderContext {
 
     public final Object setAttribute(String key, Object value) {
         if (attributes == null) {
-            attributes = new HashMap();
+            attributes = new HashMap<String, Object>();
         }
 
         return attributes.put(key, value);
@@ -265,7 +273,7 @@ public abstract class AbstractRenderContext implements IRenderContext {
         }
 
         int level = scopeVars.size();
-        VarScopeState scope = (VarScopeState) scopeVars.remove(--level);
+        VarScopeState scope = scopeVars.remove(--level);
 
         if (varName.equals(scope.getVarName()) == false) {
             throw new FacesException("Not the same varName ? (stackVarName="
@@ -287,13 +295,13 @@ public abstract class AbstractRenderContext implements IRenderContext {
         FacesContext facesContext = getFacesContext();
 
         if (scopeVars == null) {
-            scopeVars = new ArrayList(SCOPE_VAR_INITIAL_SIZE);
+            scopeVars = new ArrayList<VarScopeState>(SCOPE_VAR_INITIAL_SIZE);
         }
 
         scopeVars.add(varScopeState);
 
-        facesContext.getExternalContext().getRequestMap().put(
-                varScopeState.getVarName(), varScopeState.getValue());
+        facesContext.getExternalContext().getRequestMap()
+                .put(varScopeState.getVarName(), varScopeState.getValue());
     }
 
     public Object saveState(FacesContext facesContext) {
@@ -304,8 +312,7 @@ public abstract class AbstractRenderContext implements IRenderContext {
         Object sv[] = new Object[scopeVars.size()];
 
         int idx = 0;
-        for (Iterator it = scopeVars.iterator(); it.hasNext();) {
-            VarScopeState varScopeState = (VarScopeState) it.next();
+        for (VarScopeState varScopeState : scopeVars) {
 
             sv[idx++] = varScopeState.saveState(facesContext);
         }
@@ -342,7 +349,6 @@ public abstract class AbstractRenderContext implements IRenderContext {
      * @version $Revision$ $Date$
      */
     public static class VarScopeState implements StateHolder {
-        private static final String REVISION = "$Revision$";
 
         private String varName;
 

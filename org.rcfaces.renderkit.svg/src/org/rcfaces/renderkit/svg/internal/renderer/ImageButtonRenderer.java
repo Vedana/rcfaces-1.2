@@ -10,12 +10,13 @@ package org.rcfaces.renderkit.svg.internal.renderer;
  * @version $Revision$ $Date$
  */
 public class ImageButtonRenderer extends ImageRenderer {
-    private static final String REVISION = "$Revision$";
-
+ 
+    @Override
     protected boolean isItemSelectable() {
         return true;
     }
 
+    @Override
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.IMAGE_BUTTON;
     }

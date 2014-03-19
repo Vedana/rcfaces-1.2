@@ -1,7 +1,6 @@
 package org.rcfaces.renderkit.html.internal.taglib;
 
 import javax.faces.component.UIComponent;
-import org.rcfaces.core.internal.component.Properties;
 import javax.servlet.jsp.JspException;
 import org.apache.commons.logging.LogFactory;
 import javax.servlet.jsp.tagext.Tag;
@@ -14,6 +13,7 @@ import org.apache.commons.logging.Log;
 import javax.faces.component.UIViewRoot;
 import org.rcfaces.renderkit.html.component.CssStyleComponent;
 import org.rcfaces.core.internal.tools.ListenersTools1_2;
+import org.rcfaces.renderkit.html.component.Properties;
 import org.rcfaces.core.component.capability.ITextCapability;
 
 public class CssStyleTag extends CameliaTag implements Tag {
@@ -28,36 +28,41 @@ public class CssStyleTag extends CameliaTag implements Tag {
 	private ValueExpression requiredModules;
 	private ValueExpression requiredSets;
 	private ValueExpression mergeStyles;
+	private ValueExpression processRules;
 	public String getComponentType() {
 		return CssStyleComponent.COMPONENT_TYPE;
 	}
 
-	public final void setText(ValueExpression text) {
+	public void setText(ValueExpression text) {
 		this.text = text;
 	}
 
-	public final void setUserAgent(ValueExpression userAgent) {
+	public void setUserAgent(ValueExpression userAgent) {
 		this.userAgent = userAgent;
 	}
 
-	public final void setSrc(ValueExpression src) {
+	public void setSrc(ValueExpression src) {
 		this.src = src;
 	}
 
-	public final void setSrcCharSet(ValueExpression srcCharSet) {
+	public void setSrcCharSet(ValueExpression srcCharSet) {
 		this.srcCharSet = srcCharSet;
 	}
 
-	public final void setRequiredModules(ValueExpression requiredModules) {
+	public void setRequiredModules(ValueExpression requiredModules) {
 		this.requiredModules = requiredModules;
 	}
 
-	public final void setRequiredSets(ValueExpression requiredSets) {
+	public void setRequiredSets(ValueExpression requiredSets) {
 		this.requiredSets = requiredSets;
 	}
 
-	public final void setMergeStyles(ValueExpression mergeStyles) {
+	public void setMergeStyles(ValueExpression mergeStyles) {
 		this.mergeStyles = mergeStyles;
+	}
+
+	public void setProcessRules(ValueExpression processRules) {
+		this.processRules = processRules;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
@@ -72,6 +77,7 @@ public class CssStyleTag extends CameliaTag implements Tag {
 			LOG.debug("  requiredModules='"+requiredModules+"'");
 			LOG.debug("  requiredSets='"+requiredSets+"'");
 			LOG.debug("  mergeStyles='"+mergeStyles+"'");
+			LOG.debug("  processRules='"+processRules+"'");
 		}
 		if ((uiComponent instanceof CssStyleComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -147,6 +153,15 @@ public class CssStyleTag extends CameliaTag implements Tag {
 				component.setMergeStyles(getBool(mergeStyles.getExpressionString()));
 			}
 		}
+
+		if (processRules != null) {
+			if (processRules.isLiteralText()==false) {
+				component.setValueExpression(Properties.PROCESS_RULES, processRules);
+
+			} else {
+				component.setProcessRules(getBool(processRules.getExpressionString()));
+			}
+		}
 	}
 
 	public void release() {
@@ -157,6 +172,7 @@ public class CssStyleTag extends CameliaTag implements Tag {
 		requiredModules = null;
 		requiredSets = null;
 		mergeStyles = null;
+		processRules = null;
 
 		super.release();
 	}

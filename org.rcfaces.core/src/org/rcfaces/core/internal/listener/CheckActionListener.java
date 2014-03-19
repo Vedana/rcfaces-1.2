@@ -15,9 +15,8 @@ import org.rcfaces.core.event.ICheckListener;
  */
 public class CheckActionListener extends AbstractActionListener implements
         ICheckListener {
-    private static final String REVISION = "$Revision$";
 
-    private static final Class actionParameters[] = { CheckEvent.class };
+    private static final Class< ? >[] actionParameters = { CheckEvent.class };
 
     public CheckActionListener() {
     }
@@ -34,7 +33,8 @@ public class CheckActionListener extends AbstractActionListener implements
         process(event);
     }
 
-    protected Class[] listParameterClasses() {
+    @Override
+    protected Class< ? >[] listParameterClasses() {
         return actionParameters;
     }
 }

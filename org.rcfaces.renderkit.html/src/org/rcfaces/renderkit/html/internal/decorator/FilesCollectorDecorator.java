@@ -15,8 +15,8 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.item.BasicSelectItem;
 import org.rcfaces.core.item.FileItem;
+import org.rcfaces.renderkit.html.internal.agent.UserAgentRuleTools;
 import org.rcfaces.renderkit.html.internal.util.FileItemSource;
-import org.rcfaces.renderkit.html.internal.util.UserAgentTools;
 import org.rcfaces.renderkit.html.item.IUserAgentVaryFileItem;
 
 /**
@@ -26,11 +26,9 @@ import org.rcfaces.renderkit.html.item.IUserAgentVaryFileItem;
  */
 public class FilesCollectorDecorator extends AbstractSelectItemsDecorator {
 
-    private static final String REVISION = "$Revision$";
-
     private static final FileItemSource SOURCE_EMPTY_ARRAY[] = new FileItemSource[0];
 
-    private List sources;
+    private List<FileItemSource> sources;
 
     public FilesCollectorDecorator(UIComponent component) {
         super(component, null);
@@ -66,7 +64,7 @@ public class FilesCollectorDecorator extends AbstractSelectItemsDecorator {
                 if (selectItem instanceof IUserAgentVaryFileItem) {
                     IUserAgentVaryFileItem userAgentVaryFileItem = (IUserAgentVaryFileItem) selectItem;
 
-                    if (UserAgentTools.accept(getComponentRenderContext()
+                    if (UserAgentRuleTools.accept(getComponentRenderContext()
                             .getFacesContext(), userAgentVaryFileItem) == false) {
                         rendered = false;
                     }
@@ -76,7 +74,7 @@ public class FilesCollectorDecorator extends AbstractSelectItemsDecorator {
                     FileItemSource source = new FileItemSource(selectItem);
 
                     if (sources == null) {
-                        sources = new ArrayList(8);
+                        sources = new ArrayList<FileItemSource>(8);
                     }
                     if (sources.indexOf(source) < 0) {
                         sources.add(source);
@@ -105,7 +103,6 @@ public class FilesCollectorDecorator extends AbstractSelectItemsDecorator {
             return SOURCE_EMPTY_ARRAY;
         }
 
-        return (FileItemSource[]) sources.toArray(new FileItemSource[sources
-                .size()]);
+        return sources.toArray(new FileItemSource[sources.size()]);
     }
 }

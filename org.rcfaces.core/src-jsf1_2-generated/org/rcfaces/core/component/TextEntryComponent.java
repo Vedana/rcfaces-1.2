@@ -291,9 +291,9 @@ public class TextEntryComponent extends AbstractInputComponent implements
 
 	public void setClientValidator(String clientValidator) {
 
-
+			
 				engine.setProperty(Properties.CLIENT_VALIDATOR, clientValidator);
-				
+
 				ClientValidatorTools.setClientValidator(null, this);
 			
 	}

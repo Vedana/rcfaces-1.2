@@ -14,9 +14,9 @@ var __members={
 	f_dateEntry: function() {
 		this.f_super(arguments);
 
-		this._showOnFocus=f_core.GetAttribute(this, "v:showOnFocus");
+		this._showOnFocus=f_core.GetAttributeNS(this,"showOnFocus");
 		
-		var twoDigitYearStart=f_core.GetAttribute(this, "v:twoDigitYearStart");
+		var twoDigitYearStart=f_core.GetAttributeNS(this,"twoDigitYearStart");
 		if (twoDigitYearStart) {
 			this._twoDigitYearStart=f_core.DeserializeDate(twoDigitYearStart);
 		}
@@ -50,7 +50,7 @@ var __members={
 			return minDate;
 		}
 		
-		minDate=f_core.GetAttribute(this, "v:minDate");
+		minDate=f_core.GetAttributeNS(this,"minDate");
 		if (minDate) {
 			minDate=f_core.DeserializeDate(minDate);
 		} else {
@@ -72,7 +72,7 @@ var __members={
 			return maxDate;
 		}
 		
-		maxDate=f_core.GetAttribute(this, "v:maxDate");
+		maxDate=f_core.GetAttributeNS(this,"maxDate");
 		if (maxDate) {
 			maxDate=f_core.DeserializeDate(maxDate);
 		} else {

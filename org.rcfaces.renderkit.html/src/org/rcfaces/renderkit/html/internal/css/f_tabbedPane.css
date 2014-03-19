@@ -17,6 +17,9 @@
 	vertical-align: baseline;
 	border: 0;
 	border-bottom: 1px solid #919B9C;
+
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 }
  
 .f_tabbedPane_title {
@@ -210,7 +213,10 @@
 }
 
 .f_tabbedPane_content {
-	display: block;
+	position: relative;
+
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 /* Alignement eventuel des images des onglets */
@@ -219,4 +225,10 @@
 .f_tabbedPane_titleIcon {
 	margin-right: 4px;
 	vertical-align: middle;
+}
+
+.f_tab_heading {
+	position: absolute;
+	left: -10000px;
+	top: -10000px;
 }

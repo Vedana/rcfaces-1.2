@@ -23,23 +23,23 @@ public abstract class AbstractMenuTag extends AbstractConverterCommandTag implem
 	private ValueExpression checkedValues;
 	private ValueExpression readOnly;
 	private ValueExpression removeAllWhenShown;
-	public final void setSelectionListener(ValueExpression selectionListeners) {
+	public void setSelectionListener(ValueExpression selectionListeners) {
 		this.selectionListeners = selectionListeners;
 	}
 
-	public final void setCheckListener(ValueExpression checkListeners) {
+	public void setCheckListener(ValueExpression checkListeners) {
 		this.checkListeners = checkListeners;
 	}
 
-	public final void setCheckedValues(ValueExpression checkedValues) {
+	public void setCheckedValues(ValueExpression checkedValues) {
 		this.checkedValues = checkedValues;
 	}
 
-	public final void setReadOnly(ValueExpression readOnly) {
+	public void setReadOnly(ValueExpression readOnly) {
 		this.readOnly = readOnly;
 	}
 
-	public final void setRemoveAllWhenShown(ValueExpression removeAllWhenShown) {
+	public void setRemoveAllWhenShown(ValueExpression removeAllWhenShown) {
 		this.removeAllWhenShown = removeAllWhenShown;
 	}
 

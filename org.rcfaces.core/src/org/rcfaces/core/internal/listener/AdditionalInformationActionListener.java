@@ -16,9 +16,8 @@ import org.rcfaces.core.event.SelectionEvent;
  */
 public class AdditionalInformationActionListener extends AbstractActionListener
         implements IAdditionalInformationListener {
-    private static final String REVISION = "$Revision$";
 
-    private static final Class actionParameters[] = { SelectionEvent.class };
+    private static final Class< ? >[] actionParameters = { SelectionEvent.class };
 
     public AdditionalInformationActionListener() {
     }
@@ -36,7 +35,8 @@ public class AdditionalInformationActionListener extends AbstractActionListener
             throws AbortProcessingException {
     }
 
-    protected Class[] listParameterClasses() {
+    @Override
+    protected Class< ? >[] listParameterClasses() {
         return actionParameters;
     }
 

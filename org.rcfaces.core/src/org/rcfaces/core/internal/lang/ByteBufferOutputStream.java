@@ -12,7 +12,6 @@ import java.io.OutputStream;
  * @version $Revision$ $Date$
  */
 public final class ByteBufferOutputStream extends OutputStream {
-    private static final String REVISION = "$Revision$";
 
     /**
      * The buffer where data is stored.
@@ -46,6 +45,7 @@ public final class ByteBufferOutputStream extends OutputStream {
      * @param b
      *            the byte to be written.
      */
+    @Override
     public void write(int b) {
         int newcount = count + 1;
         if (newcount > buf.length) {
@@ -68,6 +68,7 @@ public final class ByteBufferOutputStream extends OutputStream {
      * @param len
      *            the number of bytes to write.
      */
+    @Override
     public void write(byte b[], int off, int len) {
         if ((off < 0) || (off > b.length) || (len < 0)
                 || ((off + len) > b.length) || ((off + len) < 0)) {
@@ -130,17 +131,19 @@ public final class ByteBufferOutputStream extends OutputStream {
     /**
      * Returns the current size of the buffer.
      * 
-     * @return the value of the <code>count</code> field, which is the number
-     *         of valid bytes in this output stream.
+     * @return the value of the <code>count</code> field, which is the number of
+     *         valid bytes in this output stream.
      * @see java.io.ByteArrayOutputStream#count
      */
     public int size() {
         return count;
     }
 
+    @Override
     public void flush() {
     }
 
+    @Override
     public void close() {
     }
 }

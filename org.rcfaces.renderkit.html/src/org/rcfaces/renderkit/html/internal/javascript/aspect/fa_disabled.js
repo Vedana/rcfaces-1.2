@@ -25,7 +25,7 @@ var __members = {
 	f_isDisabled: function() {
 		if (this._disabled===undefined) {
 			// Appel depuis le constructor de l'objet !
-		  	this._disabled=f_core.GetBooleanAttribute(this, "v:disabled", false);
+		  	this._disabled=f_core.GetBooleanAttributeNS(this, "disabled", false);
 		  	this._initialDisabled=this._disabled;
 		}
 		
@@ -80,7 +80,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setProperty: f_class.ABSTRACT
-}
+};
 
 new f_aspect("fa_disabled", {
 	members: __members

@@ -31,17 +31,18 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 	private ValueExpression sortListeners;
 	private ValueExpression mouseOutListeners;
 	private ValueExpression mouseOverListeners;
-	private ValueExpression tabIndex;
 	private ValueExpression unlockedClientAttributeNames;
+	private ValueExpression tabIndex;
 	private ValueExpression propertyChangeListeners;
+	private ValueExpression alertLoadingMessage;
 	private ValueExpression marginBottom;
 	private ValueExpression marginLeft;
 	private ValueExpression marginRight;
 	private ValueExpression marginTop;
+	private ValueExpression resetListeners;
 	private ValueExpression keyUpListeners;
 	private ValueExpression keyDownListeners;
 	private ValueExpression keyPressListeners;
-	private ValueExpression resetListeners;
 	private ValueExpression userEventListeners;
 	private ValueExpression x;
 	private ValueExpression y;
@@ -50,162 +51,189 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 	private ValueExpression lookId;
 	private ValueExpression width;
 	private ValueExpression height;
+	private ValueExpression wheelSelection;
 	private ValueExpression ariaLabel;
 	private ValueExpression ariaLevel;
 	private ValueExpression waiRole;
+<<<<<<< HEAD
 	private ValueExpression bottomPosition;
 	private ValueExpression leftPosition;
 	private ValueExpression rightPosition;
 	private ValueExpression topPosition;
+=======
+	private ValueExpression bottom;
+	private ValueExpression horizontalCenter;
+	private ValueExpression left;
+	private ValueExpression right;
+	private ValueExpression top;
+	private ValueExpression verticalCenter;
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	private ValueExpression initListeners;
 	private ValueExpression hiddenMode;
 	private ValueExpression immediate;
+<<<<<<< HEAD
 	private ValueExpression first;
 	private ValueExpression rows;
 	private ValueExpression margins;
 	private ValueExpression var;
 	private ValueExpression value;
+=======
+	private ValueExpression var;
+	private ValueExpression first;
+	private ValueExpression margins;
+	private ValueExpression value;
+	private ValueExpression rows;
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	private ValueExpression saveCompleteState;
-	public final void setHelpMessage(ValueExpression helpMessage) {
+	public void setHelpMessage(ValueExpression helpMessage) {
 		this.helpMessage = helpMessage;
 	}
 
-	public final void setHelpURL(ValueExpression helpURL) {
+	public void setHelpURL(ValueExpression helpURL) {
 		this.helpURL = helpURL;
 	}
 
-	public final void setToolTipText(ValueExpression toolTipText) {
+	public void setToolTipText(ValueExpression toolTipText) {
 		this.toolTipText = toolTipText;
 	}
 
-	public final void setBlurListener(ValueExpression blurListeners) {
+	public void setBlurListener(ValueExpression blurListeners) {
 		this.blurListeners = blurListeners;
 	}
 
-	public final void setFocusListener(ValueExpression focusListeners) {
+	public void setFocusListener(ValueExpression focusListeners) {
 		this.focusListeners = focusListeners;
 	}
 
-	public final void setBackgroundColor(ValueExpression backgroundColor) {
+	public void setBackgroundColor(ValueExpression backgroundColor) {
 		this.backgroundColor = backgroundColor;
 	}
 
-	public final void setForegroundColor(ValueExpression foregroundColor) {
+	public void setForegroundColor(ValueExpression foregroundColor) {
 		this.foregroundColor = foregroundColor;
 	}
 
-	public final void setVisible(ValueExpression visible) {
+	public void setVisible(ValueExpression visible) {
 		this.visible = visible;
 	}
 
-	public final void setErrorListener(ValueExpression errorListeners) {
+	public void setErrorListener(ValueExpression errorListeners) {
 		this.errorListeners = errorListeners;
 	}
 
-	public final void setSortManager(ValueExpression sortManager) {
+	public void setSortManager(ValueExpression sortManager) {
 		this.sortManager = sortManager;
 	}
 
-	public final void setSortListener(ValueExpression sortListeners) {
+	public void setSortListener(ValueExpression sortListeners) {
 		this.sortListeners = sortListeners;
 	}
 
-	public final void setMouseOutListener(ValueExpression mouseOutListeners) {
+	public void setMouseOutListener(ValueExpression mouseOutListeners) {
 		this.mouseOutListeners = mouseOutListeners;
 	}
 
-	public final void setMouseOverListener(ValueExpression mouseOverListeners) {
+	public void setMouseOverListener(ValueExpression mouseOverListeners) {
 		this.mouseOverListeners = mouseOverListeners;
 	}
 
-	public final void setTabIndex(ValueExpression tabIndex) {
-		this.tabIndex = tabIndex;
-	}
-
-	public final void setUnlockedClientAttributeNames(ValueExpression unlockedClientAttributeNames) {
+	public void setUnlockedClientAttributeNames(ValueExpression unlockedClientAttributeNames) {
 		this.unlockedClientAttributeNames = unlockedClientAttributeNames;
 	}
 
-	public final void setPropertyChangeListener(ValueExpression propertyChangeListeners) {
+	public void setTabIndex(ValueExpression tabIndex) {
+		this.tabIndex = tabIndex;
+	}
+
+	public void setPropertyChangeListener(ValueExpression propertyChangeListeners) {
 		this.propertyChangeListeners = propertyChangeListeners;
 	}
 
-	public final void setMarginBottom(ValueExpression marginBottom) {
+	public void setAlertLoadingMessage(ValueExpression alertLoadingMessage) {
+		this.alertLoadingMessage = alertLoadingMessage;
+	}
+
+	public void setMarginBottom(ValueExpression marginBottom) {
 		this.marginBottom = marginBottom;
 	}
 
-	public final void setMarginLeft(ValueExpression marginLeft) {
+	public void setMarginLeft(ValueExpression marginLeft) {
 		this.marginLeft = marginLeft;
 	}
 
-	public final void setMarginRight(ValueExpression marginRight) {
+	public void setMarginRight(ValueExpression marginRight) {
 		this.marginRight = marginRight;
 	}
 
-	public final void setMarginTop(ValueExpression marginTop) {
+	public void setMarginTop(ValueExpression marginTop) {
 		this.marginTop = marginTop;
 	}
 
-	public final void setKeyUpListener(ValueExpression keyUpListeners) {
-		this.keyUpListeners = keyUpListeners;
-	}
-
-	public final void setKeyDownListener(ValueExpression keyDownListeners) {
-		this.keyDownListeners = keyDownListeners;
-	}
-
-	public final void setKeyPressListener(ValueExpression keyPressListeners) {
-		this.keyPressListeners = keyPressListeners;
-	}
-
-	public final void setResetListener(ValueExpression resetListeners) {
+	public void setResetListener(ValueExpression resetListeners) {
 		this.resetListeners = resetListeners;
 	}
 
-	public final void setUserEventListener(ValueExpression userEventListeners) {
+	public void setKeyUpListener(ValueExpression keyUpListeners) {
+		this.keyUpListeners = keyUpListeners;
+	}
+
+	public void setKeyDownListener(ValueExpression keyDownListeners) {
+		this.keyDownListeners = keyDownListeners;
+	}
+
+	public void setKeyPressListener(ValueExpression keyPressListeners) {
+		this.keyPressListeners = keyPressListeners;
+	}
+
+	public void setUserEventListener(ValueExpression userEventListeners) {
 		this.userEventListeners = userEventListeners;
 	}
 
-	public final void setX(ValueExpression x) {
+	public void setX(ValueExpression x) {
 		this.x = x;
 	}
 
-	public final void setY(ValueExpression y) {
+	public void setY(ValueExpression y) {
 		this.y = y;
 	}
 
-	public final void setPartialRendering(ValueExpression partialRendering) {
+	public void setPartialRendering(ValueExpression partialRendering) {
 		this.partialRendering = partialRendering;
 	}
 
-	public final void setStyleClass(ValueExpression styleClass) {
+	public void setStyleClass(ValueExpression styleClass) {
 		this.styleClass = styleClass;
 	}
 
-	public final void setLookId(ValueExpression lookId) {
+	public void setLookId(ValueExpression lookId) {
 		this.lookId = lookId;
 	}
 
-	public final void setWidth(ValueExpression width) {
+	public void setWidth(ValueExpression width) {
 		this.width = width;
 	}
 
-	public final void setHeight(ValueExpression height) {
+	public void setHeight(ValueExpression height) {
 		this.height = height;
 	}
 
-	public final void setAriaLabel(ValueExpression ariaLabel) {
+	public void setWheelSelection(ValueExpression wheelSelection) {
+		this.wheelSelection = wheelSelection;
+	}
+
+	public void setAriaLabel(ValueExpression ariaLabel) {
 		this.ariaLabel = ariaLabel;
 	}
 
-	public final void setAriaLevel(ValueExpression ariaLevel) {
+	public void setAriaLevel(ValueExpression ariaLevel) {
 		this.ariaLevel = ariaLevel;
 	}
 
-	public final void setWaiRole(ValueExpression waiRole) {
+	public void setWaiRole(ValueExpression waiRole) {
 		this.waiRole = waiRole;
 	}
 
+<<<<<<< HEAD
 	public final void setBottomPosition(ValueExpression bottomPosition) {
 		this.bottomPosition = bottomPosition;
 	}
@@ -223,17 +251,45 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 	}
 
 	public final void setInitListener(ValueExpression initListeners) {
+=======
+	public void setBottom(ValueExpression bottom) {
+		this.bottom = bottom;
+	}
+
+	public void setHorizontalCenter(ValueExpression horizontalCenter) {
+		this.horizontalCenter = horizontalCenter;
+	}
+
+	public void setLeft(ValueExpression left) {
+		this.left = left;
+	}
+
+	public void setRight(ValueExpression right) {
+		this.right = right;
+	}
+
+	public void setTop(ValueExpression top) {
+		this.top = top;
+	}
+
+	public void setVerticalCenter(ValueExpression verticalCenter) {
+		this.verticalCenter = verticalCenter;
+	}
+
+	public void setInitListener(ValueExpression initListeners) {
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		this.initListeners = initListeners;
 	}
 
-	public final void setHiddenMode(ValueExpression hiddenMode) {
+	public void setHiddenMode(ValueExpression hiddenMode) {
 		this.hiddenMode = hiddenMode;
 	}
 
-	public final void setImmediate(ValueExpression immediate) {
+	public void setImmediate(ValueExpression immediate) {
 		this.immediate = immediate;
 	}
 
+<<<<<<< HEAD
 	public final void setFirst(ValueExpression first) {
 		this.first = first;
 	}
@@ -247,11 +303,31 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 	}
 
 	public final void setVar(ValueExpression var) {
+=======
+	public void setVar(ValueExpression var) {
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		this.var = var;
 	}
 
+<<<<<<< HEAD
 	public final void setValue(ValueExpression value) {
 		this.value = value;
+=======
+	public void setFirst(ValueExpression first) {
+		this.first = first;
+	}
+
+	public void setMargins(ValueExpression margins) {
+		this.margins = margins;
+	}
+
+	public void setValue(ValueExpression value) {
+		this.value = value;
+	}
+
+	public void setRows(ValueExpression rows) {
+		this.rows = rows;
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	}
 
 	public final void setSaveCompleteState(ValueExpression saveCompleteState) {
@@ -267,8 +343,9 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			LOG.debug("  foregroundColor='"+foregroundColor+"'");
 			LOG.debug("  visible='"+visible+"'");
 			LOG.debug("  sortManager='"+sortManager+"'");
-			LOG.debug("  tabIndex='"+tabIndex+"'");
 			LOG.debug("  unlockedClientAttributeNames='"+unlockedClientAttributeNames+"'");
+			LOG.debug("  tabIndex='"+tabIndex+"'");
+			LOG.debug("  alertLoadingMessage='"+alertLoadingMessage+"'");
 			LOG.debug("  marginBottom='"+marginBottom+"'");
 			LOG.debug("  marginLeft='"+marginLeft+"'");
 			LOG.debug("  marginRight='"+marginRight+"'");
@@ -280,20 +357,38 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			LOG.debug("  lookId='"+lookId+"'");
 			LOG.debug("  width='"+width+"'");
 			LOG.debug("  height='"+height+"'");
+			LOG.debug("  wheelSelection='"+wheelSelection+"'");
 			LOG.debug("  ariaLabel='"+ariaLabel+"'");
 			LOG.debug("  ariaLevel='"+ariaLevel+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
+<<<<<<< HEAD
 			LOG.debug("  bottomPosition='"+bottomPosition+"'");
 			LOG.debug("  leftPosition='"+leftPosition+"'");
 			LOG.debug("  rightPosition='"+rightPosition+"'");
 			LOG.debug("  topPosition='"+topPosition+"'");
+=======
+			LOG.debug("  bottom='"+bottom+"'");
+			LOG.debug("  horizontalCenter='"+horizontalCenter+"'");
+			LOG.debug("  left='"+left+"'");
+			LOG.debug("  right='"+right+"'");
+			LOG.debug("  top='"+top+"'");
+			LOG.debug("  verticalCenter='"+verticalCenter+"'");
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  immediate='"+immediate+"'");
+<<<<<<< HEAD
 			LOG.debug("  first='"+first+"'");
 			LOG.debug("  rows='"+rows+"'");
 			LOG.debug("  margins='"+margins+"'");
 			LOG.debug("  var='"+var+"'");
 			LOG.debug("  value='"+value+"'");
+=======
+			LOG.debug("  var='"+var+"'");
+			LOG.debug("  first='"+first+"'");
+			LOG.debug("  margins='"+margins+"'");
+			LOG.debug("  value='"+value+"'");
+			LOG.debug("  rows='"+rows+"'");
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		}
 		if ((uiComponent instanceof AbstractDataComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -394,15 +489,6 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.MOUSE_OVER_LISTENER_TYPE, mouseOverListeners);
 		}
 
-		if (tabIndex != null) {
-			if (tabIndex.isLiteralText()==false) {
-				component.setValueExpression(Properties.TAB_INDEX, tabIndex);
-
-			} else {
-				component.setTabIndex(getInteger(tabIndex.getExpressionString()));
-			}
-		}
-
 		if (unlockedClientAttributeNames != null) {
 			if (unlockedClientAttributeNames.isLiteralText()==false) {
 				component.setValueExpression(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, unlockedClientAttributeNames);
@@ -412,8 +498,26 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (tabIndex != null) {
+			if (tabIndex.isLiteralText()==false) {
+				component.setValueExpression(Properties.TAB_INDEX, tabIndex);
+
+			} else {
+				component.setTabIndex(getInteger(tabIndex.getExpressionString()));
+			}
+		}
+
 		if (propertyChangeListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
+		}
+
+		if (alertLoadingMessage != null) {
+			if (alertLoadingMessage.isLiteralText()==false) {
+				component.setValueExpression(Properties.ALERT_LOADING_MESSAGE, alertLoadingMessage);
+
+			} else {
+				component.setAlertLoadingMessage(alertLoadingMessage.getExpressionString());
+			}
 		}
 
 		if (marginBottom != null) {
@@ -452,6 +556,10 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (resetListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.RESET_LISTENER_TYPE, resetListeners);
+		}
+
 		if (keyUpListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.KEY_UP_LISTENER_TYPE, keyUpListeners);
 		}
@@ -462,10 +570,6 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 
 		if (keyPressListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.KEY_PRESS_LISTENER_TYPE, keyPressListeners);
-		}
-
-		if (resetListeners != null) {
-			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.RESET_LISTENER_TYPE, resetListeners);
 		}
 
 		if (userEventListeners != null) {
@@ -535,6 +639,15 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (wheelSelection != null) {
+			if (wheelSelection.isLiteralText()==false) {
+				component.setValueExpression(Properties.WHEEL_SELECTION, wheelSelection);
+
+			} else {
+				component.setWheelSelection(getBool(wheelSelection.getExpressionString()));
+			}
+		}
+
 		if (ariaLabel != null) {
 			if (ariaLabel.isLiteralText()==false) {
 				component.setValueExpression(Properties.ARIA_LABEL, ariaLabel);
@@ -562,6 +675,7 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			}
 		}
 
+<<<<<<< HEAD
 		if (bottomPosition != null) {
 			if (bottomPosition.isLiteralText()==false) {
 				component.setValueExpression(Properties.BOTTOM_POSITION, bottomPosition);
@@ -595,6 +709,59 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 
 			} else {
 				component.setTopPosition(getInt(topPosition.getExpressionString()));
+=======
+		if (bottom != null) {
+			if (bottom.isLiteralText()==false) {
+				component.setValueExpression(Properties.BOTTOM, bottom);
+
+			} else {
+				component.setBottom(getNumber(bottom.getExpressionString()));
+			}
+		}
+
+		if (horizontalCenter != null) {
+			if (horizontalCenter.isLiteralText()==false) {
+				component.setValueExpression(Properties.HORIZONTAL_CENTER, horizontalCenter);
+
+			} else {
+				component.setHorizontalCenter(getNumber(horizontalCenter.getExpressionString()));
+			}
+		}
+
+		if (left != null) {
+			if (left.isLiteralText()==false) {
+				component.setValueExpression(Properties.LEFT, left);
+
+			} else {
+				component.setLeft(getNumber(left.getExpressionString()));
+			}
+		}
+
+		if (right != null) {
+			if (right.isLiteralText()==false) {
+				component.setValueExpression(Properties.RIGHT, right);
+
+			} else {
+				component.setRight(getNumber(right.getExpressionString()));
+			}
+		}
+
+		if (top != null) {
+			if (top.isLiteralText()==false) {
+				component.setValueExpression(Properties.TOP, top);
+
+			} else {
+				component.setTop(getNumber(top.getExpressionString()));
+			}
+		}
+
+		if (verticalCenter != null) {
+			if (verticalCenter.isLiteralText()==false) {
+				component.setValueExpression(Properties.VERTICAL_CENTER, verticalCenter);
+
+			} else {
+				component.setVerticalCenter(getNumber(verticalCenter.getExpressionString()));
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 			}
 		}
 
@@ -620,6 +787,24 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (var != null) {
+			if (var.isLiteralText()==false) {
+				component.setValueExpression(Properties.VAR, var);
+
+			} else {
+				component.setVar(var.getExpressionString());
+			}
+		}
+
+		if (first != null) {
+			if (first.isLiteralText()==false) {
+				component.setValueExpression(Properties.FIRST, first);
+
+			} else {
+				component.setFirst(getInt(first.getExpressionString()));
+			}
+		}
+
 		if (first != null) {
 			if (first.isLiteralText()==false) {
 				component.setValueExpression(Properties.FIRST, first);
@@ -638,6 +823,7 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			}
 		}
 
+<<<<<<< HEAD
 		if (margins != null) {
 			if (margins.isLiteralText()==false) {
 				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
@@ -663,6 +849,8 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			}
 		}
 
+=======
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		if (saveCompleteState != null) {
 			if (saveCompleteState.isLiteralText()==false) {
 				component.setValueExpression(Properties.SAVE_COMPLETE_STATE, saveCompleteState);
@@ -687,17 +875,18 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 		sortListeners = null;
 		mouseOutListeners = null;
 		mouseOverListeners = null;
-		tabIndex = null;
 		unlockedClientAttributeNames = null;
+		tabIndex = null;
 		propertyChangeListeners = null;
+		alertLoadingMessage = null;
 		marginBottom = null;
 		marginLeft = null;
 		marginRight = null;
 		marginTop = null;
+		resetListeners = null;
 		keyUpListeners = null;
 		keyDownListeners = null;
 		keyPressListeners = null;
-		resetListeners = null;
 		userEventListeners = null;
 		x = null;
 		y = null;
@@ -706,21 +895,39 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 		lookId = null;
 		width = null;
 		height = null;
+		wheelSelection = null;
 		ariaLabel = null;
 		ariaLevel = null;
 		waiRole = null;
+<<<<<<< HEAD
 		bottomPosition = null;
 		leftPosition = null;
 		rightPosition = null;
 		topPosition = null;
+=======
+		bottom = null;
+		horizontalCenter = null;
+		left = null;
+		right = null;
+		top = null;
+		verticalCenter = null;
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		initListeners = null;
 		hiddenMode = null;
 		immediate = null;
+<<<<<<< HEAD
 		first = null;
 		rows = null;
 		margins = null;
 		var = null;
 		value = null;
+=======
+		var = null;
+		first = null;
+		margins = null;
+		value = null;
+		rows = null;
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		saveCompleteState = null;
 
 		super.release();

@@ -21,7 +21,7 @@ var __members = {
 	_overStyleClass: undefined,
 
 	fa_overStyleClass: function() {
-		var overStyleClass=f_core.GetAttribute(this, "v:overStyleClass", null);
+		var overStyleClass=f_core.GetAttributeNS(this, "overStyleClass", null);
 		if (overStyleClass!==null) {
 			this._installOverStyleClass(overStyleClass);
 		}

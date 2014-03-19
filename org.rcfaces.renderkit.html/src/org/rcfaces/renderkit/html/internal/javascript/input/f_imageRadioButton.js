@@ -14,11 +14,11 @@ var __members = {
 	f_imageRadioButton: function() {
 		this.f_super(arguments);
 		
-		var groupName=f_core.GetAttribute(this, "v:groupName");
+		var groupName=f_core.GetAttributeNS(this,"groupName");
 		if (groupName ) {	
 			this._groupName=groupName;
 		
-			this.f_addToGroup(groupName, this);
+			this.f_addToGroup(groupName, this.id);
 		}
 			
 	},
@@ -41,8 +41,7 @@ var __members = {
 			return false;
 		}
 		
-		this.f_setSelected(!this.f_isSelected());
-		return true;
+		return this.f_super(arguments, event);
 	},
 	/**
 	 * Set selected state.
@@ -98,7 +97,7 @@ var __members = {
 	 * @return f_imageRadioButton
 	 */
 	f_getSelectedInGroup: function() {
-		return this.f_mapIntoGroup(this.f_getGroupName(), function(item) {
+		return this.f_mapIntoGroupOfComponents(this.f_getGroupName(), function(item) {
 			if (item.f_isSelected()) {
 				return item;
 			}
@@ -111,7 +110,7 @@ var __members = {
 	 * @return f_imageRadioButton[]
 	 */
 	f_listAllInGroup: function() {
-		return this.f_listGroup(this.f_getGroupName());
+		return this.f_listGroupOfComponents(this.f_getGroupName());
 	},
 	fa_updateRequired: function() {
 	},
@@ -139,7 +138,7 @@ var __members = {
 	f_setValue: function(value) {
 		this.f_setSelected(value!==false);
 	}
-}
+};
 
 new f_class("f_imageRadioButton", {
 	extend: f_imageCheckButton, 

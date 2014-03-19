@@ -49,6 +49,10 @@ public class DataColumnTag extends CameliaTag implements Tag {
 	private ValueExpression defaultCellStyleClass;
 	private ValueExpression cellDefaultToolTipText;
 	private ValueExpression cellToolTipText;
+	private ValueExpression allCellClickable;
+	private ValueExpression cellClickable;
+	private ValueExpression toolTipId;
+	private ValueExpression titleToolTipId;
 	private ValueExpression selectionListeners;
 	private ValueExpression doubleClickListeners;
 	private ValueExpression userEventListeners;
@@ -60,147 +64,163 @@ public class DataColumnTag extends CameliaTag implements Tag {
 		return DataColumnComponent.COMPONENT_TYPE;
 	}
 
-	public final void setVisible(ValueExpression visible) {
+	public void setVisible(ValueExpression visible) {
 		this.visible = visible;
 	}
 
-	public final void setHiddenMode(ValueExpression hiddenMode) {
+	public void setHiddenMode(ValueExpression hiddenMode) {
 		this.hiddenMode = hiddenMode;
 	}
 
-	public final void setText(ValueExpression text) {
+	public void setText(ValueExpression text) {
 		this.text = text;
 	}
 
-	public final void setTextDirection(ValueExpression textDirection) {
+	public void setTextDirection(ValueExpression textDirection) {
 		this.textDirection = textDirection;
 	}
 
-	public final void setToolTipText(ValueExpression toolTipText) {
+	public void setToolTipText(ValueExpression toolTipText) {
 		this.toolTipText = toolTipText;
 	}
 
-	public final void setAlignment(ValueExpression alignment) {
+	public void setAlignment(ValueExpression alignment) {
 		this.alignment = alignment;
 	}
 
-	public final void setBackgroundColor(ValueExpression backgroundColor) {
+	public void setBackgroundColor(ValueExpression backgroundColor) {
 		this.backgroundColor = backgroundColor;
 	}
 
-	public final void setForegroundColor(ValueExpression foregroundColor) {
+	public void setForegroundColor(ValueExpression foregroundColor) {
 		this.foregroundColor = foregroundColor;
 	}
 
-	public final void setSortListener(ValueExpression sortListeners) {
+	public void setSortListener(ValueExpression sortListeners) {
 		this.sortListeners = sortListeners;
 	}
 
-	public final void setStyleClass(ValueExpression styleClass) {
+	public void setStyleClass(ValueExpression styleClass) {
 		this.styleClass = styleClass;
 	}
 
-	public final void setAscending(ValueExpression ascending) {
+	public void setAscending(ValueExpression ascending) {
 		this.ascending = ascending;
 	}
 
-	public final void setSortComparator(ValueExpression sortComparator) {
+	public void setSortComparator(ValueExpression sortComparator) {
 		this.sortComparator = sortComparator;
 	}
 
-	public final void setResizable(ValueExpression resizable) {
+	public void setResizable(ValueExpression resizable) {
 		this.resizable = resizable;
 	}
 
-	public final void setDisabledImageURL(ValueExpression disabledImageURL) {
+	public void setDisabledImageURL(ValueExpression disabledImageURL) {
 		this.disabledImageURL = disabledImageURL;
 	}
 
-	public final void setHoverImageURL(ValueExpression hoverImageURL) {
+	public void setHoverImageURL(ValueExpression hoverImageURL) {
 		this.hoverImageURL = hoverImageURL;
 	}
 
-	public final void setSelectedImageURL(ValueExpression selectedImageURL) {
+	public void setSelectedImageURL(ValueExpression selectedImageURL) {
 		this.selectedImageURL = selectedImageURL;
 	}
 
-	public final void setImageURL(ValueExpression imageURL) {
+	public void setImageURL(ValueExpression imageURL) {
 		this.imageURL = imageURL;
 	}
 
-	public final void setImageHeight(ValueExpression imageHeight) {
+	public void setImageHeight(ValueExpression imageHeight) {
 		this.imageHeight = imageHeight;
 	}
 
-	public final void setImageWidth(ValueExpression imageWidth) {
+	public void setImageWidth(ValueExpression imageWidth) {
 		this.imageWidth = imageWidth;
 	}
 
-	public final void setMenuPopupId(ValueExpression menuPopupId) {
+	public void setMenuPopupId(ValueExpression menuPopupId) {
 		this.menuPopupId = menuPopupId;
 	}
 
-	public final void setMaxWidth(ValueExpression maxWidth) {
+	public void setMaxWidth(ValueExpression maxWidth) {
 		this.maxWidth = maxWidth;
 	}
 
-	public final void setMinWidth(ValueExpression minWidth) {
+	public void setMinWidth(ValueExpression minWidth) {
 		this.minWidth = minWidth;
 	}
 
-	public final void setWidth(ValueExpression width) {
+	public void setWidth(ValueExpression width) {
 		this.width = width;
 	}
 
-	public final void setVerticalAlignment(ValueExpression verticalAlignment) {
+	public void setVerticalAlignment(ValueExpression verticalAlignment) {
 		this.verticalAlignment = verticalAlignment;
 	}
 
-	public final void setAutoFilter(ValueExpression autoFilter) {
+	public void setAutoFilter(ValueExpression autoFilter) {
 		this.autoFilter = autoFilter;
 	}
 
-	public final void setCellImageURL(ValueExpression cellImageURL) {
+	public void setCellImageURL(ValueExpression cellImageURL) {
 		this.cellImageURL = cellImageURL;
 	}
 
-	public final void setDefaultCellImageURL(ValueExpression defaultCellImageURL) {
+	public void setDefaultCellImageURL(ValueExpression defaultCellImageURL) {
 		this.defaultCellImageURL = defaultCellImageURL;
 	}
 
-	public final void setCellStyleClass(ValueExpression cellStyleClass) {
+	public void setCellStyleClass(ValueExpression cellStyleClass) {
 		this.cellStyleClass = cellStyleClass;
 	}
 
-	public final void setDefaultCellStyleClass(ValueExpression defaultCellStyleClass) {
+	public void setDefaultCellStyleClass(ValueExpression defaultCellStyleClass) {
 		this.defaultCellStyleClass = defaultCellStyleClass;
 	}
 
-	public final void setCellDefaultToolTipText(ValueExpression cellDefaultToolTipText) {
+	public void setCellDefaultToolTipText(ValueExpression cellDefaultToolTipText) {
 		this.cellDefaultToolTipText = cellDefaultToolTipText;
 	}
 
-	public final void setCellToolTipText(ValueExpression cellToolTipText) {
+	public void setCellToolTipText(ValueExpression cellToolTipText) {
 		this.cellToolTipText = cellToolTipText;
 	}
 
-	public final void setSelectionListener(ValueExpression selectionListeners) {
+	public void setAllCellClickable(ValueExpression allCellClickable) {
+		this.allCellClickable = allCellClickable;
+	}
+
+	public void setCellClickable(ValueExpression cellClickable) {
+		this.cellClickable = cellClickable;
+	}
+
+	public void setToolTipId(ValueExpression toolTipId) {
+		this.toolTipId = toolTipId;
+	}
+
+	public void setTitleToolTipId(ValueExpression titleToolTipId) {
+		this.titleToolTipId = titleToolTipId;
+	}
+
+	public void setSelectionListener(ValueExpression selectionListeners) {
 		this.selectionListeners = selectionListeners;
 	}
 
-	public final void setDoubleClickListener(ValueExpression doubleClickListeners) {
+	public void setDoubleClickListener(ValueExpression doubleClickListeners) {
 		this.doubleClickListeners = doubleClickListeners;
 	}
 
-	public final void setUserEventListener(ValueExpression userEventListeners) {
+	public void setUserEventListener(ValueExpression userEventListeners) {
 		this.userEventListeners = userEventListeners;
 	}
 
-	public final void setInitListener(ValueExpression initListeners) {
+	public void setInitListener(ValueExpression initListeners) {
 		this.initListeners = initListeners;
 	}
 
-	public final void setValue(ValueExpression value) {
+	public void setValue(ValueExpression value) {
 		this.value = value;
 	}
 
@@ -243,6 +263,10 @@ public class DataColumnTag extends CameliaTag implements Tag {
 			LOG.debug("  defaultCellStyleClass='"+defaultCellStyleClass+"'");
 			LOG.debug("  cellDefaultToolTipText='"+cellDefaultToolTipText+"'");
 			LOG.debug("  cellToolTipText='"+cellToolTipText+"'");
+			LOG.debug("  allCellClickable='"+allCellClickable+"'");
+			LOG.debug("  cellClickable='"+cellClickable+"'");
+			LOG.debug("  toolTipId='"+toolTipId+"'");
+			LOG.debug("  titleToolTipId='"+titleToolTipId+"'");
 			LOG.debug("  value='"+value+"'");
 		}
 		if ((uiComponent instanceof DataColumnComponent)==false) {
@@ -527,6 +551,42 @@ public class DataColumnTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (allCellClickable != null) {
+			if (allCellClickable.isLiteralText()==false) {
+				component.setValueExpression(Properties.ALL_CELL_CLICKABLE, allCellClickable);
+
+			} else {
+				component.setAllCellClickable(getBool(allCellClickable.getExpressionString()));
+			}
+		}
+
+		if (cellClickable != null) {
+			if (cellClickable.isLiteralText()==false) {
+				component.setValueExpression(Properties.CELL_CLICKABLE, cellClickable);
+
+			} else {
+				component.setCellClickable(getBool(cellClickable.getExpressionString()));
+			}
+		}
+
+		if (toolTipId != null) {
+			if (toolTipId.isLiteralText()==false) {
+				component.setValueExpression(Properties.TOOL_TIP_ID, toolTipId);
+
+			} else {
+				component.setToolTipId(toolTipId.getExpressionString());
+			}
+		}
+
+		if (titleToolTipId != null) {
+			if (titleToolTipId.isLiteralText()==false) {
+				component.setValueExpression(Properties.TITLE_TOOL_TIP_ID, titleToolTipId);
+
+			} else {
+				component.setTitleToolTipId(titleToolTipId.getExpressionString());
+			}
+		}
+
 		if (selectionListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
 		}
@@ -592,6 +652,10 @@ public class DataColumnTag extends CameliaTag implements Tag {
 		defaultCellStyleClass = null;
 		cellDefaultToolTipText = null;
 		cellToolTipText = null;
+		allCellClickable = null;
+		cellClickable = null;
+		toolTipId = null;
+		titleToolTipId = null;
 		selectionListeners = null;
 		doubleClickListeners = null;
 		userEventListeners = null;

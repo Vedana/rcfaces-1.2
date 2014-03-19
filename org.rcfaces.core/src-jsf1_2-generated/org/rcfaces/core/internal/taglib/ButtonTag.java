@@ -24,34 +24,39 @@ public class ButtonTag extends AbstractCommandTag implements Tag {
 	private ValueExpression readOnly;
 	private ValueExpression alternateText;
 	private ValueExpression focusStyleClass;
+	private ValueExpression toolTipId;
 	private ValueExpression actionListeners;
 	private ValueExpression action;
 	public String getComponentType() {
 		return ButtonComponent.COMPONENT_TYPE;
 	}
 
-	public final void setText(ValueExpression text) {
+	public void setText(ValueExpression text) {
 		this.text = text;
 	}
 
-	public final void setTextDirection(ValueExpression textDirection) {
+	public void setTextDirection(ValueExpression textDirection) {
 		this.textDirection = textDirection;
 	}
 
-	public final void setSelectionListener(ValueExpression selectionListeners) {
+	public void setSelectionListener(ValueExpression selectionListeners) {
 		this.selectionListeners = selectionListeners;
 	}
 
-	public final void setReadOnly(ValueExpression readOnly) {
+	public void setReadOnly(ValueExpression readOnly) {
 		this.readOnly = readOnly;
 	}
 
-	public final void setAlternateText(ValueExpression alternateText) {
+	public void setAlternateText(ValueExpression alternateText) {
 		this.alternateText = alternateText;
 	}
 
-	public final void setFocusStyleClass(ValueExpression focusStyleClass) {
+	public void setFocusStyleClass(ValueExpression focusStyleClass) {
 		this.focusStyleClass = focusStyleClass;
+	}
+
+	public void setToolTipId(ValueExpression toolTipId) {
+		this.toolTipId = toolTipId;
 	}
 
 	public final void setAction(ValueExpression action) {
@@ -72,6 +77,7 @@ public class ButtonTag extends AbstractCommandTag implements Tag {
 			LOG.debug("  readOnly='"+readOnly+"'");
 			LOG.debug("  alternateText='"+alternateText+"'");
 			LOG.debug("  focusStyleClass='"+focusStyleClass+"'");
+			LOG.debug("  toolTipId='"+toolTipId+"'");
 			LOG.debug("  action='"+action+"'");
 			LOG.debug("  actionListeners='"+actionListeners+"'");
 		}
@@ -136,6 +142,15 @@ public class ButtonTag extends AbstractCommandTag implements Tag {
 			}
 		}
 
+		if (toolTipId != null) {
+			if (toolTipId.isLiteralText()==false) {
+				component.setValueExpression(Properties.TOOL_TIP_ID, toolTipId);
+
+			} else {
+				component.setToolTipId(toolTipId.getExpressionString());
+			}
+		}
+
 		if (action != null) {
 			ListenersTools1_2.parseAction(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, action);
 		}
@@ -152,6 +167,7 @@ public class ButtonTag extends AbstractCommandTag implements Tag {
 		readOnly = null;
 		alternateText = null;
 		focusStyleClass = null;
+		toolTipId = null;
 		action = null;
 		actionListeners = null;
 

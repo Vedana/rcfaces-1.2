@@ -22,14 +22,13 @@ import org.rcfaces.core.internal.manager.IContainerManager;
  * @version $Revision$ $Date$
  */
 public class ComponentIterators {
-    private static final String REVISION = "$Revision$";
 
     public static final IComponentIterator EMPTY_COMPONENT_ITERATOR = new EmptyComponentIterator();
 
     public static final UIComponent[] EMPTY_COMPONENT_ARRAY = new UIComponent[0];
 
-    public static int indexOf(IContainerManager parent, UIComponent child,
-            Class childClass) {
+    public static <T> int indexOf(IContainerManager parent, UIComponent child,
+            Class<T> childClass) {
 
         if (Constants.CACHED_COMPONENT_ITERATOR
                 && Constants.STATED_COMPONENT_CHILDREN_LIST) {
@@ -43,8 +42,9 @@ public class ComponentIterators {
         }
 
         int idx = 0;
-        for (Iterator it = parent.getChildren().iterator(); it.hasNext();) {
-            UIComponent obj = (UIComponent) it.next();
+        for (Iterator<UIComponent> it = parent.getChildren().iterator(); it
+                .hasNext();) {
+            UIComponent obj = it.next();
             if (obj == null) {
                 continue;
             }
@@ -63,8 +63,8 @@ public class ComponentIterators {
         return -1;
     }
 
-    public static UIComponent componentAt(IContainerManager parent,
-            Class childClass, int position) {
+    public static <T> UIComponent componentAt(IContainerManager parent,
+            Class<T> childClass, int position) {
         if (Constants.CACHED_COMPONENT_ITERATOR
                 && Constants.STATED_COMPONENT_CHILDREN_LIST) {
             UIComponent elements[] = CachedChildrenList.getArray(parent,
@@ -78,8 +78,9 @@ public class ComponentIterators {
         }
 
         int idx = 0;
-        for (Iterator it = parent.getChildren().iterator(); it.hasNext();) {
-            UIComponent obj = (UIComponent) it.next();
+        for (Iterator<UIComponent> it = parent.getChildren().iterator(); it
+                .hasNext();) {
+            UIComponent obj = it.next();
             if (obj == null) {
                 continue;
             }
@@ -99,15 +100,16 @@ public class ComponentIterators {
                 + " <= " + (idx - 1) + ")");
     }
 
-    public static int count(IContainerManager parent, Class childClass) {
+    public static <T> int count(IContainerManager parent, Class<T> childClass) {
         if (Constants.CACHED_COMPONENT_ITERATOR
                 && Constants.STATED_COMPONENT_CHILDREN_LIST) {
             return CachedChildrenList.getCount(parent, childClass);
         }
 
         int cnt = 0;
-        for (Iterator it = parent.getChildren().iterator(); it.hasNext();) {
-            UIComponent obj = (UIComponent) it.next();
+        for (Iterator<UIComponent> it = parent.getChildren().iterator(); it
+                .hasNext();) {
+            UIComponent obj = it.next();
             if (obj == null) {
                 continue;
             }
@@ -122,13 +124,14 @@ public class ComponentIterators {
         return cnt;
     }
 
-    public static boolean removeAll(IContainerManager parent, Class childClass) {
+    public static <T> boolean removeAll(IContainerManager parent,
+            Class<T> childClass) {
         int count = parent.getChildCount();
         if (count < 1) {
             return false;
         }
 
-        List rev = list((UIComponent) parent, childClass);
+        List<T> rev = list((UIComponent) parent, childClass);
 
         if (rev == null || rev.isEmpty()) {
             return false;
@@ -137,7 +140,7 @@ public class ComponentIterators {
         return parent.getChildren().removeAll(rev);
     }
 
-    public static List list(UIComponent parent, Class childClass) {
+    public static <T> List<T> list(UIComponent parent, Class<T> childClass) {
 
         if (Constants.CACHED_COMPONENT_ITERATOR
                 && Constants.STATED_COMPONENT_CHILDREN_LIST) {
@@ -147,29 +150,29 @@ public class ComponentIterators {
             }
         }
 
-        List components = parent.getChildren();
+        List<UIComponent> components = parent.getChildren();
         int total = components.size();
         if (total == 0) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
 
-        List rev = null;
-        for (Iterator it = components.iterator(); it.hasNext(); total--) {
-            UIComponent component = (UIComponent) it.next();
+        List<T> rev = null;
+        for (Iterator<UIComponent> it = components.iterator(); it.hasNext(); total--) {
+            UIComponent component = it.next();
 
             if (childClass.isInstance(component) == false) {
                 continue;
             }
 
             if (rev == null) {
-                rev = new ArrayList(total);
+                rev = new ArrayList<T>(total);
             }
 
-            rev.add(component);
+            rev.add((T) component);
         }
 
         if (rev == null) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
 
         return rev;
@@ -181,7 +184,6 @@ public class ComponentIterators {
      * @version $Revision$ $Date$
      */
     private static class EmptyComponentIterator implements IComponentIterator {
-        private static final String REVISION = "$Revision$";
 
         /*
          * (non-Javadoc)
@@ -221,14 +223,14 @@ public class ComponentIterators {
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
-    public static class ComponentListIterator implements IComponentIterator {
-        private static final String REVISION = "$Revision$";
+    public static class ComponentListIterator<T> implements
+            IComponentIterator<T> {
 
-        private final Iterator iterator;
+        private final Iterator<T> iterator;
 
         private int count;
 
-        protected ComponentListIterator(List list) {
+        protected ComponentListIterator(List<T> list) {
             this.iterator = list.iterator();
             this.count = list.size();
         }
@@ -256,12 +258,12 @@ public class ComponentIterators {
          * 
          * @see org.rcfaces.core.iterators.IComponentIterator#nextComponent()
          */
-        public final UIComponent nextComponent() {
-            Object object = iterator.next();
+        public final T nextComponent() {
+            T object = iterator.next();
 
             count--;
 
-            return (UIComponent) object;
+            return object;
         }
 
         public UIComponent[] toArray(UIComponent[] array) {
@@ -303,19 +305,19 @@ public class ComponentIterators {
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
-    public static class ComponentArrayIterator implements IComponentIterator {
-        private static final String REVISION = "$Revision$";
+    public static class ComponentArrayIterator<T> implements
+            IComponentIterator<T> {
 
-        private final Object array[];
+        private final Object[] array;
 
         private int count;
 
-        protected ComponentArrayIterator(UIComponent object) {
+        protected ComponentArrayIterator(T object) {
             this.array = new Object[] { object };
             this.count = 1;
         }
 
-        protected ComponentArrayIterator(Object array[]) {
+        protected ComponentArrayIterator(T array[]) {
             this.array = array;
             this.count = array.length;
         }
@@ -343,7 +345,7 @@ public class ComponentIterators {
          * 
          * @see org.rcfaces.core.iterators.IComponentIterator#nextComponent()
          */
-        public final UIComponent nextComponent() {
+        public final T nextComponent() {
             if (count < 1) {
                 throw new NoSuchElementException(
                         "No more components ! (position="
@@ -351,7 +353,7 @@ public class ComponentIterators {
                                 + array.length + ")");
             }
 
-            UIComponent component = (UIComponent) array[array.length - count];
+            T component = (T) array[array.length - count];
             count--;
 
             return component;

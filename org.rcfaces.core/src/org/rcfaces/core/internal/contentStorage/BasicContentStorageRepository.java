@@ -6,6 +6,7 @@ package org.rcfaces.core.internal.contentStorage;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.lang.ILimitedMap;
 import org.rcfaces.core.internal.lang.LimitedMap;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.version.HashCodeTools;
@@ -17,23 +18,23 @@ import org.rcfaces.core.model.IContentModel;
  * @version $Revision$ $Date$
  */
 public class BasicContentStorageRepository implements IContentStorageRepository {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(BasicContentStorageRepository.class);
 
     private static int id;
 
-    private final LimitedMap resolvedContentByKey;
+    private final ILimitedMap<String, IResolvedContent> resolvedContentByKey;
 
     public BasicContentStorageRepository() {
-        resolvedContentByKey = new LimitedMap(
-                Constants.BASIC_CONTENT_CACHE_SIZE);
+        resolvedContentByKey = new LimitedMap<String, IResolvedContent>(
+                Constants.BASIC_CONTENT_CACHE_SIZE,
+                Constants.BASIC_CONTENT_CACHE_SOFT_REFERENCES);
     }
 
     public IResolvedContent load(String key) {
         synchronized (resolvedContentByKey) {
-            return (IResolvedContent) resolvedContentByKey.get(key);
+            return resolvedContentByKey.get(key);
         }
     }
 
@@ -80,18 +81,18 @@ public class BasicContentStorageRepository implements IContentStorageRepository 
                 }
             }
 
-            String url = sa.toString();
+            String url = sa.toString().replace(':', '$');
             content.setVersioned(true);
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Generated url='" + url + "' for " + content);
             }
 
-            return url;
+            return url.intern();
         }
 
         // Il faut creer une clef artificielle ...
-        
+
         int id;
         synchronized (BasicContentStorageRepository.class) {
             id = BasicContentStorageRepository.id++;
@@ -117,6 +118,6 @@ public class BasicContentStorageRepository implements IContentStorageRepository 
             LOG.debug("Generated url='" + url + "' for " + content);
         }
 
-        return url;
+        return url.intern();
     }
 }

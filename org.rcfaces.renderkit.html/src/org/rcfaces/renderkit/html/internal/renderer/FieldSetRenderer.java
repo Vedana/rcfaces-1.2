@@ -18,6 +18,7 @@ import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
 import org.rcfaces.core.internal.renderkit.border.ITitledBorderRenderer;
+import org.rcfaces.core.internal.renderkit.designer.IDesignerEngine;
 import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
@@ -25,6 +26,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.border.IFieldSetBorderRenderer;
 import org.rcfaces.renderkit.html.internal.border.IHtmlBorderRenderer;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -32,17 +34,19 @@ import org.rcfaces.renderkit.html.internal.border.IHtmlBorderRenderer;
  * @version $Revision$ $Date$
  */
 public class FieldSetRenderer extends AbstractCssRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final String BORDER_RENDERER = "camelia.customButton.borderRenderer";
 
-    private static final String DIV_BODY = "_cellBody";
+    private static final String CONTENT = "_content";
 
     private static final String TITLE_ID_SUFFIX = ""
             + UINamingContainer.SEPARATOR_CHAR
             + UINamingContainer.SEPARATOR_CHAR + "label";
 
-    public void encodeBegin(IComponentWriter writer) throws WriterException {
+    public final void encodeBegin(IComponentWriter writer)
+            throws WriterException {
+        // Final a cause du designer
+
         super.encodeBegin(writer);
 
         IComponentRenderContext componentContext = writer
@@ -54,6 +58,8 @@ public class FieldSetRenderer extends AbstractCssRenderer {
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
         encodeFieldSetTop(htmlWriter, component);
+
+        designerBeginChildren(writer, IDesignerEngine.MAIN_BODY);
     }
 
     protected void encodeFieldSetTop(IHtmlWriter htmlWriter,
@@ -140,14 +146,14 @@ public class FieldSetRenderer extends AbstractCssRenderer {
 
             String hs = computeSizeInPixel(height, -1, delta);
             if (hs != null) {
-                htmlWriter.writeStyle(32).writeHeight(hs).writeOverflow(
-                        ICssWriter.HIDDEN);
+                htmlWriter.writeStyle(32).writeHeight(hs)
+                        .writeOverflow(ICssWriter.HIDDEN);
             }
         }
     }
 
     protected String getBodyClassName(IHtmlWriter htmlWriter) {
-        return getMainStyleClassName() + DIV_BODY;
+        return getMainStyleClassName() + CONTENT;
     }
 
     protected void writeFieldSetAttributes(IHtmlWriter htmlWriter,
@@ -159,22 +165,27 @@ public class FieldSetRenderer extends AbstractCssRenderer {
         writeStyleClass(htmlWriter, getCssStyleClasses(htmlWriter));
 
         ICssWriter cssWriter = htmlWriter.writeStyle(32);
-        writeFieldSetCss(cssWriter, fieldSetComponent);
+        writeFieldSetCss(htmlWriter, cssWriter, fieldSetComponent);
 
         String overStyleClass = fieldSetComponent.getOverStyleClass(htmlWriter
                 .getComponentRenderContext().getFacesContext());
         if (overStyleClass != null) {
-            htmlWriter.writeAttribute("v:overStyleClass", overStyleClass);
+            htmlWriter.writeAttributeNS("overStyleClass", overStyleClass);
 
             htmlWriter.getJavaScriptEnableMode().enableOnOver();
         }
 
     }
 
-    protected void writeFieldSetCss(ICssWriter cssWriter,
-            FieldSetComponent fieldSetComponent) {
-        cssWriter.writePosition(fieldSetComponent);
-        cssWriter.writeSize(fieldSetComponent);
+    protected void writeFieldSetCss(IHtmlWriter htmlWriter,
+            ICssWriter cssWriter, FieldSetComponent fieldSetComponent)
+            throws WriterException {
+
+        writeComponentPosition(htmlWriter, cssWriter, fieldSetComponent,
+                CSS_ALL_MASK);
+        // cssWriter.writePosition(fieldSetComponent);
+        // cssWriter.writeSize(fieldSetComponent);
+
         cssWriter.writeMargin(fieldSetComponent);
         cssWriter.writeVisibility(fieldSetComponent);
         cssWriter.writeBackground(fieldSetComponent, null);
@@ -196,15 +207,18 @@ public class FieldSetRenderer extends AbstractCssRenderer {
 
         return (IHtmlBorderRenderer) borderRendererRegistry.getBorderRenderer(
                 facesContext, RenderKitFactory.HTML_BASIC_RENDER_KIT,
-                fieldSetComponent.getFamily(), fieldSetComponent
-                        .getRendererType(), borderType);
+                fieldSetComponent.getFamily(),
+                fieldSetComponent.getRendererType(), borderType);
     }
 
     protected String getDefaultBorderType(FieldSetComponent fieldSetComponent) {
         return "rounded";
     }
 
-    protected void encodeEnd(IComponentWriter writer) throws WriterException {
+    protected final void encodeEnd(IComponentWriter writer)
+            throws WriterException {
+        // Final a cause du designer
+        designerEndChildren(writer, IDesignerEngine.MAIN_BODY);
 
         IComponentRenderContext componentContext = writer
                 .getComponentRenderContext();
@@ -262,4 +276,17 @@ public class FieldSetRenderer extends AbstractCssRenderer {
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.FIELD_SET;
     }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null,
+                new String[] { "overStyleClass" });
+    }
+
+    @Override
+    protected boolean needInitLayout() {
+        return true;
+    }
+
 }

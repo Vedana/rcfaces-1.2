@@ -4,7 +4,6 @@
 package org.rcfaces.renderkit.html.internal;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
@@ -12,13 +11,17 @@ import java.util.ResourceBundle;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.faces.event.FacesListener;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.ToolTipComponent;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
-import org.rcfaces.core.component.capability.IHelpCapability;
+import org.rcfaces.core.component.capability.IToolTipIdCapability;
+import org.rcfaces.core.component.iterator.IToolTipIterator;
 import org.rcfaces.core.internal.capability.IRCFacesComponent;
+import org.rcfaces.core.internal.capability.IToolTipComponent;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
@@ -35,7 +38,6 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
  */
 public abstract class AbstractJavaScriptRenderer extends
         AbstractJavaScriptRenderer0 implements IJavaScriptComponentRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(AbstractJavaScriptRenderer.class);
@@ -49,11 +51,13 @@ public abstract class AbstractJavaScriptRenderer extends
 
     // private static final String LAZY_COMPONENTS = "camelia.component.lazy";
 
-    protected static final String LAZY_INIT_TAG = "v:init";
+    public static final String LAZY_INIT_TAG = "init";
 
     // private static final String INIT_BY_NAME = "javascript.InitByName";
 
     private static final boolean ENCODE_EVENT_ATTRIBUTE_ON_COLLECTOR_MODE = true;
+
+    private static final String CONTAINS_TOOLTIP_PROPERTY = "org.rcfaces.renderkit.CONTAINS_TOOLTIP";
 
     /*
      * protected void setInitializeByName(IComponentRenderContext renderContext)
@@ -91,8 +95,8 @@ public abstract class AbstractJavaScriptRenderer extends
                 .getHtmlComponentRenderContext();
 
         componentRenderContext.getHtmlRenderContext()
-                .getJavaScriptRenderContext().initializeJavaScriptComponent(
-                        writer);
+                .getJavaScriptRenderContext()
+                .initializeJavaScriptComponent(writer);
     }
 
     public void releaseJavaScript(IJavaScriptWriter writer)
@@ -138,7 +142,7 @@ public abstract class AbstractJavaScriptRenderer extends
 
         String javascriptClass = getJavaScriptClassName();
         if (javascriptClass != null) {
-            w.writeAttribute("v:class", javascriptClass);
+            w.writeAttributeNS("class", javascriptClass);
         }
 
         return w;
@@ -162,8 +166,9 @@ public abstract class AbstractJavaScriptRenderer extends
         UIComponent component = componentRenderContext.getComponent();
 
         // On recherche les ActionListeners
-        Map listenersByType = ListenerTools.getListenersByType(
-                ListenerTools.ATTRIBUTE_NAME_SPACE, component);
+        Map<String, FacesListener[]> listenersByType = ListenerTools
+                .getListenersByType(ListenerTools.ATTRIBUTE_NAME_SPACE,
+                        component);
 
         if (hasComponentAction(component)) {
             String listenerType = getActionEventName(ListenerTools.ATTRIBUTE_NAME_SPACE);
@@ -184,7 +189,7 @@ public abstract class AbstractJavaScriptRenderer extends
             appendAttributeEventForm(sa, writer, listenersByType);
 
             if (sa.length() > 0) {
-                writer.writeAttribute("v:events", sa.toString());
+                writer.writeAttributeNS("events", sa.toString());
             }
 
             if (listenersByType.containsKey(ListenerTools.ATTRIBUTE_NAME_SPACE
@@ -211,19 +216,18 @@ public abstract class AbstractJavaScriptRenderer extends
     }
 
     protected static final void appendAttributeEventForm(StringAppender sa,
-            IHtmlWriter htmlWriter, Map listenersByType) {
+            IHtmlWriter htmlWriter, Map<String, FacesListener[]> listenersByType) {
         IRenderContext renderContext = htmlWriter.getComponentRenderContext()
                 .getRenderContext();
 
         IJavaScriptEnableMode javaScriptEnableMode = htmlWriter
                 .getJavaScriptEnableMode();
 
-        for (Iterator it = listenersByType.entrySet().iterator(); it.hasNext();) {
-            Map.Entry entry = (Map.Entry) it.next();
+        for (Map.Entry<String, FacesListener[]> entry : listenersByType
+                .entrySet()) {
+            String listenerType = entry.getKey();
 
-            String listenerType = (String) entry.getKey();
-
-            FacesListener listeners[] = (FacesListener[]) entry.getValue();
+            FacesListener listeners[] = entry.getValue();
 
             boolean submitSupport = true;
             if (ListenerTools.ATTRIBUTE_NAME_SPACE.getValidationEventName()
@@ -264,7 +268,7 @@ public abstract class AbstractJavaScriptRenderer extends
         boolean enableJavascript = false;
 
         boolean hasAction = false;
-        Map listenersByType = null;
+        Map<String, FacesListener[]> listenersByType = null;
         if (encodeEventsInAttributes(writer) == false
                 && htmlRenderContext.getProcessContext().isDesignerMode() == false) {
             // On recherche l'attribut Action
@@ -345,8 +349,8 @@ public abstract class AbstractJavaScriptRenderer extends
                         }
                     }
 
-                    EventsRenderer.encodeEventListeners(js, js
-                            .getComponentVarName(), listenersByType,
+                    EventsRenderer.encodeEventListeners(js,
+                            js.getComponentVarName(), listenersByType,
                             actionListenerType);
                 }
 
@@ -373,7 +377,7 @@ public abstract class AbstractJavaScriptRenderer extends
         String ak = accessKeyCapability.getAccessKey();
 
         if (ak != null && ak.length() > 0) {
-            writer.writeAttribute("v:accessKey", ak);
+            writer.writeAttributeNS("accessKey", ak);
             writer.getJavaScriptEnableMode().enableOnAccessKey();
         }
 
@@ -384,21 +388,21 @@ public abstract class AbstractJavaScriptRenderer extends
         return false;
     }
 
-//    protected final IHtmlWriter writeHelp(IHtmlWriter writer,
-//            IHelpCapability helpComponent) {
-//        if ((helpComponent.getHelpURL() != null)
-//                || (helpComponent.getHelpMessage() != null)) {
-//            // writer.enableJavaScript(); // ????
-//        }
-//
-//        return writer;
-//    }
+    // protected final IHtmlWriter writeHelp(IHtmlWriter writer,
+    // IHelpCapability helpComponent) {
+    // if ((helpComponent.getHelpURL() != null)
+    // || (helpComponent.getHelpMessage() != null)) {
+    // // writer.enableJavaScript(); // ????
+    // }
+    //
+    // return writer;
+    // }
 
     protected final void declareLazyJavaScriptRenderer(IHtmlWriter writer) {
 
         writer.getHtmlComponentRenderContext().getHtmlRenderContext()
-                .getJavaScriptRenderContext().declareLazyJavaScriptRenderer(
-                        writer);
+                .getJavaScriptRenderContext()
+                .declareLazyJavaScriptRenderer(writer);
     }
 
     public void addRequiredJavaScriptClassNames(IHtmlWriter writer,
@@ -407,17 +411,33 @@ public abstract class AbstractJavaScriptRenderer extends
         if (className != null) {
             javaScriptRenderContext.appendRequiredClass(className, null);
         }
+
+        if (writer.getComponentRenderContext().containsAttribute(
+                CONTAINS_TOOLTIP_PROPERTY)) {
+            javaScriptRenderContext.appendRequiredClass(
+                    JavaScriptClasses.COMPONENT, "toolTip");
+
+        }
+    }
+
+    protected void markContainsTooltip(IComponentRenderContext renderContext) {
+        renderContext.setAttribute(CONTAINS_TOOLTIP_PROPERTY, Boolean.TRUE);
     }
 
     public String getResourceBundleValue(IHtmlWriter htmlWriter, String key) {
+
+        return getResourceBundleValue(htmlWriter, getJavaScriptClassName(), key);
+    }
+
+    public String getResourceBundleValue(IHtmlWriter htmlWriter,
+            String refClassName, String key) {
 
         IJavaScriptRenderContext javaScriptRenderContext = htmlWriter
                 .getHtmlComponentRenderContext().getHtmlRenderContext()
                 .getJavaScriptRenderContext();
 
-        return getResourceBundleValue(javaScriptRenderContext,
-                getJavaScriptClassName(), htmlWriter
-                        .getComponentRenderContext().getRenderContext()
+        return getResourceBundleValue(javaScriptRenderContext, refClassName,
+                htmlWriter.getComponentRenderContext().getRenderContext()
                         .getProcessContext().getUserLocale(), key);
     }
 
@@ -432,8 +452,8 @@ public abstract class AbstractJavaScriptRenderer extends
             return null;
         }
 
-        ResourceBundle resourceBundle = ResourceBundle.getBundle(jsClass
-                .getResourceBundleName(), locale);
+        ResourceBundle resourceBundle = ResourceBundle.getBundle(
+                jsClass.getResourceBundleName(), locale);
 
         try {
             return resourceBundle.getString(key);
@@ -442,6 +462,51 @@ public abstract class AbstractJavaScriptRenderer extends
             LOG.debug(ex);
 
             return null;
+        }
+    }
+
+    protected final void writeFirstTooltipClientId(IHtmlWriter htmlWriter)
+            throws WriterException {
+
+        IComponentRenderContext componentContext = htmlWriter
+                .getComponentRenderContext();
+
+        UIComponent component = componentContext.getComponent();
+
+        String tooltipClientId = null;
+
+        if (component instanceof IToolTipIdCapability) {
+            String tooltipId = ((IToolTipIdCapability) component)
+                    .getToolTipId();
+
+            if (tooltipId != null) {
+                tooltipClientId = componentContext.getRenderContext()
+                        .computeBrotherComponentClientId(component, tooltipId);
+            }
+        }
+
+        if (tooltipClientId == null) {
+            if (component instanceof IToolTipComponent) {
+                IToolTipIterator iterator = ((IToolTipComponent) component)
+                        .listToolTips();
+
+                if (iterator.count() > 0) {
+                    ToolTipComponent tooltipComponent = iterator.next();
+
+                    FacesContext facesContext = componentContext
+                            .getFacesContext();
+
+                    tooltipClientId = tooltipComponent
+                            .getClientId(facesContext);
+                }
+
+            }
+        }
+
+        if (tooltipClientId != null) {
+            htmlWriter.writeAttribute("v:toolTipId", tooltipClientId);
+
+            markContainsTooltip(htmlWriter.getComponentRenderContext());
         }
     }
 }

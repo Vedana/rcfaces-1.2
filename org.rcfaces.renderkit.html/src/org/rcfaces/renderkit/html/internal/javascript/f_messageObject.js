@@ -51,15 +51,15 @@ var __statics = {
     CreateFromTag: function(tag) {
     	f_core.Assert(tag && tag.nodeType==f_core.ELEMENT_NODE, "f_messageObject.CreateFromTag: Invalid tag parameter '"+tag+"'.");
     	
-		var detail=f_core.GetAttribute(tag, "v:detail");
-		var summary=f_core.GetAttribute(tag, "v:summary");		
-		var severity=f_core.GetNumberAttribute(tag, "v:severity");	
+		var detail=f_core.GetAttributeNS(tag,"detail");
+		var summary=f_core.GetAttributeNS(tag,"summary");		
+		var severity=f_core.GetNumberAttributeNS(tag,"severity");	
 		
 		var clientDatas=f_core.ParseDataAttribute(tag);
 		
 		var component=null;
 		
-		var forClientId=f_core.GetAttribute(tag, "v:for");			
+		var forClientId=f_core.GetAttributeNS(tag,"for");			
 		if (forClientId) {
 			component=f_core.GetElementById(forClientId);
 		}
@@ -68,7 +68,7 @@ var __statics = {
 		
 		f_messageContext.Get(component).f_addMessageObject(component, messageObject, true);
     }
-}
+};
 
 var __members = {
 	
@@ -216,7 +216,7 @@ var __members = {
 	toString: function() {
 		return "[f_messageObject severity='"+this._severity+"' summary='"+this._summary+"' detail='"+this._detail+"']";
 	}
-}
+};
 
 new f_class("f_messageObject", {
 	statics: __statics,

@@ -53,7 +53,8 @@ var __statics = {
 			detailLabel.style.display="inline";
 		}
 	}
-}
+};
+
 var __members = {
 	/**
 	 * @field private function
@@ -73,14 +74,14 @@ var __members = {
 		if (image) {
 			this._image=image;
 			this._imageURL=image.src;
-			this._infoImageURL=f_core.GetAttribute(this, "v:infoImageURL");
-			this._warnImageURL=f_core.GetAttribute(this, "v:warnImageURL");
-			this._errorImageURL=f_core.GetAttribute(this, "v:errorImageURL");
-			this._fatalImageURL=f_core.GetAttribute(this, "v:fatalImageURL");
+			this._infoImageURL=f_core.GetAttributeNS(this,"infoImageURL");
+			this._warnImageURL=f_core.GetAttributeNS(this,"warnImageURL");
+			this._errorImageURL=f_core.GetAttributeNS(this,"errorImageURL");
+			this._fatalImageURL=f_core.GetAttributeNS(this,"fatalImageURL");
 		}
 
-		this._showIfMessage=f_core.GetBooleanAttribute(this, "v:showIfMessage", false);
-		this._showActiveComponentMessage=f_core.GetBooleanAttribute(this, "v:showActiveComponentMessage", false);
+		this._showIfMessage=f_core.GetBooleanAttributeNS(this,"showIfMessage", false);
+		this._showActiveComponentMessage=f_core.GetBooleanAttributeNS(this,"showActiveComponentMessage", false);
 		if (this._showActiveComponentMessage && !this.f_getFor()) {
 			this.f_addFocusAndBlurListener();
 		}
@@ -120,13 +121,13 @@ var __members = {
 				this.className=cls;
 			}
 
-			if (summaryLabel && summaryLabel.style.display!="none") {
+			if (summaryLabel) {
 				summaryLabel.style.display="none";
 			}
-			if (detailLabel && detailLabel.style.display!="none") {
+			if (detailLabel) {
 				detailLabel.style.display="none";
 			}
-			if (textLabel && textLabel.style.display!="inline") {
+			if (textLabel) {
 				textLabel.style.display="inline";
 			}
 			
@@ -272,7 +273,7 @@ var __members = {
   			// this = document ... normalement
   			f_core.Debug(f_message, "f_addFocusAndBlurListener: this._onFocusCb on "+this);
   			message._performOnFocus(evt);
-		}
+		};
 		
 		var capture = undefined;
 		if (!f_core.IsInternetExplorer()) {
@@ -293,13 +294,15 @@ var __members = {
 			evt = f_core.GetJsEvent(this);
 		}
 
-		var target;
+		var target=undefined;
 		if (evt.target) {
 			target = evt.target;
 			
 		} else if (evt.srcElement) {
 			target = evt.srcElement;
 		}
+		
+		f_core.Assert(target, "f_message._performOnFocus: Target not found for event '"+evt+"'.");
 		
      	f_core.Debug(f_message, "_performOnFocus: target="+target.tagName+"#"+target.id+"."+target.className);
 		var compId = target.id;
@@ -365,7 +368,7 @@ var __members = {
 
 		this.f_setProperty(f_prop.TEXT, text);
 	}
-}
+};
 
 new f_class("f_message", {
 	extend: f_component, 

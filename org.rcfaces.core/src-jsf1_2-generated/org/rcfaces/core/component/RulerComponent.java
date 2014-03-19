@@ -4,6 +4,7 @@ import org.rcfaces.core.internal.capability.IAnchoredPositionSettings;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.component.capability.IPositionCapability;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.ILayoutPositionCapability;
 import java.lang.String;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
@@ -11,6 +12,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.tools.MarginTools;
+import org.rcfaces.core.internal.converter.AlignmentNormalizer;
 import org.rcfaces.core.component.capability.IAlignmentCapability;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import javax.el.ValueExpression;
@@ -38,7 +40,11 @@ import org.rcfaces.core.component.capability.IMarginCapability;
  */
 public class RulerComponent extends CameliaBaseComponent implements 
 	IPositionCapability,
+<<<<<<< HEAD
 	IAnchoredPositionCapability,
+=======
+	ILayoutPositionCapability,
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	IMarginCapability,
 	ISizeCapability,
 	IVisibilityCapability,
@@ -55,7 +61,11 @@ public class RulerComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
+<<<<<<< HEAD
 		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"alignment","orientation","lookId","bottomPosition","rightPosition","visible","backgroundColor","marginLeft","marginTop","marginRight","width","rendered","leftPosition","marginBottom","topPosition","height","hiddenMode","foregroundColor","y","margins","x"}));
+=======
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"alignment","orientation","lookId","visible","backgroundColor","marginLeft","marginTop","marginRight","width","rendered","verticalCenter","marginBottom","height","hiddenMode","bottom","left","right","foregroundColor","y","horizontalCenter","margins","x","top"}));
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	}
 
 	public RulerComponent() {
@@ -136,6 +146,144 @@ public class RulerComponent extends CameliaBaseComponent implements
 
 	public void setY(java.lang.String y) {
 		engine.setProperty(Properties.Y, y);
+	}
+
+	public java.lang.Number getBottom() {
+		return getBottom(null);
+	}
+
+	/**
+	 * See {@link #getBottom() getBottom()} for more details
+	 */
+	public java.lang.Number getBottom(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.BOTTOM, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "bottom" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isBottomSetted() {
+		return engine.isPropertySetted(Properties.BOTTOM);
+	}
+
+	public void setBottom(java.lang.Number bottom) {
+		engine.setProperty(Properties.BOTTOM, bottom);
+	}
+
+	public java.lang.Number getHorizontalCenter() {
+		return getHorizontalCenter(null);
+	}
+
+	/**
+	 * See {@link #getHorizontalCenter() getHorizontalCenter()} for more details
+	 */
+	public java.lang.Number getHorizontalCenter(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.HORIZONTAL_CENTER, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "horizontalCenter" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHorizontalCenterSetted() {
+		return engine.isPropertySetted(Properties.HORIZONTAL_CENTER);
+	}
+
+	public void setHorizontalCenter(java.lang.Number horizontalCenter) {
+		engine.setProperty(Properties.HORIZONTAL_CENTER, horizontalCenter);
+	}
+
+	public java.lang.Number getLeft() {
+		return getLeft(null);
+	}
+
+	/**
+	 * See {@link #getLeft() getLeft()} for more details
+	 */
+	public java.lang.Number getLeft(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.LEFT, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "left" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isLeftSetted() {
+		return engine.isPropertySetted(Properties.LEFT);
+	}
+
+	public void setLeft(java.lang.Number left) {
+		engine.setProperty(Properties.LEFT, left);
+	}
+
+	public java.lang.Number getRight() {
+		return getRight(null);
+	}
+
+	/**
+	 * See {@link #getRight() getRight()} for more details
+	 */
+	public java.lang.Number getRight(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.RIGHT, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "right" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isRightSetted() {
+		return engine.isPropertySetted(Properties.RIGHT);
+	}
+
+	public void setRight(java.lang.Number right) {
+		engine.setProperty(Properties.RIGHT, right);
+	}
+
+	public java.lang.Number getTop() {
+		return getTop(null);
+	}
+
+	/**
+	 * See {@link #getTop() getTop()} for more details
+	 */
+	public java.lang.Number getTop(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.TOP, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "top" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTopSetted() {
+		return engine.isPropertySetted(Properties.TOP);
+	}
+
+	public void setTop(java.lang.Number top) {
+		engine.setProperty(Properties.TOP, top);
+	}
+
+	public java.lang.Number getVerticalCenter() {
+		return getVerticalCenter(null);
+	}
+
+	/**
+	 * See {@link #getVerticalCenter() getVerticalCenter()} for more details
+	 */
+	public java.lang.Number getVerticalCenter(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.VERTICAL_CENTER, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "verticalCenter" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isVerticalCenterSetted() {
+		return engine.isPropertySetted(Properties.VERTICAL_CENTER);
+	}
+
+	public void setVerticalCenter(java.lang.Number verticalCenter) {
+		engine.setProperty(Properties.VERTICAL_CENTER, verticalCenter);
 	}
 
 	public int getBottomPosition() {
@@ -532,8 +680,11 @@ public class RulerComponent extends CameliaBaseComponent implements
 		return engine.isPropertySetted(Properties.ALIGNMENT);
 	}
 
-	public void setAlignment(java.lang.String alignment) {
-		engine.setProperty(Properties.ALIGNMENT, alignment);
+	public void setAlignment(String alignment) {
+
+
+			engine.setProperty(Properties.ALIGNMENT, AlignmentNormalizer.normalize(alignment));
+    	
 	}
 
 	protected Set getCameliaFields() {

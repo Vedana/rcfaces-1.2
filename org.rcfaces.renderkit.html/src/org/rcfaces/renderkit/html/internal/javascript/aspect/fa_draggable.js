@@ -24,12 +24,12 @@ var __members = {
 	f_isDraggable: function() {
 		if (this._draggable===undefined) {
 			// Appel depuis le constructor de l'objet !
-			var dragEffects=f_core.GetNumberAttribute(this, "v:dragEffects");
+			var dragEffects=f_core.GetNumberAttributeNS(this, "dragEffects");
 			
 		  	this._draggable=(dragEffects!==undefined);
 		  	if (this._draggable) {
 		  		this._dragEffects=dragEffects;
-		  		var ds=f_core.GetAttribute(this, "v:dragTypes");
+		  		var ds=f_core.GetAttributeNS(this, "dragTypes");
 		  		if (ds) {
 		  			this._dragTypes=ds.split(",");
 		  		}		  		
@@ -37,7 +37,45 @@ var __members = {
 		}
 		
 		return this._draggable;
-	}
+	},
+
+	
+	/**
+	 * @method public abstract
+	 * @param Object selection
+	 * @return Array
+	 */
+	f_getDragItems : f_class.ABSTRACT,
+	
+	/**
+	 * @method public abstract
+	 * @param Object selection
+	 * @return Array
+	 */
+	f_getDragItemsValue : f_class.ABSTRACT,
+	
+	/**
+	 * @method public abstract
+	 * @param Object selection
+	 * @return Array
+	 */
+	f_getDragItemsElement : f_class.ABSTRACT,
+	
+	/**
+	 * @method public abstract
+	 * @param Object selection
+	 * @return Number
+	 */
+	f_getDragEffects : f_class.ABSTRACT,
+	
+	/**
+	 * @method public abstract
+	 * @param Object selection
+	 * @return Array
+	 */
+	f_getDragTypes : f_class.ABSTRACT
+
+
 }
 
 new f_aspect("fa_draggable", {

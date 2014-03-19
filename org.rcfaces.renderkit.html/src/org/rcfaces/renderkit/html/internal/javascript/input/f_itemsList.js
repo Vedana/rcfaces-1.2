@@ -15,7 +15,7 @@ var __statics = {
 	_ItemToString: function() {
 		return this._id;
 	}
-}
+};
 
 var __members = {
 
@@ -116,7 +116,7 @@ var __members = {
 			if (f_core.IsDebugEnabled(f_itemsList)) {
 				item.toString=function() {
 					return "[toolItemSeparator id='"+item._id+"']";
-				}				
+				};
 			} else {
 				item.toString=f_itemsList._ItemToString;
 			}
@@ -152,7 +152,7 @@ var __members = {
 		if (f_core.IsDebugEnabled(f_itemsList)) {
 			item.toString=function() {
 				return "[toolItem id='"+this._id+"' value='"+this._value+"' inputType='"+this._inputType+"' disabled="+this._disabled+"]";
-			}				
+			};				
 		} else {
 			item.toString=f_itemsList._ItemToString;
 		}
@@ -168,23 +168,11 @@ var __members = {
 		case fa_items.AS_PUSH_BUTTON:
 		case fa_items.AS_CHECK_BUTTON:
 		case fa_items.AS_RADIO_BUTTON:
-			var itemsList=this;
-		
-			var selectionCallback=function(event) {
-				return itemsList._itemOnSelect(event);
-			}
-		
-			component.f_addEventListener(f_event.SELECTION, selectionCallback);
+			this._itemConfigureItemComponent(item, component);
 			break;
-			
+
 		case fa_items.AS_DROP_DOWN_MENU:
-			var itemsList=this;
-		
-			var selectionCallback=function(event) {
-				return itemsList._itemMenuOnSelect(event);
-			}
-		
-			component.f_addEventListener(f_event.SELECTION, selectionCallback);
+			this._itemConfigureDropMenuItemComponent(item, component);
 			break;
 
 		case fa_items.AS_SUBMIT_BUTTON: // trop tard !?
@@ -198,13 +186,39 @@ var __members = {
 		return item;
 	},
 	/**
+	 * @method protected
+	 * @param f_event event
+	 * @return void
+	 */
+	_itemConfigureItemComponent: function(item, component) {
+		var itemsList=this;
+		
+		var selectionCallback=function(event) {
+			return itemsList._itemOnSelect(event);
+		};
+	
+		component.f_addEventListener(f_event.SELECTION, selectionCallback);		
+	},
+	/**
+	 * @method protected
+	 * @param f_event event
+	 * @return void
+	 */
+	_itemConfigureDropMenuItemComponent: function(item, component) {
+		var itemsList=this;
+		
+		var selectionCallback=function(event) {
+			return itemsList._itemMenuOnSelect(event);
+		};
+	
+		component.f_addEventListener(f_event.SELECTION, selectionCallback);		
+	},
+	/**
 	 * @method private
 	 * @param f_event event
 	 * @return Boolean
 	 */
 	_itemOnSelect: function(event) {
-		var itemValue; // Rechercher l'item
-		
 		var itemComponent=event.f_getComponent();
 		var itemValue=this._getItemValueByComponent(itemComponent);		
 		
@@ -375,7 +389,7 @@ var __members = {
 		return component.f_getText();
 	}
 	*/
-}
+};
  
 new f_class("f_itemsList", {
 	extend: f_component,

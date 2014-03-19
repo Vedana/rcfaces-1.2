@@ -13,7 +13,6 @@ import org.rcfaces.core.component.capability.IResizableCapability;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.capability.ICellStyleClassCapability;
 import org.rcfaces.core.internal.capability.ICellToolTipTextSettings;
-import org.rcfaces.core.component.capability.IToolTipCapability;
 import org.apache.commons.logging.Log;
 import org.rcfaces.core.internal.capability.ICellStyleClassSettings;
 import java.util.Set;
@@ -29,11 +28,13 @@ import org.rcfaces.core.component.capability.ISortComparatorCapability;
 import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import org.rcfaces.core.internal.component.CameliaColumnComponent;
+import org.rcfaces.core.internal.converter.AlignmentNormalizer;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.component.capability.IAlignmentCapability;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.ISortEventCapability;
 import java.util.HashSet;
+import org.rcfaces.core.component.capability.IToolTipTextCapability;
 import org.rcfaces.core.component.capability.IWidthRangeCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import java.util.Arrays;
@@ -47,7 +48,7 @@ public class ComponentsColumnComponent extends CameliaColumnComponent implements
 	IHiddenModeCapability,
 	ITextCapability,
 	ITextDirectionCapability,
-	IToolTipCapability,
+	IToolTipTextCapability,
 	IAlignmentCapability,
 	IForegroundBackgroundColorCapability,
 	ISortEventCapability,
@@ -262,8 +263,11 @@ public class ComponentsColumnComponent extends CameliaColumnComponent implements
 		return engine.isPropertySetted(Properties.ALIGNMENT);
 	}
 
-	public void setAlignment(java.lang.String alignment) {
-		engine.setProperty(Properties.ALIGNMENT, alignment);
+	public void setAlignment(String alignment) {
+
+
+			engine.setProperty(Properties.ALIGNMENT, AlignmentNormalizer.normalize(alignment));
+    	
 	}
 
 	public java.lang.String getBackgroundColor() {

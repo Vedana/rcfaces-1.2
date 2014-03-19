@@ -14,9 +14,6 @@ import javax.faces.model.SelectItem;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.RcfacesContext;
-import org.rcfaces.core.internal.adapter.IAdapterManager;
-import org.rcfaces.core.lang.IAdaptable;
 
 /**
  * 
@@ -24,8 +21,6 @@ import org.rcfaces.core.lang.IAdaptable;
  * @version $Revision$ $Date$
  */
 public class SelectItemAdapter {
-
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(SelectItemAdapter.class);
 
@@ -44,12 +39,12 @@ public class SelectItemAdapter {
         return adapt(Arrays.asList(value), parameter, facesContext);
     }
 
-    public static SelectItem[] adapt(Collection collection) {
+    public static SelectItem[] adapt(Collection< ? > collection) {
         return adapt(collection, null, null);
     }
 
-    public static SelectItem[] adapt(Collection collection, Object parameter,
-            FacesContext facesContext) {
+    public static SelectItem[] adapt(Collection< ? > collection,
+            Object parameter, FacesContext facesContext) {
         if (collection == null || collection.isEmpty()) {
             return SELECT_ITEM_EMPTY_ARRAY;
         }
@@ -58,46 +53,21 @@ public class SelectItemAdapter {
             facesContext = FacesContext.getCurrentInstance();
         }
 
-        IAdapterManager adapterManager = RcfacesContext.getInstance(
-                facesContext).getAdapterManager();
-
-        List ret = null;
+        List<SelectItem> ret = null;
 
         int count = collection.size();
-        for (Iterator it = collection.iterator(); it.hasNext(); count--) {
+        for (Iterator< ? > it = collection.iterator(); it.hasNext(); count--) {
             Object value = it.next();
 
             if (value == null) {
                 continue;
             }
 
-            if (value instanceof SelectItem) {
-                if (ret == null) {
-                    ret = new ArrayList(count);
-                }
-                ret.add(value);
-                continue;
-            }
-
-            if (value instanceof IAdaptable) {
-                IAdaptable adaptable = (IAdaptable) value;
-
-                SelectItem selectItem = (SelectItem) adaptable.getAdapter(
-                        SelectItem.class, parameter);
-                if (selectItem != null) {
-                    if (ret == null) {
-                        ret = new ArrayList(count);
-                    }
-                    ret.add(selectItem);
-                    continue;
-                }
-            }
-
-            SelectItem selectItem = (SelectItem) adapterManager.getAdapter(
-                    value, SelectItem.class, parameter);
+            SelectItem selectItem = SelectItemTools.convertToSelectItem(
+                    facesContext, value);
             if (selectItem != null) {
                 if (ret == null) {
-                    ret = new ArrayList(count);
+                    ret = new ArrayList<SelectItem>(count);
                 }
                 ret.add(selectItem);
                 continue;
@@ -113,6 +83,6 @@ public class SelectItemAdapter {
             return SELECT_ITEM_EMPTY_ARRAY;
         }
 
-        return (SelectItem[]) ret.toArray(new SelectItem[ret.size()]);
+        return ret.toArray(new SelectItem[ret.size()]);
     }
 }

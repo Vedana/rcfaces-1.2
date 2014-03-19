@@ -27,6 +27,8 @@ import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import java.lang.Object;
 import java.lang.String;
 import org.rcfaces.core.lang.Time;
+import org.rcfaces.core.internal.converter.LiteralTimeConverter
+			;
 import org.rcfaces.core.component.capability.IAlternateTextCapability;
 import org.rcfaces.core.internal.component.IDataMapAccessor;
 import javax.el.ValueExpression;
@@ -157,24 +159,25 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 
 	public Time getTime() {
 
-
+			
 				Object submittedValue=getSubmittedExternalValue();
 				if (submittedValue!=null) {
 					return (Time)submittedValue;
 				}
 
 				Object value=getValue();
-				
+
 				if (value==null) {
 					return null;
 				}
-				
+
 				if (value instanceof Time) {
 					return (Time)value;
 				}
-				
+
 				if (value instanceof String) {
-					return (Time)LiteralTimeConverter.SINGLETON.getAsObject(null, this, (String)value);
+				return (Time)LiteralTimeConverter.SINGLETON.getAsObject(null, this,
+				(String)value);
 				}
 
 				if (value instanceof IAdaptable) {
@@ -840,7 +843,8 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	}
 
 	public String getTimeFormat(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.TIME_FORMAT, facesContext);
+		String s = engine.getStringProperty(Properties.TIME_FORMAT, facesContext);
+		return s;
 	}
 
 	public void setTimeFormat(String timeFormat) {
@@ -868,7 +872,8 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * @return step used
 	 */
 	public String getHourStep(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.HOUR_STEP, facesContext);
+		String s = engine.getStringProperty(Properties.HOUR_STEP, facesContext);
+		return s;
 	}
 
 	/**
@@ -904,7 +909,8 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * @return step
 	 */
 	public String getMinuteStep(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.MINUTE_STEP, facesContext);
+		String s = engine.getStringProperty(Properties.MINUTE_STEP, facesContext);
+		return s;
 	}
 
 	/**
@@ -940,7 +946,8 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * @return step
 	 */
 	public String getSecondStep(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.SECOND_STEP, facesContext);
+		String s = engine.getStringProperty(Properties.SECOND_STEP, facesContext);
+		return s;
 	}
 
 	/**
@@ -976,7 +983,8 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	 * @return step
 	 */
 	public String getMillisStep(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.MILLIS_STEP, facesContext);
+		String s = engine.getStringProperty(Properties.MILLIS_STEP, facesContext);
+		return s;
 	}
 
 	/**

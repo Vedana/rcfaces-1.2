@@ -13,16 +13,20 @@ import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.IMenuComponent;
+import org.rcfaces.core.component.capability.IRowToolTipIdCapability;
 import org.rcfaces.core.component.capability.ISortedChildrenCapability;
+import org.rcfaces.core.internal.tools.AdditionalInformationTools
+			;
+import org.rcfaces.core.component.capability.IGridCaptionCapability;
 import org.rcfaces.core.internal.capability.IAdditionalInformationRangeComponent;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.component.capability.IScrollableCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.model.ISortedComponent;
-import org.rcfaces.core.internal.tools.AdditionalInformationTools;
+import java.lang.Object;
 import org.rcfaces.core.internal.tools.OrderTools;
-import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.iterator.IColumnIterator;
+import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.capability.IEmptyDataMessageCapability;
 import org.rcfaces.core.component.capability.IClientSelectionFullStateCapability;
 import org.rcfaces.core.component.AbstractDataComponent;
@@ -49,6 +53,7 @@ import java.util.Set;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import org.rcfaces.core.component.capability.IAdditionalInformationEventCapability;
 import org.rcfaces.core.component.iterator.IAdditionalInformationIterator;
+import org.rcfaces.core.component.capability.IScopeColumnIdCapability;
 import java.lang.String;
 import org.rcfaces.core.internal.converter.ClientFullStateConverter;
 import org.rcfaces.core.component.capability.IAdditionalInformationValuesCapability;
@@ -82,7 +87,10 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	IScrollableCapability,
 	IPreferencesSettings,
 	IPagedCapability,
+	IRowToolTipIdCapability,
 	IHeaderVisibilityCapability,
+	IScopeColumnIdCapability,
+	IGridCaptionCapability,
 	IGridComponent,
 	IOrderedChildrenCapability,
 	ISortedChildrenCapability,
@@ -97,7 +105,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headerVisible","selectionCardinality","clientAdditionalInformationFullState","emptyDataMessage","loadListener","selectionListener","paged","additionalInformationValues","showValue","additionalInformationListener","verticalScrollPosition","border","required","clientSelectionFullState","preferences","doubleClickListener","selectedValues","horizontalScrollPosition","rowStyleClass","rowCountVar","selectable","additionalInformationCardinality","rowValueConverter","rowIndexVar","rowValue"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headerVisible","summary","selectionCardinality","clientAdditionalInformationFullState","scopeColumnId","cellTextWrap","emptyDataMessage","loadListener","selectionListener","paged","additionalInformationValues","showValue","additionalInformationListener","verticalScrollPosition","border","required","clientSelectionFullState","preferences","doubleClickListener","selectedValues","horizontalScrollPosition","caption","rowCountVar","rowStyleClass","rowToolTipId","selectable","additionalInformationCardinality","rowValueConverter","rowIndexVar","rowValue"}));
 	}
 
 	public ComponentsGridComponent() {
@@ -112,28 +120,32 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	public UIComponent[] getSortedChildren() {
 
 
-				return SortTools.getSortedChildren(null, this, engine, ComponentsColumnComponent.class);
+				return SortTools.getSortedChildren(null, this, engine,
+				ComponentsColumnComponent.class);
 			
 	}
 
 	public void setSortedChildren(UIComponent[] components) {
 
 
-				SortTools.setSortedChildren(null, this, engine, ComponentsColumnComponent.class, components);
+				SortTools.setSortedChildren(null, this, engine,
+				ComponentsColumnComponent.class, components);
 			
 	}
 
 	public void setOrderedChildren(UIComponent[] components) {
 
 
-				OrderTools.setOrderedChildren(null, this, engine, ComponentsColumnComponent.class, components);
+				OrderTools.setOrderedChildren(null, this, engine,
+				ComponentsColumnComponent.class, components);
 			
 	}
 
 	public UIComponent[] getOrderedChildren() {
 
 
-				return OrderTools.getOrderedChildren(null, this, engine, ComponentsColumnComponent.class);
+				return OrderTools.getOrderedChildren(null, this, engine,
+				ComponentsColumnComponent.class);
 			
 	}
 
@@ -147,14 +159,14 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	public IColumnIterator listColumns() {
 
 
-			return GridTools.listColumns(this, ComponentsColumnComponent.class);
+				return GridTools.listColumns(this, ComponentsColumnComponent.class);
 			
 	}
 
 	public IAdditionalInformationIterator listAdditionalInformations() {
 
 
-			return AdditionalInformationTools.listAdditionalInformations(this);
+				return AdditionalInformationTools.listAdditionalInformations(this);
 			
 	}
 
@@ -198,14 +210,16 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	public Object getFirstSelectedValue() {
 
 
-				return SelectionTools.getFirst(getSelectedValues(), getValue());
+				return SelectionTools.getFirst(getSelectedValues(),
+				getValue());
 			
 	}
 
 	public Object[] listSelectedValues() {
 
 
-				return SelectionTools.listValues(getSelectedValues(), getValue());
+				return SelectionTools.listValues(getSelectedValues(),
+				getValue());
 			
 	}
 
@@ -250,28 +264,35 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	public int getAdditionalInformationValuesCount() {
 
 
-				return AdditionalInformationTools.getCount(getAdditionalInformationValues());
+				return
+				AdditionalInformationTools.getCount(getAdditionalInformationValues());
 			
 	}
 
 	public Object getFirstAdditionalInformationValue() {
 
 
-				return AdditionalInformationTools.getFirst(getAdditionalInformationValues(), null);
+				return
+				AdditionalInformationTools.getFirst(getAdditionalInformationValues(),
+				null);
 			
 	}
 
 	public Object getAdditionalInformationValues(FacesContext facesContext) {
 
 
-				return engine.getValue(Properties.ADDITIONAL_INFORMATION_VALUES, facesContext);
+				return
+				engine.getValue(Properties.ADDITIONAL_INFORMATION_VALUES,
+				facesContext);
 			
 	}
 
 	public Object[] listAdditionalInformationValues() {
 
 
-				return AdditionalInformationTools.listValues(getAdditionalInformationValues(), getValue());
+				return
+				AdditionalInformationTools.listValues(getAdditionalInformationValues(),
+				getValue());
 			
 	}
 
@@ -285,14 +306,18 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	public ComponentsColumnComponent getFirstSortedColumn() {
 
 
-				return (ComponentsColumnComponent)SortTools.getFirstSortedChild(null, this, engine, ComponentsColumnComponent.class );
+				return
+				(ComponentsColumnComponent)SortTools.getFirstSortedChild(null, this,
+				engine, ComponentsColumnComponent.class );
 			
 	}
 
 	public void setSortedColumn(ComponentsColumnComponent componentsColumn) {
 
 
-				SortTools.setSortedChildren(null, this, engine, ComponentsColumnComponent.class, new ComponentsColumnComponent[] { componentsColumn });
+				SortTools.setSortedChildren(null, this, engine,
+				ComponentsColumnComponent.class, new ComponentsColumnComponent[] {
+				componentsColumn });
 			
 	}
 
@@ -889,6 +914,29 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 		engine.setProperty(Properties.PAGED, paged);
 	}
 
+	public java.lang.String getRowToolTipId() {
+		return getRowToolTipId(null);
+	}
+
+	/**
+	 * See {@link #getRowToolTipId() getRowToolTipId()} for more details
+	 */
+	public java.lang.String getRowToolTipId(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ROW_TOOL_TIP_ID, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "rowToolTipId" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isRowToolTipIdSetted() {
+		return engine.isPropertySetted(Properties.ROW_TOOL_TIP_ID);
+	}
+
+	public void setRowToolTipId(java.lang.String rowToolTipId) {
+		engine.setProperty(Properties.ROW_TOOL_TIP_ID, rowToolTipId);
+	}
+
 	public boolean isHeaderVisible() {
 		return isHeaderVisible(null);
 	}
@@ -912,6 +960,75 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 		engine.setProperty(Properties.HEADER_VISIBLE, headerVisible);
 	}
 
+	public java.lang.String getScopeColumnId() {
+		return getScopeColumnId(null);
+	}
+
+	/**
+	 * See {@link #getScopeColumnId() getScopeColumnId()} for more details
+	 */
+	public java.lang.String getScopeColumnId(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.SCOPE_COLUMN_ID, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "scopeColumnId" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isScopeColumnIdSetted() {
+		return engine.isPropertySetted(Properties.SCOPE_COLUMN_ID);
+	}
+
+	public void setScopeColumnId(java.lang.String scopeColumnId) {
+		engine.setProperty(Properties.SCOPE_COLUMN_ID, scopeColumnId);
+	}
+
+	public java.lang.String getSummary() {
+		return getSummary(null);
+	}
+
+	/**
+	 * See {@link #getSummary() getSummary()} for more details
+	 */
+	public java.lang.String getSummary(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.SUMMARY, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "summary" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isSummarySetted() {
+		return engine.isPropertySetted(Properties.SUMMARY);
+	}
+
+	public void setSummary(java.lang.String summary) {
+		engine.setProperty(Properties.SUMMARY, summary);
+	}
+
+	public java.lang.String getCaption() {
+		return getCaption(null);
+	}
+
+	/**
+	 * See {@link #getCaption() getCaption()} for more details
+	 */
+	public java.lang.String getCaption(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.CAPTION, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "caption" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isCaptionSetted() {
+		return engine.isPropertySetted(Properties.CAPTION);
+	}
+
+	public void setCaption(java.lang.String caption) {
+		engine.setProperty(Properties.CAPTION, caption);
+	}
+
 	/**
 	 * Returns a string value specifying the name of the variable receiving the number of rows.
 	 * @return variable name
@@ -925,7 +1042,8 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	 * @return variable name
 	 */
 	public String getRowCountVar(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ROW_COUNT_VAR, facesContext);
+		String s = engine.getStringProperty(Properties.ROW_COUNT_VAR, facesContext);
+		return s;
 	}
 
 	/**
@@ -961,7 +1079,8 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	 * @return variable name
 	 */
 	public String getRowIndexVar(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ROW_INDEX_VAR, facesContext);
+		String s = engine.getStringProperty(Properties.ROW_INDEX_VAR, facesContext);
+		return s;
 	}
 
 	/**
@@ -989,7 +1108,8 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	}
 
 	public String getRowValue(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ROW_VALUE, facesContext);
+		String s = engine.getStringProperty(Properties.ROW_VALUE, facesContext);
+		return s;
 	}
 
 	public void setRowValue(String rowValue) {
@@ -1022,6 +1142,26 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	 */
 	public boolean isRowValueConverterSetted() {
 		return engine.isPropertySetted(Properties.ROW_VALUE_CONVERTER);
+	}
+
+	public boolean isCellTextWrap() {
+		return isCellTextWrap(null);
+	}
+
+	public boolean isCellTextWrap(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.CELL_TEXT_WRAP, false, facesContext);
+	}
+
+	public void setCellTextWrap(boolean cellTextWrap) {
+		engine.setProperty(Properties.CELL_TEXT_WRAP, cellTextWrap);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "cellTextWrap" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isCellTextWrapSetted() {
+		return engine.isPropertySetted(Properties.CELL_TEXT_WRAP);
 	}
 
 	protected Set getCameliaFields() {

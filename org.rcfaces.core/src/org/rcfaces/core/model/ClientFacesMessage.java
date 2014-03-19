@@ -19,11 +19,9 @@ import org.rcfaces.core.component.capability.IClientDataCapability;
  */
 public class ClientFacesMessage extends FacesMessage implements
         IClientDataCapability {
-    private static final String REVISION = "$Revision$";
-
     private static final long serialVersionUID = 4456702905941225305L;
 
-    private Map clientDataMap;
+    private Map<String, String> clientDataMap;
 
     public ClientFacesMessage() {
         super();
@@ -46,7 +44,7 @@ public class ClientFacesMessage extends FacesMessage implements
             return null;
         }
 
-        return (String) clientDataMap.get(name);
+        return clientDataMap.get(name);
     }
 
     public int getClientDataCount() {
@@ -57,11 +55,11 @@ public class ClientFacesMessage extends FacesMessage implements
         return clientDataMap.size();
     }
 
-    public Map getClientDataMap() {
+    public Map<String, String> getClientDataMap() {
         if (clientDataMap == null) {
-            return Collections.EMPTY_MAP;
+            return Collections.emptyMap();
         }
-        return new HashMap(clientDataMap);
+        return new HashMap<String, String>(clientDataMap);
     }
 
     public String[] listClientDataKeys() {
@@ -69,9 +67,9 @@ public class ClientFacesMessage extends FacesMessage implements
             return new String[] {};
         }
 
-        Collection keys = clientDataMap.keySet();
+        Collection<String> keys = clientDataMap.keySet();
 
-        return (String[]) keys.toArray(new String[keys.size()]);
+        return keys.toArray(new String[keys.size()]);
     }
 
     public String removeClientData(String name) {
@@ -79,7 +77,7 @@ public class ClientFacesMessage extends FacesMessage implements
             return null;
         }
 
-        return (String) clientDataMap.remove(name);
+        return clientDataMap.remove(name);
     }
 
     public String setClientData(String name, String data) {
@@ -87,7 +85,7 @@ public class ClientFacesMessage extends FacesMessage implements
             return null;
         }
 
-        return (String) clientDataMap.put(name, data);
+        return clientDataMap.put(name, data);
     }
 
 }

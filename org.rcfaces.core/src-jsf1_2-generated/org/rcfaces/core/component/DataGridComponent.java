@@ -1,11 +1,14 @@
 package org.rcfaces.core.component;
 
+import org.rcfaces.core.component.capability.ICriteriaManagerCapability;
 import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
 import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.converter.DragDropEffectsConverter;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ISelectableCapability;
 import org.rcfaces.core.internal.capability.ISortedComponentsCapability;
+import org.rcfaces.core.internal.tools.ToolTipTools;
+import org.rcfaces.core.component.capability.ICriteriaCountCapability;
 import org.rcfaces.core.internal.tools.SelectionTools;
 import org.rcfaces.core.component.capability.IKeySearchColumnIdCapability;
 import org.rcfaces.core.component.capability.IHeaderVisibilityCapability;
@@ -18,27 +21,34 @@ import org.rcfaces.core.internal.capability.IDraggableGridComponent;
 import org.rcfaces.core.component.capability.IDragEventCapability;
 import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.capability.IRowToolTipIdCapability;
 import org.rcfaces.core.component.capability.ISortedChildrenCapability;
 import org.rcfaces.core.component.capability.IDroppableCapability;
+import org.rcfaces.core.internal.tools.AdditionalInformationTools
+			;
 import org.rcfaces.core.internal.converter.CheckCardinalityConverter;
+import org.rcfaces.core.component.capability.IGridCaptionCapability;
 import org.rcfaces.core.internal.capability.IAdditionalInformationRangeComponent;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.tools.CheckTools;
+import org.rcfaces.core.internal.tools.CriteriaTools;
 import org.rcfaces.core.component.capability.IScrollableCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.model.ISortedComponent;
-import org.rcfaces.core.internal.tools.AdditionalInformationTools;
+import java.lang.Object;
 import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import org.rcfaces.core.internal.tools.OrderTools;
 import org.rcfaces.core.component.iterator.IColumnIterator;
 import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.internal.capability.ICriteriaContainer;
 import org.rcfaces.core.component.capability.IEmptyDataMessageCapability;
 import org.rcfaces.core.component.capability.IClientSelectionFullStateCapability;
-import org.rcfaces.core.component.AbstractDataComponent;
 import org.rcfaces.core.component.capability.IDraggableCapability;
+import org.rcfaces.core.component.AbstractDataComponent;
 import org.rcfaces.core.component.capability.IShowValueCapability;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.capability.IPreferencesSettings;
+import org.rcfaces.core.internal.capability.IToolTipComponent;
 import org.rcfaces.core.internal.capability.ICheckRangeComponent;
 import org.rcfaces.core.component.capability.IDropCompleteEventCapability;
 import org.rcfaces.core.component.capability.IDisabledCapability;
@@ -61,6 +71,7 @@ import org.rcfaces.core.component.capability.IDragAndDropEffects;
 import org.rcfaces.core.component.capability.ICheckableCapability;
 import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
 import org.rcfaces.core.component.capability.IRowStyleClassCapability;
+import org.rcfaces.core.component.iterator.IToolTipIterator;
 import org.rcfaces.core.internal.converter.SelectionCardinalityConverter;
 import org.rcfaces.core.internal.tools.SortTools;
 import org.apache.commons.logging.Log;
@@ -73,11 +84,14 @@ import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import org.rcfaces.core.component.capability.IAdditionalInformationEventCapability;
 import org.rcfaces.core.component.DataColumnComponent;
 import org.rcfaces.core.component.iterator.IAdditionalInformationIterator;
+import org.rcfaces.core.component.capability.IScopeColumnIdCapability;
 import org.rcfaces.core.component.capability.IDropEventCapability;
 import java.lang.String;
 import org.rcfaces.core.internal.converter.ClientFullStateConverter;
+import org.rcfaces.core.model.ICriteriaSelectedResult;
 import org.rcfaces.core.component.capability.IAdditionalInformationValuesCapability;
 import org.rcfaces.core.component.capability.ICheckEventCapability;
+import org.rcfaces.core.model.ISelectedCriteria;
 import javax.el.ValueExpression;
 import java.util.HashSet;
 import org.rcfaces.core.internal.converter.AdditionalInformationCardinalityConverter;
@@ -101,15 +115,15 @@ import org.rcfaces.core.internal.tools.CollectionTools;
  * </p>
  */
 public class DataGridComponent extends AbstractDataComponent implements 
-	ISelectionEventCapability,
-	ISelectableCapability,
-	ISelectionCardinalityCapability,
-	ISelectedValuesCapability,
 	IDragEventCapability,
 	IDraggableCapability,
 	IDropEventCapability,
 	IDropCompleteEventCapability,
 	IDroppableCapability,
+	ISelectionEventCapability,
+	ISelectableCapability,
+	ISelectionCardinalityCapability,
+	ISelectedValuesCapability,
 	ICheckEventCapability,
 	ICheckableCapability,
 	ICheckCardinalityCapability,
@@ -133,10 +147,15 @@ public class DataGridComponent extends AbstractDataComponent implements
 	IKeySearchColumnIdCapability,
 	IPreferencesSettings,
 	IPagedCapability,
+	ICriteriaCountCapability,
 	IClientSelectionFullStateCapability,
 	IClientCheckFullStateCapability,
 	IHeaderVisibilityCapability,
+	IRowToolTipIdCapability,
 	ICursorProvider,
+	IScopeColumnIdCapability,
+	IGridCaptionCapability,
+	IToolTipComponent,
 	IGridComponent,
 	IDroppableGridComponent,
 	IOrderedChildrenCapability,
@@ -145,6 +164,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 	ISelectionRangeComponent,
 	ICheckRangeComponent,
 	ISortedComponentsCapability,
+	ICriteriaManagerCapability,
 	IAdditionalInformationRangeComponent,
 	IDraggableGridComponent {
 
@@ -154,7 +174,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"dragListener","rowDropEffects","dropListener","dropEffects","emptyDataMessage","loadListener","checkedValues","selectionListener","paged","additionalInformationListener","cursorValue","border","required","bodyDroppable","doubleClickListener","clientCheckFullState","rowLabelColumnId","horizontalScrollPosition","dropCompleteListener","rowCountVar","dropTypes","rowDragEffects","rowValueColumnId","additionalInformationCardinality","rowIndexVar","checkListener","headerVisible","selectionCardinality","droppable","dragTypes","rowDropTypes","clientAdditionalInformationFullState","checkCardinality","checkable","cellTextWrap","rowDragTypes","additionalInformationValues","showValue","verticalScrollPosition","clientSelectionFullState","preferences","filterProperties","dragEffects","selectedValues","rowStyleClass","keySearchColumnId","readOnly","selectable","draggable","disabled"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"summary","dragListener","scopeColumnId","rowDropEffects","dropListener","dropEffects","fullCriteriaCount","emptyDataMessage","loadListener","checkedValues","selectionListener","paged","additionalInformationListener","cursorValue","border","required","bodyDroppable","doubleClickListener","clientCheckFullState","rowLabelColumnId","horizontalScrollPosition","rowCountVar","dropCompleteListener","rowToolTipId","dropTypes","rowDragEffects","rowValueColumnId","selectedCriteriaColumns","additionalInformationCardinality","rowIndexVar","checkListener","headerVisible","droppable","selectionCardinality","dragTypes","rowDropTypes","clientAdditionalInformationFullState","checkCardinality","checkable","cellTextWrap","rowDragTypes","additionalInformationValues","showValue","verticalScrollPosition","clientSelectionFullState","preferences","filterProperties","dragEffects","selectedValues","caption","rowStyleClass","keySearchColumnId","readOnly","selectable","draggable","disabled"}));
 	}
 
 	public DataGridComponent() {
@@ -166,31 +186,42 @@ public class DataGridComponent extends AbstractDataComponent implements
 		setId(componentId);
 	}
 
+	public IToolTipIterator listToolTips() {
+
+
+			return ToolTipTools.listToolTips(this);
+		
+	}
+
 	public UIComponent[] getSortedChildren() {
 
 
-				return SortTools.getSortedChildren(null, this, engine, DataColumnComponent.class);
+				return SortTools.getSortedChildren(null, this, engine,
+				DataColumnComponent.class);
 			
 	}
 
 	public void setSortedChildren(UIComponent[] components) {
 
 
-				SortTools.setSortedChildren(null, this, engine, DataColumnComponent.class, components);
+				SortTools.setSortedChildren(null, this, engine,
+				DataColumnComponent.class, components);
 			
 	}
 
 	public void setOrderedChildren(UIComponent[] components) {
 
 
-				OrderTools.setOrderedChildren(null, this, engine, DataColumnComponent.class, components);
+				OrderTools.setOrderedChildren(null, this, engine,
+				DataColumnComponent.class, components);
 			
 	}
 
 	public UIComponent[] getOrderedChildren() {
 
 
-				return OrderTools.getOrderedChildren(null, this, engine, DataColumnComponent.class);
+				return OrderTools.getOrderedChildren(null, this, engine,
+				DataColumnComponent.class);
 			
 	}
 
@@ -260,7 +291,8 @@ public class DataGridComponent extends AbstractDataComponent implements
 	public IColumnIterator listColumns() {
 
 
-				return GridTools.listColumns(this, org.rcfaces.core.component.DataColumnComponent.class);
+				return GridTools.listColumns(this,
+				org.rcfaces.core.component.DataColumnComponent.class);
 			
 	}
 
@@ -274,7 +306,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 	public IAdditionalInformationIterator listAdditionalInformations() {
 
 
-			return AdditionalInformationTools.listAdditionalInformations(this);
+				return AdditionalInformationTools.listAdditionalInformations(this);
 			
 	}
 
@@ -302,14 +334,16 @@ public class DataGridComponent extends AbstractDataComponent implements
 	public Object getFirstSelectedValue() {
 
 
-				return SelectionTools.getFirst(getSelectedValues(), getValue());
+				return SelectionTools.getFirst(getSelectedValues(),
+				getValue());
 			
 	}
 
 	public Object[] listSelectedValues() {
 
 
-				return SelectionTools.listValues(getSelectedValues(), getValue());
+				return SelectionTools.listValues(getSelectedValues(),
+				getValue());
 			
 	}
 
@@ -413,28 +447,72 @@ public class DataGridComponent extends AbstractDataComponent implements
 	public int getAdditionalInformationValuesCount() {
 
 
-				return AdditionalInformationTools.getCount(getAdditionalInformationValues());
+				return
+				AdditionalInformationTools.getCount(getAdditionalInformationValues());
 			
 	}
 
 	public Object getFirstAdditionalInformationValue() {
 
 
-				return AdditionalInformationTools.getFirst(getAdditionalInformationValues(), null);
+				return
+				AdditionalInformationTools.getFirst(getAdditionalInformationValues(),
+				null);
 			
 	}
 
 	public Object getAdditionalInformationValues(FacesContext facesContext) {
 
 
-				return engine.getValue(Properties.ADDITIONAL_INFORMATION_VALUES, facesContext);
+				return
+				engine.getValue(Properties.ADDITIONAL_INFORMATION_VALUES,
+				facesContext);
 			
 	}
 
 	public Object[] listAdditionalInformationValues() {
 
 
-				return AdditionalInformationTools.listValues(getAdditionalInformationValues(), getValue());
+				return
+				AdditionalInformationTools.listValues(getAdditionalInformationValues(),
+				getValue());
+			
+	}
+
+	public ICriteriaContainer[] listCriteriaContainers() {
+
+
+				return CriteriaTools.listCriteriaContainers(null, this);
+			
+	}
+
+	public ICriteriaContainer[] listSelectedCriteriaContainers() {
+
+
+				return CriteriaTools.getSelectedCriteriaColumns(null, this,
+				engine, Properties.SELECTED_CRITERIA_COLUMNS);
+			
+	}
+
+	public void setSelectedCriteriaContainers(ICriteriaContainer[] components) {
+
+
+				CriteriaTools.setSelectedCriteriaColumns(null, this, engine,
+				components, Properties.SELECTED_CRITERIA_COLUMNS);
+			
+	}
+
+	public ICriteriaSelectedResult processSelectedCriteria() {
+
+
+				return CriteriaTools.processCriteriaConfig(this, null);
+			
+	}
+
+	public ICriteriaSelectedResult processSelectedCriteria(ISelectedCriteria[] configs) {
+
+
+				return CriteriaTools.processCriteriaConfig(this, configs);
 			
 	}
 
@@ -448,14 +526,17 @@ public class DataGridComponent extends AbstractDataComponent implements
 	public DataColumnComponent getFirstSortedColumn() {
 
 
-				return (DataColumnComponent)SortTools.getFirstSortedChild(null, this, engine, DataColumnComponent.class );
+				return (DataColumnComponent)SortTools.getFirstSortedChild(null,
+				this, engine, DataColumnComponent.class );
 			
 	}
 
 	public void setSortedColumn(DataColumnComponent dataColumn) {
 
 
-				SortTools.setSortedChildren(null, this, engine, DataColumnComponent.class, new DataColumnComponent[] { dataColumn });
+				SortTools.setSortedChildren(null, this, engine,
+				DataColumnComponent.class, new DataColumnComponent[] { dataColumn
+				});
 			
 	}
 
@@ -672,11 +753,12 @@ public class DataGridComponent extends AbstractDataComponent implements
 	public Object getCursorValue(FacesContext facesContext) {
 
 
-				Object cursorValue=engine.getValue(Properties.CURSOR_VALUE, facesContext);
+				Object cursorValue=engine.getValue(Properties.CURSOR_VALUE,
+				facesContext);
 				if (cursorValue!=null) {
-					return cursorValue;
+				return cursorValue;
 				}
-				
+
 				return ComponentTools.getCursorValue(getValue(), this, facesContext);
 			
 	}
@@ -688,90 +770,6 @@ public class DataGridComponent extends AbstractDataComponent implements
 			
 			setFilterProperties(filterProperties);
 		
-	}
-
-	public final void addSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
-		addFacesListener(listener);
-	}
-
-	public final void removeSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
-		removeFacesListener(listener);
-	}
-
-	public final javax.faces.event.FacesListener [] listSelectionListeners() {
-		return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
-	}
-
-	public boolean isSelectable() {
-		return isSelectable(null);
-	}
-
-	/**
-	 * See {@link #isSelectable() isSelectable()} for more details
-	 */
-	public boolean isSelectable(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.SELECTABLE, false, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "selectable" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isSelectableSetted() {
-		return engine.isPropertySetted(Properties.SELECTABLE);
-	}
-
-	public void setSelectable(boolean selectable) {
-		engine.setProperty(Properties.SELECTABLE, selectable);
-	}
-
-	public int getSelectionCardinality() {
-		return getSelectionCardinality(null);
-	}
-
-	/**
-	 * See {@link #getSelectionCardinality() getSelectionCardinality()} for more details
-	 */
-	public int getSelectionCardinality(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.SELECTION_CARDINALITY,0, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "selectionCardinality" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isSelectionCardinalitySetted() {
-		return engine.isPropertySetted(Properties.SELECTION_CARDINALITY);
-	}
-
-	public void setSelectionCardinality(int selectionCardinality) {
-		engine.setProperty(Properties.SELECTION_CARDINALITY, selectionCardinality);
-	}
-
-	public java.lang.Object getSelectedValues() {
-		return getSelectedValues(null);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "selectedValues" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isSelectedValuesSetted() {
-		return engine.isPropertySetted(Properties.SELECTED_VALUES);
-	}
-
-	/**
-	 * Return the type of the property represented by the {@link ValueExpression}, relative to the specified {@link javax.faces.context.FacesContext}.
-	 */
-	public Class getSelectedValuesType(javax.faces.context.FacesContext facesContext) {
-		ValueExpression valueExpression=engine.getValueExpressionProperty(Properties.SELECTED_VALUES);
-		if (valueExpression==null) {
-			return null;
-		}
-		if (facesContext==null) {
-			facesContext=javax.faces.context.FacesContext.getCurrentInstance();
-		}
-		return valueExpression.getType(facesContext.getELContext());
 	}
 
 	public final void addDragListener(org.rcfaces.core.event.IDragListener listener) {
@@ -946,6 +944,90 @@ public class DataGridComponent extends AbstractDataComponent implements
 
 	public void setDroppable(boolean droppable) {
 		engine.setProperty(Properties.DROPPABLE, droppable);
+	}
+
+	public final void addSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listSelectionListeners() {
+		return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
+	}
+
+	public boolean isSelectable() {
+		return isSelectable(null);
+	}
+
+	/**
+	 * See {@link #isSelectable() isSelectable()} for more details
+	 */
+	public boolean isSelectable(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.SELECTABLE, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "selectable" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isSelectableSetted() {
+		return engine.isPropertySetted(Properties.SELECTABLE);
+	}
+
+	public void setSelectable(boolean selectable) {
+		engine.setProperty(Properties.SELECTABLE, selectable);
+	}
+
+	public int getSelectionCardinality() {
+		return getSelectionCardinality(null);
+	}
+
+	/**
+	 * See {@link #getSelectionCardinality() getSelectionCardinality()} for more details
+	 */
+	public int getSelectionCardinality(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.SELECTION_CARDINALITY,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "selectionCardinality" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isSelectionCardinalitySetted() {
+		return engine.isPropertySetted(Properties.SELECTION_CARDINALITY);
+	}
+
+	public void setSelectionCardinality(int selectionCardinality) {
+		engine.setProperty(Properties.SELECTION_CARDINALITY, selectionCardinality);
+	}
+
+	public java.lang.Object getSelectedValues() {
+		return getSelectedValues(null);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "selectedValues" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isSelectedValuesSetted() {
+		return engine.isPropertySetted(Properties.SELECTED_VALUES);
+	}
+
+	/**
+	 * Return the type of the property represented by the {@link ValueExpression}, relative to the specified {@link javax.faces.context.FacesContext}.
+	 */
+	public Class getSelectedValuesType(javax.faces.context.FacesContext facesContext) {
+		ValueExpression valueExpression=engine.getValueExpressionProperty(Properties.SELECTED_VALUES);
+		if (valueExpression==null) {
+			return null;
+		}
+		if (facesContext==null) {
+			facesContext=javax.faces.context.FacesContext.getCurrentInstance();
+		}
+		return valueExpression.getType(facesContext.getELContext());
 	}
 
 	public final void addCheckListener(org.rcfaces.core.event.ICheckListener listener) {
@@ -1463,6 +1545,29 @@ public class DataGridComponent extends AbstractDataComponent implements
 		engine.setProperty(Properties.PAGED, paged);
 	}
 
+	public boolean isFullCriteriaCount() {
+		return isFullCriteriaCount(null);
+	}
+
+	/**
+	 * See {@link #isFullCriteriaCount() isFullCriteriaCount()} for more details
+	 */
+	public boolean isFullCriteriaCount(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.FULL_CRITERIA_COUNT, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "fullCriteriaCount" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isFullCriteriaCountSetted() {
+		return engine.isPropertySetted(Properties.FULL_CRITERIA_COUNT);
+	}
+
+	public void setFullCriteriaCount(boolean fullCriteriaCount) {
+		engine.setProperty(Properties.FULL_CRITERIA_COUNT, fullCriteriaCount);
+	}
+
 	public int getClientSelectionFullState() {
 		return getClientSelectionFullState(null);
 	}
@@ -1532,6 +1637,29 @@ public class DataGridComponent extends AbstractDataComponent implements
 		engine.setProperty(Properties.HEADER_VISIBLE, headerVisible);
 	}
 
+	public java.lang.String getRowToolTipId() {
+		return getRowToolTipId(null);
+	}
+
+	/**
+	 * See {@link #getRowToolTipId() getRowToolTipId()} for more details
+	 */
+	public java.lang.String getRowToolTipId(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ROW_TOOL_TIP_ID, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "rowToolTipId" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isRowToolTipIdSetted() {
+		return engine.isPropertySetted(Properties.ROW_TOOL_TIP_ID);
+	}
+
+	public void setRowToolTipId(java.lang.String rowToolTipId) {
+		engine.setProperty(Properties.ROW_TOOL_TIP_ID, rowToolTipId);
+	}
+
 	public java.lang.Object getCursorValue() {
 		return getCursorValue(null);
 	}
@@ -1546,6 +1674,75 @@ public class DataGridComponent extends AbstractDataComponent implements
 
 	public void setCursorValue(java.lang.Object cursorValue) {
 		engine.setProperty(Properties.CURSOR_VALUE, cursorValue);
+	}
+
+	public java.lang.String getScopeColumnId() {
+		return getScopeColumnId(null);
+	}
+
+	/**
+	 * See {@link #getScopeColumnId() getScopeColumnId()} for more details
+	 */
+	public java.lang.String getScopeColumnId(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.SCOPE_COLUMN_ID, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "scopeColumnId" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isScopeColumnIdSetted() {
+		return engine.isPropertySetted(Properties.SCOPE_COLUMN_ID);
+	}
+
+	public void setScopeColumnId(java.lang.String scopeColumnId) {
+		engine.setProperty(Properties.SCOPE_COLUMN_ID, scopeColumnId);
+	}
+
+	public java.lang.String getSummary() {
+		return getSummary(null);
+	}
+
+	/**
+	 * See {@link #getSummary() getSummary()} for more details
+	 */
+	public java.lang.String getSummary(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.SUMMARY, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "summary" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isSummarySetted() {
+		return engine.isPropertySetted(Properties.SUMMARY);
+	}
+
+	public void setSummary(java.lang.String summary) {
+		engine.setProperty(Properties.SUMMARY, summary);
+	}
+
+	public java.lang.String getCaption() {
+		return getCaption(null);
+	}
+
+	/**
+	 * See {@link #getCaption() getCaption()} for more details
+	 */
+	public java.lang.String getCaption(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.CAPTION, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "caption" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isCaptionSetted() {
+		return engine.isPropertySetted(Properties.CAPTION);
+	}
+
+	public void setCaption(java.lang.String caption) {
+		engine.setProperty(Properties.CAPTION, caption);
 	}
 
 	public String[] getRowDragTypes() {
@@ -1628,6 +1825,26 @@ public class DataGridComponent extends AbstractDataComponent implements
 		return engine.isPropertySetted(Properties.ROW_DROP_EFFECTS);
 	}
 
+	public Object getSelectedCriteriaColumns() {
+		return getSelectedCriteriaColumns(null);
+	}
+
+	public Object getSelectedCriteriaColumns(javax.faces.context.FacesContext facesContext) {
+		return engine.getValue(Properties.SELECTED_CRITERIA_COLUMNS, facesContext);
+	}
+
+	public void setSelectedCriteriaColumns(Object selectedCriteriaColumns) {
+		engine.setValue(Properties.SELECTED_CRITERIA_COLUMNS, selectedCriteriaColumns);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "selectedCriteriaColumns" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isSelectedCriteriaColumnsSetted() {
+		return engine.isPropertySetted(Properties.SELECTED_CRITERIA_COLUMNS);
+	}
+
 	/**
 	 * Returns the id for the column containing the key for the row.
 	 * @return column id
@@ -1641,7 +1858,8 @@ public class DataGridComponent extends AbstractDataComponent implements
 	 * @return column id
 	 */
 	public String getRowValueColumnId(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ROW_VALUE_COLUMN_ID, facesContext);
+		String s = engine.getStringProperty(Properties.ROW_VALUE_COLUMN_ID, facesContext);
+		return s;
 	}
 
 	/**
@@ -1669,7 +1887,8 @@ public class DataGridComponent extends AbstractDataComponent implements
 	}
 
 	public String getRowLabelColumnId(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ROW_LABEL_COLUMN_ID, facesContext);
+		String s = engine.getStringProperty(Properties.ROW_LABEL_COLUMN_ID, facesContext);
+		return s;
 	}
 
 	public void setRowLabelColumnId(String rowLabelColumnId) {
@@ -1697,7 +1916,8 @@ public class DataGridComponent extends AbstractDataComponent implements
 	 * @return variable name
 	 */
 	public String getRowCountVar(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ROW_COUNT_VAR, facesContext);
+		String s = engine.getStringProperty(Properties.ROW_COUNT_VAR, facesContext);
+		return s;
 	}
 
 	/**
@@ -1733,7 +1953,8 @@ public class DataGridComponent extends AbstractDataComponent implements
 	 * @return variable name
 	 */
 	public String getRowIndexVar(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ROW_INDEX_VAR, facesContext);
+		String s = engine.getStringProperty(Properties.ROW_INDEX_VAR, facesContext);
+		return s;
 	}
 
 	/**

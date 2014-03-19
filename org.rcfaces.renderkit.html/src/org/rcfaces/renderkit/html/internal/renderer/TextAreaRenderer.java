@@ -13,8 +13,11 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.AbstractInputRenderer;
+import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
+import org.rcfaces.renderkit.html.internal.util.CarriageReturnNormalizerMode;
 
 /**
  * 
@@ -22,8 +25,8 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  * @version $Revision$ $Date$
  */
 public class TextAreaRenderer extends AbstractInputRenderer {
-    private static final String REVISION = "$Revision$";
 
+    @SuppressWarnings("unused")
     protected void encodeComponent(IHtmlWriter htmlWriter)
             throws WriterException {
 
@@ -104,7 +107,7 @@ public class TextAreaRenderer extends AbstractInputRenderer {
 
         int maxTextLength = textAreaComponent.getMaxTextLength(facesContext);
         if (maxTextLength > 0) {
-            htmlWriter.writeAttribute("v:maxTextLength", maxTextLength);
+            htmlWriter.writeAttributeNS("maxTextLength", maxTextLength);
 
             // htmlWriter.enableJavaScript(); Bof bof ... on peut le faire à la
             // génération ?
@@ -113,7 +116,11 @@ public class TextAreaRenderer extends AbstractInputRenderer {
         }
 
         if (textAreaComponent.isIgnoreWhenFull(facesContext)) {
-            htmlWriter.writeAttribute("v:ignoreWhenFull", true);
+            htmlWriter.writeAttributeNS("ignoreWhenFull", true);
+        }
+
+        if (textAreaComponent.isRequired()) {
+            htmlWriter.writeAriaRequired(true);
         }
     }
 
@@ -170,9 +177,44 @@ public class TextAreaRenderer extends AbstractInputRenderer {
             }
         }
 
+        if (newValue != null && newValue.length() > 0) {
+            IHtmlProcessContext htmlProcessContext = (IHtmlProcessContext) context
+                    .getProcessContext();
+
+            CarriageReturnNormalizerMode normalizer = htmlProcessContext
+                    .getCarriageReturnNormalizerMode();
+
+            if (normalizer != null) {
+                switch (normalizer) {
+                case NormalizeToCR:
+                    newValue = newValue.replace("\r\n", "\r");
+                    newValue = newValue.replace("\n", "\r");
+                    break;
+
+                case NormalizeToLF:
+                    newValue = newValue.replace("\r\n", "\n");
+                    newValue = newValue.replace("\r", "\n");
+                    break;
+
+                case NormalizeToCRLF:
+                    newValue = newValue.replace("\r\n", "\n");
+                    newValue = newValue.replace("\r", "\n");
+                    newValue = newValue.replace("\n", "\r\n");
+                    break;
+                }
+            }
+        }
+
         if (newValue != null
                 && textAreaComponent.isValueLocked(facesContext) == false) {
             textAreaComponent.setSubmittedExternalValue(newValue);
         }
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "maxTextLength",
+                "ignoreWhenFull" });
     }
 }

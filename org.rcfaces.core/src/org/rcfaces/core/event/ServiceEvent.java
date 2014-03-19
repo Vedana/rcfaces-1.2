@@ -17,8 +17,6 @@ import org.rcfaces.core.progressMonitor.IProgressMonitor;
  */
 public class ServiceEvent extends ActionEvent {
 
-    private static final String REVISION = "$Revision$";
-
     private static final long serialVersionUID = -5716525897091852723L;
 
     private final Object data;
@@ -31,10 +29,12 @@ public class ServiceEvent extends ActionEvent {
         this.data = data;
     }
 
+    @Override
     public boolean isAppropriateListener(FacesListener listener) {
         return (listener instanceof IServiceEventListener);
     }
 
+    @Override
     public void processListener(FacesListener listener) {
         ((IServiceEventListener) listener).processServiceEvent(this);
     }

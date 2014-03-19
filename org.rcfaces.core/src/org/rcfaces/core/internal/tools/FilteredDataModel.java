@@ -15,7 +15,6 @@ import org.rcfaces.core.model.IFilterProperties;
  * @version $Revision$ $Date$
  */
 public class FilteredDataModel {
-    private static final String REVISION = "$Revision$";
 
     public static DataModel filter(DataModel dataModel,
             IFilterProperties filters) {

@@ -14,6 +14,8 @@
 	position: absolute;
 	visibility: hidden;
 	z-index: 2000;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 .f_popup_iframe_body {

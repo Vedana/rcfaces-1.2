@@ -41,7 +41,7 @@ var __statics = {
 	 * @field private static final String
 	 */	  
 	_LINK_ID_SUFFIX: "::a"
-}
+};
  
 var __members = {
 
@@ -124,6 +124,7 @@ var __members = {
 		
 		switch(this.tagName.toLowerCase()) {
 		case "input":
+		case "button":
 			// Il faut recuperer le click pour empecher le submit !
 			image=this;
 			break;
@@ -150,7 +151,7 @@ var __members = {
 					}
 				}
 				
-				var tabIndex=f_core.GetAttribute(this, "v:tabIndex");
+				var tabIndex=f_core.GetAttributeNS(this,"tabIndex");
 				if (!tabIndex) {
 					tabIndex=0;
 				}
@@ -166,6 +167,14 @@ var __members = {
 		return eventComponent;
 	},
 	
+	/**
+	 * 
+	 * @method protected final
+	 * @return HTMLElement
+	 */
+	f_getInput: function() {
+		return this.f_getEventElement();
+	},
 	/**
 	 * 
 	 * @method protected
@@ -362,7 +371,7 @@ var __members = {
 		var url=null;
 		
 		var suffix="";
-		var ignoreFlat;
+		var ignoreFlat=undefined;
 		if (this.f_isDisabled()) {
 			url = this.f_getDisabledImageURL();
 			suffix="_disabled";
@@ -516,13 +525,24 @@ var __members = {
 	},
 	fa_updateDisabled: function(disabled) {
 		var cmp=this.f_getEventElement();
+		var isInput = (cmp.tagName.toLowerCase() == "input");
 		if (disabled) {
-			cmp.tabIndex=-1;
+			// Initialisation eventuelle
+			this.fa_getTabIndex();
+			if (isInput) {
+				cmp.disabled = true;
+			} else {
+				cmp.tabIndex=-1;
+			}
 			cmp.hideFocus=true;
 			fa_aria.SetElementAriaDisabled(cmp, disabled);
 			
 		} else {
-			cmp.tabIndex=this.fa_getTabIndex();
+			if (isInput) {
+				cmp.disabled = false;
+			} else {
+				cmp.tabIndex=this.fa_getTabIndex();
+			}
 			cmp.hideFocus=false;
 			cmp.removeAttribute(fa_aria.ARIA_DISABLED);
 		}
@@ -616,13 +636,13 @@ var __members = {
 		if (this.f_isDisabled()) {
 			return;
 		}
-
-		f_core.Debug(f_imageButton, "f_setFocus: Set focus on imageButton '"+this.id+"'.");
 		
 		var cmp=this.f_getEventElement();
 		if (!cmp) {
 			cmp=this;
 		}
+
+		f_core.Debug(f_imageButton, "f_setFocus: Set focus on imageButton '"+this.id+"' focussableComponent="+cmp);
 		
 		cmp.focus();
 	},
@@ -661,11 +681,11 @@ var __members = {
 		
 		return imageElement.src;
 	}
-}
+};
 
 new f_class("f_imageButton", {
 	extend: f_component, 
-	aspects: [ fa_readOnly, fa_disabled, fa_tabIndex, fa_borderType, fa_images, fa_immediate, fa_value, fa_aria ],
+	aspects: [ fa_readOnly, fa_disabled, fa_tabIndex, fa_borderType, fa_images, fa_immediate, fa_value, fa_aria, fa_basicToolTipContainer ],
 	statics: __statics,
 	members: __members
 });

@@ -19,13 +19,17 @@ import org.rcfaces.core.internal.util.FastWriter;
  * @version $Revision$ $Date$
  */
 public class CssWriter extends FastWriter implements ICssWriter {
-    private static final String REVISION = "$Revision$";
-
     protected static final String BACKGROUND = "background";
 
     protected static final String BACKGROUND_COLOR = "background-color";
 
     protected static final String BORDER_STYLE = "border-style";
+    
+    protected static final String BORDER_LEFT_WIDTH = "border-left-width";
+    
+    protected static final String BORDER_RIGHT_WIDTH = "border-right-width";
+
+    protected static final String BOTTOM = "bottom";
 
     protected static final String COLOR = "color";
 
@@ -58,10 +62,12 @@ public class CssWriter extends FastWriter implements ICssWriter {
     protected static final String OVERFLOW = "overflow";
 
     protected static final String PADDING = "padding";
-    
+
     protected static final String PADDING_TOP = "padding-top";
 
     protected static final String POSITION = "position";
+
+    protected static final String RIGHT = "right";
 
     protected static final String TEXT_ALIGN = "text-align";
 
@@ -237,9 +243,9 @@ public class CssWriter extends FastWriter implements ICssWriter {
             writeFontFamily(fontName);
         }
 
-        if (fontSize != null) {
-            writeFontSize(fontSize);
-        }
+        // if (fontSize != null) {
+        // writeFontSize(fontSize);
+        // }
 
         if (fbold != null) {
             if (fbold.booleanValue()) {
@@ -314,14 +320,22 @@ public class CssWriter extends FastWriter implements ICssWriter {
     public ICssWriter writeLeft(String left) {
         return writeProperty(LEFT, left, null);
     }
-    
-    public ICssWriter writeLeftPx(int left) {
-		return writeProperty(LEFT, String.valueOf(left), PX_UNIT);
-	}
 
-	public ICssWriter writeTopPx(int top) {
-		return writeProperty(TOP, String.valueOf(top), PX_UNIT);
-	}
+    public ICssWriter writeLeftPx(int left) {
+        return writeProperty(LEFT, String.valueOf(left), PX_UNIT);
+    }
+
+    public ICssWriter writeTopPx(int top) {
+        return writeProperty(TOP, String.valueOf(top), PX_UNIT);
+    }
+
+    public ICssWriter writeRightPx(int right) {
+        return writeProperty(RIGHT, String.valueOf(right), PX_UNIT);
+    }
+
+    public ICssWriter writeBottomPx(int bottom) {
+        return writeProperty(BOTTOM, String.valueOf(bottom), PX_UNIT);
+    }
 
     public ICssWriter writePosition(String position) {
         return writeProperty(POSITION, position, null);
@@ -353,6 +367,7 @@ public class CssWriter extends FastWriter implements ICssWriter {
         return this;
     }
 
+    @SuppressWarnings("null")
     public final ICssWriter writeMargin(IMarginCapability element) {
         int cnt = 0;
 
@@ -579,6 +594,14 @@ public class CssWriter extends FastWriter implements ICssWriter {
     public ICssWriter writeBorderStyle(String borderStyle) {
         return writeProperty(BORDER_STYLE, borderStyle, null);
     }
+    
+    public ICssWriter writeBorderLeftWidth(int borderSizePx) {
+		return writeProperty(BORDER_LEFT_WIDTH, String.valueOf(borderSizePx), PX_UNIT);
+	}
+
+	public ICssWriter writeBorderRightWidth(int borderSizePx) {
+		return writeProperty(BORDER_RIGHT_WIDTH, String.valueOf(borderSizePx), PX_UNIT);
+	}
 
     public ICssWriter writeMargin(String margin) {
         return writeProperty(MARGIN, margin, null);
@@ -587,7 +610,7 @@ public class CssWriter extends FastWriter implements ICssWriter {
     public ICssWriter writePadding(String padding) {
         return writeProperty(PADDING, padding, null);
     }
-    
+
     public ICssWriter writePaddingTop(String padding) {
         return writeProperty(PADDING_TOP, padding, null);
     }

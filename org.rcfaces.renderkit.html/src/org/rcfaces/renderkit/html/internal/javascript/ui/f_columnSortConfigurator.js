@@ -54,8 +54,8 @@ var __statics = {
     	var selectedSelect=this;
 		var base=selectedSelect._base;
 		
-		var docBase = selectedSelect.ownerDocument;
-		var number = selectedSelect._number;
+//		var docBase = selectedSelect.ownerDocument;
+//		var number = selectedSelect._number;
 		
 		f_core.Debug(f_columnSortConfigurator, "_SelectOnChange: entering");
 
@@ -67,7 +67,7 @@ var __statics = {
 		var cols = f_columnSortConfigurator.GetColumns(grid);		
 		
 		var selects=base._selects;
-		var radios=base._radios;
+//		var radios=base._radios;
 		for(var i=0;i<selects.length;i++) {
 			var select=selects[i];
 			
@@ -158,7 +158,7 @@ var __statics = {
 		}
 		return visibleCols;
 	}
-}
+};
 
 var __members = {
 	
@@ -672,7 +672,7 @@ var __members = {
 	f_getEventLocked: function(evt, showAlert, mask) {
   		return this._eventTarget.f_getEventLocked(evt, showAlert, mask);
   	}
-}
+};
 
 new f_class("f_columnSortConfigurator", {
 	extend: f_object,

@@ -26,6 +26,7 @@ import org.rcfaces.renderkit.html.internal.ICssWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -33,7 +34,6 @@ import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
  * @version $Revision$ $Date$
  */
 public class CalendarRenderer extends AbstractCalendarRenderer {
-    private static final String REVISION = "$Revision$";
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.CALENDAR;
@@ -103,7 +103,7 @@ public class CalendarRenderer extends AbstractCalendarRenderer {
 
         int mode = calendarComponent.getMode(facesContext);
         if (mode != 0) {
-            htmlWriter.writeAttribute("v:mode", mode);
+            htmlWriter.writeAttributeNS("mode", mode);
         }
 
         Object value = calendarComponent.getValue();
@@ -179,14 +179,15 @@ public class CalendarRenderer extends AbstractCalendarRenderer {
         }
 
         if (s_value != null) {
-            htmlWriter.writeAttribute("v:value", s_value);
+            htmlWriter.writeAttributeNS("value", s_value);
         }
 
         if (calendarComponent.isAutoSelection(facesContext)) {
-            htmlWriter.writeAttribute("v:autoSelection", true);
+            htmlWriter.writeAttributeNS("autoSelection", true);
         }
     }
 
+    @SuppressWarnings("unchecked")
     protected void decode(IRequestContext context, UIComponent component,
             IComponentData componentData) {
         super.decode(context, component, componentData);
@@ -196,7 +197,7 @@ public class CalendarRenderer extends AbstractCalendarRenderer {
         Object dateValue = componentData.getProperty("value");
 
         if (dateValue instanceof Collection) {
-            Collection c = (Collection) dateValue;
+            Collection<Date> c = (Collection<Date>) dateValue;
 
             switch (calendarComponent.getMode(context.getFacesContext())) {
             case ICalendarModeCapability.DATE_CALENDAR_MODE:
@@ -216,6 +217,13 @@ public class CalendarRenderer extends AbstractCalendarRenderer {
         }
 
         calendarComponent.setSubmittedExternalValue(date);
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "mode", "value",
+                "autoSelection" });
     }
 
 }

@@ -32,10 +32,8 @@ import org.xml.sax.Attributes;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class BasicHierarchicalRepository extends AbstractRepository
-        implements IHierarchicalRepository {
-
-    private static final String REVISION = "$Revision$";
+public class BasicHierarchicalRepository extends AbstractRepository implements
+        IHierarchicalRepository {
 
     private static final long serialVersionUID = -6882051141540673466L;
 
@@ -52,11 +50,11 @@ public class BasicHierarchicalRepository extends AbstractRepository
 
     private static final Integer SET_TYPE = new Integer(2);
 
-    private final Map modulesByName = new HashMap();
+    private final Map<String, IModule> modulesByName = new HashMap<String, IModule>();
 
-    private final Map setsByName = new HashMap();
+    private final Map<String, ISet> setsByName = new HashMap<String, ISet>();
 
-    private final Map resourcesByName = new HashMap();
+    private final Map<String, IFile> resourcesByName = new HashMap<String, IFile>();
 
     private ISet bootSet;
 
@@ -73,6 +71,7 @@ public class BasicHierarchicalRepository extends AbstractRepository
         this.bootSet = set;
     }
 
+    @Override
     protected IContentProvider getDefaultContentProvider() {
         return URLContentProvider.SINGLETON;
     }
@@ -96,8 +95,8 @@ public class BasicHierarchicalRepository extends AbstractRepository
         final String baseDirectory[] = new String[1];
 
         digester.addRule("repository", new Rule() {
-            private static final String REVISION = "$Revision$";
 
+            @Override
             public void begin(String namespace, String name,
                     Attributes attributes) throws Exception {
 
@@ -117,8 +116,8 @@ public class BasicHierarchicalRepository extends AbstractRepository
         });
 
         digester.addRule("repository/module", new Rule() {
-            private static final String REVISION = "$Revision$";
 
+            @Override
             public void begin(String namespace, String name,
                     Attributes attributes) throws Exception {
                 String id = attributes.getValue("id");
@@ -147,6 +146,7 @@ public class BasicHierarchicalRepository extends AbstractRepository
                 this.digester.push(m);
             }
 
+            @Override
             public void end(String namespace, String name) throws Exception {
                 this.digester.pop();
             }
@@ -154,8 +154,8 @@ public class BasicHierarchicalRepository extends AbstractRepository
         });
 
         digester.addRule("repository/module/file", new Rule() {
-            private static final String REVISION = "$Revision$";
 
+            @Override
             public void begin(String namespace, String xname,
                     Attributes attributes) throws Exception {
 
@@ -169,7 +169,7 @@ public class BasicHierarchicalRepository extends AbstractRepository
 
                 String depends = attributes.getValue("depends");
                 if (depends != null) {
-                    List l = null;
+                    List<IHierarchicalFile> l = null;
                     for (StringTokenizer st = new StringTokenizer(depends, ", "); st
                             .hasMoreTokens();) {
                         String dname = st.nextToken();
@@ -182,15 +182,14 @@ public class BasicHierarchicalRepository extends AbstractRepository
                         }
 
                         if (l == null) {
-                            l = new ArrayList();
+                            l = new ArrayList<IHierarchicalFile>();
                         }
 
                         l.add(fd);
                     }
 
                     if (l != null) {
-                        ds = (IHierarchicalFile[]) l
-                                .toArray(new IHierarchicalFile[l.size()]);
+                        ds = l.toArray(new IHierarchicalFile[l.size()]);
                     }
                 }
 
@@ -200,11 +199,11 @@ public class BasicHierarchicalRepository extends AbstractRepository
 
                 if (contentProviderClassName != null) {
                     try {
-                        Class clazz = ClassLocator.load(
-                                contentProviderClassName, null, container);
+                        Class< ? extends IContentProvider> clazz = ClassLocator
+                                .load(contentProviderClassName, null,
+                                        container, IContentProvider.class);
 
-                        contentProvider = (IContentProvider) clazz
-                                .newInstance();
+                        contentProvider = clazz.newInstance();
 
                     } catch (Exception ex) {
                         LOG.error("Can not find contentProvider class '"
@@ -225,18 +224,17 @@ public class BasicHierarchicalRepository extends AbstractRepository
                 this.digester.push(f);
             }
 
+            @Override
             public void end(String namespace, String name) throws Exception {
                 this.digester.pop();
             }
         });
     }
 
-    public final IHierarchicalFile declareFile(String name, String directory,
-            IModule module, IHierarchicalFile depends[], Object container,
-            IContentProvider contentProvider) {
-        final String contentLocation = getContentLocation(name, directory);
-
+    protected URL searchContent(String name, String contentLocation,
+            Object container) {
         URL url = null;
+
         if (container instanceof ClassLoader) {
             String cl = contentLocation;
             if (cl.startsWith("/")) {
@@ -276,12 +274,32 @@ public class BasicHierarchicalRepository extends AbstractRepository
         }
 
         if (url == null) {
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("Can not find resource ('" + name + "') '"
+                        + contentLocation + "' from container='" + container
+                        + "'.");
+            }
+        }
+
+        return url;
+    }
+
+    public final IHierarchicalFile declareFile(String name, String directory,
+            IModule module, IHierarchicalFile depends[], Object container,
+            IContentProvider contentProvider) {
+        final String contentLocation = getContentLocation(name, directory);
+
+        URL url = searchContent(name, contentLocation, container);
+
+        if (url == null) {
             throw new IllegalArgumentException("Can not locate file '" + name
                     + "'  (location='" + contentLocation + "')");
         }
 
+        IContentRef contentRef = new URLContentRef(null, url);
+
         String rname = "f:" + name;
-        IHierarchicalFile f = createFile(module, rname, name, name, url,
+        IHierarchicalFile f = createFile(module, rname, name, name, contentRef,
                 depends, contentProvider);
 
         filesByName.put(name, f);
@@ -292,8 +310,8 @@ public class BasicHierarchicalRepository extends AbstractRepository
 
     protected HierarchicalFile createFile(IModule module, String name,
             String filename, String unlocalizedURI,
-            URL unlocalizedContentLocation, IHierarchicalFile dependencies[],
-            IContentProvider contentProvider) {
+            IContentRef unlocalizedContentLocation,
+            IHierarchicalFile dependencies[], IContentProvider contentProvider) {
 
         return new HierarchicalFile(module, name, filename, unlocalizedURI,
                 unlocalizedContentLocation, dependencies, contentProvider);
@@ -307,7 +325,7 @@ public class BasicHierarchicalRepository extends AbstractRepository
     }
 
     public IModule getModuleByName(String name) {
-        return (IModule) modulesByName.get(name);
+        return modulesByName.get(name);
     }
 
     public IHierarchicalFile getFileById(String id) {
@@ -315,7 +333,7 @@ public class BasicHierarchicalRepository extends AbstractRepository
     }
 
     public ISet getSetByName(String name) {
-        return (ISet) setsByName.get(name);
+        return setsByName.get(name);
     }
 
     private String getModuleFilename(String id) {
@@ -326,12 +344,12 @@ public class BasicHierarchicalRepository extends AbstractRepository
         return name;
     }
 
-    public IHierarchicalFile[] computeFiles(Collection files,
+    public IHierarchicalFile[] computeFiles(Collection<Object> files,
             int typeOfCollection, IContext context) {
-        List dependencies = null;
-        List deps = null;
+        List<IHierarchicalFile> dependencies = null;
+        List<IHierarchicalFile> deps = null;
 
-        for (Iterator it = files.iterator(); it.hasNext();) {
+        for (Iterator<Object> it = files.iterator(); it.hasNext();) {
             Object next = it.next();
 
             IHierarchicalFile file = convertType(next, typeOfCollection);
@@ -346,7 +364,7 @@ public class BasicHierarchicalRepository extends AbstractRepository
             }
 
             if (deps == null && dependencies != null) {
-                deps = new ArrayList(dependencies);
+                deps = new ArrayList<IHierarchicalFile>(dependencies);
             }
 
             deps = computeFile(file, context, deps);
@@ -361,7 +379,8 @@ public class BasicHierarchicalRepository extends AbstractRepository
 
             // La liste a chang�e !
             if (dependencies == null) {
-                dependencies = new ArrayList(files.size() * 2);
+                dependencies = new ArrayList<IHierarchicalFile>(
+                        files.size() * 2);
 
             } else {
                 deps.removeAll(dependencies); // Retire les doublons
@@ -376,8 +395,7 @@ public class BasicHierarchicalRepository extends AbstractRepository
             return HIERARCHICAL_FILE_EMPTY_ARRAY;
         }
 
-        return (IHierarchicalFile[]) dependencies
-                .toArray(new IHierarchicalFile[dependencies.size()]);
+        return dependencies.toArray(new IHierarchicalFile[dependencies.size()]);
     }
 
     protected IHierarchicalFile convertType(Object next, int typeOfCollection) {
@@ -401,8 +419,8 @@ public class BasicHierarchicalRepository extends AbstractRepository
         return null;
     }
 
-    private List computeFile(IHierarchicalFile file, IContext context,
-            List newFiles) {
+    private List<IHierarchicalFile> computeFile(IHierarchicalFile file,
+            IContext context, List<IHierarchicalFile> newFiles) {
         if (context.contains(file)) {
             return newFiles;
         }
@@ -474,7 +492,7 @@ public class BasicHierarchicalRepository extends AbstractRepository
         context.add(file);
 
         if (newFiles == null) {
-            newFiles = new ArrayList();
+            newFiles = new ArrayList<IHierarchicalFile>();
         }
 
         newFiles.add(file);
@@ -483,19 +501,19 @@ public class BasicHierarchicalRepository extends AbstractRepository
     }
 
     public IModule[] listModules() {
-        Collection c = modulesByName.values();
+        Collection<IModule> c = modulesByName.values();
 
-        return (IModule[]) c.toArray(new IModule[c.size()]);
+        return c.toArray(new IModule[c.size()]);
     }
 
     public ISet[] listSets() {
-        Collection c = setsByName.values();
+        Collection<ISet> c = setsByName.values();
 
-        return (ISet[]) c.toArray(new ISet[c.size()]);
+        return c.toArray(new ISet[c.size()]);
     }
 
     public ISet declareSet(String name, String uri, String[] modules) {
-        List l = new ArrayList(modules.length);
+        List<IModule> l = new ArrayList<IModule>(modules.length);
 
         for (int i = 0; i < modules.length; i++) {
             String moduleName = modules[i];
@@ -511,7 +529,7 @@ public class BasicHierarchicalRepository extends AbstractRepository
             addModules(l, module);
         }
 
-        IModule ms[] = (IModule[]) l.toArray(new IModule[l.size()]);
+        IModule ms[] = l.toArray(new IModule[l.size()]);
 
         return declareSet(name, uri, ms);
     }
@@ -531,7 +549,7 @@ public class BasicHierarchicalRepository extends AbstractRepository
         return set;
     }
 
-    private void addModules(List modules, IModule module) {
+    private void addModules(List<IModule> modules, IModule module) {
         if (modules.contains(module)) {
             return;
         }
@@ -551,7 +569,7 @@ public class BasicHierarchicalRepository extends AbstractRepository
     }
 
     private static IModule[] filterModules(IModule[] modules) {
-        List l = new ArrayList(modules.length);
+        List<IModule> l = new ArrayList<IModule>(modules.length);
 
         for (int i = 0; i < modules.length; i++) {
             IModule module = modules[i];
@@ -563,7 +581,7 @@ public class BasicHierarchicalRepository extends AbstractRepository
             l.add(module);
         }
 
-        return (IModule[]) l.toArray(new IModule[l.size()]);
+        return l.toArray(new IModule[l.size()]);
     }
 
     /**
@@ -572,8 +590,6 @@ public class BasicHierarchicalRepository extends AbstractRepository
      * @version $Revision$ $Date$
      */
     public class HierarchicalFile extends File implements IHierarchicalFile {
-
-        private static final String REVISION = "$Revision$";
 
         private static final long serialVersionUID = -4635130019371035269L;
 
@@ -584,7 +600,7 @@ public class BasicHierarchicalRepository extends AbstractRepository
         private IHierarchicalFile[] dependencies;
 
         public HierarchicalFile(IModule module, String name, String filename,
-                String unlocalizedURI, Object unlocalizedContentLocation,
+                String unlocalizedURI, IContentRef unlocalizedContentLocation,
                 IHierarchicalFile[] dependencies,
                 IContentProvider contentProvider) {
             super(name, filename, unlocalizedURI, unlocalizedContentLocation,
@@ -607,7 +623,8 @@ public class BasicHierarchicalRepository extends AbstractRepository
         }
 
         public void addDependencies(IHierarchicalFile dependencies[]) {
-            List l = new ArrayList(Arrays.asList(this.dependencies));
+            List<IHierarchicalFile> l = new ArrayList<IHierarchicalFile>(
+                    Arrays.asList(this.dependencies));
 
             for (int i = 0; i < dependencies.length; i++) {
                 IHierarchicalFile f = dependencies[i];
@@ -622,8 +639,7 @@ public class BasicHierarchicalRepository extends AbstractRepository
                 LOG.debug("Dependencies of HFile[" + getId() + "]=" + l);
             }
 
-            this.dependencies = (IHierarchicalFile[]) l
-                    .toArray(new IHierarchicalFile[l.size()]);
+            this.dependencies = l.toArray(new IHierarchicalFile[l.size()]);
         }
 
         public IHierarchicalFile[] listDependencies() {
@@ -634,10 +650,12 @@ public class BasicHierarchicalRepository extends AbstractRepository
             return module;
         }
 
+        @Override
         public int hashCode() {
             return hashCode;
         }
 
+        @Override
         public String toString() {
             return "[HFile " + getId() + "]";
         }
@@ -649,7 +667,6 @@ public class BasicHierarchicalRepository extends AbstractRepository
      * @version $Revision$ $Date$
      */
     public class SetImpl extends HierarchicalFile implements ISet {
-        private static final String REVISION = "$Revision$";
 
         private static final long serialVersionUID = -5572999892750207302L;
 
@@ -683,7 +700,7 @@ public class BasicHierarchicalRepository extends AbstractRepository
                 return externalDependencies;
             }
 
-            Set l = null;
+            Set<IHierarchicalFile> l = null;
             IHierarchicalFile files[] = listDependencies();
 
             for (int i = 0; i < files.length; i++) {
@@ -701,7 +718,7 @@ public class BasicHierarchicalRepository extends AbstractRepository
                     }
 
                     if (l == null) {
-                        l = new HashSet();
+                        l = new HashSet<IHierarchicalFile>();
                     }
 
                     l.add(dfile);
@@ -718,18 +735,18 @@ public class BasicHierarchicalRepository extends AbstractRepository
                 return externalDependencies;
             }
 
-            externalDependencies = (IHierarchicalFile[]) l
-                    .toArray(new IHierarchicalFile[l.size()]);
+            externalDependencies = l.toArray(new IHierarchicalFile[l.size()]);
 
             return externalDependencies;
         }
 
+        @Override
         public IHierarchicalFile[] listDependencies() {
             if (dependencies != null) {
                 return dependencies;
             }
 
-            List l = new ArrayList();
+            List<IHierarchicalFile> l = new ArrayList<IHierarchicalFile>();
             IModule modules[] = (IModule[]) super.listDependencies();
             for (int i = 0; i < modules.length; i++) {
 
@@ -742,12 +759,12 @@ public class BasicHierarchicalRepository extends AbstractRepository
                 LOG.debug("Dependencies of SET[" + getId() + "]=" + l);
             }
 
-            dependencies = (IHierarchicalFile[]) l
-                    .toArray(new IHierarchicalFile[l.size()]);
+            dependencies = l.toArray(new IHierarchicalFile[l.size()]);
 
             return dependencies;
         }
 
+        @Override
         public String toString() {
             return "[Set " + getId() + "]";
         }
@@ -760,13 +777,13 @@ public class BasicHierarchicalRepository extends AbstractRepository
      * @version $Revision$ $Date$
      */
     public class Module extends HierarchicalFile implements IModule {
-        private static final String REVISION = "$Revision$";
 
         private static final long serialVersionUID = -5299468486306880225L;
 
         private boolean groupAllFiles;
 
-        private List filesList = new ArrayList(8);
+        private List<IHierarchicalFile> filesList = new ArrayList<IHierarchicalFile>(
+                8);
 
         private IHierarchicalFile files[];
 
@@ -805,13 +822,13 @@ public class BasicHierarchicalRepository extends AbstractRepository
             filesList.add(file);
         }
 
+        @Override
         public IHierarchicalFile[] listDependencies() {
             if (files != null) {
                 return files;
             }
 
-            files = (IHierarchicalFile[]) filesList
-                    .toArray(new IHierarchicalFile[filesList.size()]);
+            files = filesList.toArray(new IHierarchicalFile[filesList.size()]);
             filesList = null;
 
             return files;
@@ -822,7 +839,7 @@ public class BasicHierarchicalRepository extends AbstractRepository
                 return externalDependencies;
             }
 
-            Set l = null;
+            Set<IHierarchicalFile> l = null;
             IHierarchicalFile files[] = listDependencies();
 
             for (int i = 0; i < files.length; i++) {
@@ -838,7 +855,7 @@ public class BasicHierarchicalRepository extends AbstractRepository
                     }
 
                     if (l == null) {
-                        l = new HashSet();
+                        l = new HashSet<IHierarchicalFile>();
                     }
 
                     l.add(dfile);
@@ -856,8 +873,7 @@ public class BasicHierarchicalRepository extends AbstractRepository
                 return externalDependencies;
             }
 
-            externalDependencies = (IHierarchicalFile[]) l
-                    .toArray(new IHierarchicalFile[l.size()]);
+            externalDependencies = l.toArray(new IHierarchicalFile[l.size()]);
 
             return externalDependencies;
         }
@@ -867,7 +883,7 @@ public class BasicHierarchicalRepository extends AbstractRepository
                 return externalModules;
             }
 
-            Set l = null;
+            Set<IModule> l = null;
             IHierarchicalFile files[] = listExternalDependencies();
 
             for (int i = 0; i < files.length; i++) {
@@ -877,7 +893,7 @@ public class BasicHierarchicalRepository extends AbstractRepository
                 }
 
                 if (l == null) {
-                    l = new HashSet();
+                    l = new HashSet<IModule>();
                 }
 
                 l.add(module);
@@ -893,7 +909,7 @@ public class BasicHierarchicalRepository extends AbstractRepository
                 return externalModules;
             }
 
-            externalModules = (IModule[]) l.toArray(new IModule[l.size()]);
+            externalModules = l.toArray(new IModule[l.size()]);
 
             return externalModules;
         }
@@ -906,6 +922,7 @@ public class BasicHierarchicalRepository extends AbstractRepository
             return set;
         }
 
+        @Override
         public String toString() {
             return "[Module " + getId() + "]";
         }

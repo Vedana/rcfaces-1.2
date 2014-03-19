@@ -19,5 +19,5 @@ public interface ICheckedValuesCapability extends ICheckProvider {
      * void setCheckedValues(Object values);
      */
 
-    Class getCheckedValuesType(FacesContext facesContext);
+    Class< ? > getCheckedValuesType(FacesContext facesContext);
 }

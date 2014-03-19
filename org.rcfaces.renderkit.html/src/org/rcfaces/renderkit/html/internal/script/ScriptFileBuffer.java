@@ -13,7 +13,6 @@ import org.rcfaces.core.internal.content.FileBuffer;
  * @version $Revision$ $Date$
  */
 public class ScriptFileBuffer extends FileBuffer implements IScriptFile {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(ScriptFileBuffer.class);
 

@@ -1,4 +1,4 @@
-<camelia-components>	
+<camelia-components package="html">	
 
 	<component id="init" extends="cameliaBase" renderKit="html">
 	
@@ -57,6 +57,7 @@
 		<attribute id="requiredSets" type="java.lang.String" />
 
 		<attribute id="mergeStyles" type="boolean" />
+		<attribute id="processRules" type="boolean" />
 	</component>
 	
 	<component id="loadBundle" extends="cameliaBase" renderKit="html">

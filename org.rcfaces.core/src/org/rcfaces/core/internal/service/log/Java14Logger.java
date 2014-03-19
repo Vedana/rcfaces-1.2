@@ -23,8 +23,6 @@ import org.rcfaces.core.internal.service.log.LogService.IFilter;
  */
 class Java14Logger implements LogService.ILogger {
 
-    private static final String REVISION = "$Revision$";
-
     private static LogManager logManager = LogManager.getLogManager();
 
     private IFilter filters[];
@@ -57,14 +55,18 @@ class Java14Logger implements LogService.ILogger {
             return filters;
         }
 
-        List l = null;
+        List<LogService.Filter> l = null;
 
-        Enumeration loggers = logManager.getLoggerNames();
+        Enumeration<String> loggers = logManager.getLoggerNames();
 
         for (; loggers.hasMoreElements();) {
-            String loggerName = (String) loggers.nextElement();
+            String loggerName = loggers.nextElement();
 
             Logger logger = logManager.getLogger(loggerName);
+
+            if (logger == null) {
+                continue;
+            }
 
             String name = logger.getName();
             if (name.startsWith(LogService.PREFIX_LOGGER_NAME) == false) {
@@ -79,7 +81,7 @@ class Java14Logger implements LogService.ILogger {
             int level = convertLevelToInt(logger.getLevel());
 
             if (l == null) {
-                l = new ArrayList();
+                l = new ArrayList<LogService.Filter>();
             }
 
             l.add(new LogService.Filter(level, name));
@@ -89,7 +91,7 @@ class Java14Logger implements LogService.ILogger {
             return LogService.EMPTY_FILTERS;
         }
 
-        return (LogService.Filter[]) l.toArray(new LogService.Filter[l.size()]);
+        return l.toArray(new LogService.Filter[l.size()]);
     }
 
     private static final int convertLevelToInt(Level level) {

@@ -15,9 +15,8 @@ import org.rcfaces.core.event.IBlurListener;
  */
 public class BlurActionListener extends AbstractActionListener implements
         IBlurListener {
-    private static final String REVISION = "$Revision$";
 
-    private static final Class actionParameters[] = { BlurEvent.class };
+    private static final Class< ? >[] actionParameters = { BlurEvent.class };
 
     public BlurActionListener() {
         // Pour la déserialisation ...
@@ -42,7 +41,8 @@ public class BlurActionListener extends AbstractActionListener implements
         process(event);
     }
 
-    protected Class[] listParameterClasses() {
+    @Override
+    protected Class< ? >[] listParameterClasses() {
         return actionParameters;
     }
 }

@@ -29,6 +29,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.AbstractImageButtonFamillyDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
 
 /**
@@ -38,24 +39,10 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
  */
 public class DateChooserRenderer extends AbstractCalendarRenderer implements
         ICalendarDecoderRenderer {
-    private static final String REVISION = "$Revision$";
 
-    private static final boolean USE_CSS_IMAGES = true;
+    private static final String DATE_CHOOSER_IMAGEURL = "dateChooser/dateChooser.gif";
 
-    private static final String DATE_CHOOSER_IMAGEURL;
-
-    private static final String DATE_CHOOSER_DISABLED_IMAGEURL;
-
-    static {
-        if (USE_CSS_IMAGES) {
-            DATE_CHOOSER_IMAGEURL = BLANK_IMAGE_URL;
-            DATE_CHOOSER_DISABLED_IMAGEURL = null;
-
-        } else {
-            DATE_CHOOSER_IMAGEURL = "dateChooser/dateChooser.gif";
-            DATE_CHOOSER_DISABLED_IMAGEURL = "dateChooser/dateChooser_disabled.gif";
-        }
-    }
+    private static final String DATE_CHOOSER_DISABLED_IMAGEURL = "dateChooser/dateChooser_disabled.gif";
 
     private static final int DATE_CHOOSER_WIDTH = 16;
 
@@ -69,11 +56,15 @@ public class DateChooserRenderer extends AbstractCalendarRenderer implements
         return true;
     }
 
+    protected IComponentDecorator createDateChooserButtonDecorator(
+            IImageButtonFamilly imageButtonFamilly) {
+        return new DateChooserButtonDecorator(imageButtonFamilly);
+    }
+
     protected IComponentDecorator createComponentDecorator(
             FacesContext facesContext, UIComponent component) {
 
-        IComponentDecorator componentDecorator = new DateChooserButtonDecorator(
-                (IImageButtonFamilly) component);
+        IComponentDecorator componentDecorator = createDateChooserButtonDecorator((IImageButtonFamilly) component);
 
         IComponentDecorator parent = super.createComponentDecorator(
                 facesContext, component);
@@ -102,15 +93,26 @@ public class DateChooserRenderer extends AbstractCalendarRenderer implements
         IHtmlRenderContext htmlRenderContext = htmlWriter
                 .getHtmlComponentRenderContext().getHtmlRenderContext();
 
+        String imageURL;
+        if (useCssBackgroundImage()) {
+            imageURL = BLANK_IMAGE_URL;
+
+        } else {
+            imageURL = getDateChooserImageURL(htmlWriter);
+        }
+
         return htmlRenderContext.getHtmlProcessContext()
-                .getStyleSheetContentAccessor(DATE_CHOOSER_IMAGEURL,
-                        IContentFamily.IMAGE);
+                .getStyleSheetContentAccessor(imageURL, IContentFamily.IMAGE);
     }
 
-    public IContentAccessor getDateChooserDisabledImageAccessor(
+    protected boolean useCssBackgroundImage() {
+        return true;
+    }
+
+    protected IContentAccessor getDateChooserDisabledImageAccessor(
             IHtmlWriter htmlWriter) {
 
-        if (USE_CSS_IMAGES) {
+        if (useCssBackgroundImage()) {
             return null;
         }
 
@@ -118,8 +120,17 @@ public class DateChooserRenderer extends AbstractCalendarRenderer implements
                 .getHtmlComponentRenderContext().getHtmlRenderContext();
 
         return htmlRenderContext.getHtmlProcessContext()
-                .getStyleSheetContentAccessor(DATE_CHOOSER_DISABLED_IMAGEURL,
+                .getStyleSheetContentAccessor(
+                        getDateChooserDisabledImageURL(htmlWriter),
                         IContentFamily.IMAGE);
+    }
+
+    protected String getDateChooserImageURL(IHtmlWriter htmlWriter) {
+        return DATE_CHOOSER_IMAGEURL;
+    }
+
+    protected String getDateChooserDisabledImageURL(IHtmlWriter htmlWriter) {
+        return DATE_CHOOSER_DISABLED_IMAGEURL;
     }
 
     protected void decode(IRequestContext context, UIComponent component,
@@ -140,7 +151,7 @@ public class DateChooserRenderer extends AbstractCalendarRenderer implements
         dateChooserComponent.setSubmittedExternalValue(date);
     }
 
-    protected void addUnlockProperties(Set unlockedProperties) {
+    protected void addUnlockProperties(Set<String> unlockedProperties) {
         super.addUnlockProperties(unlockedProperties);
 
         unlockedProperties.add(Properties.VALUE);
@@ -162,7 +173,6 @@ public class DateChooserRenderer extends AbstractCalendarRenderer implements
      */
     protected class DateChooserButtonDecorator extends
             AbstractImageButtonFamillyDecorator {
-        private static final String REVISION = "$Revision$";
 
         private boolean firstLine = true;
 
@@ -193,11 +203,11 @@ public class DateChooserRenderer extends AbstractCalendarRenderer implements
                 throws WriterException {
 
             if (imageButtonFamilly.isDisabled(facesContext)) {
-                writer.writeAttribute("v:disabled", true);
+                writer.writeAttributeNS("disabled", true);
             }
 
             if (imageButtonFamilly.isReadOnly(facesContext)) {
-                writer.writeAttribute("v:readOnly", true);
+                writer.writeAttributeNS("readOnly", true);
             }
 
             IComponentRenderContext componentRenderContext = writer
@@ -205,10 +215,10 @@ public class DateChooserRenderer extends AbstractCalendarRenderer implements
             DateChooserComponent dateChooserComponent = (DateChooserComponent) componentRenderContext
                     .getComponent();
 
-            
-            String popupStyleClass=dateChooserComponent.getPopupStyleClass(facesContext);
-            if (popupStyleClass!=null) {
-                writer.writeAttribute("v:popupStyleClass", popupStyleClass);
+            String popupStyleClass = dateChooserComponent
+                    .getPopupStyleClass(facesContext);
+            if (popupStyleClass != null) {
+                writer.writeAttributeNS("popupStyleClass", popupStyleClass);
             }
 
             Calendar componentCalendar = CalendarTools.getCalendar(
@@ -222,34 +232,35 @@ public class DateChooserRenderer extends AbstractCalendarRenderer implements
 
                 StringAppender sb = new StringAppender(16);
                 appendDate(componentCalendar, homeDate, sb, true);
-                writer.writeAttribute("v:homeDate", sb.toString());
+                writer.writeAttributeNS("homeDate", sb.toString());
 
                 String homeDateLabel = dateChooserComponent
                         .getHomeDateLabel(facesContext);
                 if (homeDateLabel != null) {
-                    writer.writeAttribute("v:homeDateLabel", homeDateLabel);
+                    writer.writeAttributeNS("homeDateLabel", homeDateLabel);
                 }
             }
 
-            Date selected = dateChooserComponent.getDefaultSelectedDate(facesContext);
+            Date selected = dateChooserComponent
+                    .getDefaultSelectedDate(facesContext);
             if (selected != null) {
 
                 StringAppender sb = new StringAppender(16);
                 appendDate(componentCalendar, selected, sb, true);
-                writer.writeAttribute("v:defaultSelectedDate", sb.toString());
+                writer.writeAttributeNS("defaultSelectedDate", sb.toString());
             }
-            
+
             String forComponent = dateChooserComponent.getFor(facesContext);
             if (forComponent != null) {
-                writer.writeAttribute("v:for", forComponent);
+                writer.writeAttributeNS("for", forComponent);
 
                 String forValueFormat = dateChooserComponent
                         .getForValueFormat(facesContext);
                 if (forValueFormat != null) {
-                    forValueFormat = CalendarTools.normalizeFormat(writer
-                            .getComponentRenderContext(), forValueFormat);
+                    forValueFormat = CalendarTools.normalizeFormat(
+                            writer.getComponentRenderContext(), forValueFormat);
 
-                    writer.writeAttribute("v:forValueFormat", forValueFormat);
+                    writer.writeAttributeNS("forValueFormat", forValueFormat);
                 }
             }
         }
@@ -324,7 +335,7 @@ public class DateChooserRenderer extends AbstractCalendarRenderer implements
         }
 
         protected boolean useImageFilterIfNecessery() {
-            return USE_CSS_IMAGES == false;
+            return useCssBackgroundImage();
         }
 
         protected boolean isCompositeComponent() {
@@ -338,6 +349,14 @@ public class DateChooserRenderer extends AbstractCalendarRenderer implements
 
             super.writeEndCompositeComponent();
         }
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "disabled",
+                "readOnly", "popupStyleClass", "homeDate", "homeDateLabel",
+                "defaultSelectedDate", "for", "forValueFormat" });
     }
 
 }

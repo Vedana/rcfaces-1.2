@@ -1,0 +1,18 @@
+/*
+ * $Id$
+ */
+
+/**
+ *
+ * @class f_text
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+ 
+.f_headingZone_text {
+	position: absolute;
+	left: -10000px;
+	top: -10000px;
+}
+ 

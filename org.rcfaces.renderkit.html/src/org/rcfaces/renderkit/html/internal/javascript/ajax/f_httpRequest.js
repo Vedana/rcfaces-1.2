@@ -22,9 +22,9 @@ var __statics = {
 	GET_METHOD: "GET",
 	
 	/**
-	 * @field hidden static final String
+	 * @field public static final String
 	 */
-	URLENCODED_MIME_TYPE: "application/x-www-form-urlencoded; charset=UTF-8",
+	URLENCODED_MIME_TYPE: "application/x-www-form-urlencoded",
 	
 	/**
 	 * @field public static final String
@@ -59,21 +59,40 @@ var __statics = {
 	/**
 	 * @field public static final String
 	 */
-	 HTTP_CONTENT_TYPE: "Content-Type",
+	HTTP_CONTENT_TYPE: "Content-Type",
 	
 	/**
 	 * @field hidden static final String
 	 */
-	 CAMELIA_RESPONSE_HEADER: "X-Camelia-Service"
-} 
+	CAMELIA_RESPONSE_HEADER: "X-Camelia-Service",
+	
+	/**
+	 * @field hidden static final String
+	 */
+	UTF_8: "UTF-8"
+};
 
 var __members = {
 
-	f_httpRequest: function(component, url, acceptType, noLog) {
+	/**
+	 * @method public
+	 * @param HTMLElement component
+	 * @param optional String acceptType
+	 * @param optional String charSet
+	 * @param optional String url
+	 * @param optional hidden Boolean noLog
+	 */
+	f_httpRequest: function(component, acceptType, charSet, url, noLog) {
 		this._component=component;		
-		this._noLog=noLog;
+	
+		this.f_setAcceptType(acceptType, charSet);
+
+		if (!url) {
+			url=f_env.GetViewURI();
+		}
 		this._url=url;
-		this.f_setAcceptType(acceptType);
+
+		this._noLog=noLog;
 
 		this.f_cancelRequest();		
 	},
@@ -83,7 +102,8 @@ var __members = {
 		
 		// this._requestHeaders=undefined; // Map<String,String>
 		// this._ready = undefined; // Boolean
-		//this._noLog=noLog; // Boolean
+		//this._noLog=undefined; // Boolean
+		// this._url=undefined; // String
 		this._listener= undefined; // Function
 		this._component = undefined; // any ?
 	},
@@ -240,7 +260,7 @@ var __members = {
 	 * @return void
 	 */
 	f_cancelRequest: function() {
-		f_core.Debug(f_httpRequest, "f_cancelRequest: Cancel request");
+		f_core.Debug(f_httpRequest, "f_cancelRequest: Clean or cancel request");
 
 		var request=this._request;
 		if (request) {
@@ -434,7 +454,7 @@ var __members = {
 					self._onReadyStateChange();
 				};
 				
-				if (f_core.IsGecko()) {
+				if (f_core.IsGecko() || f_core.IsWebkit()) {
 					req.onerror = function() {
 						if (window._rcfacesExiting) {
 							// Nous ne sommes pas dans un contexte sain ....
@@ -575,14 +595,14 @@ var __members = {
 				}
 				
 				if (!contentType) {
-					contentType = f_httpRequest.URLENCODED_MIME_TYPE;
+					contentType = f_httpRequest.URLENCODED_MIME_TYPE+"; charset=UTF-8";
 				}
 				
 			} else if (typeof(data)=="string") {
 				formData=data;
 
 				if (!contentType) {
-					contentType = f_httpRequest.URLENCODED_MIME_TYPE;
+					contentType = f_httpRequest.URLENCODED_MIME_TYPE+"; charset=UTF-8";
 				}
 			} 
 		}
@@ -595,9 +615,13 @@ var __members = {
 	 * listener enregistré pour la gestion des évènements de la requête
 	 *
 	 * @method private
-	 * @return Boolean
+	 * @return void
 	 */
 	_onReadyStateChange: function() {
+		if (window._rcfacesExiting || window._rcfacesSubmitLocked) {
+			return;
+		}
+
 		var req = this._request;
 		if (!req) {
 			f_core.Info(f_httpRequest, "_onReadyStateChange: Request has been canceled !");
@@ -736,7 +760,7 @@ var __members = {
 				return;
 			}
 
-			var responseContentType
+			var responseContentType;
 			try {
 				responseContentType=req.getResponseHeader(f_httpRequest.HTTP_CONTENT_TYPE);
 				
@@ -808,6 +832,10 @@ var __members = {
 	 * @return void
 	 */
 	_callError: function(status, statusText) {
+		if (window._rcfacesExiting) {
+			return;
+		}
+
 		if (this._error) {
 			// Error handler already called
 			return;
@@ -834,15 +862,19 @@ var __members = {
 	/**
 	 * @method public
 	 * @param optional String acceptType Mime type of accept header parameter.
+	 * @param optional String charSet
 	 * @return void
 	 */
-	f_setAcceptType: function(acceptType) {
+	f_setAcceptType: function(acceptType, charSet) {
 		if (!acceptType) {
 			acceptType=f_httpRequest.ANY_MIME_TYPE;		
 		}
+		if (charSet) {
+			acceptType+="; charset="+charSet;
+		}
 		this._acceptType=acceptType;
 	}
-}
+};
 
 new f_class("f_httpRequest", {
 	statics: __statics,

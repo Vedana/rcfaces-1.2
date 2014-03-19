@@ -23,6 +23,8 @@ public class ComponentsListTag extends AbstractDataTag implements Tag {
 	private ValueExpression horizontalScrollPosition;
 	private ValueExpression verticalScrollPosition;
 	private ValueExpression showValue;
+	private ValueExpression headingZone;
+	private ValueExpression headingLevel;
 	private ValueExpression rowCountVar;
 	private ValueExpression rowIndexVar;
 	private ValueExpression columnNumber;
@@ -32,43 +34,51 @@ public class ComponentsListTag extends AbstractDataTag implements Tag {
 		return ComponentsListComponent.COMPONENT_TYPE;
 	}
 
-	public final void setBorder(ValueExpression border) {
+	public void setBorder(ValueExpression border) {
 		this.border = border;
 	}
 
-	public final void setBorderType(ValueExpression borderType) {
+	public void setBorderType(ValueExpression borderType) {
 		this.borderType = borderType;
 	}
 
-	public final void setHorizontalScrollPosition(ValueExpression horizontalScrollPosition) {
+	public void setHorizontalScrollPosition(ValueExpression horizontalScrollPosition) {
 		this.horizontalScrollPosition = horizontalScrollPosition;
 	}
 
-	public final void setVerticalScrollPosition(ValueExpression verticalScrollPosition) {
+	public void setVerticalScrollPosition(ValueExpression verticalScrollPosition) {
 		this.verticalScrollPosition = verticalScrollPosition;
 	}
 
-	public final void setShowValue(ValueExpression showValue) {
+	public void setShowValue(ValueExpression showValue) {
 		this.showValue = showValue;
 	}
 
-	public final void setRowCountVar(ValueExpression rowCountVar) {
+	public void setHeadingZone(ValueExpression headingZone) {
+		this.headingZone = headingZone;
+	}
+
+	public void setHeadingLevel(ValueExpression headingLevel) {
+		this.headingLevel = headingLevel;
+	}
+
+	public void setRowCountVar(ValueExpression rowCountVar) {
 		this.rowCountVar = rowCountVar;
 	}
 
-	public final void setRowIndexVar(ValueExpression rowIndexVar) {
+	public void setRowIndexVar(ValueExpression rowIndexVar) {
 		this.rowIndexVar = rowIndexVar;
 	}
 
-	public final void setColumnNumber(ValueExpression columnNumber) {
+	public void setColumnNumber(ValueExpression columnNumber) {
 		this.columnNumber = columnNumber;
 	}
 
-	public final void setRowStyleClass(ValueExpression rowStyleClass) {
+	public void setRowStyleClass(ValueExpression rowStyleClass) {
 		this.rowStyleClass = rowStyleClass;
 	}
 
-	public final void setColumnStyleClass(ValueExpression columnStyleClass) {
+	public void setColumnStyleClass(ValueExpression columnStyleClass) {
 		this.columnStyleClass = columnStyleClass;
 	}
 
@@ -82,6 +92,8 @@ public class ComponentsListTag extends AbstractDataTag implements Tag {
 			LOG.debug("  horizontalScrollPosition='"+horizontalScrollPosition+"'");
 			LOG.debug("  verticalScrollPosition='"+verticalScrollPosition+"'");
 			LOG.debug("  showValue='"+showValue+"'");
+			LOG.debug("  headingZone='"+headingZone+"'");
+			LOG.debug("  headingLevel='"+headingLevel+"'");
 			LOG.debug("  rowCountVar='"+rowCountVar+"'");
 			LOG.debug("  rowIndexVar='"+rowIndexVar+"'");
 			LOG.debug("  columnNumber='"+columnNumber+"'");
@@ -145,6 +157,24 @@ public class ComponentsListTag extends AbstractDataTag implements Tag {
 			}
 		}
 
+		if (headingZone != null) {
+			if (headingZone.isLiteralText()==false) {
+				component.setValueExpression(Properties.HEADING_ZONE, headingZone);
+
+			} else {
+				component.setHeadingZone(getBool(headingZone.getExpressionString()));
+			}
+		}
+
+		if (headingLevel != null) {
+			if (headingLevel.isLiteralText()==false) {
+				component.setValueExpression(Properties.HEADING_LEVEL, headingLevel);
+
+			} else {
+				component.setHeadingLevel(headingLevel.getExpressionString());
+			}
+		}
+
 		if (rowCountVar != null) {
 			if (rowCountVar.isLiteralText()==false) {
 				throw new javax.faces.FacesException("Attribute 'rowCountVar' does not accept binding !");
@@ -193,6 +223,8 @@ public class ComponentsListTag extends AbstractDataTag implements Tag {
 		horizontalScrollPosition = null;
 		verticalScrollPosition = null;
 		showValue = null;
+		headingZone = null;
+		headingLevel = null;
 		rowCountVar = null;
 		rowIndexVar = null;
 		columnNumber = null;

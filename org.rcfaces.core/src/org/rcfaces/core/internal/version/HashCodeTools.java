@@ -36,7 +36,6 @@ import org.rcfaces.core.internal.util.MessageDigestSelector;
  * @version $Revision$ $Date$
  */
 public class HashCodeTools {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(HashCodeTools.class);
 
@@ -118,14 +117,11 @@ public class HashCodeTools {
         }
 
         if (LOG.isDebugEnabled()) {
-            LOG
-                    .debug("Compute HashCode of buffer (size="
-                            + buffer.length
-                            + ") using '"
-                            + Arrays
-                                    .asList(Constants.RESOURCE_VERSION_DIGEST_ALGORITHMS)
-                            + " algorithm (maxHashCodeSize=" + maxHashCodeSize
-                            + ")");
+            LOG.debug("Compute HashCode of buffer (size="
+                    + buffer.length
+                    + ") using '"
+                    + Arrays.asList(Constants.RESOURCE_VERSION_DIGEST_ALGORITHMS)
+                    + " algorithm (maxHashCodeSize=" + maxHashCodeSize + ")");
         }
 
         MessageDigest messageDigest = MessageDigestSelector
@@ -134,6 +130,9 @@ public class HashCodeTools {
         byte digest[] = messageDigest.digest(buffer);
 
         String etag = Base64.encodeBytes(digest, Base64.DONT_BREAK_LINES);
+        if (etag.endsWith("==")) { // Ca fait pas joli !
+            etag = etag.substring(0, etag.length() - 2);
+        }
 
         if (maxHashCodeSize == 0) {
             maxHashCodeSize = Constants.VERSIONED_URI_HASHCODE_MAX_SIZE;
@@ -146,7 +145,7 @@ public class HashCodeTools {
             LOG.debug("Compute ETag from url '" + url + "' = '" + etag + "'.");
         }
 
-        etag += ":" + buffer.length;
+        etag += buffer.length;
 
         return etag;
     }

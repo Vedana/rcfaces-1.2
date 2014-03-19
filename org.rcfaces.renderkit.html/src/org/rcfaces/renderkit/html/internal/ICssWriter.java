@@ -83,10 +83,14 @@ public interface ICssWriter {
     ICssWriter writeTopPx(int top);
 
     ICssWriter writeLeftPx(int left);
-    
+
     ICssWriter writeTop(String top);
 
     ICssWriter writeLeft(String left);
+
+    ICssWriter writeBottomPx(int bottom);
+
+    ICssWriter writeRightPx(int right);
 
     ICssWriter writeSize(ISizeCapability capability);
 
@@ -119,6 +123,10 @@ public interface ICssWriter {
     ICssWriter writeVerticalAlign(String verticalAlignement);
 
     ICssWriter writeBorderStyle(String borderStyle);
+    
+    ICssWriter writeBorderLeftWidth(int borderSizePx);
+    
+    ICssWriter writeBorderRightWidth(int borderSizePx);
 
     ICssWriter writeMargin(String margin);
 

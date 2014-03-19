@@ -26,19 +26,19 @@ public class KeyLabelTag extends AbstractOutputTag implements Tag {
 		return KeyLabelComponent.COMPONENT_TYPE;
 	}
 
-	public final void setFilterProperties(ValueExpression filterProperties) {
+	public void setFilterProperties(ValueExpression filterProperties) {
 		this.filterProperties = filterProperties;
 	}
 
-	public final void setSelectedStyleClass(ValueExpression selectedStyleClass) {
+	public void setSelectedStyleClass(ValueExpression selectedStyleClass) {
 		this.selectedStyleClass = selectedStyleClass;
 	}
 
-	public final void setParentsStyleClass(ValueExpression parentsStyleClass) {
+	public void setParentsStyleClass(ValueExpression parentsStyleClass) {
 		this.parentsStyleClass = parentsStyleClass;
 	}
 
-	public final void setShowParents(ValueExpression showParents) {
+	public void setShowParents(ValueExpression showParents) {
 		this.showParents = showParents;
 	}
 

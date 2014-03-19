@@ -36,6 +36,9 @@
 	border: 0;
 	padding: 0;
 	margin: 0 2px;
+
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 .f_comboGrid_input_verifying {
@@ -55,6 +58,9 @@
 	border: 0;
 	padding: 0;
 	-moz-user-select: none;
+
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 .f_comboGrid_button {

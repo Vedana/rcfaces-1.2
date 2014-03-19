@@ -18,7 +18,6 @@ import org.rcfaces.renderkit.svg.item.INodeItem;
  * @version $Revision$ $Date$
  */
 public class SVGImageGenerationInformation extends GenerationImageInformation {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(SVGImageGenerationInformation.class);
@@ -46,6 +45,7 @@ public class SVGImageGenerationInformation extends GenerationImageInformation {
         setAttribute(NODES_PROPERTY, nodes);
     }
 
+    @Override
     public void restoreState(FacesContext facesContext, Object state) {
         Object states[] = (Object[]) state;
 
@@ -66,6 +66,7 @@ public class SVGImageGenerationInformation extends GenerationImageInformation {
         setNodes(nodes);
     }
 
+    @Override
     public Object saveState(FacesContext facesContext) {
 
         INodeItem nodes[] = getNodes();
@@ -106,6 +107,7 @@ public class SVGImageGenerationInformation extends GenerationImageInformation {
         setAttribute(DEFAULT_FONT_FAMILY_PROPERTY, fontFamily);
     }
 
+    @Override
     public void participeKey(StringAppender sa) {
         super.participeKey(sa);
 

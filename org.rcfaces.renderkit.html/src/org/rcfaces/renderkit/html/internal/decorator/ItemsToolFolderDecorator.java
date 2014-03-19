@@ -53,7 +53,7 @@ import org.rcfaces.core.component.capability.IStatesImageCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.capability.ITextPositionCapability;
-import org.rcfaces.core.component.capability.IToolTipCapability;
+import org.rcfaces.core.component.capability.IToolTipTextCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.event.SelectionEvent;
 import org.rcfaces.core.internal.component.IToolBarImageAccessors;
@@ -93,7 +93,6 @@ import org.rcfaces.renderkit.html.internal.renderer.ToolBarRenderer;
  * @version $Revision$ $Date$
  */
 public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(ItemsToolFolderDecorator.class);
@@ -108,13 +107,15 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
 
     private final String borderType;
 
-    private final List menuDecoratorStack = new ArrayList(8);
+    private final List<ItemsMenuDecorator> menuDecoratorStack = new ArrayList<ItemsMenuDecorator>(
+            8);
 
     private final boolean showDropDownMark;
 
-    private final List itemsId = new ArrayList(8);
+    private final List<String> itemsId = new ArrayList<String>(8);
 
-    private final Map itemIdToClientId = new HashMap(8);
+    private final Map<String, String> itemIdToClientId = new HashMap<String, String>(
+            8);
 
     private IToolBarImageAccessors toolBarImageAccessors;
 
@@ -276,8 +277,8 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
                     .writeObjectLiteral(false);
 
             Object siValue = selectItem.getValue();
-            String selectItemValue = convertItemValue(javaScriptWriter
-                    .getHtmlComponentRenderContext(), siValue);
+            String selectItemValue = convertItemValue(
+                    javaScriptWriter.getHtmlComponentRenderContext(), siValue);
 
             if (selectItemValue == null) {
                 throw new FacesException(
@@ -285,15 +286,15 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
                                 + component.getId());
             }
 
-            String itemCliendId = (String) itemIdToClientId.get(itemId);
+            String itemCliendId = itemIdToClientId.get(itemId);
             if (itemCliendId == null) {
                 itemCliendId = itemId;
             }
 
-            Map componentIdToValue = (Map) getComponent().getAttributes().get(
-                    COMPONENT_ID_TO_VALUE_PROPERTY);
+            Map<String, String> componentIdToValue = (Map<String, String>) getComponent()
+                    .getAttributes().get(COMPONENT_ID_TO_VALUE_PROPERTY);
             if (componentIdToValue == null) {
-                componentIdToValue = new HashMap(8);
+                componentIdToValue = new HashMap<String, String>(8);
 
                 getComponent().getAttributes().put(
                         COMPONENT_ID_TO_VALUE_PROPERTY, componentIdToValue);
@@ -365,8 +366,8 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
                     .getJavaScriptRenderContext().allocateVarName();
 
             javaScriptWriter.write("var ").write(componentVarName).write('=')
-                    .writeMethodCall("f_getItemComponent").write(
-                            selectItemVarName).writeln(");");
+                    .writeMethodCall("f_getItemComponent")
+                    .write(selectItemVarName).writeln(");");
 
             menuDecorator = pushMenuDecorator(componentVarName, itemId,
                     javaScriptWriter);
@@ -416,7 +417,7 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
         }
         htmlWriter.writeClass(sa.toString());
 
-        htmlWriter.writeAttribute("v:separator", true);
+        htmlWriter.writeAttributeNS("separator", true);
 
         allocateItemSeparator();
 
@@ -619,8 +620,9 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
 
         String description = selectItem.getDescription();
         if (description != null
-                && (itemComponent instanceof IToolTipCapability)) {
-            ((IToolTipCapability) itemComponent).setToolTipText(description);
+                && (itemComponent instanceof IToolTipTextCapability)) {
+            ((IToolTipTextCapability) itemComponent)
+                    .setToolTipText(description);
         }
 
         boolean disabled = selectItem.isDisabled();
@@ -819,7 +821,7 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
 
         htmlWriter.endComponent();
 
-        List children = component.getChildren();
+        List<UIComponent> children = component.getChildren();
 
         try {
             children.add(itemComponent);
@@ -918,8 +920,8 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
 
         String parentVarId = getToolBarContext().peekVarId();
 
-        javaScriptWriter.writeMethodCall("f_appendSeparatorItem").write(
-                parentVarId).writeln(");");
+        javaScriptWriter.writeMethodCall("f_appendSeparatorItem")
+                .write(parentVarId).writeln(");");
     }
 
     protected SelectItem createSelectItem(UISelectItem component) {
@@ -1068,7 +1070,7 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
     }
 
     public String nextItemId() {
-        return (String) itemsId.remove(0);
+        return itemsId.remove(0);
     }
 
     public String allocateItemId() {
@@ -1101,14 +1103,13 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
 
     public void popupMenuDecorator() {
 
-        ItemsMenuDecorator itemsMenuDecorator = (ItemsMenuDecorator) menuDecoratorStack
+        ItemsMenuDecorator itemsMenuDecorator = menuDecoratorStack
                 .remove(menuDecoratorStack.size() - 1);
 
         itemsMenuDecorator.finalizeItemContext();
     }
 
     public ItemsMenuDecorator peekMenuDecorator() {
-        return (ItemsMenuDecorator) menuDecoratorStack.get(menuDecoratorStack
-                .size() - 1);
+        return menuDecoratorStack.get(menuDecoratorStack.size() - 1);
     }
 }

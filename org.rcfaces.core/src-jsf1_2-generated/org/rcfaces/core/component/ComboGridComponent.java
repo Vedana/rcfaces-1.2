@@ -15,12 +15,14 @@ import org.rcfaces.core.component.capability.IRowStyleClassCapability;
 import org.apache.commons.logging.Log;
 import org.rcfaces.core.internal.tools.SortTools;
 import org.rcfaces.core.component.capability.ISortedChildrenCapability;
+import org.rcfaces.core.internal.tools.AdditionalInformationTools
+			;
 import org.rcfaces.core.component.capability.IAdditionalInformationCardinalityCapability;
 import java.util.Set;
 import org.rcfaces.core.internal.capability.IAdditionalInformationRangeComponent;
 import org.rcfaces.core.component.capability.IAdditionalInformationEventCapability;
 import org.rcfaces.core.model.ISortedComponent;
-import org.rcfaces.core.internal.tools.AdditionalInformationTools;
+import java.lang.Object;
 import org.rcfaces.core.component.iterator.IAdditionalInformationIterator;
 import org.rcfaces.core.internal.tools.OrderTools;
 import org.rcfaces.core.component.KeyEntryComponent;
@@ -72,28 +74,32 @@ public class ComboGridComponent extends KeyEntryComponent implements
 	public UIComponent[] getSortedChildren() {
 
 
-				return SortTools.getSortedChildren(null, this, engine, ComboColumnComponent.class);
+				return SortTools.getSortedChildren(null, this, engine,
+				ComboColumnComponent.class);
 			
 	}
 
 	public void setSortedChildren(UIComponent[] components) {
 
 
-				SortTools.setSortedChildren(null, this, engine, ComboColumnComponent.class, components);
+				SortTools.setSortedChildren(null, this, engine,
+				ComboColumnComponent.class, components);
 			
 	}
 
 	public void setOrderedChildren(UIComponent[] components) {
 
 
-				OrderTools.setOrderedChildren(null, this, engine, ComboColumnComponent.class, components);
+				OrderTools.setOrderedChildren(null, this, engine,
+				ComboColumnComponent.class, components);
 			
 	}
 
 	public UIComponent[] getOrderedChildren() {
 
 
-				return OrderTools.getOrderedChildren(null, this, engine, ComboColumnComponent.class);
+				return OrderTools.getOrderedChildren(null, this, engine,
+				ComboColumnComponent.class);
 			
 	}
 
@@ -107,14 +113,14 @@ public class ComboGridComponent extends KeyEntryComponent implements
 	public IColumnIterator listColumns() {
 
 
-			return GridTools.listColumns(this, ComboColumnComponent.class);
+				return GridTools.listColumns(this, ComboColumnComponent.class);
 			
 	}
 
 	public IAdditionalInformationIterator listAdditionalInformations() {
 
 
-			return AdditionalInformationTools.listAdditionalInformations(this);
+				return AdditionalInformationTools.listAdditionalInformations(this);
 			
 	}
 
@@ -128,28 +134,35 @@ public class ComboGridComponent extends KeyEntryComponent implements
 	public int getAdditionalInformationValuesCount() {
 
 
-				return AdditionalInformationTools.getCount(getAdditionalInformationValues());
+				return
+				AdditionalInformationTools.getCount(getAdditionalInformationValues());
 			
 	}
 
 	public Object getFirstAdditionalInformationValue() {
 
 
-				return AdditionalInformationTools.getFirst(getAdditionalInformationValues(), null);
+				return
+				AdditionalInformationTools.getFirst(getAdditionalInformationValues(),
+				null);
 			
 	}
 
 	public Object getAdditionalInformationValues(FacesContext facesContext) {
 
 
-				return engine.getValue(Properties.ADDITIONAL_INFORMATION_VALUES, facesContext);
+				return
+				engine.getValue(Properties.ADDITIONAL_INFORMATION_VALUES,
+				facesContext);
 			
 	}
 
 	public Object[] listAdditionalInformationValues() {
 
 
-				return AdditionalInformationTools.listValues(getAdditionalInformationValues(), getValue());
+				return
+				AdditionalInformationTools.listValues(getAdditionalInformationValues(),
+				getValue());
 			
 	}
 
@@ -163,14 +176,18 @@ public class ComboGridComponent extends KeyEntryComponent implements
 	public ComboColumnComponent getFirstSortedColumn() {
 
 
-				return (ComboColumnComponent)SortTools.getFirstSortedChild(null, this, engine, ComboColumnComponent.class );
+				return
+				(ComboColumnComponent)SortTools.getFirstSortedChild(null, this,
+				engine, ComboColumnComponent.class );
 			
 	}
 
 	public void setSortedColumn(ComboColumnComponent comboColumn) {
 
 
-				SortTools.setSortedChildren(null, this, engine, ComboColumnComponent.class, new ComboColumnComponent[] { comboColumn });
+				SortTools.setSortedChildren(null, this, engine,
+				ComboColumnComponent.class, new ComboColumnComponent[] { comboColumn
+				});
 			
 	}
 
@@ -544,7 +561,8 @@ public class ComboGridComponent extends KeyEntryComponent implements
 	}
 
 	public String getPagerStyleClass(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.PAGER_STYLE_CLASS, facesContext);
+		String s = engine.getStringProperty(Properties.PAGER_STYLE_CLASS, facesContext);
+		return s;
 	}
 
 	public void setPagerStyleClass(String pagerStyleClass) {
@@ -564,7 +582,8 @@ public class ComboGridComponent extends KeyEntryComponent implements
 	}
 
 	public String getPagerLookId(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.PAGER_LOOK_ID, facesContext);
+		String s = engine.getStringProperty(Properties.PAGER_LOOK_ID, facesContext);
+		return s;
 	}
 
 	public void setPagerLookId(String pagerLookId) {
@@ -584,7 +603,8 @@ public class ComboGridComponent extends KeyEntryComponent implements
 	}
 
 	public String getPopupStyleClass(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.POPUP_STYLE_CLASS, facesContext);
+		String s = engine.getStringProperty(Properties.POPUP_STYLE_CLASS, facesContext);
+		return s;
 	}
 
 	public void setPopupStyleClass(String popupStyleClass) {
@@ -604,7 +624,8 @@ public class ComboGridComponent extends KeyEntryComponent implements
 	}
 
 	public String getGridStyleClass(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.GRID_STYLE_CLASS, facesContext);
+		String s = engine.getStringProperty(Properties.GRID_STYLE_CLASS, facesContext);
+		return s;
 	}
 
 	public void setGridStyleClass(String gridStyleClass) {
@@ -624,7 +645,8 @@ public class ComboGridComponent extends KeyEntryComponent implements
 	}
 
 	public String getGridLookId(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.GRID_LOOK_ID, facesContext);
+		String s = engine.getStringProperty(Properties.GRID_LOOK_ID, facesContext);
+		return s;
 	}
 
 	public void setGridLookId(String gridLookId) {

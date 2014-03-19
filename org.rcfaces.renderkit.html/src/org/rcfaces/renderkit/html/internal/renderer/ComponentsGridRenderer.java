@@ -42,7 +42,6 @@ import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
-import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.CollectionTools;
 import org.rcfaces.core.internal.tools.ComponentTools;
@@ -58,6 +57,7 @@ import org.rcfaces.core.model.IFiltredModel;
 import org.rcfaces.core.model.IIndexesModel;
 import org.rcfaces.core.model.IRangeDataModel;
 import org.rcfaces.core.model.IRangeDataModel2;
+import org.rcfaces.core.model.ISelectedCriteria;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.core.model.ISortedDataModel;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
@@ -67,20 +67,20 @@ import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 import org.rcfaces.renderkit.html.internal.service.ComponentsGridService;
-import org.rcfaces.renderkit.html.internal.service.ComponentsListService;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
 public class ComponentsGridRenderer extends AbstractGridRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(ComponentsGridRenderer.class);
 
-    private static final Map SORT_ALIASES = new HashMap(2);
+    private static final Map<String, String> SORT_ALIASES = new HashMap<String, String>(
+            2);
     static {
         SORT_ALIASES.put(ISortEventCapability.SORT_SERVER, SORT_SERVER_COMMAND);
     }
@@ -91,6 +91,8 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
     private static final boolean NOT_SUPPORTED_SERVER_SORT = false;
 
     private static final String ROWCOUNT_PROPERTY = "org.rcfaces.html.componentsGrid.ROWCOUNT";
+
+    private static final String HTML_GENERATED_ROW_INDEXES_PROPERTY = "org.rcfaces.html.componentsGrid.ROW_INDEXES";
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.COMPONENTS_GRID;
@@ -105,6 +107,23 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         return true;
     }
 
+    protected ICssStyleClasses createStyleClasses(IHtmlWriter htmlWriter) {
+        ICssStyleClasses cssStyleClasses = super.createStyleClasses(htmlWriter);
+
+        IGridComponent dg = (IGridComponent) htmlWriter
+                .getComponentRenderContext().getComponent();
+
+        if (dg instanceof ComponentsGridComponent) {
+            if (((ComponentsGridComponent) dg).isCellTextWrap(htmlWriter
+                    .getComponentRenderContext().getFacesContext())) {
+
+                cssStyleClasses.addSpecificStyleClass(GRID_WRAP_CLASSNAME);
+            }
+        }
+
+        return cssStyleClasses;
+    }
+
     protected void writeGridComponentAttributes(IHtmlWriter htmlWriter,
             AbstractGridRenderContext tableContext, IGridComponent dg)
             throws WriterException {
@@ -115,7 +134,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                     .getInstance(htmlWriter.getComponentRenderContext()
                             .getFacesContext());
             if (componentsGridServer != null) {
-                htmlWriter.writeAttribute("v:asyncRender", true);
+                htmlWriter.writeAttributeNS("asyncRender", true);
             }
 
             /* Si le tableau n'est pas visible ! */
@@ -126,11 +145,18 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 
             if (interactiveComponentClientId != null) {
                 // Pas de donn�es si nous sommes dans un scope interactif !
-                htmlWriter.writeAttribute("v:interactiveShow",
+                htmlWriter.writeAttributeNS("interactiveShow",
                         interactiveComponentClientId);
 
                 ((ComponentsGridRenderContext) tableContext)
                         .setInteractiveShow(true);
+            }
+        }
+
+        if (dg instanceof ComponentsGridComponent) {
+            if (((ComponentsGridComponent) dg).isCellTextWrap(htmlWriter
+                    .getComponentRenderContext().getFacesContext())) {
+                htmlWriter.writeAttributeNS("cellTextWrap", true);
             }
         }
 
@@ -148,21 +174,22 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
             }
 
             if (clientShowValue != null) {
-                htmlWriter.writeAttribute("v:showValue", clientShowValue);
+                htmlWriter.writeAttributeNS("showValue", clientShowValue);
             }
         }
     }
 
     public ComponentsGridRenderContext createComponentsGridContext(
             IProcessContext processContext,
-            IScriptRenderContext scriptRenderContext,
+            IJavaScriptRenderContext scriptRenderContext,
             ComponentsGridComponent dgc, int rowIndex, int forcedRow,
             ISortedComponent[] sortedComponents, String filterExpression,
-            String showAdditionals, String hideAdditionals) {
+            String showAdditionals, String hideAdditionals,
+            ISelectedCriteria[] criteriaContainers) {
         return new ComponentsGridRenderContext(processContext,
                 scriptRenderContext, dgc, rowIndex, forcedRow,
                 sortedComponents, filterExpression, showAdditionals,
-                hideAdditionals);
+                hideAdditionals, criteriaContainers);
     }
 
     protected void encodeBodyEnd(IHtmlWriter writer,
@@ -190,10 +217,10 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                 .getHtmlComponentRenderContext());
 
         // Dans tous les cas il faut positionner le renderContext !
-        ComponentsListService componentsListServer = ComponentsListService
+        ComponentsGridService componentsGridServer = ComponentsGridService
                 .getInstance(facesContext);
-        if (componentsListServer != null) {
-            componentsListServer.setupComponent(componentRenderContext);
+        if (componentsGridServer != null) {
+            componentsGridServer.setupComponent(componentRenderContext);
         }
 
         if (tableContext.isInteractiveShow()) {
@@ -207,14 +234,64 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         }
     }
 
+    @Override
+    protected void encodeJsBody(IJavaScriptWriter jsWriter,
+            AbstractGridRenderContext gridRenderContext) throws WriterException {
+        super.encodeJsBody(jsWriter, gridRenderContext);
+
+        List<Integer> rowIndexes = (List<Integer>) jsWriter
+                .getComponentRenderContext().getAttribute(
+                        HTML_GENERATED_ROW_INDEXES_PROPERTY);
+        if (rowIndexes != null && rowIndexes.isEmpty() == false) {
+            jsWriter.writeMethodCall("_addRowIndexes");
+
+            Collections.sort(rowIndexes);
+
+            boolean first = true;
+            int last = -1;
+            int count = 0;
+            for (Iterator<Integer> it = rowIndexes.iterator(); it.hasNext();) {
+                int i = it.next().intValue();
+
+                if (last >= 0 && count > 0 && last == i - 1) {
+                    last++;
+                    count++;
+                    continue;
+                }
+
+                if (count > 0) {
+                    jsWriter.write(',').writeInt(count);
+                    count = 0;
+                }
+
+                last = i;
+                count++;
+
+                if (first) {
+                    first = false;
+                } else {
+                    jsWriter.write(',');
+                }
+
+                jsWriter.writeInt(i);
+            }
+
+            if (count > 0) {
+                jsWriter.write(',').writeInt(count);
+            }
+
+            jsWriter.writeln(");");
+        }
+    }
+
     protected void encodeJsColumns(IJavaScriptWriter jsWriter,
             AbstractGridRenderContext gridRenderContext) throws WriterException {
 
         Integer rowCount = (Integer) jsWriter.getComponentRenderContext()
                 .getAttribute(ROWCOUNT_PROPERTY);
         if (rowCount != null) {
-            jsWriter.writeMethodCall("f_setRowCount").writeInt(
-                    rowCount.intValue()).writeln(");");
+            jsWriter.writeMethodCall("f_setRowCount")
+                    .writeInt(rowCount.intValue()).writeln(");");
         }
 
         encodeJsColumns(jsWriter, gridRenderContext, GENERATE_CELL_STYLE_CLASS);
@@ -323,22 +400,22 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 
         int sortTranslations[] = null;
 
-        ISortedComponent sortedComponents[] = gridRenderContext
-                .listSortedComponents();
-
         DataModel dataModel = componentsGridComponent.getDataModelValue();
 
-        if (dataModel instanceof IComponentRefModel) {
-            ((IComponentRefModel) dataModel)
-                    .setComponent(componentsGridComponent);
+        IComponentRefModel componentRefModel = getAdapter(
+                IComponentRefModel.class, dataModel);
+
+        if (componentRefModel != null) {
+            componentRefModel.setComponent(componentsGridComponent);
         }
 
         boolean filtred = false;
 
         IFilterProperties filtersMap = gridRenderContext.getFiltersMap();
+        IFiltredModel filtredDataModel = getAdapter(IFiltredModel.class,
+                dataModel);
         if (filtersMap != null) {
-            if (dataModel instanceof IFiltredModel) {
-                IFiltredModel filtredDataModel = (IFiltredModel) dataModel;
+            if (filtredDataModel != null) {
 
                 filtredDataModel.setFilter(filtersMap);
                 gridRenderContext.updateRowCount();
@@ -350,8 +427,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                 gridRenderContext.updateRowCount();
             }
 
-        } else if (dataModel instanceof IFiltredModel) {
-            IFiltredModel filtredDataModel = (IFiltredModel) dataModel;
+        } else if (filtredDataModel != null) {
 
             filtredDataModel.setFilter(FilterExpressionTools.EMPTY);
             gridRenderContext.updateRowCount();
@@ -359,6 +435,10 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
             filtred = true;
         }
 
+        ISortedComponent sortedComponents[] = gridRenderContext
+                .listSortedComponents();
+        ISortedDataModel sortedDataModel = getAdapter(ISortedDataModel.class,
+                dataModel, sortedComponents);
         if (sortedComponents != null && sortedComponents.length > 0) {
 
             if (NOT_SUPPORTED_SERVER_SORT) {
@@ -366,7 +446,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                         "Can not sort dataModel in server side !");
             }
 
-            if (dataModel instanceof ISortedDataModel) {
+            if (sortedDataModel != null) {
                 // On delegue au modele, le tri !
 
                 // Nous devons êctre OBLIGATOIREMENT en mode rowValueColumnId
@@ -375,8 +455,8 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                             "Can not sort dataModel without attribute rowValue attribute specified !");
                 }
 
-                ((ISortedDataModel) dataModel).setSortParameters(
-                        componentsGridComponent, sortedComponents);
+                sortedDataModel.setSortParameters(componentsGridComponent,
+                        sortedComponents);
             } else {
                 throw new FacesException(
                         "ComponentsGrid can not be sorted automatically ! (the dataModel must implement ISortedDataModel)");
@@ -385,10 +465,9 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
             // Apres le tri, on connait peu etre la taille
             gridRenderContext.updateRowCount();
 
-        } else if (dataModel instanceof ISortedDataModel) {
+        } else if (sortedDataModel != null) {
             // Reset des parametres de tri !
-            ((ISortedDataModel) dataModel).setSortParameters(
-                    componentsGridComponent, null);
+            sortedDataModel.setSortParameters(componentsGridComponent, null);
         }
 
         // Initializer le IRandgeDataModel avant la selection/check/additionnal
@@ -468,7 +547,8 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
             }
         }
 
-        Map varContext = facesContext.getExternalContext().getRequestMap();
+        Map<String, Object> varContext = facesContext.getExternalContext()
+                .getRequestMap();
         String rowCountVar = gridRenderContext.getRowCountVar();
         if (rowCountVar != null) {
             varContext.put(rowCountVar, new Integer(count));
@@ -484,6 +564,15 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         boolean writeSelected = true;
         if (componentsGridComponent.getClientSelectionFullState(facesContext) != IClientFullStateCapability.NONE_CLIENT_FULL_STATE) {
             writeSelected = false;
+        }
+
+        List<Integer> htmlGeneratedRowIndexes = null;
+        if (encodeJs == false) {
+            htmlGeneratedRowIndexes = new ArrayList<Integer>();
+
+            writer.getComponentRenderContext().setAttribute(
+                    HTML_GENERATED_ROW_INDEXES_PROPERTY,
+                    htmlGeneratedRowIndexes);
         }
 
         try {
@@ -638,6 +727,11 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                             defaultCellStyleClass, i, translatedRowIndex);
                 }
 
+                if (htmlGeneratedRowIndexes != null) {
+                    htmlGeneratedRowIndexes
+                            .add(new Integer(translatedRowIndex));
+                }
+
                 if (sortTranslations == null) {
                     if (selectedOffset >= 0
                             && selectedOffset >= selectedIndexes.length) {
@@ -683,17 +777,17 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         htmlWriter.startElement(IHtmlWriter.TR);
 
         if (rowValue != null) {
-            htmlWriter.writeAttribute("v:rowValue", rowValue);
+            htmlWriter.writeAttributeNS("rowValue", rowValue);
         }
 
-        htmlWriter.writeAttribute("v:rowIndex", rowIndex);
+        htmlWriter.writeAttributeNS("rowIndex", rowIndex);
 
         htmlWriter.writeClass(rowClassName);
 
         htmlWriter.writeId(computeRowId(htmlWriter));
 
         if (selected && writeSelected) {
-            htmlWriter.writeAttribute("v:selected", true);
+            htmlWriter.writeAttributeNS("selected", true);
         }
 
         UIColumn columns[] = gridRenderContext.listColumns();
@@ -717,10 +811,19 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 
             UIColumn column = columns[columnIndex];
 
-            htmlWriter.startElement(IHtmlWriter.TD);
+            String cellType = IHtmlWriter.TD;
+            String scopeColId = gridRenderContext.getScopeColId();
+            if (scopeColId != null && scopeColId.equals(column.getId())) {
+                cellType = IHtmlWriter.TH;
+            }
 
-            htmlWriter.writeAttribute("noWrap");
+            htmlWriter.startElement(cellType);
 
+            if (gridRenderContext.getComponentsGridComponent().isCellTextWrap(
+                    htmlWriter.getComponentRenderContext().getFacesContext()) == false) {
+                htmlWriter.writeAttribute("noWrap");
+
+            }
             String toolTip = null;
             if (defaultCellToolTipTexts != null) {
                 toolTip = defaultCellToolTipTexts[columnIndex];
@@ -743,7 +846,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                 if (csc != null) {
                     styleClass = csc;
 
-                    htmlWriter.writeAttribute("v:className", csc);
+                    htmlWriter.writeAttributeNS("className", csc);
                 }
             }
 
@@ -763,8 +866,8 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                     for (; st.hasMoreTokens();) {
                         String cellStyleClass = st.nextToken();
 
-                        sa.append(' ').append(cellStyleClass).append(
-                                "_selected");
+                        sa.append(' ').append(cellStyleClass)
+                                .append("_selected");
                     }
                 }
 
@@ -772,14 +875,20 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                 sa.append(' ').append(styleClass);
             }
 
-            htmlWriter.writeClass(sa.toString());
-
             if (cellHorizontalAligments != null) {
                 String alignment = cellHorizontalAligments[columnIndex];
                 if (alignment != null) {
-                    htmlWriter.writeAlign(alignment);
+                    sa.append(" f_grid_cell_align_").append(alignment);
                 }
             }
+
+            htmlWriter.writeClass(sa.toString());
+
+            // Accessibility : add scope="row" for the scope column
+            if (scopeColId != null && scopeColId.equals(column.getId())) {
+                htmlWriter.writeAttribute("scope", "row");
+            }
+
             htmlWriter.endComponent();
 
             htmlWriter.writeln();
@@ -789,7 +898,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 
             htmlWriter.writeln();
 
-            htmlWriter.endElement(IHtmlWriter.TD);
+            htmlWriter.endElement(cellType);
         }
 
         htmlWriter.endElement(IHtmlWriter.TR);
@@ -958,7 +1067,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         super.encodeEnd(writer);
     }
 
-    protected void addUnlockProperties(Set unlockedProperties) {
+    protected void addUnlockProperties(Set<String> unlockedProperties) {
         super.addUnlockProperties(unlockedProperties);
 
         unlockedProperties.add("selectedItems");
@@ -983,10 +1092,11 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         if (selectedRows != null || deselectedRows != null) {
             if (rowValueSetted) {
 
-                Set selectedValues = SelectionTools.selectionValuesToSet(
-                        facesContext, componentsGridComponent, false);
+                Set<Object> selectedValues = SelectionTools
+                        .selectionValuesToSet(facesContext,
+                                componentsGridComponent, false);
 
-                Set newSelectedValues = updateSelection(facesContext,
+                Set<Object> newSelectedValues = updateSelection(facesContext,
                         selectedValues, selectedRows, deselectedRows,
                         componentsGridComponent);
 
@@ -1015,8 +1125,8 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         super.decode(context, component, componentData);
     }
 
-    private Set updateSelection(FacesContext facesContext, Set set,
-            String selectedRows, String deselectedRows,
+    private Set<Object> updateSelection(FacesContext facesContext,
+            Set<Object> set, String selectedRows, String deselectedRows,
             ComponentsGridComponent componentsGridComponent) {
 
         if (HtmlTools.ALL_VALUE.equals(deselectedRows)) {
@@ -1024,8 +1134,8 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 
         } else if (set.size() > 0 && deselectedRows != null
                 && deselectedRows.length() > 0) {
-            List deselect = parseValues(facesContext, componentsGridComponent,
-                    deselectedRows);
+            List<Object> deselect = parseValues(facesContext,
+                    componentsGridComponent, deselectedRows);
 
             if (deselect.isEmpty() == false) {
                 set.removeAll(deselect);
@@ -1033,8 +1143,8 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         }
 
         if (selectedRows != null && selectedRows.length() > 0) {
-            List select = parseValues(facesContext, componentsGridComponent,
-                    selectedRows);
+            List<Object> select = parseValues(facesContext,
+                    componentsGridComponent, selectedRows);
 
             if (select.isEmpty() == false) {
                 set.addAll(select);
@@ -1045,22 +1155,22 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         return set;
     }
 
-    public static List parseValues(FacesContext facesContext,
+    public static List<Object> parseValues(FacesContext facesContext,
             ComponentsGridComponent componentsGridComponent, String values) {
         StringTokenizer st = new StringTokenizer(values,
                 HtmlTools.LIST_SEPARATORS);
         if (st.hasMoreTokens() == false) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
 
-        List tokens = new ArrayList(st.countTokens());
+        List<String> tokens = new ArrayList<String>(st.countTokens());
         for (; st.hasMoreTokens();) {
             tokens.add(st.nextToken());
         }
 
         Object vs[] = convertStringsToValues(facesContext,
-                componentsGridComponent, (String[]) tokens
-                        .toArray(new String[tokens.size()]));
+                componentsGridComponent,
+                tokens.toArray(new String[tokens.size()]));
 
         return Arrays.asList(vs);
     }
@@ -1104,8 +1214,6 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
      */
     public class ComponentsGridRenderContext extends AbstractGridRenderContext {
 
-        private static final String REVISION = "$Revision$";
-
         private boolean rowValueSetted;
 
         private boolean interactiveShow;
@@ -1113,14 +1221,14 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         private Converter rowValueConverter;
 
         public ComponentsGridRenderContext(IProcessContext processContext,
-                IScriptRenderContext scriptRenderContext,
+                IJavaScriptRenderContext scriptRenderContext,
                 ComponentsGridComponent gridComponent, int rowIndex,
                 int forcedRows, ISortedComponent[] sortedComponents,
                 String filterExpression, String showAdditionals,
-                String hideAdditionals) {
+                String hideAdditionals, ISelectedCriteria[] criteriaContainers) {
             super(processContext, scriptRenderContext, gridComponent, rowIndex,
                     forcedRows, sortedComponents, filterExpression,
-                    showAdditionals, hideAdditionals);
+                    showAdditionals, hideAdditionals, criteriaContainers);
         }
 
         public ComponentsGridRenderContext(
@@ -1157,15 +1265,23 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         }
 
         protected String convertAliasCommand(String command) {
-            return (String) SORT_ALIASES.get(command);
+            return SORT_ALIASES.get(command);
         }
 
         public boolean isRowValueSetted() {
             return rowValueSetted;
         }
     }
-    
-     protected String getWAIRole() {
-    	return null;
+
+    protected String getWAIRole() {
+        return null;
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "asyncRender",
+                "interactiveShow", "cellTextWrap", "showValue", "rowValue",
+                "rowIndex", "selected", "className" });
     }
 }

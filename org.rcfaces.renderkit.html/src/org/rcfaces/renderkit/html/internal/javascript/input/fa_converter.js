@@ -26,7 +26,7 @@ var __members = {
 	 * @return String
 	 */
 	f_getAsString: f_class.ABSTRACT
-}
+};
 
 new f_aspect("fa_converter", {
 	members: __members

@@ -12,35 +12,53 @@
 var __members = {
 
 	/**
-	 * @field protected Boolean
-	 */
-	_loading: undefined,
-
-	/**
-	 * @field private function
+	 * @field private Function
 	 */
 	_nextCommand: undefined,
 
+	/**
+	 * @field private Number
+	 */
+	_nextCommandDate: undefined,
+
 	f_finalize: function() {
-//		this._loading=undefined; // Boolean
 		this._nextCommand=undefined; // function
 	},
 	/**
 	 * @method protected
-	 * @param function callback
+	 * @param Function callback
 	 * @return void
 	 */
 	f_appendCommand: function(callBack) {
 		f_core.Assert(typeof(callBack)=="function", "fa_commands.f_appendCommand: Invalid callback parameter ("+callBack+")");
 		
-		if (!this._loading) {
+		var now=new Date().getTime();
+		
+		if (this._nextCommandDate && now-this._nextCommandDate>1000*10) {
+			this._nextCommandDate=undefined;
+			this._nextCommand=undefined;
+		}
+		
+		var nextCommand = this._nextCommand;		
+		
+		if (!this._nextCommandDate && !nextCommand) {
+			this._nextCommandDate=now;
+			
 			f_core.Info(fa_commands, "f_appendCommand: Call immediatly the callback !");
-			callBack.call(this, this);
+			try {
+				callBack.call(this, this);
+				
+			} catch (ex) {
+				f_core.Error(fa_commands, "f_appendCommand: Call of callback: "+callBack+" throws exception.", ex);
+				this._nextCommandDate=undefined;
+				return;
+			}
+
 			return;
 		}
 		
 		if (f_core.IsInfoEnabled(fa_commands)) {
-			if (this._nextCommand) {
+			if (nextCommand) {
 				f_core.Info(fa_commands, "f_appendCommand: Replace an other callback !");
 	
 			} else  {
@@ -57,19 +75,25 @@ var __members = {
 	f_processNextCommand: function() {
 		var nextCommand=this._nextCommand;
 		if (!nextCommand) {
+			this._nextCommandDate=undefined;
+			
 			f_core.Debug(fa_commands, "f_processNextCommand: no more commands");
 			return false;
 		}
 	
 		f_core.Info(fa_commands, "f_processNextCommand: Process callback !");
 		
+		var now=new Date().getTime();
+		
 		this._nextCommand=undefined;
+		this._nextCommandDate=now;
 		
 		try {
 			nextCommand.call(this, this);
 			
 		} catch (ex) {
 			f_core.Error(fa_commands, "f_processNextCommand: Call of callback: "+nextCommand+" throws exception.", ex);
+			this._nextCommandDate=undefined;
 			return false;
 		}
 		
@@ -83,7 +107,7 @@ var __members = {
 		f_core.Debug(fa_commands, "f_clearCommands: clear commands");
 		this._nextCommand=undefined;
 	}
-}
+};
 
 new f_aspect("fa_commands", {
 	members: __members

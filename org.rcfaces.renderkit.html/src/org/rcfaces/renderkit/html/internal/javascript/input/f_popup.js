@@ -19,8 +19,7 @@ var __statics = {
 	 * @field hidden static final Number
 	 */
 	IE_FRAME_POPUP_TYPE: 1,
-	 
-
+	
 
 	/**
 	 * @field hidden static final Number
@@ -103,6 +102,8 @@ var __statics = {
 	Initializer: function() {
 		if (f_popup.Ie_enablePopup()) {
 			var popup=f_popup._Ie_PreparePopup(document);
+			
+			// BUG IE: S'il y a une restriction de domain en JS (Erreur d'accés)
 			popup.document._rootPopup=true;
 		}
 	},
@@ -159,7 +160,7 @@ var __statics = {
 			return false;
 		}
 		
-		return f_core.IsInternetExplorer();
+		return f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_6);
 	},
 	/**
 	 * @method private static
@@ -380,15 +381,20 @@ var __statics = {
 			return true;
 		}
 		
-		doc.addEventListener("mousedown", f_popup._Gecko_OnMouseDown, true);		
-		doc.addEventListener("click", f_popup._Gecko_OnClick, true);		
-		doc.addEventListener("dblclick", f_popup._Gecko_OnClick, true);		
-//		doc.addEventListener("blur", f_popup._Gecko_OnBlur, true);
-		doc.addEventListener("focus", f_popup._Gecko_OnFocus, true);
-		doc.addEventListener("keydown", f_popup._OnKeyDownJs, true);
-		doc.addEventListener("keyup", f_popup._OnKeyUpJs, true);
-		doc.addEventListener("keypress", f_popup._OnKeyPressJs, true);		
-		doc.addEventListener("contextmenu", f_popup._Gecko_OnContextMenu, true);
+		f_core.AddEventListener(doc,"mousedown", f_popup._Gecko_OnMouseDown, doc);		
+		f_core.AddEventListener(doc,"click", f_popup._Gecko_OnClick, doc);		
+		f_core.AddEventListener(doc,"dblclick", f_popup._Gecko_OnClick, doc);
+		
+		if(!f_core.IsInternetExplorer()) {
+			
+			f_core.AddEventListener(doc,"blur", f_popup._Gecko_OnBlur, doc);
+			f_core.AddEventListener(doc,"focus", f_popup._Gecko_OnFocus, doc);
+		}
+		
+		f_core.AddEventListener(doc,"keydown", f_popup._OnKeyDownJs, doc);
+		f_core.AddEventListener(doc,"keyup", f_popup._OnKeyUpJs, doc);
+		f_core.AddEventListener(doc,"keypress", f_popup._OnKeyPressJs, doc);		
+		f_core.AddEventListener(doc,"contextmenu", f_popup._Gecko_OnContextMenu, doc);
 		return true;
 	},
 	/**
@@ -468,15 +474,16 @@ var __statics = {
 			return;
 		}
 
-		doc.removeEventListener("mousedown", f_popup._Gecko_OnMouseDown, true);
-		doc.removeEventListener("click", f_popup._Gecko_OnClick, true);
-		doc.removeEventListener("dblclick", f_popup._Gecko_OnClick, true);
-//		document.removeEventListener("blur", f_popup._Gecko_OnBlur, true);
-		doc.removeEventListener("focus", f_popup._Gecko_OnFocus, true);
-		doc.removeEventListener("keydown", f_popup._OnKeyDownJs, true);
-		doc.removeEventListener("keyup", f_popup._OnKeyUpJs, true);
-		doc.removeEventListener("keypress", f_popup._OnKeyPressJs, true);
-		doc.removeEventListener("contextmenu", f_popup._Gecko_OnContextMenu, true);
+		f_core.RemoveEventListener(doc,"mousedown", f_popup._Gecko_OnMouseDown, doc);		
+		f_core.RemoveEventListener(doc,"click", f_popup._Gecko_OnClick, doc);		
+		f_core.RemoveEventListener(doc,"dblclick", f_popup._Gecko_OnClick, doc);		
+		f_core.RemoveEventListener(doc,"blur", f_popup._Gecko_OnBlur, doc);
+		f_core.RemoveEventListener(doc,"focus", f_popup._Gecko_OnFocus, doc);
+		f_core.RemoveEventListener(doc,"keydown", f_popup._OnKeyDownJs, doc);
+		f_core.RemoveEventListener(doc,"keyup", f_popup._OnKeyUpJs, doc);
+		f_core.RemoveEventListener(doc,"keypress", f_popup._OnKeyPressJs, doc);		
+		f_core.RemoveEventListener(doc,"contextmenu", f_popup._Gecko_OnContextMenu, doc);
+		
 	},
 	/**
 	 * @method private static
@@ -499,7 +506,10 @@ var __statics = {
 	 * @context document:this
 	 */
 	_Gecko_OnMouseDown: function(evt) {
-		f_core.Debug(f_popup, "_OnMouseDown on "+this+" target="+evt.target+"/"+evt.target.className+"  popupComponent="+f_popup.Component);
+		
+		var target = evt.target || evt.srcElement;
+		
+		f_core.Debug(f_popup, "_OnMouseDown on "+this+" target="+target+"/"+target.className+"  popupComponent="+f_popup.Component);
 
 		var component=f_popup.Component;
 		if (!component) {
@@ -508,7 +518,7 @@ var __statics = {
 		
 		// Si la target n'est pas dans une popup on ferme !
 		
-		var found=f_popup.IsChildOfDocument(evt.target, evt);
+		var found=f_popup.IsChildOfDocument(target, evt);
 		f_core.Debug(f_popup, "OnMouseDown search parent="+found);
 
 		if (found) {
@@ -602,6 +612,11 @@ var __statics = {
 		
 		f_core.Debug(f_popup, "_Ie_OnMouseDown: click on "+this+" fromElement="+evt.srcElement+"/"+evt.srcElement.className);
 		
+		var component=f_popup.Component;
+		if (!component) {
+			return true;
+		}
+		
 		var found=f_popup.IsChildOfDocument(evt.srcElement, evt);
 		f_core.Debug(f_popup, "_Ie_OnMouseDown: search parent="+found);
 
@@ -626,8 +641,9 @@ var __statics = {
 	 * @return Boolean
 	 * @context document:this
 	 */
-	_Gecko_OnClick: function(evt) {	
-		f_core.Debug(f_popup, "OnClick: click on "+this+" target="+evt.target+"/"+evt.target.className);
+	_Gecko_OnClick: function(evt) {
+		var target = evt.target || evt.srcElement;
+		f_core.Debug(f_popup, "OnClick: click on "+this+" target="+target+"/"+target.className);
 
 		if (!f_popup.Component) {
 			return true;
@@ -644,19 +660,27 @@ var __statics = {
 	 * @context document:this
 	 */
 	_Gecko_OnBlur: function(evt) {	
-		f_core.Debug(f_popup, "OnBlur on "+this+" target="+evt.target+"/"+evt.target.className);
+		var target = evt.target || evt.srcElement;
+		f_core.Debug(f_popup, "OnBlur on "+this+" target="+target+"/"+target.className);
 
-/*
 		if (!f_popup.Component) {
 			return;
 		}
-		try {
-			f_popup.Callbacks.exit.call(f_popup.Component, evt);
-			
-		} catch (x) {
-			f_core.Error(f_popup, "exit callback throws exception", x);
+		var found=f_popup.IsChildOfDocument(target, evt);
+		f_core.Debug(f_popup, "OnFocus search parent="+found);
+
+		if (found) {
+			return true;
 		}
-		*/	
+		if (f_popup.Callbacks) {
+			try {
+				f_popup.Callbacks.exit.call(f_popup.Component, evt);
+				
+			} catch (x) {
+				f_core.Error(f_popup, "exit callback throws exception", x);
+			}
+		}
+		
 		return true;
 	},
 	/**
@@ -667,30 +691,32 @@ var __statics = {
 		if (window._rcfacesExiting) {
 			return;
 		}
-		
-		f_core.Debug(f_popup, "_Gecko_OnFocus: on "+this+" target="+evt.target+"/"+evt.target.className);
+		var target = evt.target || evt.srcElement;
+		f_core.Debug(f_popup, "_Gecko_OnFocus: on "+this+" target="+target+"/"+target.className);
 
 		if (!f_popup.Component) {
 			return;
 		}
 		
-		var found=f_popup.IsChildOfDocument(evt.target, evt);
+		var found=f_popup.IsChildOfDocument(target, evt);
 		f_core.Debug(f_popup, "OnFocus search parent="+found);
 
 		if (found) {
 			return true;
 		}
 	
-		try {
-			f_popup.Callbacks.exit.call(f_popup.Component, evt);
-			
-		} catch (x) {
-			f_core.Error(f_popup, "Exit callback throws exception", x);
-
-		} finally {
-			f_popup.Callbacks=undefined;
+		if (f_popup.Callbacks) {
+			try {
+				f_popup.Callbacks.exit.call(f_popup.Component, evt);
+				
+			} catch (x) {
+				f_core.Error(f_popup, "Exit callback throws exception", x);
+	
+			} finally {
+				f_popup.Callbacks=undefined;
+			}
 		}
-			
+		
 		return true;
 	},
 	/**
@@ -727,6 +753,10 @@ var __statics = {
 		f_core.Debug(f_popup, "_OnKeyDownJs: keyCode="+evt.keyCode+" on "+this+" component:"+component+" target:"+target);
 		
 		var callbacks=f_popup.Callbacks;
+		if (!callbacks) {
+			// Bizarre ... pas possible ???
+			return f_core.CancelJsEvent(evt);
+		}
 		if (evt.altKey) { // ?
 			try {
 				if (callbacks.exit.call(component, evt)===true) {
@@ -832,13 +862,19 @@ var __statics = {
 			return true;
 		}
 	
+		var callbacks=f_popup.Callbacks;
+		if (!callbacks) {
+			f_core.Debug(f_popup, "_OnKeyPressJs["+evt.keyCode+"] on "+this+" no callbacks");
+
+			return true;
+		}
+
 		var target=evt.target;
 		if (!target) {
 			target=evt.srcElement;
 		}
-		f_core.Debug(f_popup, "_OnKeyPressJs["+evt.keyCode+"] on "+this+" component:"+component+" target:"+target);
-		
-		var callbacks=f_popup.Callbacks;
+		f_core.Debug(f_popup, "_OnKeyPressJs["+evt.keyCode+"] on "+this+" component:"+component+" target:"+target);		
+
 		try {
 			if (callbacks.keyPress) {
 				if (callbacks.keyPress.call(component, evt, f_popup.Popup)===false) {
@@ -896,43 +932,25 @@ var __statics = {
 	 * @method hidden static 
 	 */	
 	VerifyMouseDown: function(component, jsEvent) {
-		if (f_core.IsGecko()) {
+		var target = jsEvent.target || jsEvent.srcElement;
 			
-			// On a un probleme ! 
-			// Les evenements clicks sont traités par notre composant !
-			var target=jsEvent.target;
-			
-			// Il y a des sous-composants dans le menu 
-			// l'evenement peut provenir de l'un d'eux ... 
-			// dans le doute on recherche dans les parents
-			for(;target;) {
-				if (target._popupObject) {
-					// On laisse tomber ...
-					
-					return true;
-				}
-				target=target.parentNode;
+		// On a un probleme ! 
+		// Les evenements clicks sont traités par notre composant !
+		
+		// Il y a des sous-composants dans le menu 
+		// l'evenement peut provenir de l'un d'eux ... 
+		// dans le doute on recherche dans les parents
+		for(;target;) {
+			if (target._popupObject) {
+				// On laisse tomber ...
+				
+				return true;
 			}
-			
-			return false;
-		}
-
-		if (f_core.IsInternetExplorer()) {
-			var target=jsEvent.srcElement;
-			
-			for(;target;) {
-				if (target._popupObject) {
-					// On laisse tomber ...
-					
-					return true;
-				}
-				target=target.parentNode;
-			}
-			
-			return false;
+			target=target.parentNode;
 		}
 		
-		return true;
+		return false;
+		
 	},
 	/**
 	 * @method hidden static
@@ -998,7 +1016,7 @@ var __statics = {
 			// Calcule la position de la souris 
 			var eventPos=f_core.GetJsEventPosition(jsEvent);
 			
-			popupComponent=jsEvent.srcElement.ownerDocument.body;
+			popupComponent=(jsEvent.srcElement || jsEvent.targetElement || jsEvent.toElement).ownerDocument.body;
 			popupX=eventPos.x; //-cursorPos.x;
 			popupY=eventPos.y; //-cursorPos.y;
 
@@ -1023,6 +1041,24 @@ var __statics = {
 			popupH+=positionInfos.deltaHeight;
 		}
 
+		var viewSize=f_core.GetViewSize(null, popupComponent.ownerDocument);
+		
+		var bw=viewSize.width;
+		var bh=viewSize.height;
+		
+		var scrollPosition=f_core.GetScrollOffsets(popupComponent.ownerDocument);
+		bw+=scrollPosition.x;
+		bh+=scrollPosition.y;
+
+		
+		if (popupW+popupX>bw) {
+			popupX +=  (bw-popupW-popupX);
+		}
+		
+		if (popupH+popupY>bh) {
+			popupY += (bh-popupH-popupY);
+		}
+		
 		f_core.Debug(f_popup, "Ie_openPopup: Open popup x="+popupX+" y="+popupY+" w="+popupW+" h="+popupH+" componentPosition="+popupComponent.id+"/"+popupComponent.tagName);
 		
 		popup.show(popupX, popupY, popupW, popupH, popupComponent);		
@@ -1048,10 +1084,11 @@ var __statics = {
 				
 		f_core.Debug(f_popup, "_Ie_unload: Unload popup '"+this.id+"' rootPopup="+doc._rootPopup);		
 		
+		var component = f_popup.Component;
 		if (doc._rootPopup) {
 			var cbs=f_popup.Callbacks;
-			if (cbs) {
-				cbs.exit.call(f_popup.Component, evt);
+			if (cbs && component) {
+				cbs.exit.call(component, evt);
 				f_popup.Callbacks=undefined;
 			}
 		}
@@ -1129,7 +1166,17 @@ var __statics = {
 		var component=positionInfos.component;	
 		var offsetX=0;
 		var offsetY=0;
-		var offsetWidth;
+		var offsetWidth=popup.offsetWidth;
+		var offsetHeight=popup.offsetHeight;
+		var heightSetted=false;
+		
+		if (positionInfos.popupWidth) {
+			offsetWidth=positionInfos.popupWidth;
+		}
+		if (positionInfos.maxPopupHeight && popup.offsetHeight>positionInfos.maxPopupHeight) {
+			heightSetted=true;
+			offsetHeight=positionInfos.maxPopupHeight;
+		}
 		
 		popup.style.display="block"; // On remet le display block pour pouvoir avoir la taille !
 
@@ -1140,21 +1187,16 @@ var __statics = {
 		}
 		
 		switch(positionInfos.position) {
+		
 		case f_popup.BOTTOM_COMPONENT:
-			offsetY+=component.offsetHeight;
-			break;
-
-		case f_popup.RIGHT_COMPONENT:
-			offsetX+=component.offsetWidth;
-			break;
-
 		case f_popup.BOTTOM_LEFT_COMPONENT:
 			offsetY+=component.offsetHeight;
 			break;
-
+					
 		case f_popup.BOTTOM_RIGHT_COMPONENT:
-			offsetX+=component.offsetWidth;
 			offsetY+=component.offsetHeight;
+		case f_popup.RIGHT_COMPONENT:
+			offsetX+=component.offsetWidth;
 			break;
 
 		case f_popup.MIDDLE_COMPONENT:
@@ -1199,9 +1241,42 @@ var __statics = {
 				
 		offsetX+=2; // Border par défaut !
 		
-		var pos={ x: offsetX, y: offsetY };
+		var positions={ x: offsetX, y: offsetY };
 		
-		f_core.ComputePopupPosition(popup, pos);
+		var viewSize=f_core.GetViewSize(null, popup.ownerDocument);
+		
+		var bw=viewSize.width;
+		var bh=viewSize.height;
+		var scrollPosition=f_core.GetScrollOffsets(popup.ownerDocument);
+		bw+=scrollPosition.x;
+		bh+=scrollPosition.y;
+
+		var absPos={ x: 0, y: 0};
+		if (!component) {
+			absPos=f_core.GetAbsolutePosition(popup.offsetParent);
+		}
+
+		f_core.Debug(f_core, "Gecko_openPopup: bw="+bw+" bh="+bh+" absPos.x="+absPos.x+" absPos.y="+absPos.y+" positions.x="+positions.x+" positions.y="+positions.y+" popupWidth="+offsetWidth+" popupHeight="+popup.offsetHeight);
+
+		if (offsetWidth+positions.x+absPos.x>bw) {
+			positions.x=bw-offsetWidth-absPos.x;
+
+			f_core.Debug(f_core, "Gecko_openPopup: change x position to "+positions.x);
+		}
+		
+		if (offsetHeight > bh - scrollPosition.y) {
+			positions.y=0;
+			positions.x=0;
+			
+		} else if (offsetHeight+positions.y-absPos.y>bh) {
+			if (component) {
+				var aeAbs = f_core.GetAbsolutePosition(component);
+				positions.y=aeAbs.y-offsetHeight;
+			} else {
+				positions.y=bh-offsetHeight-absPos.y;
+			}
+			f_core.Debug(f_core, "Gecko_openPopup: change y position to "+positions.y);
+		} 
 
 		var popupStyle=popup.style;
 
@@ -1224,9 +1299,16 @@ var __statics = {
 			}
 		}
 
-		popupStyle.left=pos.x+"px";
-		popupStyle.top=pos.y+"px";
-	
+		popupStyle.left=positions.x+"px";
+		popupStyle.top=positions.y+"px";
+		
+		if (positionInfos.popupWidth) {
+			popupStyle.width=offsetWidth+"px";
+		}
+		if (heightSetted) {
+			popupStyle.height=offsetHeight+"px";
+		}
+
 		popupStyle.visibility="inherit";
 	},
 	/**
@@ -1235,7 +1317,7 @@ var __statics = {
 	GetComponent: function() {
 		return f_popup.Component;
 	}
-}
+};
 
 var __prototype = {
 	
@@ -1247,7 +1329,7 @@ var __prototype = {
 	f_popup: function(mode) {
 		this._mode=mode;
 	}
-}
+};
 
 new f_class("f_popup", {
 	statics: __statics

@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import javax.el.ValueExpression;
 
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.render.Renderer;
 import javax.faces.event.ActionEvent;
@@ -53,8 +54,11 @@ import org.rcfaces.core.internal.component.IInitializationState;
 import org.rcfaces.core.internal.converter.StrategyListenerConverter;
 import org.rcfaces.core.internal.manager.IContainerManager;
 import org.rcfaces.core.internal.manager.ITransientAttributesManager;
+import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
 import org.rcfaces.core.internal.renderkit.IAsyncRenderer;
 import org.rcfaces.core.internal.renderkit.IRendererExtension;
+import org.rcfaces.core.internal.renderkit.AbstractRendererTypeFactory;
+import org.rcfaces.core.internal.renderkit.designer.IDesignerEngine;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.tools.BindingTools;
 import org.rcfaces.core.event.IValidationListener;
@@ -65,16 +69,19 @@ import org.rcfaces.core.event.ValidationEvent;
  */
 public abstract class CameliaInputComponent extends javax.faces.component.UIInput implements
 		IRCFacesComponent, IContainerManager, IComponentLifeCycle, ITransientAttributesManager, IConvertValueHolder, ISubmittedExternalValue {
-	private static final String REVISION = "$Revision$";
 
 	private static final Log LOG = LogFactory.getLog(CameliaInputComponent.class);
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(Arrays.asList(new String[] {"converter","value"}));
+	protected static final Set<String> CAMELIA_ATTRIBUTES=new HashSet(Arrays.asList(new String[] {"converter","value"}));
+
+	private static final String NULL_RENDERER_TYPE = "##NULL RENDERER##";
 
 	protected transient IComponentEngine engine;
 
 	private transient IStateChildrenList stateChildrenList;
 
+	private transient String rendererType;
+	
 	 private static final Object NULL_VALUE = org.rcfaces.core.internal.tools.ValuesTools.NULL_VALUE;
 
 
@@ -122,31 +129,39 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
     protected void setDefaultProperties(IInitializationState state) {
     }
 
+    @Override
 	public String getFamily() {
 		return CameliaComponents.FAMILY;
 	}
 
+    @Override
 	public final String getRendererType() {
-		String rendererType = super.getRendererType();
-		if (rendererType == null) {
-        	if (LOG.isTraceEnabled()) {
-        		LOG.trace("RendererType is null for component id='"+getId()+"' class='"+getClass()+"'");
-        	}
-			return null;
-		}
-
-		if ((this instanceof ILookAndFeelCapability) == false) {
+		if (rendererType!=null) {
+			if (rendererType == NULL_RENDERER_TYPE) {
+				return null;
+			}
+			
 			return rendererType;
 		}
-
-		String lookId = ((ILookAndFeelCapability) this).getLookId();
-		if (lookId == null) {
-			return rendererType;
+		
+		rendererType = super.getRendererType();
+       	if (LOG.isTraceEnabled()) {
+    		LOG.trace("RendererType is null for component id='"+getId()+"' class='"+getClass()+"'");
 		}
 
-		return rendererType + ":" + lookId;
+		FacesContext facesContext=FacesContext.getCurrentInstance();
+
+		rendererType=AbstractRendererTypeFactory.get(facesContext).computeRendererType(facesContext, this, getFamily(), rendererType);
+ 		if (rendererType == null) {
+            rendererType = NULL_RENDERER_TYPE;
+
+            return null;
+        }
+		
+		return rendererType;
 	}
 
+    @Override
 	public void restoreState(FacesContext context, Object state) {
 		if (LOG.isTraceEnabled()) {
 			LOG.trace("Restoring state of component '"+getId()+"'.");
@@ -170,6 +185,7 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 		}
 	}
 
+    @Override
 	public Object saveState(FacesContext context) {
 		if (LOG.isTraceEnabled()) {
 			LOG.trace("Saving state of component '"+getId()+"'.");
@@ -193,6 +209,7 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 		return states;
 	}
 
+    @Override
 	public void setValueExpression(String name, ValueExpression binding) {
 		if (getCameliaFields().contains(name)) {
 			if (name.equals(getCameliaValueAlias())) {
@@ -210,7 +227,7 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 		super.setValueExpression(name, binding);
 	}
 
-	protected Set getCameliaFields() {
+	protected Set<String> getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}
 
@@ -218,6 +235,7 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 		return null;
 	}
 
+    @Override
 	public final ValueExpression getValueExpression(String name) {
 		if (getCameliaFields().contains(name)) {
 			if (name.equals(getCameliaValueAlias())) {
@@ -238,6 +256,7 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 	}
 */
 
+    @Override
     public void encodeBegin(FacesContext context) throws IOException {
 		if (context == null) {
 			throw new NullPointerException("FacesContext is null");
@@ -253,6 +272,7 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 	    }
 	}
 	
+    @Override
     public void encodeChildren(FacesContext context) throws IOException {
 		if (context == null) {
 			throw new NullPointerException("FacesContext is null");
@@ -268,7 +288,8 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 	    }
 	}
 	
-    public void encodeEnd(FacesContext context) throws IOException {
+    @Override
+ 	public void encodeEnd(FacesContext context) throws IOException {
 		if (context == null) {
 			throw new NullPointerException("FacesContext is null");
 		}
@@ -287,6 +308,7 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 		return ComponentTools.verifyAsyncDecode(context, (IAsyncDecodeModeCapability) this, phaseId);
 	}
 	
+    @Override
 	public void processDecodes(FacesContext context) {
 		if (context == null) {
 			throw new NullPointerException();
@@ -343,6 +365,7 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 	    }
 	}
 
+    @Override
 	public void processValidators(FacesContext context) {
 		if (context == null) {
             throw new NullPointerException("Context is NULL to processValidators");
@@ -397,6 +420,7 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 		engine.processValidation(context);			
 	}
  
+    @Override
     public void processUpdates(FacesContext context) {
 
 		try {
@@ -440,12 +464,13 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 	 * 
 	 * @see javax.faces.component.UIComponent#getChildren()
 	 */
-	public final List getChildren() {
+    @Override
+	public final List<UIComponent> getChildren() {
 		if (Constants.STATED_COMPONENT_CHILDREN_LIST==false) {
 			return super.getChildren();
 		}
 		
-		List list = super.getChildren();
+		List<UIComponent> list = super.getChildren();
 
 		if (stateChildrenList == null) {
 			stateChildrenList = engine.createStateChildrenList();
@@ -502,6 +527,7 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 		return true;
 	}
 	
+    @Override
 	public boolean isRendered() {
 		if (super.isRendered()==false) {
 			return false;
@@ -524,6 +550,7 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 		return null;
 	}
 
+    @Override
    public void queueEvent(FacesEvent e) {
 // Un keyPress doit pouvoir activer l'immediate !
 // Oui mais le code d'appel ne fait r�f�rence qu'a des ActionEvent
@@ -567,6 +594,9 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
         }
     }
 
+	public void settedPhase(FacesContext facesContext) {
+	}
+
     public void decodePhase(FacesContext facesContext) {
     }
 
@@ -604,13 +634,28 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 
 		return true;
     } 
+
+    protected final void designerDeclareCompositeChild(FacesContext facesContext, UIComponent child) {
+
+        IDesignerEngine designerEngine = AbstractProcessContext.getProcessContext(facesContext).getDesignerEngine();
+
+        if (designerEngine == null) {
+            return;
+        }
+
+        designerEngine.declareCompositeChild(this, child);
+    }
 	
+<<<<<<< HEAD
 	protected final IDataMapAccessor getDataMapAccessor(FacesContext context, String name,
             boolean modify) {
             
     	return engine.getDataMapAccessor(context, name, modify);
     }
 	
+=======
+    @Override
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	public String toString() {
 		String name=getClass().getName();
 		name=name.substring(name.lastIndexOf('.')+1);
@@ -623,7 +668,8 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 		
 		s+=","+engine.toString();
 		
-		s+=",rendererId='"+getRendererType()+"'";
+		// On prend le super, sinon il peut precalculer le rendererType trop tot !
+		s+=",rendererId='"+super.getRendererType()+"'";
 		
 		if (getFamily()!=CameliaComponents.FAMILY) {
 			s+=",family='"+getFamily()+"'";
@@ -654,19 +700,19 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 
 
 				if (!Constants.MYFACES_INPUT_BROADCAST_BUG) {
-					super.broadcast(event);
-					return;
+				super.broadcast(event);
+				return;
 				}
-				
+
 				// Bug #1647203
-				if (event instanceof ValueChangeEvent) {				
-					super.broadcast(event);
-					return;
+				if (event instanceof ValueChangeEvent) {
+				super.broadcast(event);
+				return;
 				}
-				
+
 				FacesListener listeners[]=getFacesListeners(FacesListener.class);
 				ComponentTools.broadcast(this, event, listeners);
-				
+
 			
 	}
 
@@ -674,22 +720,22 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 
 
 				Object value=super.getLocalValue();
-				
+
 				if (NULL_VALUE.equals(value)) {
-					value=null;
+				value=null;
 				}
-				
+
 				return value;
 			
 	}
 
 	protected Object getConvertedValue(FacesContext context, Object submittedValue) {
 
-				
+
 				if (NULL_VALUE.equals(submittedValue)) {
-					submittedValue=null;
+				submittedValue=null;
 				}
-				
+
 				return super.getConvertedValue(context, submittedValue);
 			
 	}
@@ -698,11 +744,11 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 
 
 				Object value=super.getSubmittedValue();
-				
+
 				if (NULL_VALUE.equals(value)) {
-					value=null;
+				value=null;
 				}
-				
+
 				return value;
 			
 	}
@@ -711,9 +757,9 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 
 
 				if (submittedValue==null) {
-					submittedValue=NULL_VALUE;
+				submittedValue=NULL_VALUE;
 				}
-				
+
 				super.setSubmittedValue(submittedValue);
 			
 	}
@@ -722,11 +768,11 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 
 
 				Object value=super.getSubmittedValue();
-				
+
 				if (NULL_VALUE.equals(value)) {
-					return true;
+				return true;
 				}
-				
+
 				return value!=null;
 			
 	}
@@ -735,11 +781,11 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 
 
 				Object value=super.getValue();
-				
+
 				if (NULL_VALUE.equals(value)) {
-					value=null;
+				value=null;
 				}
-				
+
 				return value;
 			
 	}

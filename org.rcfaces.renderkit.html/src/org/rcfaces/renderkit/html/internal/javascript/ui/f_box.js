@@ -5,7 +5,7 @@
 /**
  * Box class.
  *
- * @class public f_box extends f_component, fa_asyncRender, fa_subMenu
+ * @class public f_box extends f_component, fa_asyncRender, fa_subMenu, fa_overStyleClass
  */
  
 var __statics = {
@@ -13,7 +13,7 @@ var __statics = {
 	 * @field private static final String
 	 */
 	_BODY_MENU_ID: "#body"
-}
+};
 
 var __members = {
 	/**
@@ -22,8 +22,12 @@ var __members = {
 	_defaultMenuId: undefined,
 	
 /*
+ * 	f_box: function() {
+ *     this.f_super(arguments);
+ *  },
+ * 
 	f_finalize: function() {
-		this._defaultMenuId=undefined; // String
+		// this._defaultMenuId=undefined; // String
 		
 		this.f_super(arguments);
 	},
@@ -117,7 +121,7 @@ var __members = {
 			this.className=className;
 		}
 	}
-}
+};
  
 new f_class("f_box", {
 	extend: f_component,

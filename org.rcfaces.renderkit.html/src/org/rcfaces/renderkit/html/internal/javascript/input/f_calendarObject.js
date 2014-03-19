@@ -156,60 +156,60 @@ var __statics = {
 	 */
 	CreateCalendarFromComponent: function(component, layout) {
 		var className="f_calendar";
-		//f_core.GetAttribute(component, "v:className");
+		//f_core.GetAttributeNS(component, "className");
 		//if (!className) {
 		//	className=component.className;
 		//}
 			
 		var calendar=f_calendarObject.f_newInstance(className, component, layout);
 		
-		var maxDate=f_core.GetAttribute(component, "v:maxDate");
+		var maxDate=f_core.GetAttributeNS(component, "maxDate");
 		if (maxDate) {
 			calendar.f_setMaxDate(maxDate);
 		}		
 
-		var minDate=f_core.GetAttribute(component, "v:minDate");
+		var minDate=f_core.GetAttributeNS(component,"minDate");
 		if (minDate) {
 			calendar.f_setMinDate(minDate);
 		}
 		
-		var twoDigitYearStart=f_core.GetAttribute(component, "v:twoDigitYearStart");
+		var twoDigitYearStart=f_core.GetAttributeNS(component,"twoDigitYearStart");
 		if (twoDigitYearStart) {
 			calendar.f_setTwoDigitYearStart(twoDigitYearStart);
 		}
 
-		var homeDate=f_core.GetAttribute(component, "v:homeDate");
+		var homeDate=f_core.GetAttributeNS(component,"homeDate");
 		if (homeDate) {
-			var homeDateLabel=f_core.GetAttribute(component, "v:homeDateLabel");
+			var homeDateLabel=f_core.GetAttributeNS(component,"homeDateLabel");
 			
 			calendar.f_setHomeDate(homeDate, homeDateLabel);
 		}
 
-		var clientDatesStrategy=f_core.GetAttribute(component, "v:clientDatesStrategy");
+		var clientDatesStrategy=f_core.GetAttributeNS(component,"clientDatesStrategy");
 		if (clientDatesStrategy) {
 			calendar._clientDatesStrategy=parseInt(clientDatesStrategy, 10);
 		}
 
-		var disabledWeekDays=f_core.GetAttribute(component, "v:disabledWeekDays");
+		var disabledWeekDays=f_core.GetAttributeNS(component,"disabledWeekDays");
 		if (disabledWeekDays) {
 			calendar.f_setDisabledWeekDays(disabledWeekDays);
 		}
 		
-		var firstDayOfWeek=f_core.GetAttribute(component, "v:firstDayOfWeek");
+		var firstDayOfWeek=f_core.GetAttributeNS(component,"firstDayOfWeek");
 		if (firstDayOfWeek) {
 			calendar._firstDayOfWeek=parseInt(firstDayOfWeek, 10);
 		}
 		
-		calendar._multiple=f_core.GetBooleanAttribute(component, "v:multiple");
+		calendar._multiple=f_core.GetBooleanAttributeNS(component,"multiple");
 
-		var mode=f_core.GetAttribute(component, "v:mode");
+		var mode=f_core.GetAttributeNS(component,"mode");
 		if (mode) {
 			calendar._mode=parseInt(mode, 10);
 		}
 
-		var cursorDate=f_core.GetAttribute(component, "v:cursorDate");
+		var cursorDate=f_core.GetAttributeNS(component,"cursorDate");
 		
-		var date=f_core.GetAttribute(component, "v:value");
+		var date=f_core.GetAttributeNS(component,"value");
 		if (date) {
 			calendar.f_setSelection(date, !cursorDate);
 		}
@@ -218,7 +218,7 @@ var __statics = {
 			calendar.f_setCursorDate(cursorDate);			
 		}
 		
-		calendar._autoSelection=f_core.GetBooleanAttribute(component, "v:autoSelection");
+		calendar._autoSelection=f_core.GetBooleanAttributeNS(component,"autoSelection");
 		
 		return calendar;
 	},
@@ -1659,7 +1659,7 @@ var __members = {
 		var button=doc.createElement("a");
 		button.className=className+"_today";
 		button.onclick=f_calendarObject._OnHomeDateClick;
-		button.href=f_core.JAVASCRIPT_VOID;
+		button.href=f_core.CreateJavaScriptVoid0();
 		button._date=this._homeDate;
 		button._calendar=this;
 		
@@ -1709,7 +1709,7 @@ var __members = {
 		
 		var link=doc.createElement("a");
 		link.className=className+"_prevUnit";
-		link.href=f_core.JAVASCRIPT_VOID;
+		link.href=f_core.CreateJavaScriptVoid0();
 		f_core.AppendChild(td, link);
 		unitButtons.push(link);
 		link.onclick=f_calendarObject._OnPrevUnitClick;
@@ -1752,7 +1752,7 @@ var __members = {
 			
 		var link=doc.createElement("a");
 		link.className=className+"_nextUnit";
-		link.href=f_core.JAVASCRIPT_VOID;
+		link.href=f_core.CreateJavaScriptVoid0();
 		f_core.AppendChild(td, link);
 		unitButtons.push(link);
 		link.onclick=f_calendarObject._OnNextUnitClick;
@@ -1812,7 +1812,7 @@ var __members = {
 			var link;
 			if (selectDay) {
 				link=doc.createElement("a");
-				link.href=f_core.JAVASCRIPT_VOID;
+				link.href=f_core.CreateJavaScriptVoid0();
 				link.onclick=f_calendarObject._OnWeekDayClick;
 				link.onkeydown=f_calendarObject._OnWeekDayKey;
 				link._calendar=this;
@@ -1858,7 +1858,7 @@ var __members = {
 					var but=doc.createElement("a");
 					f_core.AppendChild(td, but);
 					but.className=className+"_week";
-					but.href=f_core.JAVASCRIPT_VOID;
+					but.href=f_core.CreateJavaScriptVoid0();
 					this._weekButtons.push(but);
 					but.onclick=f_calendarObject._OnWeekClick;
 					but.onkeydown=f_calendarObject._OnWeekKey;
@@ -1884,7 +1884,7 @@ var __members = {
 			f_core.AppendChild(td, day);
 // C'est une classe utilisateur !
 //			day.className=className+"_day";
-			day.href=f_core.JAVASCRIPT_VOID;
+			day.href=f_core.CreateJavaScriptVoid0();
 			this._dayButtons.push(day);
 			day.onclick=f_calendarObject._OnDayClick;
 			day.onkeydown=f_calendarObject._OnDayKey;
@@ -1930,7 +1930,7 @@ var __members = {
 			var month=doc.createElement("a");
 			f_core.AppendChild(td, month);
 			month.className=className+"_month";
-			month.href=f_core.JAVASCRIPT_VOID;
+			month.href=f_core.CreateJavaScriptVoid0();
 			this._monthButtons.push(month);
 			
 			month.onclick=f_calendarObject._OnMonthClick;
@@ -1970,7 +1970,7 @@ var __members = {
 		var link=doc.createElement("a");
 		link.className=className+"_prevYear";
 		f_core.AppendChild(td, link);
-		link.href=f_core.JAVASCRIPT_VOID;
+		link.href=f_core.CreateJavaScriptVoid0();
 		this._yearButtons.push(link);
 		link.onclick=f_calendarObject._OnPrevYearClick;
 		link.onkeydown=f_calendarObject._OnYearKey;
@@ -1990,7 +1990,7 @@ var __members = {
 		var year=doc.createElement("a");
 		f_core.AppendChild(td, year);
 		year.className=className+"_cursorYearLabel";
-		year.href=f_core.JAVASCRIPT_VOID;
+		year.href=f_core.CreateJavaScriptVoid0();
 		year.onclick=f_calendarObject._OnYearClick;
 		year.onkeydown=f_calendarObject._OnYearKey;		
 		this._yearButtons.push(year);
@@ -2006,7 +2006,7 @@ var __members = {
 		var link=doc.createElement("a");
 		link.className=className+"_nextYear";
 		f_core.AppendChild(td, link);
-		link.href=f_core.JAVASCRIPT_VOID;
+		link.href=f_core.CreateJavaScriptVoid0();
 		this._yearButtons.push(link);
 		link.onclick=f_calendarObject._OnNextYearClick;
 		link.onkeydown=f_calendarObject._OnYearKey;
@@ -2047,7 +2047,7 @@ var __members = {
 		var link=doc.createElement("a");
 		link.className=className+"_prevMonth";
 		f_core.AppendChild(td, link);
-		link.href=f_core.JAVASCRIPT_VOID;
+		link.href=f_core.CreateJavaScriptVoid0();
 		this._monthCursors.push(link);
 		link.onclick=f_calendarObject._OnPrevMonthClick;
 		link.onkeydown=f_calendarObject._OnMonthKey;
@@ -2079,7 +2079,7 @@ var __members = {
 		var link=doc.createElement("a");
 		link.className=className+"_nextMonth";
 		f_core.AppendChild(td, link);
-		link.href=f_core.JAVASCRIPT_VOID;
+		link.href=f_core.CreateJavaScriptVoid0();
 		this._monthCursors.push(link);
 		link.onclick=f_calendarObject._OnNextMonthClick;
 		link.onkeydown=f_calendarObject._OnMonthKey;
@@ -2318,7 +2318,7 @@ var __members = {
 		var maxDate=this._maxDate;
 				
 		var dates=this._dates;
-		var dtimes;
+		var dtimes=undefined;
 		if (dates.length>0) {
 			dtimes=new Array;
 
@@ -2559,7 +2559,7 @@ var __members = {
 						}
 						d=null;
 						
-						ds.splice(j--, 1)
+						ds.splice(j--, 1);
 						break;
 					}
 					if (!d) {
@@ -3117,7 +3117,20 @@ var __members = {
 			selectionDetail=f_calendarObject.MONTH_SELECTION_DETAIL;
 			d=new Date(cursorDate.getTime());
 			
-			d.setMonth(d.getMonth()+delta);
+			var searchedMonth = d.getMonth()+delta;
+			d.setMonth(searchedMonth);
+
+			var searchDelta = -1;
+			if (searchedMonth < 0) {
+				searchedMonth = 12 + searchedMonth;
+				searchDelta = 1;
+			} else if (searchedMonth > 11) {
+				searchedMonth = searchedMonth - 12;
+			}
+			
+			while (searchedMonth != d.getMonth()) {
+				d.setDate(d.getDate() + searchDelta);
+			}
 
 			switch(this._mode) {
 			case f_calendarObject.PERIOD_MODE:
@@ -3361,8 +3374,7 @@ var __members = {
 		params.minDate=minDate.getTime();
 		params.maxDate=maxDate.getTime();
 
-		var url=f_env.GetViewURI();	
-		var request=new f_httpRequest(this, url, f_httpRequest.JAVASCRIPT_MIME_TYPE);
+		var request=new f_httpRequest(this, f_httpRequest.JAVASCRIPT_MIME_TYPE);
 		var calendarObject=this;
 		request.f_setListener({
 			/**

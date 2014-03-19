@@ -30,56 +30,91 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 	private ValueExpression suggestionConverter;
 	private ValueExpression moreResultsMessage;
 	private ValueExpression orderedItems;
+	private ValueExpression showPopupForOneResult;
+	private ValueExpression disableProposals;
+	private ValueExpression inputFormat;
+	private ValueExpression labelFormat;
+	private ValueExpression descriptionFormat;
+	private ValueExpression popupWidth;
+	private ValueExpression popupHeight;
 	public String getComponentType() {
 		return SuggestTextEntryComponent.COMPONENT_TYPE;
 	}
 
-	public final void setFilterProperties(ValueExpression filterProperties) {
+	public void setFilterProperties(ValueExpression filterProperties) {
 		this.filterProperties = filterProperties;
 	}
 
-	public final void setMaxResultNumber(ValueExpression maxResultNumber) {
+	public void setMaxResultNumber(ValueExpression maxResultNumber) {
 		this.maxResultNumber = maxResultNumber;
 	}
 
-	public final void setSuggestionListener(ValueExpression suggestionListeners) {
+	public void setSuggestionListener(ValueExpression suggestionListeners) {
 		this.suggestionListeners = suggestionListeners;
 	}
 
-	public final void setMenuListener(ValueExpression menuListeners) {
+	public void setMenuListener(ValueExpression menuListeners) {
 		this.menuListeners = menuListeners;
 	}
 
-	public final void setSuggestionDelayMs(ValueExpression suggestionDelayMs) {
+	public void setSuggestionDelayMs(ValueExpression suggestionDelayMs) {
 		this.suggestionDelayMs = suggestionDelayMs;
 	}
 
-	public final void setSuggestionMinChars(ValueExpression suggestionMinChars) {
+	public void setSuggestionMinChars(ValueExpression suggestionMinChars) {
 		this.suggestionMinChars = suggestionMinChars;
 	}
 
-	public final void setCaseSensitive(ValueExpression caseSensitive) {
+	public void setCaseSensitive(ValueExpression caseSensitive) {
 		this.caseSensitive = caseSensitive;
 	}
 
-	public final void setForceProposal(ValueExpression forceProposal) {
+	public void setForceProposal(ValueExpression forceProposal) {
 		this.forceProposal = forceProposal;
 	}
 
-	public final void setSuggestionValue(ValueExpression suggestionValue) {
+	public void setSuggestionValue(ValueExpression suggestionValue) {
 		this.suggestionValue = suggestionValue;
 	}
 
-	public final void setSuggestionConverter(ValueExpression suggestionConverter) {
+	public void setSuggestionConverter(ValueExpression suggestionConverter) {
 		this.suggestionConverter = suggestionConverter;
 	}
 
-	public final void setMoreResultsMessage(ValueExpression moreResultsMessage) {
+	public void setMoreResultsMessage(ValueExpression moreResultsMessage) {
 		this.moreResultsMessage = moreResultsMessage;
 	}
 
-	public final void setOrderedItems(ValueExpression orderedItems) {
+	public void setOrderedItems(ValueExpression orderedItems) {
 		this.orderedItems = orderedItems;
+	}
+
+	public void setShowPopupForOneResult(ValueExpression showPopupForOneResult) {
+		this.showPopupForOneResult = showPopupForOneResult;
+	}
+
+	public void setDisableProposals(ValueExpression disableProposals) {
+		this.disableProposals = disableProposals;
+	}
+
+	public void setInputFormat(ValueExpression inputFormat) {
+		this.inputFormat = inputFormat;
+	}
+
+	public void setLabelFormat(ValueExpression labelFormat) {
+		this.labelFormat = labelFormat;
+	}
+
+	public void setDescriptionFormat(ValueExpression descriptionFormat) {
+		this.descriptionFormat = descriptionFormat;
+	}
+
+	public void setPopupWidth(ValueExpression popupWidth) {
+		this.popupWidth = popupWidth;
+	}
+
+	public void setPopupHeight(ValueExpression popupHeight) {
+		this.popupHeight = popupHeight;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
@@ -97,6 +132,13 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 			LOG.debug("  suggestionConverter='"+suggestionConverter+"'");
 			LOG.debug("  moreResultsMessage='"+moreResultsMessage+"'");
 			LOG.debug("  orderedItems='"+orderedItems+"'");
+			LOG.debug("  showPopupForOneResult='"+showPopupForOneResult+"'");
+			LOG.debug("  disableProposals='"+disableProposals+"'");
+			LOG.debug("  inputFormat='"+inputFormat+"'");
+			LOG.debug("  labelFormat='"+labelFormat+"'");
+			LOG.debug("  descriptionFormat='"+descriptionFormat+"'");
+			LOG.debug("  popupWidth='"+popupWidth+"'");
+			LOG.debug("  popupHeight='"+popupHeight+"'");
 		}
 		if ((uiComponent instanceof SuggestTextEntryComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -207,6 +249,69 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 				component.setOrderedItems(getBool(orderedItems.getExpressionString()));
 			}
 		}
+
+		if (showPopupForOneResult != null) {
+			if (showPopupForOneResult.isLiteralText()==false) {
+				component.setValueExpression(Properties.SHOW_POPUP_FOR_ONE_RESULT, showPopupForOneResult);
+
+			} else {
+				component.setShowPopupForOneResult(getBool(showPopupForOneResult.getExpressionString()));
+			}
+		}
+
+		if (disableProposals != null) {
+			if (disableProposals.isLiteralText()==false) {
+				component.setValueExpression(Properties.DISABLE_PROPOSALS, disableProposals);
+
+			} else {
+				component.setDisableProposals(getBool(disableProposals.getExpressionString()));
+			}
+		}
+
+		if (inputFormat != null) {
+			if (inputFormat.isLiteralText()==false) {
+				component.setValueExpression(Properties.INPUT_FORMAT, inputFormat);
+
+			} else {
+				component.setInputFormat(inputFormat.getExpressionString());
+			}
+		}
+
+		if (labelFormat != null) {
+			if (labelFormat.isLiteralText()==false) {
+				component.setValueExpression(Properties.LABEL_FORMAT, labelFormat);
+
+			} else {
+				component.setLabelFormat(labelFormat.getExpressionString());
+			}
+		}
+
+		if (descriptionFormat != null) {
+			if (descriptionFormat.isLiteralText()==false) {
+				component.setValueExpression(Properties.DESCRIPTION_FORMAT, descriptionFormat);
+
+			} else {
+				component.setDescriptionFormat(descriptionFormat.getExpressionString());
+			}
+		}
+
+		if (popupWidth != null) {
+			if (popupWidth.isLiteralText()==false) {
+				component.setValueExpression(Properties.POPUP_WIDTH, popupWidth);
+
+			} else {
+				component.setPopupWidth(getInt(popupWidth.getExpressionString()));
+			}
+		}
+
+		if (popupHeight != null) {
+			if (popupHeight.isLiteralText()==false) {
+				component.setValueExpression(Properties.POPUP_HEIGHT, popupHeight);
+
+			} else {
+				component.setPopupHeight(getInt(popupHeight.getExpressionString()));
+			}
+		}
 	}
 
 	public void release() {
@@ -222,6 +327,13 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 		suggestionConverter = null;
 		moreResultsMessage = null;
 		orderedItems = null;
+		showPopupForOneResult = null;
+		disableProposals = null;
+		inputFormat = null;
+		labelFormat = null;
+		descriptionFormat = null;
+		popupWidth = null;
+		popupHeight = null;
 
 		super.release();
 	}

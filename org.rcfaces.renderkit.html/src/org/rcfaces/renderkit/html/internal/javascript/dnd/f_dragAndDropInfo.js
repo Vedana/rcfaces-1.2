@@ -10,6 +10,17 @@
  * @version $Revision$ $Date$
  */
 
+var __statics = {
+	/**
+	 * @method public static
+	 * @param f_component component
+	 * @return f_dragAndDropEngine
+	 */
+	GetDragAndDropEngine: function(component) {
+		return component._dragAndDropEngine;
+	}	
+};
+
 var __members = {
 	
 	/**
@@ -108,5 +119,6 @@ var __members = {
 		
 new f_class("f_dragAndDropInfo", {
 	extend: f_object,
+	statics: __statics,
 	members: __members
 });

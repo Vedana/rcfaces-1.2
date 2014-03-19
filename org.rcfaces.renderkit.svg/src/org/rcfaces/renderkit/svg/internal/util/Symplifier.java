@@ -38,7 +38,7 @@ public class Symplifier {
 
         GeneralPath ret = new GeneralPath();
 
-        List l = new ArrayList();
+        List<Point> l = new ArrayList<Point>();
 
         for (; pathIterator.isDone() == false; pathIterator.next()) {
 
@@ -81,8 +81,8 @@ public class Symplifier {
         return ret;
     }
 
-    private static void drawShape(double tol, GeneralPath ret, List l) {
-        Point pts[] = (Point[]) l.toArray(new Point[l.size()]);
+    private static void drawShape(double tol, GeneralPath ret, List<Point> l) {
+        Point pts[] = l.toArray(new Point[l.size()]);
 
         Point symplified[] = simplifyShape(tol, pts);
 

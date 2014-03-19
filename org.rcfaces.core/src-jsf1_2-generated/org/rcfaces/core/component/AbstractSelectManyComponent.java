@@ -1,6 +1,7 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.ILayoutPositionCapability;
 import org.rcfaces.core.component.capability.IUserEventCapability;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import javax.faces.context.FacesContext;
@@ -84,7 +85,11 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 	ITextAlignmentCapability,
 	IAccessKeyCapability,
 	IWAIRoleCapability,
+<<<<<<< HEAD
 	IAnchoredPositionCapability,
+=======
+	ILayoutPositionCapability,
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	IInitEventCapability,
 	IHiddenModeCapability,
 	IImmediateCapability,
@@ -97,7 +102,11 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaSelectManyComponent.CAMELIA_ATTRIBUTES);
 	static {
+<<<<<<< HEAD
 		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontName","accessKey","visible","marginLeft","backgroundColor","tabIndex","errorListener","focusListener","propertyChangeListener","helpURL","height","keyDownListener","valueLocked","mouseOverListener","mouseOutListener","waiRole","validationListener","lookId","rightPosition","userEventListener","marginTop","styleClass","width","fontBold","fontSize","fontItalic","fontUnderline","textAlignment","toolTipText","blurListener","bottomPosition","leftPosition","ariaLevel","topPosition","hiddenMode","foregroundColor","helpMessage","marginRight","keyUpListener","partialRendering","keyPressListener","ariaLabel","initListener","marginBottom","unlockedClientAttributeNames","immediate","disabled","y","margins","x"}));
+=======
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontName","accessKey","visible","marginLeft","backgroundColor","tabIndex","errorListener","focusListener","propertyChangeListener","helpURL","height","valueLocked","keyDownListener","mouseOverListener","right","mouseOutListener","waiRole","validationListener","lookId","userEventListener","marginTop","styleClass","width","fontBold","fontSize","fontItalic","fontUnderline","textAlignment","bottom","toolTipText","horizontalCenter","blurListener","ariaLevel","hiddenMode","left","foregroundColor","top","helpMessage","marginRight","keyUpListener","partialRendering","keyPressListener","ariaLabel","verticalCenter","initListener","immediate","marginBottom","unlockedClientAttributeNames","disabled","y","margins","x"}));
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	}
 
 
@@ -117,6 +126,18 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 			map=Collections.unmodifiableMap(map);
 		}
 		return map;
+		
+	}
+
+	public ValueExpression getServerDataValueExpression(String name, FacesContext facesContext) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
+		if (dataMapAccessor==null) {
+			return null;
+		}
+		
+		return dataMapAccessor.getValueExpression(name);
 		
 	}
 
@@ -195,7 +216,11 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 	public Object getServerData(String name, FacesContext facesContext) {
 
 
+<<<<<<< HEAD
 		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
+=======
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		if (dataMapAccessor==null) {
 			return null;
 		}
@@ -1165,6 +1190,7 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 		engine.setProperty(Properties.WAI_ROLE, waiRole);
 	}
 
+<<<<<<< HEAD
 	public int getBottomPosition() {
 		return getBottomPosition(null);
 	}
@@ -1255,6 +1281,144 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 
 	public void setTopPosition(int topPosition) {
 		engine.setProperty(Properties.TOP_POSITION, topPosition);
+=======
+	public java.lang.Number getBottom() {
+		return getBottom(null);
+	}
+
+	/**
+	 * See {@link #getBottom() getBottom()} for more details
+	 */
+	public java.lang.Number getBottom(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.BOTTOM, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "bottom" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isBottomSetted() {
+		return engine.isPropertySetted(Properties.BOTTOM);
+	}
+
+	public void setBottom(java.lang.Number bottom) {
+		engine.setProperty(Properties.BOTTOM, bottom);
+	}
+
+	public java.lang.Number getHorizontalCenter() {
+		return getHorizontalCenter(null);
+	}
+
+	/**
+	 * See {@link #getHorizontalCenter() getHorizontalCenter()} for more details
+	 */
+	public java.lang.Number getHorizontalCenter(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.HORIZONTAL_CENTER, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "horizontalCenter" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHorizontalCenterSetted() {
+		return engine.isPropertySetted(Properties.HORIZONTAL_CENTER);
+	}
+
+	public void setHorizontalCenter(java.lang.Number horizontalCenter) {
+		engine.setProperty(Properties.HORIZONTAL_CENTER, horizontalCenter);
+	}
+
+	public java.lang.Number getLeft() {
+		return getLeft(null);
+	}
+
+	/**
+	 * See {@link #getLeft() getLeft()} for more details
+	 */
+	public java.lang.Number getLeft(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.LEFT, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "left" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isLeftSetted() {
+		return engine.isPropertySetted(Properties.LEFT);
+	}
+
+	public void setLeft(java.lang.Number left) {
+		engine.setProperty(Properties.LEFT, left);
+	}
+
+	public java.lang.Number getRight() {
+		return getRight(null);
+	}
+
+	/**
+	 * See {@link #getRight() getRight()} for more details
+	 */
+	public java.lang.Number getRight(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.RIGHT, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "right" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isRightSetted() {
+		return engine.isPropertySetted(Properties.RIGHT);
+	}
+
+	public void setRight(java.lang.Number right) {
+		engine.setProperty(Properties.RIGHT, right);
+	}
+
+	public java.lang.Number getTop() {
+		return getTop(null);
+	}
+
+	/**
+	 * See {@link #getTop() getTop()} for more details
+	 */
+	public java.lang.Number getTop(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.TOP, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "top" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTopSetted() {
+		return engine.isPropertySetted(Properties.TOP);
+	}
+
+	public void setTop(java.lang.Number top) {
+		engine.setProperty(Properties.TOP, top);
+	}
+
+	public java.lang.Number getVerticalCenter() {
+		return getVerticalCenter(null);
+	}
+
+	/**
+	 * See {@link #getVerticalCenter() getVerticalCenter()} for more details
+	 */
+	public java.lang.Number getVerticalCenter(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.VERTICAL_CENTER, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "verticalCenter" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isVerticalCenterSetted() {
+		return engine.isPropertySetted(Properties.VERTICAL_CENTER);
+	}
+
+	public void setVerticalCenter(java.lang.Number verticalCenter) {
+		engine.setProperty(Properties.VERTICAL_CENTER, verticalCenter);
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	}
 
 	public final void addInitListener(org.rcfaces.core.event.IInitListener listener) {

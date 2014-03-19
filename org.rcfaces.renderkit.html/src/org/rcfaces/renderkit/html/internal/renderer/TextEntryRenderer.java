@@ -20,18 +20,17 @@ import org.rcfaces.core.component.TextEntryComponent;
 import org.rcfaces.core.component.capability.IClientValidationCapability;
 import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.config.ClientValidatorsRegistryImpl.ClientValidator;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.manager.IValidationParameters;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
-import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.ClientValidatorTools;
 import org.rcfaces.core.internal.tools.ClientValidatorTools.IClientValidationContext;
 import org.rcfaces.core.internal.util.CommandParserIterator;
 import org.rcfaces.core.internal.util.ParamUtils;
+import org.rcfaces.core.internal.validator.ClientValidatorsRegistryImpl.ClientValidator;
 import org.rcfaces.core.internal.validator.IClientValidatorDescriptor;
 import org.rcfaces.core.internal.validator.IClientValidatorsRegistry;
 import org.rcfaces.core.internal.validator.ITaskDescriptor;
@@ -45,17 +44,19 @@ import org.rcfaces.core.validator.IParameter;
 import org.rcfaces.core.validator.ITranslatorTask;
 import org.rcfaces.renderkit.html.internal.AbstractInputRenderer;
 import org.rcfaces.renderkit.html.internal.EventsRenderer;
+import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
+import org.rcfaces.renderkit.html.internal.validator.HtmlClientValidators;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
 public class TextEntryRenderer extends AbstractInputRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(TextEntryRenderer.class);
 
@@ -102,6 +103,8 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         }
 
         if (textEntryComponent.isRequired()) {
+            htmlWriter.writeAriaRequired(true);
+
             htmlWriter.getJavaScriptEnableMode().enableOnSubmit();
         }
     }
@@ -122,7 +125,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             helpMessage = ParamUtils.formatMessage(textEntryComponent,
                     helpMessage);
 
-            htmlWriter.writeAttribute("v:helpMessage", helpMessage);
+            htmlWriter.writeAttributeNS("helpMessage", helpMessage);
 
             htmlWriter.getJavaScriptEnableMode().enableOnFocus();
         }
@@ -132,7 +135,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             emptyMessage = ParamUtils.formatMessage(textEntryComponent,
                     emptyMessage);
 
-            htmlWriter.writeAttribute("v:emptyMessage", emptyMessage);
+            htmlWriter.writeAttributeNS("emptyMessage", emptyMessage);
 
             htmlWriter.getJavaScriptEnableMode().enableOnFocus();
         }
@@ -140,7 +143,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         // boolean useValidator = false;
 
         if (textEntryComponent.isAutoTab(facesContext)) {
-            htmlWriter.writeAttribute("v:autoTab", true);
+            htmlWriter.writeAttributeNS("autoTab", true);
 
             htmlWriter.getJavaScriptEnableMode().enableOnFocus();
         }
@@ -267,7 +270,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             emptyMessage = textEntryComponent.getEmptyMessage(facesContext);
 
             if (emptyMessage != null) {
-                htmlWriter.writeAttribute("v:emptyMessageShown", true);
+                htmlWriter.writeAttributeNS("emptyMessageShown", true);
 
                 getCssStyleClasses(htmlWriter).addSuffix("_empty_message");
             }
@@ -387,14 +390,14 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         IValidationParameters validationCapability = (IValidationParameters) componentRenderContext
                 .getComponent();
 
-        Map parametersMap = validationCapability
+        Map<String, String> parametersMap = validationCapability
                 .getClientValidationParametersMap();
         if (parametersMap.isEmpty() == false) {
             // On travaille avec une copie ... car on fait des removes aprés...
-            parametersMap = new HashMap(parametersMap);
+            parametersMap = new HashMap<String, String>(parametersMap);
         }
 
-        List params = new ArrayList(8);
+        List<String> params = new ArrayList<String>(8);
 
         IClientValidationContext clientValidationContext = ClientValidatorTools
                 .getClientValidationContext(htmlWriter
@@ -448,7 +451,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
                         params.add(name);
 
                         // Les valeurs des parametres sont prioritaires
-                        String value = (String) parametersMap.remove(name);
+                        String value = parametersMap.remove(name);
                         if (value == null) {
                             value = parameter.getValue();
                         }
@@ -460,10 +463,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         }
 
         if (parametersMap.isEmpty() == false) {
-            for (Iterator it = parametersMap.entrySet().iterator(); it
-                    .hasNext();) {
-
-                Map.Entry entry = (Map.Entry) it.next();
+            for (Map.Entry<String, String> entry : parametersMap.entrySet()) {
 
                 params.add(entry.getKey());
                 params.add(entry.getValue());
@@ -490,15 +490,17 @@ public class TextEntryRenderer extends AbstractInputRenderer {
 
         // Meme vide ! Car c'est cet attribut qui spécifie qu'il y a un
         // validateur !
-        htmlWriter.writeAttribute("v:clientValidator", sb.toString());
+        htmlWriter.writeAttributeNS("clientValidator", sb.toString());
 
         boolean internalValue = true;
 
         if (validatorDescriptor != null) {
 
+            String ns = htmlWriter.getRcfacesNamespace() + ":";
+
             ITaskDescriptor filterTask = validatorDescriptor.getFilterTask();
             if (filterTask != null) {
-                writeTaskDescriptor(htmlWriter, filterTask, "v:vFilter");
+                writeTaskDescriptor(htmlWriter, filterTask, ns + "vFilter");
 
                 if (filterTask.getClientTaskExpression() != null
                         && filterTask.getServerTask() == null) {
@@ -509,7 +511,8 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             ITaskDescriptor translatorTask = validatorDescriptor
                     .getTranslatorTask();
             if (translatorTask != null) {
-                writeTaskDescriptor(htmlWriter, translatorTask, "v:vTranslator");
+                writeTaskDescriptor(htmlWriter, translatorTask, ns
+                        + "vTranslator");
 
                 if (translatorTask.getClientTaskExpression() != null
                         && translatorTask.getServerTask() == null) {
@@ -519,7 +522,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
 
             ITaskDescriptor checkerTask = validatorDescriptor.getCheckerTask();
             if (checkerTask != null) {
-                writeTaskDescriptor(htmlWriter, checkerTask, "v:vChecker");
+                writeTaskDescriptor(htmlWriter, checkerTask, ns + "vChecker");
 
                 if (checkerTask.getClientTaskExpression() != null
                         && checkerTask.getServerTask() == null) {
@@ -530,7 +533,8 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             ITaskDescriptor formatterTask = validatorDescriptor
                     .getFormatterTask();
             if (formatterTask != null) {
-                writeTaskDescriptor(htmlWriter, formatterTask, "v:vFormatter");
+                writeTaskDescriptor(htmlWriter, formatterTask, ns
+                        + "vFormatter");
 
                 if (formatterTask.getClientTaskExpression() != null
                         && formatterTask.getServerTask() == null) {
@@ -541,7 +545,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             ITaskDescriptor behaviorTask = validatorDescriptor
                     .getBehaviorTask();
             if (behaviorTask != null) {
-                writeTaskDescriptor(htmlWriter, behaviorTask, "v:vBehavior");
+                writeTaskDescriptor(htmlWriter, behaviorTask, ns + "vBehavior");
 
                 if (behaviorTask.getClientTaskExpression() != null
                         && behaviorTask.getServerTask() == null) {
@@ -551,7 +555,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
 
             ITaskDescriptor errorTask = validatorDescriptor.getOnErrorTask();
             if (errorTask != null) {
-                writeTaskDescriptor(htmlWriter, errorTask, "v:vError");
+                writeTaskDescriptor(htmlWriter, errorTask, ns + "vError");
 
                 if (errorTask.getClientTaskExpression() != null
                         && errorTask.getServerTask() == null) {
@@ -562,7 +566,8 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             ITaskDescriptor checkErrorTask = validatorDescriptor
                     .getOnCheckErrorTask();
             if (checkErrorTask != null) {
-                writeTaskDescriptor(htmlWriter, checkErrorTask, "v:vCheckError");
+                writeTaskDescriptor(htmlWriter, checkErrorTask, ns
+                        + "vCheckError");
 
                 if (checkErrorTask.getClientTaskExpression() != null
                         && checkErrorTask.getServerTask() == null) {
@@ -572,7 +577,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
 
             String converter = validatorDescriptor.getConverter();
             if (converter != null) {
-                htmlWriter.writeAttribute("v:converter", converter);
+                htmlWriter.writeAttributeNS("converter", converter);
             }
         }
 
@@ -617,8 +622,8 @@ public class TextEntryRenderer extends AbstractInputRenderer {
 
         String text = convertValue(facesContext, textEntryComponent);
 
-        IClientValidatorContext context = new ClientValidatorContext(htmlWriter
-                .getComponentRenderContext(), parameters, text);
+        IClientValidatorContext context = new ClientValidatorContext(
+                htmlWriter.getComponentRenderContext(), parameters, text);
 
         if (text != null && text.length() > 0) {
             IFilterTask filterTask = null;
@@ -694,8 +699,8 @@ public class TextEntryRenderer extends AbstractInputRenderer {
                     .getServerTask();
 
             if (checkerTask != null) {
-                String newText = checkerTask.applyChecker(context, context
-                        .getOutputValue());
+                String newText = checkerTask.applyChecker(context,
+                        context.getOutputValue());
 
                 if (newText != null) {
                     context.setOutputValue(newText);
@@ -760,8 +765,8 @@ public class TextEntryRenderer extends AbstractInputRenderer {
                         .getServerTask();
 
                 if (behaviorTask != null) {
-                    if (behaviorTask.applyBehavior(context, context
-                            .getOutputValue())) {
+                    if (behaviorTask.applyBehavior(context,
+                            context.getOutputValue())) {
 
                         if (errorTask != null) {
                             errorTask.performError(context,
@@ -788,7 +793,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
 
         String internalValue = context.getInput();
         if (internalValue != null) {
-            htmlWriter.writeAttribute("v:internalValue", internalValue);
+            htmlWriter.writeAttributeNS("internalValue", internalValue);
 
             htmlWriter.getComponentRenderContext().setAttribute(
                     VALIDATOR_INTERNAL_VALUE_ATTRIBUTE, internalValue);
@@ -886,7 +891,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         IClientValidatorDescriptor validatorDescriptor = clientValidationContext
                 .getClientValidatorDescriptor();
 
-        List params = new ArrayList();
+        List<String> params = new ArrayList<String>();
         IParameter cParameters[] = command.listParameters();
         IParameter vParameters[] = validatorDescriptor.listParameters();
         if ((cParameters != null && cParameters.length > 0)
@@ -899,7 +904,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
                     IParameter parameter = cParameters[i];
 
                     String name;
-                    if (i < vParameters.length) {
+                    if (vParameters != null && i < vParameters.length) {
                         name = vParameters[i].getName();
 
                     } else {
@@ -940,8 +945,9 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             }
         }
 
-        jsWriter.write("var validator=").writeCall("f_clientValidator",
-                "f_newInstance").write(jsWriter.getComponentVarName());
+        jsWriter.write("var validator=")
+                .writeCall("f_clientValidator", "f_newInstance")
+                .write(jsWriter.getComponentVarName());
 
         if (params.isEmpty() == false) {
             int pred = 0;
@@ -1068,11 +1074,11 @@ public class TextEntryRenderer extends AbstractInputRenderer {
     private void appendValidators(FacesContext facesContext,
             IHtmlWriter writer, Validator[] validators) throws WriterException {
 
-        IClientValidatorsRegistry clientValidatorManager = writer
+        IClientValidatorsRegistry clientValidatorsRegistry = writer
                 .getComponentRenderContext().getRenderContext()
                 .getProcessContext().getRcfacesContext()
                 .getClientValidatorsRegistry();
-        if (clientValidatorManager == null) {
+        if (clientValidatorsRegistry == null) {
             // throw new FacesException("Can not get validator registry from
             // faces context !");
 
@@ -1080,10 +1086,10 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             return;
         }
 
-        IRenderContext renderContext = writer.getComponentRenderContext()
-                .getRenderContext();
+        IHtmlRenderContext renderContext = writer
+                .getHtmlComponentRenderContext().getHtmlRenderContext();
 
-        List vls = null;
+        List<String> vls = null;
 
         int expressionsLength = 0;
 
@@ -1097,7 +1103,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
                 expression = clientValidator.getExpression();
 
             } else {
-                expression = clientValidatorManager
+                expression = HtmlClientValidators.get()
                         .convertFromValidatorToExpression(renderContext,
                                 validator);
             }
@@ -1107,7 +1113,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             }
 
             if (vls == null) {
-                vls = new ArrayList(validators.length - i);
+                vls = new ArrayList<String>(validators.length - i);
             }
 
             vls.add(expression);
@@ -1131,6 +1137,16 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             EventsRenderer.appendCommand(sa, expression);
         }
 
-        writer.writeAttribute("v:validators", sa.toString());
+        writer.writeAttributeNS("validators", sa.toString());
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "helpMessage",
+                "emptyMessage", "autoTab", "emptyMessageShown",
+                "clientValidator", "vFilter", "vTranslator", "vChecker",
+                "vFormatter", "vBehavior", "vError", "vCheckError",
+                "converter", "internalValue", "validators" });
     }
 }

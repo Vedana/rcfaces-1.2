@@ -36,7 +36,6 @@ import org.rcfaces.core.model.BasicContentModel;
  */
 public abstract class AbstractOperationContentModel extends BasicContentModel
         implements Serializable, IResolvedContent, IAdaptable {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = 4218209439999498360L;
 
@@ -52,7 +51,6 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
      * 
      */
     protected static final IFileBuffer INVALID_BUFFERED_FILE = new IFileBuffer() {
-        private static final String REVISION = "$Revision$";
 
         public int getSize() {
             return 0;
@@ -102,6 +100,8 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
 
     };
 
+    private static final int MAX_URL_HASH_LENGTH = 32;
+
     private final String resourceURL;
 
     private final String operationId;
@@ -110,7 +110,7 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
 
     private String resourceKey;
 
-    private transient Map filterParameters;
+    private transient Map<String, Object> filterParameters;
 
     private transient IBufferOperation bufferOperation;
 
@@ -141,6 +141,7 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
         setWrappedData(this);
     }
 
+    @Override
     public void setInformations(
             IGenerationResourceInformation generationInformation,
             IGeneratedResourceInformation generatedInformation) {
@@ -160,20 +161,20 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
         }
     }
 
-    public final synchronized Map getFilterParameters() {
+    public final synchronized Map<String, Object> getFilterParameters() {
         if (filterParameters != null) {
             return filterParameters;
         }
 
         if (filterParametersToParse == null
                 || filterParametersToParse.length() < 1) {
-            filterParameters = Collections.EMPTY_MAP;
+            filterParameters = Collections.emptyMap();
             return filterParameters;
         }
 
         StringTokenizer st = new StringTokenizer(filterParametersToParse, ",");
 
-        filterParameters = new HashMap(st.countTokens());
+        filterParameters = new HashMap<String, Object>(st.countTokens());
         int idx = 0;
         for (; st.hasMoreTokens();) {
             String token = st.nextToken().trim();
@@ -199,9 +200,10 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
         return filterParameters;
     }
 
-    public Object getAdapter(Class adapter, Object parameter) {
+    @SuppressWarnings("unchecked")
+    public <T> T getAdapter(Class<T> adapter, Object parameter) {
         if (IResolvedContent.class.equals(adapter)) {
-            return getResolvedContent();
+            return (T) getResolvedContent();
         }
 
         return null;
@@ -274,6 +276,10 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
         return getFileBuffer().getHash();
     }
 
+    public String getContentEncoding() {
+        return null;
+    }
+
     public String getResourceKey() {
         synchronized (this) {
             if (resourceKey == null) {
@@ -343,7 +349,8 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
 
         String key = sa2.toString();
 
-        String result = HashCodeTools.computeURLFormat(null, key, key, -1);
+        String result = HashCodeTools.computeURLFormat(null, key, key,
+                MAX_URL_HASH_LENGTH);
 
         sa.append(result);
     }
@@ -378,6 +385,7 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
     protected abstract IResourceLoaderFactory getResourceLoaderFactory(
             FacesContext facesContext);
 
+    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
@@ -392,6 +400,7 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
         return result;
     }
 
+    @Override
     public boolean equals(Object obj) {
         if (this == obj)
             return true;

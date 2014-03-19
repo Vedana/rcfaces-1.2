@@ -32,7 +32,7 @@ var __statics = {
 		
 		return combo.f_fireEvent(f_event.SELECTION, evt, null, combo.f_getValue(), combo);
 	}
-}
+};
 
 var __members = {
 
@@ -275,8 +275,7 @@ var __members = {
 			params.filterExpression=filterExpression;
 		}
 	
-		var url=f_env.GetViewURI();
-		var request=new f_httpRequest(this, url, f_httpRequest.JAVASCRIPT_MIME_TYPE);
+		var request=new f_httpRequest(this, f_httpRequest.JAVASCRIPT_MIME_TYPE);
 		var combo=this;
 		request.f_setListener({
 			/**
@@ -562,8 +561,7 @@ var __members = {
 	 */
 	fa_cancelFilterRequest: function() {
 	}
-}
-
+};
 
 new f_class("f_abstractList", {
 	extend: f_input,

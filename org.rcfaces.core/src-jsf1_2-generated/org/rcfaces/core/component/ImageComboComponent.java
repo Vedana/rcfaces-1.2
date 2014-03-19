@@ -1,12 +1,15 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.TextPositionConverter
+			;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import java.lang.String;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IShowDropDownMarkCapability;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import org.rcfaces.core.component.capability.IAudioDescriptionCapability;
 import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
 import javax.faces.convert.Converter;
 import javax.el.ValueExpression;
@@ -16,7 +19,6 @@ import java.util.Set;
 import java.util.Arrays;
 import org.rcfaces.core.component.AbstractMenuComponent;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
-import org.rcfaces.core.internal.converter.TextPositionConverter;
 
 /**
  * <p>The imageCombo Component is a <a href="/comps/comboComponent.html">combo Component</a> with an image added to the text.</p>
@@ -33,7 +35,8 @@ import org.rcfaces.core.internal.converter.TextPositionConverter;
  */
 public class ImageComboComponent extends AbstractMenuComponent implements 
 	IImageButtonFamilly,
-	IShowDropDownMarkCapability {
+	IShowDropDownMarkCapability,
+	IAudioDescriptionCapability {
 
 	private static final Log LOG = LogFactory.getLog(ImageComboComponent.class);
 
@@ -41,7 +44,7 @@ public class ImageComboComponent extends AbstractMenuComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractMenuComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disabledImageURL","imageHeight","text","popupRowNumber","showDropDownMark","borderType","textPosition","hoverImageURL","tabIndex","selectedImageURL","selectionListener","readOnly","border","imageURL","disabled","imageWidth"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disabledImageURL","imageHeight","text","popupRowNumber","showDropDownMark","borderType","textPosition","hoverImageURL","tabIndex","audioDescription","selectedImageURL","selectionListener","readOnly","border","imageURL","disabled","imageWidth"}));
 	}
 
 	public ImageComboComponent() {
@@ -332,6 +335,29 @@ public class ImageComboComponent extends AbstractMenuComponent implements
 
 	public void setShowDropDownMark(boolean showDropDownMark) {
 		engine.setProperty(Properties.SHOW_DROP_DOWN_MARK, showDropDownMark);
+	}
+
+	public java.lang.String getAudioDescription() {
+		return getAudioDescription(null);
+	}
+
+	/**
+	 * See {@link #getAudioDescription() getAudioDescription()} for more details
+	 */
+	public java.lang.String getAudioDescription(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.AUDIO_DESCRIPTION, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "audioDescription" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAudioDescriptionSetted() {
+		return engine.isPropertySetted(Properties.AUDIO_DESCRIPTION);
+	}
+
+	public void setAudioDescription(java.lang.String audioDescription) {
+		engine.setProperty(Properties.AUDIO_DESCRIPTION, audioDescription);
 	}
 
 	/**

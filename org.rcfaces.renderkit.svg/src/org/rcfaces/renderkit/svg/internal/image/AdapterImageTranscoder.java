@@ -31,15 +31,13 @@ import org.w3c.dom.Element;
  * @version $Revision$ $Date$
  */
 class AdapterImageTranscoder extends ImageTranscoder {
-    private static final String REVISION = "$Revision$";
-
     private static final double DEFAULT_FLATNESS = 0.0;
 
     private static final double DEFAULT_DISTANCE_TOLERANCE = 0.0;
 
-    private Map selectables;
+    private Map<String, INodeItem> selectables;
 
-    private Map selectableShapes;
+    private Map<INodeItem, ShapeValue> selectableShapes;
 
     private GraphicsNode rootGraphicsNode;
 
@@ -53,6 +51,7 @@ class AdapterImageTranscoder extends ImageTranscoder {
 
     private double distanceTolerance = DEFAULT_DISTANCE_TOLERANCE;
 
+    @Override
     public BufferedImage createImage(int width, int height) {
         BufferedImage img = new BufferedImage(width, height,
                 BufferedImage.TYPE_INT_RGB);
@@ -88,13 +87,14 @@ class AdapterImageTranscoder extends ImageTranscoder {
                 imageWidth));
     }
 
-    public void setSelectables(Map selectables) {
+    public void setSelectables(Map<String, INodeItem> selectables) {
         this.selectables = selectables;
 
         addTranscodingHint(SVGAbstractTranscoder.KEY_EXECUTE_ONLOAD,
                 Boolean.TRUE);
     }
 
+    @Override
     public void writeImage(BufferedImage img, TranscoderOutput output)
             throws TranscoderException {
 
@@ -105,6 +105,7 @@ class AdapterImageTranscoder extends ImageTranscoder {
         return userAgent;
     }
 
+    @Override
     public void transcode(TranscoderInput input, TranscoderOutput output)
             throws TranscoderException {
 
@@ -113,13 +114,15 @@ class AdapterImageTranscoder extends ImageTranscoder {
         globalTransform = canvasGraphicsNode.getGlobalTransform();
     }
 
+    @Override
     protected CanvasGraphicsNode getCanvasGraphicsNode(GraphicsNode gn) {
         // Gros hack ... mais a t-on le choix ?
 
         canvasGraphicsNode = super.getCanvasGraphicsNode(gn);
 
         if (selectables != null && selectables.isEmpty() == false) {
-            selectableShapes = new HashMap(selectables.size());
+            selectableShapes = new HashMap<INodeItem, ShapeValue>(
+                    selectables.size());
 
             searchSelectableGraphicsNode(gn);
         }
@@ -127,6 +130,7 @@ class AdapterImageTranscoder extends ImageTranscoder {
         return canvasGraphicsNode;
     }
 
+    @Override
     protected BridgeContext createBridgeContext(String svgVersion) {
         BridgeContext bridgeContext = super.createBridgeContext(svgVersion);
 
@@ -137,19 +141,19 @@ class AdapterImageTranscoder extends ImageTranscoder {
 
     private void searchSelectableGraphicsNode(GraphicsNode root) {
 
-        List l = new ArrayList(64);
+        List<GraphicsNode> l = new ArrayList<GraphicsNode>(64);
 
         l.add(root);
 
         for (; l.isEmpty() == false;) {
-            GraphicsNode node = (GraphicsNode) l.remove(l.size() - 1);
+            GraphicsNode node = l.remove(l.size() - 1);
 
             Element element = bridgeContext.getElement(node);
 
             if (element != null) {
                 String id = element.getAttribute("id");
                 if (id != null) {
-                    INodeItem item = (INodeItem) selectables.get(id);
+                    INodeItem item = selectables.get(id);
                     if (item != null) {
                         Shape shape = node.getOutline();
                         if (shape != null) {
@@ -180,7 +184,9 @@ class AdapterImageTranscoder extends ImageTranscoder {
             if (node instanceof CompositeGraphicsNode) {
                 CompositeGraphicsNode compositeGraphicsNode = (CompositeGraphicsNode) node;
 
-                List children = compositeGraphicsNode.getChildren();
+                @SuppressWarnings("unchecked")
+                List<GraphicsNode> children = compositeGraphicsNode
+                        .getChildren();
 
                 l.addAll(children);
             }
@@ -191,9 +197,9 @@ class AdapterImageTranscoder extends ImageTranscoder {
         return globalTransform;
     }
 
-    public final Map getSelectableShapes() {
+    public final Map<INodeItem, ShapeValue> getSelectableShapes() {
         if (selectableShapes == null) {
-            return Collections.EMPTY_MAP;
+            return Collections.emptyMap();
         }
         return selectableShapes;
     }

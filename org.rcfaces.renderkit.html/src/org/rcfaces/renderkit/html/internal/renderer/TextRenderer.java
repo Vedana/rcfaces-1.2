@@ -21,6 +21,7 @@ import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.util.AudioDescriptionTools;
 import org.rcfaces.renderkit.html.internal.util.TextTypeTools;
 
 /**
@@ -28,8 +29,6 @@ import org.rcfaces.renderkit.html.internal.util.TextTypeTools;
  * @version $Revision$ $Date$
  */
 public class TextRenderer extends AbstractCssRenderer {
-    private static final String REVISION = "$Revision$";
-
     private static final String DEFAULT_TEXT_ELEMENT = IHtmlWriter.LABEL;
 
     protected boolean useHtmlAccessKeyAttribute() {
@@ -51,7 +50,7 @@ public class TextRenderer extends AbstractCssRenderer {
 
         String element = null;
         String ac = textComponent.getFor();
-        if (ac == null) {
+        if (element == null) {
             element = getTextElement(htmlWriter);
         }
 
@@ -60,16 +59,13 @@ public class TextRenderer extends AbstractCssRenderer {
         }
 
         htmlWriter.startElement(element);
+        designerEditableZone(htmlWriter, "text");
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
         writeTextDirection(htmlWriter, textComponent);
 
-        int ariaLevel = textComponent.getAriaLevel(componentRenderContext
-                .getFacesContext());
-        if (ariaLevel > 0) {
-            htmlWriter.writeAriaLevel(ariaLevel);
-        }
+        writeAriaLevelAttribute(htmlWriter, textComponent);
 
         if (ac != null) {
             // On peut pas calculer la véritable ID car le composant est peut
@@ -91,8 +87,11 @@ public class TextRenderer extends AbstractCssRenderer {
                 }
 
                 htmlWriter.writeFor(forId);
+                
+                htmlWriter.getJavaScriptEnableMode().enableOnMessage();
             }
         }
+        writeTextAttributes(htmlWriter, textComponent);
 
         if (writeText(htmlWriter, textComponent)) {
             // Un accessKey est postionné !
@@ -100,9 +99,27 @@ public class TextRenderer extends AbstractCssRenderer {
             htmlWriter.getJavaScriptEnableMode().enableOnAccessKey();
         }
 
+        AudioDescriptionTools.writeAudioDescription(htmlWriter);
+
         htmlWriter.endElement(element);
 
         super.encodeEnd(htmlWriter);
+    }
+
+    protected void writeTextAttributes(IHtmlWriter htmlWriter,
+            TextComponent element) throws WriterException {
+
+    }
+
+    protected void writeAriaLevelAttribute(IHtmlWriter htmlWriter,
+            TextComponent textComponent) throws WriterException {
+
+        int ariaLevel = textComponent.getAriaLevel(htmlWriter
+                .getComponentRenderContext().getFacesContext());
+        if (ariaLevel > 0) {
+            htmlWriter.writeAriaLevel(ariaLevel);
+        }
+
     }
 
     protected String getDefaultTextElement(IHtmlWriter htmlWriter) {

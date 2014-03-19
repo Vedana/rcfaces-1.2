@@ -1,6 +1,5 @@
 package org.rcfaces.renderkit.html.component;
 
-import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import org.rcfaces.renderkit.html.component.capability.IUserAgentVaryCapability;
@@ -9,6 +8,7 @@ import java.util.HashSet;
 import org.apache.commons.logging.LogFactory;
 import java.util.Arrays;
 import java.util.Set;
+import org.rcfaces.renderkit.html.component.Properties;
 import org.rcfaces.core.component.capability.ITextCapability;
 
 /**
@@ -24,7 +24,7 @@ public class CssStyleComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"srcCharSet","requiredModules","text","requiredSets","userAgent","mergeStyles","src"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"srcCharSet","requiredModules","text","requiredSets","userAgent","processRules","mergeStyles","src"}));
 	}
 
 	public CssStyleComponent() {
@@ -95,7 +95,8 @@ public class CssStyleComponent extends CameliaBaseComponent implements
 	 * @return url
 	 */
 	public String getSrc(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.SRC, facesContext);
+		String s = engine.getStringProperty(Properties.SRC, facesContext);
+		return s;
 	}
 
 	/**
@@ -131,7 +132,8 @@ public class CssStyleComponent extends CameliaBaseComponent implements
 	 * @return charset
 	 */
 	public String getSrcCharSet(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.SRC_CHAR_SET, facesContext);
+		String s = engine.getStringProperty(Properties.SRC_CHAR_SET, facesContext);
+		return s;
 	}
 
 	/**
@@ -159,7 +161,8 @@ public class CssStyleComponent extends CameliaBaseComponent implements
 	}
 
 	public String getRequiredModules(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.REQUIRED_MODULES, facesContext);
+		String s = engine.getStringProperty(Properties.REQUIRED_MODULES, facesContext);
+		return s;
 	}
 
 	public void setRequiredModules(String requiredModules) {
@@ -179,7 +182,8 @@ public class CssStyleComponent extends CameliaBaseComponent implements
 	}
 
 	public String getRequiredSets(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.REQUIRED_SETS, facesContext);
+		String s = engine.getStringProperty(Properties.REQUIRED_SETS, facesContext);
+		return s;
 	}
 
 	public void setRequiredSets(String requiredSets) {
@@ -212,6 +216,26 @@ public class CssStyleComponent extends CameliaBaseComponent implements
 	 */
 	public boolean isMergeStylesSetted() {
 		return engine.isPropertySetted(Properties.MERGE_STYLES);
+	}
+
+	public boolean isProcessRules() {
+		return isProcessRules(null);
+	}
+
+	public boolean isProcessRules(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.PROCESS_RULES, false, facesContext);
+	}
+
+	public void setProcessRules(boolean processRules) {
+		engine.setProperty(Properties.PROCESS_RULES, processRules);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "processRules" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isProcessRulesSetted() {
+		return engine.isPropertySetted(Properties.PROCESS_RULES);
 	}
 
 	protected Set getCameliaFields() {

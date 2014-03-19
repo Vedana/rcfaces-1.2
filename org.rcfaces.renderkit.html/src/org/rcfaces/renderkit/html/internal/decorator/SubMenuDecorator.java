@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
+import javax.faces.event.FacesListener;
 
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
@@ -22,8 +23,6 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools;
  * @version $Revision$ $Date$
  */
 public class SubMenuDecorator extends MenuDecorator {
-    private static final String REVISION = "$Revision$";
-
     protected final String menuId;
 
     protected String menuVarName;
@@ -115,11 +114,12 @@ public class SubMenuDecorator extends MenuDecorator {
             if (suffixMenuId == null) {
                 SelectItemsJsContext context = (SelectItemsJsContext) getContext();
 
-                Map listenersByType = ListenerTools.getListenersByType(
-                        ListenerTools.JAVASCRIPT_NAME_SPACE, component);
+                Map<String, FacesListener[]> listenersByType = ListenerTools
+                        .getListenersByType(
+                                ListenerTools.JAVASCRIPT_NAME_SPACE, component);
 
-                EventsRenderer.encodeEventListeners(javaScriptWriter, context
-                        .peekVarId(), listenersByType, null);
+                EventsRenderer.encodeEventListeners(javaScriptWriter,
+                        context.peekVarId(), listenersByType, null);
             }
 
         }

@@ -15,6 +15,7 @@ import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.internal.renderkit.IAsyncRenderer;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.renderkit.designer.IDesignerEngine;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
@@ -23,6 +24,7 @@ import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.SubMenuDecorator;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 import org.rcfaces.renderkit.html.internal.util.TextTypeTools;
 
 /**
@@ -31,16 +33,17 @@ import org.rcfaces.renderkit.html.internal.util.TextTypeTools;
  * @version $Revision$ $Date$
  */
 public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
-    private static final String REVISION = "$Revision$";
-
     private static final String HTML_TYPE_PROPERTY = "org.rcfaces.renderkit.html.box.COMPONENT_TYPE";
 
-    public void encodeBegin(IComponentWriter writer) throws WriterException {
+    public final void encodeBegin(IComponentWriter writer)
+            throws WriterException {
+        // Final a cause du designer
+
         super.encodeBegin(writer);
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        String type = TextTypeTools.getType(htmlWriter);
+        String type = getMainTagName(htmlWriter);
         if (type == null) {
             type = IHtmlWriter.DIV;
         }
@@ -51,6 +54,12 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
         htmlWriter.startElement(type);
 
         writeComponentAttributes(htmlWriter);
+
+        designerBeginChildren(htmlWriter, IDesignerEngine.MAIN_BODY);
+    }
+
+    protected String getMainTagName(IHtmlWriter htmlWriter) {
+        return TextTypeTools.getType(htmlWriter);
     }
 
     protected void writeComponentAttributes(IHtmlWriter htmlWriter)
@@ -72,7 +81,7 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
 
         String overStyleClass = boxComponent.getOverStyleClass(facesContext);
         if (overStyleClass != null) {
-            htmlWriter.writeAttribute("v:overStyleClass", overStyleClass);
+            htmlWriter.writeAttributeNS("overStyleClass", overStyleClass);
 
             htmlWriter.getJavaScriptEnableMode().enableOnOver();
         }
@@ -87,11 +96,11 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
                         .getAsyncRenderMode(boxComponent);
 
                 if (asyncRender != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
-                    htmlWriter.writeAttribute("v:asyncRender", true);
+                    htmlWriter.writeAttributeNS("asyncRender", true);
 
                     if (boxComponent.getAsyncDecodeMode(componentRenderContext
                             .getFacesContext()) == IAsyncDecodeModeCapability.PARTIAL_ASYNC_DECODE_MODE) {
-                        htmlWriter.writeAttribute("v:asyncDecode", true);
+                        htmlWriter.writeAttributeNS("asyncDecode", true);
                     }
 
                     htmlRenderContext.pushInteractiveRenderComponent(
@@ -103,7 +112,12 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
         setAsyncRenderer(htmlWriter, boxComponent, asyncRender);
     }
 
-    protected void encodeEnd(IComponentWriter writer) throws WriterException {
+    protected final void encodeEnd(IComponentWriter writer)
+            throws WriterException {
+        // Final a cause du designer
+
+        designerEndChildren(writer, IDesignerEngine.MAIN_BODY);
+
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
         BoxComponent boxComponent = (BoxComponent) htmlWriter
                 .getComponentRenderContext().getComponent();
@@ -180,5 +194,12 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
             javaScriptRenderContext.appendRequiredClass(JavaScriptClasses.BOX,
                     "menu");
         }
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] {
+                "overStyleClass", "asyncRender", "asyncDecode" });
     }
 }

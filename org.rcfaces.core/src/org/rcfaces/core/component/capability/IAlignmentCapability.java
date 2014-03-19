@@ -15,6 +15,14 @@ package org.rcfaces.core.component.capability;
  * @version $Revision$ $Date$
  */
 public interface IAlignmentCapability {
+	
+	/**
+	 *  valid values for Alignment
+	 *  @see AlignmentNormalizer
+	 */
+	String LEFT = "left";
+	String RIGHT = "right";
+	String CENTER = "center";
 
     /**
      * Returns a string that represents the alignement of the data in the

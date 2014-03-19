@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -46,11 +47,15 @@ import org.rcfaces.core.item.ITreeNode;
 import org.rcfaces.core.item.IVisibleItem;
 import org.rcfaces.core.item.TreeNode;
 import org.rcfaces.core.lang.OrderedSet;
+import org.rcfaces.core.util.SelectItemTreeTools;
+import org.rcfaces.core.util.SelectItemTreeTools.INodeHandler;
+import org.rcfaces.core.util.SelectItemTreeTools.SelectItemNode;
 import org.rcfaces.renderkit.html.internal.HtmlValuesTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
+import org.rcfaces.renderkit.html.internal.service.TreeService;
 
 /**
  * 
@@ -58,8 +63,6 @@ import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
  * @version $Revision$ $Date$
  */
 public class TreeDecorator extends AbstractSelectItemsDecorator {
-
-    private static final String REVISION = "$Revision$";
 
     private static final String IMAGES_PROPERTY = "treeRender.images";
 
@@ -72,6 +75,14 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
     private DragWalker dragWalker;
 
     private DropWalker dropWalker;
+
+    private Set<String> interactiveParentsVarId;
+
+    private List<SchrodingerNode> schrodingerNodesStack = null;
+
+    private SchrodingerNode unloadedParentSchrodingerNode = null;
+
+    private List<SchrodingerNode> schrodingerNodes;
 
     public TreeDecorator(TreeComponent component) {
         super(component, component.getFilterProperties());
@@ -86,6 +97,13 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
             dropWalker = new DropWalker(component);
         }
 
+        if (component.isSchrodingerCheckable()) {
+            schrodingerNodesStack = new LinkedList<TreeDecorator.SchrodingerNode>();
+
+            schrodingerNodesStack.add(new SchrodingerNode(null));
+
+            schrodingerNodes = new ArrayList<TreeDecorator.SchrodingerNode>();
+        }
     }
 
     protected void preEncodeContainer() throws WriterException {
@@ -98,10 +116,6 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
         mapSelectItems(componentContext, SelectItemMappers.SEARCH_IMAGE_MAPPER);
 
         super.preEncodeContainer();
-    }
-
-    protected void postEncodeContainer() throws WriterException {
-        super.postEncodeContainer();
     }
 
     /*
@@ -298,7 +312,88 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
                     treeRenderContext.getSelectionValues());
         }
 
+        if (schrodingerNodes != null && schrodingerNodes.size() > 0) {
+            writeSchrodingerStates(javaScriptWriter);
+        }
+
+        if (interactiveParentsVarId != null) {
+            writeInteractiveParentsVarId(javaScriptWriter);
+        }
+
         super.encodeComponentsEnd();
+    }
+
+    protected void writeInteractiveParentsVarId(
+            IJavaScriptWriter javaScriptWriter) throws WriterException {
+        javaScriptWriter.writeMethodCall("f_setInteractiveParent");
+
+        boolean first = true;
+        for (String id : interactiveParentsVarId) {
+            if (first) {
+                first = false;
+            } else {
+                javaScriptWriter.write(',');
+            }
+            javaScriptWriter.write(id);
+        }
+
+        javaScriptWriter.writeln(");");
+
+    }
+
+    protected void writeSchrodingerStates(IJavaScriptWriter javaScriptWriter)
+            throws WriterException {
+
+        javaScriptWriter.writeMethodCall("f_setSchrodingerStates");
+
+        boolean first = true;
+        for (SchrodingerNode node : schrodingerNodes) {
+
+            if (node.varId == null) {
+                continue;
+            }
+            if (node.checkedCount == 0 || node.checkedCount == node.childCount) {
+                continue;
+            }
+
+            if (first) {
+                first = false;
+                javaScriptWriter.write('[');
+            } else {
+                javaScriptWriter.write(',');
+            }
+            javaScriptWriter.write(node.varId);
+        }
+        if (first == false) {
+            javaScriptWriter.write(']');
+        }
+
+        boolean first2 = true;
+        for (SchrodingerNode node : schrodingerNodes) {
+
+            if (node.varId == null) {
+                continue;
+            }
+            if (node.checkedCount != node.childCount) {
+                continue;
+            }
+
+            if (first2) {
+                first2 = false;
+                if (first) {
+                    javaScriptWriter.writeNull();
+                }
+                javaScriptWriter.write(",[");
+            } else {
+                javaScriptWriter.write(',');
+            }
+            javaScriptWriter.write(node.varId);
+        }
+        if (first2 == false) {
+            javaScriptWriter.write(']');
+        }
+
+        javaScriptWriter.writeln(");");
     }
 
     private void writeFullStates(IJavaScriptWriter jsWriter, String jsCommand,
@@ -346,13 +441,38 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
     public int encodeNodeBegin(UIComponent component, SelectItem selectItem,
             boolean hasChild, boolean isVisible) throws WriterException {
 
+        TreeRenderContext treeRenderContext = (TreeRenderContext) getContext();
+
+        SchrodingerNode schrodingerNode = null;
+        if (schrodingerNodesStack != null) {
+            if (hasChild == false) {
+                SchrodingerNode parentSchrodingerNode = schrodingerNodesStack
+                        .get(0);
+
+                if (treeRenderContext.isValueChecked(selectItem,
+                        selectItem.getValue())) {
+                    parentSchrodingerNode.checkedCount++;
+                }
+
+                parentSchrodingerNode.childCount++;
+
+            } else {
+                schrodingerNode = new SchrodingerNode(selectItem);
+                schrodingerNodesStack.add(0, schrodingerNode);
+
+                treeRenderContext.removeValueChecked(selectItem);
+            }
+
+            if (unloadedParentSchrodingerNode != null) {
+                return EVAL_NODE;
+            }
+        }
+
         if (selectItem instanceof IVisibleItem) {
             if (((IVisibleItem) selectItem).isVisible() == false) {
                 return SKIP_NODE;
             }
         }
-
-        TreeRenderContext treeRenderContext = (TreeRenderContext) getContext();
 
         String parentVarId = null;
 
@@ -369,8 +489,21 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
             if (preloadLevelDepth > 0
                     && preloadLevelDepth < treeRenderContext.getDepth()) {
                 if (treeRenderContext.isFirstInteractiveChild(parentVarId)) {
-                    javaScriptWriter.writeMethodCall("f_setInteractiveParent")
-                            .write(parentVarId).writeln(");");
+
+                    if (interactiveParentsVarId == null) {
+                        interactiveParentsVarId = new HashSet<String>();
+                    }
+                    interactiveParentsVarId.add(parentVarId);
+                }
+
+                if (schrodingerNodesStack != null
+                        && treeRenderContext.getCheckValues().size() > 0) {
+
+                    // Il faut rechercher les checks ...
+                    unloadedParentSchrodingerNode = schrodingerNodesStack
+                            .get(0);
+
+                    return EVAL_NODE;
                 }
 
                 return SKIP_NODE;
@@ -382,6 +515,10 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
 
         treeRenderContext.pushVarId(varId);
 
+        if (schrodingerNode != null) {
+            schrodingerNode.varId = varId;
+        }
+
         javaScriptWriter.write("var ").write(varId);
 
         if (parentVarId == null) {
@@ -391,16 +528,122 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
         javaScriptWriter.write('=').writeMethodCall("f_appendNode2")
                 .write(parentVarId).write(',');
 
-        IObjectLiteralWriter objectLiteralWriter = javaScriptWriter
-                .writeObjectLiteral(false);
+        writeNodeObject(treeRenderContext, selectItem, false, hasChild);
+
+        javaScriptWriter.writeln(");");
+
+        return EVAL_NODE;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @seeorg.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#
+     * encodeTreeNodeEnd
+     * (org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer
+     * .TreeContext, javax.faces.component.UIComponent,
+     * javax.faces.model.SelectItem)
+     */
+    public void encodeNodeEnd(UIComponent component, SelectItem selectItem,
+            boolean hasChild, boolean isVisible) {
+
+        TreeRenderContext treeRenderContext = (TreeRenderContext) getContext();
+
+        if (schrodingerNodesStack != null) {
+            if (hasChild) {
+                SchrodingerNode schrodingerNode = schrodingerNodesStack
+                        .remove(0);
+
+                if (schrodingerNode.checkedCount > 0) {
+                    schrodingerNodes.add(schrodingerNode);
+                }
+
+                SchrodingerNode parent = schrodingerNodesStack.get(0);
+
+                parent.checkedCount += schrodingerNode.checkedCount;
+                parent.childCount += schrodingerNode.childCount; // NON PAS LES
+                                                                 // PARENTS + 1;
+            }
+
+            if (unloadedParentSchrodingerNode != null
+                    && unloadedParentSchrodingerNode.selectItem == selectItem) {
+                unloadedParentSchrodingerNode = null;
+            }
+        }
+
+        if (isVisible == false) {
+            int preloadLevelDepth = treeRenderContext.getPreloadedLevelDepth();
+            if (preloadLevelDepth > 0
+                    && preloadLevelDepth < treeRenderContext.getDepth()) {
+                return;
+            }
+        }
+
+        treeRenderContext.popVarId();
+
+        if (dragWalker != null) {
+            dragWalker.pop(selectItem);
+        }
+
+        if (dropWalker != null) {
+            dropWalker.pop(selectItem);
+        }
+    }
+
+    /**
+     * Called from the {@link TreeService} to refresh the father node of the
+     * newly rendered nodes
+     * 
+     * @param selectItem
+     *            father node
+     * @param hasChild
+     * @throws WriterException
+     */
+    public void refreshNode(SelectItem selectItem, boolean hasChild)
+            throws WriterException {
+
+        TreeRenderContext treeRenderContext = (TreeRenderContext) getContext();
+
+        javaScriptWriter.getComponentVarName();
+
+        javaScriptWriter.writeMethodCall("f_refreshNode");
 
         Object selectItemValue = selectItem.getValue();
 
         String value = convertItemValue(
                 javaScriptWriter.getHtmlComponentRenderContext(),
                 selectItemValue);
-        if (value != null) {
-            objectLiteralWriter.writeSymbol("_value").writeString(value);
+        javaScriptWriter.writeString(value).write(',');
+
+        writeNodeObject(treeRenderContext, selectItem, true, hasChild);
+
+        javaScriptWriter.writeln(");");
+
+        if (dragWalker != null) {
+            dragWalker.pop(selectItem);
+        }
+
+        if (dropWalker != null) {
+            dropWalker.pop(selectItem);
+        }
+    }
+
+    private void writeNodeObject(TreeRenderContext treeRenderContext,
+            SelectItem selectItem, boolean refreshNode, boolean hasChild)
+            throws WriterException {
+
+        IObjectLiteralWriter objectLiteralWriter = javaScriptWriter
+                .writeObjectLiteral(false);
+
+        Object selectItemValue = selectItem.getValue();
+
+        if (refreshNode == false) {
+            String value = convertItemValue(
+                    javaScriptWriter.getHtmlComponentRenderContext(),
+                    selectItemValue);
+            if (value != null) {
+                objectLiteralWriter.writeSymbol("_value").writeString(value);
+            }
         }
 
         String text = selectItem.getLabel();
@@ -463,6 +706,10 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
             }
         }
 
+        if (refreshNode) {
+            objectLiteralWriter.writeSymbol("_hasChild").writeBoolean(hasChild);
+        }
+
         if (dragWalker != null) {
             dragWalker.pushAndWriteAttributes(objectLiteralWriter, selectItem);
         }
@@ -471,42 +718,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
             dropWalker.pushAndWriteAttributes(objectLiteralWriter, selectItem);
         }
 
-        objectLiteralWriter.end().writeln(");");
-
-        return EVAL_NODE;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @seeorg.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#
-     * encodeTreeNodeEnd
-     * (org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer
-     * .TreeContext, javax.faces.component.UIComponent,
-     * javax.faces.model.SelectItem)
-     */
-    public void encodeNodeEnd(UIComponent component, SelectItem selectItem,
-            boolean hasChild, boolean isVisible) {
-
-        TreeRenderContext treeRenderContext = (TreeRenderContext) getContext();
-
-        if (isVisible == false) {
-            int preloadLevelDepth = treeRenderContext.getPreloadedLevelDepth();
-            if (preloadLevelDepth > 0
-                    && preloadLevelDepth < treeRenderContext.getDepth()) {
-                return;
-            }
-        }
-
-        treeRenderContext.popVarId();
-
-        if (dragWalker != null) {
-            dragWalker.pop(selectItem);
-        }
-
-        if (dropWalker != null) {
-            dropWalker.pop(selectItem);
-        }
+        objectLiteralWriter.end();
     }
 
     /*
@@ -547,6 +759,16 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
             this.selectItemsContext = selectItemsContext;
 
             super.encodeNodes(treeComponent);
+
+            if (schrodingerNodes != null && schrodingerNodes.size() > 0) {
+                writeSchrodingerStates(javaScriptWriter);
+            }
+
+            if (interactiveParentsVarId != null) {
+                writeInteractiveParentsVarId(javaScriptWriter);
+            }
+
+            nodeRenderer.refreshNode(treeComponent);
 
         } finally {
             this.javaScriptWriter = null;
@@ -590,7 +812,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
         return null;
     }
 
-    protected void addUnlockProperties(Set unlockedProperties) {
+    protected void addUnlockProperties(Set<String> unlockedProperties) {
         super.addUnlockProperties(unlockedProperties);
 
         unlockedProperties.add("checkedItems");
@@ -601,13 +823,14 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
         unlockedProperties.add("collapsedItems");
     }
 
+    @SuppressWarnings("unused")
     public void decode(IRequestContext context, UIComponent component,
             IComponentData componentData) {
         super.decode(context, component, componentData);
 
         FacesContext facesContext = context.getFacesContext();
 
-        TreeComponent tree = (TreeComponent) component;
+        final TreeComponent tree = (TreeComponent) component;
 
         boolean checkable = tree.isCheckable(facesContext);
 
@@ -630,7 +853,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
                 }
             }
 
-            Set values = CollectionTools.valuesToSet(v, false);
+            Set<Object> values = CollectionTools.valuesToSet(v, false);
 
             if (HtmlValuesTools.updateValues(facesContext, tree, false, values,
                     checkedValues, uncheckedValues)) {
@@ -662,7 +885,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
 
                 // On recommence à ZERO ! ???? pourquoi ? nous sommes en full
                 // state ?
-                Set values = new OrderedSet();
+                Set<Object> values = new OrderedSet<Object>();
 
                 if (HtmlValuesTools.updateValues(facesContext, tree, true,
                         values, selectedValues, deselectedValues)) {
@@ -679,7 +902,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
 
                         } else {
                             // On prend le premier !
-                            Set set = new HashSet(1);
+                            Set<Object> set = new HashSet<Object>(1);
                             set.add(values.iterator().next());
 
                             ValuesTools.setValues(facesContext, tree, set);
@@ -697,7 +920,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
                 // Set values = ValuesTools.valueToSet(v, true);
 
                 // On recommence à ZERO ! ??? nous sommes en full state ?
-                Set values = new OrderedSet();
+                Set<Object> values = new OrderedSet<Object>();
 
                 HtmlValuesTools.updateValues(facesContext, tree, true, values,
                         selectedValues, deselectedValues);
@@ -711,7 +934,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
         String collapsedValues = componentData
                 .getStringProperty("collapsedItems");
         if (collapsedValues != null || expandedValues != null) {
-            Set expansionValues = ExpansionTools.expansionValuesToSet(
+            Set<Object> expansionValues = ExpansionTools.expansionValuesToSet(
                     facesContext, component, false);
 
             if (HtmlValuesTools.updateValues(facesContext, tree, true,
@@ -719,6 +942,67 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
 
                 ExpansionTools.setExpansionValues(facesContext, tree,
                         expansionValues);
+            }
+        }
+
+        String schrodingerStates = componentData
+                .getStringProperty("schrodingerStates");
+        if (schrodingerStates != null) {
+
+            final Set<Object> checkedValuesSet = CheckTools.checkValuesToSet(
+                    facesContext, tree, true);
+
+            SelectItemNode root = SelectItemTreeTools.constructTree(
+                    facesContext, component, null, null);
+
+            if (schrodingerStates != null) {
+                List<Object> states = HtmlValuesTools.parseValues(facesContext,
+                        component, false, false, schrodingerStates);
+
+                for (Object stateObject : states) {
+                    String state = (String) stateObject;
+                    final boolean check = (state.charAt(0) == '+');
+                    state = state.substring(1);
+
+                    Object value = HtmlValuesTools.convertStringToValue(
+                            facesContext, component, state, true);
+                    if (value == null) {
+                        continue;
+                    }
+
+                    SelectItemNode selectItemNode = root.searchByValue(value);
+                    if (selectItemNode == null) {
+                        continue;
+                    }
+
+                    selectItemNode.forEachNode(new INodeHandler<Boolean>() {
+
+                        public Boolean process(SelectItemNode node) {
+                            if (node.hasChildren()) {
+                                return null;
+                            }
+
+                            Object value = node.getSelectItem().getValue();
+
+                            if (check) {
+                                if (checkedValuesSet.contains(value)) {
+                                    return null;
+                                }
+
+                                tree.check(value);
+                                return null;
+                            }
+
+                            if (checkedValuesSet.contains(value) == false) {
+                                return null;
+                            }
+
+                            tree.uncheck(value);
+                            return null;
+                        }
+                    });
+
+                }
             }
         }
     }
@@ -808,9 +1092,9 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
 
     protected abstract class AbstractDragDropWalker {
 
-        private final List dragDropSelectItemStates;
+        private final List<DragDropItemState> dragDropSelectItemStates;
 
-        private final List selectItemLastDragDropInfos;
+        private final List<Object> selectItemLastDragDropInfos;
 
         private String[] cachedDragDropTypes;
 
@@ -818,8 +1102,8 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
 
         public AbstractDragDropWalker(int dragDropEffects,
                 String dragDropTypes[]) {
-            dragDropSelectItemStates = new ArrayList(8);
-            selectItemLastDragDropInfos = new ArrayList(8);
+            dragDropSelectItemStates = new ArrayList<DragDropItemState>(8);
+            selectItemLastDragDropInfos = new ArrayList<Object>(8);
 
             if (dragDropEffects < 0) {
                 dragDropEffects = IDragAndDropEffects.DEFAULT_DND_EFFECT;
@@ -993,8 +1277,8 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
                 return null;
             }
 
-            return (DragDropItemState) dragDropSelectItemStates
-                    .get(dragDropSelectItemStates.size() - offset - 1);
+            return dragDropSelectItemStates.get(dragDropSelectItemStates.size()
+                    - offset - 1);
         }
 
         protected abstract String[] getDragDropTypes(SelectItem mainItem,
@@ -1066,4 +1350,19 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
             return selectItem instanceof IDroppableItem;
         }
     }
+
+    public class SchrodingerNode {
+        private SelectItem selectItem;
+
+        private String varId;
+
+        int checkedCount;
+
+        int childCount;
+
+        public SchrodingerNode(SelectItem selectItem) {
+            this.selectItem = selectItem;
+        }
+    }
+
 }

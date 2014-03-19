@@ -12,8 +12,7 @@ import java.util.Date;
  * @version $Revision$ $Date$
  */
 public class Period extends DefaultAdaptable implements Serializable,
-        Comparable {
-    private static final String REVISION = "$Revision$";
+        Comparable<Period> {
 
     private static final long serialVersionUID = -3717158186943282329L;
 
@@ -34,6 +33,7 @@ public class Period extends DefaultAdaptable implements Serializable,
         return start;
     }
 
+    @Override
     public int hashCode() {
         final int PRIME = 31;
         int result = 1;
@@ -42,6 +42,7 @@ public class Period extends DefaultAdaptable implements Serializable,
         return result;
     }
 
+    @Override
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
@@ -63,8 +64,8 @@ public class Period extends DefaultAdaptable implements Serializable,
         return true;
     }
 
-    public int compareTo(Object o) {
-        return start.compareTo(((Period) o).getStart());
+	public int compareTo(Period o) {
+		return start.compareTo(o.getStart());
     }
 
 }

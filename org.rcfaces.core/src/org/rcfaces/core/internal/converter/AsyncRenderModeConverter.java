@@ -5,7 +5,6 @@
 package org.rcfaces.core.internal.converter;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.faces.component.UIComponent;
@@ -22,13 +21,16 @@ import org.rcfaces.core.model.AbstractConverter;
  * @version $Revision$ $Date$
  */
 public class AsyncRenderModeConverter extends AbstractConverter {
-    private static final String REVISION = "$Revision$";
 
     private static final String NONE_ASYNC_RENDER_MODE_NAME = "none";
+
+    private static final String FALSE_ASYNC_RENDER_MODE_NAME = "false";
 
     private static final String BUFFER_ASYNC_RENDER_MODE_NAME = "buffer";
 
     private static final String TREE_ASYNC_RENDER_MODE_NAME = "tree";
+
+    private static final String TRUE_ASYNC_RENDER_MODE_NAME = "true";
 
     private static final Integer DEFAULT_ASYNC_RENDER_MODE = new Integer(
             Constants.DEFAULT_ASYNC_MODE);
@@ -38,16 +40,24 @@ public class AsyncRenderModeConverter extends AbstractConverter {
 
     public static final Converter SINGLETON = new AsyncRenderModeConverter();
 
-    private static Map ASYNC_RENDER_MODES = new HashMap(5);
+    private static Map<String, Integer> ASYNC_RENDER_MODES = new HashMap<String, Integer>(
+            8);
     static {
         ASYNC_RENDER_MODES.put(NONE_ASYNC_RENDER_MODE_NAME, new Integer(
                 IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE));
+        ASYNC_RENDER_MODES.put(FALSE_ASYNC_RENDER_MODE_NAME, new Integer(
+                IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE));
+
         ASYNC_RENDER_MODES.put(BUFFER_ASYNC_RENDER_MODE_NAME, new Integer(
                 IAsyncRenderModeCapability.BUFFER_ASYNC_RENDER_MODE));
+
         ASYNC_RENDER_MODES.put(TREE_ASYNC_RENDER_MODE_NAME, new Integer(
+                IAsyncRenderModeCapability.TREE_ASYNC_RENDER_MODE));
+        ASYNC_RENDER_MODES.put(TRUE_ASYNC_RENDER_MODE_NAME, new Integer(
                 IAsyncRenderModeCapability.TREE_ASYNC_RENDER_MODE));
     }
 
+    @SuppressWarnings("unused")
     public Object getAsObject(FacesContext context, UIComponent component,
             String value) {
 
@@ -57,7 +67,7 @@ public class AsyncRenderModeConverter extends AbstractConverter {
 
         value = value.toLowerCase();
 
-        Integer i = (Integer) ASYNC_RENDER_MODES.get(value);
+        Integer i = ASYNC_RENDER_MODES.get(value);
         if (i != null) {
             return i;
         }
@@ -82,19 +92,17 @@ public class AsyncRenderModeConverter extends AbstractConverter {
             Object value) {
 
         if (value == null) {
-            return (String) ASYNC_RENDER_MODES.get(DEFAULT_ASYNC_RENDER_MODE);
+            value = DEFAULT_ASYNC_RENDER_MODE;
         }
 
         if ((value instanceof Integer) == false) {
             throw new IllegalArgumentException("Value must be an Integer !");
         }
 
-        for (Iterator it = ASYNC_RENDER_MODES.entrySet().iterator(); it
-                .hasNext();) {
-            Map.Entry entry = (Map.Entry) it.next();
+        for (Map.Entry<String, Integer> entry : ASYNC_RENDER_MODES.entrySet()) {
 
             if (value.equals(entry.getValue())) {
-                return (String) entry.getKey();
+                return entry.getKey();
             }
         }
 

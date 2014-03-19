@@ -17,5 +17,7 @@ public interface IStyleContentAccessorHandler extends
 
     String MERGE_FILTER_NAME = "merge";
 
+    String PROCESS_FILTER_NAME = "process";
+
     IStyleOperation getStyleOperation(String operationId);
 }

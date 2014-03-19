@@ -15,7 +15,6 @@ import org.apache.commons.logging.LogFactory;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractJavaScriptRenderer0 extends AbstractHtmlRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(AbstractJavaScriptRenderer0.class);

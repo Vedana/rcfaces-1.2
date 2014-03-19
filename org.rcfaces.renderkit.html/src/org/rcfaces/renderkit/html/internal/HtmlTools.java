@@ -41,6 +41,7 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.CalendarTools;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.tools.FilterExpressionTools;
+import org.rcfaces.core.item.IAccessKeyItem;
 import org.rcfaces.core.lang.Period;
 import org.rcfaces.core.lang.Time;
 import org.rcfaces.core.model.IFilterProperties;
@@ -52,7 +53,6 @@ import org.w3c.dom.Document;
  * @version $Revision$ $Date$
  */
 public class HtmlTools {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(HtmlTools.class);
 
@@ -106,24 +106,26 @@ public class HtmlTools {
                 component), values, separators, noValue);
     }
 
-    public static Map decodeParametersToMap(IProcessContext processContext,
-            UIComponent component, Renderer renderer, String values,
-            String separators, Object noValue) {
+    public static Map<String, Object> decodeParametersToMap(
+            IProcessContext processContext, UIComponent component,
+            Renderer renderer, String values, String separators, Object noValue) {
         return decodeParametersToMap(new BasicDecoderContext(processContext,
                 component, renderer), values, separators, noValue);
     }
 
-    public static Map decodeParametersToMap(IDecoderContext decoderContext,
-            String values, String separators, Object noValue) {
+    public static Map<String, Object> decodeParametersToMap(
+            IDecoderContext decoderContext, String values, String separators,
+            Object noValue) {
         if (values == null || values.length() < 1) {
-            return Collections.EMPTY_MAP;
+            return Collections.emptyMap();
         }
 
         char cs[] = values.toCharArray();
 
         Position position = new Position(values);
 
-        Map properties = new HashMap((cs.length / 16) + 1);
+        Map<String, Object> properties = new HashMap<String, Object>(
+                (cs.length / 16) + 1);
         for (; position.start < cs.length;) {
             int nameStart = position.start;
 
@@ -202,7 +204,7 @@ public class HtmlTools {
             }
             position.start++; // le ':'
 
-            List l = new ArrayList(length);
+            List<Object> l = new ArrayList<Object>(length);
 
             for (; position.start < cs.length;) {
 
@@ -418,6 +420,17 @@ public class HtmlTools {
         return encode;
     }
 
+    public static final boolean writeItemSpanAccessKey(IHtmlWriter writer,
+            IAccessKeyItem accessKeyItem, String text, boolean escapeLF)
+            throws WriterException {
+        if (text == null || text.length() < 1) {
+            return false;
+        }
+
+        String accessKey = accessKeyItem.getAccessKey();
+        return writeAccessKey(writer, accessKey, text, escapeLF);
+    }
+
     public static final boolean writeSpanAccessKey(IHtmlWriter writer,
             IAccessKeyCapability accessKeyCapability, String text,
             boolean escapeLF) throws WriterException {
@@ -426,9 +439,31 @@ public class HtmlTools {
         }
 
         String accessKey = accessKeyCapability.getAccessKey();
+        return writeAccessKey(writer, accessKey, text, escapeLF);
+    }
+
+    public static final boolean writeAccessKey(IHtmlWriter writer,
+            String accessKey, String text, boolean escapeLF)
+            throws WriterException {
+
+        boolean escapeHTML = (writer.getHtmlComponentRenderContext()
+                .getHtmlRenderContext().getHtmlProcessContext()
+                .isHtmlEscapingDisabled() == false);
+
+        return writeAccessKey(writer, accessKey, text, escapeLF, escapeHTML);
+    }
+
+    public static final boolean writeAccessKey(IHtmlWriter writer,
+            String accessKey, String text, boolean escapeLF, boolean escapeHTML)
+            throws WriterException {
+
+        if (text == null || text.length() < 1) {
+            return false;
+        }
+
         if (accessKey == null || accessKey.length() < 1) {
             if (escapeLF) {
-                writeAndEscapeLF(writer, text, NO_ACCESS_KEY);
+                writeAndEscapeLF(writer, text, NO_ACCESS_KEY, escapeHTML);
                 return false;
             }
 
@@ -438,7 +473,7 @@ public class HtmlTools {
         }
 
         if (escapeLF) {
-            writeAndEscapeLF(writer, text, accessKey.charAt(0));
+            writeAndEscapeLF(writer, text, accessKey.charAt(0), escapeHTML);
             return false;
         }
 
@@ -470,7 +505,7 @@ public class HtmlTools {
     }
 
     private static void writeAndEscapeLF(IHtmlWriter writer, String text,
-            char accessKey) throws WriterException {
+            char accessKey, boolean escapeHtml) throws WriterException {
         char chs[] = text.toCharArray();
         int p = 0;
 
@@ -494,8 +529,10 @@ public class HtmlTools {
                     break;
                 }
             }
+
             if (old < p) {
-                writer.write(chs, old, p - old);
+                String s = new String(chs, old, p - old);
+                writer.writeText(s);
             }
 
             if (p == chs.length) {
@@ -542,7 +579,7 @@ public class HtmlTools {
             HtmlTools.appendData(datas, key, value);
         }
 
-        writer.writeAttribute("v:data", datas.toString());
+        writer.writeAttributeNS("data", datas.toString());
 
         return writer;
     }
@@ -627,6 +664,7 @@ public class HtmlTools {
         return ComponentTools.getForComponent(context, componentId, component);
     }
 
+    @SuppressWarnings("unused")
     public static String computeGroupName(IHtmlProcessContext processContext,
             UIComponent component, String groupName) {
 
@@ -827,20 +865,18 @@ public class HtmlTools {
             }
 
             sa.append('s');
-            sa
-                    .append(Long
-                            .toString(
-                                    ((((year * 12 + month) * 31 + (day - 1)) * 24 + hours) * 60 + minutes)
-                                            * 60 + seconds, RADIX));
+            sa.append(Long
+                    .toString(
+                            ((((year * 12 + month) * 31 + (day - 1)) * 24 + hours) * 60 + minutes)
+                                    * 60 + seconds, RADIX));
             return;
         }
 
         sa.append('S');
-        sa
-                .append(Long
-                        .toString(
-                                (((((year * 12 + month) * 31 + (day - 1)) * 24 + hours) * 60 + minutes) * 60 + seconds)
-                                        * 1000 + millis, RADIX));
+        sa.append(Long
+                .toString(
+                        (((((year * 12 + month) * 31 + (day - 1)) * 24 + hours) * 60 + minutes) * 60 + seconds)
+                                * 1000 + millis, RADIX));
     }
 
     public static Date parseDate(String time, IProcessContext processContext,
@@ -1167,7 +1203,7 @@ public class HtmlTools {
             return null;
         }
 
-        final List rowsSetted = new ArrayList();
+        final List<Object> rowsSetted = new ArrayList<Object>();
 
         UIComponent parent = context.getViewRoot();
 
@@ -1290,11 +1326,11 @@ public class HtmlTools {
 
     public static String computeSubInputComponentId(IHtmlWriter htmlWriter,
             String clientId) {
-        FacesContext facesContext = htmlWriter.getComponentRenderContext()
-                .getFacesContext();
+        // FacesContext facesContext =
+        // htmlWriter.getComponentRenderContext().getFacesContext();
 
-        return computeSubInputComponentId(htmlWriter
-                .getComponentRenderContext(), clientId);
+        return computeSubInputComponentId(
+                htmlWriter.getComponentRenderContext(), clientId);
     }
 
     public static String computeSubInputComponentId(
@@ -1317,8 +1353,9 @@ public class HtmlTools {
         }
 
         String subClientId = ((ISubInputClientIdRenderer) renderer)
-                .computeSubInputClientId(componentRenderContext
-                        .getRenderContext(), component, clientId);
+                .computeSubInputClientId(
+                        componentRenderContext.getRenderContext(), component,
+                        clientId);
 
         return subClientId;
     }

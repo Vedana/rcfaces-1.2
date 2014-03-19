@@ -22,7 +22,7 @@ var __members = {
 	f_isCollapsed: function() {
 		if (this._collapsed===undefined) {
 			// Appel depuis le constructor de l'objet !
-			this._collapsed =f_core.GetBooleanAttribute(this, "v:collapsed", false);
+			this._collapsed =f_core.GetBooleanAttributeNS(this, "collapsed", false);
 		}
 
 		return this._collapsed;

@@ -197,6 +197,10 @@ A string value sprecifying the charset associated to the "src" files.
 			<attribute-name>mergeStyles</attribute-name>
 			<attribute-class>boolean</attribute-class>
 		</attribute>
+		<attribute>
+			<attribute-name>processRules</attribute-name>
+			<attribute-class>boolean</attribute-class>
+		</attribute>
 	</component>
 	<component>
 		<description><![CDATA[
@@ -293,6 +297,11 @@ Base name of the resource bundle to be loaded.
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.pager</renderer-type>
 			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.PagerRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.core.criteriaList</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.CriteriaListRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
@@ -393,6 +402,11 @@ Base name of the resource bundle to be loaded.
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.imagePagerButton</renderer-type>
 			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ImagePagerButtonRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.core.imageCriteriaButton</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ImageCriteriaButtonRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
@@ -511,6 +525,11 @@ Base name of the resource bundle to be loaded.
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.core.heading</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.HeadingRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.styledText</renderer-type>
 			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.StyledTextRenderer</renderer-class>
 		</renderer>
@@ -618,6 +637,21 @@ Base name of the resource bundle to be loaded.
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.service</renderer-type>
 			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ServiceRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.core.toolTip</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ToolTipRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.core.toolTipManager</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ToolTipManagerRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.core.headingZone</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.HeadingZoneRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>

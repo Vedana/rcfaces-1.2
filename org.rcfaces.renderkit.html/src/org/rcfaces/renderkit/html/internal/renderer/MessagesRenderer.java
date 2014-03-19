@@ -16,13 +16,13 @@ import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
 public class MessagesRenderer extends AbstractCssRenderer {
-    public static final String REVISION = "$Revision$";
 
     protected void encodeBegin(IComponentWriter writer) throws WriterException {
         super.encodeBegin(writer);
@@ -44,64 +44,34 @@ public class MessagesRenderer extends AbstractCssRenderer {
 
         boolean globalOnly = messagesComponent.isGlobalOnly();
         if (globalOnly) {
-            htmlWriter.writeAttribute("v:globalOnly", true);
+            htmlWriter.writeAttributeNS("globalOnly", true);
         }
 
         if (messagesComponent.isShowSummary()) {
-            htmlWriter.writeAttribute("v:showSummary", true);
+            htmlWriter.writeAttributeNS("showSummary", true);
         }
 
         if (messagesComponent.isShowDetail()) {
-            htmlWriter.writeAttribute("v:showDetail", true);
+            htmlWriter.writeAttributeNS("showDetail", true);
         }
 
         if (messagesComponent.isShowActiveComponentMessage(facesContext)) {
-            htmlWriter.writeAttribute("v:showActiveComponentMessage", true);
+            htmlWriter.writeAttributeNS("showActiveComponentMessage", true);
         }
 
         int maxCount = messagesComponent.getMaxCount(facesContext);
         if (maxCount > 0) {
-            htmlWriter.writeAttribute("v:maxCount", maxCount);
+            htmlWriter.writeAttributeNS("maxCount", maxCount);
         }
 
         htmlWriter.endElement(IHtmlWriter.TABLE);
 
         htmlWriter.getJavaScriptEnableMode().enableOnMessage();
     }
-    
-    protected String getWAIRole() {
-    	return IAccessibilityRoles.ALERT;
-    }
 
-    /*
-     * protected void encodeJavaScript(IJavaScriptWriter js) throws
-     * WriterException { super.encodeJavaScript(js);
-     * 
-     * FacesContext facesContext = js.getFacesContext(); IComponentRenderContext
-     * componentRenderContext = js .getHtmlComponentRenderContext();
-     * MessagesComponent messagesComponent = (MessagesComponent)
-     * componentRenderContext .getComponent();
-     * 
-     * String bundleVar = messagesComponent.getBundleVar(facesContext);
-     * 
-     * boolean globalOnly = messagesComponent.isGlobalOnly();
-     * 
-     * Iterator iterator = facesContext.getMessages(null); Set globals = null;
-     * if (globalOnly == false) { globals = new HashSet(); for (;
-     * iterator.hasNext();) { globals.add(iterator.next()); }
-     * 
-     * iterator = facesContext.getMessages(); }
-     * 
-     * boolean messageGlobal = true;
-     * 
-     * for (; iterator.hasNext();) { FacesMessage facesMessage = (FacesMessage)
-     * iterator.next();
-     * 
-     * if (globals != null) { messageGlobal = globals.contains(facesMessage); }
-     * 
-     * JavaScriptTools.writeMessage(js, facesMessage, null, messageGlobal,
-     * bundleVar); } }
-     */
+    protected String getWAIRole() {
+        return IAccessibilityRoles.ALERT;
+    }
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.MESSAGES;
@@ -127,5 +97,13 @@ public class MessagesRenderer extends AbstractCssRenderer {
          */
 
         super.decode(context, component, componentData);
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "globalOnly",
+                "showSummary", "showDetail", "showActiveComponentMessage",
+                "maxCount" });
     }
 }

@@ -23,14 +23,13 @@ import org.rcfaces.core.internal.util.StateHolderTools;
  * @version $Revision$ $Date$
  */
 public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(BasicPropertiesAccessor.class);
 
     private static final boolean debugEnabled = LOG.isDebugEnabled();
 
-    private Map properties;
+    private Map<String, Object> properties;
 
     public Object getProperty(String propertyName) {
         if (properties == null || properties.isEmpty()) {
@@ -72,9 +71,10 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
                 valueBinding.setValue(context.getELContext(), value);
 
             } catch (RuntimeException ex) {
-                LOG.error("Set value '" + value + "' to '"
-                        + valueBinding.getExpressionString() + " old='" + old
-                        + "'", ex);
+                LOG.error(
+                        "Set value '" + value + "' to '"
+                                + valueBinding.getExpressionString() + " old='"
+                                + old + "'", ex);
 
                 throw ex;
             }
@@ -104,10 +104,8 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
         Object old = valueBinding.getValue(context.getELContext());
 
         if (debugEnabled) {
-            LOG
-                    .debug("Set value '" + value + "' to '"
-                            + valueBinding.getExpressionString() + " old='"
-                            + old + "'");
+            LOG.debug("Set value '" + value + "' to '"
+                    + valueBinding.getExpressionString() + " old='" + old + "'");
         }
 
         try {
@@ -165,6 +163,14 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
         return old;
     }
 
+    public void clearProperties(FacesContext context) {
+        if (properties == null) {
+            return;
+        }
+
+        properties.clear();
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -179,8 +185,9 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
 
         Object rets[] = new Object[properties.size() * 2];
         int i = 0;
-        for (Iterator it = properties.entrySet().iterator(); it.hasNext();) {
-            Map.Entry entry = (Map.Entry) it.next();
+        for (Iterator<Map.Entry<String, Object>> it = properties.entrySet()
+                .iterator(); it.hasNext();) {
+            Map.Entry<String, Object> entry = it.next();
 
             Object value = entry.getValue();
             if (value == null) {
@@ -262,9 +269,9 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
         return properties.containsKey(propertyName);
     }
 
-    public Set keySet() {
+    public Set<String> keySet() {
         if (properties == null || properties.isEmpty()) {
-            return Collections.EMPTY_SET;
+            return Collections.emptySet();
         }
 
         return properties.keySet();
@@ -278,18 +285,19 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
         return properties.size();
     }
 
+    @Override
     public String toString() {
         if (properties == null) {
             return "[EMPTY]";
         }
 
-        Set keys = keySet();
+        Set<String> keys = keySet();
 
         String s = "{";
 
         boolean first = true;
-        for (Iterator it = keys.iterator(); it.hasNext();) {
-            String key = (String) it.next();
+        for (Iterator<String> it = keys.iterator(); it.hasNext();) {
+            String key = it.next();
 
             if (first) {
                 first = false;

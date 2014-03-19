@@ -12,7 +12,7 @@ import org.rcfaces.core.lang.IAdapterFactory;
  */
 public interface IAdapterManager {
 
-    Object getAdapter(Object adaptable, Class adapterType, Object parameter);
+	<T> T getAdapter(Object adaptable, Class<T> adapterType, Object parameter);
 
-    void registerAdapters(IAdapterFactory factory, Class adaptable);
+	void registerAdapters(IAdapterFactory factory, Class<?> adaptable);
 }

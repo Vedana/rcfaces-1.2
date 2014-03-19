@@ -33,7 +33,7 @@ var __statics = {
  		
  		waitingShell.f_open();
 	}
-}
+};
 
 var __members = {
 
@@ -46,7 +46,7 @@ var __members = {
 	 * @param optional String text
 	 * @param optional Number width
 	 * @param optional Number height
-	 * @return optional Boolean showOnSubmit
+	 * @param optional Boolean showOnSubmit
 	 * @param optional String backgroundMode
 	 */
 	f_waitingShell: function(imageURL, text, width, height, showOnSubmit, backgroundMode) {
@@ -54,15 +54,15 @@ var __members = {
 
 		if (this.nodeType==f_core.ELEMENT_NODE) {
 			if (!imageURL) {
-				imageURL=f_core.GetAttribute(this, "v:imageURL");
+				imageURL=f_core.GetAttributeNS(this,"imageURL");
 			}
 
 			if (!text) { 
-				text=f_core.GetAttribute(this, "v:text");
+				text=f_core.GetAttributeNS(this,"text");
 			}
 
 			if (showOnSubmit===undefined) {
-				showOnSubmit=f_core.GetBooleanAttribute(this, "v:visible", true);
+				showOnSubmit=f_core.GetBooleanAttributeNS(this,"visible", true);
 			}
 		}
 		if (imageURL) {
@@ -109,7 +109,7 @@ var __members = {
 				self.f_open();
 			}
 			self=null;
-		}
+		};
 		f_core.AddPostSubmitListener(submitCb);
 	},
 	/**
@@ -220,7 +220,7 @@ var __members = {
 	toString: function() {
 		return "[f_waitingShell]";
 	}
-}
+};
 
 new f_class("f_waitingShell", {
 	extend: f_dialog,

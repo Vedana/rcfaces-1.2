@@ -15,6 +15,7 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
+import org.rcfaces.core.internal.renderkit.designer.IDesignerEngine;
 import org.rcfaces.core.internal.tools.ContextTools;
 import org.rcfaces.core.internal.tools.PageConfiguration;
 import org.rcfaces.core.internal.util.PathUtil;
@@ -26,12 +27,12 @@ import org.rcfaces.core.internal.util.PathUtil;
  */
 public abstract class AbstractProcessContext implements IProcessContext {
 
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory
             .getLog(AbstractProcessContext.class);
 
     private static final String EXTERNAL_CONTEXT_PROPERTY = "org.rcfaces.renderkit.core.EXTERNAL_CONTEXT";
+
+    private static final String DESIGNER_ENGINE_PROPERTY_NAME = "org.rcfaces.renderkit.core.DESIGNER_ENGINE";
 
     protected final RcfacesContext rcfacesContext;
 
@@ -40,6 +41,8 @@ public abstract class AbstractProcessContext implements IProcessContext {
     private final String contextPath;
 
     private final String servletPath;
+
+    private final IDesignerEngine designerEngine;
 
     private String baseHREF;
 
@@ -79,10 +82,21 @@ public abstract class AbstractProcessContext implements IProcessContext {
 
         rcfacesContext = RcfacesContext.getInstance(facesContext);
 
+<<<<<<< HEAD
         if (rcfacesContext.isDesignerMode()) {
             this.designerMode = new DefaultDesignerInterface();
         }
+=======
+        this.designerEngine = (IDesignerEngine) externalContext
+                .getApplicationMap().get(DESIGNER_ENGINE_PROPERTY_NAME);
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 
+        if (designerEngine != null) {
+            this.designerMode = true;
+
+        } else {
+            this.designerMode = rcfacesContext.isDesignerMode();
+        }
     }
 
     public final FacesContext getFacesContext() {
@@ -234,32 +248,6 @@ public abstract class AbstractProcessContext implements IProcessContext {
         return null;
     }
 
-    /*
-     * public final String computeFromContextPath(String uri, boolean
-     * canBeRelative) { String baseURI = getAbsolutePath(canBeRelative);
-     * 
-     * String ret; if (uri == null) { ret = baseURI; } / else if
-     * (baseURI.length() == 0) { if (uri.length() > 0) { } } /else {
-     * StringAppender u = new StringAppender(baseURI, uri.length() + 2);
-     * 
-     * if (baseURI.length() > 0) { u.append('/'); }
-     * 
-     * if (uri.length() > 0) { if (uri.charAt(0) == '/') {
-     * u.append(uri.substring(1)); } else if (u.length() > 1 &&
-     * u.charAt(u.length() - 1) == '/') { u.setLength(u.length() - 1);
-     * u.append(uri); } else { u.append(uri); } }
-     * 
-     * ret = u.toString(); }
-     * 
-     * if (Constants.ENCODE_URI) { ret = externalContext.encodeResourceURL(ret);
-     * }
-     * 
-     * if (LOG.isDebugEnabled()) { LOG.debug("Compute uri '" + uri + "' => '" +
-     * ret + "'."); }
-     * 
-     * return ret; }
-     */
-
     public final String getBaseHREF() {
         return baseHREF;
     }
@@ -300,8 +288,8 @@ public abstract class AbstractProcessContext implements IProcessContext {
     }
 
     protected static void setProcessContext(IProcessContext externalContext) {
-        Map requestMap = externalContext.getFacesContext().getExternalContext()
-                .getRequestMap();
+        Map<String, Object> requestMap = externalContext.getFacesContext()
+                .getExternalContext().getRequestMap();
         IProcessContext old = (IProcessContext) requestMap.put(
                 EXTERNAL_CONTEXT_PROPERTY, externalContext);
         if (old != null) {
@@ -318,9 +306,24 @@ public abstract class AbstractProcessContext implements IProcessContext {
 
         ExternalContext externalContext = facesContext.getExternalContext();
 
-        Map requestMap = externalContext.getRequestMap();
-        return (IProcessContext) requestMap.get(EXTERNAL_CONTEXT_PROPERTY);
+        Map<String, Object> requestMap = externalContext.getRequestMap();
+        IProcessContext processContext = (IProcessContext) requestMap
+                .get(EXTERNAL_CONTEXT_PROPERTY);
 
+        if (processContext == null) {
+            return new AbstractProcessContext(facesContext) {
+
+                public String getNamingSeparator() {
+                    throw new IllegalStateException("Temporary process context");
+                }
+
+                public Boolean getMultiWindowMode() {
+                    throw new IllegalStateException("Temporary process context");
+                }
+            };
+        }
+
+        return processContext;
     }
 
     public final String getScriptType() {
@@ -375,7 +378,7 @@ public abstract class AbstractProcessContext implements IProcessContext {
         defaultAttributesLocale = PageConfiguration
                 .getDefaultLiteralLocale(facesContext);
 
-        Map applicationMap = facesContext.getExternalContext()
+        Map<String, Object> applicationMap = facesContext.getExternalContext()
                 .getApplicationMap();
 
         defaultTimeZone = getTimeZone(applicationMap,
@@ -393,7 +396,7 @@ public abstract class AbstractProcessContext implements IProcessContext {
         }
     }
 
-    private TimeZone getTimeZone(Map applicationMap,
+    private TimeZone getTimeZone(Map<String, Object> applicationMap,
             String defaultTimezoneParameter) {
 
         Object defaultTimeZone = applicationMap.get(defaultTimezoneParameter);
@@ -414,8 +417,12 @@ public abstract class AbstractProcessContext implements IProcessContext {
         return (TimeZone) defaultTimeZone;
     }
 
-    public RcfacesContext getRcfacesContext() {
+    public final RcfacesContext getRcfacesContext() {
         return rcfacesContext;
+    }
+
+    public final IDesignerEngine getDesignerEngine() {
+        return designerEngine;
     }
 
 }

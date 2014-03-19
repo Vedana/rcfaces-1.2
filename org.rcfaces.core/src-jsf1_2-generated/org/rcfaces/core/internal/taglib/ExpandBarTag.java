@@ -19,6 +19,8 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 	private static final Log LOG=LogFactory.getLog(ExpandBarTag.class);
 
 	private ValueExpression expandListeners;
+	private ValueExpression headingZone;
+	private ValueExpression headingLevel;
 	private ValueExpression asyncRenderMode;
 	private ValueExpression fontBold;
 	private ValueExpression fontItalic;
@@ -50,115 +52,123 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 		return ExpandBarComponent.COMPONENT_TYPE;
 	}
 
-	public final void setExpandListener(ValueExpression expandListeners) {
+	public void setExpandListener(ValueExpression expandListeners) {
 		this.expandListeners = expandListeners;
 	}
 
-	public final void setAsyncRenderMode(ValueExpression asyncRenderMode) {
+	public void setHeadingZone(ValueExpression headingZone) {
+		this.headingZone = headingZone;
+	}
+
+	public void setHeadingLevel(ValueExpression headingLevel) {
+		this.headingLevel = headingLevel;
+	}
+
+	public void setAsyncRenderMode(ValueExpression asyncRenderMode) {
 		this.asyncRenderMode = asyncRenderMode;
 	}
 
-	public final void setFontBold(ValueExpression fontBold) {
+	public void setFontBold(ValueExpression fontBold) {
 		this.fontBold = fontBold;
 	}
 
-	public final void setFontItalic(ValueExpression fontItalic) {
+	public void setFontItalic(ValueExpression fontItalic) {
 		this.fontItalic = fontItalic;
 	}
 
-	public final void setFontName(ValueExpression fontName) {
+	public void setFontName(ValueExpression fontName) {
 		this.fontName = fontName;
 	}
 
-	public final void setFontSize(ValueExpression fontSize) {
+	public void setFontSize(ValueExpression fontSize) {
 		this.fontSize = fontSize;
 	}
 
-	public final void setFontUnderline(ValueExpression fontUnderline) {
+	public void setFontUnderline(ValueExpression fontUnderline) {
 		this.fontUnderline = fontUnderline;
 	}
 
-	public final void setDisabled(ValueExpression disabled) {
+	public void setDisabled(ValueExpression disabled) {
 		this.disabled = disabled;
 	}
 
-	public final void setReadOnly(ValueExpression readOnly) {
+	public void setReadOnly(ValueExpression readOnly) {
 		this.readOnly = readOnly;
 	}
 
-	public final void setText(ValueExpression text) {
+	public void setText(ValueExpression text) {
 		this.text = text;
 	}
 
-	public final void setTextDirection(ValueExpression textDirection) {
+	public void setTextDirection(ValueExpression textDirection) {
 		this.textDirection = textDirection;
 	}
 
-	public final void setTextAlignment(ValueExpression textAlignment) {
+	public void setTextAlignment(ValueExpression textAlignment) {
 		this.textAlignment = textAlignment;
 	}
 
-	public final void setCollapsed(ValueExpression collapsed) {
+	public void setCollapsed(ValueExpression collapsed) {
 		this.collapsed = collapsed;
 	}
 
-	public final void setBorder(ValueExpression border) {
+	public void setBorder(ValueExpression border) {
 		this.border = border;
 	}
 
-	public final void setAccessKey(ValueExpression accessKey) {
+	public void setAccessKey(ValueExpression accessKey) {
 		this.accessKey = accessKey;
 	}
 
-	public final void setTabIndex(ValueExpression tabIndex) {
+	public void setTabIndex(ValueExpression tabIndex) {
 		this.tabIndex = tabIndex;
 	}
 
-	public final void setGroupName(ValueExpression groupName) {
+	public void setGroupName(ValueExpression groupName) {
 		this.groupName = groupName;
 	}
 
-	public final void setBlurListener(ValueExpression blurListeners) {
+	public void setBlurListener(ValueExpression blurListeners) {
 		this.blurListeners = blurListeners;
 	}
 
-	public final void setFocusListener(ValueExpression focusListeners) {
+	public void setFocusListener(ValueExpression focusListeners) {
 		this.focusListeners = focusListeners;
 	}
 
-	public final void setSelectionListener(ValueExpression selectionListeners) {
+	public void setSelectionListener(ValueExpression selectionListeners) {
 		this.selectionListeners = selectionListeners;
 	}
 
-	public final void setLoadListener(ValueExpression loadListeners) {
+	public void setLoadListener(ValueExpression loadListeners) {
 		this.loadListeners = loadListeners;
 	}
 
-	public final void setScopeSaveValue(ValueExpression scopeSaveValue) {
+	public void setScopeSaveValue(ValueExpression scopeSaveValue) {
 		this.scopeSaveValue = scopeSaveValue;
 	}
 
-	public final void setScopeValue(ValueExpression scopeValue) {
+	public void setScopeValue(ValueExpression scopeValue) {
 		this.scopeValue = scopeValue;
 	}
 
-	public final void setScopeVar(ValueExpression scopeVar) {
+	public void setScopeVar(ValueExpression scopeVar) {
 		this.scopeVar = scopeVar;
 	}
 
-	public final void setOverStyleClass(ValueExpression overStyleClass) {
+	public void setOverStyleClass(ValueExpression overStyleClass) {
 		this.overStyleClass = overStyleClass;
 	}
 
-	public final void setCollapseEffect(ValueExpression collapseEffect) {
+	public void setCollapseEffect(ValueExpression collapseEffect) {
 		this.collapseEffect = collapseEffect;
 	}
 
-	public final void setCollapsedText(ValueExpression collapsedText) {
+	public void setCollapsedText(ValueExpression collapsedText) {
 		this.collapsedText = collapsedText;
 	}
 
-	public final void setUserExpandable(ValueExpression userExpandable) {
+	public void setUserExpandable(ValueExpression userExpandable) {
 		this.userExpandable = userExpandable;
 	}
 
@@ -167,6 +177,8 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 			if (ExpandBarComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
+			LOG.debug("  headingZone='"+headingZone+"'");
+			LOG.debug("  headingLevel='"+headingLevel+"'");
 			LOG.debug("  asyncRenderMode='"+asyncRenderMode+"'");
 			LOG.debug("  fontBold='"+fontBold+"'");
 			LOG.debug("  fontItalic='"+fontItalic+"'");
@@ -205,6 +217,24 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 
 		if (expandListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.EXPAND_LISTENER_TYPE, expandListeners);
+		}
+
+		if (headingZone != null) {
+			if (headingZone.isLiteralText()==false) {
+				component.setValueExpression(Properties.HEADING_ZONE, headingZone);
+
+			} else {
+				component.setHeadingZone(getBool(headingZone.getExpressionString()));
+			}
+		}
+
+		if (headingLevel != null) {
+			if (headingLevel.isLiteralText()==false) {
+				component.setValueExpression(Properties.HEADING_LEVEL, headingLevel);
+
+			} else {
+				component.setHeadingLevel(headingLevel.getExpressionString());
+			}
 		}
 
 		if (asyncRenderMode != null) {
@@ -433,6 +463,8 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 
 	public void release() {
 		expandListeners = null;
+		headingZone = null;
+		headingLevel = null;
 		asyncRenderMode = null;
 		fontBold = null;
 		fontItalic = null;

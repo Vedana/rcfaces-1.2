@@ -4,7 +4,6 @@
 package org.rcfaces.renderkit.html.internal;
 
 import java.util.Arrays;
-import java.util.Locale;
 
 import javax.faces.context.FacesContext;
 
@@ -13,6 +12,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.repository.IRepository;
+import org.rcfaces.core.internal.repository.IRepository.ICriteria;
 
 /**
  * 
@@ -20,8 +20,6 @@ import org.rcfaces.core.internal.repository.IRepository;
  * @version $Revision$ $Date$
  */
 public final class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory
             .getLog(JavaScriptWriterImpl.class);
 
@@ -80,13 +78,11 @@ public final class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
         start = false;
 
         if (LOG.isDebugEnabled()) {
-            LOG
-                    .debug("Initialize Writer componentId='"
-                            + writer.getComponentRenderContext()
-                                    .getComponentClientId()
-                            + "' requiresPending="
-                            + (javascriptRenderContext != null && javascriptRenderContext
-                                    .isRequiresPending()) + ".");
+            LOG.debug("Initialize Writer componentId='"
+                    + writer.getComponentRenderContext().getComponentClientId()
+                    + "' requiresPending="
+                    + (javascriptRenderContext != null && javascriptRenderContext
+                            .isRequiresPending()) + ".");
         }
 
         if (javascriptRenderContext != null
@@ -207,6 +203,9 @@ public final class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
         if (useMetaContentScriptType == false) {
             writer.writeType(IHtmlRenderContext.JAVASCRIPT_TYPE);
         }
+        if (getHtmlRenderContext().getProcessContext().isDesignerMode()) {
+            writer.writeAttributeNS("rcfaces", "core");
+        }
 
         if (useScriptCData) {
             write(IHtmlRenderContext.JAVASCRIPT_CDATA_BEGIN);
@@ -244,14 +243,21 @@ public final class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
                     + Arrays.asList(filesToRequire));
         }
 
-        Locale locale = javascriptRenderContext.getUserLocale();
+        ICriteria criteria = javascriptRenderContext.getCriteria();
         for (int i = 0; i < filesToRequire.length; i++) {
             IRepository.IFile file = filesToRequire[i];
 
             if (i > 0) {
                 write(',');
             }
-            writeString(file.getURI(locale));
+
+            String fileURI = file.getURI(criteria);
+            if (fileURI == null) {
+                throw new NullPointerException("Can not get URI of file '"
+                        + fileURI + "' criteria='" + criteria + "'");
+            }
+
+            writeString(fileURI);
         }
         writeln(");");
 
@@ -288,7 +294,8 @@ public final class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
             return varId;
         }
 
-        // Plus d'exception car on peut initialiser le componentVarName en conséquence ...
+        // Plus d'exception car on peut initialiser le componentVarName en
+        // conséquence ...
         // throw new FacesException("Var is not initialized yet !");
         return null;
     }

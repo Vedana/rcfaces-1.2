@@ -24,7 +24,7 @@ var __statics = {
 		backgroundMode: f_shell.GREYED_BACKGROUND_MODE
 	}
 	
-}
+};
 
 var __members = {
 
@@ -54,11 +54,12 @@ var __members = {
 		
 		if (this.nodeType==f_core.ELEMENT_NODE) {
 			
-			this._parameters=f_core.ParseDataAttribute(this, "v:parameter");
+			this._parameters=f_core.ParseDataAttribute(this,f_core._VNS+":parameter");
 			
-			this.f_setViewURL(f_core.GetAttribute(this, "v:viewURL", "about:blank"));
+			var viewURL=f_core.GetAttributeNS(this, "viewURL", "about:blank");
+			this.f_setViewURL(viewURL);
 
-			if (f_core.GetBooleanAttribute(this, "v:visible", true)) {
+			if (f_core.GetBooleanAttributeNS(this, "visible", true)) {
 				this.f_open();
 			}
 		}		
@@ -78,6 +79,7 @@ var __members = {
 			this.f_finalizeIframe(iframe);
 		}
 		this._parameters=undefined;
+		this._loadFrame=undefined;
 		this.f_super(arguments);		
 	},
 	/**
@@ -181,7 +183,15 @@ var __members = {
 			var ds="";
 			var first=true;
 			
+			var system=f_env.GetSystemParameterNames();
+			
 			for(var key in param) {
+				
+				if (system[key]) {
+					url=f_core.AddParameter(url, key, param[key]);
+					continue;
+				}
+				
 				if (first) {
 					first=false;
 				} else {
@@ -202,37 +212,36 @@ var __members = {
 	},
 	
 	f_fillBody: function(base) {
-		var iframe=f_core.CreateElement(base, "iframe");
+		var iframe=f_core.CreateElement(base, "iframe", {
+			frameBorder: 0, //ajouter le frameBorder avant l'ajout au DOM
+			className: "f_viewDialog_frame",
+			title: ""
+		});
 		this._iframe=iframe;
 		
-		iframe.className="f_viewDialog_frame";
-		iframe.frameBorder=0;
 		iframe.style.width=this.f_getWidth();
 		iframe.style.height=this.f_getHeight();
 		
 		var self=this;
-		if (f_core.IsInternetExplorer()) {
+		var version = f_core.GetBrowserVersion();
+		if (f_core.IsInternetExplorer() && version < 9 ) { //ie 9
 			f_core.Debug(f_viewDialog, "f_fillBody: IE use onreadystatechange ");
-			iframe.onreadystatechange=function() {
+			
+			this._loadFrame = function() {
 				if (window._rcfacesExiting) {
 					return false;
 				}
 
-				f_core.Debug(f_viewDialog, "f_fillBody: on ready state change: "+this+" state="+this.readyState);
-
-				if (this.readyState != "interactive") {
-					return;
-				}	
-				
-				this.onreadystatechange=null;
-				
+				var doc=f_core.GetFrameDocument(iframe);
 				try {
-					self.f_performFrameReady(this, this.contentWindow.document);
+					self.f_performFrameReady(iframe, doc);
 
 				} catch (x) {					
 					f_core.Error(f_viewDialog, "f_fillBody: f_performFrameReady throws exception.", x);
 				}
 			};
+			
+			f_core.AddEventListener(iframe, "load", this._loadFrame);
 			
 		} else {
 			f_core.Debug(f_viewDialog, "f_fillBody: Firefox use onload ");
@@ -245,8 +254,9 @@ var __members = {
 	
 				this.onload=null;
 				
+				var doc=f_core.GetFrameDocument(this);
 				try {
-					self.f_performFrameReady(this, this.contentWindow.document);
+					self.f_performFrameReady(this, doc);
 
 				} catch (x) {					
 					f_core.Error(f_viewDialog, "f_fillBody: f_performFrameReady throws exception.", x);
@@ -275,7 +285,53 @@ var __members = {
 	 * @return void
 	 */
 	f_performFrameReady: function(iframe, doc) {
-		f_core.Debug(f_frameShellDecorator, "f_performFrameReady: frame '"+iframe+"' is ready !");
+		f_core.Debug(f_frameShellDecorator, "f_performFrameReady: frame '"+iframe+"' is ready ! (doc="+doc+")");
+		
+		this.f_setBody(doc.body);
+		
+		var component=f_focusManager.Get().f_getFocusComponent();
+		if (!component) {
+			return;
+		}
+		
+		var shellDecorator=this.f_getShellDecorator();
+		if (!shellDecorator) {
+			return;
+		}
+
+		var title=shellDecorator.f_getTitle();
+		if (title) {
+			doc.title=title;
+			iframe.title=title;
+		}
+		
+		try {
+			if (shellDecorator.f_isIntoShell(component)) {
+				return false;
+			}
+			
+			var comp=f_core.GetNextFocusableComponent(doc.body);
+			if (comp) {
+				f_core.SetFocus(comp, true);
+			}
+		
+		} catch (ex) {
+			f_core.Error(f_viewDialog, "f_performFrameReady: Try to identify a focus component", ex);
+		}
+	},
+
+	f_preDestruction: function() {
+		if (f_env.GetPerformanceTimingFeatures()) {
+			var iframe=this._iframe;
+			if (iframe) {
+				var localWin=iframe.contentWindow;
+				if (localWin.f_core) {			
+					f_core.FramePerformanceTimingLog(localWin);
+				}
+			}
+		}
+		
+		this.f_super(arguments);
 	},
 	
 	/* Plus nécessaire par la redéfinition de  _OnExit 
@@ -317,11 +373,11 @@ var __members = {
 	toString: function() {
 		return "[f_viewDialog viewURL='"+this._viewURL+"']";
 	}
-}
+};
 
 new f_class("f_viewDialog", {
 	extend: f_dialog,
-	aspects: [ fa_immediate ],
+	aspects: [ fa_immediate, fa_clientData ],
 	members: __members,
 	statics: __statics
 });

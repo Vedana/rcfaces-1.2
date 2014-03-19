@@ -11,43 +11,41 @@ import java.util.Map;
  */
 public class MapIndexesModel extends CollectionIndexesModel {
 
-    private static final String REVISION = "$Revision$";
+	private static final long serialVersionUID = -6123923382601149193L;
 
-    private static final long serialVersionUID = -6123923382601149193L;
+	private static final Object DEFAULT_VALUE = Boolean.TRUE;
 
-    private static final Object DEFAULT_VALUE = Boolean.TRUE;
+	private final Map map;
 
-    private final Map map;
+	private final Object defaultValue;
 
-    private final Object defaultValue;
+	public MapIndexesModel(Map map) {
+		this(map, DEFAULT_VALUE);
+	}
 
-    public MapIndexesModel(Map map) {
-        this(map, DEFAULT_VALUE);
-    }
+	public MapIndexesModel(Map map, Object defaultValue) {
+		super(map.keySet());
 
-    public MapIndexesModel(Map map, Object defaultValue) {
-        super(map.keySet());
+		this.map = map;
+		this.defaultValue = defaultValue;
+	}
 
-        this.map = map;
-        this.defaultValue = defaultValue;
-    }
+	public boolean addIndex(int index) {
+		if (commited) {
+			throw new IllegalStateException("Already commited indexes model.");
+		}
 
-    public boolean addIndex(int index) {
-        if (commited) {
-            throw new IllegalStateException("Already commited indexes model.");
-        }
+		map.put(getKey(index), getSelectedValue(index));
 
-        map.put(getKey(index), getSelectedValue(index));
+		return true;
+	}
 
-        return true;
-    }
+	protected Object getSelectedValue(int index) {
+		return defaultValue;
+	}
 
-    protected Object getSelectedValue(int index) {
-        return defaultValue;
-    }
-
-    public IIndexesModel copy() {
-        return new MapIndexesModel(map, defaultValue);
-    }
+	public IIndexesModel copy() {
+		return new MapIndexesModel(map, defaultValue);
+	}
 
 }

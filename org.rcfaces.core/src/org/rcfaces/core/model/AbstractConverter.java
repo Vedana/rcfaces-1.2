@@ -12,23 +12,22 @@ import javax.faces.convert.Converter;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractConverter implements Converter {
-    private static final String REVISION = "$Revision$";
 
-    private transient boolean transientFlag;
+	private transient boolean transientFlag;
 
-    public void restoreState(FacesContext arg0, Object state) {
-    }
+	public void restoreState(FacesContext arg0, Object state) {
+	}
 
-    public Object saveState(FacesContext arg0) {
-        return null;
-    }
+	public Object saveState(FacesContext arg0) {
+		return null;
+	}
 
-    public void setTransient(boolean transientFlag) {
-        this.transientFlag = transientFlag;
-    }
+	public void setTransient(boolean transientFlag) {
+		this.transientFlag = transientFlag;
+	}
 
-    public boolean isTransient() {
-        return transientFlag;
-    }
+	public boolean isTransient() {
+		return transientFlag;
+	}
 
 }

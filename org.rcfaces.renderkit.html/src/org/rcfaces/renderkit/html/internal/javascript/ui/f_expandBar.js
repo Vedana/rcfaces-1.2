@@ -5,7 +5,7 @@
 /**
  * class f_expandBar
  *
- * @class public f_expandBar extends f_component, fa_disabled, fa_readOnly, fa_collapsed, fa_groupName, fa_overStyleClass
+ * @class public f_expandBar extends f_component, fa_disabled, fa_readOnly, fa_collapsed, fa_groupName, fa_overStyleClass, fa_asyncRender
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -84,9 +84,9 @@ var __statics = {
 	
 		expandBar.f_fireEvent(f_event.SELECTION, evt);
 		
-		return true;
+		return f_core.CancelJsEvent(evt);
 	}
-}
+};
 
 var __members = {
 	f_expandBar: function() {
@@ -94,7 +94,7 @@ var __members = {
 
 		var doc=this.ownerDocument;
 
-		var userExpandable=f_core.GetBooleanAttribute(this, "v:userExpandable", true);
+		var userExpandable=f_core.GetBooleanAttributeNS(this,"userExpandable", true);
 
 		var txt=null;
 		var head=doc.getElementById(this.id+f_expandBar._HEAD_ID_SUFFIX);
@@ -130,14 +130,14 @@ var __members = {
 			this._content=doc.getElementById(this.id+f_expandBar._CONTENT_ID_SUFFIX);
 		}
 			
-		this._normalText=f_core.GetAttribute(this, "v:text", txt);
-		this._collapsedText=f_core.GetAttribute(this, "v:collapsedText", txt);
+		this._normalText=f_core.GetAttributeNS(this,"text", txt);
+		this._collapsedText=f_core.GetAttributeNS(this,"collapsedText", txt);
 	
-		var groupName=f_core.GetAttribute(this, "v:groupName");
+		var groupName=f_core.GetAttributeNS(this,"groupName");
 		if (groupName ) {	
 			this._groupName=groupName;
 		
-			this.f_addToGroup(groupName, this);
+			this.f_addToGroup(groupName, this.id);
 		}
 	
 		if (userExpandable) {
@@ -205,7 +205,8 @@ var __members = {
 		case f_event.KEYDOWN:
 		case f_event.KEYUP:
 			var link=this.f_getButton();
-			if (!link) {
+			
+			if (!link || !link.offsetTop) {
 				return;
 			}
 			
@@ -290,8 +291,10 @@ var __members = {
 			cmp=this;
 		}
 		
-		f_core.Debug(f_expandBar, "f_setFocus: focus component '"+cmp+"' for expandBar '"+this.id+"'.");
-		cmp.focus();
+		if( cmp.visible){ // IE
+			f_core.Debug(f_expandBar, "f_setFocus: focus component '"+cmp+"' for expandBar '"+this.id+"'.");
+			cmp.focus();
+		}
 	},
 	/**
 	 * @method protected
@@ -303,11 +306,11 @@ var __members = {
 			return false;
 		}
 
-		var ret=this.f_fireEvent(f_event.EXPAND, evt);
-		
+		var ret=this.f_fireEvent(f_event.SELECTION, evt);
+			
 		this.f_setFocus();
 		
-		return ret;
+		return f_core.CancelJsEvent(evt);
 	},
 	/**
 	 * @method protected
@@ -405,7 +408,7 @@ var __members = {
 		if (!set && groupName) {
 			var p=this;
 			
-			this.f_mapIntoGroup(groupName, function(item) {
+			this.f_mapIntoGroupOfComponents(groupName, function(item) {
 				if (item==p) {
 					return;
 				}
@@ -431,7 +434,7 @@ var __members = {
 		var content=this._content;
 		var body=this._body;		
 		
-		effect = f_core.GetAttribute(this, "v:effect");
+		effect = f_core.GetAttributeNS(this,"effect");
 		if (effect) {
 			effect=f_core.CreateEffectByName(effect, content, function(value) {
 				
@@ -543,11 +546,47 @@ var __members = {
 		this.f_setCollapsed(false);
 		
 		return this.f_super(arguments);		
+	},
+	f_documentComplete: function() {
+		var sh=this.style.height;
+		if (sh && sh.indexOf("px")>0) {
+			this.f_updateHeight(parseInt(sh, 10));
+		}
+	},
+	f_updateHeight: function(height) {
+		f_core.Assert(typeof (height) == "number",
+				"f_expandBar.f_setHeight: height parameter must be a number ! ("
+						+ height + ")");
+
+		this.style.height = height + "px";
+		
+		var border=f_core.ComputeContentBoxBorderLength(this, "top", "bottom");
+		height-=border;
+		
+		var head=this._head;
+		if (head) {
+			var hh=head.offsetHeight;
+			height-=hh;
+		}
+		
+		var body=this._body;
+		if (body) {
+			body.style.height=height + "px";
+			
+			var content=this._content;
+			if (content && content!=body) {
+				var borderBody=f_core.ComputeContentBoxBorderLength(body, "top", "bottom");
+				height-=borderBody;
+			
+				content.style.height=height+"px";
+			}
+		}
 	}
-}
+};
+
 new f_class("f_expandBar", {
 	extend: f_component,
-	aspects: [ fa_disabled, fa_readOnly, fa_collapsed, fa_groupName, fa_overStyleClass ],
+	aspects: [ fa_disabled, fa_readOnly, fa_collapsed, fa_groupName, fa_overStyleClass, fa_asyncRender ],
 	statics: __statics,
 	members: __members
 });

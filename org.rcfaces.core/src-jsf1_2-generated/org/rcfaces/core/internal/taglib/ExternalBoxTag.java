@@ -26,19 +26,19 @@ public class ExternalBoxTag extends AbstractOutputTag implements Tag {
 		return ExternalBoxComponent.COMPONENT_TYPE;
 	}
 
-	public final void setLoadListener(ValueExpression loadListeners) {
+	public void setLoadListener(ValueExpression loadListeners) {
 		this.loadListeners = loadListeners;
 	}
 
-	public final void setOverStyleClass(ValueExpression overStyleClass) {
+	public void setOverStyleClass(ValueExpression overStyleClass) {
 		this.overStyleClass = overStyleClass;
 	}
 
-	public final void setScrolling(ValueExpression scrolling) {
+	public void setScrolling(ValueExpression scrolling) {
 		this.scrolling = scrolling;
 	}
 
-	public final void setContentURL(ValueExpression contentURL) {
+	public void setContentURL(ValueExpression contentURL) {
 		this.contentURL = contentURL;
 	}
 

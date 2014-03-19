@@ -29,31 +29,31 @@ public class UIImageItemTag extends SelectItemTag implements Tag {
 		return UIImageItemComponent.COMPONENT_TYPE;
 	}
 
-	public final void setVisible(ValueExpression visible) {
+	public void setVisible(ValueExpression visible) {
 		this.visible = visible;
 	}
 
-	public final void setDisabledImageURL(ValueExpression disabledImageURL) {
+	public void setDisabledImageURL(ValueExpression disabledImageURL) {
 		this.disabledImageURL = disabledImageURL;
 	}
 
-	public final void setHoverImageURL(ValueExpression hoverImageURL) {
+	public void setHoverImageURL(ValueExpression hoverImageURL) {
 		this.hoverImageURL = hoverImageURL;
 	}
 
-	public final void setSelectedImageURL(ValueExpression selectedImageURL) {
+	public void setSelectedImageURL(ValueExpression selectedImageURL) {
 		this.selectedImageURL = selectedImageURL;
 	}
 
-	public final void setImageURL(ValueExpression imageURL) {
+	public void setImageURL(ValueExpression imageURL) {
 		this.imageURL = imageURL;
 	}
 
-	public final void setAlternateText(ValueExpression alternateText) {
+	public void setAlternateText(ValueExpression alternateText) {
 		this.alternateText = alternateText;
 	}
 
-	public final void setRendered(ValueExpression rendered) {
+	public void setRendered(ValueExpression rendered) {
 		this.rendered = rendered;
 	}
 

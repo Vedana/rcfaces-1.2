@@ -32,7 +32,6 @@ import org.rcfaces.core.provider.AbstractProvider;
  */
 public abstract class ImageContentAccessorHandler extends AbstractProvider
         implements IContentAccessorHandler {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(ImageContentAccessorHandler.class);
@@ -47,6 +46,7 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
     public ImageContentAccessorHandler() {
     }
 
+    @Override
     public void startup(FacesContext facesContext) {
         super.startup(facesContext);
 
@@ -80,8 +80,7 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
 
         if (isProviderEnabled() == false) {
             if (LOG.isDebugEnabled()) {
-                LOG
-                        .debug("Provider is disabled, return an unsupported content accessor flag");
+                LOG.debug("Provider is disabled, return an unsupported content accessor flag");
             }
 
             if (contentAccessor.getPathType() == IContentPath.FILTER_PATH_TYPE) {

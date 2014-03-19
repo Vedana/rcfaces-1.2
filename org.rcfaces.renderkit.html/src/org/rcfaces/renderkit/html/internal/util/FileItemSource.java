@@ -16,7 +16,6 @@ import org.rcfaces.core.item.ICharSetItem;
  * @version $Revision$ $Date$
  */
 public class FileItemSource implements StateHolder, IResourceKeyParticipant {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(FileItemSource.class);
 

@@ -26,9 +26,8 @@ import org.rcfaces.core.internal.util.Delay;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
+@SuppressWarnings("unused")
 public class Constants {
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory.getLog(Constants.class);
 
     private static final String CONSTANT_PREFIX;
@@ -107,7 +106,11 @@ public class Constants {
 
     public static final boolean BASIC_CONTENT_WEAK_CACHE_ENABLED = true;
 
+    public static final int LIMITED_MAP_WEAK_CACHE_SIZE = 256;
+
     public static final int BASIC_CONTENT_CACHE_SIZE = 256;
+
+    public static final boolean BASIC_CONTENT_CACHE_SOFT_REFERENCES = true;
 
     private static final String version;
     static {
@@ -152,6 +155,10 @@ public class Constants {
     public static final int MINIMUM_GZIP_BUFFER_SIZE = 128;
 
     public static final int CONTENT_STORAGE_CACHE_SIZE = 512;
+
+    public static final boolean CONTENT_STORAGE_CACHE_SOFT_REFERENCES = true;
+
+    public static final boolean LOCALE_CRITERIA_LANGUAGE_ONLY = true;
 
     static {
         LOG.info("READ_ONLY_COLLECTION_LOCK_ENABLED="
@@ -200,7 +207,9 @@ public class Constants {
 
         LOG.info("REPOSITORY_DEFAULT_LOCALE=" + REPOSITORY_DEFAULT_LOCALE);
 
-        LOG.info("CONTENT_STORAGE_CACHE_SIZE=" + CONTENT_STORAGE_CACHE_SIZE);
+        LOG.info("CONTENT_STORAGE_CACHE_SIZE=" + CONTENT_STORAGE_CACHE_SIZE
+                + "  (soft references=" + CONTENT_STORAGE_CACHE_SOFT_REFERENCES
+                + ")");
 
         LOG.info("FACELETS_SUPPORT=" + FACELETS_SUPPORT);
 
@@ -241,7 +250,7 @@ public class Constants {
         return version;
     }
 
-    public static final String searchVersion(Class clazz,
+    public static final String searchVersion(Class< ? > clazz,
             String systemParameter, String versionName) {
 
         try {
@@ -315,13 +324,13 @@ public class Constants {
                 + "' uniqueness.");
 
         try {
-            Enumeration enumeration = Constants.class.getClassLoader()
+            Enumeration<URL> enumeration = Constants.class.getClassLoader()
                     .getResources("META-INF/MANIFEST.MF");
 
-            Set resources = new HashSet(2);
+            Set<URL> resources = new HashSet<URL>(2);
 
             for (; enumeration.hasMoreElements();) {
-                URL url = (URL) enumeration.nextElement();
+                URL url = enumeration.nextElement();
 
                 InputStream inputStream = url.openStream();
                 if (inputStream == null) {

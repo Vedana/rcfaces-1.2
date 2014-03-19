@@ -25,36 +25,46 @@ public class CardBoxTag extends AbstractInputTag implements Tag {
 	private ValueExpression scopeValue;
 	private ValueExpression scopeVar;
 	private ValueExpression asyncDecodeMode;
+	private ValueExpression headingZone;
+	private ValueExpression headingLevel;
 	public String getComponentType() {
 		return CardBoxComponent.COMPONENT_TYPE;
 	}
 
-	public final void setSelectionListener(ValueExpression selectionListeners) {
+	public void setSelectionListener(ValueExpression selectionListeners) {
 		this.selectionListeners = selectionListeners;
 	}
 
-	public final void setAsyncRenderMode(ValueExpression asyncRenderMode) {
+	public void setAsyncRenderMode(ValueExpression asyncRenderMode) {
 		this.asyncRenderMode = asyncRenderMode;
 	}
 
-	public final void setPreferences(ValueExpression preferences) {
+	public void setPreferences(ValueExpression preferences) {
 		this.preferences = preferences;
 	}
 
-	public final void setScopeSaveValue(ValueExpression scopeSaveValue) {
+	public void setScopeSaveValue(ValueExpression scopeSaveValue) {
 		this.scopeSaveValue = scopeSaveValue;
 	}
 
-	public final void setScopeValue(ValueExpression scopeValue) {
+	public void setScopeValue(ValueExpression scopeValue) {
 		this.scopeValue = scopeValue;
 	}
 
-	public final void setScopeVar(ValueExpression scopeVar) {
+	public void setScopeVar(ValueExpression scopeVar) {
 		this.scopeVar = scopeVar;
 	}
 
-	public final void setAsyncDecodeMode(ValueExpression asyncDecodeMode) {
+	public void setAsyncDecodeMode(ValueExpression asyncDecodeMode) {
 		this.asyncDecodeMode = asyncDecodeMode;
+	}
+
+	public void setHeadingZone(ValueExpression headingZone) {
+		this.headingZone = headingZone;
+	}
+
+	public void setHeadingLevel(ValueExpression headingLevel) {
+		this.headingLevel = headingLevel;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
@@ -68,6 +78,8 @@ public class CardBoxTag extends AbstractInputTag implements Tag {
 			LOG.debug("  scopeValue='"+scopeValue+"'");
 			LOG.debug("  scopeVar='"+scopeVar+"'");
 			LOG.debug("  asyncDecodeMode='"+asyncDecodeMode+"'");
+			LOG.debug("  headingZone='"+headingZone+"'");
+			LOG.debug("  headingLevel='"+headingLevel+"'");
 		}
 		if ((uiComponent instanceof CardBoxComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -133,6 +145,24 @@ public class CardBoxTag extends AbstractInputTag implements Tag {
 				component.setAsyncDecodeMode(asyncDecodeMode.getExpressionString());
 			}
 		}
+
+		if (headingZone != null) {
+			if (headingZone.isLiteralText()==false) {
+				component.setValueExpression(Properties.HEADING_ZONE, headingZone);
+
+			} else {
+				component.setHeadingZone(getBool(headingZone.getExpressionString()));
+			}
+		}
+
+		if (headingLevel != null) {
+			if (headingLevel.isLiteralText()==false) {
+				component.setValueExpression(Properties.HEADING_LEVEL, headingLevel);
+
+			} else {
+				component.setHeadingLevel(headingLevel.getExpressionString());
+			}
+		}
 	}
 
 	public void release() {
@@ -143,6 +173,8 @@ public class CardBoxTag extends AbstractInputTag implements Tag {
 		scopeValue = null;
 		scopeVar = null;
 		asyncDecodeMode = null;
+		headingZone = null;
+		headingLevel = null;
 
 		super.release();
 	}

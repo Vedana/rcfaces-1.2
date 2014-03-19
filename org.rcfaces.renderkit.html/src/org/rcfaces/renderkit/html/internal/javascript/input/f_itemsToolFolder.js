@@ -138,7 +138,7 @@ var __members = {
 		var component=fa_namingContainer.FindComponent(this, id, false, f_itemsToolFolder._LAZY_INITIALIZATIONS);
 		f_core.Assert(component, "f_itemsToolFolder.f_appendToolItem2: Can not find component associated to id '"+id+"'.");
 		
-		var lazyMode=!f_class.IsObjectInitialized(component);
+		var lazyMode=!f_classLoader.IsObjectInitialized(component);
 		if (lazyMode ) {
 			var lazyClassLoader=this._lazyClassLoader;
 			if (!lazyClassLoader) {
@@ -303,7 +303,11 @@ var __members = {
 		f_core.Debug(f_itemsToolFolder, "_itemOnSelect: Call SELECTION on item='"+item+"' value='"+itemValue+"'.");
 		
 		this._immediateItemPerformed=(item && item._immediate);		
-		var detail=(item && item._immediate)?f_event.IMMEDIATE_DETAIL:0;
+		var detail={value:0};
+		if (item && item._immediate) {
+			detail.value|=f_event.IMMEDIATE_DETAIL;
+			detail.immediate=true;
+		}
 		
 		this.f_fireEvent(f_event.SELECTION, event.f_getJsEvent(), item, itemValue, null, detail);
 		
@@ -347,7 +351,11 @@ var __members = {
 		
 		this._immediateItemPerformed=(item && item._immediate);
 		
-		var detail=(item && item._immediate)?f_event.IMMEDIATE_DETAIL:0;
+		var detail={value:0};
+		if (item && item._immediate) {
+			detail.value|=f_event.IMMEDIATE_DETAIL;
+			detail.immediate=true;
+		}
 		
 		this.f_fireEvent(f_event.SELECTION, event.f_getJsEvent(), item, itemValue, null, detail);
 		

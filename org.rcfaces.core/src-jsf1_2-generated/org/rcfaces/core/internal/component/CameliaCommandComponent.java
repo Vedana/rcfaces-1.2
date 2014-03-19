@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import javax.el.ValueExpression;
 
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.render.Renderer;
 import javax.faces.event.ActionEvent;
@@ -48,8 +49,11 @@ import org.rcfaces.core.internal.component.IInitializationState;
 import org.rcfaces.core.internal.converter.StrategyListenerConverter;
 import org.rcfaces.core.internal.manager.IContainerManager;
 import org.rcfaces.core.internal.manager.ITransientAttributesManager;
+import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
 import org.rcfaces.core.internal.renderkit.IAsyncRenderer;
 import org.rcfaces.core.internal.renderkit.IRendererExtension;
+import org.rcfaces.core.internal.renderkit.AbstractRendererTypeFactory;
+import org.rcfaces.core.internal.renderkit.designer.IDesignerEngine;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.tools.BindingTools;
 import org.rcfaces.core.event.IValidationListener;
@@ -60,16 +64,19 @@ import org.rcfaces.core.event.ValidationEvent;
  */
 public abstract class CameliaCommandComponent extends javax.faces.component.UICommand implements
 		IRCFacesComponent, IContainerManager, IComponentLifeCycle, ITransientAttributesManager {
-	private static final String REVISION = "$Revision$";
 
 	private static final Log LOG = LogFactory.getLog(CameliaCommandComponent.class);
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(Arrays.asList(new String[] {"immediate","value"}));
+	protected static final Set<String> CAMELIA_ATTRIBUTES=new HashSet(Arrays.asList(new String[] {"immediate","value"}));
+
+	private static final String NULL_RENDERER_TYPE = "##NULL RENDERER##";
 
 	protected transient IComponentEngine engine;
 
 	private transient IStateChildrenList stateChildrenList;
 
+	private transient String rendererType;
+	
 
 	protected CameliaCommandComponent() {
 		IFactory factory = Constants1.getCameliaFactory();
@@ -115,31 +122,39 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
     protected void setDefaultProperties(IInitializationState state) {
     }
 
+    @Override
 	public String getFamily() {
 		return CameliaComponents.FAMILY;
 	}
 
+    @Override
 	public final String getRendererType() {
-		String rendererType = super.getRendererType();
-		if (rendererType == null) {
-        	if (LOG.isTraceEnabled()) {
-        		LOG.trace("RendererType is null for component id='"+getId()+"' class='"+getClass()+"'");
-        	}
-			return null;
-		}
-
-		if ((this instanceof ILookAndFeelCapability) == false) {
+		if (rendererType!=null) {
+			if (rendererType == NULL_RENDERER_TYPE) {
+				return null;
+			}
+			
 			return rendererType;
 		}
-
-		String lookId = ((ILookAndFeelCapability) this).getLookId();
-		if (lookId == null) {
-			return rendererType;
+		
+		rendererType = super.getRendererType();
+       	if (LOG.isTraceEnabled()) {
+    		LOG.trace("RendererType is null for component id='"+getId()+"' class='"+getClass()+"'");
 		}
 
-		return rendererType + ":" + lookId;
+		FacesContext facesContext=FacesContext.getCurrentInstance();
+
+		rendererType=AbstractRendererTypeFactory.get(facesContext).computeRendererType(facesContext, this, getFamily(), rendererType);
+ 		if (rendererType == null) {
+            rendererType = NULL_RENDERER_TYPE;
+
+            return null;
+        }
+		
+		return rendererType;
 	}
 
+    @Override
 	public void restoreState(FacesContext context, Object state) {
 		if (LOG.isTraceEnabled()) {
 			LOG.trace("Restoring state of component '"+getId()+"'.");
@@ -163,6 +178,7 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
 		}
 	}
 
+    @Override
 	public Object saveState(FacesContext context) {
 		if (LOG.isTraceEnabled()) {
 			LOG.trace("Saving state of component '"+getId()+"'.");
@@ -186,6 +202,7 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
 		return states;
 	}
 
+    @Override
 	public void setValueExpression(String name, ValueExpression binding) {
 		if (getCameliaFields().contains(name)) {
 			if (name.equals(getCameliaValueAlias())) {
@@ -203,7 +220,7 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
 		super.setValueExpression(name, binding);
 	}
 
-	protected Set getCameliaFields() {
+	protected Set<String> getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}
 
@@ -211,6 +228,7 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
 		return null;
 	}
 
+    @Override
 	public final ValueExpression getValueExpression(String name) {
 		if (getCameliaFields().contains(name)) {
 			if (name.equals(getCameliaValueAlias())) {
@@ -231,6 +249,7 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
 	}
 */
 
+    @Override
     public void encodeBegin(FacesContext context) throws IOException {
 		if (context == null) {
 			throw new NullPointerException("FacesContext is null");
@@ -246,6 +265,7 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
 	    }
 	}
 	
+    @Override
     public void encodeChildren(FacesContext context) throws IOException {
 		if (context == null) {
 			throw new NullPointerException("FacesContext is null");
@@ -261,7 +281,8 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
 	    }
 	}
 	
-    public void encodeEnd(FacesContext context) throws IOException {
+    @Override
+ 	public void encodeEnd(FacesContext context) throws IOException {
 		if (context == null) {
 			throw new NullPointerException("FacesContext is null");
 		}
@@ -280,6 +301,7 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
 		return ComponentTools.verifyAsyncDecode(context, (IAsyncDecodeModeCapability) this, phaseId);
 	}
 	
+    @Override
 	public void processDecodes(FacesContext context) {
 		if (context == null) {
 			throw new NullPointerException();
@@ -336,6 +358,7 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
 	    }
 	}
 
+    @Override
 	public void processValidators(FacesContext context) {
 		if (context == null) {
             throw new NullPointerException("Context is NULL to processValidators");
@@ -390,6 +413,7 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
 		engine.processValidation(context);			
 	}
  
+    @Override
     public void processUpdates(FacesContext context) {
 
 		try {
@@ -433,12 +457,13 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
 	 * 
 	 * @see javax.faces.component.UIComponent#getChildren()
 	 */
-	public final List getChildren() {
+    @Override
+	public final List<UIComponent> getChildren() {
 		if (Constants.STATED_COMPONENT_CHILDREN_LIST==false) {
 			return super.getChildren();
 		}
 		
-		List list = super.getChildren();
+		List<UIComponent> list = super.getChildren();
 
 		if (stateChildrenList == null) {
 			stateChildrenList = engine.createStateChildrenList();
@@ -495,6 +520,7 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
 		return true;
 	}
 	
+    @Override
 	public boolean isRendered() {
 		if (super.isRendered()==false) {
 			return false;
@@ -517,6 +543,7 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
 		return null;
 	}
 
+    @Override
    public void queueEvent(FacesEvent e) {
 // Un keyPress doit pouvoir activer l'immediate !
 // Oui mais le code d'appel ne fait r�f�rence qu'a des ActionEvent
@@ -560,6 +587,9 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
         }
     }
 
+	public void settedPhase(FacesContext facesContext) {
+	}
+
     public void decodePhase(FacesContext facesContext) {
     }
 
@@ -597,13 +627,28 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
 
 		return true;
     } 
+
+    protected final void designerDeclareCompositeChild(FacesContext facesContext, UIComponent child) {
+
+        IDesignerEngine designerEngine = AbstractProcessContext.getProcessContext(facesContext).getDesignerEngine();
+
+        if (designerEngine == null) {
+            return;
+        }
+
+        designerEngine.declareCompositeChild(this, child);
+    }
 	
+<<<<<<< HEAD
 	protected final IDataMapAccessor getDataMapAccessor(FacesContext context, String name,
             boolean modify) {
             
     	return engine.getDataMapAccessor(context, name, modify);
     }
 	
+=======
+    @Override
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	public String toString() {
 		String name=getClass().getName();
 		name=name.substring(name.lastIndexOf('.')+1);
@@ -616,7 +661,8 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
 		
 		s+=","+engine.toString();
 		
-		s+=",rendererId='"+getRendererType()+"'";
+		// On prend le super, sinon il peut precalculer le rendererType trop tot !
+		s+=",rendererId='"+super.getRendererType()+"'";
 		
 		if (getFamily()!=CameliaComponents.FAMILY) {
 			s+=",family='"+getFamily()+"'";
@@ -627,15 +673,16 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
 	
 	public void broadcast(FacesEvent event) {
 
-				
+
 				if (event instanceof ActionEvent) {
-					// Traitement local, sinon l'actionEvent est traité 2 fois !
-					
-					FacesListener listeners[]=getFacesListeners(FacesListener.class);
-					ComponentTools.broadcastCommand(this, (ActionEvent)event, listeners);
-					return;
+				// Traitement local, sinon l'actionEvent est traité 2 fois !
+
+				FacesListener listeners[]=getFacesListeners(FacesListener.class);
+				ComponentTools.broadcastCommand(this, (ActionEvent)event,
+				listeners);
+				return;
 				}
-				
+
 				super.broadcast(event);
 			
 	}

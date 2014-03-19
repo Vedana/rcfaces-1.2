@@ -1,12 +1,282 @@
-Format de génération des images:
-Permet d'utiliser les informations passées en parametre pour l'adaptation
+
+f_suggestTextEntry:
+Correction du rechargement AJAX intenspectif lors de l'utilisation du BACKSPACE
+
+KeyEntryRenderer:
+Correction d'une regression lors de l'affichage de la clef
+
+f_keyEntry, f_comboGrid, KeyEntryRenderer, ComboGridRenderer:
+Validation du champ coté serveur
+
+HiddenValue:
+Support de l'initListener Javascript
+
+f_classLoader/f_core:
+Tentative de suppression du double submit
+
+f_core/f_event:
+Ajout des méthodes raccourcis "$" et "$$" pour la recherche de composants
+
+f_dataGrid/f_grid/AbstractGridRenderer:
+Ajout de la possibilité de generation des HEADERS des TD pour les dataGrid  (a activer)
+
+ComboGridRenderer:
+Amélioration du tooltip
+Passe le container en role PRESENTATION
+
+ExpandBarRenderer:
+Passe le container en role PRESENTATION
+
+TextAreaRenderer:
+Correction d'un bug qui associait "rendered" à "required"
+
+f_viewDialog:
+Positionnement du title à ""  (comme la frame technique)
+
+f_frameShellDecorator:
+Le title de la frame technique est ""
+
+f_menuCore:
+Possibilité de spécifier la taille de la popup
+
+fa_dataGridPopup:
+Amelioration de l'accessibilité de la popup de comboGrid
+
+f_tree:
+Amélioration du tooltip de la commande
+
+ItemsService:
+Evite la confusion des requetes
+
+SuggestTextEntryRenderer:
+f_suggestTextEntry:
+Evite la confusion des requetes
+Possibilité de spécifier la taille de la popup
+Gestion des inputFormat, descriptionFormat, labelFormat
+
+PreSelectionListener:
+PreselectionListener traité coté serveur (et non plus QUE coté Javascript)
+
+f_messageContext:
+Ajout d'une méthode pour positionner le focus sur le composant en erreur
+
+f_frameShellDecorator:
+Revision de la finalisation d'une popup afin de pouvoir traiter le code de retour (Fix depuis Firefox 10)
+
+f_focusManager:
+Correction d'un probleme dans le f_getFocusComponent()
+
+fa_checkManager, fa_selectionManager:
+Initialisation de l'état en LAZY et non plus dans le constructeur de l'aspect, 
+ce qui pouvait poser problème lors de la lecture de l'état dans le constructeur de l'objet.
+
+fa_tabIndex.js:
+Généralisation de la gestion du tabIndex par un aspect
+
+fa_aria.js:
+Autorise la suppression d'un attribut aria si la "value" est undefined
+
+RadioButtonRenderer, TextEntryRenderer, TextAreaRenderer:
+Ajout de aria-required  si le champ est requis
+
+ICaptionCapility, IGridCaptionCapability,  v:tree , v:headingZone:
+Ajout de l'interface ICaptionCapability afin de généraliser la notion de Caption
+IGridCaptionCapability hérite de ICaptionCapability
+
+ILimitedMap,  BasicContentStorageRepository, ContentStorageEngineImpl, LimitedMap:
+Generalisation à une interface de la hashmap avec un nombre limité d'entrées
+
+IHeadingLevelCapability, IHeadingZoneCapability,  v:TabbedPane, v:HeadingZone, v:Heading, v:ExpandBar, v:FieldSet, v:CardBox :
+Possibilité de gerer des zones de titre afin de calculer automatiquement le niveau de <Hx>
+
+EventsCollector:
+Système qui autorise l'enregistrement de l'évenement afin de pouvoir être réjoué par un validateur
+
+f_component:
+Le position X,Y,Width,Height peut être undefined en plus de Number
+
+f_service:
+Gestion du mode designer
+
+f_tree, AbstractGridRenderer:
+Correction d'accessibilité
+
+f_input:
+Pas de tabIndex par defaut sur un f_input
+
+f_dataGrid,f_grid:
+Le scope COL est un TH pas un TD
+
+f_tabbedPane, f_calendarObject, f_customButton, f_hyperLink, f_pager, f_tree, f_shellDecorator, AbstractGridRenderer
+Generation d'un Javascript:void(x)
+
+f_suggestTextEntry,  SuggestTextEntryRenderer:
+Support du disableProposals
+
+f_core:
+Amélioration du système du calcul des propriétés du CSS
+
+f_fireBugAppender:
+Support de la nouvelle version de firebug
+
+f_classLoader:
+Appel du documentComplete pour les composants qui sont initialisés apres le documentComplete
+
+AbstractSelectItemsDecorator:
+Gestion du filtre qui retourne null a iterator()
+
+f_calendarObject:
+Correction bug défilement des mois lorsque le dernier jour du mois est sélectionné et que le nouveau mois n'a pas le même jour
+
+f_keyEntry:
+Modification de f_getSelectedValue, pour pouvoir récupérer la clé d'une valeur de comboGrid même lorsqu'elle n'est pas editable ou readOnly
+
+GridTools:
+Ajout de la Classe GridTools et de la fonction HasSortedServerListener permettant de contrôler si un tableau doit être trier sur le serveur
+
+AbstractGridRendererContext:
+Correction de la colonne rendered=false qui �tait visible.  (visible=false fonctionnait par contre !)
+
+JavaScriptRenderContext:
+Correction de l'initialisation des composants <v:init>  (comme Accelerator)
+
+AcceleratorRenderer:
+Correction de la g�n�ration du parametrage des touches de l'accelerateur
+
+f_core:
+La fonction OpenWindow devient public 
+
+f_clientValidator:
+Pas de Gestion du maxTextLength dans le cas d'un replace au niveau du translator
+
+fa_items, fa_menuCore:
+Ajout de l'attribut notFireChecked aux fonctions appendRadioItem et setItemChecked pour ne pas lancé l'évènement
+
+Menu popup des critère:
+Ajout de la classe CriteriaMenuDecorator et f_criteriaPopupMAnager
+
+SuggesTextEntry: 
+Correction globale du composant.
+
+Pattern Adaptable:
+Les classes héritant de AbstractGridRenderer (comboGrid, datagrid, componentsGrid) sont compatible avec le pattern Adaptable. Les dataModel de ces composants doivent implémenter l'interface IAdaptable pour se spécialiser.
+Les classes AdaptedDataModel et  AdaptedArrayDataModel permettent d'utiliser à la fois le pattern Adaptable et d'implémenter les interfaces traditionelles.
+
+Criteria:
+Ajout des capability criteria. Implementation des critère pour le composant Datagrig 
+
+GridTools:
+Ajout de la Classe GridTools et de la fonction HasSortedServerListener permettant de contrôler si un tableau doit être trier sur le serveur
+
+AbstractGridRendererContext:
+Correction de la colonne rendered=false qui �tait visible.  (visible=false fonctionnait par contre !)
+
+JavaScriptRenderContext:
+Correction de l'initialisation des composants <v:init>  (comme Accelerator)
+
+AcceleratorRenderer:
+Correction de la génération du parametrage des touches de l'accelerateur
+
+RadioButton: 
+Uniformisation de la gestion du focus (tabIndex)
+
+fa_selectionManager, f_grid:
+Ajour de la notion selectOnMousedown sur le label
+
+f_dragAndDropEngine:
+ajout methode statique IsDragInProgress
+reset de la phase des composants de type fa_selectionManager
+
+f_imageButton, AbstractImageButtonFamillyDecorator:
+gestion du disabled différent pour Input et A : contournement du bug IE de gestion des tabIndex 
+
+f_expandBar: 
+Correction setFocus pour IE
+Correction fireEvent multiple
+
+f_tree:
+f_refreshContent correction bug boucle
+
+f_core:
+La fonction OpenWindow devient public 
+
+f_grid:
+transformation de la property SORT_INDEX en attribut pour la bonne gestion du tri lorsqu'il est initialisé sur le serveur
+
+f_popup:
+Gestion du blur décommentée
+
+scheduler:
+Ajout Aria
+
+f_dragAndDropEngine, fa_draggable, f_tree, f_grid:
+Gestion du dnd avec une selection multiple  
+
+fa_selectionManager, f_tree, f_grid:
+Ajouter des phases "begin" et "end" afin de dissocier les evenements mousedown et mouseup lors de la selection
+
+f_keyEntry.f_onSuggest: 
+Correction de la perte de la sélection en mode non éditable après une selection au clavier 
+
+ExpandBarRenderer:
+Gestion de l'attribut html acceskey sur l'element A du header sans utiliser l'héritage destiné au conteneur 
+
+f_grid:
+Gestion de l'attribut RefreshFullUpdateState qui permet de forcer le rafraichissement complet
+
+f_tree:
+Généralisation de l'affichage d'une erreur dans le chargement des noeuds en AJAX
+
+f_grid:
+Gestion de la position du scroll horizontal lors du tri d'une colonne sous FF
+
+AbstractGrid et f_grid:
+Gestion de l'attribut alertLoadingMessage (utilisé pour l'affichage de boite d'alerte sur action utilisateur lorsque loading de page en cours)
+si value = "" : pas de message
+si pas déclaré : alert avec message original
+si value != "" : alert avec message = value
+
+f_grid:
+Gestion de l'attribut v:wheelSelection
+
+AbstractGrid:
+ajout attribut wheelSelection (boolean default:true)
+Permet de spécifier si la molette doit sélectionner ou pas
+
+CheckButton:
+Gestion du tabIndex when disabled (génération et javascript)
+ajout de v:tabIndex
+redéfinition de fa_getTabIndexElement
+
+fa_tabIndex:
+Gestion du Get et du Set
+Ajout de fa_getTabIndexElement (input) par défaut
+
+fa_selectionManager:
+Gestion du click droit en cas de multisélection (f_performElementSelection)
+
+f_grid:
+Ajout d'un paramêtre à f_refreshContent (Boolean fullUpdate to force rowCount and pager update)
+ 
+ariaLabel :
+Ajout de l'attribut ariaLabel
+
+ListenerManager:
+Ajout d'un nouveau paramètre d'initialisation. 
+Permet de contrôler stratégie de gestion des listener à chaque chargement des composants
+
+IPreSelectionListener:
+Ajout du listener de pré-sélection
+
+scheduler:
+Ajout du composant planning.
 
 ComboGrid:
 Ajout des attributs forceValue, forLabel, valueFormatLabel et novalueFormatLabel.
 Modification du checkListener
 
 f_comboGrid, f_popup, f_menuBar :
-correction du bug à l'ouverture des comboGrids:
+correction du bug à l'ouverture des comboGrids
 
 f_tree:
 Implementation de l'ExpandListener et loadListener

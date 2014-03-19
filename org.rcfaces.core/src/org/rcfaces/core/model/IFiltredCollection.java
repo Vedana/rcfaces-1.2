@@ -10,21 +10,21 @@ import java.util.Iterator;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public interface IFiltredCollection {
+public interface IFiltredCollection<T> {
 
-    int NO_MAXIMUM_RESULT_NUMBER = -1;
+	int NO_MAXIMUM_RESULT_NUMBER = -1;
 
-    Iterator iterator(IFilterProperties filterProperties,
-            int maximumResultNumber);
+	Iterator<T> iterator(IFilterProperties filterProperties,
+			int maximumResultNumber);
 
-    /**
-     * 
-     * @author Olivier Oeuillot (latest modification by $Author$)
-     * @version $Revision$ $Date$
-     */
-    public interface IFiltredIterator extends Iterator {
-        int getSize();
+	/**
+	 * 
+	 * @author Olivier Oeuillot (latest modification by $Author$)
+	 * @version $Revision$ $Date$
+	 */
+	public interface IFiltredIterator<T> extends Iterator<T> {
+		int getSize();
 
-        void release();
-    }
+		void release();
+	}
 }

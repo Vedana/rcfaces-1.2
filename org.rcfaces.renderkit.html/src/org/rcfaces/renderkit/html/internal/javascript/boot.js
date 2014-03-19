@@ -18,7 +18,7 @@ if (!window._rcfacesInitLibraryDate) {
 	window._rcfacesInitLibraryDate=new Date();
 }
 
-var __SYMBOL=function(x) { return x };
+var __SYMBOL=function(x) { return x; };
 
 if (window._RCFACES_LEVEL3) {
 	/**
@@ -36,10 +36,10 @@ if (window._RCFACES_LEVEL3) {
 		}
 
 		return false;
-	}
+	};
 
 	var _rcfacesGW=function(thiz, evt) {
-		var win;
+		var win=undefined;
 		if (evt) {
 			if (evt.view) { // Firefox
 				win=evt.view;
@@ -52,19 +52,22 @@ if (window._RCFACES_LEVEL3) {
 					win=evt.target.ownerDocument.defaultView;
 				}
 
-			} else if (evt.fromElement) { // IE
-				win=evt.fromElement.ownerDocument.parentWindow;		
+			} else if (evt.fromElement && evt.fromElement.ownerDocument) { // IE
+				win=evt.fromElement.ownerDocument.parentWindow;
 
-			} else if (evt.toElement) { // IE
+			} else if (evt.toElement && evt.toElement.ownerDocument) { // IE
 				win=evt.toElement.ownerDocument.parentWindow;
 
-			} else if (evt.srcElement) { // IE
+			} else if (evt.srcElement && evt.srcElement.ownerDocument) { // IE
 				win=evt.srcElement.ownerDocument.parentWindow;
 			}
 		}
 		
 		if (!win) {
-			if (thiz.parentWindow) {
+			 if (thiz._window) {
+				win=thiz._window;
+					
+			} else if (thiz.parentWindow) {
 				// IE !
 				win=thiz.parentWindow;
 				
@@ -78,12 +81,12 @@ if (window._RCFACES_LEVEL3) {
 				}
 	
 			} else if (thiz.frames) {
-				win=thiz;			
+				win=thiz;
 			}
-			
-			if (!win) {
-				throw new Error("RCFaces: Unknown 'this' object type ! ("+this+")");
-			}
+		}
+		
+		if (!win) {
+			throw new Error("RCFaces: Unknown 'this' object type ! (thiz="+thiz+" evt="+evt+" this="+this+")");
 		}
 			
 		for(var w=win;w;w=w.opener) {
@@ -118,5 +121,5 @@ if (window._RCFACES_LEVEL3) {
 		}		
 		
 		throw new Error("RCFaces: Can not identify the rcfaces window !");
-	}
+	};
 }	

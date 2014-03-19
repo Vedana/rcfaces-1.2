@@ -3,7 +3,6 @@
  */
 package org.rcfaces.core.internal.contentAccessor;
 
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.faces.context.FacesContext;
@@ -19,7 +18,6 @@ import org.rcfaces.core.lang.IContentFamily;
  */
 public class BasicGeneratedResourceInformation extends AbstractInformation
         implements IGeneratedResourceInformation {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(BasicGeneratedResourceInformation.class);
@@ -59,8 +57,8 @@ public class BasicGeneratedResourceInformation extends AbstractInformation
     }
 
     public void setProcessingAtRequest(boolean processedAtRequest) {
-        setAttribute(PROCESSED_AT_REQUEST_PROPERTY, Boolean
-                .valueOf(processedAtRequest));
+        setAttribute(PROCESSED_AT_REQUEST_PROPERTY,
+                Boolean.valueOf(processedAtRequest));
     }
 
     public boolean isProcessingAtRequestSetted() {
@@ -96,6 +94,7 @@ public class BasicGeneratedResourceInformation extends AbstractInformation
         setAttribute(RESPONSE_URL_SUFFIX_PROPERTY, suffix);
     }
 
+    @Override
     public void restoreState(FacesContext context, Object state) {
         Object states[] = (Object[]) state;
 
@@ -108,6 +107,7 @@ public class BasicGeneratedResourceInformation extends AbstractInformation
         }
     }
 
+    @Override
     public Object saveState(FacesContext context) {
         Object states[] = new Object[2];
 
@@ -120,13 +120,11 @@ public class BasicGeneratedResourceInformation extends AbstractInformation
     }
 
     public void copyTo(IGeneratedResourceInformation generatedInformation) {
-        Map attributes = getAttributes();
+        Map<String, Object> attributes = getAttributes();
 
-        for (Iterator it = attributes.entrySet().iterator(); it.hasNext();) {
-            Map.Entry entry = (Map.Entry) it.next();
+        for (Map.Entry<String, Object> entry : attributes.entrySet()) {
 
-            generatedInformation.setAttribute((String) entry.getKey(), entry
-                    .getValue());
+            generatedInformation.setAttribute(entry.getKey(), entry.getValue());
         }
     }
 

@@ -9,7 +9,6 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -39,17 +38,16 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.repository.IHierarchicalRepository;
 import org.rcfaces.core.internal.repository.IRepository;
 import org.rcfaces.core.internal.repository.IRepository.IContext;
+import org.rcfaces.core.internal.repository.IRepository.ICriteria;
 import org.rcfaces.core.internal.tools.PageConfiguration;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.renderkit.html.component.InitComponent;
 import org.rcfaces.renderkit.html.internal.AbstractHtmlRenderer;
 import org.rcfaces.renderkit.html.internal.AbstractJavaScriptWriter;
-import org.rcfaces.renderkit.html.internal.ClientBrowserFactory;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
-import org.rcfaces.renderkit.html.internal.IClientBrowser;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
@@ -57,6 +55,9 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptRenderContext;
+import org.rcfaces.renderkit.html.internal.agent.ClientBrowserFactory;
+import org.rcfaces.renderkit.html.internal.agent.IClientBrowser;
+import org.rcfaces.renderkit.html.internal.agent.IUserAgent.BrowserType;
 import org.rcfaces.renderkit.html.internal.css.ICssConfig;
 import org.rcfaces.renderkit.html.internal.css.StylesheetsServlet;
 import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository;
@@ -68,7 +69,6 @@ import org.rcfaces.renderkit.html.internal.javascript.JavaScriptRepositoryServle
  * @version $Revision$ $Date$
  */
 public class InitRenderer extends AbstractHtmlRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(InitRenderer.class);
 
@@ -77,40 +77,31 @@ public class InitRenderer extends AbstractHtmlRenderer {
     private static final String REQUEST_DOMAIN_VALUE = "$requestDomain";
 
     private static final String DISABLE_IE_IMAGE_BAR_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".DISABLE_IE_IMAGE_BAR";
+            .getPackagePrefix() + ".DISABLE_IE_IMAGE_BAR";
 
     private static final String DISABLE_CONTEXT_MENU_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".DISABLE_CONTEXT_MENU";
+            .getPackagePrefix() + ".DISABLE_CONTEXT_MENU";
 
     private static final String JSP_DISABLE_CACHE_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".JSP_DISABLE_CACHE";
+            .getPackagePrefix() + ".JSP_DISABLE_CACHE";
 
     private static final String USER_AGENT_VARY_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".USER_AGENT_VARY";
+            .getPackagePrefix() + ".USER_AGENT_VARY";
 
     private static final String CLIENT_VALIDATION_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".CLIENT_VALIDATION";
+            .getPackagePrefix() + ".CLIENT_VALIDATION";
 
     private static final String DISABLED_COOKIES_PAGE_URL_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".DISABLED_COOKIES_PAGE_URL";
+            .getPackagePrefix() + ".DISABLED_COOKIES_PAGE_URL";
 
     private static final String DISABLED_SCRIPT_PAGE_URL_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".DISABLED_SCRIPT_PAGE_URL";
+            .getPackagePrefix() + ".DISABLED_SCRIPT_PAGE_URL";
 
     private static final String FAVORITE_IMAGE_URL_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".FAVORITE_IMAGE_URL";
+            .getPackagePrefix() + ".FAVORITE_IMAGE_URL";
 
     private static final String WAI_ROLES_NS_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".WAI_ROLES_NS";
+            .getPackagePrefix() + ".WAI_ROLES_NS";
 
     private static final String BASE_PARAMETER = Constants.getPackagePrefix()
             + ".BASE";
@@ -121,22 +112,18 @@ public class InitRenderer extends AbstractHtmlRenderer {
     private static final String MULTI_WINDOW_CLASSLOADER_FILENAME = "f_multiWindowClassLoader.js";
 
     public static final String MULTI_WINDOW_CLASSLOADER = Constants
-            .getPackagePrefix()
-            + ".client.MULTI_WINDOW_CLASSLOADER";
+            .getPackagePrefix() + ".client.MULTI_WINDOW_CLASSLOADER";
 
     private static final String NONE_IMAGE_URL = "none";
 
     private static final String INVALID_BROWSER_PAGE_URL_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".INVALID_BROWSER_PAGE_URL";
+            .getPackagePrefix() + ".INVALID_BROWSER_PAGE_URL";
 
     public static final Object META_CONTENT_TYPE_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".META_CONTENT_TYPE_PARAMETER";
+            .getPackagePrefix() + ".META_CONTENT_TYPE_PARAMETER";
 
     public static final Object CLIENT_MESSAGE_ID_FILTER_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".CLIENT_MESSAGE_ID_FILTER";
+            .getPackagePrefix() + ".CLIENT_MESSAGE_ID_FILTER";
 
     private static final String APPLICATION_PARAMETERS_PROPERTY = "org.rcfaces.renderkit.html.internal.taglib.InitializeTag.APPLICATION_PARAMETERS";
 
@@ -250,6 +237,14 @@ public class InitRenderer extends AbstractHtmlRenderer {
             htmlWriter.endElement(IHtmlWriter.META);
         }
 
+        if (htmlProcessContext.getClientBrowser().getBrowserType() == BrowserType.MICROSOFT_INTERNET_EXPLORER) {
+            String version = "IE="
+                    + htmlProcessContext.getClientBrowser().getMajorVersion();
+            htmlWriter.startElement(IHtmlWriter.META);
+            htmlWriter.writeHttpEquiv("X-UA-Compatible", version);
+            htmlWriter.endElement(IHtmlWriter.META);
+        }
+
         if (disableContextMenu) {
             htmlRenderContext.setDisabledContextMenu(true);
         }
@@ -298,8 +293,8 @@ public class InitRenderer extends AbstractHtmlRenderer {
 
             if (base.startsWith(IContentPath.CONTEXT_KEYWORD)) {
                 StringAppender sa = new StringAppender(facesContext
-                        .getExternalContext().getRequestContextPath(), base
-                        .length());
+                        .getExternalContext().getRequestContextPath(),
+                        base.length());
 
                 if (base.length() >= 8) {
                     sa.append(base.substring(8));
@@ -319,8 +314,8 @@ public class InitRenderer extends AbstractHtmlRenderer {
                         .getExternalContext().getRequest();
                 String scheme = request.getScheme();
                 if (scheme != null) {
-                    sa.append(scheme).append("://").append(
-                            request.getServerName());
+                    sa.append(scheme).append("://")
+                            .append(request.getServerName());
 
                     int port = request.getServerPort();
                     if (port == 80 && "http".equals(scheme)) {
@@ -383,7 +378,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
             // Il n'est pas connu du repository !
 
             String cameliaScriptURI = bootSet.getURI(repositoryContext
-                    .getLocale());
+                    .getCriteria());
 
             String jsBaseURI = repository.getBaseURI(htmlProcessContext);
 
@@ -444,7 +439,8 @@ public class InitRenderer extends AbstractHtmlRenderer {
                 htmlWriter.writeCharSet(cssCharset);
             }
 
-            IClientBrowser clientBrowser = ClientBrowserFactory.Get().get(facesContext);
+            IClientBrowser clientBrowser = ClientBrowserFactory.Get().get(
+                    facesContext);
 
             String styleSheetURI = htmlProcessContext.getStyleSheetURI(
                     cssConfig.getStyleSheetFileName(clientBrowser), true);
@@ -462,8 +458,8 @@ public class InitRenderer extends AbstractHtmlRenderer {
         if (title != null) {
             writeTitle(htmlWriter, title);
 
-            facesContext.getExternalContext().getRequestMap().put(
-                    TITLE_PROPERTY, title);
+            facesContext.getExternalContext().getRequestMap()
+                    .put(TITLE_PROPERTY, title);
         }
 
         HtmlRenderContext.setMetaDataInitialized(facesContext);
@@ -516,15 +512,40 @@ public class InitRenderer extends AbstractHtmlRenderer {
                         host = requestURI.substring(idx, idx3);
                     }
 
-                    int idx4 = host.lastIndexOf('.');
-                    if (idx4 > 0) {
-                        int idx5 = host.lastIndexOf('.', idx4 - 1);
-                        if (idx5 > 0) {
-                            domain = host.substring(idx5 + 1);
-                        } else {
-                            domain = host;
+                    StringTokenizer st = new StringTokenizer(host, ".");
+                    int segmentsCount = st.countTokens();
+                    String[] segments = new String[segmentsCount];
+                    boolean allDigit = (segmentsCount == 4);
+                    for (int i = 0; i < segmentsCount; i++) {
+                        String token = st.nextToken();
+                        segments[segmentsCount - 1 - i] = token;
+
+                        if (allDigit) {
+                            for (int j = 0; j < token.length(); j++) {
+                                if (Character.isDigit(token.charAt(j))) {
+                                    continue;
+                                }
+
+                                allDigit = false;
+                                break;
+                            }
                         }
                     }
+
+                    if (allDigit) {
+                        // C'est une addresse IP !
+                        // On ne touche pas au HOST
+                        domain = host;
+
+                    } else if (segments.length > 2) {
+                        // On réduit le scope du domaine, on ne prend que les 2
+                        // derniers
+                        domain = segments[1] + "." + segments[0];
+
+                    } else {
+                        domain = host;
+                    }
+
                 }
             }
         }
@@ -537,8 +558,8 @@ public class InitRenderer extends AbstractHtmlRenderer {
             jsWriter = openScriptTag(htmlWriter);
         }
 
-        jsWriter.write("try{document.domain=").writeString(domain).writeln(
-                "}catch(x){window._rcfacesDomainEx=x}");
+        jsWriter.write("try{document.domain=").writeString(domain)
+                .writeln("}catch(x){window._rcfacesDomainEx=x}");
 
         return jsWriter;
     }
@@ -577,8 +598,8 @@ public class InitRenderer extends AbstractHtmlRenderer {
     private static synchronized ApplicationParameters getApplicationParameters(
             IHtmlProcessContext htmlProcessContext) {
 
-        Map applicationMap = htmlProcessContext.getFacesContext()
-                .getExternalContext().getApplicationMap();
+        Map<String, Object> applicationMap = htmlProcessContext
+                .getFacesContext().getExternalContext().getApplicationMap();
         ApplicationParameters appParams = (ApplicationParameters) applicationMap
                 .get(APPLICATION_PARAMETERS_PROPERTY);
         if (appParams != null) {
@@ -634,10 +655,9 @@ public class InitRenderer extends AbstractHtmlRenderer {
             }
 
         } catch (Throwable th) {
-            LOG
-                    .debug(
-                            "Too late to specify Vary (User-Agent) into HttpResponse !",
-                            th);
+            LOG.debug(
+                    "Too late to specify Vary (User-Agent) into HttpResponse !",
+                    th);
         }
 
         writer.startElement(IHtmlWriter.META);
@@ -859,15 +879,12 @@ public class InitRenderer extends AbstractHtmlRenderer {
         String cameliaClassLoader = jsWriter.getJavaScriptRenderContext()
                 .convertSymbol("f_classLoader", "_rcfacesClassLoader");
 
-        jsWriter
-                .write(
-                        "var cl=(function(v){try{return (v.opener && v.opener!=v && arguments.callee(v.opener)) || v.")
+        jsWriter.write(
+                "var cl=(function(v){try{return (v.opener && v.opener!=v && arguments.callee(v.opener)) || v.")
                 .write(cameliaClassLoader)
-                .write(
-                        "}catch(x){}})(window) || (function(v){try{return (v.parent && v.parent!=v && arguments.callee(v.parent)) || v.")
+                .write("}catch(x){}})(window) || (function(v){try{return (v.parent && v.parent!=v && arguments.callee(v.parent)) || v.")
                 .write(cameliaClassLoader)
-                .write(
-                        "}catch(x){}})(window)  || (function(v){try{return v.top.")
+                .write("}catch(x){}})(window)  || (function(v){try{return v.top.")
                 .write(cameliaClassLoader).write("}catch(x){}})(window);");
 
         jsWriter.write("if(cl&&cl.");
@@ -900,13 +917,14 @@ public class InitRenderer extends AbstractHtmlRenderer {
         }
         jsWriter.write("></\"+\"SCRIPT>");
 
-        List l = Collections.singletonList(MULTI_WINDOW_CLASSLOADER_FILENAME);
+        List<Object> l = Collections
+                .<Object> singletonList(MULTI_WINDOW_CLASSLOADER_FILENAME);
 
         IRepository.IFile files[] = repository.computeFiles(l,
                 IHierarchicalRepository.FILENAME_COLLECTION_TYPE,
                 repositoryContext);
         if (files != null && files.length > 0) {
-            Locale locale = repositoryContext.getLocale();
+            ICriteria criteria = repositoryContext.getCriteria();
             for (int i = 0; i < files.length; i++) {
                 jsWriter.write("<SCRIPT");
                 if (htmlProcessContext.useMetaContentScriptType() == false) {
@@ -918,7 +936,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
 
                 jsWriter.write(jsBaseURI);
                 jsWriter.write('/');
-                jsWriter.write(files[i].getURI(locale));
+                jsWriter.write(files[i].getURI(criteria));
 
                 jsWriter.write("\\\"");
                 if (javascriptCharset != null) {
@@ -948,8 +966,6 @@ public class InitRenderer extends AbstractHtmlRenderer {
      */
     private static class ApplicationParameters implements Serializable {
 
-        private static final String REVISION = "$Revision$";
-
         private static final long serialVersionUID = 491523571265962718L;
 
         boolean metaContentType;
@@ -976,7 +992,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
 
         String favoriteImageURL;
 
-        Set clientMessageIdFilter;
+        Set<String> clientMessageIdFilter;
 
         String waiRolesNS;
 
@@ -1123,8 +1139,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
                 }
 
                 if (htmlProcessContext.useMetaContentScriptType()) {
-                    LOG
-                            .info("UseMetaContentScriptType is enabled for context.");
+                    LOG.info("UseMetaContentScriptType is enabled for context.");
                 }
 
                 if (htmlProcessContext.useMetaContentStyleType()) {
@@ -1167,17 +1182,20 @@ public class InitRenderer extends AbstractHtmlRenderer {
         if (htmlProcessContext.useMetaContentScriptType() == false) {
             writer.writeType(IHtmlRenderContext.JAVASCRIPT_TYPE);
         }
+        if (htmlProcessContext.isDesignerMode()) {
+            writer.writeAttributeNS("rcfaces", "core");
+        }
 
         return new JavaScriptWriterImpl(writer);
     }
 
-    static Set parseClientMessageIdFilter(String filter) {
-        Set set = null;
+    static Set<String> parseClientMessageIdFilter(String filter) {
+        Set<String> set = null;
 
         StringTokenizer st = new StringTokenizer(filter, ", ");
         for (; st.hasMoreTokens();) {
             if (set == null) {
-                set = new HashSet(st.countTokens());
+                set = new HashSet<String>(st.countTokens());
             }
 
             String clientId = st.nextToken();
@@ -1194,7 +1212,6 @@ public class InitRenderer extends AbstractHtmlRenderer {
      * @version $Revision$ $Date$
      */
     static class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
-        private static final String REVISION = "$Revision$";
 
         private final IHtmlWriter writer;
 
@@ -1345,8 +1362,8 @@ public class InitRenderer extends AbstractHtmlRenderer {
                         + "'.");
             }
 
-            write("var ").write(varId).write("=").writeString(string).writeln(
-                    ";");
+            write("var ").write(varId).write("=").writeString(string)
+                    .writeln(";");
 
             return varId;
         }

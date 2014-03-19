@@ -11,9 +11,12 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.renderkit.border.AbstractBorderRenderer;
 import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceContributor;
 import org.rcfaces.renderkit.html.internal.renderer.ICssStyleClasses;
 
 /**
@@ -22,8 +25,7 @@ import org.rcfaces.renderkit.html.internal.renderer.ICssStyleClasses;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
-        implements IHtmlBorderRenderer {
-    private static final String REVISION = "$Revision$";
+        implements IHtmlBorderRenderer, INamespaceContributor {
 
     public static final String TD_TEXT = "_ctext";
 
@@ -171,8 +173,7 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
 
         writer.startElement(IHtmlWriter.TABLE);
         writer.writeId(writer.getComponentRenderContext()
-                .getComponentClientId()
-                + BORDER_ID_SUFFIX);
+                .getComponentClientId() + BORDER_ID_SUFFIX);
 
         String className = getClassName();
         if (className != null) {
@@ -182,11 +183,12 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
             writer.writeClass(tableClassName);
 
             if (tableClassName != className) {
-                writer.writeAttribute("v:className", className);
+                writer.writeAttributeNS("className", className);
             }
         }
         writer.writeCellPadding(0);
         writer.writeCellSpacing(0);
+        writer.writeRole(IAccessibilityRoles.PRESENTATION);
 
         if (width != null || height != null) {
             ICssWriter cssWriter = writer.writeStyle(64);
@@ -254,11 +256,18 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
         writer.writeWidth(getWestBorderWidth());
         writer.writeHeight(getNorthBorderHeight());
         writer.writeSrc(getBlankImageURL(writer));
+
+        writeAlternateImage(writer);
+
         writer.endElement(IHtmlWriter.IMG);
 
         writer.endElement(IHtmlWriter.TD);
 
         return writer;
+    }
+
+    protected void writeAlternateImage(IHtmlWriter writer) {
+
     }
 
     protected String getWestBorderClassName(IHtmlWriter writer) {
@@ -291,6 +300,8 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
         writer.writeWidth(getEastBorderWidth());
         writer.writeHeight(getNorthBorderHeight());
         writer.writeSrc(getBlankImageURL(writer));
+        writeAlternateImage(writer);
+
         writer.endElement(IHtmlWriter.IMG);
 
         writer.endElement(IHtmlWriter.TD);
@@ -585,6 +596,12 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
 
     protected String getComboImageVerticalAlign(IHtmlWriter writer) {
         return "center";
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+
+        nameSpaceProperties.addAttributes(null, new String[] { "className" });
+
     }
 
 }

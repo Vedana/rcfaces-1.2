@@ -35,6 +35,53 @@ var __statics = {
 	
 		return engine;
 	 },
+	 
+	/**
+	 * 
+	 * @method public static
+	 * @return boolean
+	 */
+	 IsDragInProgress: function() {
+		 return !!f_dragAndDropEngine._Current;
+	 },
+	 
+	 /**
+	 * 
+	 * @method public static
+	 * @param  Array sourceTypes
+	 * @param  Array targetTypes
+	 * @return Array selectedTypes
+	 */
+	 ComputeTypes: function(sourceTypes , targetTypes) {
+		 var selectedTypes=new Array();		
+	
+		if (targetTypes && targetTypes.length && sourceTypes && sourceTypes.length) {
+			var ts=new Array();
+			for (var j=0;j<targetTypes.length;j++) {
+				var tt=targetTypes[j];
+				var rt=f_dragAndDropEngine._SplitTypes(tt);
+				
+				ts.push(rt);
+			}
+						
+			for(var i=0;i<sourceTypes.length;i++) {
+				var st=sourceTypes[i];
+				var st2=f_dragAndDropEngine._SplitTypes(st);
+				if (!st2) {
+					continue;
+				}
+				
+				for (var j=0;j<targetTypes.length;j++) {
+					var tt2=ts[j];
+					
+					if ((st2[0]=="*" || tt2[0]=="*" || st2[0]==tt2[0]) && (st2[1]=="*" || tt2[1]=="*" || st2[1]==tt2[1])) {
+						selectedTypes.f_addElement(targetTypes[j]); // Il faut conserver le parametre éventuel !
+					}
+				}
+			}
+		}
+		return selectedTypes;		
+	 },
 	 /**
 	  * @method private static
 	  * @param Event evt
@@ -49,7 +96,7 @@ var __statics = {
 		try {
 			var current=f_dragAndDropEngine._Current;
 	
-//			f_core.Debug(f_dragAndDropEngine, "_DragMove: drag move ! current="+current);
+			f_core.Debug(f_dragAndDropEngine, "_DragMove: drag move ! current="+current);
 	
 			if (!current) {
 				return;
@@ -75,7 +122,7 @@ var __statics = {
 		try {
 			var current=f_dragAndDropEngine._Current;
 	
-//			f_core.Debug(f_dragAndDropEngine, "_DragStop: stop drag ! current="+current);
+			f_core.Debug(f_dragAndDropEngine, "_DragStop: stop drag ! current="+current);
 	
 			if (!current) {
 				return;
@@ -83,7 +130,20 @@ var __statics = {
 			
 			current._dragStop(evt, false);
 			
-			return f_dragAndDropEngine._Exit();
+			f_dragAndDropEngine._Exit();
+			
+			if (f_core.IsInternetExplorer()) {
+//				f_core.Debug(f_dragAndDropEngine, "_DragStop: from="+evt.srcElement+" to="+evt.toElement+" related="+evt.relatedElement);
+				
+				try {
+					evt.srcElement.fireEvent("onmouseup");
+
+				} catch (x2) {
+					// Dans certains cas, ca peut arriver !
+				}
+			}
+			
+			return;
 			
 		} catch (x) {
 			f_core.Error(f_dragAndDropEngine, "_DragStop: exception", x);
@@ -103,7 +163,7 @@ var __statics = {
 		try {
 			var current=f_dragAndDropEngine._Current;
 	
-//			f_core.Debug(f_dragAndDropEngine, "_KeyDown/_KeyUp: stop drag ! current="+current+" keyCode="+evt.keyCode);
+			f_core.Debug(f_dragAndDropEngine, "_KeyDown/_KeyUp: stop drag ! current="+current+" keyCode="+evt.keyCode);
 	
 			if (!current) {
 				return;
@@ -142,7 +202,7 @@ var __statics = {
 		try {
 			var current=f_dragAndDropEngine._Current;
 	
-//			f_core.Info(f_dragAndDropEngine, "_FocusExit: focus ! current="+current);
+			f_core.Info(f_dragAndDropEngine, "_FocusExit: focus ! current="+current);
 	
 			if (!current) {
 				return;
@@ -165,11 +225,11 @@ var __statics = {
 		
 		if (!current) {
 
-//			f_core.Debug(f_dragAndDropEngine, "_Exit: nothing to clear");
+			f_core.Debug(f_dragAndDropEngine, "_Exit: nothing to clear");
 			return;
 		}	
 		
-//		f_core.Debug(f_dragAndDropEngine, "_Exit: exit dnd engine ! current="+current);
+		f_core.Debug(f_dragAndDropEngine, "_Exit: exit dnd engine ! current="+current);
 		
 		f_dragAndDropEngine._Current=undefined;
 
@@ -345,22 +405,12 @@ var __members = {
 	/**
 	 * @method public
 	 * @param Event jsEvent
-	 * @param Object sourceItem
-	 * @param any sourceItemValue
-	 * @param HTMLElement sourceItemElement
-	 * @param Number sourceDragEffects
-	 * @param Array sourceDragTypes
+	 * @param Object selection
 	 * @return Boolean
 	 */
-	f_start: function(jsEvent, sourceItem, sourceItemValue, sourceItemElement, sourceDragEffects, sourceDragTypes) {	
+	f_start: function(jsEvent, selection) {	
 //		f_core.Debug(f_dragAndDropEngine, "f_dragAndDropEngine: sourceComponent='"+this._sourceComponent+"' sourceItem='"+sourceItem+"' sourceItemValue='"+sourceItemValue+"' sourceItemElement='"+sourceItemElement+"' sourceDragEffects='"+sourceDragEffects+"' sourceDragTypes='"+sourceDragTypes+"'");
 
-		this._sourceItem=sourceItem;
-		this._sourceItemValue=sourceItemValue;
-		this._sourceItemElement = sourceItemElement;
-		this._sourceDragEffects=sourceDragEffects;
-		this._sourceDragTypes=sourceDragTypes;			
-		
 		if (this._install(jsEvent)===false) {
 
 			f_core.Debug(f_dragAndDropEngine, "f_start: install returns FALSE");
@@ -372,17 +422,26 @@ var __members = {
 
 		f_core.Debug(f_dragAndDropEngine, "f_start: installed returns TRUE");
 		
+		var srcComponent = this._sourceComponent;
+		
+		this._sourceItems= srcComponent.f_getDragItems(selection);
+		this._sourceItemsValue= srcComponent.f_getDragItemsValue(selection);
+		this._sourceItemsElement = srcComponent.f_getDragItemsValue(selection);
+		this._sourceDragEffects=  srcComponent.f_getDragEffects(selection);
+		this._sourceDragTypes= srcComponent.f_getDragTypes(selection);		
+		
 		return true;
 	},
-
+	
+	
 	/** 
 	 * @method protected
 	 * @return void
 	 */
 	_clearFields: function() {
-		this._sourceItem=undefined;
-		this._sourceItemValue=undefined;
-		this._sourceItemElement = undefined;
+		this._sourceItems=undefined;
+		this._sourceItemsValue=undefined;
+		this._sourceItemsElement = undefined;
 		this._sourceDragEffects=undefined;
 		this._sourceDragTypes=undefined;			
 
@@ -453,7 +512,7 @@ var __members = {
 	 * @return void
 	 */
 	_exit: function() {
-//		f_core.Debug(f_dragAndDropEngine, "_exit: Exit drag/drop engine.");
+		f_core.Debug(f_dragAndDropEngine, "_exit: Exit drag/drop engine.");
 
 		this._releaseDropInfos(true);
 		
@@ -618,7 +677,7 @@ var __members = {
 			return false;
 		}
 		
-		var targetItemValue=this._targetItemValue;
+//		var targetItemValue=this._targetItemValue;
 		var types=this._currentDropTypes;
 		var effect=this._currentDropEffect;
 		
@@ -652,7 +711,7 @@ var __members = {
 			f_core.Error(f_dragAndDropEngine, "_dragStop: fire DROP_COMPLETE throws exception: jsEvent='"+jsEvent+"'.", x);
 		}
 
-		return true;
+		return f_core.CancelJsEvent(jsEvent);
 	},
 	/**
 	 * @method private
@@ -671,6 +730,8 @@ var __members = {
 		this._lastClientX=jsEvent.clientX;
 		this._lastClientY=jsEvent.clientY;
 
+		f_core.Debug(f_dragAndDropEngine, "_dragMove: started="+this._started+" dndInfo="+this._dragAndDropInfo);
+		
 		if (!this._started) {
 
 //			f_core.Debug(f_dragAndDropEngine, "_dragMove: Test start drag");
@@ -720,7 +781,6 @@ var __members = {
 		
 		var dropComponent=f_core.GetParentByClass(dropElement);
 		//f_core.Debug(f_dragAndDropEngine, "_dragMove: DropComponent="+dropComponent);
-		
 		
 		var queryDropInfosCall=this._queryDropInfosCall;
 		if (this._targetComponent && !this._verifyParent(this._targetComponent, dropComponent)) {
@@ -1032,34 +1092,8 @@ var __members = {
 
 	//	f_core.Debug(f_dragAndDropEngine, "_computeDragAndDrop: match types target='"+targetTypes+"', source='"+sourceTypes+"'.");
 		
-		var selectedTypes=new Array();		
-
-		if (targetTypes && targetTypes.length && sourceTypes && sourceTypes.length) {
-			var ts=new Array();
-			for (var j=0;j<targetTypes.length;j++) {
-				var tt=targetTypes[j];
-				var rt=f_dragAndDropEngine._SplitTypes(tt);
-				
-				ts.push(rt);
-			}
-						
-			for(var i=0;i<sourceTypes.length;i++) {
-				var st=sourceTypes[i];
-				var st2=f_dragAndDropEngine._SplitTypes(st);
-				if (!st2) {
-					continue;
-				}
-				
-				for (var j=0;j<targetTypes.length;j++) {
-					var tt2=ts[j];
-					
-					if ((st2[0]=="*" || tt2[0]=="*" || st2[0]==tt2[0]) && (st2[1]=="*" || tt2[1]=="*" || st2[1]==tt2[1])) {
-						selectedTypes.f_addElement(targetTypes[j]); // Il faut conserver le parametre éventuel !
-					}
-				}
-			}
-		}
-			
+		var selectedTypes=f_dragAndDropEngine.ComputeTypes(sourceTypes, targetTypes);
+	
 	//	f_core.Debug(f_dragAndDropEngine, "_computeDragAndDrop: match result = "+selectedTypes);
 	
 		if (!selectedTypes.length) {
@@ -1160,30 +1194,71 @@ var __members = {
 	f_getSourceAdditionnalInformations: function() {
 		return this._additionalSourceInformations;
 	},
+	/**
+	 * @method public
+	 * @return any first sourceItem
+	 */
 	f_getSourceItem: function() {
-		return this._sourceItem;
+		if (this._sourceItems && this._sourceItems[0]) {
+			return this._sourceItems[0];
+		}
+		return null;
 	},
+	/**
+	 * @method public
+	 * @return any first sourceItemValue
+	 */
 	f_getSourceItemValue: function() {
-		return this._sourceItemValue;
+		if (this._sourceItemsValue && this._sourceItemsValue[0]) {
+		return this._sourceItemsValue[0];
+		}
+		return null;
 	},
+	/**
+	 * @method public
+	 * @return Array array of sourceItems
+	 */
+	f_getSourceItems: function() {
+		return this._sourceItems;
+	},
+	/**
+	 * @method public
+	 * @return Array array of sourceItemValues
+	 */
+	f_getSourceItemsValue: function() {
+		return this._sourceItemsValue;
+	},
+	/**
+	 * @method public
+	 * @return any source Component
+	 */
 	f_getSourceComponent: function() {
 		return this._sourceComponent;
 	},
-	f_getLastMousePosition: function() {
-		return this._lastMousePosition;
-	},
+	/**
+	 * @method public
+	 * @return Number[] last mouse position
+	 */
 	fa_getLastMousePosition: function() {
 		return this._lastMousePosition;
 	},
+	/**
+	 * @method public
+	 * @return HtmlElement the scrollable container
+	 */
 	fa_getScrollableContainer: function() {
 		return document.body;
 	},
+	/**
+	 * @method public
+	 * @return void
+	 */
 	f_updateMousePosition: function() {
 		
 		var event;
 		
 		if (f_core.IsInternetExplorer()) {
-			var event = document.createEventObject();
+			event = document.createEventObject();
 			event.detail = 0;
 			event.screenX = this._lastClientX;
 			event.screenY = this._lastClientY;
@@ -1197,7 +1272,6 @@ var __members = {
 			event.relatedTarget = document.body;
 
 		} else {
-			
 			event=document.createEvent("MouseEvents");		
 			
 			event.initMouseEvent("move", 
@@ -1219,6 +1293,10 @@ var __members = {
 		
 		this._dragMove(event);
 	},
+	/**
+	 * @method public
+	 * @return void
+	 */
 	fa_autoScrollPerformed: function() {
 		this.f_updateMousePosition();
 	}

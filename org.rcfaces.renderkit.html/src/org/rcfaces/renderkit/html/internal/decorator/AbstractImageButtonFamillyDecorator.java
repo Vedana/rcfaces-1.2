@@ -19,9 +19,9 @@ import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapabilit
 import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
 import org.rcfaces.core.component.capability.ISelectedCapability;
 import org.rcfaces.core.component.capability.ISizeCapability;
-import org.rcfaces.core.component.capability.ITabIndexCapability;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.component.capability.ITextPositionCapability;
+import org.rcfaces.core.component.capability.IToolTipTextCapability;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
 import org.rcfaces.core.image.operation.IDisableOperation;
 import org.rcfaces.core.image.operation.IHoverOperation;
@@ -48,6 +48,7 @@ import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.border.AbstractHtmlBorderRenderer;
 import org.rcfaces.renderkit.html.internal.border.IHtmlBorderRenderer;
 import org.rcfaces.renderkit.html.internal.border.NoneBorderRenderer;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 import org.rcfaces.renderkit.html.internal.renderer.ICssStyleClasses;
 
 /**
@@ -57,7 +58,6 @@ import org.rcfaces.renderkit.html.internal.renderer.ICssStyleClasses;
  */
 public abstract class AbstractImageButtonFamillyDecorator extends
         AbstractComponentDecorator {
-    private static final String REVISION = "$Revision$";
 
     // private static final String SELECTED_IMAGE_RENDERED =
     // "imageButton.selected.rendered";
@@ -114,7 +114,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
     protected Integer tabIndex = null;
 
     protected String alternateText;
-    
+
     protected boolean disabled;
 
     public AbstractImageButtonFamillyDecorator(
@@ -145,8 +145,8 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
                 htmlBorderWriter = (IHtmlBorderRenderer) borderRendererRegistry
                         .getBorderRenderer(facesContext,
-                                RenderKitFactory.HTML_BASIC_RENDER_KIT, cmp
-                                        .getFamily(), cmp.getRendererType(),
+                                RenderKitFactory.HTML_BASIC_RENDER_KIT,
+                                cmp.getFamily(), cmp.getRendererType(),
                                 borderType);
 
             }
@@ -160,17 +160,32 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                 textPosition = IHorizontalTextPositionCapability.DEFAULT_POSITION;
             }
 
-            if (imageButtonFamilly instanceof IAccessKeyCapability) {
-                accessKey = ((IAccessKeyCapability) imageButtonFamilly)
-                        .getAccessKey();
+            if (accessKey == null) {
+                // Peut être positionné par le constructeur enfant !
+
+                if (imageButtonFamilly instanceof IAccessKeyCapability) {
+                    accessKey = ((IAccessKeyCapability) imageButtonFamilly)
+                            .getAccessKey();
+                }
             }
 
-            if (imageButtonFamilly instanceof IAlternateTextCapability) {
-                alternateText = ((IAlternateTextCapability) imageButtonFamilly)
-                        .getAlternateText();
+            if (alternateText == null) {
+                // Peut être positionné par le constructeur enfant !
+                if (imageButtonFamilly instanceof IAlternateTextCapability) {
+                    alternateText = ((IAlternateTextCapability) imageButtonFamilly)
+                            .getAlternateText();
+
+                    if (alternateText == null
+                            && (imageButtonFamilly instanceof IToolTipTextCapability)) {
+                        alternateText = ((IToolTipTextCapability) imageButtonFamilly)
+                                .getToolTipText();
+                    }
+                }
             }
-            tabIndex = imageButtonFamilly.getTabIndex(facesContext);
-        
+            if (tabIndex == null) {
+                // Peut être positionné par le constructeur enfant !
+                tabIndex = imageButtonFamilly.getTabIndex(facesContext);
+            }
 
             if (htmlBorderWriter == null && (text != null)) {
                 IBorderRenderersRegistry borderRendererRegistry = RcfacesContext
@@ -246,15 +261,13 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                         width, height, tableHorizontalSpan, tableVerticalSpan,
                         disabled, selected);
             }
-            
-            
-            
+
             if (tabIndex != null) {
-             	writer.writeAttribute("v:tabIndex", tabIndex.intValue());
+                writer.writeAttributeNS("tabIndex", tabIndex.intValue());
             }
 
             if (borderType != null) {
-                writer.writeAttribute("v:borderType", borderType);
+                writer.writeAttributeNS("borderType", borderType);
             }
 
             ICssStyleClasses cssStyleClasses = getCssStyleClasses();
@@ -264,12 +277,12 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             } else if (selected) {
                 cssStyleClasses.addSuffix("_selected");
             }
-           
+
             writeAttributes(cssStyleClasses);
 
             if (cssStyleClasses != null) {
-                writer.writeAttribute("v:className", cssStyleClasses
-                        .listStyleClasses(), " ");
+                writer.writeAttributeNS("className",
+                        cssStyleClasses.listStyleClasses(), " ");
             }
 
             initializeJavaScript(writer);
@@ -277,11 +290,11 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             if (imageAccessor != null) {
                 imageSrc = imageAccessor.resolveURL(facesContext, null, null);
             }
-            
+
             if (disabled) {
                 if (disabledImageAccessor != null) {
                     if (imageSrc != null) {
-                        writer.writeAttribute("v:imageURL", imageSrc);
+                        writer.writeAttributeNS("imageURL", imageSrc);
                     }
 
                     String disabledImageSrc = disabledImageAccessor.resolveURL(
@@ -298,9 +311,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                     if (selectedSrc != null) {
                         writer.getJavaScriptEnableMode().enableOnFocus();
 
-                        writer
-                                .writeAttribute("v:selectedImageURL",
-                                        selectedSrc);
+                        writer.writeAttributeNS("selectedImageURL", selectedSrc);
                     }
                 }
             } else {
@@ -313,12 +324,12 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
                         if (selected) {
                             if (imageSrc != null) {
-                                writer.writeAttribute("v:imageURL", imageSrc);
+                                writer.writeAttributeNS("imageURL", imageSrc);
                             }
                             imageSrc = selectedImageURL;
 
                         } else {
-                            writer.writeAttribute("v:selectedImageURL",
+                            writer.writeAttributeNS("selectedImageURL",
                                     selectedImageURL);
                         }
                     }
@@ -329,11 +340,11 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                             facesContext, null, null);
 
                     if (disabledImageURL != null) {
-                        writer.writeAttribute("v:disabledImageURL",
+                        writer.writeAttributeNS("disabledImageURL",
                                 disabledImageURL);
                     }
                 }
-                
+
             }
 
             if (hoverImageAccessor != null) {
@@ -342,7 +353,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
                 if (hoverImageURL != null) {
                     writer.getJavaScriptEnableMode().enableOnOver();
-                    writer.writeAttribute("v:hoverImageURL", hoverImageURL);
+                    writer.writeAttributeNS("hoverImageURL", hoverImageURL);
                 }
             }
 
@@ -354,30 +365,36 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                     writer.writeName(writer.getComponentRenderContext()
                             .getComponentClientId());
                     writer.writeValue(getInputValue(true));
-                    writeInputAttributes(writer);
+                    writeInputAttributes(writer, true);
                     writeImageSrc(writer, imageSrc);
                     writeImageSize(writer, imageButtonFamilly);
 
                 } else {
                     // C'est un <a href> !
-                    writer.writeHRef(IHtmlWriter.JAVASCRIPT_VOID);
-                    writeInputAttributes(writer);
+                    // On évite d'avoir href="javascript:void(0)" qui se suivent
+                    // car JAWS les merge ....
+                    writer.writeHRef_JavascriptVoid0();
+                    writeInputAttributes(writer, false);
 
                     writer.startElement(IHtmlWriter.IMG);
                     writer.writeId(getImageId(writer, htmlBorderWriter));
                     writer.writeClass(getImageClassName(htmlBorderWriter));
                     writeImageSrc(writer, imageSrc);
                     writeImageSize(writer, imageButtonFamilly);
+
+                    if (alternateText != null) {
+                        writer.writeAlt(alternateText);
+                    }
                     writer.endElement(IHtmlWriter.IMG);
                 }
 
                 // writer.writeAlign("baseline");
             }
 
-            
             /*
              * Le javascript s'occupe de ca ! if (button == false &&
-             * imageJavascript == false) { writer.writeAttribute("href", IHtmlWriter.JAVASCRIPT_VOID); }
+             * imageJavascript == false) { writer.writeAttribute("href",
+             * IHtmlWriter.JAVASCRIPT_VOID); }
              */
 
             if (htmlBorderWriter != null) {
@@ -422,24 +439,36 @@ public abstract class AbstractImageButtonFamillyDecorator extends
     }
 
     protected String getInputRole() {
-    	return IAccessibilityRoles.BUTTON;
-	}
+        return IAccessibilityRoles.BUTTON;
+    }
 
-	protected String getMainStyleClassName() {
+    protected String getMainStyleClassName() {
         return null;
     }
 
-    private void writeInputAttributes(IHtmlWriter writer)
+    private void writeInputAttributes(IHtmlWriter writer, boolean isInput)
             throws WriterException {
-		 if (tabIndex != null) {
-		     writer.writeTabIndex(tabIndex.intValue());
-		 }
+
+        if (isInput) {
+            if (disabled) {
+                writer.writeDisabled();
+            }
+            if (tabIndex != null) {
+                writer.writeTabIndex(tabIndex.intValue());
+            }
+        } else {
+            if (disabled) {
+                writer.writeTabIndex(-1);
+            } else if (tabIndex != null) {
+                writer.writeTabIndex(tabIndex.intValue());
+            }
+        }
 
         if (accessKey != null) {
             writer.writeAccessKey(accessKey);
         }
         if (alternateText != null) {
-            writer.writeAlt(alternateText);
+            writer.writeTitle(alternateText);
         }
     }
 
@@ -650,6 +679,10 @@ public abstract class AbstractImageButtonFamillyDecorator extends
         return "SELECTED";
     }
 
+    protected boolean hasLabel() {
+        return true;
+    }
+
     protected void writeImage() throws WriterException {
 
         if (imageSrc == null) {
@@ -658,14 +691,16 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
         String inputElement = getInputElement();
         writer.startElement(inputElement);
-        writeInputAttributes(writer);
         writer.writeRole(getInputRole());
         if (disabled) {
-        	writer.writeAriaDisabled(disabled);
+            writer.writeAriaDisabled(disabled);
         }
-        writer.writeAriaLabelledBy(getTextId(writer, htmlBorderWriter));
-        
+        if (text != null) {
+            writer.writeAriaLabelledBy(getTextId(writer, htmlBorderWriter));
+        }
+
         if (IHtmlWriter.INPUT.equals(inputElement)) {
+            writeInputAttributes(writer, true);
             writer.writeType(IHtmlWriter.IMAGE_INPUT_TYPE);
 
             writer.writeName(writer.getComponentRenderContext()
@@ -684,12 +719,9 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             }
 
         } else {
+            writeInputAttributes(writer, false);
             writeImageAttributes();
-            writer.writeHRef(IHtmlWriter.JAVASCRIPT_VOID);
-
-            if (alternateText != null) {
-                writer.writeAlt(alternateText);
-            }
+            writer.writeHRef_JavascriptVoid0();
 
             String inputId = getInputId(writer, htmlBorderWriter);
             writer.writeId(inputId);
@@ -700,7 +732,9 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             writer.writeClass(getImageClassName(htmlBorderWriter));
             writeImageSrc(writer, imageSrc);
             writeImageSize(writer, imageButtonFamilly);
-
+            if (alternateText != null) {
+                writer.writeAlt(alternateText);
+            }
             writer.endElement(IHtmlWriter.IMG);
         }
 
@@ -869,7 +903,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
         if (imageSrc == null) {
             writer.startElement(IHtmlWriter.A);
-            writer.writeHRef(IHtmlWriter.JAVASCRIPT_VOID);
+            writer.writeHRef_JavascriptVoid0();
 
             writer.addSubFocusableComponent(clientId);
             writer.getJavaScriptEnableMode().enableOnFocus();
@@ -978,5 +1012,14 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             return;
         }
         htmlBorderWriter.writeComboImage(writer, mainClassName);
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "tabIndex",
+                "borderType", "className", "imageURL", "selectedImageURL",
+                "imageURL", "selectedImageURL", "disabledImageURL",
+                "hoverImageURL" });
     }
 }

@@ -38,12 +38,17 @@ var __statics = {
 			lst=new Array;
 			dgp[componentId]=lst;
 		}
-		
-		lst.push(pager);
+
+		if (!pager.id) {
+			pager.id=f_core.AllocateAnoIdentifier();
+		}
+
+		// On enregistre l'ID pour eviter les leaks !
+		lst.push(pager.id);
 
 		var dp=pager.ownerDocument.getElementById(componentId);
 		// Le dataGrid n'existe pas forcement lors de son enregistrement !		
-		if (dp && f_class.IsObjectInitialized(dp)) {
+		if (dp && f_classLoader.IsObjectInitialized(dp)) {
 
 			f_core.Debug(fa_pagedComponent, "RegisterPager: Register fa_pager ("+pager.id+"/"+pager+") to component '"+componentId+"': Initialize now ! ");
 			try {		
@@ -69,8 +74,10 @@ var __statics = {
 			return;
 		}
 		
+		var pagerId=pager.id;
+		
 		for(var componentId in dgp) {
-			dgp[componentId].f_removeElement(pager);
+			dgp[componentId].f_removeElement(pagerId);
 		}
 	},
 	/**
@@ -80,24 +87,24 @@ var __statics = {
 	Finalizer: function() {
 		fa_pagedComponent._DataPagers=undefined;
 	}
-}
+};
  
 var __members = {
 	fa_pagedComponent: function() {
-		this._interactive=f_core.GetBooleanAttribute(this, "v:asyncRender");
+		this._interactive=f_core.GetBooleanAttributeNS(this, "asyncRender");
 		
-		this._interactiveShow=f_core.GetBooleanAttribute(this, "v:interactiveShow");
+		this._interactiveShow=f_core.GetBooleanAttributeNS(this, "interactiveShow");
 		if (this._interactiveShow && !this.f_isVisible()) {
 			this.f_getClass().f_getClassLoader().f_addVisibleComponentListener(this);
 		}
 		
-		this._rows=f_core.GetNumberAttribute(this, "v:rows", 0); // Nombre ligne a afficher
+		this._rows=f_core.GetNumberAttributeNS(this, "rows", 0); // Nombre ligne a afficher
 		
-		this._first=f_core.GetNumberAttribute(this, "v:first", 0);  // La premiere ligne
+		this._first=f_core.GetNumberAttributeNS(this, "first", 0);  // La premiere ligne
 
-		this._paged=f_core.GetBooleanAttribute(this, "v:paged", true);
+		this._paged=f_core.GetBooleanAttributeNS(this, "paged", true);
 
-		this._rowCount=f_core.GetNumberAttribute(this, "v:rowCount", -1); // Nombre ligne au total
+		this._rowCount=f_core.GetNumberAttributeNS(this, "rowCount", -1); // Nombre ligne au total
 		if (this._rowCount<0) {
 			this._maxRows=this._first+this._rows;
 		}
@@ -134,9 +141,24 @@ var __members = {
 			return;
 		}
 		
+		var doc=this.ownerDocument;
+		
 		for(var i=0;i<lst.length;i++) {
-			var p=lst[i];
+			var pId=lst[i];
+			if (!pId) {
+				continue;
+			}
+			
+			var p=f_core.GetElementByClientId(pId, doc);
 			if (!p) {
+				lst[i]=undefined; // N'existe plus  (AJAX ???)
+				continue;
+			}
+
+			if (!p.fa_pagedComponentInitialized) {
+				f_core.Error(fa_pagedComponent, "f_performPagedComponentInitialized: Can not call fa_pagedComponentInitialized on pager='"+p.id+"'.");
+				
+				lst[i]=undefined;
 				continue;
 			}
 			
@@ -179,7 +201,7 @@ var __members = {
 		return this._maxRows;
 	},
 	/**
-	 * List rows.
+	 * Get number of rows by page
 	 *
 	 * @method public
 	 * @return Number
@@ -213,7 +235,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setFirst: f_class.ABSTRACT
-}
+};
 
 new f_aspect("fa_pagedComponent", {
 	extend: [ fa_filterProperties ],

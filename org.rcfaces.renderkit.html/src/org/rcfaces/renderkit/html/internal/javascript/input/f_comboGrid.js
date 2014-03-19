@@ -30,13 +30,15 @@ var __statics = {
 	 */
 	_OnButtonMouseDown: function(evt) {
 		var comboGrid=this._comboGrid;
-		if(evt.timeStamp - fa_dataGridPopup.LAST_OUTSIDE < 100){
-			return false;
-		}
 		
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
+		
+		if(evt.timeStamp - fa_dataGridPopup.LAST_OUTSIDE < 100){
+			return false;
+		}
+	
 		if (comboGrid.f_getEventLocked(evt)) {
 			return false;
 		}
@@ -108,7 +110,7 @@ var __statics = {
 		
 		return f_core.CancelJsEvent(evt);		
 	}
-}
+};
 
 var __members = {
 	
@@ -284,7 +286,7 @@ var __members = {
 		f_core.Debug(f_comboGrid, "f_getEventLocked: menuOpened="+this.f_isDataGridPopupOpened()+" mask="+mask+" showAlert="+showAlert);
 
 		return this.f_super(arguments, evt, showAlert, mask);
-	},
+	},	
 	/**
 	 * @method protected
 	 * @param f_event evt
@@ -299,16 +301,18 @@ var __members = {
 
 		f_core.Debug(f_comboGrid, "_onCancelDown: Event keyCode="+jsEvt.keyCode);
 
-		switch(jsEvt.keyCode) {
-		case f_key.VK_DOWN:
-		case f_key.VK_UP:
-		case f_key.VK_ENTER:
-		case f_key.VK_RETURN:
-		case f_key.VK_ESPACE:
-			if (this.f_isDataGridPopupOpened()) {
-				return f_core.CancelJsEvent(jsEvt);
+		if (!f_core.IsInternetExplorer()) { // a supprimer quand IE7 8 auront disparu
+		
+			switch(jsEvt.keyCode) {
+				
+			case f_key.VK_DOWN:
+			case f_key.VK_UP:
+			case f_key.VK_ESPACE:
+				if (this.f_isDataGridPopupOpened()) {
+					return f_core.CancelJsEvent(jsEvt);
+				}
 			}
-		}
+	}
 		
 		return this.f_super(arguments, evt);
 	},
@@ -322,11 +326,17 @@ var __members = {
 		if (jsEvt.cancelBubble || this.f_isDisabled()) {
 			f_core.Debug(f_comboGrid, "f_onSuggest: Event has been canceled !");
 			return true;
-		}
-		
+		}		
 		
 		var menuOpened=this.f_isDataGridPopupOpened();
 		if (menuOpened) {
+			
+			switch(jsEvt.keyCode) { //pb IE 
+				case f_key.VK_DOWN:
+				case f_key.VK_UP:
+					return false;
+			}
+			
 			// Aie aie aie
 			this.f_closePopup(jsEvt);
 			return true;
@@ -349,6 +359,32 @@ var __members = {
 	},
 
 	/**
+	 * @method protected
+	 * @param f_event evt
+	 * @return Boolean
+	 * @override
+	 */
+	f_onKeyPress: function(evt) {
+		var jsEvt=evt.f_getJsEvent();
+		
+		if (f_core.IsWebkit()) {
+			switch(jsEvt.keyCode) {
+			case f_key.VK_RETURN:
+			case f_key.VK_ENTER:
+				
+				var now=new Date().getTime()-this._closePopupDate;
+				
+				if (now<100) {				
+					return f_core.CancelJsEvent(jsEvt);
+				}
+				break;
+			}
+		}
+		
+		return this.f_super(arguments, evt);
+	},
+
+	/**
 	 * @method private
 	 * @param f_event event
 	 * @return void
@@ -363,7 +399,7 @@ var __members = {
 		
 		return this.f_super(arguments, event);
 	}
-}
+};
 
 new f_class("f_comboGrid", {
 	extend: f_keyEntry,

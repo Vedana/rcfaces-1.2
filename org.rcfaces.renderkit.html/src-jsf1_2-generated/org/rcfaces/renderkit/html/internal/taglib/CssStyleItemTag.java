@@ -2,7 +2,6 @@ package org.rcfaces.renderkit.html.internal.taglib;
 
 import org.rcfaces.core.internal.taglib.FileItemTag;
 import javax.faces.component.UIComponent;
-import org.rcfaces.core.internal.component.Properties;
 import org.apache.commons.logging.LogFactory;
 import javax.servlet.jsp.tagext.Tag;
 import org.rcfaces.core.internal.taglib.CameliaTag;
@@ -14,6 +13,7 @@ import org.apache.commons.logging.Log;
 import javax.faces.component.UIViewRoot;
 import org.rcfaces.renderkit.html.component.CssStyleItemComponent;
 import org.rcfaces.core.internal.tools.ListenersTools1_2;
+import org.rcfaces.renderkit.html.component.Properties;
 
 public class CssStyleItemTag extends FileItemTag implements Tag {
 
@@ -25,7 +25,7 @@ public class CssStyleItemTag extends FileItemTag implements Tag {
 		return CssStyleItemComponent.COMPONENT_TYPE;
 	}
 
-	public final void setUserAgent(ValueExpression userAgent) {
+	public void setUserAgent(ValueExpression userAgent) {
 		this.userAgent = userAgent;
 	}
 

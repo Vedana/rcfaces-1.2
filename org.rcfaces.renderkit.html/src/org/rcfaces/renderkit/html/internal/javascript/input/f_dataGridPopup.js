@@ -52,14 +52,15 @@ var __statics = {
 		
 		var properties= { 
 			id: dataGridPopupId,
-			"v:nc": "true", 
 			role: "grid", 
-			className: sc, 
-			"v:asyncRender": "true", 
-			"v:filtred": "true",
-			"v:selectionCardinality": fa_cardinality.ONE_CARDINALITY
+			className: sc
 		};
 		
+		properties[f_core._VNS+":nc"]=true;
+		properties[f_core._VNS+":asyncRender"]="true"; 
+		properties[f_core._VNS+":filtred"]= "true";
+		properties[f_core._VNS+":selectionCardinality"]= fa_cardinality.ONE_CARDINALITY;
+				
 		if (width) {
 			properties.cssWidth=width+"px";
 			if (height) {
@@ -67,7 +68,10 @@ var __statics = {
 			}
 		}		
 		
-		f_dataGridPopup.CopyProperties(properties, dataGridPopup, "v:rows", "v:rowStyleClass", "v:paged", "v:headerVisible", "v:emptyDataMessage");
+		f_dataGridPopup.CopyProperties(properties, dataGridPopup, f_core._VNS+":rows", f_core._VNS+":rowStyleClass", f_core._VNS+":paged", f_core._VNS+":headerVisible", f_core._VNS+":emptyDataMessage");
+		if (dataGridPopup._indexDb) {
+			f_dataGridPopup.CopyProperties(properties, dataGridPopup, f_core._VNS+":indexedDb", f_core._VNS+":idbName", f_core._VNS+":idbPK", f_core._VNS+":idbKey", f_core._VNS+":idbCount", f_core._VNS+":idbIndex");
+		}
 		
 		var divDataGrid=f_core.CreateElement(parent, "div", properties);
 		
@@ -77,7 +81,7 @@ var __statics = {
 		width-=bw;
 		height-=bh;
 		
-		var headerVisible=f_core.GetBooleanAttribute(dataGridPopup, "v:headerVisible", false);
+		var headerVisible=f_core.GetBooleanAttributeNS(dataGridPopup,"headerVisible", false);
 		
 		var totalSize=0;
 		for(var i=0;i<columns.length;i++) {
@@ -98,7 +102,7 @@ var __statics = {
 			break;
 		}
 		
-		var emptyDataMessage=properties["v:emptyDataMessage"];
+		var emptyDataMessage=properties[f_core._VNS+":emptyDataMessage"];
 		if (emptyDataMessage) {
 			f_core.CreateElement(divDataGrid, "div", {
 				id: dataGridPopupId + f_grid._EMPTY_DATA_MESSAGE_ID_SUFFIX,
@@ -160,7 +164,7 @@ var __statics = {
 				//f_core.CreateElement(divTtext, "img", { "class": "f_grid_ttext", align: "left"});
 				
 				if (column._text) {
-					f_core.SetTextNode(divTtext, column._text)
+					f_core.SetTextNode(divTtext, column._text);
 				}
 			}
 		}
@@ -219,7 +223,7 @@ var __statics = {
 				
 		return dataGrid;
 	}
-}
+};
 
 var __members = {
 
@@ -263,7 +267,7 @@ var __members = {
 			return;
 		}
 
-		var selection;
+		var selection=undefined;
 		
 		if (autoSelect>0) {
 			selection=this.fa_getElementValue(rows[0]);
@@ -302,7 +306,7 @@ var __members = {
 		
 		return this.f_super(arguments, evt);
 	}
-}
+};
  
 new f_class("f_dataGridPopup", {
 	extend: f_dataGrid,

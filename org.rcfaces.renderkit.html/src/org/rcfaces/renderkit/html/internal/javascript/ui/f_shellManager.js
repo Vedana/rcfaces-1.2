@@ -85,26 +85,27 @@ var __statics = {
      * @context event:evt
      */
 	_OnFocus: function(evt) {
-     	if (window._rcfacesExiting) {
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+
+		if (window._rcfacesExiting) {
      		// On sait jamais, nous sommes peut etre dans un context foireux ...
      		return true;
      	}
-     	
-     	f_core.Debug(f_shellManager, "_OnFocus: entering on "+this.tagName+"#"+this.id+"."+this.className);
+    	
+     	f_core.Debug(f_shellManager, "_OnFocus: entering on "+this.tagName+"#"+this.id+"."+this.className+" event="+evt);
  
  		var shellManager=f_shellManager.Get();
  
  		var shell=shellManager.f_getTopShell();
  		if (!shell) {
  			// Plus de frame visibles ... (on peut être en cours de fermeture ...)
+ 	  		f_core.Info(f_shellManager, "_OnFocus: No top shell ?");
 			return true;
  		}
-     	
-		if (!evt) {
-			evt = f_core.GetJsEvent(this);
-		}
-     	 			
-		var target;
+      	 			
+		var target=undefined;
 		if (evt.target) {
 			target = evt.target;
 			
@@ -118,11 +119,14 @@ var __statics = {
 		}
 
 		var shellDecorator=shellManager.f_getShellDecorator(shell);
+		
 		if (shellDecorator.f_isIntoShell(target)) {
+			f_core.Info(f_shellManager, "_OnFocus: Shell decorator="+shellDecorator+" into shell "+target);
 			return true;
 		}
-     	
-     	shellDecorator.f_setFocus();
+		f_core.Info(f_shellManager, "_OnFocus: Shell decorator="+shellDecorator+" set focus "+target);
+    	
+     	shell.f_setFocus();
      	
      	return f_core.CancelJsEvent(evt);
      },
@@ -194,11 +198,12 @@ var __statics = {
 	 * @return Boolean Returns <code>true</code> if the shell is found.
 	 */
 	CloseShell: function(object, returnValue) {
+		f_core.Debug(f_shellManager, "CloseShell: Request close shell '"+object+"'  returnValue='"+returnValue+"'");
 		if (object instanceof f_event) {
 			object=object.f_getComponent();
 		}
 		
-		if (object.nodeType!=f_core.ELEMENT_NODE) {
+		if (!object || object.nodeType!=f_core.ELEMENT_NODE) {
 			return false;
 		}
 		
@@ -210,20 +215,6 @@ var __statics = {
 		shell.f_close(returnValue);
 		
 		return true;
-	},
-	Finalizer: function() {
-		var shellManager=f_shellManager._singleton;
-		if (shellManager) {
-			f_shellManager._singleton=undefined; // f_shellManager
-				
-			if (shellManager._modalStyleInstalled) {
-				shellManager._modalStyleInstalled=undefined;
-				
-				f_core.RemoveEventListener(document, "focus", f_shellManager._OnFocus);
-			}
-		}
-
-		f_shellManager._documentComplete=undefined; //boolean
 	},
 	
 	
@@ -242,9 +233,28 @@ var __statics = {
 		shellDecorators[name]=constructor;
 	},
 	Finalizer: function() {
+		var shellManager=f_shellManager._singleton;
+		if (shellManager) {
+			f_shellManager._singleton=undefined; // f_shellManager
+				
+			if (shellManager._modalStyleInstalled) {
+				shellManager._modalStyleInstalled=undefined;
+				
+				
+				var capture=document;
+				if (f_core.IsInternetExplorer(7) || f_core.IsInternetExplorer(8)) {
+					capture=undefined;
+				}
+
+				f_core.RemoveEventListener(document, "focus", f_shellManager._OnFocus, capture);
+			}
+		}
+
+		f_shellManager._documentComplete=undefined; //Boolean
+
 		f_shellManager._ShellDecorators=undefined;
 	}
-}
+};
 
 var __members = {
 	f_shellManager: function() {
@@ -298,7 +308,7 @@ var __members = {
 	 * @return void
 	 */
 	f_popShell: function(shell) {
-		f_core.Debug(f_shellManager, "f_pushShell: pop shell '"+shell._id+"'.");
+		f_core.Debug(f_shellManager, "f_popShell: pop shell '"+shell._id+"'.");
 
 		shell.f_setStatus(f_shell.DESTROYING_STATUS);			
 
@@ -346,7 +356,7 @@ var __members = {
 	 * @return void
 	 */
 	_hideScreen: function() {		
-		var backgroundMode;
+		var backgroundMode=undefined;
 		
 		var shells=this._shells;
 		for(var i=0;i<shells.length;i++) {
@@ -481,7 +491,13 @@ var __members = {
 		}
 		this._modalStyleInstalled=true;
 		
-		f_core.AddEventListener(document, "focus", f_shellManager._OnFocus);
+		
+		var capture=document;
+		if (f_core.IsInternetExplorer(7) || f_core.IsInternetExplorer(8)) {
+			capture=undefined;
+		}
+
+		f_core.AddEventListener(document, "focus", f_shellManager._OnFocus, capture);
 	},
 
 	/**
@@ -497,7 +513,12 @@ var __members = {
 	
 		this._modalStyleInstalled=undefined;
 			
-		f_core.RemoveEventListener(document, "focus", f_shellManager._OnFocus);
+		var capture=document;
+		if (f_core.IsInternetExplorer(7) || f_core.IsInternetExplorer(8)) {
+			capture=undefined;
+		}
+
+		f_core.RemoveEventListener(document, "focus", f_shellManager._OnFocus, capture);
 	},
 	/**
 	 * @method public
@@ -612,6 +633,7 @@ var __members = {
 	 * @return void
 	 */
 	f_closeShell: function(shell, showNextShell) {
+		f_core.Debug(f_shellManager, "f_closeShell: Requested close shell '"+shell+"' showNextShell='"+showNextShell+"'");
 		if (shell.f_getStatus() == f_shell.CREATED_STATUS) {
 			shell.f_setStatus(f_shell.DESTROYING_STATUS); // Directement ...
 		}
@@ -643,7 +665,6 @@ var __members = {
 			} catch (x) {
 				f_core.Error(f_shellManager, "f_closeShell: f_destroyDecoration throws exception self="+self, x);
 			}
-
 		}
 		
 		if (shell.f_getStatus()==f_shell.CLOSED_STATUS) {
@@ -689,7 +710,6 @@ var __members = {
     	}
     	
     	for(;waitingShells.length;) {		    		
-    		var maxPriority=-1;
     		var waitingShell=null;
     		
     		for(var i=0;i<waitingShells.length;i++) {
@@ -764,7 +784,7 @@ var __members = {
 	f_clearPendingShells: function() {
     	this._waitingShells=undefined;
 	}
-}
+};
 
 new f_class("f_shellManager", {
 	statics: __statics,

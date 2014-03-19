@@ -23,7 +23,6 @@ import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
  * @version $Revision$ $Date$
  */
 public class JavaScriptCollectorRenderer extends AbstractHtmlRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(JavaScriptCollectorRenderer.class);
@@ -58,4 +57,10 @@ public class JavaScriptCollectorRenderer extends AbstractHtmlRenderer {
     public IAsyncRenderer getAsyncRenderer(FacesContext facesContext) {
         return null;
     }
+
+    @Override
+    protected void encodeEnd(IComponentWriter writer) throws WriterException {
+        super.encodeEnd(writer);
+    }
+
 }

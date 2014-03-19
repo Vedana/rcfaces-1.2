@@ -12,8 +12,6 @@ import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
  * @version $Revision$ $Date$
  */
 public class ContentModelWrapper implements IContentModel {
-    private static final String REVISION = "$Revision$";
-
     private IContentModel contentModel;
 
     public void setContentModel(IContentModel contentModel) {
@@ -40,15 +38,18 @@ public class ContentModelWrapper implements IContentModel {
         contentModel.setContentEngineId(contentEngineId);
     }
 
+    @Override
     public boolean equals(Object obj) {
         return contentModel.equals(obj);
     }
 
+    @Override
     public int hashCode() {
         return contentModel.hashCode();
     }
 
-    public void setInformations(IGenerationResourceInformation generationInformation,
+    public void setInformations(
+            IGenerationResourceInformation generationInformation,
             IGeneratedResourceInformation generatedInformation) {
         contentModel.setInformations(generationInformation,
                 generatedInformation);

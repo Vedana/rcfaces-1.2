@@ -35,55 +35,55 @@ public class ToolBarTag extends AbstractBasicTag implements Tag {
 		return ToolBarComponent.COMPONENT_TYPE;
 	}
 
-	public final void setInitListener(ValueExpression initListeners) {
+	public void setInitListener(ValueExpression initListeners) {
 		this.initListeners = initListeners;
 	}
 
-	public final void setVerticalAlignment(ValueExpression verticalAlignment) {
+	public void setVerticalAlignment(ValueExpression verticalAlignment) {
 		this.verticalAlignment = verticalAlignment;
 	}
 
-	public final void setBorderType(ValueExpression borderType) {
+	public void setBorderType(ValueExpression borderType) {
 		this.borderType = borderType;
 	}
 
-	public final void setSeparatorImageURL(ValueExpression separatorImageURL) {
+	public void setSeparatorImageURL(ValueExpression separatorImageURL) {
 		this.separatorImageURL = separatorImageURL;
 	}
 
-	public final void setSeparatorImageWidth(ValueExpression separatorImageWidth) {
+	public void setSeparatorImageWidth(ValueExpression separatorImageWidth) {
 		this.separatorImageWidth = separatorImageWidth;
 	}
 
-	public final void setSeparatorImageHeight(ValueExpression separatorImageHeight) {
+	public void setSeparatorImageHeight(ValueExpression separatorImageHeight) {
 		this.separatorImageHeight = separatorImageHeight;
 	}
 
-	public final void setSeparatorAlternateText(ValueExpression separatorAlternateText) {
+	public void setSeparatorAlternateText(ValueExpression separatorAlternateText) {
 		this.separatorAlternateText = separatorAlternateText;
 	}
 
-	public final void setControlImageURL(ValueExpression controlImageURL) {
+	public void setControlImageURL(ValueExpression controlImageURL) {
 		this.controlImageURL = controlImageURL;
 	}
 
-	public final void setControlImageWidth(ValueExpression controlImageWidth) {
+	public void setControlImageWidth(ValueExpression controlImageWidth) {
 		this.controlImageWidth = controlImageWidth;
 	}
 
-	public final void setControlImageHeight(ValueExpression controlImageHeight) {
+	public void setControlImageHeight(ValueExpression controlImageHeight) {
 		this.controlImageHeight = controlImageHeight;
 	}
 
-	public final void setControlAlternateText(ValueExpression controlAlternateText) {
+	public void setControlAlternateText(ValueExpression controlAlternateText) {
 		this.controlAlternateText = controlAlternateText;
 	}
 
-	public final void setItemPadding(ValueExpression itemPadding) {
+	public void setItemPadding(ValueExpression itemPadding) {
 		this.itemPadding = itemPadding;
 	}
 
-	public final void setLocked(ValueExpression locked) {
+	public void setLocked(ValueExpression locked) {
 		this.locked = locked;
 	}
 

@@ -18,6 +18,7 @@ import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
 
 /**
@@ -26,7 +27,6 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
  * @version $Revision$ $Date$
  */
 public class HyperLinkRenderer extends AbstractCssRenderer {
-    private static final String REVISION = "$Revision$";
 
     public void encodeEnd(IComponentWriter writer) throws WriterException {
         FacesContext facesContext = writer.getComponentRenderContext()
@@ -54,16 +54,17 @@ public class HyperLinkRenderer extends AbstractCssRenderer {
         if (disabled) {
             htmlWriter.writeDisabled();
         }
+        writeFirstTooltipClientId(htmlWriter);
 
         // Il faut le laisser pour le lazy FOCUS
-        htmlWriter.writeHRef(IHtmlWriter.JAVASCRIPT_VOID);
+        htmlWriter.writeHRef_JavascriptVoid0();
 
         Object value = getValue(component);
         if (value != null) {
             String convertedValue = convertValue(facesContext, component, value);
 
             if (convertedValue != null) {
-                htmlWriter.writeAttribute("v:value", convertedValue);
+                htmlWriter.writeAttributeNS("value", convertedValue);
             }
         }
 
@@ -72,7 +73,6 @@ public class HyperLinkRenderer extends AbstractCssRenderer {
             if (text != null) {
                 text = ParamUtils.formatMessage(component, text);
             }
-
             htmlWriter.writeText(text);
         }
 
@@ -97,6 +97,10 @@ public class HyperLinkRenderer extends AbstractCssRenderer {
 
     protected String getActionEventName(INameSpace nameSpace) {
         return nameSpace.getSelectionEventName();
+    }
+
+    protected boolean useHtmlAccessKeyAttribute() {
+        return true;
     }
 
     protected void decode(IRequestContext context, UIComponent component,
@@ -132,5 +136,11 @@ public class HyperLinkRenderer extends AbstractCssRenderer {
                 }
             }
         }
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "value" });
     }
 }

@@ -40,6 +40,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.decorator.ISelectItemNodeWriter;
 import org.rcfaces.renderkit.html.internal.decorator.SelectItemsContext;
+import org.rcfaces.renderkit.html.internal.decorator.TreeDecorator;
 import org.rcfaces.renderkit.html.internal.renderer.TreeRenderer;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
 
@@ -48,7 +49,6 @@ import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
  * @version $Revision$ $Date$
  */
 public class TreeService extends AbstractHtmlService {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(TreeService.class);
 
@@ -114,7 +114,7 @@ public class TreeService extends AbstractHtmlService {
         ILocalizedComponent localizedComponent = HtmlTools.localizeComponent(
                 facesContext, treeId);
         if (localizedComponent == null) {
-            // Cas special: la session a du expir�e ....
+            // Cas special: la session a du expirée ....
 
             sendJsError(facesContext, treeId, INVALID_PARAMETER_SERVICE_ERROR,
                     "Can not find treeComponent (id='" + treeId + "').",
@@ -293,13 +293,16 @@ public class TreeService extends AbstractHtmlService {
      * @version $Revision$ $Date$
      */
     private static class FilterNodeRenderer implements ISelectItemNodeWriter {
-        private static final String REVISION = "$Revision$";
 
         private final ISelectItemNodeWriter parent;
 
         private final int indexes[];
 
         private int currentIndex = 0;
+
+        private SelectItem mainNode = null;
+
+        private boolean mainNodeHasChild = false;
 
         public FilterNodeRenderer(String node, ISelectItemNodeWriter parent) {
             this.parent = parent;
@@ -357,10 +360,11 @@ public class TreeService extends AbstractHtmlService {
                 if (indexes[depth] != 0) {
                     return SKIP_NODE;
                 }
-
+                mainNode = selectItem;
                 return EVAL_NODE;
             }
 
+            mainNodeHasChild = true;
             return parent.encodeNodeBegin(component, selectItem, hasChild,
                     isVisible);
         }
@@ -373,6 +377,13 @@ public class TreeService extends AbstractHtmlService {
             }
 
             parent.encodeNodeEnd(component, selectItem, hasChild, isVisible);
+        }
+
+        public void refreshNode(UIComponent component) throws WriterException {
+            if (mainNode != null && parent instanceof TreeDecorator) {
+                ((TreeDecorator) parent)
+                        .refreshNode(mainNode, mainNodeHasChild);
+            }
         }
     }
 }

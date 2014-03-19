@@ -45,9 +45,14 @@ var __statics = {
 	 * @field public static final Number
 	 */
 	AS_SEPARATOR: 64
-}
+};
 
 var __members = {
+		
+	/**
+	 * @field protected Object[]
+	 */
+	_items: undefined,
 
 	fa_items: function() {
 	},
@@ -432,9 +437,10 @@ var __members = {
 	 * @method public
 	 * @param String item Value of the item, or the item object.
 	 * @param Boolean checked
+	 * @param optional Boolean notFireChecked
 	 * @return void
 	 */
-	f_setItemChecked: function(item, checked) {
+	f_setItemChecked: function(item, checked, notFireChecked) {
 		if (typeof(item)!="object") {
 			item=this.f_getItemByValue(item, true);
 		}
@@ -449,7 +455,7 @@ var __members = {
 		if (item._groupName && checked) {
 			var selected=this.f_getCheckedItemInGroup(item);
 			if (selected && this.f_isItemChecked(selected)) {
-				this.f_setItemChecked(selected, false);
+				this.f_setItemChecked(selected, false, true); // a confirmer 
 			}		
 		}		
 		
@@ -493,6 +499,10 @@ var __members = {
 		}
 
 		this.fa_updateItemStyle(item);
+		
+		if (notFireChecked) {
+			return;
+		}
 		
 		this.f_fireEvent(f_event.CHECK, null, item, item._checked);
 	},
@@ -614,7 +624,7 @@ var __members = {
 			item=this.f_getItemByValue(item, true);
 		}
 
-		this.f_changeGroup(item._groupName, groupName, item);
+		this.f_changeGroup(item._groupName, groupName, item._value);
 		item._groupName = groupName;
 	},
 	/**
@@ -734,6 +744,7 @@ var __members = {
 	
 	/**
 	 * @method abstract protected
+	 * @param Array items
 	 * @return void
 	 */
 	fa_destroyItems: f_class.ABSTRACT,
@@ -749,7 +760,7 @@ var __members = {
 	 * @return void
 	 */
 	fa_componentUpdated: f_class.OPTIONAL_ABSTRACT
-}
+};
 
 new f_aspect("fa_items", {
 	extend: [ fa_itemClientDatas ],

@@ -13,6 +13,7 @@ import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.event.SelectionEvent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.renderkit.IComponentData;
+import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.util.ParamUtils;
@@ -27,12 +28,15 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
  * @version $Revision$ $Date$
  */
 public class ButtonRenderer extends AbstractInputRenderer {
-    private static final String REVISION = "$Revision$";
 
     protected void encodeComponent(IHtmlWriter htmlWriter)
             throws WriterException {
-        ButtonComponent button = (ButtonComponent) htmlWriter
-                .getComponentRenderContext().getComponent();
+
+        IComponentRenderContext componentContext = htmlWriter
+                .getComponentRenderContext();
+
+        ButtonComponent button = (ButtonComponent) componentContext
+                .getComponent();
 
         htmlWriter.startElement(IHtmlWriter.INPUT);
 
@@ -41,6 +45,8 @@ public class ButtonRenderer extends AbstractInputRenderer {
         writeCssAttributes(htmlWriter);
         writeInputAttributes(htmlWriter);
         writeTextDirection(htmlWriter, button);
+
+        writeFirstTooltipClientId(htmlWriter);
 
         String txt = button.getText(htmlWriter.getComponentRenderContext()
                 .getFacesContext());
@@ -55,6 +61,16 @@ public class ButtonRenderer extends AbstractInputRenderer {
         htmlWriter.addSubFocusableComponent(htmlWriter
                 .getComponentRenderContext().getComponentClientId());
     }
+
+    // public static IColumnIterator listColumns(IGridComponent component,
+    // Class filter) {
+    // List list = ComponentIterators.list((UIComponent) component, filter);
+    // if (list.isEmpty()) {
+    // return EMPTY_COLUMNS_ITERATOR;
+    // }
+    //
+    // return new ColumnListIterator(list);
+    // }
 
     protected boolean isNameEqualsId() {
         return true;
@@ -121,8 +137,8 @@ public class ButtonRenderer extends AbstractInputRenderer {
             try {
                 px = Integer.parseInt(x);
             } catch (NumberFormatException ex) {
-                FacesContext.getCurrentInstance().getExternalContext().log(
-                        "Can not parse X position '" + x + "'.", ex);
+                FacesContext.getCurrentInstance().getExternalContext()
+                        .log("Can not parse X position '" + x + "'.", ex);
             }
         }
 
@@ -131,8 +147,8 @@ public class ButtonRenderer extends AbstractInputRenderer {
                 py = Integer.parseInt(y);
 
             } catch (NumberFormatException ex) {
-                FacesContext.getCurrentInstance().getExternalContext().log(
-                        "Can not parse Y position '" + y + "'.", ex);
+                FacesContext.getCurrentInstance().getExternalContext()
+                        .log("Can not parse Y position '" + y + "'.", ex);
             }
         }
 

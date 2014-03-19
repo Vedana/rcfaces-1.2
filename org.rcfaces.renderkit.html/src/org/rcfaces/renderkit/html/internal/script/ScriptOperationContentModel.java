@@ -12,7 +12,7 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
-import org.rcfaces.core.internal.content.AbstractBufferOperationContentModel;
+import org.rcfaces.core.internal.content.AbstractGzipedBufferOperationContentModel;
 import org.rcfaces.core.internal.content.IBufferOperation;
 import org.rcfaces.core.internal.content.IFileBuffer;
 import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
@@ -30,8 +30,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
  * @version $Revision$ $Date$
  */
 public class ScriptOperationContentModel extends
-        AbstractBufferOperationContentModel {
-    private static final String REVISION = "$Revision$";
+        AbstractGzipedBufferOperationContentModel {
 
     private static final Log LOG = LogFactory
             .getLog(ScriptOperationContentModel.class);
@@ -83,25 +82,26 @@ public class ScriptOperationContentModel extends
             return INVALID_BUFFERED_FILE;
         }
 
-        Map applicationParameters = new ApplicationParametersMap(facesContext);
+        Map<String, Object> applicationParameters = new ApplicationParametersMap(
+                facesContext);
 
         IScriptFile scriptFile = createNewScriptFile(resourceURL);
         try {
             IScriptOperationContext parserContext = new ScriptOperationContext(
-                    contentInfo[0].getCharSet(), contentInfo[0]
-                            .getLastModified());
+                    contentInfo[0].getCharSet(),
+                    contentInfo[0].getLastModified(), resourceLoaderFactory,
+                    applicationParameters);
 
-            String newStyleSheetContent = filter(applicationParameters,
-                    resourceLoaderFactory, resourceURL, scriptContent,
+            String newStyleSheetContent = filter(resourceURL, scriptContent,
                     new IScriptOperation[] { scriptOperation },
                     new Map[] { getFilterParameters() }, parserContext);
 
             String contentType = getContentType() + "; charset="
                     + parserContext.getCharset();
 
-            scriptFile.initialize(contentType, newStyleSheetContent
-                    .getBytes(parserContext.getCharset()), parserContext
-                    .getLastModifiedDate());
+            scriptFile.initialize(contentType,
+                    newStyleSheetContent.getBytes(parserContext.getCharset()),
+                    parserContext.getLastModifiedDate());
 
         } catch (IOException e) {
             LOG.error("Can not create filtred image '" + getResourceURL()
@@ -134,11 +134,9 @@ public class ScriptOperationContentModel extends
         return scriptOperation;
     }
 
-    protected String filter(Map applicationParameters,
-            IResourceLoaderFactory resourceLoaderFactory, String styleSheetURL,
-            String styleSheetContent, IScriptOperation scriptOperations[],
-            Map parameters[], IScriptOperationContext parserContext)
-            throws IOException {
+    protected String filter(String scriptURL, String scriptContent,
+            IScriptOperation scriptOperations[], Map parameters[],
+            IScriptOperationContext scriptOperationContext) throws IOException {
 
         if (LOG.isTraceEnabled()) {
             LOG.trace("Process " + scriptOperations.length
@@ -154,12 +152,11 @@ public class ScriptOperationContentModel extends
                         + scriptOperation.getName() + "'");
             }
 
-            styleSheetURL = scriptOperation.filter(applicationParameters,
-                    resourceLoaderFactory, styleSheetURL, styleSheetContent,
-                    parserContext);
+            scriptURL = scriptOperation.filter(scriptURL, scriptContent,
+                    scriptOperationContext);
         }
 
-        return styleSheetURL;
+        return scriptURL;
     }
 
     protected String getDefaultCharset() {
@@ -189,9 +186,17 @@ public class ScriptOperationContentModel extends
 
         private long lastModifiedDate;
 
-        public ScriptOperationContext(String charset, long lastModifiedDate) {
+        private final IResourceLoaderFactory resourceLoaderFactory;
+
+        private final Map<String, Object> applicationParameters;
+
+        public ScriptOperationContext(String charset, long lastModifiedDate,
+                IResourceLoaderFactory resourceLoaderFactory,
+                Map<String, Object> applicationParameters) {
             this.charset = charset;
             this.lastModifiedDate = lastModifiedDate;
+            this.resourceLoaderFactory = resourceLoaderFactory;
+            this.applicationParameters = applicationParameters;
         }
 
         public final String getCharset() {
@@ -208,6 +213,14 @@ public class ScriptOperationContentModel extends
 
         public final void setLastModifiedDate(long lastModifiedDate) {
             this.lastModifiedDate = lastModifiedDate;
+        }
+
+        public IResourceLoaderFactory getResourceLoaderFactory() {
+            return resourceLoaderFactory;
+        }
+
+        public Map<String, Object> getApplicationParameters() {
+            return applicationParameters;
         }
 
     }

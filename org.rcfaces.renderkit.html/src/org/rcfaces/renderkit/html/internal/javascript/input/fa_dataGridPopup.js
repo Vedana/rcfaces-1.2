@@ -43,7 +43,7 @@ var __statics = {
 		f_core.Debug(fa_dataGridPopup, "_OpenPopup: Open popup for dataGridPopup '"+dataGridPopup.id+"'. (popupOpened='"+dataGridPopup._popupOpened+"' popup='"+dataGridPopup._popup+"')");
 
 		var popupClassName="f_dataGridPopup_popup";
-		var ds=f_core.GetAttribute(dataGridPopup, "v:popupStyleClass");
+		var ds=f_core.GetAttributeNS(dataGridPopup,"popupStyleClass");
 		if (ds) {
 			popupClassName+=" "+ds;
 		}			
@@ -217,7 +217,8 @@ var __statics = {
 			
 			if (dataGridPopup._searchInput) {
 				dataGridPopup._searchInput.focus();
-			}else if (dataGridPopup._input) {
+				
+			} else if (dataGridPopup._input) {
 				dataGridPopup._ariaInput = dataGridPopup._input;
 				dataGridPopup._ariaInput._role = true;
 				dataGridPopup._ariaInput.setAttribute("role", "listbox");
@@ -241,10 +242,12 @@ var __statics = {
 			return;
 		}
 		
-		if(dataGridPopup._ariaInput){
+		if (dataGridPopup._ariaInput){
 			dataGridPopup._ariaInput.removeAttribute("aria-activedescendant");
 			if (dataGridPopup._ariaInput._role) {
-				dataGridPopup._ariaInput.setAttribute("role", "textbox");
+				
+				// Le 28/09 Réné demande de remettre le role à combobox  (JAWS ne voit plus rien)
+				dataGridPopup._ariaInput.setAttribute("role", "combobox");
 				dataGridPopup._ariaInput._role = false;
 			}
 		}
@@ -324,7 +327,7 @@ var __statics = {
 		
 		return dataGridPopup._onSearchClick(jsEvent);
 	}
-}
+};
 
 var __members = {
 		
@@ -354,14 +357,14 @@ var __members = {
 	_columns: undefined,
 	
 	fa_dataGridPopup: function() {		
-		this._valueColumnId=f_core.GetAttribute(this, "v:valueColumnId");
+		this._valueColumnId=f_core.GetAttributeNS(this,"valueColumnId");
 		
-		var labelColumnId=f_core.GetAttribute(this, "v:labelColumnId");
+		var labelColumnId=f_core.GetAttributeNS(this,"labelColumnId");
 		if (labelColumnId) {
 			this._labelColumnId=labelColumnId;
 		}
 		
-		var valueFormat=f_core.GetAttribute(this, "v:valueFormat");
+		var valueFormat=f_core.GetAttributeNS(this,"valueFormat");
 		if (!valueFormat) {
 			if (labelColumnId) {
 				valueFormat="{"+labelColumnId+"}";
@@ -371,8 +374,8 @@ var __members = {
 			}
 		}
 		
-		this._popupWidth=f_core.GetNumberAttribute(this, "v:popupWidth", 320);
-		this._popupHeight=f_core.GetNumberAttribute(this, "v:popupHeight", 200);
+		this._popupWidth=f_core.GetNumberAttributeNS(this,"popupWidth", 320);
+		this._popupHeight=f_core.GetNumberAttributeNS(this,"popupHeight", 200);
 		
 		this._valueFormat=valueFormat;
 		
@@ -418,8 +421,8 @@ var __members = {
 				f_core.VerifyProperties(searchInput);
 			}
 			
-			if(this._ariaInput){
-				this._ariaInput = undefined // HtmlInputElement
+			if (this._ariaInput){
+				this._ariaInput = undefined; // HtmlInputElement
 			}
 			
 			var searchIcon=this._searchIcon;
@@ -467,8 +470,8 @@ var __members = {
 	f_constructDataGrid: function(parent) {
 		f_core.Debug(fa_dataGridPopup, "f_constructDataGrid: construct components parent="+parent);
 
-		var rows=f_core.GetNumberAttribute(this, "v:rows");
-		var paged=f_core.GetBooleanAttribute(this, "v:paged", true);
+		var rows=f_core.GetNumberAttributeNS(this, "rows");
+		var paged=f_core.GetBooleanAttributeNS(this, "paged", true);
 		
 		var hasPager=(rows>0 && paged);
 		
@@ -485,13 +488,15 @@ var __members = {
 			className: tableClassName, 
 			"style": "width:"+width+"px;height:"+height+"px" 
 		});
+		dataGridContainer.setAttribute("role", "presentation");
 		
 		var tBodyContainer=f_core.CreateElement(dataGridContainer, "tbody");		
 		
-		var showTitle=f_core.GetBooleanAttribute(this, "v:searchFieldVisible", true);
+		var showTitle=f_core.GetBooleanAttributeNS(this,"searchFieldVisible", true);
 		
 		var cwidth=width;
 		var cheight=height;
+		var resourceBundle=f_resourceBundle.Get(fa_dataGridPopup);
 		
 		if (showTitle) {	
 			inputHeight=20;
@@ -502,8 +507,6 @@ var __members = {
 			 	className: "fa_dataGridPopup_search"
 			});								
 			
-			var resourceBundle=f_resourceBundle.Get(fa_dataGridPopup);
-			
 			var search=f_core.CreateElement(tr, "td", {
 				align: "left", 
 				valign: "middle" 
@@ -513,29 +516,33 @@ var __members = {
 				className: "fa_dataGridPopup_title"
 			});
 			
-			f_core.CreateElement(div, "div", {
+			var plabel = f_core.CreateElement(div, "label", {
 				className: "fa_dataGridPopup_label",
 				textNode: resourceBundle.f_get("SEARCH_LABEL")
 			});
+			plabel.setAttribute("for", this.id+"::dataGridPopup_input");
 			
-			var form=f_core.CreateElement(div,  "form", {
+			var form=f_core.CreateElement(div, "form", {
 				className: "fa_dataGridPopup_form"
 			});
+			form.onsubmit=document._rcfacesDisableSubmit;
+			form.submit=document._rcfacesDisableSubmitReturnFalse;
+			form.action="#";
 		
 			var button=f_core.CreateElement(form, "img", {
 				className: "fa_dataGridPopup_icon",
 				src: f_env.GetBlankImageURL(),
 				name: "searchButton"
-			});	
+			});
 			this._searchIcon=button;
 			button._dataGridPopup=this;
 			button.onclick=fa_dataGridPopup._SearchButton_onclick;
 			
 			var input=f_core.CreateElement(form, "input", {
+				id: this.id+"::dataGridPopup_input",
 				className: "fa_dataGridPopup_input",
 				name: "searchValue",
 				type: "text",
-				role: "listbox",
 				// He oui ! cela semble marcher sur tous les browsers ! (meme Gecko !?)		
 				autocomplete: "off"
 			});
@@ -559,8 +566,9 @@ var __members = {
 			valign: "middle" 
 		});									
 		
+		
 		var dataGridStyleClass="fa_dataGridPopup_grid";
-		var ds=f_core.GetAttribute(this, "v:gridStyleClass");
+		var ds=f_core.GetAttributeNS(this,"gridStyleClass");
 		if (ds) {
 			dataGridStyleClass+=" "+ds;
 		}
@@ -577,13 +585,13 @@ var __members = {
 	
 		if (hasPager) {
 
-			if (!f_core.GetAttribute(this, "v:message")) {				
+			if (!f_core.GetAttributeNS(this,"message")) {				
 
-				this.setAttribute("v:message", resourceBundle.f_get("MESSAGE"));
-				this.setAttribute("v:zeroResultMessage", resourceBundle.f_get("ZERO_RESULT_MESSAGE"));			
-				this.setAttribute("v:oneResultMessage", resourceBundle.f_get("ONE_RESULT_MESSAGE"));			
-				this.setAttribute("v:manyResultMessage", resourceBundle.f_get("MANY_RESULTS_MESSAGE"));			
-				this.setAttribute("v:manyResultMessage2", resourceBundle.f_get("MANY_RESULTS_MESSAGE2"));			
+				f_core.SetAttributeNS(this, "message", resourceBundle.f_get("MESSAGE"));
+				f_core.SetAttributeNS(this, "zeroResultMessage", resourceBundle.f_get("ZERO_RESULT_MESSAGE"));			
+				f_core.SetAttributeNS(this, "oneResultMessage", resourceBundle.f_get("ONE_RESULT_MESSAGE"));			
+				f_core.SetAttributeNS(this, "manyResultMessage", resourceBundle.f_get("MANY_RESULTS_MESSAGE"));			
+				f_core.SetAttributeNS(this, "manyResultMessage2", resourceBundle.f_get("MANY_RESULTS_MESSAGE2"));			
 			}			
 			
 			td=f_core.CreateElement(tBodyContainer, "tr", { 
@@ -591,9 +599,9 @@ var __members = {
 			}, "td", {
 				align: "center", 
 				valign: "middle" });
-				
+
 			var psc="fa_dataGridPopup_pager";
-			var ppsc=f_core.GetAttribute(this, "v:pagerStyleClass");
+			var ppsc=f_core.GetAttributeNS(this,"pagerStyleClass");
 			if (ppsc) {
 				psc+=" "+ppsc;
 			}
@@ -603,6 +611,16 @@ var __members = {
 				":"+dataGrid.id,
 				psc);
 			this._pager=pager;			
+			
+			pager.setAttribute("role", "description");        
+			pager.setAttribute("aria-relevant", "additions all");
+			pager.setAttribute("aria-atomic", "true");
+			pager.setAttribute("aria-live", "polite");
+			
+			if (this._searchInput) {
+				// ca met la zone !
+				//this._searchInput.setAttribute("aria-controls", pager.id);
+			}
 		}
 				
 		var self=this;
@@ -648,6 +666,8 @@ var __members = {
 	f_closeDataGridPopup: function(jsEvent) {
 		f_core.Debug(fa_dataGridPopup, "f_closeDataGridPopup: event="+jsEvent);
 
+		this._closePopupDate=new Date().getTime(); // Pour Webkit !
+		
 		fa_dataGridPopup._ClosePopup(this, jsEvent);
 		
 		var self=this;
@@ -668,7 +688,7 @@ var __members = {
 	f_openDataGridPopup: function(jsEvent, text, autoSelect) {
 		f_core.Debug(fa_dataGridPopup, "f_openDataGridPopup: jsEvent="+jsEvent+" text='"+text+"' autoSelect="+autoSelect);
 
-		var popupOpened=this._popupOpened
+		var popupOpened=this._popupOpened;
 		if (!popupOpened) {
 			if (this.f_fireEvent(f_event.MENU, jsEvent)===false) {
 				return false;
@@ -701,6 +721,13 @@ var __members = {
 		
 		dataGrid.f_setAutoSelection(1);
 		
+		var pager=this._pager;
+		if (pager) {
+			var parent=pager.parentNode;
+			parent.removeChild(pager);
+			parent.appendChild(pager);
+		}
+		
 		var filterProperties=this.f_getFilterProperties();
 		if (text) {
 			filterProperties.text=text;
@@ -713,6 +740,16 @@ var __members = {
 	 * @return Boolean
 	 */
 	_clickOutside: function(jsEvent) {
+		
+		if(!jsEvent) {
+			jsEvent = f_core.GetJsEvent(this);
+		}
+		
+		if (jsEvent.type == f_event.BLUR) {
+			// on ne gère pas les events de type blur afin de ne pas fermer la popup au changement de focus
+			return true;
+		}
+		
 		f_core.Debug(fa_dataGridPopup, "_clickOutside: popup click outside");
 		fa_dataGridPopup.LAST_OUTSIDE = jsEvent.timeStamp;
 		this.f_closeDataGridPopup(jsEvent);
@@ -875,6 +912,14 @@ var __members = {
 			return true;
 		}
 		
+		var pager=this._pager;
+		if (pager) {
+			// Pour la vocalisation ... il faut y aller franco !
+			for (; pager.firstChild;) {
+				pager.removeChild(pager.firstChild);
+			}
+		}
+		
 		f_core.Debug(fa_dataGridPopup, "_onSearchSuggest: Set timeout to "+suggestionDelayMs);
 		
 		var delay=suggestionDelayMs;
@@ -906,7 +951,7 @@ var __members = {
 	 * @method private
 	 */
 	_onSuggestTimeOut: function(text) {
-		if (!text) {
+		if (!text && this._searchInput) {
 			text=this._searchInput.value;
 		}
 		
@@ -930,6 +975,6 @@ var __members = {
 	 * @return void
 	 */	
 	fa_valueSelected: f_class.ABSTRACT
-}
+};
 
 new f_aspect("fa_dataGridPopup", __statics, __members, fa_filterProperties);

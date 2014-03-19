@@ -5,7 +5,6 @@
 package org.rcfaces.core.internal.converter;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.faces.component.UIComponent;
@@ -20,7 +19,8 @@ import org.rcfaces.core.model.AbstractConverter;
  * @version $Revision$ $Date$
  */
 public class AsyncDecodeModeConverter extends AbstractConverter {
-    private static final String REVISION = "$Revision$";
+
+    private static final String DEFAULT_ASYNC_DECODE_MODE_NAME = "default";
 
     private static final String COMPLETE_ASYNC_DECODE_MODE_NAME = "complete";
 
@@ -31,12 +31,15 @@ public class AsyncDecodeModeConverter extends AbstractConverter {
 
     public static final Converter SINGLETON = new AsyncDecodeModeConverter();
 
-    private static Map ASYNC_DECODE_MODES = new HashMap(5);
+    private static Map<String, Integer> ASYNC_DECODE_MODES = new HashMap<String, Integer>(
+            5);
     static {
         ASYNC_DECODE_MODES.put(COMPLETE_ASYNC_DECODE_MODE_NAME, new Integer(
                 IAsyncDecodeModeCapability.COMPLETE_ASYNC_DECODE_MODE));
         ASYNC_DECODE_MODES.put(PARTIAL_ASYNC_DECODE_MODE_NAME, new Integer(
                 IAsyncDecodeModeCapability.PARTIAL_ASYNC_DECODE_MODE));
+        ASYNC_DECODE_MODES.put(DEFAULT_ASYNC_DECODE_MODE_NAME, new Integer(
+                IAsyncDecodeModeCapability.DEFAULT_ASYNC_DECODE_MODE));
     }
 
     public Object getAsObject(FacesContext context, UIComponent component,
@@ -48,13 +51,9 @@ public class AsyncDecodeModeConverter extends AbstractConverter {
 
         value = value.toLowerCase();
 
-        Integer i = (Integer) ASYNC_DECODE_MODES.get(value);
+        Integer i = ASYNC_DECODE_MODES.get(value);
         if (i != null) {
             return i;
-        }
-
-        if ("default".equalsIgnoreCase(value)) {
-            return DEFAULT_ASYNC_DECODE_MODE;
         }
 
         throw new IllegalArgumentException("Keyword '" + value
@@ -65,19 +64,17 @@ public class AsyncDecodeModeConverter extends AbstractConverter {
             Object value) {
 
         if (value == null) {
-            return (String) ASYNC_DECODE_MODES.get(DEFAULT_ASYNC_DECODE_MODE);
+            value = DEFAULT_ASYNC_DECODE_MODE;
         }
 
         if ((value instanceof Integer) == false) {
             throw new IllegalArgumentException("Value must be an Integer !");
         }
 
-        for (Iterator it = ASYNC_DECODE_MODES.entrySet().iterator(); it
-                .hasNext();) {
-            Map.Entry entry = (Map.Entry) it.next();
+        for (Map.Entry<String, Integer> entry : ASYNC_DECODE_MODES.entrySet()) {
 
             if (value.equals(entry.getValue())) {
-                return (String) entry.getKey();
+                return entry.getKey();
             }
         }
 

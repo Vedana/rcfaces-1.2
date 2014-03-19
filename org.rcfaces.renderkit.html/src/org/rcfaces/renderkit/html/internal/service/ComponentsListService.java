@@ -37,9 +37,9 @@ import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
+import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
-import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.renderer.ComponentsListRenderer;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
 
@@ -48,7 +48,6 @@ import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
  * @version $Revision$ $Date$
  */
 public class ComponentsListService extends AbstractHtmlService {
-    private static final String REVISION = "$Revision$";
 
     private static final String SERVICE_ID = Constants.getPackagePrefix()
             + ".ComponentsList";
@@ -189,8 +188,8 @@ public class ComponentsListService extends AbstractHtmlService {
                     printWriter = response.getWriter();
 
                 } else {
-                    ConfiguredHttpServlet
-                            .setGzipContentEncoding((HttpServletResponse) response, true);
+                    ConfiguredHttpServlet.setGzipContentEncoding(
+                            (HttpServletResponse) response, true);
 
                     OutputStream outputStream = response.getOutputStream();
 
@@ -267,12 +266,12 @@ public class ComponentsListService extends AbstractHtmlService {
 
         String varId = jsWriter.getComponentVarName();
 
-        jsWriter.write("var ").write(varId).write('=').writeCall("f_core",
-                "GetElementByClientId").writeString(componentClientId).writeln(
-                ", document);");
+        jsWriter.write("var ").write(varId).write('=')
+                .writeCall("f_core", "GetElementByClientId")
+                .writeString(componentClientId).writeln(", document);");
 
-        jsWriter.writeMethodCall("f_startNewPage").writeInt(rowIndex).writeln(
-                ");");
+        jsWriter.writeMethodCall("f_startNewPage").writeInt(rowIndex)
+                .writeln(");");
 
         ResponseWriter oldWriter = facesContext.getResponseWriter();
         ResponseStream oldStream = facesContext.getResponseStream();
@@ -296,16 +295,22 @@ public class ComponentsListService extends AbstractHtmlService {
             // IComponentTreeRenderProcessor
             // componentTreeRenderProcessor=ComponentTreeRenderProcessorFactory.get(facesContext)
 
-            dgr.encodeChildren(writer, listContext);
+            int rowCount = dgr.encodeChildren(writer, listContext);
 
             newWriter.flush();
 
             String buffer = myWriter.toString();
 
-            int rowCount = 10;
-
             jsWriter.writeMethodCall("f_updateNewPage").writeInt(rowCount)
                     .write(',').writeString(buffer).writeln(");");
+
+            String viewStateId = saveViewAndReturnStateId(facesContext);
+
+            if (viewStateId != null) {
+                jsWriter.writeCall("f_classLoader", "ChangeJsfViewId")
+                        .write(varId).write(',').writeString(viewStateId)
+                        .write(')');
+            }
 
         } finally {
             if (oldWriter != null) {

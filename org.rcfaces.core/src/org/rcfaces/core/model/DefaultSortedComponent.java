@@ -11,39 +11,37 @@ import javax.faces.component.UIComponent;
  * @version $Revision$ $Date$
  */
 public class DefaultSortedComponent implements ISortedComponent {
-    private static final String REVISION = "$Revision$";
+	private final UIComponent component;
 
-    private final UIComponent component;
+	private final int index;
 
-    private final int index;
+	private final int sortMode;
 
-    private final int sortMode;
+	public DefaultSortedComponent(UIComponent component, int index, int sortMode) {
+		this.component = component;
+		this.index = index;
+		this.sortMode = sortMode;
+	}
 
-    public DefaultSortedComponent(UIComponent component, int index, int sortMode) {
-        this.component = component;
-        this.index = index;
-        this.sortMode = sortMode;
-    }
+	public DefaultSortedComponent(UIComponent component, int index,
+			boolean sortOrder) {
+		this(component, index, (sortOrder) ? ASCENDING : DESCENDING);
+	}
 
-    public DefaultSortedComponent(UIComponent component, int index,
-            boolean sortOrder) {
-        this(component, index, (sortOrder) ? ASCENDING : DESCENDING);
-    }
+	public UIComponent getComponent() {
+		return component;
+	}
 
-    public UIComponent getComponent() {
-        return component;
-    }
+	public int getIndex() {
+		return index;
+	}
 
-    public int getIndex() {
-        return index;
-    }
+	public int getSortMode() {
+		return sortMode;
+	}
 
-    public int getSortMode() {
-        return sortMode;
-    }
-
-    public final boolean isAscending() {
-        return getSortMode() == ASCENDING;
-    }
+	public final boolean isAscending() {
+		return getSortMode() == ASCENDING;
+	}
 
 }

@@ -32,7 +32,6 @@ import javax.imageio.stream.ImageOutputStream;
  * @version $Revision$ $Date$
  */
 public class ICOImageWriter extends ImageWriter {
-    private static final String REVISION = "$Revision$";
 
     private ImageOutputStream stream = null;
 
@@ -40,6 +39,7 @@ public class ICOImageWriter extends ImageWriter {
         super(originator);
     }
 
+    @Override
     public void setOutput(Object output) {
         super.setOutput(output); // validates output
         if (output != null) {
@@ -53,30 +53,36 @@ public class ICOImageWriter extends ImageWriter {
         this.stream = null;
     }
 
+    @Override
     public IIOMetadata getDefaultStreamMetadata(ImageWriteParam param) {
         return null;
     }
 
+    @Override
     public IIOMetadata getDefaultImageMetadata(ImageTypeSpecifier imageType,
             ImageWriteParam param) {
         ICOMetadata meta = new ICOMetadata();
         return meta;
     }
 
+    @Override
     public IIOMetadata convertStreamMetadata(IIOMetadata inData,
             ImageWriteParam param) {
         return null;
     }
 
+    @Override
     public IIOMetadata convertImageMetadata(IIOMetadata metadata,
             ImageTypeSpecifier type, ImageWriteParam param) {
         return null;
     }
 
+    @Override
     public boolean canWriteRasters() {
         return true;
     }
 
+    @Override
     public void write(IIOMetadata streamMetadata, IIOImage image,
             ImageWriteParam param) throws IOException {
         if (stream == null) {

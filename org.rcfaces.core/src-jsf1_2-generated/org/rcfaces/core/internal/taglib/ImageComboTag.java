@@ -29,56 +29,61 @@ public class ImageComboTag extends AbstractMenuTag implements Tag {
 	private ValueExpression imageHeight;
 	private ValueExpression imageWidth;
 	private ValueExpression showDropDownMark;
+	private ValueExpression audioDescription;
 	private ValueExpression popupRowNumber;
 	public String getComponentType() {
 		return ImageComboComponent.COMPONENT_TYPE;
 	}
 
-	public final void setImageURL(ValueExpression imageURL) {
+	public void setImageURL(ValueExpression imageURL) {
 		this.imageURL = imageURL;
 	}
 
-	public final void setDisabledImageURL(ValueExpression disabledImageURL) {
+	public void setDisabledImageURL(ValueExpression disabledImageURL) {
 		this.disabledImageURL = disabledImageURL;
 	}
 
-	public final void setHoverImageURL(ValueExpression hoverImageURL) {
+	public void setHoverImageURL(ValueExpression hoverImageURL) {
 		this.hoverImageURL = hoverImageURL;
 	}
 
-	public final void setSelectedImageURL(ValueExpression selectedImageURL) {
+	public void setSelectedImageURL(ValueExpression selectedImageURL) {
 		this.selectedImageURL = selectedImageURL;
 	}
 
-	public final void setBorder(ValueExpression border) {
+	public void setBorder(ValueExpression border) {
 		this.border = border;
 	}
 
-	public final void setBorderType(ValueExpression borderType) {
+	public void setBorderType(ValueExpression borderType) {
 		this.borderType = borderType;
 	}
 
-	public final void setText(ValueExpression text) {
+	public void setText(ValueExpression text) {
 		this.text = text;
 	}
 
-	public final void setTextPosition(ValueExpression textPosition) {
+	public void setTextPosition(ValueExpression textPosition) {
 		this.textPosition = textPosition;
 	}
 
-	public final void setImageHeight(ValueExpression imageHeight) {
+	public void setImageHeight(ValueExpression imageHeight) {
 		this.imageHeight = imageHeight;
 	}
 
-	public final void setImageWidth(ValueExpression imageWidth) {
+	public void setImageWidth(ValueExpression imageWidth) {
 		this.imageWidth = imageWidth;
 	}
 
-	public final void setShowDropDownMark(ValueExpression showDropDownMark) {
+	public void setShowDropDownMark(ValueExpression showDropDownMark) {
 		this.showDropDownMark = showDropDownMark;
 	}
 
-	public final void setPopupRowNumber(ValueExpression popupRowNumber) {
+	public void setAudioDescription(ValueExpression audioDescription) {
+		this.audioDescription = audioDescription;
+	}
+
+	public void setPopupRowNumber(ValueExpression popupRowNumber) {
 		this.popupRowNumber = popupRowNumber;
 	}
 
@@ -98,6 +103,7 @@ public class ImageComboTag extends AbstractMenuTag implements Tag {
 			LOG.debug("  imageHeight='"+imageHeight+"'");
 			LOG.debug("  imageWidth='"+imageWidth+"'");
 			LOG.debug("  showDropDownMark='"+showDropDownMark+"'");
+			LOG.debug("  audioDescription='"+audioDescription+"'");
 			LOG.debug("  popupRowNumber='"+popupRowNumber+"'");
 		}
 		if ((uiComponent instanceof ImageComboComponent)==false) {
@@ -211,6 +217,15 @@ public class ImageComboTag extends AbstractMenuTag implements Tag {
 			}
 		}
 
+		if (audioDescription != null) {
+			if (audioDescription.isLiteralText()==false) {
+				component.setValueExpression(Properties.AUDIO_DESCRIPTION, audioDescription);
+
+			} else {
+				component.setAudioDescription(audioDescription.getExpressionString());
+			}
+		}
+
 		if (popupRowNumber != null) {
 			if (popupRowNumber.isLiteralText()==false) {
 				component.setValueExpression(Properties.POPUP_ROW_NUMBER, popupRowNumber);
@@ -233,6 +248,7 @@ public class ImageComboTag extends AbstractMenuTag implements Tag {
 		imageHeight = null;
 		imageWidth = null;
 		showDropDownMark = null;
+		audioDescription = null;
 		popupRowNumber = null;
 
 		super.release();

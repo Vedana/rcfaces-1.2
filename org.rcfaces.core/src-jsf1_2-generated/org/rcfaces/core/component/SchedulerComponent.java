@@ -22,11 +22,12 @@ import java.lang.String;
 import java.util.Date;
 import org.rcfaces.core.component.capability.IHeightCapability;
 import org.rcfaces.core.lang.Time;
+import org.rcfaces.core.internal.converter.LiteralTimeConverter
+			;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.ILiteralTimeZoneCapability;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
-import org.rcfaces.core.internal.converter.LiteralTimeConverter;
 import java.util.Arrays;
 
 public class SchedulerComponent extends CameliaBaseComponent implements 
@@ -45,7 +46,11 @@ public class SchedulerComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
+<<<<<<< HEAD
 		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"hourBegin","secondaryTick","periods","var","selectionListener","literalLocale","height","periodStyle","verticalScrollPosition","showSecondaryTickLabel","periodEnd","periodToolTip","literalTimeZone","hourEnd","periodSelectable","periodLabel","primaryTick","periodValue","styleClass","width","showPrimaryTickLabel","dateBegin","horizontalScrollPosition","immediate","periodBegin"}));
+=======
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"hourBegin","secondaryTick","periods","var","tabIndex","selectionListener","literalLocale","height","periodStyle","verticalScrollPosition","showSecondaryTickLabel","periodEnd","periodToolTip","literalTimeZone","hourEnd","periodSelectable","periodLabel","primaryTick","periodValue","styleClass","width","showPrimaryTickLabel","dateBegin","horizontalScrollPosition","immediate","periodType","periodBegin"}));
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	}
 
 	public SchedulerComponent() {
@@ -79,14 +84,16 @@ public class SchedulerComponent extends CameliaBaseComponent implements
 	public void setHourBegin(String time) {
 
 
-				Time timeValue=(Time)LiteralTimeConverter.SINGLETON.getAsObject(null, this, time);
+				Time
+				timeValue=(Time)LiteralTimeConverter.SINGLETON.getAsObject(null,
+				this, time);
 				setHourBegin(timeValue);
 			
 	}
 
 	public void setHourEnd(String time) {
 
-
+			
 				Time timeValue=(Time)LiteralTimeConverter.SINGLETON.getAsObject(null, this, time);
 				setHourEnd(timeValue);
 			
@@ -146,14 +153,14 @@ public class SchedulerComponent extends CameliaBaseComponent implements
 
 	public List getSchedulerColumn() {
 
-
+			
 				return ComponentIterators.list(this, SchedulerColumnComponent.class);
 			
 	}
 
 	public List getPeriodClientData() {
 
-
+			
 				return ComponentIterators.list(this, PeriodClientDataComponent.class);
 			
 	}
@@ -547,7 +554,8 @@ public class SchedulerComponent extends CameliaBaseComponent implements
 	}
 
 	public String getPeriodLabel(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.PERIOD_LABEL, facesContext);
+		String s = engine.getStringProperty(Properties.PERIOD_LABEL, facesContext);
+		return s;
 	}
 
 	public void setPeriodLabel(String periodLabel) {
@@ -567,7 +575,8 @@ public class SchedulerComponent extends CameliaBaseComponent implements
 	}
 
 	public String getPeriodStyle(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.PERIOD_STYLE, facesContext);
+		String s = engine.getStringProperty(Properties.PERIOD_STYLE, facesContext);
+		return s;
 	}
 
 	public void setPeriodStyle(String periodStyle) {
@@ -607,7 +616,8 @@ public class SchedulerComponent extends CameliaBaseComponent implements
 	}
 
 	public String getPeriodToolTip(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.PERIOD_TOOL_TIP, facesContext);
+		String s = engine.getStringProperty(Properties.PERIOD_TOOL_TIP, facesContext);
+		return s;
 	}
 
 	public void setPeriodToolTip(String periodToolTip) {
@@ -627,7 +637,8 @@ public class SchedulerComponent extends CameliaBaseComponent implements
 	}
 
 	public String getPeriodValue(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.PERIOD_VALUE, facesContext);
+		String s = engine.getStringProperty(Properties.PERIOD_VALUE, facesContext);
+		return s;
 	}
 
 	public void setPeriodValue(String periodValue) {
@@ -642,12 +653,34 @@ public class SchedulerComponent extends CameliaBaseComponent implements
 		return engine.isPropertySetted(Properties.PERIOD_VALUE);
 	}
 
+	public String getPeriodType() {
+		return getPeriodType(null);
+	}
+
+	public String getPeriodType(javax.faces.context.FacesContext facesContext) {
+		String s = engine.getStringProperty(Properties.PERIOD_TYPE, facesContext);
+		return s;
+	}
+
+	public void setPeriodType(String periodType) {
+		engine.setProperty(Properties.PERIOD_TYPE, periodType);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "periodType" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isPeriodTypeSetted() {
+		return engine.isPropertySetted(Properties.PERIOD_TYPE);
+	}
+
 	public String getVar() {
 		return getVar(null);
 	}
 
 	public String getVar(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.VAR, facesContext);
+		String s = engine.getStringProperty(Properties.VAR, facesContext);
+		return s;
 	}
 
 	public void setVar(String var) {

@@ -12,8 +12,6 @@ import javax.faces.event.FacesListener;
  * @version $Revision$ $Date$
  */
 public class AdditionalInformationEvent extends CameliaEvent {
-    private static final String REVISION = "$Revision$";
-
     private static final long serialVersionUID = -2936160640888525068L;
 
     public AdditionalInformationEvent(UIComponent component) {
@@ -23,8 +21,11 @@ public class AdditionalInformationEvent extends CameliaEvent {
     /*
      * (non-Javadoc)
      * 
-     * @see javax.faces.event.FacesEvent#isAppropriateListener(javax.faces.event.FacesListener)
+     * @see
+     * javax.faces.event.FacesEvent#isAppropriateListener(javax.faces.event.
+     * FacesListener)
      */
+    @Override
     public boolean isAppropriateListener(FacesListener listener) {
         return (listener instanceof IAdditionalInformationListener);
     }
@@ -32,8 +33,11 @@ public class AdditionalInformationEvent extends CameliaEvent {
     /*
      * (non-Javadoc)
      * 
-     * @see javax.faces.event.FacesEvent#processListener(javax.faces.event.FacesListener)
+     * @see
+     * javax.faces.event.FacesEvent#processListener(javax.faces.event.FacesListener
+     * )
      */
+    @Override
     public void processListener(FacesListener listener) {
         ((IAdditionalInformationListener) listener)
                 .processAdditionalInformation(this);

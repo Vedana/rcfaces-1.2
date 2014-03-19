@@ -1,6 +1,5 @@
 package org.rcfaces.renderkit.html.component;
 
-import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import org.apache.commons.logging.Log;
@@ -8,6 +7,7 @@ import java.util.HashSet;
 import org.apache.commons.logging.LogFactory;
 import java.util.Arrays;
 import java.util.Set;
+import org.rcfaces.renderkit.html.component.Properties;
 
 public class NameSpaceComponent extends CameliaBaseComponent {
 
@@ -34,7 +34,8 @@ public class NameSpaceComponent extends CameliaBaseComponent {
 	}
 
 	public String getUri(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.URI, facesContext);
+		String s = engine.getStringProperty(Properties.URI, facesContext);
+		return s;
 	}
 
 	public void setUri(String uri) {
@@ -54,7 +55,8 @@ public class NameSpaceComponent extends CameliaBaseComponent {
 	}
 
 	public String getPrefix(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.PREFIX, facesContext);
+		String s = engine.getStringProperty(Properties.PREFIX, facesContext);
+		return s;
 	}
 
 	public void setPrefix(String prefix) {

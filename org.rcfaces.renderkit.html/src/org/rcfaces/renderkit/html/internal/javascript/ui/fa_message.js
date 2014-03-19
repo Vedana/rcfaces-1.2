@@ -23,7 +23,12 @@ var __members = {
 		
 		messageContext.f_addMessageListener(this);
 		
-		if (messageContext.f_containsMessagesFor(this.id)) {
+		var targetId=this.id;
+		if (this.f_getTargetMessageClientId) {
+			targetId=this.f_getTargetMessageClientId();
+		}
+		
+		if (targetId && messageContext.f_containsMessagesFor(targetId)) {
 			f_core.Debug(fa_message, "fa_message: message detected for component id='"+this.id+"'");
 
 			this.f_performMessageChanges(messageContext);
@@ -50,10 +55,10 @@ var __members = {
 			return classSpecified;
 		}
 		
-		this._fatalStyleClass=f_core.GetAttribute(this, "v:fatalStyleClass");
-		this._errorStyleClass=f_core.GetAttribute(this, "v:errorStyleClass");
-		this._warnStyleClass=f_core.GetAttribute(this, "v:warnStyleClass");
-		this._infoStyleClass=f_core.GetAttribute(this, "v:infoStyleClass");
+		this._fatalStyleClass=f_core.GetAttributeNS(this,"fatalStyleClass");
+		this._errorStyleClass=f_core.GetAttributeNS(this,"errorStyleClass");
+		this._warnStyleClass=f_core.GetAttributeNS(this,"warnStyleClass");
+		this._infoStyleClass=f_core.GetAttributeNS(this,"infoStyleClass");
 		
 		classSpecified=this._fatalStyleClass || this._errorStyleClass || this._warnStyleClass || this._infoStyleClass;
 		this._classSpecified=classSpecified;
@@ -167,9 +172,18 @@ var __members = {
 	
 	/**
 	 * @method protected abstract
+	 * @param f_messageContext messageContext
+	 * @return void
 	 */
-	f_performMessageChanges: f_class.ABSTRACT	
-}
+	f_performMessageChanges: f_class.ABSTRACT,
+	
+	
+	/**
+	 * @method protected optional abstract
+	 * @return String
+	 */
+	f_getTargetMessageClientId: f_class.OPTIONAL_ABSTRACT
+};
 
 new f_aspect("fa_message", {
 	members: __members

@@ -238,7 +238,7 @@ f_classLoader.prototype = {
 			
 			document.body.onmouseover=null;
 		}
-		
+
 		this._onFireInits=undefined; // List<String>
 		this._onCompleteIds=undefined; // List<String>
 		this._onMessageIds=undefined; // List<String>
@@ -448,7 +448,7 @@ f_classLoader.prototype = {
 			}
 		}
 		f_core.Debug(f_classLoader, "f_onDocumentComplete: "+nb+" static DocumentComplete method(s) called.");
-	
+
 		nb=0;
 	
 		var documentCompleteObjects = this._documentCompleteObjects;
@@ -472,7 +472,7 @@ f_classLoader.prototype = {
 				f_core.Error(f_classLoader, "f_onDocumentComplete: Exception during documentComplete event for object "+obj.id+"/"+obj.tagName, x);
 			}
 		}	
-	
+
 		f_core.Debug(f_classLoader, "f_onDocumentComplete: "+nb+" f_documentComplete method(s) called.");
 	},
 	
@@ -483,7 +483,8 @@ f_classLoader.prototype = {
 	 * @return void
 	 */
 	_newInstance: function(object, systemClass) {
-		f_core.Assert(typeof(object)=="object", "f_classLoader._newInstance: Object parameter must be an object ! ("+typeof(object)+")");
+		// Certains composants sont de type "object" !!!! (<OBJECT> sous fx par exemple)
+		f_core.Assert(typeof(object)=="object" || typeof(object)=="function", "f_classLoader._newInstance: Object parameter must be an object ! ("+typeof(object)+")");
 	
 		if (this._exiting && !systemClass) {
 			throw "This classloader is exiting ... [newInstance: "+((object._kclass)?("className="+object._kclass._name):"")+",tagName="+object.tagName+"]";
@@ -586,7 +587,7 @@ f_classLoader.prototype = {
 		if (!window._rcfacesDisableInitSearch) {
 			var root=this._window.document.body;
 			
-			var lazys=root.getElementsByTagName("v:init");
+			var lazys=root.getElementsByTagName(f_core._VNS+":init");
 			
 			f_core.Debug(f_classLoader, "f_initializeObjects: "+lazys.length+" lazy object(s) found !"+
 				((this._lazyIndex)?"(Current index="+this._lazyIndex+")":""));
@@ -622,18 +623,18 @@ f_classLoader.prototype = {
 					continue;
 				}
 				
-				var clz=f_core.GetAttribute(component, "v:class");
+				var clz=f_core.GetAttributeNS(component,"class");
 				if (clz) {
 					components.push(component, component);
 					continue;
 				}
 				
-				var fct=f_core.GetAttribute(component, "v:function");
+				var fct=f_core.GetAttributeNS(component,"function");
 				if (fct) {
 					var evaluatedFunction=evaluations[fct];
 					if (!evaluatedFunction) {
 						try {
-							evaluatedFunction=f_core.WindowScopeEval(fct)
+							evaluatedFunction=f_core.WindowScopeEval(fct);
 		
 						} catch (x) {
 							f_core.Error(f_classLoader, "f_initializeObjects: Failed to evaluate function '"+fct+"'.", x);					
@@ -665,7 +666,7 @@ f_classLoader.prototype = {
 						continue;
 					}
 					
-					var clz=f_core.GetAttribute(prev, "v:class");
+					var clz=f_core.GetAttributeNS(prev,"class");
 					if (!clz) {
 						f_core.Warn(f_classLoader, "f_initializeObjects: Lazy detection: Unknown previous sibling type '"+prev.tagName+"#"+prev.id+"'.");
 						continue;
@@ -767,7 +768,7 @@ f_classLoader.prototype = {
 			return undefined;
 		}
 		
-		var ret;
+		var ret=undefined;
 		
 		// On passe pas par un object Event pour des raisons de performances
 		for(var i=0;i<listeners.length;i++) {
@@ -869,9 +870,18 @@ f_classLoader.prototype = {
 	 * @return void
 	 */
 	f_initOnMessage: function(ids) {
-		
+
+		f_core.Debug(f_classLoader, "f_initOnMessage: ***********************"+ids);
+
 		if (f_core.IsDebugEnabled(f_classLoader)) {
 			f_core.Debug(f_classLoader, "f_initOnMessage: ("+ids.length+" components) ids="+ids.join());
+		}
+		
+		if (this._onMessageVerified) {
+			// On initialise tout de suite car on a des messages sur le feu !!!
+			
+			this._initializeIds(ids);
+			return;
 		}
 
 		var onMessageIds=this._onMessageIds;
@@ -882,7 +892,7 @@ f_classLoader.prototype = {
 			return;
 		}
 		
-		onMessageIds.push.apply(onMessageIds, ids);		
+		onMessageIds.push.apply(onMessageIds, ids);
 	},
 	/**
 	 * @method hidden final
@@ -890,13 +900,15 @@ f_classLoader.prototype = {
 	 * @return void
 	 */
 	f_verifyOnMessage: function(form) {
+		this._onMessageVerified=true;
+
 		var onMessageIds=this._onMessageIds;
 		if (!onMessageIds) {
 			return;
 		}
 		this._onMessageIds=undefined;
 		
-		f_core.Info(f_classLoader, "f_verifyOnMessage: initialize "+onMessageIds.length+" components.");
+		f_core.Debug(f_classLoader, "f_verifyOnMessage: initialize "+onMessageIds.length+" components.");
 		
 		this._initializeIds(onMessageIds);
 	},
@@ -962,16 +974,21 @@ f_classLoader.prototype = {
 			f_core.Debug(f_classLoader, "_initializeIds: ("+ids.length+" objects) ids="+ids.join());
 		}
 
+		var documentComplete = this.f_isDocumentCompleted();
+
 		for(var i=0;i<ids.length;i++) {
 			var componentId=ids[i];
-						
+	
+			f_core.Debug(f_classLoader,"_initializeIds["+i+"/"+ids.length+"]: search component '"+componentId+"'.");
+
 			var component=document.getElementById(componentId);
 			if (!component) {
-				f_core.Error(f_classLoader,"f_verifyOnMessage["+i+"/"+ids.length+"]: Can not find component '"+componentId+"'.");
+				// On peut avoir changer de page de componentsGrid / additionnalInformations
+				f_core.Info(f_classLoader,"_initializeIds["+i+"/"+ids.length+"]: Can not find component '"+componentId+"'.");
 				continue;
 			}
 			
-			if (f_class.IsObjectInitialized(component)) {
+			if (f_classLoader.IsObjectInitialized(component)) {
 				f_core.Info(f_classLoader,"_initializeIds["+i+"/"+ids.length+"]: Already initialized '"+componentId+"'.");
 				continue;
 			}
@@ -981,13 +998,36 @@ f_classLoader.prototype = {
 				this.f_init(component, false, true);
 				
 			} catch (ex) {
-				f_core.Error(f_classLoader, "f_verifyOnMessage: Can not initialize component '"+componentId+"'.", ex);
+				f_core.Error(f_classLoader, "_initializeIds: Can not initialize component '"+componentId+"'.", ex);
 			}			
 						
 			var onInitComponentListeners=this._onInitComponentListeners;
 			if (onInitComponentListeners) {
-				this._callOnInitComponentListeners(onInitComponentListeners, component);
+				f_core.Debug(f_classLoader,"_initializeIds["+i+"/"+ids.length+"]: Call onInit on component '"+componentId+"'.");
+
+				try {
+					this._callOnInitComponentListeners(onInitComponentListeners, component);
+					
+				} catch (ex) {
+					f_core.Error(f_classLoader, "_initializeIds: Can not call onInit on component '"+componentId+"'.", ex);
+				}	
 			}
+			
+			if (documentComplete) {
+				var documentCompleteFct = component.f_documentComplete;
+				if (documentCompleteFct) {
+					f_core.Debug(f_classLoader,"_initializeIds["+i+"/"+ids.length+"]: Call documentComplete on component '"+componentId+"'.");
+					
+					try {			
+						documentCompleteFct.call(component);
+				
+					} catch (ex) {
+						f_core.Error(f_classLoader, "_initializeIds: Can not call documentComplete on component '"+componentId+"'.", ex);
+					}			
+				}
+			}			
+
+			f_core.Debug(f_classLoader,"_initializeIds["+i+"/"+ids.length+"]: End of initialization of component '"+componentId+"'.");
 		}
 	},
 	/**
@@ -1045,9 +1085,33 @@ f_classLoader.prototype = {
 		}
 		this._onSubmitIds=undefined;
 		
-		f_core.Info(f_classLoader, "f_verifyOnSubmit: initialize "+onSubmitIds.length+" components.");
+		f_core.Debug(f_classLoader, "f_verifyOnSubmit: initialize "+onSubmitIds.length+" components.");
 		
 		this._initializeIds(onSubmitIds);
+		
+		f_core.Debug(f_classLoader, "f_verifyOnSubmit: "+onSubmitIds.length+" components initialized.");
+	},
+	/**
+	 * @method hidden final
+	 * @param Set ids
+	 * @return void
+	 */
+	f_initOnLayoutIds: function(ids) {
+		
+		if (f_core.IsDebugEnabled(f_classLoader)) {
+			var idsLog="";
+			for(var id in ids) {
+				if (idsLog) {
+					idsLog+=",";
+				}
+				
+				idsLog+=id;
+			}	
+
+			f_core.Debug(f_classLoader, "f_initOnLayoutIds: ids="+idsLog);
+		}
+
+		f_layoutManager.Get().f_addComponentClientIds(ids);
 	},
 	/**
 	 * @method hidden final
@@ -1097,10 +1161,10 @@ f_classLoader.prototype = {
 			delete onFocusIds[mainId];
 			
 			if (componentId!=mainId) {
-				component=component.ownerDocument.getElementById(mainId)
+				component=component.ownerDocument.getElementById(mainId);
 			}
 			
-			if (f_class.IsObjectInitialized(component)) {
+			if (f_classLoader.IsObjectInitialized(component)) {
 				return true;
 			}
 			
@@ -1117,7 +1181,13 @@ f_classLoader.prototype = {
 			if (onInitComponentListeners) {
 				self._callOnInitComponentListeners(onInitComponentListeners, component);
 			}
-		}
+			
+			var documentCompleteFct = component.f_documentComplete;
+			if (documentCompleteFct && self.f_isDocumentCompleted()) {
+				documentCompleteFct.call(component);
+			}
+		
+		};
 		
 		if (f_core.IsInternetExplorer()) {
 			document.body.onfocusin=function() {
@@ -1134,7 +1204,27 @@ f_classLoader.prototype = {
 				}
 
 				initFct(evt.target);
-			}, document.body)
+			}, document.body);
+			
+			// Chrome ne déclanche pas d evenement focus sur certain composant
+			if (f_core.IsWebkit()) {// click sur bouton
+				f_core.AddEventListener(document.body, "mousedown", function(evt) {
+					if (self._exiting) {
+						return;
+					}
+
+					initFct(evt.target);
+				}, document.body);
+			}
+			if (f_core.IsWebkit()) {//accesskey
+				f_core.AddEventListener(document.body, "click", function(evt) {
+					if (self._exiting) {
+						return;
+					}
+
+					initFct(evt.target);
+				}, document.body);
+			}
 		}
 	},
 	/**
@@ -1183,10 +1273,10 @@ f_classLoader.prototype = {
 			delete onOverIds[mainId];
 			
 			if (componentId!=mainId) {
-				component=component.ownerDocument.getElementById(mainId)
+				component=component.ownerDocument.getElementById(mainId);
 			}
 			
-			if (f_class.IsObjectInitialized(component)) {
+			if (f_classLoader.IsObjectInitialized(component)) {
 				return true;
 			}
 			
@@ -1204,11 +1294,16 @@ f_classLoader.prototype = {
 				self._callOnInitComponentListeners(onInitComponentListeners, component);
 			}
 			
+			var documentCompleteFct = component.f_documentComplete;
+			if (documentCompleteFct && self.f_isDocumentCompleted()) {
+				documentCompleteFct.call(component);
+			}			
+			
 			if (retargetIE) {						
-				var newEvt = component.ownerDocument.createEventObject(window.event)
+				var newEvt = component.ownerDocument.createEventObject(window.event);
 		   		return component.fireEvent("onmouseover", newEvt);
 			}
-		}
+		};
 		
 		if (f_core.IsInternetExplorer()) {
 			document.body.onmouseover=function() {
@@ -1225,14 +1320,14 @@ f_classLoader.prototype = {
 				}
 
 				initFct(evt.target);
-			}, document.body)
+			}, document.body);
 		}		
 	},
 	/**
 	 * @method hidden final
 	 * @param Object obj Object or String
-	 * @return optional Boolean ignoreNotFound
-	 * @return optional Boolean callCompleteComponent
+	 * @param optional Boolean ignoreNotFound
+	 * @param optional Boolean callCompleteComponent
 	 * @return Object
 	 */
 	f_init: function(obj, ignoreNotFound, callCompleteComponent) {
@@ -1244,7 +1339,7 @@ f_classLoader.prototype = {
 			var doc=this._window.document;
 	
 			obj=doc.getElementById(id);
-			if (!obj) {
+			if (false && !obj) { // On recherche plus par le name, trop de risque !
 				var names=doc.getElementsByName(id);
 				if (!names || !names.length) {
 					if (ignoreNotFound) {
@@ -1253,14 +1348,14 @@ f_classLoader.prototype = {
 					throw new Error("Component not found by Id/name '"+id+"'.");
 				}
 				
-				f_core.Assert(names.length!=1, "f_classLoader._init: Too many components associated to name '"+id+"'.");
+				f_core.Assert(names.length==1, "f_classLoader._init: Too many components associated to name '"+id+"'.");
 				
 				obj=names[0];
 				if (f_core.DebugMode) {
 					if (obj.id) {
 						f_core.Assert(obj, "f_classLoader._init: Component found by name ('"+id+"') has already an ID ('+obj.id+') !");
 			
-					} else if (f_core.GetAttribute(obj, "v:class")==null) {
+					} else if (f_core.GetAttributeNS(obj,"class")==null) {
 						f_core.Assert(obj, "f_classLoader._init: Component found by name ('"+id+"') is not a RCFaces Component !");
 					}
 				}
@@ -1275,6 +1370,13 @@ f_classLoader.prototype = {
 					}
 				}
 			}
+			
+			if (!obj) {
+				if (ignoreNotFound) {
+					return null;
+				}
+				throw new Error("Component not found by Id/name '"+id+"'.");
+			}
 		}
 		
 		if (obj._kclass) {
@@ -1282,9 +1384,14 @@ f_classLoader.prototype = {
 			return obj;
 		}
 		
+		if (obj.nodeType!=f_core.ELEMENT_NODE) {
+			f_core.Debug(f_classLoader, "f_init: Invalid type of object '"+obj.nodeType+"'.");
+			return null;
+		}
+		
 		f_core.Debug(f_classLoader, "f_init: Initialize object '"+obj+"' (id='"+obj.id+"') ignore='"+ignoreNotFound+"'  typeof(obj)='"+typeof(obj)+"'");
 			
-		var claz = f_core.GetAttribute(obj, "v:class");
+		var claz = f_core.GetAttributeNS(obj,"class");
 		if (!claz) {
 			// La classe n'est pas définie ... c'est peut etre une form !
 	
@@ -1292,7 +1399,7 @@ f_classLoader.prototype = {
 			return obj;
 		}
 	
-		var look = f_core.GetAttribute(obj, "v:lookid");
+		var look = f_core.GetAttributeNS(obj,"lookid");
 	
 		var cls=this.f_getClass(claz, look);
 		if (!cls) {
@@ -1321,6 +1428,18 @@ f_classLoader.prototype = {
 		
 				} catch (x) {
 					f_core.Error(f_classLoader, "f_init: f_completeComponent throws exception for component '"+component.id+"'.", x);
+				}
+			}
+			
+			if (this._documentCompleted) {				
+				var documentCompleteFct = component.f_documentComplete;
+				if (documentCompleteFct) {
+					try {
+						documentCompleteFct.call(component);
+					
+					} catch (x) {
+						f_core.Error(f_classLoader, "f_init: f_documentComplete throws exception for component '"+component.id+"'.", x);
+					}
 				}
 			}
 		}
@@ -1570,7 +1689,7 @@ f_classLoader.prototype = {
 			this._visibleListeners=visibleListeners;
 		}
 		
-		visibleListeners.f_addElement(component);
+		visibleListeners.f_addElement(component.id);
 		
 		return true;
 	},
@@ -1586,9 +1705,19 @@ f_classLoader.prototype = {
 		if (!components) {
 			return;
 		}
-		
+
+		var doc=this.f_getDocument();
+	
 		for(var i=0;i<components.length;) {
-			var component=components[i];
+			var componentId=components[i];
+			
+			var component=doc.getElementById(componentId);
+			if (!component) {
+				f_core.Debug(f_classLoader, "fireVisibleEvent["+i+"/"+ids.length+"]: Can not find component '"+componentId+"'.");
+				
+				components.splice(i, 1);
+				continue;
+			}			
 			
 			if (!f_core.IsComponentVisible(component)) {
 				i++;
@@ -1758,9 +1887,17 @@ f_classLoader.prototype = {
 		
 		f_class.Clean(toClean);
 		
-		f_core.Debug(f_classLoader, "f_garbageObjects: "+toClean.length+" object(s) garbaged "+(serializableComponentsGarbaged?(") and "+serializableComponentsGarbaged+" objects serializes"):"")+".");
+		f_core.Debug(f_classLoader, "f_garbageObjects: "+toClean.length+" object(s) garbaged ");
 		
 		return serializedForm;
+	},
+	
+	/**
+	 * @method hidden
+	 * @return void
+	 */
+	f_completeGarbageObjects: function() {
+		f_core.GarbageListenerReferences();
 	},
 	
 	/**
@@ -1905,7 +2042,7 @@ f_classLoader.prototype = {
 		}
 		return "[ClassLoader '"+this._window.location+"']";
 	}
-}
+};
 
 
 /**
@@ -1932,10 +2069,10 @@ f_classLoader._EMPTY_ARGUMENTS=[];
 f_classLoader._MakeClassName=function(claz, lookId) {
 	if (!lookId) {
 		return claz;
-	}
+	} 
 	
 	return claz+f_class._LOOK+lookId;
-}
+};
 
 
 /**
@@ -1987,7 +2124,7 @@ f_classLoader.Destroy=function(objects) {
 	if (lastClassLoader) {
 		lastClassLoader._destroy(toDestroy);
 	}
-}
+};
 
 /**
  * @method private static
@@ -2050,7 +2187,7 @@ f_classLoader._SerializeInputs=function(component) {
 	}
 	
 	return serializedInputs;
-}
+};
 
 /**
  * @method hidden static
@@ -2069,7 +2206,7 @@ f_classLoader.SerializeInputsIntoParam=function(parameters, component, updateInp
 
 	} else {
 		var form=f_core.GetParentForm(component);
-		serializedInputs=form._serializedInputs
+		serializedInputs=form._serializedInputs;
 	}
 	
 	if (!serializedInputs) {
@@ -2079,7 +2216,7 @@ f_classLoader.SerializeInputsIntoParam=function(parameters, component, updateInp
 	for(var name in serializedInputs) {
 		parameters[name]=serializedInputs[name];
 	}	
-}
+};
 
 /**
  * @method hidden static
@@ -2167,19 +2304,62 @@ f_classLoader.SerializeInputsIntoForm=function(form) {
 			break;
 		}
 	}		
-}
+};
 
+/**
+ * @field hidden static final Number
+ */
+f_classLoader.UNKNOWN_STATE = 0;
 
+/**
+ * @field hidden static final Number
+ */
+f_classLoader.LAZY_STATE = 1;
 
+/**
+ * @field hidden static final Number
+ */
+f_classLoader.INITIALIZED_STATE = 2;
+
+/**
+ * @method hidden static final
+ * @param Object object
+ * @return Number  (0=Unknown 1=Not initialized  2=Initialized)
+ */
+f_classLoader.GetObjectState=function(object) {
+	if (object._kclass) {
+		return f_classLoader.INITIALIZED_STATE;
+	}
+	
+	if (object.nodeType==f_core.ELEMENT_NODE) {
+		var claz = f_core.GetAttribute(object, "v:class");
+		if (claz) {
+			return f_classLoader.LAZY_STATE;
+		}
+	}
+
+	return f_classLoader.UNKNOWN_STATE;
+};
+
+/**
+ * @method hidden static final 
+ * @param Object object
+ * @return Boolean
+ */
+f_classLoader.IsObjectInitialized=function(object) {
+	f_core.Assert(object && typeof(object)=="object", "f_class.IsObjectInitialized: Object is invalid ("+object+")");
+
+	return !!object._kclass;
+};
 /**
  * @method public static
  * @param Window win
  * @return f_classLoader
- * @context window:window
+ * @context window:win
  */
 f_classLoader.Get=function(win) {
 	return win._rcfacesClassLoader;
-}
+};
 
 /**
  * @method public static
@@ -2187,7 +2367,7 @@ f_classLoader.Get=function(win) {
  */
 f_classLoader.f_getName=function() {
 	return "f_classLoader";
-}
+};
 
 f_classLoader._kernelClass=true;
 

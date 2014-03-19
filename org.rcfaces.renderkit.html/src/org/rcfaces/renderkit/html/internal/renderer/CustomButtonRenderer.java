@@ -25,6 +25,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.border.AbstractHtmlBorderRenderer;
 import org.rcfaces.renderkit.html.internal.border.IHtmlBorderRenderer;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
 
 /**
@@ -66,8 +67,8 @@ public class CustomButtonRenderer extends AbstractCssRenderer {
 
             borderRenderer = (IHtmlBorderRenderer) borderRendererRegistry
                     .getBorderRenderer(facesContext,
-                            RenderKitFactory.HTML_BASIC_RENDER_KIT, component
-                                    .getFamily(), component.getRendererType(),
+                            RenderKitFactory.HTML_BASIC_RENDER_KIT,
+                            component.getFamily(), component.getRendererType(),
                             borderType);
         }
 
@@ -88,7 +89,7 @@ public class CustomButtonRenderer extends AbstractCssRenderer {
         htmlWriter.startElement(IHtmlWriter.DIV);
 
         if (borderRenderer != null) {
-            htmlWriter.writeAttribute("v:borderType", borderType);
+            htmlWriter.writeAttributeNS("borderType", borderType);
         }
 
         writeHtmlAttributes(htmlWriter);
@@ -182,8 +183,9 @@ public class CustomButtonRenderer extends AbstractCssRenderer {
         IComponentRenderContext componentRenderContext = writer
                 .getComponentRenderContext();
 
-        ComponentTools.encodeChildrenRecursive(componentRenderContext
-                .getFacesContext(), componentRenderContext.getComponent());
+        ComponentTools.encodeChildrenRecursive(
+                componentRenderContext.getFacesContext(),
+                componentRenderContext.getComponent());
     }
 
     public void encodeEnd(IComponentWriter writer) throws WriterException {
@@ -231,11 +233,11 @@ public class CustomButtonRenderer extends AbstractCssRenderer {
                 .getFacesContext();
 
         if (component.isDisabled(facesContext)) {
-            htmlWriter.writeAttribute("v:disabled", true);
+            htmlWriter.writeAttributeNS("disabled", true);
         }
 
         if (component.isReadOnly(facesContext)) {
-            htmlWriter.writeAttribute("v:readOnly", true);
+            htmlWriter.writeAttributeNS("readOnly", true);
         }
 
         Object value = component.getValue();
@@ -244,8 +246,15 @@ public class CustomButtonRenderer extends AbstractCssRenderer {
                     facesContext);
 
             if (svalue != null) {
-                htmlWriter.writeAttribute("v:value", svalue);
+                htmlWriter.writeAttributeNS("value", svalue);
             }
         }
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "borderType",
+                "disabled", "readOnly", "value" });
     }
 }

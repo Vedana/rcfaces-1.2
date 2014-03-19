@@ -1,7 +1,6 @@
 package org.rcfaces.core.component;
 
 import java.util.TimeZone;
-import org.rcfaces.core.internal.converter.LiteralDateConverter;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.lang.IAdaptable;
 import org.rcfaces.core.component.capability.IMenuPopupIdCapability;
@@ -10,6 +9,8 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
 import java.util.Date;
 import org.rcfaces.core.component.SelectItemComponent;
+import org.rcfaces.core.internal.converter.LiteralDateConverter
+			;
 import org.rcfaces.core.internal.converter.TimeZoneConverter;
 import javax.faces.FacesException;
 import javax.el.ValueExpression;
@@ -53,20 +54,20 @@ public class DateItemComponent extends SelectItemComponent implements
 
 	public Date getDate() {
 
-
+			
 				Object value=getItemValue();
 
 				if (value==null) {
 					return null;
-				}			
+				}
 
 				if (value instanceof Date) {
 					return (Date)value;
 				}
-								
+
 				if (value instanceof String) {
 					return (Date)LiteralDateConverter.SINGLETON.getAsObject(null, this, (String)value);
-				}				
+				}
 
 				if (value instanceof IAdaptable) {
 					Date adapted=(Date)((IAdaptable)value).getAdapter(Date.class, this);
@@ -96,14 +97,14 @@ public class DateItemComponent extends SelectItemComponent implements
 	public void setText(String text) {
 
 
-			setItemLabel(text);
+				setItemLabel(text);
 			
 	}
 
 	public String getText() {
 
 
-			return getItemLabel();
+				return getItemLabel();
 			
 	}
 

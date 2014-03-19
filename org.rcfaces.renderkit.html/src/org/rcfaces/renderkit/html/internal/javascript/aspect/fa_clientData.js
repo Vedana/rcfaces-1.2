@@ -19,7 +19,7 @@ var __statics = {
 	 * @field private static final String
 	 */
 	_CHANGED_PROPERTY: "changed"
-}
+};
 
 var __members = {
 /*
@@ -93,13 +93,12 @@ var __members = {
 		if (!this.fa_componentUpdated) {
 			for (var i=0;i<arguments.length;) {
 				var name=arguments[i++];
-				var data=arguments[i++];
+				var value=arguments[i++];
 
 				data[name]=value;
 			}
 			return;
-		}
-		
+		}		
 		
 		var modifiedData=this._modifiedDatas;
 		var newData=this._newDatas;
@@ -116,7 +115,7 @@ var __members = {
 			var name=arguments[i++];
 			f_core.Assert(typeof(name)=="string", "fa_clientData.f_setClientData: Name of clientData must be a string !");
 
-			var value;
+			var value=undefined;
 			
 			if (i<arguments.length) {
 				value=arguments[i++];
@@ -146,6 +145,44 @@ var __members = {
 			data[name] = value;
 		}
 	},
+	/**
+	 * Clear all client datas associated to the component.
+	 * 
+	 * @method public
+	 * @return void
+	 */
+	f_clearClientDatas: function() {
+		var data=this._clientDatas;
+		
+		if (data===undefined) {
+			return;
+		}
+		
+		this._clientDatas=new Object();
+		if (!this.fa_componentUpdated) {
+			return;
+		}		
+		
+		var modifiedData=this._modifiedDatas;
+		var newData=this._newDatas;
+		
+		if (!modifiedData) {
+			modifiedData=new Object;
+			this._modifiedDatas=modifiedData;
+
+			newData=new Object;
+			this._newDatas=newData;
+		}
+		
+		for(var name in data) {							
+			if (newData[name]) {
+				// C'est un nouveau ... on efface seulement la propriété "modifié" !
+				delete modifiedData[name];
+				continue;
+			}
+			modifiedData[name]=fa_clientData._REMOVED_PROPERTY;
+		}
+	},
 	f_serialize: {
 		after: function() {
 			var modifiedData=this._modifiedDatas;
@@ -170,7 +207,7 @@ var __members = {
 			this.f_setProperty(f_prop.DATA, v, true);
 		}
 	}
-}
+};
 
 new f_aspect("fa_clientData", {
 	statics: __statics,

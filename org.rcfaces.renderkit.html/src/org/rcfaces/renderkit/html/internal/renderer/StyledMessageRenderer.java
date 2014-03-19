@@ -12,6 +12,7 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -19,7 +20,6 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  * @version $Revision$ $Date$
  */
 public class StyledMessageRenderer extends AbstractCssRenderer {
-    private static final String REVISION = "$Revision$";
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.STYLED_MESSAGE;
@@ -70,39 +70,39 @@ public class StyledMessageRenderer extends AbstractCssRenderer {
         writeCssAttributes(htmlWriter);
 
         if (forValue != null) {
-            htmlWriter.writeAttribute("v:for", forValue);
+            htmlWriter.writeAttributeNS("for", forValue);
         }
-        
+
         if (showIfMessage) {
-            htmlWriter.writeAttribute("v:showIfMessage", true);
+            htmlWriter.writeAttributeNS("showIfMessage", true);
         }
 
         if (messageComponent.isSetFocusIfMessage(facesContext)) {
-            htmlWriter.writeAttribute("v:setFocusIfMessage", true);
+            htmlWriter.writeAttributeNS("setFocusIfMessage", true);
         }
 
         String infoStyleClass = messageComponent
                 .getInfoStyleClass(facesContext);
         if (infoStyleClass != null) {
-            htmlWriter.writeAttribute("v:infoStyleClass", infoStyleClass);
+            htmlWriter.writeAttributeNS("infoStyleClass", infoStyleClass);
         }
 
         String warnStyleClass = messageComponent
                 .getWarnStyleClass(facesContext);
         if (warnStyleClass != null) {
-            htmlWriter.writeAttribute("v:warnStyleClass", warnStyleClass);
+            htmlWriter.writeAttributeNS("warnStyleClass", warnStyleClass);
         }
 
         String errorStyleClass = messageComponent
                 .getErrorStyleClass(facesContext);
         if (errorStyleClass != null) {
-            htmlWriter.writeAttribute("v:errorStyleClass", errorStyleClass);
+            htmlWriter.writeAttributeNS("errorStyleClass", errorStyleClass);
         }
 
         String fatalStyleClass = messageComponent
                 .getFatalStyleClass(facesContext);
         if (fatalStyleClass != null) {
-            htmlWriter.writeAttribute("v:fatalStyleClass", fatalStyleClass);
+            htmlWriter.writeAttributeNS("fatalStyleClass", fatalStyleClass);
         }
     }
 
@@ -112,4 +112,12 @@ public class StyledMessageRenderer extends AbstractCssRenderer {
      * 
      * JavaScriptTools.writeFirstMessage(js); }
      */
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "for",
+                "showIfMessage", "setFocusIfMessage", "infoStyleClass",
+                "warnStyleClass", "errorStyleClass", "fatalStyleClass" });
+    }
 }

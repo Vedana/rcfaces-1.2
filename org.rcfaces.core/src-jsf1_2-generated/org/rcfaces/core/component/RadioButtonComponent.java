@@ -2,8 +2,9 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.component.RadioButtonComponent;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.HorizontalTextPositionConverter
+			;
 import java.util.Map;
-import org.rcfaces.core.internal.converter.HorizontalTextPositionConverter;
 import org.rcfaces.core.component.capability.IRadioValueCapability;
 import java.util.Collections;
 import org.apache.commons.logging.LogFactory;
@@ -164,14 +165,14 @@ public class RadioButtonComponent extends AbstractInputComponent implements
 	public RadioButtonComponent getSelectedFromSameGroup() {
 
 
-			return RadioButtonTools.getSelectedRadioButtonFromSameGroup(this);
+				return RadioButtonTools.getSelectedRadioButtonFromSameGroup(this);
 			
 	}
 
 	public IRadioButtonIterator listSameGroup() {
 
 
-			return RadioButtonTools.listRadioButtonSameGroup(this);
+				return RadioButtonTools.listRadioButtonSameGroup(this);
 			
 	}
 

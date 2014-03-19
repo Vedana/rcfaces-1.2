@@ -21,7 +21,6 @@ import org.rcfaces.core.validator.IParameter;
  * @version $Revision$ $Date$
  */
 public class ClientValidatorContext implements IClientValidatorContext {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(ClientValidatorContext.class);
@@ -40,7 +39,7 @@ public class ClientValidatorContext implements IClientValidatorContext {
 
     private String outputValue;
 
-    private Map attributes;
+    private Map<String, Object> attributes;
 
     public ClientValidatorContext(
             IComponentRenderContext componentRenderContext,
@@ -128,7 +127,7 @@ public class ClientValidatorContext implements IClientValidatorContext {
 
     public Object setAttribute(String key, Object value) {
         if (attributes == null) {
-            attributes = new HashMap();
+            attributes = new HashMap<String, Object>();
 
         }
 

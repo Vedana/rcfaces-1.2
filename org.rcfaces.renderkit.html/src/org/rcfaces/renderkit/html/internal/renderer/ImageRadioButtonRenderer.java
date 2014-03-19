@@ -19,6 +19,7 @@ import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -26,7 +27,6 @@ import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
  * @version $Revision$ $Date$
  */
 public class ImageRadioButtonRenderer extends ImageCheckButtonRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(ImageRadioButtonRenderer.class);
@@ -83,7 +83,6 @@ public class ImageRadioButtonRenderer extends ImageCheckButtonRenderer {
      * @version $Revision$ $Date$
      */
     protected class ImageRadioButtonWriter extends ImageCheckButtonDecorator {
-        private static final String REVISION = "$Revision$";
 
         public ImageRadioButtonWriter(IImageButtonFamilly imageButtonFamilly) {
             super(imageButtonFamilly);
@@ -105,7 +104,7 @@ public class ImageRadioButtonRenderer extends ImageCheckButtonRenderer {
                         .getHtmlProcessContext(),
                         (UIComponent) imageButtonFamilly, groupName);
 
-                writer.writeAttribute("v:groupName", groupName);
+                writer.writeAttributeNS("groupName", groupName);
             }
         }
 
@@ -113,5 +112,11 @@ public class ImageRadioButtonRenderer extends ImageCheckButtonRenderer {
             return ImageRadioButtonRenderer.this.isSelected(
                     (ImageRadioButtonComponent) imageButtonFamilly, null);
         }
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "groupName" });
     }
 }

@@ -24,13 +24,12 @@ import org.rcfaces.core.internal.util.ComponentIterators;
  * @version $Revision$ $Date$
  */
 public class RadioButtonTools {
-    private static final String REVISION = "$Revision$";
 
     private static final IRadioButtonIterator EMPTY_RADIO_BUTTON_COMPONENT_ITERATOR = new RadioButtonListIterator(
-            Collections.EMPTY_LIST);
+            Collections.<RadioButtonComponent> emptyList());
 
     private static final IImageRadioButtonIterator EMPTY_IMAGE_RADIO_BUTTON_COMPONENT_ITERATOR = new ImageRadioButtonListIterator(
-            Collections.EMPTY_LIST);
+            Collections.<ImageRadioButtonComponent> emptyList());
 
     public static RadioButtonComponent getSelectedRadioButtonFromSameGroup(
             IRadioGroupCapability radioButtonComponent) {
@@ -66,8 +65,8 @@ public class RadioButtonTools {
 
         List result = new ArrayList(8);
 
-        listRadioWithSameGroupBox(component, radioButtonComponent
-                .getGroupName(), result);
+        listRadioWithSameGroupBox(component,
+                radioButtonComponent.getGroupName(), result);
 
         if (result.isEmpty()) {
             return EMPTY_RADIO_BUTTON_COMPONENT_ITERATOR;
@@ -84,16 +83,19 @@ public class RadioButtonTools {
             component = component.getParent();
         }
 
-        List result = new ArrayList(8);
+        List< ? extends IRadioGroupCapability> result = new ArrayList<ImageRadioButtonComponent>(
+                8);
 
-        listRadioWithSameGroupBox(component, radioButtonComponent
-                .getGroupName(), result);
+        listRadioWithSameGroupBox(component,
+                radioButtonComponent.getGroupName(),
+                (List<IRadioGroupCapability>) result);
 
         if (result.isEmpty()) {
             return EMPTY_IMAGE_RADIO_BUTTON_COMPONENT_ITERATOR;
         }
 
-        return new ImageRadioButtonListIterator(result);
+        return new ImageRadioButtonListIterator(
+                (List<ImageRadioButtonComponent>) result);
     }
 
     /**
@@ -102,16 +104,15 @@ public class RadioButtonTools {
      * @version $Revision$ $Date$
      */
     private static final class RadioButtonListIterator extends
-            ComponentIterators.ComponentListIterator implements
-            IRadioButtonIterator {
-        private static final String REVISION = "$Revision$";
+            ComponentIterators.ComponentListIterator<RadioButtonComponent>
+            implements IRadioButtonIterator {
 
-        public RadioButtonListIterator(List list) {
+        public RadioButtonListIterator(List<RadioButtonComponent> list) {
             super(list);
         }
 
         public final RadioButtonComponent next() {
-            return (RadioButtonComponent) nextComponent();
+            return nextComponent();
         }
 
         public RadioButtonComponent[] toArray() {
@@ -125,16 +126,15 @@ public class RadioButtonTools {
      * @version $Revision$ $Date$
      */
     private static final class ImageRadioButtonListIterator extends
-            ComponentIterators.ComponentListIterator implements
-            IImageRadioButtonIterator {
-        private static final String REVISION = "$Revision$";
+            ComponentIterators.ComponentListIterator<ImageRadioButtonComponent>
+            implements IImageRadioButtonIterator {
 
-        public ImageRadioButtonListIterator(List list) {
+        public ImageRadioButtonListIterator(List<ImageRadioButtonComponent> list) {
             super(list);
         }
 
         public final ImageRadioButtonComponent next() {
-            return (ImageRadioButtonComponent) nextComponent();
+            return nextComponent();
         }
 
         public ImageRadioButtonComponent[] toArray() {
@@ -145,8 +145,9 @@ public class RadioButtonTools {
     private static final IRadioGroupCapability findRadioButtonSelectedWithSameGroupBox(
             UIComponent container, String groupName) {
 
-        for (Iterator i = container.getChildren().iterator(); i.hasNext();) {
-            UIComponent e = (UIComponent) i.next();
+        for (Iterator<UIComponent> i = container.getChildren().iterator(); i
+                .hasNext();) {
+            UIComponent e = i.next();
 
             if (e instanceof IRadioGroupCapability) {
                 IRadioGroupCapability rb = (IRadioGroupCapability) e;
@@ -183,10 +184,11 @@ public class RadioButtonTools {
     }
 
     private static final void listRadioWithSameGroupBox(UIComponent container,
-            String groupName, List list) {
+            String groupName, List<IRadioGroupCapability> list) {
 
-        for (Iterator i = container.getChildren().iterator(); i.hasNext();) {
-            UIComponent e = (UIComponent) i.next();
+        for (Iterator<UIComponent> i = container.getChildren().iterator(); i
+                .hasNext();) {
+            UIComponent e = i.next();
 
             if (e instanceof IRadioGroupCapability) {
                 IRadioGroupCapability rb = (IRadioGroupCapability) e;
@@ -195,7 +197,7 @@ public class RadioButtonTools {
                     continue;
                 }
 
-                list.add(e);
+                list.add((IRadioGroupCapability) e);
                 continue;
             }
 
@@ -210,8 +212,8 @@ public class RadioButtonTools {
     /*
      * public static Object getGroupValue(IRadioValueCapability component) {
      * IRadioValueCapability radioGroupCapability = (IRadioValueCapability)
-     * getSelectedRadioGroupFromSameGroup(component); if (radioGroupCapability ==
-     * null) { return null; }
+     * getSelectedRadioGroupFromSameGroup(component); if (radioGroupCapability
+     * == null) { return null; }
      * 
      * return getValue(radioGroupCapability); }
      * 
@@ -239,8 +241,8 @@ public class RadioButtonTools {
      * engine.setProperty(Properties.GROUP_VALUE, value); }
      * 
      * private static Object getValue(IRadioValueCapability
-     * groupValueCapability) { if (groupValueCapability instanceof ValueHolder) {
-     * return ((ValueHolder) groupValueCapability).getValue(); }
+     * groupValueCapability) { if (groupValueCapability instanceof ValueHolder)
+     * { return ((ValueHolder) groupValueCapability).getValue(); }
      * 
      * if (groupValueCapability instanceof UISelectItem) { return
      * ((UISelectItem) groupValueCapability).getItemValue(); }

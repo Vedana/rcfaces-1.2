@@ -15,6 +15,7 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -22,7 +23,6 @@ import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
  * @version $Revision$ $Date$
  */
 public class ImageCheckButtonRenderer extends ImageButtonRenderer {
-    private static final String REVISION = "$Revision$";
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.IMAGE_CHECK_BUTTON;
@@ -61,7 +61,6 @@ public class ImageCheckButtonRenderer extends ImageButtonRenderer {
      * @version $Revision$ $Date$
      */
     protected class ImageCheckButtonDecorator extends ImageButtonDecorator {
-        private static final String REVISION = "$Revision$";
 
         public ImageCheckButtonDecorator(IImageButtonFamilly imageButtonFamilly) {
             super(imageButtonFamilly);
@@ -83,7 +82,13 @@ public class ImageCheckButtonRenderer extends ImageButtonRenderer {
             if (isSelected((ISelectedCapability) imageButtonFamilly) == false) {
                 return;
             }
-            writer.writeAttribute("v:selected", true);
+            writer.writeAttributeNS("selected", true);
         }
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "selected" });
     }
 }

@@ -12,6 +12,7 @@ import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.RcfacesContext;
+import org.rcfaces.core.internal.renderkit.designer.IDesignerEngine;
 
 /**
  * 
@@ -63,4 +64,6 @@ public interface IProcessContext {
     TimeZone getForcedDateTimeZone();
 
     Calendar getForcedDateCalendar();
+
+    IDesignerEngine getDesignerEngine();
 }

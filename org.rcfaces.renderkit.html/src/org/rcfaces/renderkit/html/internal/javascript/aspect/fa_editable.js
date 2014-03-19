@@ -22,7 +22,7 @@ var __members = {
 	f_isEditable: function() {
 		if (this._editable===undefined) {
 			// Appel depuis le constructor de l'objet !
-			this._editable=f_core.GetBooleanAttribute(this, "v:editable", true);
+			this._editable=f_core.GetBooleanAttributeNS(this, "editable", true);
 		}
 
 		return this._editable;

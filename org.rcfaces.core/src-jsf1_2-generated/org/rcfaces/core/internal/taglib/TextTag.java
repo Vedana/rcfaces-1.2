@@ -21,6 +21,7 @@ public class TextTag extends AbstractOutputTag implements Tag {
 	private static final Log LOG=LogFactory.getLog(TextTag.class);
 
 	private ValueExpression text;
+	private ValueExpression audioDescription;
 	private ValueExpression textDirection;
 	private ValueExpression fontBold;
 	private ValueExpression fontItalic;
@@ -35,47 +36,51 @@ public class TextTag extends AbstractOutputTag implements Tag {
 		return TextComponent.COMPONENT_TYPE;
 	}
 
-	public final void setText(ValueExpression text) {
+	public void setText(ValueExpression text) {
 		this.text = text;
 	}
 
-	public final void setTextDirection(ValueExpression textDirection) {
+	public void setAudioDescription(ValueExpression audioDescription) {
+		this.audioDescription = audioDescription;
+	}
+
+	public void setTextDirection(ValueExpression textDirection) {
 		this.textDirection = textDirection;
 	}
 
-	public final void setFontBold(ValueExpression fontBold) {
+	public void setFontBold(ValueExpression fontBold) {
 		this.fontBold = fontBold;
 	}
 
-	public final void setFontItalic(ValueExpression fontItalic) {
+	public void setFontItalic(ValueExpression fontItalic) {
 		this.fontItalic = fontItalic;
 	}
 
-	public final void setFontName(ValueExpression fontName) {
+	public void setFontName(ValueExpression fontName) {
 		this.fontName = fontName;
 	}
 
-	public final void setFontSize(ValueExpression fontSize) {
+	public void setFontSize(ValueExpression fontSize) {
 		this.fontSize = fontSize;
 	}
 
-	public final void setFontUnderline(ValueExpression fontUnderline) {
+	public void setFontUnderline(ValueExpression fontUnderline) {
 		this.fontUnderline = fontUnderline;
 	}
 
-	public final void setTextAlignment(ValueExpression textAlignment) {
+	public void setTextAlignment(ValueExpression textAlignment) {
 		this.textAlignment = textAlignment;
 	}
 
-	public final void setAccessKey(ValueExpression accessKey) {
+	public void setAccessKey(ValueExpression accessKey) {
 		this.accessKey = accessKey;
 	}
 
-	public final void setFor(ValueExpression forValue) {
+	public void setFor(ValueExpression forValue) {
 		this.forValue = forValue;
 	}
 
-	public final void setType(ValueExpression type) {
+	public void setType(ValueExpression type) {
 		this.type = type;
 	}
 
@@ -85,6 +90,7 @@ public class TextTag extends AbstractOutputTag implements Tag {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
 			LOG.debug("  text='"+text+"'");
+			LOG.debug("  audioDescription='"+audioDescription+"'");
 			LOG.debug("  textDirection='"+textDirection+"'");
 			LOG.debug("  fontBold='"+fontBold+"'");
 			LOG.debug("  fontItalic='"+fontItalic+"'");
@@ -114,6 +120,15 @@ public class TextTag extends AbstractOutputTag implements Tag {
 
 			} else {
 				component.setText(text.getExpressionString());
+			}
+		}
+
+		if (audioDescription != null) {
+			if (audioDescription.isLiteralText()==false) {
+				component.setValueExpression(Properties.AUDIO_DESCRIPTION, audioDescription);
+
+			} else {
+				component.setAudioDescription(audioDescription.getExpressionString());
 			}
 		}
 
@@ -210,6 +225,7 @@ public class TextTag extends AbstractOutputTag implements Tag {
 
 	public void release() {
 		text = null;
+		audioDescription = null;
 		textDirection = null;
 		fontBold = null;
 		fontItalic = null;

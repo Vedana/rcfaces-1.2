@@ -84,9 +84,6 @@
 }
 
 .f_grid_tcell {
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-
 	list-style-image: none;
 	list-style-position: outside;
 	list-style-type: none;
@@ -102,6 +99,10 @@
 
 .f_grid_tcell,
 .f_grid_sortManager {
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+
+	display: block;
 	color: #000;
 	vertical-align: middle;
 	margin: 0;
@@ -151,11 +152,17 @@
 	margin-right: 4px;
 	vertical-align: middle;
 	border: 0;
+
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 }
  
 .f_grid_stext {
  	position: relative;
  	text-align: left;
+
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 .f_grid_stext_ascending {
@@ -168,11 +175,15 @@
 
 .f_grid_ttext {
 /*	text-overflow: ellipsis; */
+
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+
 	text-overflow: clip;
 	white-space:nowrap;
 	overflow: hidden;
 	vertical-align: middle;
-	line-height: 16px;
+	line-height: 18px;
 	display: block;
 	color: #000;
 	text-decoration: none;
@@ -184,6 +195,18 @@
 .f_grid_cell_cursor {
 	border: 1px dotted black;
 	padding: 0 3px;
+}
+
+.f_grid_cell_align_left {
+	text-align: left;	
+}
+
+.f_grid_cell_align_center {
+	text-align: center;
+}
+
+.f_grid_cell_align_right {
+	text-align: right;
 }
 
 .f_grid_label {
@@ -201,16 +224,16 @@
 	cursor: pointer;
 	vertical-align: middle;
 	line-height: 18px;
-	-moz-user-focus: ignore;
-	-moz-user-select: none;
 	padding: 0;
 	margin: 0 2px 0 0;
-	width: 16px;  // Pour la compatibilité IE
-	height: 16px;  // Pour la compatibilité IE
+	width: 16px;  /* Pour la compatibilité IE */
+	height: 16px;  /* Pour la compatibilité IE */
+	
+	outline: none;
 }
 
 .f_grid_row {
-//	xxxheight: 20px;
+/*	xxxheight: 20px; */
 }
 
 .f_grid_row_even, 
@@ -278,6 +301,7 @@
 	user-select: none;	
 }
 
+/* Fix Firefox 3.6 avec position relative */
 .f_grid_dataBody_scroll {
 	padding: 0;
 	margin: 0;
@@ -286,10 +310,13 @@
 	overflow-y: auto;
 	overflow-x: auto;
 	text-align: left;
-	-moz-outline-style: none;
+	XX-moz-outline-style: none;
+	XX-moz-user-focus: ignore;
 
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
+	
+	position: relative; 
 }
 
 .f_grid_dataTitle_scroll {
@@ -335,8 +362,8 @@
 	cursor: pointer;
 	vertical-align: middle;
 	line-height: 18px;
-	width: 16px;  // Pour la compatibilité IE
-	height: 16px;  // Pour la compatibilité IE	
+	width: 16px;  /* Pour la compatibilité IE */
+	height: 16px;  /* Pour la compatibilité IE */	
 }
 
 .f_grid_additional_button_expanded {
@@ -356,7 +383,7 @@
 }
 
 .f_grid_additionalRow {
-//	xxxvertical-align: top;
+/*	xxxvertical-align: top;  */
 }
 
 .f_grid_additional_button_no_content {
@@ -393,3 +420,67 @@
 	line-height: 0.1;
 	font-size: 0.1px;
 }
+
+
+.f_grid_wrap .f_grid_label,
+.f_grid_wrap .f_cGrid_cell {
+	white-space: normal;
+}
+ 
+.f_grid_wrap .f_dataGrid_row {
+	height: auto;
+}
+
+.f_grid_hidden_caption {
+	display: none;  /* pour taille colonne  attention accessibilite*/
+	position: absolute;
+	left: -10000px;
+	top: auto;
+	height: 1px;
+	overflow: hidden;
+	line-height: 0px;
+}
+
+.f_grid_hidden_title {
+	display: none;  /* pour taille colonne  attention accessibilite*/
+	position: absolute;
+	left: -10000px;
+	top: auto;
+	height: 1px;
+	overflow: hidden;
+	line-height: 0px;
+}
+
+.f_grid_sorterHasImage .f_grid_stext_ascending {
+	background-image: none;
+}
+
+.f_grid_sorterHasImage .f_grid_stext_descending {
+	background-image: none;
+}
+
+.f_grid_sorterHasImage .f_grid_stext_sortable {
+	background-image: none;
+}
+
+.f_grid_tsorter {
+	position: absolute;
+	right: 0;
+}
+
+.f_grid_additional_hasImage .f_grid_additional_button {
+	background-image: none;
+}
+
+/*
+.f_grid_colgroup COL {
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+*/
+
+.f_grid TH.f_cGrid_cell,
+.f_grid TH.f_grid_cell {
+	font-weight: normal;
+}
+

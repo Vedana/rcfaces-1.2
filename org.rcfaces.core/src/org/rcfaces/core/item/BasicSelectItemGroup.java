@@ -19,7 +19,6 @@ public class BasicSelectItemGroup extends SelectItemGroup implements
         ISelectItemGroup, IAccessKeyItem, IAcceleratorKeyItem,
         IGroupSelectItem, IInputTypeItem, IVisibleItem, IServerDataItem,
         IClientDataItem, IStyleClassItem {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = 6953469102413843158L;
 
@@ -53,6 +52,8 @@ public class BasicSelectItemGroup extends SelectItemGroup implements
     public BasicSelectItemGroup(Object value, String label, String description,
             boolean disabled, SelectItem selectItems[]) {
         super(label, description, disabled, selectItems);
+        
+        setValue(value);
     }
 
     public BasicSelectItemGroup(ISelectItem selectItem) {

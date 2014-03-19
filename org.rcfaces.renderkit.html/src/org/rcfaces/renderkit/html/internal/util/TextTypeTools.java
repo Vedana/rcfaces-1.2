@@ -22,11 +22,11 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
  * @version $Revision$ $Date$
  */
 public class TextTypeTools {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(TextTypeTools.class);
 
-    private static final Map HTML_TYPES = new HashMap(32);
+    private static final Map<String, String> HTML_TYPES = new HashMap<String, String>(
+            32);
     static {
         HTML_TYPES.put("label", IHtmlWriter.LABEL);
         HTML_TYPES.put("div", IHtmlWriter.DIV);
@@ -46,6 +46,7 @@ public class TextTypeTools {
         HTML_TYPES.put("preformatted", "pre");
         HTML_TYPES.put("ins", "ins");
         HTML_TYPES.put("del", "del");
+        HTML_TYPES.put("strong", "strong");
         HTML_TYPES.put("header", "h1");
         HTML_TYPES.put("header1", "h1");
         HTML_TYPES.put("header2", "h2");
@@ -58,8 +59,12 @@ public class TextTypeTools {
         HTML_TYPES.put("listitem", IHtmlWriter.LI);
         HTML_TYPES.put("orderedlist", "ol");
 
-        Collection c = HTML_TYPES.values();
-        String values[] = (String[]) c.toArray(new String[c.size()]);
+        HTML_TYPES.put("datalist", "dl");
+        HTML_TYPES.put("datatitle", "dt");
+        HTML_TYPES.put("datadata", "dd");
+
+        Collection<String> c = HTML_TYPES.values();
+        String values[] = c.toArray(new String[c.size()]);
 
         for (int i = 0; i < values.length; i++) {
             HTML_TYPES.put(values[i].toLowerCase(), values[i]);
@@ -83,7 +88,7 @@ public class TextTypeTools {
             return null;
         }
 
-        String element = (String) HTML_TYPES.get(type);
+        String element = HTML_TYPES.get(type);
         if (element != null) {
             return element;
         }
@@ -107,7 +112,7 @@ public class TextTypeTools {
 
         type = sa.toString();
 
-        element = (String) HTML_TYPES.get(type);
+        element = HTML_TYPES.get(type);
 
         return element;
     }

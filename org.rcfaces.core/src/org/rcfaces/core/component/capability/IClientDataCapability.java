@@ -62,5 +62,5 @@ public interface IClientDataCapability {
      * 
      * @return a map
      */
-    Map getClientDataMap();
+    Map<String, String> getClientDataMap();
 }

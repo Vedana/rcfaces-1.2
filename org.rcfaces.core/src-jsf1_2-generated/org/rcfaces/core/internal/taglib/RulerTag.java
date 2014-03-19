@@ -20,10 +20,19 @@ public class RulerTag extends CameliaTag implements Tag {
 
 	private ValueExpression x;
 	private ValueExpression y;
+<<<<<<< HEAD
 	private ValueExpression bottomPosition;
 	private ValueExpression leftPosition;
 	private ValueExpression rightPosition;
 	private ValueExpression topPosition;
+=======
+	private ValueExpression bottom;
+	private ValueExpression horizontalCenter;
+	private ValueExpression left;
+	private ValueExpression right;
+	private ValueExpression top;
+	private ValueExpression verticalCenter;
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	private ValueExpression marginBottom;
 	private ValueExpression marginLeft;
 	private ValueExpression marginRight;
@@ -43,11 +52,11 @@ public class RulerTag extends CameliaTag implements Tag {
 		return RulerComponent.COMPONENT_TYPE;
 	}
 
-	public final void setX(ValueExpression x) {
+	public void setX(ValueExpression x) {
 		this.x = x;
 	}
 
-	public final void setY(ValueExpression y) {
+	public void setY(ValueExpression y) {
 		this.y = y;
 	}
 
@@ -67,63 +76,87 @@ public class RulerTag extends CameliaTag implements Tag {
 		this.topPosition = topPosition;
 	}
 
-	public final void setMarginBottom(ValueExpression marginBottom) {
+	public void setBottom(ValueExpression bottom) {
+		this.bottom = bottom;
+	}
+
+	public void setHorizontalCenter(ValueExpression horizontalCenter) {
+		this.horizontalCenter = horizontalCenter;
+	}
+
+	public void setLeft(ValueExpression left) {
+		this.left = left;
+	}
+
+	public void setRight(ValueExpression right) {
+		this.right = right;
+	}
+
+	public void setTop(ValueExpression top) {
+		this.top = top;
+	}
+
+	public void setVerticalCenter(ValueExpression verticalCenter) {
+		this.verticalCenter = verticalCenter;
+	}
+
+	public void setMarginBottom(ValueExpression marginBottom) {
 		this.marginBottom = marginBottom;
 	}
 
-	public final void setMarginLeft(ValueExpression marginLeft) {
+	public void setMarginLeft(ValueExpression marginLeft) {
 		this.marginLeft = marginLeft;
 	}
 
-	public final void setMarginRight(ValueExpression marginRight) {
+	public void setMarginRight(ValueExpression marginRight) {
 		this.marginRight = marginRight;
 	}
 
-	public final void setMarginTop(ValueExpression marginTop) {
+	public void setMarginTop(ValueExpression marginTop) {
 		this.marginTop = marginTop;
 	}
 
-	public final void setWidth(ValueExpression width) {
+	public void setWidth(ValueExpression width) {
 		this.width = width;
 	}
 
-	public final void setHeight(ValueExpression height) {
+	public void setHeight(ValueExpression height) {
 		this.height = height;
 	}
 
-	public final void setVisible(ValueExpression visible) {
+	public void setVisible(ValueExpression visible) {
 		this.visible = visible;
 	}
 
-	public final void setHiddenMode(ValueExpression hiddenMode) {
+	public void setHiddenMode(ValueExpression hiddenMode) {
 		this.hiddenMode = hiddenMode;
 	}
 
-	public final void setLookId(ValueExpression lookId) {
+	public void setLookId(ValueExpression lookId) {
 		this.lookId = lookId;
 	}
 
-	public final void setOrientation(ValueExpression orientation) {
+	public void setOrientation(ValueExpression orientation) {
 		this.orientation = orientation;
 	}
 
-	public final void setBackgroundColor(ValueExpression backgroundColor) {
+	public void setBackgroundColor(ValueExpression backgroundColor) {
 		this.backgroundColor = backgroundColor;
 	}
 
-	public final void setForegroundColor(ValueExpression foregroundColor) {
+	public void setForegroundColor(ValueExpression foregroundColor) {
 		this.foregroundColor = foregroundColor;
 	}
 
-	public final void setAlignment(ValueExpression alignment) {
+	public void setAlignment(ValueExpression alignment) {
 		this.alignment = alignment;
 	}
 
-	public final void setRendered(ValueExpression rendered) {
+	public void setRendered(ValueExpression rendered) {
 		this.rendered = rendered;
 	}
 
-	public final void setMargins(ValueExpression margins) {
+	public void setMargins(ValueExpression margins) {
 		this.margins = margins;
 	}
 
@@ -134,10 +167,19 @@ public class RulerTag extends CameliaTag implements Tag {
 			}
 			LOG.debug("  x='"+x+"'");
 			LOG.debug("  y='"+y+"'");
+<<<<<<< HEAD
 			LOG.debug("  bottomPosition='"+bottomPosition+"'");
 			LOG.debug("  leftPosition='"+leftPosition+"'");
 			LOG.debug("  rightPosition='"+rightPosition+"'");
 			LOG.debug("  topPosition='"+topPosition+"'");
+=======
+			LOG.debug("  bottom='"+bottom+"'");
+			LOG.debug("  horizontalCenter='"+horizontalCenter+"'");
+			LOG.debug("  left='"+left+"'");
+			LOG.debug("  right='"+right+"'");
+			LOG.debug("  top='"+top+"'");
+			LOG.debug("  verticalCenter='"+verticalCenter+"'");
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 			LOG.debug("  marginBottom='"+marginBottom+"'");
 			LOG.debug("  marginLeft='"+marginLeft+"'");
 			LOG.debug("  marginRight='"+marginRight+"'");
@@ -184,6 +226,7 @@ public class RulerTag extends CameliaTag implements Tag {
 			}
 		}
 
+<<<<<<< HEAD
 		if (bottomPosition != null) {
 			if (bottomPosition.isLiteralText()==false) {
 				component.setValueExpression(Properties.BOTTOM_POSITION, bottomPosition);
@@ -217,6 +260,59 @@ public class RulerTag extends CameliaTag implements Tag {
 
 			} else {
 				component.setTopPosition(getInt(topPosition.getExpressionString()));
+=======
+		if (bottom != null) {
+			if (bottom.isLiteralText()==false) {
+				component.setValueExpression(Properties.BOTTOM, bottom);
+
+			} else {
+				component.setBottom(getNumber(bottom.getExpressionString()));
+			}
+		}
+
+		if (horizontalCenter != null) {
+			if (horizontalCenter.isLiteralText()==false) {
+				component.setValueExpression(Properties.HORIZONTAL_CENTER, horizontalCenter);
+
+			} else {
+				component.setHorizontalCenter(getNumber(horizontalCenter.getExpressionString()));
+			}
+		}
+
+		if (left != null) {
+			if (left.isLiteralText()==false) {
+				component.setValueExpression(Properties.LEFT, left);
+
+			} else {
+				component.setLeft(getNumber(left.getExpressionString()));
+			}
+		}
+
+		if (right != null) {
+			if (right.isLiteralText()==false) {
+				component.setValueExpression(Properties.RIGHT, right);
+
+			} else {
+				component.setRight(getNumber(right.getExpressionString()));
+			}
+		}
+
+		if (top != null) {
+			if (top.isLiteralText()==false) {
+				component.setValueExpression(Properties.TOP, top);
+
+			} else {
+				component.setTop(getNumber(top.getExpressionString()));
+			}
+		}
+
+		if (verticalCenter != null) {
+			if (verticalCenter.isLiteralText()==false) {
+				component.setValueExpression(Properties.VERTICAL_CENTER, verticalCenter);
+
+			} else {
+				component.setVerticalCenter(getNumber(verticalCenter.getExpressionString()));
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 			}
 		}
 
@@ -357,10 +453,19 @@ public class RulerTag extends CameliaTag implements Tag {
 	public void release() {
 		x = null;
 		y = null;
+<<<<<<< HEAD
 		bottomPosition = null;
 		leftPosition = null;
 		rightPosition = null;
 		topPosition = null;
+=======
+		bottom = null;
+		horizontalCenter = null;
+		left = null;
+		right = null;
+		top = null;
+		verticalCenter = null;
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		marginBottom = null;
 		marginLeft = null;
 		marginRight = null;

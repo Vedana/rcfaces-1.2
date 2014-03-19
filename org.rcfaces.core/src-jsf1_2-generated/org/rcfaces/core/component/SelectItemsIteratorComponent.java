@@ -1,5 +1,7 @@
 package org.rcfaces.core.component;
 
+import org.rcfaces.core.internal.tools.SelectItemsIteratorTools
+			;
 import org.rcfaces.core.internal.component.CameliaItemsComponent;
 import org.rcfaces.core.internal.component.Properties;
 import java.lang.Object;
@@ -9,7 +11,6 @@ import org.rcfaces.core.internal.manager.IClientDataManager;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.internal.manager.IServerDataManager;
-import org.rcfaces.core.internal.tools.SelectItemsIteratorTools;
 import javax.faces.FacesException;
 import javax.el.ValueExpression;
 import java.util.HashSet;
@@ -77,36 +78,36 @@ public class SelectItemsIteratorComponent extends CameliaItemsComponent implemen
 
 	public void setValue(Object value) {
 
-
-			throw new FacesException("Can not set value of 'SelectItemsIterator', use 'items' attribute to set the collection.");
+			
+				throw new FacesException("Can not set value of 'SelectItemsIterator', use 'items' attribute to set the collection.");
 			
 	}
 
 	public Object getValue() {
 
 
-			return getValue(null);
+				return getValue(null);
 			
 	}
 
 	public Object getValue(FacesContext context) {
 
 
-			return SelectItemsIteratorTools.getValue(this, context);
+				return SelectItemsIteratorTools.getValue(this, context);
 			
 	}
 
 	public IDataMapAccessor getClientMapAccessor(FacesContext context) {
 
 
-			return engine.getDataMapAccessor(context, "clientData", false);
+				return engine.getDataMapAccessor(context, "clientData", false);
 			
 	}
 
 	public IDataMapAccessor getServerMapAccessor(FacesContext context) {
 
 
-			return engine.getDataMapAccessor(context, "serverData", false);
+				return engine.getDataMapAccessor(context, "serverData", false);
 			
 	}
 
@@ -135,7 +136,8 @@ public class SelectItemsIteratorComponent extends CameliaItemsComponent implemen
 	}
 
 	public String getVar(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.VAR, facesContext);
+		String s = engine.getStringProperty(Properties.VAR, facesContext);
+		return s;
 	}
 
 	public void setVar(String var) {
@@ -155,7 +157,8 @@ public class SelectItemsIteratorComponent extends CameliaItemsComponent implemen
 	}
 
 	public String getItemIndexVar(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ITEM_INDEX_VAR, facesContext);
+		String s = engine.getStringProperty(Properties.ITEM_INDEX_VAR, facesContext);
+		return s;
 	}
 
 	public void setItemIndexVar(String itemIndexVar) {
@@ -175,7 +178,8 @@ public class SelectItemsIteratorComponent extends CameliaItemsComponent implemen
 	}
 
 	public String getItemLabel(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ITEM_LABEL, facesContext);
+		String s = engine.getStringProperty(Properties.ITEM_LABEL, facesContext);
+		return s;
 	}
 
 	public void setItemLabel(String itemLabel) {
@@ -235,7 +239,8 @@ public class SelectItemsIteratorComponent extends CameliaItemsComponent implemen
 	}
 
 	public String getItemDescription(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ITEM_DESCRIPTION, facesContext);
+		String s = engine.getStringProperty(Properties.ITEM_DESCRIPTION, facesContext);
+		return s;
 	}
 
 	public void setItemDescription(String itemDescription) {
@@ -255,7 +260,8 @@ public class SelectItemsIteratorComponent extends CameliaItemsComponent implemen
 	}
 
 	public String getItemAccessKey(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ITEM_ACCESS_KEY, facesContext);
+		String s = engine.getStringProperty(Properties.ITEM_ACCESS_KEY, facesContext);
+		return s;
 	}
 
 	public void setItemAccessKey(String itemAccessKey) {
@@ -275,7 +281,8 @@ public class SelectItemsIteratorComponent extends CameliaItemsComponent implemen
 	}
 
 	public String getItemAcceleratorKey(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ITEM_ACCELERATOR_KEY, facesContext);
+		String s = engine.getStringProperty(Properties.ITEM_ACCELERATOR_KEY, facesContext);
+		return s;
 	}
 
 	public void setItemAcceleratorKey(String itemAcceleratorKey) {
@@ -295,7 +302,8 @@ public class SelectItemsIteratorComponent extends CameliaItemsComponent implemen
 	}
 
 	public String getItemGroupName(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ITEM_GROUP_NAME, facesContext);
+		String s = engine.getStringProperty(Properties.ITEM_GROUP_NAME, facesContext);
+		return s;
 	}
 
 	public void setItemGroupName(String itemGroupName) {
@@ -315,7 +323,8 @@ public class SelectItemsIteratorComponent extends CameliaItemsComponent implemen
 	}
 
 	public String getItemInputType(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ITEM_INPUT_TYPE, facesContext);
+		String s = engine.getStringProperty(Properties.ITEM_INPUT_TYPE, facesContext);
+		return s;
 	}
 
 	public void setItemInputType(String itemInputType) {
@@ -335,7 +344,8 @@ public class SelectItemsIteratorComponent extends CameliaItemsComponent implemen
 	}
 
 	public String getItemStyleClass(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ITEM_STYLE_CLASS, facesContext);
+		String s = engine.getStringProperty(Properties.ITEM_STYLE_CLASS, facesContext);
+		return s;
 	}
 
 	public void setItemStyleClass(String itemStyleClass) {
@@ -355,7 +365,8 @@ public class SelectItemsIteratorComponent extends CameliaItemsComponent implemen
 	}
 
 	public String getItemImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ITEM_IMAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.ITEM_IMAGE_URL, facesContext);
+		return s;
 	}
 
 	public void setItemImageURL(String itemImageURL) {
@@ -375,7 +386,8 @@ public class SelectItemsIteratorComponent extends CameliaItemsComponent implemen
 	}
 
 	public String getItemDisabledImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ITEM_DISABLED_IMAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.ITEM_DISABLED_IMAGE_URL, facesContext);
+		return s;
 	}
 
 	public void setItemDisabledImageURL(String itemDisabledImageURL) {
@@ -395,7 +407,8 @@ public class SelectItemsIteratorComponent extends CameliaItemsComponent implemen
 	}
 
 	public String getItemHoverImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ITEM_HOVER_IMAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.ITEM_HOVER_IMAGE_URL, facesContext);
+		return s;
 	}
 
 	public void setItemHoverImageURL(String itemHoverImageURL) {
@@ -415,7 +428,8 @@ public class SelectItemsIteratorComponent extends CameliaItemsComponent implemen
 	}
 
 	public String getItemSelectedImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ITEM_SELECTED_IMAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.ITEM_SELECTED_IMAGE_URL, facesContext);
+		return s;
 	}
 
 	public void setItemSelectedImageURL(String itemSelectedImageURL) {
@@ -435,7 +449,8 @@ public class SelectItemsIteratorComponent extends CameliaItemsComponent implemen
 	}
 
 	public String getItemExpandedImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.ITEM_EXPANDED_IMAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.ITEM_EXPANDED_IMAGE_URL, facesContext);
+		return s;
 	}
 
 	public void setItemExpandedImageURL(String itemExpandedImageURL) {

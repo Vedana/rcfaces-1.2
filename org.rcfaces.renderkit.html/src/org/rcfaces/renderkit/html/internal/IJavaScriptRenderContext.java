@@ -7,6 +7,7 @@ package org.rcfaces.renderkit.html.internal;
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.repository.IRepository;
+import org.rcfaces.core.internal.repository.IRepository.ICriteria;
 import org.rcfaces.core.internal.repository.IRepository.IFile;
 import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository;
 
@@ -16,6 +17,8 @@ import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository;
  * @version $Revision$ $Date$
  */
 public interface IJavaScriptRenderContext extends IScriptRenderContext {
+
+    ICriteria getCriteria();
 
     boolean isInitialized();
 
@@ -83,4 +86,6 @@ public interface IJavaScriptRenderContext extends IScriptRenderContext {
     void writeRaw(IHtmlWriter htmlWriter, String text) throws WriterException;
 
     IJavaScriptRepository getRepository();
+
+    String convertSymbol(String className, String memberName);
 }

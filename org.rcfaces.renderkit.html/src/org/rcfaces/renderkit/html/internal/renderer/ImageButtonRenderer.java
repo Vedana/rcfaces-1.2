@@ -15,12 +15,12 @@ import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
-import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.AbstractImageButtonFamillyDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
 
 /**
@@ -29,8 +29,6 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
  * @version $Revision$ $Date$
  */
 public class ImageButtonRenderer extends AbstractCssRenderer {
-    private static final String REVISION = "$Revision$";
-
     public static final String IMAGE_BUTTON_WRITER = "camelia.writer.ImageButton";
 
     private static final String INTERNAL_VALUE_ATTRIBUTE = "camelia.internalValue";
@@ -38,7 +36,7 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.IMAGE_BUTTON;
     }
-    
+
     protected boolean hasComponenDecoratorSupport() {
         return true;
     }
@@ -80,6 +78,8 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
             }
         }
 
+        htmlWriter.getJavaScriptEnableMode().enableOnOver();
+
         super.encodeEnd(writer);
     }
 
@@ -118,13 +118,14 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
     }
 
     protected String getWAIRole() {
-        return IAccessibilityRoles.PRESENTATION;
+        return null; // IAccessibilityRoles.PRESENTATION;
     }
 
-    protected IHtmlWriter writeUserInputAttributes(IHtmlWriter writer, UIComponent component) throws WriterException {
-    	return writer;
+    protected IHtmlWriter writeUserInputAttributes(IHtmlWriter writer,
+            UIComponent component) throws WriterException {
+        return writer;
     }
-    
+
     /**
      * 
      * @author Olivier Oeuillot (latest modification by $Author$)
@@ -132,7 +133,6 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
      */
     protected class ImageButtonDecorator extends
             AbstractImageButtonFamillyDecorator {
-        private static final String REVISION = "$Revision$";
 
         public ImageButtonDecorator(IImageButtonFamilly imageButtonFamilly) {
             super(imageButtonFamilly);
@@ -148,6 +148,7 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
             writeHtmlAttributes(writer);
             writeJavaScriptAttributes(writer);
             writeCssAttributes(writer, cssStyleClasses, ~CSS_FONT_MASK);
+            writeFirstTooltipClientId(writer);
 
             FacesContext facesContext = writer.getComponentRenderContext()
                     .getFacesContext();
@@ -158,21 +159,26 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
                 throws WriterException {
             String value = getInputValue(false);
             if (value != null) {
-                writer.writeAttribute("v:value", value);
+                writer.writeAttributeNS("value", value);
 
                 writer.getComponentRenderContext().setAttribute(
                         INTERNAL_VALUE_ATTRIBUTE, value);
             }
 
             if (imageButtonFamilly.isDisabled(facesContext)) {
-                writer.writeAttribute("v:disabled", true);
+                writer.writeAttributeNS("disabled", true);
             }
-            
-            
 
             if (imageButtonFamilly.isReadOnly(facesContext)) {
-                writer.writeAttribute("v:readOnly", true);
+                writer.writeAttributeNS("readOnly", true);
             }
         }
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "value",
+                "disabled", "readOnly" });
     }
 }

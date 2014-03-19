@@ -6,7 +6,6 @@ import org.rcfaces.core.component.capability.IComponentLocaleCapability;
 import java.util.Collections;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
-import org.rcfaces.core.internal.converter.NumberFormatTypeConverter;
 import org.rcfaces.core.component.capability.IRequiredCapability;
 import java.util.HashMap;
 import javax.faces.context.FacesContext;
@@ -23,6 +22,10 @@ import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import java.lang.Object;
 import java.lang.String;
+import org.rcfaces.core.internal.converter.NumberFormatTypeConverter
+			;
+import org.rcfaces.core.internal.converter.LiteralNumberConverter
+			;
 import org.rcfaces.core.internal.converter.LiteralNumberConverter;
 import org.rcfaces.core.component.capability.IAlternateTextCapability;
 import org.rcfaces.core.internal.component.IDataMapAccessor;
@@ -140,11 +143,11 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 
 	public void setValue(Object value) {
 
-
+			
 				if (value instanceof String) {
 					value=LiteralNumberConverter.SINGLETON.getAsObject(null, this, (String)value);
 				}
-				
+
 				super.setValue(value);
 			
 	}
@@ -152,18 +155,19 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	public void setNumberFormatType(String formatType) {
 
 
-			setNumberFormatType(((Integer)NumberFormatTypeConverter.SINGLETON.getAsObject(null, this, formatType)).intValue());
+				setNumberFormatType(((Integer)NumberFormatTypeConverter.SINGLETON.getAsObject(null,
+				this, formatType)).intValue());
 			
 	}
 
 	public Number getNumber() {
 
-
+			
 				Object submittedValue=getSubmittedExternalValue();
 				if (submittedValue!=null) {
 					return (Number)submittedValue;
 				}
-			
+
 				return (Number)getValue();
 			
 	}
@@ -179,6 +183,13 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 
 
 				setValue(new Long(number));
+			
+	}
+
+	public void setNumber(Number number) {
+
+
+				setValue(number);
 			
 	}
 
@@ -761,7 +772,8 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * @return number format
 	 */
 	public String getNumberFormat(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.NUMBER_FORMAT, facesContext);
+		String s = engine.getStringProperty(Properties.NUMBER_FORMAT, facesContext);
+		return s;
 	}
 
 	/**
@@ -797,7 +809,8 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * @return step
 	 */
 	public String getIntegerStep(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.INTEGER_STEP, facesContext);
+		String s = engine.getStringProperty(Properties.INTEGER_STEP, facesContext);
+		return s;
 	}
 
 	/**
@@ -831,7 +844,8 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	 * Experimental Do not use.
 	 */
 	public String getFractionStep(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FRACTION_STEP, facesContext);
+		String s = engine.getStringProperty(Properties.FRACTION_STEP, facesContext);
+		return s;
 	}
 
 	/**

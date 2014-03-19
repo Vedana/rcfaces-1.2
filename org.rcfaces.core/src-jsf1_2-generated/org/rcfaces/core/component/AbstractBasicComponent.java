@@ -3,6 +3,7 @@ package org.rcfaces.core.component;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
 import java.util.Map;
+import org.rcfaces.core.component.capability.ILayoutPositionCapability;
 import org.rcfaces.core.component.capability.IUserEventCapability;
 import java.util.Collections;
 import org.apache.commons.logging.LogFactory;
@@ -51,7 +52,11 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 	IErrorEventCapability,
 	IWAIRoleCapability,
 	IPositionCapability,
+<<<<<<< HEAD
 	IAnchoredPositionCapability,
+=======
+	ILayoutPositionCapability,
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	ISizeCapability,
 	IMarginCapability,
 	IHelpCapability,
@@ -68,7 +73,11 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
+<<<<<<< HEAD
 		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"bottomPosition","visible","marginLeft","backgroundColor","errorListener","leftPosition","propertyChangeListener","helpURL","ariaLevel","topPosition","height","hiddenMode","waiRole","foregroundColor","lookId","rightPosition","userEventListener","helpMessage","marginTop","styleClass","width","marginRight","partialRendering","ariaLabel","unlockedClientAttributeNames","marginBottom","toolTipText","y","margins","x"}));
+=======
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"visible","backgroundColor","marginLeft","errorListener","propertyChangeListener","helpURL","ariaLevel","height","hiddenMode","left","right","foregroundColor","waiRole","top","lookId","userEventListener","helpMessage","marginTop","styleClass","width","marginRight","partialRendering","ariaLabel","verticalCenter","unlockedClientAttributeNames","marginBottom","bottom","toolTipText","horizontalCenter","y","margins","x"}));
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	}
 
 
@@ -161,12 +170,28 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 	public Object getServerData(String name, FacesContext facesContext) {
 
 
+<<<<<<< HEAD
 		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
+=======
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		if (dataMapAccessor==null) {
 			return null;
 		}
 		
 		return dataMapAccessor.getData(name, facesContext);
+		
+	}
+
+	public ValueExpression getServerDataValueExpression(String name, FacesContext facesContext) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
+		if (dataMapAccessor==null) {
+			return null;
+		}
+		
+		return dataMapAccessor.getValueExpression(name);
 		
 	}
 
@@ -504,6 +529,7 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 		engine.setProperty(Properties.Y, y);
 	}
 
+<<<<<<< HEAD
 	public int getBottomPosition() {
 		return getBottomPosition(null);
 	}
@@ -594,6 +620,144 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 
 	public void setTopPosition(int topPosition) {
 		engine.setProperty(Properties.TOP_POSITION, topPosition);
+=======
+	public java.lang.Number getBottom() {
+		return getBottom(null);
+	}
+
+	/**
+	 * See {@link #getBottom() getBottom()} for more details
+	 */
+	public java.lang.Number getBottom(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.BOTTOM, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "bottom" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isBottomSetted() {
+		return engine.isPropertySetted(Properties.BOTTOM);
+	}
+
+	public void setBottom(java.lang.Number bottom) {
+		engine.setProperty(Properties.BOTTOM, bottom);
+	}
+
+	public java.lang.Number getHorizontalCenter() {
+		return getHorizontalCenter(null);
+	}
+
+	/**
+	 * See {@link #getHorizontalCenter() getHorizontalCenter()} for more details
+	 */
+	public java.lang.Number getHorizontalCenter(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.HORIZONTAL_CENTER, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "horizontalCenter" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHorizontalCenterSetted() {
+		return engine.isPropertySetted(Properties.HORIZONTAL_CENTER);
+	}
+
+	public void setHorizontalCenter(java.lang.Number horizontalCenter) {
+		engine.setProperty(Properties.HORIZONTAL_CENTER, horizontalCenter);
+	}
+
+	public java.lang.Number getLeft() {
+		return getLeft(null);
+	}
+
+	/**
+	 * See {@link #getLeft() getLeft()} for more details
+	 */
+	public java.lang.Number getLeft(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.LEFT, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "left" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isLeftSetted() {
+		return engine.isPropertySetted(Properties.LEFT);
+	}
+
+	public void setLeft(java.lang.Number left) {
+		engine.setProperty(Properties.LEFT, left);
+	}
+
+	public java.lang.Number getRight() {
+		return getRight(null);
+	}
+
+	/**
+	 * See {@link #getRight() getRight()} for more details
+	 */
+	public java.lang.Number getRight(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.RIGHT, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "right" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isRightSetted() {
+		return engine.isPropertySetted(Properties.RIGHT);
+	}
+
+	public void setRight(java.lang.Number right) {
+		engine.setProperty(Properties.RIGHT, right);
+	}
+
+	public java.lang.Number getTop() {
+		return getTop(null);
+	}
+
+	/**
+	 * See {@link #getTop() getTop()} for more details
+	 */
+	public java.lang.Number getTop(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.TOP, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "top" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTopSetted() {
+		return engine.isPropertySetted(Properties.TOP);
+	}
+
+	public void setTop(java.lang.Number top) {
+		engine.setProperty(Properties.TOP, top);
+	}
+
+	public java.lang.Number getVerticalCenter() {
+		return getVerticalCenter(null);
+	}
+
+	/**
+	 * See {@link #getVerticalCenter() getVerticalCenter()} for more details
+	 */
+	public java.lang.Number getVerticalCenter(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.VERTICAL_CENTER, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "verticalCenter" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isVerticalCenterSetted() {
+		return engine.isPropertySetted(Properties.VERTICAL_CENTER);
+	}
+
+	public void setVerticalCenter(java.lang.Number verticalCenter) {
+		engine.setProperty(Properties.VERTICAL_CENTER, verticalCenter);
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	}
 
 	public java.lang.String getWidth() {

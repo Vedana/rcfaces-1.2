@@ -29,6 +29,7 @@ import org.rcfaces.renderkit.html.internal.AbstractCompositeRenderer;
 import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
 
 /**
@@ -37,7 +38,6 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
  * @version $Revision$ $Date$
  */
 public class NumberEntryRenderer extends AbstractCompositeRenderer {
-    private static final String REVISION = "$Revision$";
 
     protected static final String UNDEFINED_CURRENCY = "XXX";
 
@@ -117,25 +117,27 @@ public class NumberEntryRenderer extends AbstractCompositeRenderer {
             decimalFormatSymbols = NumberTools.getDefaultDecimalFormatSymbols();
         }
 
+        String ns = htmlWriter.getRcfacesNamespace() + ":";
+
         Number minNumber = numberEntryComponent.getMinimum(facesContext);
         if (minNumber != null) {
-            writeNumber(htmlWriter, "v:minimum", minNumber);
+            writeNumber(htmlWriter, ns + "minimum", minNumber);
         }
 
         Number maxNumber = numberEntryComponent.getMaximum(facesContext);
         if (maxNumber != null) {
-            writeNumber(htmlWriter, "v:maximum", maxNumber);
+            writeNumber(htmlWriter, ns + "maximum", maxNumber);
         }
 
         Number defaultNumber = numberEntryComponent
                 .getDefaultNumber(facesContext);
         if (defaultNumber != null) {
-            writeNumber(htmlWriter, "v:defaultNumber", defaultNumber);
+            writeNumber(htmlWriter, ns + "defaultNumber", defaultNumber);
         }
 
         Number number = numberEntryComponent.getNumber();
         if (number != null) {
-            writeNumber(htmlWriter, "v:number", number);
+            writeNumber(htmlWriter, ns + "number", number);
         }
 
         writeClientValidatorParams(htmlWriter);
@@ -332,8 +334,7 @@ public class NumberEntryRenderer extends AbstractCompositeRenderer {
                             curValue.append(s);
                         }
                         if (nb - optional > valueLength) {
-                            curValue
-                                    .insert(0, '0', nb - optional - valueLength);
+                            curValue.insert(0, '0', nb - optional - valueLength);
                         }
                     }
                 } else {
@@ -342,14 +343,18 @@ public class NumberEntryRenderer extends AbstractCompositeRenderer {
                 }
 
                 if (nb > 0) {
-                    Map attributes = new HashMap(3);
+                    Map<String, Object> attributes = new HashMap<String, Object>(
+                            3);
+
+                    String ns = htmlWriter.getRcfacesNamespace() + ":";
 
                     if (separators != null && separators.length() > 0) {
-                        attributes.put("v:separators", separators);
+                        attributes.put(ns + "separators", separators);
                     }
 
                     if (nb > optional) {
-                        attributes.put("v:auto", String.valueOf(nb - optional));
+                        attributes.put(ns + "auto",
+                                String.valueOf(nb - optional));
                     }
 
                     writeSubInput(htmlWriter, accessKey, tabIndex, lastChar, 1,
@@ -481,5 +486,12 @@ public class NumberEntryRenderer extends AbstractCompositeRenderer {
 
     protected String getActionEventName(INameSpace nameSpace) {
         return nameSpace.getSelectionEventName();
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "minimum",
+                "maximum", "defaultNumber", "number", "separators", "auto" });
     }
 }

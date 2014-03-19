@@ -2,19 +2,50 @@
 <!DOCTYPE faces-config PUBLIC "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN" "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
 <faces-config>
 	<component>
+		<component-type>org.rcfaces.svg.SVG</component-type>
+		<component-class>org.rcfaces.renderkit.svg.component.SVGComponent</component-class>
+	</component>
+	<component>
+		<component-type>org.rcfaces.svg.dataSVG</component-type>
+		<component-class>org.rcfaces.renderkit.svg.component.DataSVGComponent</component-class>
+	</component>
+	<component>
+		<component-type>org.rcfaces.svg.SVGDataColumn</component-type>
+		<component-class>org.rcfaces.renderkit.svg.component.SVGDataColumnComponent</component-class>
+	</component>
+	<component>
 		<description><![CDATA[
 <p>The image Component shows an image (it's equivalent to &lt;img .../&gt;).</p>
       <p>The image Component has the following capabilities :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Image</li>
-        <li>Margin</li>
-        <li>Help</li>
-        <li>Visibility</li>
-      	<li>Events Handling</li>
-      </ul>
+	        <li>IImageCapability</li>
+		<li>IImageSizeCapability</li>
+		<li>IAlternateTextCapability</li>
+		<li>IFilterCapability</li>
+		<li>IImageAccessorsCapability</li>      </ul>
       </p>
+      
+      
+        
+      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageComponent.html">image</a> renderer is linked to the <a href="/jsdocs/index.html?f_image.html" target="_blank">f_image</a> javascript class. f_image extends f_filtredComponent</p>
+      
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_image</td>
+			<td width="50%">Defines styles for the wrapper IMG element</td>
+		</tr>
+		
+		
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.svg.image</component-type>
 		<component-class>org.rcfaces.renderkit.svg.component.ImageComponent</component-class>
@@ -36,15 +67,41 @@
 <p>The imageButton Component is a <a href="/comps/buttonComponent.html">button Component</a> that can show an image.</p>
       <p>The imageButton Component has the following capabilities :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text, font &amp; image</li>
-        <li>Margin &amp; border</li>
-        <li>Help</li>
-        <li>Visibility, Read-Only, Disabled</li>
-      	<li>Events Handling</li>
+        <li>IImageButtonFamilly </li>
+		 <li>IImageAccessorsCapability </li>
       </ul>
       </p>
+      
+         
+      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageButtonComponent.html">imageButton</a> renderer is linked to the <a href="/jsdocs/index.html?f_imageButton.html" target="_blank">f_imageButton</a> javascript class. f_imageButton extends f_component, fa_readOnly, fa_disabled, fa_tabIndex, fa_borderType, fa_images, fa_immediate, fa_value, fa_aria</p>
+      
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_imageButton</td>
+			<td width="50%">Defines styles for the wrapper IMG element</td>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_imageButton_text</td>
+			<td width="50%">Defines styles for the wrapper SPAN element for text</td>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_imageButton_image</td>
+			<td width="50%">Defines styles for the wrapper IMG element</td>
+		</tr>
+		
+		
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.svg.imageButton</component-type>
 		<component-class>org.rcfaces.renderkit.svg.component.ImageButtonComponent</component-class>
@@ -68,6 +125,16 @@ A boolean value indicating that this component's value must be
 		<component-class>org.rcfaces.renderkit.svg.component.PathComponent</component-class>
 	</component>
 	<render-kit>
+		<renderer>
+			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.svg.SVG</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.svg.internal.renderer.SVGRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.svg.dataSVG</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.svg.internal.renderer.DataSVGRenderer</renderer-class>
+		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.svg.image</renderer-type>

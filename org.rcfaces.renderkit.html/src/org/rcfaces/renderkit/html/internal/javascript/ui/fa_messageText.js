@@ -25,7 +25,7 @@ var __members = {
 	 */
 	f_isShowSummary: function() {
 		if (this._showSummary===undefined) {
-			this._showSummary=f_core.GetBooleanAttribute(this, "v:showSummary", false);
+			this._showSummary=f_core.GetBooleanAttributeNS(this,"showSummary", false);
 		}
 		
 		return this._showSummary;
@@ -60,7 +60,7 @@ var __members = {
 	 */
 	f_isShowDetail: function() {
 		if (this._showDetail===undefined) {
-			this._showDetail=f_core.GetBooleanAttribute(this, "v:showDetail", false);
+			this._showDetail=f_core.GetBooleanAttributeNS(this,"showDetail", false);
 		}
 		
 		return this._showDetail;
@@ -97,7 +97,7 @@ var __members = {
 	 * @return void
 	 */
 	fa_updateMessages: f_class.ABSTRACT
-}
+};
 
 new f_aspect("fa_messageText", {
 	extend: [ fa_message ],

@@ -15,6 +15,7 @@ import org.rcfaces.core.internal.renderkit.IAsyncRenderer;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.renderkit.designer.IDesignerEngine;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
@@ -26,323 +27,343 @@ import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
 public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer {
-	private static final String REVISION = "$Revision$";
 
-	private static final String CARD_SUFFIX = "_card";
+    private static final String CARD_SUFFIX = "_card";
 
-	private static final IJavaScriptComponentRenderer CARD_JAVASCRIPT_COMPONENT = new IJavaScriptComponentRenderer() {
-		private static final String REVISION = "$Revision$";
+    private static final IJavaScriptComponentRenderer CARD_JAVASCRIPT_COMPONENT = new IJavaScriptComponentRenderer() {
 
-		public void initializeJavaScript(IJavaScriptWriter javaScriptWriter)
-				throws WriterException {
-			javaScriptWriter.getJavaScriptRenderContext()
-					.initializeJavaScriptDocument(javaScriptWriter);
-		}
+        public void initializeJavaScript(IJavaScriptWriter javaScriptWriter)
+                throws WriterException {
+            javaScriptWriter.getJavaScriptRenderContext()
+                    .initializeJavaScriptDocument(javaScriptWriter);
+        }
 
-		public void initializeJavaScriptComponent(
-				IJavaScriptWriter javaScriptWriter) {
-		}
+        public void initializeJavaScriptComponent(
+                IJavaScriptWriter javaScriptWriter) {
+        }
 
-		public void releaseJavaScript(IJavaScriptWriter javaScriptWriter) {
-		}
+        public void releaseJavaScript(IJavaScriptWriter javaScriptWriter) {
+        }
 
-		public void initializePendingComponents(IJavaScriptWriter writer) {
-		}
+        public void initializePendingComponents(IJavaScriptWriter writer) {
+        }
 
-		public void addRequiredJavaScriptClassNames(IHtmlWriter writer,
-				IJavaScriptRenderContext javaScriptRenderContext) {
-		}
-	};
+        public void addRequiredJavaScriptClassNames(IHtmlWriter writer,
+                IJavaScriptRenderContext javaScriptRenderContext) {
+        }
+    };
 
-	protected void encodeBegin(IComponentWriter writer) throws WriterException {
-		// super.encodeBegin(writer); // ???
+    protected final void encodeBegin(IComponentWriter writer)
+            throws WriterException {
+        // Final a cause du designer
 
-		FacesContext facesContext = writer.getComponentRenderContext()
-				.getFacesContext();
+        // super.encodeBegin(writer); // ???
 
-		IComponentRenderContext componentRenderContext = writer
-				.getComponentRenderContext();
-		CardComponent cardComponent = (CardComponent) componentRenderContext
-				.getComponent();
-		CardBoxComponent cardBoxComponent = cardComponent.getCardBox();
+        FacesContext facesContext = writer.getComponentRenderContext()
+                .getFacesContext();
 
-		String cardClassName = getCardStyleClass(facesContext, cardComponent);
+        IComponentRenderContext componentRenderContext = writer
+                .getComponentRenderContext();
+        CardComponent cardComponent = (CardComponent) componentRenderContext
+                .getComponent();
+        CardBoxComponent cardBoxComponent = cardComponent.getCardBox();
 
-		boolean selected = isCardSelected(cardComponent);
-		
+        String cardClassName = getCardStyleClass(facesContext, cardComponent);
 
-		IHtmlWriter htmlWriter = (IHtmlWriter) writer;
+        boolean selected = isCardSelected(cardComponent);
 
-		IHtmlRenderContext htmlRenderContext = htmlWriter
-				.getHtmlComponentRenderContext().getHtmlRenderContext();
+        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-		IJavaScriptRenderContext javascriptRenderContext = htmlRenderContext
-				.getJavaScriptRenderContext();
+        IHtmlRenderContext htmlRenderContext = htmlWriter
+                .getHtmlComponentRenderContext().getHtmlRenderContext();
 
-		if (CardBoxRenderer.isCardBoxJSF12_Generation(htmlRenderContext) == false) {
+        IJavaScriptRenderContext javascriptRenderContext = htmlRenderContext
+                .getJavaScriptRenderContext();
 
-			javascriptRenderContext.removeJavaScriptWriter(htmlWriter);
+        if (CardBoxRenderer.isCardBoxJSF12_Generation(htmlRenderContext) == false) {
 
-			// Il faut calculer les dependances
-			javascriptRenderContext.computeRequires(htmlWriter, this);
+            javascriptRenderContext.removeJavaScriptWriter(htmlWriter);
 
-			IJavaScriptWriter jsWriter = javascriptRenderContext
-					.getJavaScriptWriter(htmlWriter, CARD_JAVASCRIPT_COMPONENT);
+            // Il faut calculer les dependances
+            javascriptRenderContext.computeRequires(htmlWriter, this);
 
-			initializePendingComponents(jsWriter);
+            IJavaScriptWriter jsWriter = javascriptRenderContext
+                    .getJavaScriptWriter(htmlWriter, CARD_JAVASCRIPT_COMPONENT);
 
-			String cardBoxVarId = htmlRenderContext
-					.getComponentClientId(cardBoxComponent);
+            initializePendingComponents(jsWriter);
 
-			declareCard(jsWriter, cardComponent, cardBoxVarId, selected);
+            String cardBoxVarId = htmlRenderContext
+                    .getComponentClientId(cardBoxComponent);
 
-			jsWriter.end();
+            declareCard(jsWriter, cardComponent, cardBoxVarId, selected);
 
-		} else {
-			htmlWriter.getJavaScriptEnableMode().enableOnInit();
-		}
+            jsWriter.end();
 
-		int asyncRender = IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE;
-		if (selected == false) {
-			if (htmlRenderContext.isAsyncRenderEnable()) {
-				asyncRender = htmlRenderContext
-						.getAsyncRenderMode(cardBoxComponent);
+        } else {
 
-				if (asyncRender != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
-					htmlWriter.getHtmlComponentRenderContext()
-							.getHtmlRenderContext()
-							.pushInteractiveRenderComponent(htmlWriter, null);
-				}
-			}
+            htmlWriter.getJavaScriptEnableMode().enableOnInit();
+        }
 
-			setAsyncRenderer(htmlWriter, cardComponent, asyncRender);
-		}
+        int asyncRender = IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE;
+        if (selected == false) {
+            if (htmlRenderContext.isAsyncRenderEnable()) {
+                asyncRender = htmlRenderContext
+                        .getAsyncRenderMode(cardBoxComponent);
 
-		htmlWriter.writeln();
+                if (asyncRender != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
+                    htmlWriter.getHtmlComponentRenderContext()
+                            .getHtmlRenderContext()
+                            .pushInteractiveRenderComponent(htmlWriter, null);
+                }
+            }
 
-		htmlWriter.startElement(IHtmlWriter.DIV);
+            setAsyncRenderer(htmlWriter, cardComponent, asyncRender);
+        }
 
-		/*
-		 * String w = tabbedPane.getWidth(); if (w != null) {
-		 * writer.writeAttribute("width", w); }
-		 */
+        htmlWriter.writeln();
 
-		if (asyncRender != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
-			htmlWriter.writeAttribute("v:asyncRender", true);
-
-			if (cardComponent.getAsyncDecodeMode(componentRenderContext
-					.getFacesContext()) == IAsyncDecodeModeCapability.PARTIAL_ASYNC_DECODE_MODE) {
-				htmlWriter.writeAttribute("v:asyncDecode", true);
-			}
-		}
-
-		writeHtmlAttributes(htmlWriter);
-		writeJavaScriptAttributes(htmlWriter);
-		htmlWriter.writeClass(cardClassName);
-		writeCardAttributes(htmlWriter);
-
-		ICssWriter cssWriter = htmlWriter.writeStyle(128);
-		if (selected == false) {
-			cssWriter.writeDisplay(ICssWriter.NONE);
-		}
+        htmlWriter.startElement(IHtmlWriter.DIV);
 
-		if (selected) {
-			htmlWriter.writeAriaSelected(selected);
-		}
-		writeCardSizes(htmlWriter, cardComponent);
+        /*
+         * String w = tabbedPane.getWidth(); if (w != null) {
+         * writer.writeAttribute("width", w); }
+         */
+
+        if (asyncRender != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
+            htmlWriter.writeAttributeNS("asyncRender", true);
+
+            if (cardComponent.getAsyncDecodeMode(componentRenderContext
+                    .getFacesContext()) == IAsyncDecodeModeCapability.PARTIAL_ASYNC_DECODE_MODE) {
+                htmlWriter.writeAttributeNS("asyncDecode", true);
+            }
+        }
+
+        writeHtmlAttributes(htmlWriter);
+        writeJavaScriptAttributes(htmlWriter);
+        htmlWriter.writeClass(cardClassName);
+        writeCardAttributes(htmlWriter);
+
+        ICssWriter cssWriter = htmlWriter.writeStyle(128);
+        if (selected == false) {
+            cssWriter.writeDisplay(ICssWriter.NONE);
+        }
+
+        if (selected) {
+            htmlWriter.writeAriaSelected(selected);
+        }
+        writeCardSizes(htmlWriter, cardComponent);
 
-		String textAlignement = cardComponent.getTextAlignment(facesContext);
-		if (textAlignement != null) {
-			cssWriter.writeTextAlign(textAlignement);
-		}
-
-		String verticalAlignement = cardComponent
-				.getVerticalAlignment(facesContext);
-		if (verticalAlignement != null) {
-			cssWriter.writeVerticalAlign(verticalAlignement);
-		}
-	}
+        String textAlignement = cardComponent.getTextAlignment(facesContext);
+        if (textAlignement != null) {
+            cssWriter.writeTextAlign(textAlignement);
+        }
 
-	protected void writeCardSizes(IHtmlWriter htmlWriter,
-			CardComponent cardComponent) {
+        String verticalAlignement = cardComponent
+                .getVerticalAlignment(facesContext);
+        if (verticalAlignement != null) {
+            cssWriter.writeVerticalAlign(verticalAlignement);
+        }
 
-		CardBoxComponent cardBoxComponent = cardComponent.getCardBox();
-		FacesContext facesContext = htmlWriter.getComponentRenderContext()
-				.getFacesContext();
+        encodeSummaryTitleCard(htmlWriter);
 
-		if (cardBoxComponent.getWidth(facesContext) != null) {
-			htmlWriter.writeStyle().writeWidth("100%");
-		}
+        designerBeginChildren(htmlWriter, IDesignerEngine.MAIN_BODY);
+    }
 
-		if (cardBoxComponent.getHeight(facesContext) != null) {
-			htmlWriter.writeStyle().writeHeight("100%");
-		}
-	}
+    protected void encodeSummaryTitleCard(IHtmlWriter htmlWriter)
+            throws WriterException {
+    }
 
-	protected void writeCardAttributes(IHtmlWriter htmlWriter)
-			throws WriterException {
-	}
+    protected void writeCardSizes(IHtmlWriter htmlWriter,
+            CardComponent cardComponent) {
 
-	protected String getWAIRole() {
-		return IAccessibilityRoles.TAB_CONTENT;
-	}
+        CardBoxComponent cardBoxComponent = cardComponent.getCardBox();
+        FacesContext facesContext = htmlWriter.getComponentRenderContext()
+                .getFacesContext();
 
-	protected String getCardStyleClass(FacesContext facesContext,
-			CardComponent cardComponent) {
+        if (cardBoxComponent.getWidth(facesContext) != null) {
+            htmlWriter.writeStyle().writeWidth("100%");
+        }
 
-		String className = cardComponent.getStyleClass(facesContext);
-		if (className != null) {
-			return className;
-		}
-
-		// CardBoxComponent cardBoxComponent = cardComponent.getCardBox();
-		className = getDefaultCardStyleClassPrefix();
-
-		String suffix = getCardStyleClassSuffix();
-		if (suffix == null || suffix.length() < 1) {
-			return className;
-		}
-
-		return className + suffix;
-	}
-
-	protected String getDefaultCardStyleClassPrefix() {
-		return JavaScriptClasses.CARD_BOX;
-	}
-
-	protected String getCardStyleClassSuffix() {
-		return CARD_SUFFIX;
-	}
-
-	protected void declareCard(IJavaScriptWriter js,
-			CardComponent cardComponent, String cardBoxClientId,
-			boolean selected) throws WriterException {
-
-		boolean declare[] = new boolean[1];
-		String var = js.getJavaScriptRenderContext().allocateComponentVarId(
-				cardBoxClientId, declare);
-		if (declare[0]) {
-			js.write("var ").write(var).write('=').writeCall("f_core",
-					"GetElementByClientId").writeString(cardBoxClientId)
-					.writeln(", document, true);");
-		}
-
-		// CardBoxComponent cardBoxComponent = cardComponent.getCardBox();
-
-		IHtmlWriter writer = js.getWriter();
+        if (cardBoxComponent.getHeight(facesContext) != null) {
+            htmlWriter.writeStyle().writeHeight("100%");
+        }
+    }
 
-		IHtmlComponentRenderContext componentRenderContext = writer
-				.getHtmlComponentRenderContext();
+    protected void writeCardAttributes(IHtmlWriter htmlWriter)
+            throws WriterException {
+    }
 
-		// IHtmlRenderContext htmlRenderContext =
-		// componentRenderContext.getHtmlRenderContext();
-		FacesContext facesContext = js.getFacesContext();
+    protected String getWAIRole() {
+        return IAccessibilityRoles.TAB_CONTENT;
+    }
 
-		js.writeCall(var, "f_declareCard");
-
-		IObjectLiteralWriter objectLiteralWriter = js.writeObjectLiteral(false);
-
-		objectLiteralWriter.writeSymbol("_id").writeString(
-				componentRenderContext.getComponentClientId());
-
-		Object value = cardComponent.getValue();
-		String clientValue = null;
-		if (value instanceof String) {
-			clientValue = (String) value;
-
-		} else if (value != null) {
-			clientValue = convertValue(facesContext, cardComponent, value);
-		}
-
-		if (clientValue != null) {
-
-			objectLiteralWriter.writeSymbol("_value").writeString(clientValue);
-		}
-
-		if (selected) {
-			objectLiteralWriter.writeSymbol("_selected").writeBoolean(true);
-		}
-
-		objectLiteralWriter.end();
-
-		js.writeln(");");
-	}
-
-	protected void encodeEnd(IComponentWriter writer) throws WriterException {
-		IHtmlWriter htmlWriter = (IHtmlWriter) writer;
-
-		htmlWriter.endElement(IHtmlWriter.DIV);
-
-		super.encodeEnd(writer);
-	}
-
-	protected void encodeJavaScript(IJavaScriptWriter jsWriter)
-			throws WriterException {
-		// Pas de JAVASCRIPT !
-		super.encodeJavaScript(jsWriter);
-
-		/*
-		 * C'est fait dans les attributs du DIV IHtmlComponentRenderContext
-		 * htmlComponentRenderContext = jsWriter
-		 * .getHtmlComponentRenderContext();
-		 * 
-		 * if (htmlComponentRenderContext.getRenderContext().containsAttribute(
-		 * TabbedPaneRenderer.TABBED_PANE_JSF12_PROPERTY)) {
-		 * 
-		 * CardComponent cardComponent = (CardComponent)
-		 * htmlComponentRenderContext .getComponent();
-		 * 
-		 * boolean selected = isCardSelected(cardComponent);
-		 * 
-		 * CardBoxComponent cardBoxComponent = cardComponent.getCardBox();
-		 * 
-		 * String cardBoxVarId = htmlComponentRenderContext
-		 * .getHtmlRenderContext().getComponentClientId( cardBoxComponent);
-		 * 
-		 * declareCard(jsWriter, cardComponent, cardBoxVarId, selected); }
-		 */
-	}
-
-	protected String getJavaScriptClassName() {
-		return JavaScriptClasses.CARD;
-	}
-
-	protected boolean isCardSelected(CardComponent cardComponent) {
-		CardBoxComponent cardBoxComponent = cardComponent.getCardBox();
-
-		CardComponent selectedCard = cardBoxComponent.getSelectedCard();
-
-		if (selectedCard == null && cardBoxComponent.getValue() == null) {
-			// Aucun selectionné par défaut, on prend le premier visible
-
-			FacesContext facesContext = FacesContext.getCurrentInstance();
-
-			ICardIterator cardIterator = cardBoxComponent.listCards();
-			for (; cardIterator.hasNext();) {
-				CardComponent cc = cardIterator.next();
-
-				Boolean visibleState = cc.getVisibleState(facesContext);
-
-				if (Boolean.FALSE.equals(visibleState)) {
-					continue;
-				}
-
-				return cc == cardComponent;
-			}
-
-			return true;
-		}
-
-		if (selectedCard == cardComponent) {
-			return true;
-		}
-
-		return false;
-	}
+    protected String getCardStyleClass(FacesContext facesContext,
+            CardComponent cardComponent) {
+
+        String className = cardComponent.getStyleClass(facesContext);
+        if (className != null) {
+            return className;
+        }
+
+        // CardBoxComponent cardBoxComponent = cardComponent.getCardBox();
+        className = getDefaultCardStyleClassPrefix();
+
+        String suffix = getCardStyleClassSuffix();
+        if (suffix == null || suffix.length() < 1) {
+            return className;
+        }
+
+        return className + suffix;
+    }
+
+    protected String getDefaultCardStyleClassPrefix() {
+        return JavaScriptClasses.CARD_BOX;
+    }
+
+    protected String getCardStyleClassSuffix() {
+        return CARD_SUFFIX;
+    }
+
+    protected void declareCard(IJavaScriptWriter js,
+            CardComponent cardComponent, String cardBoxClientId,
+            boolean selected) throws WriterException {
+
+        boolean declare[] = new boolean[1];
+        String var = js.getJavaScriptRenderContext().allocateComponentVarId(
+                cardBoxClientId, declare);
+        if (declare[0]) {
+            js.write("var ").write(var).write('=')
+                    .writeCall("f_core", "GetElementByClientId")
+                    .writeString(cardBoxClientId).writeln(", document, true);");
+        }
+
+        // CardBoxComponent cardBoxComponent = cardComponent.getCardBox();
+
+        IHtmlWriter writer = js.getWriter();
+
+        IHtmlComponentRenderContext componentRenderContext = writer
+                .getHtmlComponentRenderContext();
+
+        // IHtmlRenderContext htmlRenderContext =
+        // componentRenderContext.getHtmlRenderContext();
+        FacesContext facesContext = js.getFacesContext();
+
+        js.writeCall(var, "f_declareCard");
+
+        IObjectLiteralWriter objectLiteralWriter = js.writeObjectLiteral(false);
+
+        objectLiteralWriter.writeSymbol("_id").writeString(
+                componentRenderContext.getComponentClientId());
+
+        Object value = cardComponent.getValue();
+        String clientValue = null;
+        if (value instanceof String) {
+            clientValue = (String) value;
+
+        } else if (value != null) {
+            clientValue = convertValue(facesContext, cardComponent, value);
+        }
+
+        if (clientValue != null) {
+
+            objectLiteralWriter.writeSymbol("_value").writeString(clientValue);
+        }
+
+        if (selected) {
+            objectLiteralWriter.writeSymbol("_selected").writeBoolean(true);
+        }
+
+        objectLiteralWriter.end();
+
+        js.writeln(");");
+    }
+
+    protected void encodeEnd(IComponentWriter writer) throws WriterException {
+        // Final a cause du desinger
+        designerEndChildren(writer, IDesignerEngine.MAIN_BODY);
+
+        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
+
+        htmlWriter.endElement(IHtmlWriter.DIV);
+
+        super.encodeEnd(writer);
+    }
+
+    protected void encodeJavaScript(IJavaScriptWriter jsWriter)
+            throws WriterException {
+        // Pas de JAVASCRIPT !
+        super.encodeJavaScript(jsWriter);
+
+        /*
+         * C'est fait dans les attributs du DIV IHtmlComponentRenderContext
+         * htmlComponentRenderContext = jsWriter
+         * .getHtmlComponentRenderContext();
+         * 
+         * if (htmlComponentRenderContext.getRenderContext().containsAttribute(
+         * TabbedPaneRenderer.TABBED_PANE_JSF12_PROPERTY)) {
+         * 
+         * CardComponent cardComponent = (CardComponent)
+         * htmlComponentRenderContext .getComponent();
+         * 
+         * boolean selected = isCardSelected(cardComponent);
+         * 
+         * CardBoxComponent cardBoxComponent = cardComponent.getCardBox();
+         * 
+         * String cardBoxVarId = htmlComponentRenderContext
+         * .getHtmlRenderContext().getComponentClientId( cardBoxComponent);
+         * 
+         * declareCard(jsWriter, cardComponent, cardBoxVarId, selected); }
+         */
+    }
+
+    protected String getJavaScriptClassName() {
+        return JavaScriptClasses.CARD;
+    }
+
+    protected boolean isCardSelected(CardComponent cardComponent) {
+        CardBoxComponent cardBoxComponent = cardComponent.getCardBox();
+
+        CardComponent selectedCard = cardBoxComponent.getSelectedCard();
+
+        if (selectedCard == null && cardBoxComponent.getValue() == null) {
+            // Aucun selectionné par défaut, on prend le premier visible
+
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+
+            ICardIterator cardIterator = cardBoxComponent.listCards();
+            for (; cardIterator.hasNext();) {
+                CardComponent cc = cardIterator.next();
+
+                Boolean visibleState = cc.getVisibleState(facesContext);
+
+                if (Boolean.FALSE.equals(visibleState)) {
+                    continue;
+                }
+
+                return cc == cardComponent;
+            }
+
+            return true;
+        }
+
+        if (selectedCard == cardComponent) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "asyncRender",
+                "asyncDecode" });
+    }
 }

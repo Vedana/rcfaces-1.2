@@ -36,16 +36,19 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.lang.ByteBufferInputStream;
 import org.rcfaces.core.internal.lang.StringAppender;
-import org.rcfaces.core.internal.repository.BasicHierarchicalRepository;
 import org.rcfaces.core.internal.repository.HierarchicalRepositoryServlet;
+import org.rcfaces.core.internal.repository.IContentRef;
 import org.rcfaces.core.internal.repository.IHierarchicalRepository;
-import org.rcfaces.core.internal.repository.IRepository;
 import org.rcfaces.core.internal.repository.IHierarchicalRepository.IHierarchicalFile;
 import org.rcfaces.core.internal.repository.IHierarchicalRepository.IModule;
 import org.rcfaces.core.internal.repository.IHierarchicalRepository.ISet;
+import org.rcfaces.core.internal.repository.IRepository;
 import org.rcfaces.core.internal.repository.IRepository.IContent;
 import org.rcfaces.core.internal.repository.IRepository.IContext;
+import org.rcfaces.core.internal.repository.IRepository.ICriteria;
 import org.rcfaces.core.internal.repository.IRepository.IFile;
+import org.rcfaces.core.internal.repository.LocaleCriteria;
+import org.rcfaces.core.internal.repository.URLContentRef;
 import org.rcfaces.core.internal.tools.ContextTools;
 import org.rcfaces.core.internal.util.ApplicationParametersMap;
 import org.rcfaces.core.internal.util.ClassLocator;
@@ -54,15 +57,17 @@ import org.rcfaces.core.internal.webapp.ExpirationDate;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
+import org.rcfaces.renderkit.html.internal.agent.ClientBrowserFactory;
+import org.rcfaces.renderkit.html.internal.agent.IUserAgent;
 import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository.IClass;
 import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository.IClassFile;
+import org.rcfaces.renderkit.html.internal.util.UserAgentCriteria;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
 public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = -2654621696260702001L;
 
@@ -75,7 +80,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
     private static final String MAIN_REPOSITORY_DIRECTORY_LOCATION = JavaScriptRepository.class
             .getPackage().getName().replace('.', '/');
 
-    //private static final String MAIN_REPOSITORY_LOCATION = "/repository.xml";
+    // private static final String MAIN_REPOSITORY_LOCATION = "/repository.xml";
 
     private static final String PARAMETER_PREFIX = Constants.getPackagePrefix()
             + ".javascript";
@@ -90,16 +95,13 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
             + ".REPOSITORIES";
 
     private static final String NO_CACHE_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".NO_CACHE";
+            .getPackagePrefix() + ".NO_CACHE";
 
     private static final String COMPILED_JS_SUFFIX_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".COMPILED_JS_SUFFIX";
+            .getPackagePrefix() + ".COMPILED_JS_SUFFIX";
 
     private static final String CONFIGURATION_VERSION_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".CONFIGURATION_VERSION";
+            .getPackagePrefix() + ".CONFIGURATION_VERSION";
 
     private static final String SYMBOLS_FILENAME = "/symbols";
 
@@ -108,8 +110,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
     private static final String CONTEXT_REPOSITORY_PROPERTY = "org.rcfaces.renderkit.html.javascript.ContextRepository";
 
     private static final String JAVASCRIPT_SYMBOLS_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".javascript.SYMBOLS";
+            .getPackagePrefix() + ".javascript.SYMBOLS";
 
     private static final DateFormat HEADER_DATE_FORMAT;
     static {
@@ -119,9 +120,12 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
     private static final Locale SYMBOL_LOCALE = new Locale("SYMBOLS");
 
+    private static final ICriteria SYMBOL_CRITERIA = LocaleCriteria
+            .get(SYMBOL_LOCALE);
+
     private static final String JAVASCRIPT_VERSION_PROPERTY = "javascript.version";
 
-    private static final Set SYMBOLS_FILENAMES = new HashSet(2);
+    private static final Set<String> SYMBOLS_FILENAMES = new HashSet<String>(2);
 
     private static final String JAVASCRIPT_REPOSITORY_TYPE = "javascript";
 
@@ -166,8 +170,8 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
         htmlRCFacesBuildId = Constants.getBuildId();
 
         if (mainRepositoryURI == null) {
-            mainRepositoryURI = ServletTools.computeResourceURI(config
-                    .getServletContext(), null, getClass());
+            mainRepositoryURI = ServletTools.computeResourceURI(
+                    config.getServletContext(), null, getClass());
         }
 
         if (mainRepositoryURI == null) {
@@ -249,16 +253,18 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
                     + " setted for servlet '" + getServletName() + "'.");
         }
 
-        Map applicationParamaters = new ApplicationParametersMap(servletContext);
+        Map<String, Object> applicationParamaters = new ApplicationParametersMap(
+                servletContext);
 
         JavaScriptRepository repository = new JavaScriptRepository(
                 mainRepositoryURI, repositoryVersion, applicationParamaters);
         servletContext.setAttribute(REPOSITORY_PROPERTY, repository);
 
-        List repositoriesLocation = new ArrayList(32);
-        //String location = getMainRepositoryDirectoryLocation()+ MAIN_REPOSITORY_LOCATION;
-        //repositoriesLocation.add(location);
-        //LOG.debug("Add repository location '" + location + "'. [main]");
+        List<String> repositoriesLocation = new ArrayList<String>(32);
+        // String location = getMainRepositoryDirectoryLocation()+
+        // MAIN_REPOSITORY_LOCATION;
+        // repositoriesLocation.add(location);
+        // LOG.debug("Add repository location '" + location + "'. [main]");
 
         RcfacesContext rcfacesContext = RcfacesContext.getInstance(
                 servletContext, null, null);
@@ -317,9 +323,8 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
                         repositoryContainer = getClass().getClassLoader();
 
                         if (en.hasMoreElements()) {
-                            LOG
-                                    .error("CAUTION: Same resource into differents locations ... ("
-                                            + repositoryLocation + ")");
+                            LOG.error("CAUTION: Same resource into differents locations ... ("
+                                    + repositoryLocation + ")");
                         }
                     } else {
                         LOG.error("Can not load url '" + url + "'.");
@@ -345,17 +350,13 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
                     in.close();
 
                 } catch (IOException ex) {
-                    LOG
-                            .error("Can not close '" + repositoryLocation
-                                    + "'.", ex);
+                    LOG.error("Can not close '" + repositoryLocation + "'.", ex);
                 }
             }
 
-            LOG
-                    .debug("Repository location '" + repositoryLocation
-                            + "' loaded");
+            LOG.debug("Repository location '" + repositoryLocation + "' loaded");
         }
-        
+
         // Resolve
         repository.resolveDependencies();
 
@@ -429,8 +430,8 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
         return "vfs-" + setName + ".js";
     }
 
-    protected Record newRecord(IFile file, Locale locale) {
-        return new JavaScriptRecord(file, locale);
+    protected Record newRecord(IFile file, ICriteria criteria) {
+        return new JavaScriptRecord(file, criteria);
     }
 
     protected String getInputCharset() {
@@ -443,7 +444,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
     protected ISet initializeDefaultSet() {
 
-        List mds = new ArrayList(8);
+        List<Object> mds = new ArrayList<Object>(8);
 
         IModule modules[] = getHierarchicalRepository().listModules();
 
@@ -467,10 +468,10 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
         String uri = getSetURI(name);
 
-        mds = Arrays.asList(ret);
+        mds = Arrays.<Object> asList((Object[]) ret);
 
         ISet set = getHierarchicalRepository().declareSet(name, uri,
-                (IModule[]) mds.toArray(new IModule[mds.size()]));
+                mds.toArray(new IModule[mds.size()]));
 
         return set;
     }
@@ -481,14 +482,13 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
      * @version $Revision$ $Date$
      */
     private class JavaScriptRecord extends HierarchicalRecord {
-        private static final String REVISION = "$Revision$";
 
         protected byte prolog[];
 
         protected byte epilog[];
 
-        public JavaScriptRecord(IFile file, Locale locale) {
-            super(file, locale);
+        public JavaScriptRecord(IFile file, ICriteria criteria) {
+            super(file, criteria);
         }
 
         public ExpirationDate getExpirationDate() {
@@ -499,25 +499,27 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
             return super.getExpirationDate();
         }
 
-        protected Object[] getFileContentReferences(IFile file) {
+        protected IContentRef[] getFileContentReferences(IFile file) {
             // On peut tenter ici de rechercher la version compil�e !
 
-            Object urls[] = file.getContentReferences(locale);
-
-            String surl = urls[0].toString();
-            if (surl.endsWith(".js") == false) {
-                return urls;
-            }
+            IContentRef urls[] = file.getContentReferences(criteria);
 
             if (enableSymbols == false) {
                 return urls;
             }
 
-            URL urlsc[] = new URL[urls.length];
-            System.arraycopy(urls, 0, urlsc, 0, urls.length);
+            URLContentRef ucr0 = (URLContentRef) urls[0];
+            String surl0 = ucr0.getURL().toString();
+            if (surl0.endsWith(".js") == false) {
+                return urls;
+            }
+
+            IContentRef urlsc[] = new IContentRef[urls.length];
 
             for (int i = 0; i < urls.length; i++) {
-                surl = urls[i].toString(); // + "c";
+                URLContentRef ucr = (URLContentRef) urls[i];
+
+                String surl = ucr.getURL().toString(); // + "c";
                 if (compiledJsSuffix != null) {
                     surl += compiledJsSuffix;
                 }
@@ -532,8 +534,8 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
                 }
 
                 try {
-                    IContent content = file.getContentProvider().getContent(
-                            url, locale);
+                    IContent content = file.getContentProvider()
+                            .getContent(ucr);
                     try {
                         InputStream ins = content.getInputStream();
                         if (ins != null) {
@@ -542,7 +544,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
                             } catch (IOException ex2) {
                             }
 
-                            urlsc[i] = url;
+                            urlsc[i] = new URLContentRef(ucr.getCriteria(), url);
 
                             LOG.debug("Use compiled record of '"
                                     + file.getFilename() + "' (" + surl + ")");
@@ -552,8 +554,9 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
                     }
 
                 } catch (IOException ex) {
-                    LOG.error("Can not get connection of '"
-                            + file.getFilename() + "'. (" + surl + ")", ex);
+                    LOG.error(
+                            "Can not get connection of '" + file.getFilename()
+                                    + "'. (" + surl + ")", ex);
                 }
             }
 
@@ -611,7 +614,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
         private void fillEpilog(StringAppender sb) {
 
             // if (isMultiWindowScript(getServletContext())) {
-            writeBundles(sb, (IHierarchicalFile) getFile(), locale);
+            writeBundles(sb, (IHierarchicalFile) getFile(), criteria);
             // }
 
             Map map = getSymbols();
@@ -698,7 +701,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
     }
 
     public void writeBundles(StringAppender sb, IHierarchicalFile file,
-            Locale locale) {
+            ICriteria criteria) {
         IHierarchicalFile dependencies[];
         if (file instanceof IHierarchicalRepository.ISet) {
             dependencies = ((IHierarchicalRepository.ISet) file)
@@ -712,7 +715,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
             dependencies = new IHierarchicalFile[] { file };
         }
 
-        List classes = new ArrayList(dependencies.length);
+        List<IClass> classes = new ArrayList<IClass>(dependencies.length);
         for (int i = 0; i < dependencies.length; i++) {
             IFile dependency = dependencies[i];
             if ((dependency instanceof IJavaScriptRepository.IClassFile) == false) {
@@ -729,7 +732,12 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
         sb.append("new f_bundle(window, \"");
 
-        sb.append(file.getURI(locale));
+        String furi = file.getURI(criteria);
+        if (furi == null) {
+            throw new NullPointerException("Can not get URI of file '" + file
+                    + "' criteria='" + criteria + "'");
+        }
+        sb.append(furi);
         sb.append('\"');
 
         Map symbols = null;
@@ -765,7 +773,8 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
     public static IRepository.IContext getContextRepository(
             FacesContext facesContext) {
-        Map map = facesContext.getExternalContext().getRequestMap();
+        Map<String, Object> map = facesContext.getExternalContext()
+                .getRequestMap();
 
         IRepository.IContext context = (IRepository.IContext) map
                 .get(CONTEXT_REPOSITORY_PROPERTY);
@@ -773,35 +782,50 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
             return context;
         }
 
-        Locale locale = ContextTools.getUserLocale(facesContext);
+        ICriteria criteria = null;
 
-        context = getRepository(facesContext).createContext(locale);
+        Locale locale = ContextTools.getUserLocale(facesContext);
+        if (locale != null) {
+            criteria = LocaleCriteria.get(criteria, locale);
+        }
+
+        IUserAgent userAgent = ClientBrowserFactory.Get().get(facesContext);
+        if (userAgent != null) {
+            criteria = UserAgentCriteria.get(criteria, userAgent);
+        }
+
+        context = getRepository(facesContext).createContext(criteria);
         map.put(CONTEXT_REPOSITORY_PROPERTY, context);
 
         return context;
     }
 
-    public static Map getSymbols(FacesContext facesContext) {
+    @SuppressWarnings("unchecked")
+    public static Map<String, String> getSymbols(FacesContext facesContext) {
         Map applicationMap = facesContext.getExternalContext()
                 .getApplicationMap();
 
-        return (Map) applicationMap.get(JAVASCRIPT_SYMBOLS_PARAMETER);
+        return (Map<String, String>) applicationMap
+                .get(JAVASCRIPT_SYMBOLS_PARAMETER);
     }
 
-    public static Map getSymbols(ServletContext servletContext) {
-        return (Map) servletContext.getAttribute(JAVASCRIPT_SYMBOLS_PARAMETER);
+    @SuppressWarnings("unchecked")
+    public static Map<String, String> getSymbols(ServletContext servletContext) {
+        return (Map<String, String>) servletContext
+                .getAttribute(JAVASCRIPT_SYMBOLS_PARAMETER);
     }
 
-    protected final Map getSymbols() {
+    protected final Map<String, String> getSymbols() {
         return getSymbols(getServletContext());
     }
 
+    @SuppressWarnings("null")
     private void reloadSymbols(IRepository repository) throws IOException {
         IFile file = repository.getFileByName(SYMBOLS_FILENAME);
 
         byte buffer[] = null;
 
-        Record record = getFileRecord(file, SYMBOL_LOCALE);
+        Record record = getFileRecord(file, SYMBOL_CRITERIA);
         if (record != null) {
             if (symbolsLastModified == record.getLastModificationDate()) {
                 return;
@@ -822,8 +846,10 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
         getServletContext().setAttribute(JAVASCRIPT_SYMBOLS_PARAMETER, symbols);
     }
 
-    private Map loadSymbols(byte[] buffer) throws IOException {
-        Map symbols = new HashMap(buffer.length / 16);
+    @SuppressWarnings("unchecked")
+    private Map<String, String> loadSymbols(byte[] buffer) throws IOException {
+        Map<String, String> symbols = new HashMap<String, String>(
+                buffer.length / 16);
 
         InputStream bin = new ByteBufferInputStream(buffer);
 
@@ -832,8 +858,9 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
         bin.close();
 
-        // On utilise une version non synchronisée !
-        symbols.putAll(properties);
+        // Merci les génériques à la sauce JAVA
+        Map propertiesMap = properties;
+        symbols.putAll(propertiesMap);
 
         return symbols;
     }

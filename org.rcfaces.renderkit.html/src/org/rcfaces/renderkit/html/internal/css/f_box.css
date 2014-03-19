@@ -10,3 +10,9 @@
  * @version $Revision$ $Date$ 
  */
  
+.f_box {
+	position: relative;
+
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}

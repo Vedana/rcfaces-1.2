@@ -7,12 +7,11 @@ import org.rcfaces.core.component.capability.IStatesImageCapability;
 import org.rcfaces.core.component.capability.IUserEventCapability;
 import org.rcfaces.core.component.capability.IImageSizeCapability;
 import org.apache.commons.logging.LogFactory;
-import javax.faces.component.ValueHolder;
 import org.rcfaces.core.component.capability.IResizableCapability;
+import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.capability.ICellStyleClassCapability;
 import org.rcfaces.core.internal.capability.ICellToolTipTextSettings;
-import org.rcfaces.core.component.capability.IToolTipCapability;
 import org.apache.commons.logging.Log;
 import org.rcfaces.core.internal.capability.ICellStyleClassSettings;
 import java.util.Set;
@@ -24,18 +23,21 @@ import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import org.rcfaces.core.component.capability.ICellImageCapability;
 import org.rcfaces.core.component.capability.IOrderCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import java.lang.Object;
 import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.component.capability.ISortComparatorCapability;
 import java.lang.String;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
-import org.rcfaces.core.component.capability.ISortComparatorCapability;
 import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import org.rcfaces.core.internal.converter.AlignmentNormalizer;
 import javax.faces.convert.Converter;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.component.capability.IAlignmentCapability;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.ISortEventCapability;
 import java.util.HashSet;
+import org.rcfaces.core.component.capability.IToolTipTextCapability;
 import org.rcfaces.core.component.capability.IWidthRangeCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import java.util.Arrays;
@@ -50,7 +52,7 @@ public class ComboColumnComponent extends CameliaValueColumnComponent implements
 	IHiddenModeCapability,
 	ITextCapability,
 	ITextDirectionCapability,
-	IToolTipCapability,
+	IToolTipTextCapability,
 	IAlignmentCapability,
 	IForegroundBackgroundColorCapability,
 	ISortEventCapability,
@@ -327,8 +329,11 @@ public class ComboColumnComponent extends CameliaValueColumnComponent implements
 		return engine.isPropertySetted(Properties.ALIGNMENT);
 	}
 
-	public void setAlignment(java.lang.String alignment) {
-		engine.setProperty(Properties.ALIGNMENT, alignment);
+	public void setAlignment(String alignment) {
+
+
+			engine.setProperty(Properties.ALIGNMENT, AlignmentNormalizer.normalize(alignment));
+    	
 	}
 
 	public java.lang.String getBackgroundColor() {

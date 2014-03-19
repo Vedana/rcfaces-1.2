@@ -4,13 +4,10 @@
 package org.rcfaces.renderkit.html.internal.style;
 
 import java.io.IOException;
-import java.util.Map;
 
-import org.rcfaces.core.internal.content.IOperationContentLoader;
-import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
 import org.rcfaces.core.internal.style.AbstractStyleOperation;
-import org.rcfaces.renderkit.html.internal.style.CssParserFactory.ICssParser;
-import org.rcfaces.renderkit.html.internal.style.CssParserFactory.ICssParser.IParserContext;
+import org.rcfaces.core.internal.style.IStyleParser;
+import org.rcfaces.core.internal.style.IStyleParser.IParserContext;
 
 /**
  * 
@@ -19,19 +16,15 @@ import org.rcfaces.renderkit.html.internal.style.CssParserFactory.ICssParser.IPa
  */
 public class VersionLinkedStylesOperation extends AbstractStyleOperation
         implements ICssOperation {
-    private static final String REVISION = "$Revision$";
 
     public VersionLinkedStylesOperation() {
         setName("Versioning linked styles");
     }
 
-    public String filter(Map applicationParameters,
-            IResourceLoaderFactory resourceLoaderFactory, ICssParser cssParser,
+    public String filter(IStyleParser cssParser,
             String styleSheetURL, String styleSheetContent,
-            IParserContext mergeContext,
-            IOperationContentLoader operationContentLoader) throws IOException {
-        return cssParser.normalizeBuffer(applicationParameters,
-                resourceLoaderFactory, styleSheetURL, styleSheetContent,
-                mergeContext, operationContentLoader, false);
+            IParserContext parserContext) throws IOException {
+        return cssParser.normalizeBuffer(styleSheetURL,
+                styleSheetContent, parserContext);
     }
 }

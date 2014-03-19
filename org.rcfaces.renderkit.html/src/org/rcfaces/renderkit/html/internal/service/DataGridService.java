@@ -29,15 +29,17 @@ import org.rcfaces.core.component.DataGridComponent;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.service.IServicesRegistry;
+import org.rcfaces.core.internal.tools.CriteriaTools;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.model.DefaultSortedComponent;
+import org.rcfaces.core.model.ISelectedCriteria;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
+import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
-import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.renderer.DataGridRenderer;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
 
@@ -46,7 +48,6 @@ import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
  * @version $Revision$ $Date$
  */
 public class DataGridService extends AbstractHtmlService {
-    private static final String REVISION = "$Revision$";
 
     private static final String SERVICE_ID = Constants.getPackagePrefix()
             + ".DataGrid";
@@ -168,6 +169,11 @@ public class DataGridService extends AbstractHtmlService {
                 }
             }
 
+            ISelectedCriteria[] criteriaConfigs = null;
+            String criteria_s = (String) parameters.get("criteria");
+            criteriaConfigs = CriteriaTools.computeCriteriaConfigs(
+                    facesContext, dgc, criteria_s);
+
             DataGridRenderer dgr = getDataGridRenderer(facesContext, dgc);
             if (dgr == null) {
                 sendJsError(facesContext, dataGridId,
@@ -194,8 +200,8 @@ public class DataGridService extends AbstractHtmlService {
                     printWriter = response.getWriter();
 
                 } else {
-                    ConfiguredHttpServlet
-                            .setGzipContentEncoding((HttpServletResponse) response, true);
+                    ConfiguredHttpServlet.setGzipContentEncoding(
+                            (HttpServletResponse) response, true);
 
                     OutputStream outputStream = response.getOutputStream();
 
@@ -211,7 +217,7 @@ public class DataGridService extends AbstractHtmlService {
                 writeJs(facesContext, printWriter, dgc, dataGridId, dgr,
                         rowIndex, forcedRows, sortedComponents,
                         filterExpression, unknownRowCount, showAdditional,
-                        hideAdditional);
+                        hideAdditional, criteriaConfigs);
 
             } catch (IOException ex) {
                 throw new FacesException(
@@ -283,6 +289,7 @@ public class DataGridService extends AbstractHtmlService {
         }
 
         dgc.processDecodes(facesContext);
+        dgc.clearDecodedIndex();
     }
 
     private void writeJs(FacesContext facesContext, PrintWriter printWriter,
@@ -290,7 +297,8 @@ public class DataGridService extends AbstractHtmlService {
             DataGridRenderer dgr, int rowIndex, int forcedRows,
             ISortedComponent sortedComponents[], String filterExpression,
             boolean unknownRowCount, String showAdditional,
-            String hideAdditional) throws IOException {
+            String hideAdditional, ISelectedCriteria[] criteriaContainers)
+            throws IOException {
 
         IProcessContext processContext = HtmlProcessContextImpl
                 .getHtmlProcessContext(facesContext);
@@ -306,19 +314,19 @@ public class DataGridService extends AbstractHtmlService {
                 pw, RESPONSE_CHARSET, dgc, componentClientId);
 
         DataGridRenderer.DataGridRenderContext tableContext = dgr
-                .createTableContext(processContext, jsWriter
-                        .getJavaScriptRenderContext(), dgc, rowIndex,
+                .createTableContext(processContext,
+                        jsWriter.getJavaScriptRenderContext(), dgc, rowIndex,
                         forcedRows, sortedComponents, filterExpression,
-                        showAdditional, hideAdditional);
+                        showAdditional, hideAdditional, criteriaContainers);
 
         String varId = jsWriter.getComponentVarName();
 
-        jsWriter.write("var ").write(varId).write('=').writeCall("f_core",
-                "GetElementByClientId").writeString(componentClientId).writeln(
-                ", document);");
+        jsWriter.write("var ").write(varId).write('=')
+                .writeCall("f_core", "GetElementByClientId")
+                .writeString(componentClientId).writeln(", document);");
 
-        jsWriter.writeMethodCall("f_startNewPage").writeInt(rowIndex).writeln(
-                ");");
+        jsWriter.writeMethodCall("f_startNewPage").writeInt(rowIndex)
+                .writeln(");");
 
         String rowVarId = jsWriter.getJavaScriptRenderContext()
                 .allocateVarName();
@@ -329,6 +337,16 @@ public class DataGridService extends AbstractHtmlService {
 
         jsWriter.writeMethodCall("f_updateNewPage").writeln(");");
 
+        if (hasAdditionalInformations(dgc)) {
+
+            String viewStateId = saveViewAndReturnStateId(facesContext);
+            if (viewStateId != null) {
+                jsWriter.writeCall("f_classLoader", "ChangeJsfViewId")
+                        .write(varId).write(',').writeString(viewStateId)
+                        .write(')');
+            }
+        }
+
         if (LOG.isTraceEnabled()) {
             pw.flush();
 
@@ -336,5 +354,14 @@ public class DataGridService extends AbstractHtmlService {
 
             printWriter.write(cw.toCharArray());
         }
+    }
+
+    private boolean hasAdditionalInformations(DataGridComponent dgc) {
+        int count = dgc.listAdditionalInformations().count();
+
+        if (count > 0) {
+            return true;
+        }
+        return false;
     }
 }

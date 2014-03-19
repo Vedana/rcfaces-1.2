@@ -13,7 +13,7 @@ var __members = {
 
 		this.f_setForcedEventReturn(f_event.SELECTION, undefined);
 	}
-}
+};
 
 new f_class("f_submitButton", {
 	extend: f_button,

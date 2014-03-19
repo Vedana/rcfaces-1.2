@@ -13,5 +13,7 @@ import java.util.Map;
 public interface IJavaScriptSymbolsConverter {
     String SERVICE_ID = "org.rcfaces.javaScript.SYMBOLS_CONVERTER";
 
-    String convertSymbols(String identifier, String code, Map symbols, Map applicatioParameters);
+    String convertSymbols(String identifier, String code,
+            Map<String, String> symbols,
+            Map<String, Object> applicatioParameters);
 }

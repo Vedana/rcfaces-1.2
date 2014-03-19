@@ -43,7 +43,7 @@
 	-moz-user-select: none;
 	vertical-align: top;
 	outline-width: 0px;
-	// Non support par Mozilla de outline-width
+	/* Non support par Mozilla de outline-width */
 	-moz-outline-width: 0px;
 }
 
@@ -57,9 +57,11 @@
 	height: 21px;
 }
 
+/*
 button::-moz-focus-inner {
 	border: 0;
 }
+*/
 
 .f_menuBar_bitem_selected, 
 .f_menuBar_bitem_selected_hover,

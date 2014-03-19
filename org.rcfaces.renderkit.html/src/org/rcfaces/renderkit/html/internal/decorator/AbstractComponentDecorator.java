@@ -16,14 +16,16 @@ import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceContributor;
 
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class AbstractComponentDecorator implements IComponentDecorator {
-    private static final String REVISION = "$Revision$";
+public class AbstractComponentDecorator implements IComponentDecorator,
+        INamespaceContributor {
 
     private IComponentDecorator subWriter;
 
@@ -32,11 +34,11 @@ public class AbstractComponentDecorator implements IComponentDecorator {
     private final String defaultUnlockedProperties[];
 
     public AbstractComponentDecorator() {
-        Set unlockedProperties = new HashSet();
+        Set<String> unlockedProperties = new HashSet<String>();
         addUnlockProperties(unlockedProperties);
 
         if (unlockedProperties.isEmpty() == false) {
-            defaultUnlockedProperties = (String[]) unlockedProperties
+            defaultUnlockedProperties = unlockedProperties
                     .toArray(new String[unlockedProperties.size()]);
 
         } else {
@@ -44,7 +46,7 @@ public class AbstractComponentDecorator implements IComponentDecorator {
         }
     }
 
-    protected void addUnlockProperties(Set unlockedProperties) {
+    protected void addUnlockProperties(Set<String> unlockedProperties) {
     }
 
     public String[] getDefaultUnlockedProperties(FacesContext facesContext,
@@ -61,13 +63,13 @@ public class AbstractComponentDecorator implements IComponentDecorator {
                     subWriterDefaultUnlockedProperties = defaultUnlockedProperties;
 
                 } else {
-                    Set set = new HashSet(Arrays
-                            .asList(defaultUnlockedProperties));
+                    Set<String> set = new HashSet<String>(
+                            Arrays.asList(defaultUnlockedProperties));
                     set.addAll(Arrays
                             .asList(subWriterDefaultUnlockedProperties));
 
-                    defaultUnlockedProperties = (String[]) set
-                            .toArray(new String[set.size()]);
+                    defaultUnlockedProperties = set.toArray(new String[set
+                            .size()]);
                 }
             }
         }
@@ -112,6 +114,10 @@ public class AbstractComponentDecorator implements IComponentDecorator {
         }
 
         this.subWriter = writer;
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+
     }
 
 }

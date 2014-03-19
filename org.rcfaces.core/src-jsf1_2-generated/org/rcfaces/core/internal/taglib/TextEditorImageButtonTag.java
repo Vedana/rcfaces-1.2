@@ -25,15 +25,15 @@ public class TextEditorImageButtonTag extends ImageButtonTag implements Tag {
 		return TextEditorImageButtonComponent.COMPONENT_TYPE;
 	}
 
-	public final void setFor(ValueExpression forValue) {
+	public void setFor(ValueExpression forValue) {
 		this.forValue = forValue;
 	}
 
-	public final void setGroupName(ValueExpression groupName) {
+	public void setGroupName(ValueExpression groupName) {
 		this.groupName = groupName;
 	}
 
-	public final void setType(ValueExpression type) {
+	public void setType(ValueExpression type) {
 		this.type = type;
 	}
 

@@ -4,7 +4,6 @@
 package org.rcfaces.core.internal.contentAccessor;
 
 import javax.faces.component.StateHolder;
-import javax.faces.component.UIComponent;
 
 import org.rcfaces.core.model.IFilterProperties;
 
@@ -38,8 +37,6 @@ public interface IGenerationResourceInformation extends StateHolder {
     Object getAttribute(String attributeName);
 
     Object setAttribute(String attributeName, Object value);
-
-    UIComponent getComponent();
 
     String getComponentClientId();
 

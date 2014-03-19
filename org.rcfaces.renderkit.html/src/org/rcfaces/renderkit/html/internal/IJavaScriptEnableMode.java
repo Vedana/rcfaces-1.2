@@ -23,6 +23,8 @@ public interface IJavaScriptEnableMode {
 
     void enableOnOver();
 
+    void enableOnLayout();
+
     boolean isOnInitEnabled();
 
 }

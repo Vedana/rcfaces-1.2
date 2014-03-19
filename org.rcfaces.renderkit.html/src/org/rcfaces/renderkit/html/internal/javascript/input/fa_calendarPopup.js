@@ -70,7 +70,7 @@ var __statics = {
 			
 			var className="f_dateChooser_popup f_dateChooser_popup_"+dateChooser._layout;
 			
-			var usc=f_core.GetAttribute(dateChooser, "v:popupStyleClass");
+			var usc=f_core.GetAttributeNS(dateChooser,"popupStyleClass");
 			if (usc) {
 				className+=" "+usc+" "+usc+"_"+dateChooser._layout;
 			}			
@@ -94,14 +94,14 @@ var __statics = {
 								
 			} else {
 				popup=dateChooser.ownerDocument.createElement("div");
-				popup.className=className
+				popup.className=className;
 	
 				popup.onclick=f_core.CancelJsEventHandlerTrue;
 				popup.onmousedown=f_core.CancelJsEventHandlerTrue;
 	
 				body=popup;
 				
-				var parent=dateChooser;				
+				var parent=dateChooser;	// Le warning WTP est une erreur !		
 				f_core.AppendChild(parent.ownerDocument.body, popup);
 			}
 			dateChooser._popupCalendar=popup;
@@ -319,7 +319,13 @@ var __statics = {
 		}
 		
 		var value;
-		if (component.f_getText) {
+		if (component.f_getValue) { // si le composant associé est un inputText
+			f_core.Debug(fa_calendarPopup, "_GetDateToComponent: call f_getValue of component '"+component.id+"'.");
+			value = component.f_getValue();
+			if (value instanceof Date){
+				return value;
+			}
+		}else if (component.f_getText) {
 			f_core.Debug(fa_calendarPopup, "_GetDateToComponent: call f_getText of component '"+component.id+"'.");
 			value=component.f_getText();
 
@@ -360,7 +366,7 @@ var __members={
 		
 	fa_calendarPopup: function() {
 
-		this._layout=f_core.GetNumberAttribute(this, "v:layout", f_calendar.DEFAULT_LAYOUT);
+		this._layout=f_core.GetNumberAttributeNS(this,"layout", f_calendar.DEFAULT_LAYOUT);
 		var layout;
 		switch(this._layout) {
 		case f_calendar.FULL_LAYOUT:
@@ -562,6 +568,6 @@ var __members={
 		
 		calendar.f_setSelection(selection, showSelection);
 	}
-}
- 
+};
+
 new f_aspect("fa_calendarPopup", __statics, __members, fa_itemsWrapper, fa_selectionProvider);

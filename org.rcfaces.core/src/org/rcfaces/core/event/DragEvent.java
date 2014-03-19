@@ -13,7 +13,6 @@ import javax.faces.event.FacesListener;
  * @version $Revision$ $Date$
  */
 public class DragEvent extends ActionEvent {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = 6710789805141455865L;
 
@@ -28,6 +27,7 @@ public class DragEvent extends ActionEvent {
      * javax.faces.event.FacesEvent#isAppropriateListener(javax.faces.event.
      * FacesListener)
      */
+    @Override
     public boolean isAppropriateListener(FacesListener listener) {
         return (listener instanceof IDragListener);
     }
@@ -39,6 +39,7 @@ public class DragEvent extends ActionEvent {
      * javax.faces.event.FacesEvent#processListener(javax.faces.event.FacesListener
      * )
      */
+    @Override
     public void processListener(FacesListener listener) {
         ((IDragListener) listener).componentDragged(this);
     }

@@ -104,6 +104,14 @@
 		</component>
 	</tag>
 	<tag>
+		<tag-name>criteriaList</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.criteriaList</component-type>
+			<renderer-type>org.rcfaces.core.criteriaList</renderer-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
 		<tag-name>dataGrid</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.dataGrid</component-type>
@@ -296,6 +304,14 @@
 		<component>
 			<component-type>org.rcfaces.core.imagePagerButton</component-type>
 			<renderer-type>org.rcfaces.core.imagePagerButton</renderer-type>
+			<handler-class>org.rcfaces.core.internal.facelets.ButtonHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>imageCriteriaButton</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.imageCriteriaButton</component-type>
+			<renderer-type>org.rcfaces.core.imageCriteriaButton</renderer-type>
 			<handler-class>org.rcfaces.core.internal.facelets.ButtonHandler</handler-class>
 		</component>
 	</tag>
@@ -527,6 +543,14 @@
 		</component>
 	</tag>
 	<tag>
+		<tag-name>heading</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.heading</component-type>
+			<renderer-type>org.rcfaces.core.heading</renderer-type>
+			<handler-class>org.rcfaces.core.internal.facelets.TextHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
 		<tag-name>styledText</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.styledText</component-type>
@@ -741,6 +765,58 @@
 		<component>
 			<component-type>org.rcfaces.core.service</component-type>
 			<renderer-type>org.rcfaces.core.service</renderer-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>criteria</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.criteria</component-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>criteriaItem</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.criteriaItem</component-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>criteriaItemFiller</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.criteriaItemFiller</component-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>toolTip</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.toolTip</component-type>
+			<renderer-type>org.rcfaces.core.toolTip</renderer-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>toolTipManager</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.toolTipManager</component-type>
+			<renderer-type>org.rcfaces.core.toolTipManager</renderer-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>eventsCollector</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.eventsCollector</component-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>headingZone</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.headingZone</component-type>
+			<renderer-type>org.rcfaces.core.headingZone</renderer-type>
 			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
 		</component>
 	</tag>

@@ -24,11 +24,11 @@ public class MenuRadioItemTag extends MenuCheckItemTag implements Tag {
 		return MenuRadioItemComponent.COMPONENT_TYPE;
 	}
 
-	public final void setRadioValue(ValueExpression radioValue) {
+	public void setRadioValue(ValueExpression radioValue) {
 		this.radioValue = radioValue;
 	}
 
-	public final void setGroupName(ValueExpression groupName) {
+	public void setGroupName(ValueExpression groupName) {
 		this.groupName = groupName;
 	}
 

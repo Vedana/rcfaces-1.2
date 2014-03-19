@@ -10,7 +10,6 @@ import org.apache.batik.transcoder.TranscoderOutput;
  * @version $Revision$ $Date$
  */
 class AdapterTranscoderOuput extends TranscoderOutput {
-    private static final String REVISION = "$Revision$";
 
     private BufferedImage bufferedImage;
 

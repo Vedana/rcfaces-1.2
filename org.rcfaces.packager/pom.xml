@@ -1,0 +1,161 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.rcfaces</groupId>
+  <artifactId>org.rcfaces.packager</artifactId>
+  <version>1.2.2</version>
+  <packaging>pom</packaging>
+
+  <name>org.rcfaces</name>
+  <url>http://www.rcfaces.org</url>
+ 
+  <properties>
+  	<tag>RELEASE</tag>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <internal.repo.path>file://D:/workspace Java/RCFaces2.2v1/mvn-fake-repo/</internal.repo.path>
+    
+    <jsfImplVersion>1.2</jsfImplVersion>
+    <jsf.version.dir>1_2</jsf.version.dir>
+  </properties>
+  
+	<scm>
+		<url>https://github.com/oeuillot/rcfaces-1.2</url>
+		<connection>scm:git:git://github.com/oeuillot/rcfaces-1.2.git</connection>
+		<developerConnection>scm:git:git@oeuillot/rcfaces-1.2.git</developerConnection>
+	</scm>
+
+
+  <dependencies>
+    <!-- <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency> -->
+  </dependencies>
+  
+  <modules>
+  	<module>../org.rcfaces.core</module>
+  	<module>../org.rcfaces.image.imageIO</module>
+  	<module>../org.rcfaces.jfreechart</module>
+  	<module>../org.rcfaces.renderkit.html</module>
+  	<module>../org.rcfaces.renderkit.svg</module>
+  	
+  	
+  </modules>
+  
+  
+  <build>
+       <plugins>
+           <!-- <plugin>
+	        <groupId>org.apache.maven.plugins</groupId>
+	        <artifactId>maven-release-plugin</artifactId>
+	        <version>2.4.2</version>
+	        <configuration>
+	       		<releaseVersion>${project.version}-${tag}</releaseVersion>
+	       		<developmentVersion>${project.version}</developmentVersion>
+	          <tagNameFormat>${tag}</tagNameFormat>
+	        </configuration>
+	      </plugin> -->
+	      <plugin>
+	        <groupId>org.codehaus.mojo</groupId>
+	        <artifactId>versions-maven-plugin</artifactId>
+	        <version>2.1</version>
+	        <configuration>
+	        	<newVersion>${project.version}-${tag}</newVersion>
+	        </configuration>
+	      </plugin>
+      </plugins>
+        
+        <pluginManagement>
+        	<plugins>
+		       	<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<configuration>
+						<archive>
+							<manifestFile>src/META-INF/MANIFEST.MF</manifestFile>
+							<manifestEntries>
+								<jsfVersion>${jsfImplVersion}</jsfVersion>
+							</manifestEntries>
+						</archive>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>attach-javadocs</id>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>attach-sources-no-fork</id>
+							<inherited>true</inherited>
+							<phase>generate-sources</phase>
+							<goals>
+								<goal>jar-no-fork</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.1</version>
+					<configuration>
+						<source>1.5</source>
+						<target>1.5</target>
+					</configuration>
+				</plugin>
+				<plugin>
+					<artifactId>maven-antrun-plugin</artifactId>
+					<dependencies>
+						<dependency>
+							<groupId>com.sun</groupId>
+							<artifactId>tools</artifactId>
+							<version>1.5.0</version>
+							<scope>system</scope>
+							<systemPath>${java.home}/../lib/tools.jar</systemPath>
+						</dependency>
+					</dependencies>
+					<version>1.7</version>
+					<executions>
+						<execution>
+							<phase>generate-sources</phase>
+							<configuration>
+								<target>
+									<property name="compile_classpath" refid="maven.compile.classpath" />
+									<property name="jsfVersion" value='${jsf.version.dir}' />
+									<ant antfile="${basedir}/build-package.xml">
+										<target name="buildVersion" />
+									</ant>
+								</target>
+							</configuration>
+							<goals>
+								<goal>run</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+			
+        </pluginManagement>
+    </build>
+  
+  <distributionManagement>
+	  <repository>
+	    <id>vedana-central</id>
+	    <url>http://rcfaces.org/nexus/content/repositories/vedana-central/</url>
+	  </repository>
+ </distributionManagement>
+  
+</project>

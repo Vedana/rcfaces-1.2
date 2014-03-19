@@ -19,6 +19,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -26,7 +27,6 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  * @version $Revision$ $Date$
  */
 public class ImageRenderer extends AbstractCssRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final String FILTRED_CONTENT_PROPERTY = "camelia.image.filtredContent";
 
@@ -45,6 +45,7 @@ public class ImageRenderer extends AbstractCssRenderer {
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
+        writeFirstTooltipClientId(htmlWriter);
 
         GeneratedImageInformation generatedImageInformation = null;
         IImageAccessors imageAccessors = (IImageAccessors) image
@@ -67,7 +68,7 @@ public class ImageRenderer extends AbstractCssRenderer {
                 componentRenderContext.setAttribute(FILTRED_CONTENT_PROPERTY,
                         Boolean.TRUE);
 
-                htmlWriter.writeAttribute("v:filtred", true);
+                htmlWriter.writeAttributeNS("filtred", true);
 
                 if (filterProperties != null
                         && filterProperties.isEmpty() == false) {
@@ -75,7 +76,7 @@ public class ImageRenderer extends AbstractCssRenderer {
                             filterProperties, componentRenderContext
                                     .getRenderContext().getProcessContext(),
                             componentRenderContext.getComponent());
-                    htmlWriter.writeAttribute("v:filterExpression",
+                    htmlWriter.writeAttributeNS("filterExpression",
                             filterExpression);
                 }
             }
@@ -83,17 +84,18 @@ public class ImageRenderer extends AbstractCssRenderer {
 
         if (url == null) {
             url = componentRenderContext.getHtmlRenderContext()
-                    .getHtmlProcessContext().getStyleSheetURI(BLANK_IMAGE_URL,
-                            true);
+                    .getHtmlProcessContext()
+                    .getStyleSheetURI(BLANK_IMAGE_URL, true);
 
-            htmlWriter.writeAttribute("v:blank", true);
+            htmlWriter.writeAttributeNS("blank", true);
         }
         htmlWriter.writeSrc(url);
 
         int imageWidth = image.getImageWidth(facesContext);
         int imageHeight = image.getImageHeight(facesContext);
 
-        if (imageWidth < 0 && imageHeight < 0) {
+        if (imageWidth < 0 && imageHeight < 0
+                && generatedImageInformation != null) {
             imageWidth = generatedImageInformation.getImageWidth();
             imageHeight = generatedImageInformation.getImageHeight();
         }
@@ -103,6 +105,11 @@ public class ImageRenderer extends AbstractCssRenderer {
         }
         if (imageHeight > 0) {
             htmlWriter.writeHeight(imageHeight);
+        }
+
+        String alternateText = image.getAlternateText(facesContext);
+        if (alternateText != null) {
+            htmlWriter.writeAlt(alternateText);
         }
 
         htmlWriter.endElement(IHtmlWriter.IMG);
@@ -125,5 +132,12 @@ public class ImageRenderer extends AbstractCssRenderer {
             javaScriptRenderContext.appendRequiredClass(
                     JavaScriptClasses.FILTRED_COMPONENT, "filter");
         }
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "filtred",
+                "filterExpression", "blank" });
     }
 }

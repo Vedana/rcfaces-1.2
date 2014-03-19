@@ -18,6 +18,8 @@ public class AdditionalInformationTag extends CameliaTag implements Tag {
 
 	private static final Log LOG=LogFactory.getLog(AdditionalInformationTag.class);
 
+	private ValueExpression headingZone;
+	private ValueExpression headingLevel;
 	private ValueExpression propertyChangeListeners;
 	private ValueExpression userEventListeners;
 	private ValueExpression errorListeners;
@@ -50,115 +52,123 @@ public class AdditionalInformationTag extends CameliaTag implements Tag {
 		return AdditionalInformationComponent.COMPONENT_TYPE;
 	}
 
-	public final void setPropertyChangeListener(ValueExpression propertyChangeListeners) {
+	public void setHeadingZone(ValueExpression headingZone) {
+		this.headingZone = headingZone;
+	}
+
+	public void setHeadingLevel(ValueExpression headingLevel) {
+		this.headingLevel = headingLevel;
+	}
+
+	public void setPropertyChangeListener(ValueExpression propertyChangeListeners) {
 		this.propertyChangeListeners = propertyChangeListeners;
 	}
 
-	public final void setUserEventListener(ValueExpression userEventListeners) {
+	public void setUserEventListener(ValueExpression userEventListeners) {
 		this.userEventListeners = userEventListeners;
 	}
 
-	public final void setErrorListener(ValueExpression errorListeners) {
+	public void setErrorListener(ValueExpression errorListeners) {
 		this.errorListeners = errorListeners;
 	}
 
-	public final void setAriaLabel(ValueExpression ariaLabel) {
+	public void setAriaLabel(ValueExpression ariaLabel) {
 		this.ariaLabel = ariaLabel;
 	}
 
-	public final void setAriaLevel(ValueExpression ariaLevel) {
+	public void setAriaLevel(ValueExpression ariaLevel) {
 		this.ariaLevel = ariaLevel;
 	}
 
-	public final void setWaiRole(ValueExpression waiRole) {
+	public void setWaiRole(ValueExpression waiRole) {
 		this.waiRole = waiRole;
 	}
 
-	public final void setMarginBottom(ValueExpression marginBottom) {
+	public void setMarginBottom(ValueExpression marginBottom) {
 		this.marginBottom = marginBottom;
 	}
 
-	public final void setMarginLeft(ValueExpression marginLeft) {
+	public void setMarginLeft(ValueExpression marginLeft) {
 		this.marginLeft = marginLeft;
 	}
 
-	public final void setMarginRight(ValueExpression marginRight) {
+	public void setMarginRight(ValueExpression marginRight) {
 		this.marginRight = marginRight;
 	}
 
-	public final void setMarginTop(ValueExpression marginTop) {
+	public void setMarginTop(ValueExpression marginTop) {
 		this.marginTop = marginTop;
 	}
 
-	public final void setBackgroundColor(ValueExpression backgroundColor) {
+	public void setBackgroundColor(ValueExpression backgroundColor) {
 		this.backgroundColor = backgroundColor;
 	}
 
-	public final void setForegroundColor(ValueExpression foregroundColor) {
+	public void setForegroundColor(ValueExpression foregroundColor) {
 		this.foregroundColor = foregroundColor;
 	}
 
-	public final void setBackgroundImageHorizontalPosition(ValueExpression backgroundImageHorizontalPosition) {
+	public void setBackgroundImageHorizontalPosition(ValueExpression backgroundImageHorizontalPosition) {
 		this.backgroundImageHorizontalPosition = backgroundImageHorizontalPosition;
 	}
 
-	public final void setBackgroundImageHorizontalRepeat(ValueExpression backgroundImageHorizontalRepeat) {
+	public void setBackgroundImageHorizontalRepeat(ValueExpression backgroundImageHorizontalRepeat) {
 		this.backgroundImageHorizontalRepeat = backgroundImageHorizontalRepeat;
 	}
 
-	public final void setBackgroundImageURL(ValueExpression backgroundImageURL) {
+	public void setBackgroundImageURL(ValueExpression backgroundImageURL) {
 		this.backgroundImageURL = backgroundImageURL;
 	}
 
-	public final void setBackgroundImageVerticalPosition(ValueExpression backgroundImageVerticalPosition) {
+	public void setBackgroundImageVerticalPosition(ValueExpression backgroundImageVerticalPosition) {
 		this.backgroundImageVerticalPosition = backgroundImageVerticalPosition;
 	}
 
-	public final void setBackgroundImageVerticalRepeat(ValueExpression backgroundImageVerticalRepeat) {
+	public void setBackgroundImageVerticalRepeat(ValueExpression backgroundImageVerticalRepeat) {
 		this.backgroundImageVerticalRepeat = backgroundImageVerticalRepeat;
 	}
 
-	public final void setLookId(ValueExpression lookId) {
+	public void setLookId(ValueExpression lookId) {
 		this.lookId = lookId;
 	}
 
-	public final void setStyleClass(ValueExpression styleClass) {
+	public void setStyleClass(ValueExpression styleClass) {
 		this.styleClass = styleClass;
 	}
 
-	public final void setHeight(ValueExpression height) {
+	public void setHeight(ValueExpression height) {
 		this.height = height;
 	}
 
-	public final void setMouseOutListener(ValueExpression mouseOutListeners) {
+	public void setMouseOutListener(ValueExpression mouseOutListeners) {
 		this.mouseOutListeners = mouseOutListeners;
 	}
 
-	public final void setMouseOverListener(ValueExpression mouseOverListeners) {
+	public void setMouseOverListener(ValueExpression mouseOverListeners) {
 		this.mouseOverListeners = mouseOverListeners;
 	}
 
-	public final void setInitListener(ValueExpression initListeners) {
+	public void setInitListener(ValueExpression initListeners) {
 		this.initListeners = initListeners;
 	}
 
-	public final void setLoadListener(ValueExpression loadListeners) {
+	public void setLoadListener(ValueExpression loadListeners) {
 		this.loadListeners = loadListeners;
 	}
 
-	public final void setScopeSaveValue(ValueExpression scopeSaveValue) {
+	public void setScopeSaveValue(ValueExpression scopeSaveValue) {
 		this.scopeSaveValue = scopeSaveValue;
 	}
 
-	public final void setScopeValue(ValueExpression scopeValue) {
+	public void setScopeValue(ValueExpression scopeValue) {
 		this.scopeValue = scopeValue;
 	}
 
-	public final void setScopeVar(ValueExpression scopeVar) {
+	public void setScopeVar(ValueExpression scopeVar) {
 		this.scopeVar = scopeVar;
 	}
 
-	public final void setMargins(ValueExpression margins) {
+	public void setMargins(ValueExpression margins) {
 		this.margins = margins;
 	}
 
@@ -167,6 +177,8 @@ public class AdditionalInformationTag extends CameliaTag implements Tag {
 			if (AdditionalInformationComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
+			LOG.debug("  headingZone='"+headingZone+"'");
+			LOG.debug("  headingLevel='"+headingLevel+"'");
 			LOG.debug("  ariaLabel='"+ariaLabel+"'");
 			LOG.debug("  ariaLevel='"+ariaLevel+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
@@ -200,6 +212,24 @@ public class AdditionalInformationTag extends CameliaTag implements Tag {
 
 		AdditionalInformationComponent component = (AdditionalInformationComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
+
+		if (headingZone != null) {
+			if (headingZone.isLiteralText()==false) {
+				component.setValueExpression(Properties.HEADING_ZONE, headingZone);
+
+			} else {
+				component.setHeadingZone(getBool(headingZone.getExpressionString()));
+			}
+		}
+
+		if (headingLevel != null) {
+			if (headingLevel.isLiteralText()==false) {
+				component.setValueExpression(Properties.HEADING_LEVEL, headingLevel);
+
+			} else {
+				component.setHeadingLevel(headingLevel.getExpressionString());
+			}
+		}
 
 		if (propertyChangeListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
@@ -418,6 +448,8 @@ public class AdditionalInformationTag extends CameliaTag implements Tag {
 	}
 
 	public void release() {
+		headingZone = null;
+		headingLevel = null;
 		propertyChangeListeners = null;
 		userEventListeners = null;
 		errorListeners = null;

@@ -47,7 +47,7 @@ var __members = {
 	f_externalBox : function() {
 		this.f_super(arguments);
 
-		this._contentURL = f_core.GetAttribute(this, "v:contentURL");
+		this._contentURL = f_core.GetAttributeNS(this,"contentURL");
 		this.onload = f_externalBox._OnLoad;
 	},
 

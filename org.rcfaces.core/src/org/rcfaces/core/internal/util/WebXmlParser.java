@@ -29,7 +29,6 @@ import org.xml.sax.InputSource;
  * @version $Revision$ $Date$
  */
 public class WebXmlParser {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(WebXmlParser.class);
 
@@ -39,9 +38,9 @@ public class WebXmlParser {
 
     // private final ServletContext servletContext;
 
-    private final Map servletByClassName = new HashMap();
+    private final Map<String, List<ServletBean>> servletByClassName = new HashMap<String, List<ServletBean>>();
 
-    private final Map servletByName = new HashMap();
+    private final Map<String, ServletBean> servletByName = new HashMap<String, ServletBean>();
 
     public WebXmlParser(ServletContext servletContext) {
         // this.servletContext = servletContext;
@@ -78,17 +77,17 @@ public class WebXmlParser {
     }
 
     public ServletBean[] getServletsByClassName(String className) {
-        List l = (List) servletByClassName.get(className);
+        List<ServletBean> l = servletByClassName.get(className);
 
         if (l == null) {
             return SERVLET_BEAN_EMPTY_ARRAY;
         }
 
-        return (ServletBean[]) l.toArray(new ServletBean[l.size()]);
+        return l.toArray(new ServletBean[l.size()]);
     }
 
     public ServletBean getServletByName(String name) {
-        return (ServletBean) servletByName.get(name);
+        return servletByName.get(name);
     }
 
     private void parse(InputStream inputStream, String resourceName) {
@@ -96,7 +95,6 @@ public class WebXmlParser {
         digester.setUseContextClassLoader(true);
 
         digester.setEntityResolver(new EntityResolver() {
-            private static final String REVISION = "$Revision$";
 
             public InputSource resolveEntity(String string, String string1) {
                 return new InputSource(new CharArrayReader(new char[0]));
@@ -105,8 +103,8 @@ public class WebXmlParser {
         });
 
         digester.addRule("web-app/servlet", new Rule() {
-            private static final String REVISION = "$Revision$";
 
+            @Override
             public void begin(String namespace, String name,
                     Attributes attributes) throws Exception {
 
@@ -115,14 +113,16 @@ public class WebXmlParser {
                 super.digester.push(servletBean);
             }
 
+            @Override
             public void end(String namespace, String name) throws Exception {
                 ServletBean servletBean = (ServletBean) super.digester.pop();
 
                 servletByName.put(servletBean.getName(), servletBean);
 
-                List l = (List) servletByClassName.get(servletBean.className);
+                List<ServletBean> l = servletByClassName
+                        .get(servletBean.className);
                 if (l == null) {
-                    l = new ArrayList(4);
+                    l = new ArrayList<ServletBean>(4);
                     servletByClassName.put(servletBean.className, l);
                 }
 
@@ -133,8 +133,8 @@ public class WebXmlParser {
         digester.addBeanPropertySetter("web-app/servlet/servlet-class",
                 "className");
         digester.addRule("web-app/servlet-mapping", new Rule() {
-            private static final String REVISION = "$Revision$";
 
+            @Override
             public void begin(String namespace, String name,
                     Attributes attributes) throws Exception {
 
@@ -143,6 +143,7 @@ public class WebXmlParser {
                 super.digester.push(servletMapping);
             }
 
+            @Override
             public void end(String namespace, String name) throws Exception {
                 ServletMapping servletMapping = (ServletMapping) super.digester
                         .pop();
@@ -184,21 +185,18 @@ public class WebXmlParser {
      * @version $Revision$ $Date$
      */
     public static class ServletBean {
-        private static final String REVISION = "$Revision$";
-
         private String name;
 
         private String className;
 
-        private List urlPatterns = new ArrayList();
+        private List<String> urlPatterns = new ArrayList<String>();
 
         public String getClassName() {
             return className;
         }
 
         public String[] listUrlPatterns() {
-            return (String[]) urlPatterns
-                    .toArray(new String[urlPatterns.size()]);
+            return urlPatterns.toArray(new String[urlPatterns.size()]);
         }
 
         public String getName() {
@@ -220,8 +218,6 @@ public class WebXmlParser {
      * @version $Revision$ $Date$
      */
     public static class ServletMapping {
-        private static final String REVISION = "$Revision$";
-
         private String servletName;
 
         private String urlPattern;

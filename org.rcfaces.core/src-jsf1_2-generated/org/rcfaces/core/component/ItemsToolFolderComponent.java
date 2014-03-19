@@ -15,6 +15,8 @@ import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import org.rcfaces.core.internal.tools.CheckTools;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.component.capability.ICheckedValuesCapability;
+import org.rcfaces.core.internal.converter.TextPositionConverter
+			;
 import java.lang.String;
 import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
@@ -31,7 +33,6 @@ import java.util.Arrays;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import org.rcfaces.core.component.AbstractInputComponent;
 import org.rcfaces.core.component.capability.IMenuCapability;
-import org.rcfaces.core.internal.converter.TextPositionConverter;
 import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
 
 public class ItemsToolFolderComponent extends AbstractInputComponent implements 
@@ -331,7 +332,8 @@ public class ItemsToolFolderComponent extends AbstractInputComponent implements
 	}
 
 	public String getDefaultItemLookId(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_ITEM_LOOK_ID, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_ITEM_LOOK_ID, facesContext);
+		return s;
 	}
 
 	public void setDefaultItemLookId(String defaultItemLookId) {
@@ -351,7 +353,8 @@ public class ItemsToolFolderComponent extends AbstractInputComponent implements
 	}
 
 	public String getDefaultItemStyleClass(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_ITEM_STYLE_CLASS, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_ITEM_STYLE_CLASS, facesContext);
+		return s;
 	}
 
 	public void setDefaultItemStyleClass(String defaultItemStyleClass) {

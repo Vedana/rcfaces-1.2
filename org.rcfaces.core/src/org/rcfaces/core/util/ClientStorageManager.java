@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.lang.ClientStorage;
 import org.rcfaces.core.lang.IClientStorage;
@@ -18,11 +20,12 @@ import org.rcfaces.core.lang.IClientStorage;
  * @version $Revision$ $Date$
  */
 public class ClientStorageManager {
-    private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory
+            .getLog(ClientStorageManager.class);
 
     private static final String CLIENT_STORAGE_PROPERTY = Constants
-            .getPackagePrefix()
-            + ".CLIENT_STORAGE";
+            .getPackagePrefix() + ".CLIENT_STORAGE";
 
     public static IClientStorage get(FacesContext facesContext, boolean create) {
 
@@ -32,7 +35,7 @@ public class ClientStorageManager {
             return null;
         }
 
-        Map sessionMap = externalContext.getSessionMap();
+        Map<String, Object> sessionMap = externalContext.getSessionMap();
 
         IClientStorage clientStorage = (IClientStorage) sessionMap
                 .get(CLIENT_STORAGE_PROPERTY);

@@ -31,4 +31,7 @@ public interface ISelectItemNodeWriter {
 
     void encodeNodeEnd(UIComponent component, SelectItem selectItem,
             boolean hasChild, boolean isVisible) throws WriterException;
+    
+    void refreshNode(UIComponent component) throws WriterException;
+
 }

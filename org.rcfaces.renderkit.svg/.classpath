@@ -3,9 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="src-jsf1_2-generated"/>
 	<classpathentry kind="src" path="src-generated"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.rcfaces.core"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.rcfaces.renderkit.html"/>
 	<classpathentry kind="lib" path="lib/batik-bridge.jar"/>
 	<classpathentry kind="lib" path="lib/batik-gvt.jar"/>
 	<classpathentry kind="lib" path="lib/batik-transcoder.jar"/>
@@ -15,5 +12,17 @@
 	<classpathentry kind="lib" path="lib/batik-css.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.rcfaces.image.imageIO"/>
+	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v6.0">
+		<attributes>
+			<attribute name="owner.project.facets" value="jst.utility"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5">
+		<attributes>
+			<attribute name="owner.project.facets" value="java"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.rcfaces.core"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.rcfaces.renderkit.html"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -4,7 +4,6 @@
  */
 package org.rcfaces.renderkit.html.internal.javascript;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.DateFormatSymbols;
@@ -21,7 +20,12 @@ import javax.faces.application.FacesMessage;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.lang.StringAppender;
+import org.rcfaces.core.internal.repository.IContentRef;
 import org.rcfaces.core.internal.repository.IRepository.IContent;
+import org.rcfaces.core.internal.repository.IRepository.ICriteria;
+import org.rcfaces.core.internal.repository.LocaleCriteria;
+import org.rcfaces.core.internal.repository.URLContentRef;
+import org.rcfaces.core.internal.util.ClassLocator;
 import org.rcfaces.core.internal.util.FilteredContentProvider;
 import org.rcfaces.renderkit.html.internal.AbstractCalendarRenderer;
 import org.rcfaces.renderkit.html.internal.codec.JavascriptCodec;
@@ -32,7 +36,6 @@ import org.rcfaces.renderkit.html.internal.codec.JavascriptCodec;
  * @version $Revision$ $Date$
  */
 public class SystemLocaleContentProvider extends FilteredContentProvider {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(SystemLocaleContentProvider.class);
@@ -62,54 +65,46 @@ public class SystemLocaleContentProvider extends FilteredContentProvider {
         this.bundleName = bundleName;
     }
 
-    public IContent getContent(Object contentReference, Locale locale) {
+    public IContent getContent(IContentRef contentReference) {
 
-        if (locale == null) {
-            throw new NullPointerException("Locale parameter can not be null !");
-        }
-
-        String surl = contentReference.toString();
-        int idx = surl.lastIndexOf(LOCALE_CLASS_PATTERN);
-        if (idx >= 0) {
-            idx += LOCALE_CLASS_PATTERN.length();
-            int idx2 = surl.indexOf('.', idx);
-
-            int idx3 = surl.lastIndexOf('/');
-            int idx4 = surl.lastIndexOf('/', idx3 - 1);
-
-            surl = surl.substring(0, idx4) + surl.substring(idx3, idx) + "xx"
-                    + surl.substring(idx2);
-            try {
-                contentReference = new URL(surl);
-
-            } catch (MalformedURLException ex) {
-                LOG.error("Can not reformat url to '" + surl + "' !", ex);
-
-                return null;
-            }
-        }
-
-        return new FilteredURLContent((URL) contentReference, locale);
+        URLContentRef urlContentRef = (URLContentRef) contentReference;
+        /*
+         * ICriteria criteria = contentReference.getCriteria();
+         * 
+         * if (criteria == null) { throw new NullPointerException(
+         * "Criteria parameter can not be null !"); }
+         */
+        return new FilteredURLContent(urlContentRef);
     }
-
-    /*
-     * public boolean searchLocale(Object contentReference, Locale locale,
-     * Locale[] foundLocale) { String surl = contentReference.toString(); int
-     * idx = surl.lastIndexOf(LOCALE_CLASS_PATTERN); if (idx < 0) { return
-     * false; }
-     * 
-     * return true; }
-     */
 
     protected String getCharset() {
         return JAVASCRIPT_CHARSET;
     }
 
-    protected String updateBuffer(String buffer, URL url, Locale locale) {
+    @Override
+    public IContentRef[] searchCriteriaContentReference(
+            IContentRef contentReference, ICriteria criteria) {
 
-        if (locale == null || buffer.indexOf("$$$MONTH_SHORT_NAMES$$$") < 0) {
-            return super.updateBuffer(buffer, url, locale);
+        URLContentRef urlContentRef = (URLContentRef) contentReference;
+
+        ICriteria localeCriteria = LocaleCriteria.keepLocale(criteria);
+        if (localeCriteria == null) {
+            return null;
         }
+
+        IContentRef contentRef = new URLContentRef(localeCriteria,
+                urlContentRef.getURL());
+
+        return new IContentRef[] { contentRef };
+    }
+
+    protected String updateBuffer(String buffer, URL url, ICriteria criteria) {
+
+        if (criteria == null || buffer.indexOf("$$$MONTH_SHORT_NAMES$$$") < 0) {
+            return super.updateBuffer(buffer, url, criteria);
+        }
+
+        Locale locale = LocaleCriteria.getLocale(criteria);
 
         DateFormatSymbols dateFormatSymbols = new DateFormatSymbols(locale);
 
@@ -193,8 +188,8 @@ public class SystemLocaleContentProvider extends FilteredContentProvider {
         Calendar calendar = Calendar.getInstance(locale);
         int firstDayOfWeek = calendar.getFirstDayOfWeek() - Calendar.SUNDAY;
 
-        buffer = replace(buffer, "$$$FIRST_DAY_OF_WEEK$$$", String
-                .valueOf(firstDayOfWeek));
+        buffer = replace(buffer, "$$$FIRST_DAY_OF_WEEK$$$",
+                String.valueOf(firstDayOfWeek));
 
         StringAppender datePatterns = new StringAppender(64);
 
@@ -267,7 +262,7 @@ public class SystemLocaleContentProvider extends FilteredContentProvider {
                 twoDigitYearStart);
 
         ResourceBundle resourceBundle = ResourceBundle.getBundle(bundleName,
-                locale, getCurrentLoader(this));
+                locale, ClassLocator.getCurrentLoader(this));
 
         buffer = replaceResource(buffer, resourceBundle,
                 "javax.faces.component.UIInput.CONVERSION");
@@ -296,7 +291,7 @@ public class SystemLocaleContentProvider extends FilteredContentProvider {
         buffer = replaceResource(buffer, resourceBundle,
                 "javax.faces.validator.LongRangeValidator.TYPE");
 
-        return super.updateBuffer(buffer, url, locale);
+        return super.updateBuffer(buffer, url, criteria);
     }
 
     private String replaceResource(String buffer,
@@ -315,12 +310,4 @@ public class SystemLocaleContentProvider extends FilteredContentProvider {
         return replace(buffer, "$$$" + resourceName + "$$$", localizedMessage);
     }
 
-    protected static ClassLoader getCurrentLoader(Object fallbackClass) {
-        ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        if (loader != null) {
-            return loader;
-        }
-
-        return fallbackClass.getClass().getClassLoader();
-    }
 }

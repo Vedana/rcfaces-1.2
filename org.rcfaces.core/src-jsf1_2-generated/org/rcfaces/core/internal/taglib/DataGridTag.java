@@ -18,10 +18,6 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 
 	private static final Log LOG=LogFactory.getLog(DataGridTag.class);
 
-	private ValueExpression selectionListeners;
-	private ValueExpression selectable;
-	private ValueExpression selectionCardinality;
-	private ValueExpression selectedValues;
 	private ValueExpression dragListeners;
 	private ValueExpression dragEffects;
 	private ValueExpression dragTypes;
@@ -31,6 +27,10 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 	private ValueExpression dropEffects;
 	private ValueExpression dropTypes;
 	private ValueExpression droppable;
+	private ValueExpression selectionListeners;
+	private ValueExpression selectable;
+	private ValueExpression selectionCardinality;
+	private ValueExpression selectedValues;
 	private ValueExpression checkListeners;
 	private ValueExpression checkable;
 	private ValueExpression checkCardinality;
@@ -54,14 +54,20 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 	private ValueExpression keySearchColumnId;
 	private ValueExpression preferences;
 	private ValueExpression paged;
+	private ValueExpression fullCriteriaCount;
 	private ValueExpression clientSelectionFullState;
 	private ValueExpression clientCheckFullState;
 	private ValueExpression headerVisible;
+	private ValueExpression rowToolTipId;
 	private ValueExpression cursorValue;
+	private ValueExpression scopeColumnId;
+	private ValueExpression summary;
+	private ValueExpression caption;
 	private ValueExpression rowDragTypes;
 	private ValueExpression rowDragEffects;
 	private ValueExpression rowDropTypes;
 	private ValueExpression rowDropEffects;
+	private ValueExpression selectedCriteriaColumns;
 	private ValueExpression rowValueColumnId;
 	private ValueExpression rowLabelColumnId;
 	private ValueExpression rowCountVar;
@@ -74,203 +80,227 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		return DataGridComponent.COMPONENT_TYPE;
 	}
 
-	public final void setSelectionListener(ValueExpression selectionListeners) {
-		this.selectionListeners = selectionListeners;
-	}
-
-	public final void setSelectable(ValueExpression selectable) {
-		this.selectable = selectable;
-	}
-
-	public final void setSelectionCardinality(ValueExpression selectionCardinality) {
-		this.selectionCardinality = selectionCardinality;
-	}
-
-	public final void setSelectedValues(ValueExpression selectedValues) {
-		this.selectedValues = selectedValues;
-	}
-
-	public final void setDragListener(ValueExpression dragListeners) {
+	public void setDragListener(ValueExpression dragListeners) {
 		this.dragListeners = dragListeners;
 	}
 
-	public final void setDragEffects(ValueExpression dragEffects) {
+	public void setDragEffects(ValueExpression dragEffects) {
 		this.dragEffects = dragEffects;
 	}
 
-	public final void setDragTypes(ValueExpression dragTypes) {
+	public void setDragTypes(ValueExpression dragTypes) {
 		this.dragTypes = dragTypes;
 	}
 
-	public final void setDraggable(ValueExpression draggable) {
+	public void setDraggable(ValueExpression draggable) {
 		this.draggable = draggable;
 	}
 
-	public final void setDropListener(ValueExpression dropListeners) {
+	public void setDropListener(ValueExpression dropListeners) {
 		this.dropListeners = dropListeners;
 	}
 
-	public final void setDropCompleteListener(ValueExpression dropCompleteListeners) {
+	public void setDropCompleteListener(ValueExpression dropCompleteListeners) {
 		this.dropCompleteListeners = dropCompleteListeners;
 	}
 
-	public final void setDropEffects(ValueExpression dropEffects) {
+	public void setDropEffects(ValueExpression dropEffects) {
 		this.dropEffects = dropEffects;
 	}
 
-	public final void setDropTypes(ValueExpression dropTypes) {
+	public void setDropTypes(ValueExpression dropTypes) {
 		this.dropTypes = dropTypes;
 	}
 
-	public final void setDroppable(ValueExpression droppable) {
+	public void setDroppable(ValueExpression droppable) {
 		this.droppable = droppable;
 	}
 
-	public final void setCheckListener(ValueExpression checkListeners) {
+	public void setSelectionListener(ValueExpression selectionListeners) {
+		this.selectionListeners = selectionListeners;
+	}
+
+	public void setSelectable(ValueExpression selectable) {
+		this.selectable = selectable;
+	}
+
+	public void setSelectionCardinality(ValueExpression selectionCardinality) {
+		this.selectionCardinality = selectionCardinality;
+	}
+
+	public void setSelectedValues(ValueExpression selectedValues) {
+		this.selectedValues = selectedValues;
+	}
+
+	public void setCheckListener(ValueExpression checkListeners) {
 		this.checkListeners = checkListeners;
 	}
 
-	public final void setCheckable(ValueExpression checkable) {
+	public void setCheckable(ValueExpression checkable) {
 		this.checkable = checkable;
 	}
 
-	public final void setCheckCardinality(ValueExpression checkCardinality) {
+	public void setCheckCardinality(ValueExpression checkCardinality) {
 		this.checkCardinality = checkCardinality;
 	}
 
-	public final void setCheckedValues(ValueExpression checkedValues) {
+	public void setCheckedValues(ValueExpression checkedValues) {
 		this.checkedValues = checkedValues;
 	}
 
-	public final void setAdditionalInformationListener(ValueExpression additionalInformationListeners) {
+	public void setAdditionalInformationListener(ValueExpression additionalInformationListeners) {
 		this.additionalInformationListeners = additionalInformationListeners;
 	}
 
-	public final void setAdditionalInformationValues(ValueExpression additionalInformationValues) {
+	public void setAdditionalInformationValues(ValueExpression additionalInformationValues) {
 		this.additionalInformationValues = additionalInformationValues;
 	}
 
-	public final void setClientAdditionalInformationFullState(ValueExpression clientAdditionalInformationFullState) {
+	public void setClientAdditionalInformationFullState(ValueExpression clientAdditionalInformationFullState) {
 		this.clientAdditionalInformationFullState = clientAdditionalInformationFullState;
 	}
 
-	public final void setAdditionalInformationCardinality(ValueExpression additionalInformationCardinality) {
+	public void setAdditionalInformationCardinality(ValueExpression additionalInformationCardinality) {
 		this.additionalInformationCardinality = additionalInformationCardinality;
 	}
 
-	public final void setDoubleClickListener(ValueExpression doubleClickListeners) {
+	public void setDoubleClickListener(ValueExpression doubleClickListeners) {
 		this.doubleClickListeners = doubleClickListeners;
 	}
 
-	public final void setLoadListener(ValueExpression loadListeners) {
+	public void setLoadListener(ValueExpression loadListeners) {
 		this.loadListeners = loadListeners;
 	}
 
-	public final void setRequired(ValueExpression required) {
+	public void setRequired(ValueExpression required) {
 		this.required = required;
 	}
 
-	public final void setBorder(ValueExpression border) {
+	public void setBorder(ValueExpression border) {
 		this.border = border;
 	}
 
-	public final void setRowStyleClass(ValueExpression rowStyleClass) {
+	public void setRowStyleClass(ValueExpression rowStyleClass) {
 		this.rowStyleClass = rowStyleClass;
 	}
 
-	public final void setEmptyDataMessage(ValueExpression emptyDataMessage) {
+	public void setEmptyDataMessage(ValueExpression emptyDataMessage) {
 		this.emptyDataMessage = emptyDataMessage;
 	}
 
-	public final void setReadOnly(ValueExpression readOnly) {
+	public void setReadOnly(ValueExpression readOnly) {
 		this.readOnly = readOnly;
 	}
 
-	public final void setDisabled(ValueExpression disabled) {
+	public void setDisabled(ValueExpression disabled) {
 		this.disabled = disabled;
 	}
 
-	public final void setHorizontalScrollPosition(ValueExpression horizontalScrollPosition) {
+	public void setHorizontalScrollPosition(ValueExpression horizontalScrollPosition) {
 		this.horizontalScrollPosition = horizontalScrollPosition;
 	}
 
-	public final void setVerticalScrollPosition(ValueExpression verticalScrollPosition) {
+	public void setVerticalScrollPosition(ValueExpression verticalScrollPosition) {
 		this.verticalScrollPosition = verticalScrollPosition;
 	}
 
-	public final void setFilterProperties(ValueExpression filterProperties) {
+	public void setFilterProperties(ValueExpression filterProperties) {
 		this.filterProperties = filterProperties;
 	}
 
-	public final void setShowValue(ValueExpression showValue) {
+	public void setShowValue(ValueExpression showValue) {
 		this.showValue = showValue;
 	}
 
-	public final void setKeySearchColumnId(ValueExpression keySearchColumnId) {
+	public void setKeySearchColumnId(ValueExpression keySearchColumnId) {
 		this.keySearchColumnId = keySearchColumnId;
 	}
 
-	public final void setPreferences(ValueExpression preferences) {
+	public void setPreferences(ValueExpression preferences) {
 		this.preferences = preferences;
 	}
 
-	public final void setPaged(ValueExpression paged) {
+	public void setPaged(ValueExpression paged) {
 		this.paged = paged;
 	}
 
-	public final void setClientSelectionFullState(ValueExpression clientSelectionFullState) {
+	public void setFullCriteriaCount(ValueExpression fullCriteriaCount) {
+		this.fullCriteriaCount = fullCriteriaCount;
+	}
+
+	public void setClientSelectionFullState(ValueExpression clientSelectionFullState) {
 		this.clientSelectionFullState = clientSelectionFullState;
 	}
 
-	public final void setClientCheckFullState(ValueExpression clientCheckFullState) {
+	public void setClientCheckFullState(ValueExpression clientCheckFullState) {
 		this.clientCheckFullState = clientCheckFullState;
 	}
 
-	public final void setHeaderVisible(ValueExpression headerVisible) {
+	public void setHeaderVisible(ValueExpression headerVisible) {
 		this.headerVisible = headerVisible;
 	}
 
-	public final void setCursorValue(ValueExpression cursorValue) {
+	public void setRowToolTipId(ValueExpression rowToolTipId) {
+		this.rowToolTipId = rowToolTipId;
+	}
+
+	public void setCursorValue(ValueExpression cursorValue) {
 		this.cursorValue = cursorValue;
 	}
 
-	public final void setRowDragTypes(ValueExpression rowDragTypes) {
+	public void setScopeColumnId(ValueExpression scopeColumnId) {
+		this.scopeColumnId = scopeColumnId;
+	}
+
+	public void setSummary(ValueExpression summary) {
+		this.summary = summary;
+	}
+
+	public void setCaption(ValueExpression caption) {
+		this.caption = caption;
+	}
+
+	public void setRowDragTypes(ValueExpression rowDragTypes) {
 		this.rowDragTypes = rowDragTypes;
 	}
 
-	public final void setRowDragEffects(ValueExpression rowDragEffects) {
+	public void setRowDragEffects(ValueExpression rowDragEffects) {
 		this.rowDragEffects = rowDragEffects;
 	}
 
-	public final void setRowDropTypes(ValueExpression rowDropTypes) {
+	public void setRowDropTypes(ValueExpression rowDropTypes) {
 		this.rowDropTypes = rowDropTypes;
 	}
 
-	public final void setRowDropEffects(ValueExpression rowDropEffects) {
+	public void setRowDropEffects(ValueExpression rowDropEffects) {
 		this.rowDropEffects = rowDropEffects;
 	}
 
-	public final void setRowValueColumnId(ValueExpression rowValueColumnId) {
+	public void setSelectedCriteriaColumns(ValueExpression selectedCriteriaColumns) {
+		this.selectedCriteriaColumns = selectedCriteriaColumns;
+	}
+
+	public void setRowValueColumnId(ValueExpression rowValueColumnId) {
 		this.rowValueColumnId = rowValueColumnId;
 	}
 
-	public final void setRowLabelColumnId(ValueExpression rowLabelColumnId) {
+	public void setRowLabelColumnId(ValueExpression rowLabelColumnId) {
 		this.rowLabelColumnId = rowLabelColumnId;
 	}
 
-	public final void setRowCountVar(ValueExpression rowCountVar) {
+	public void setRowCountVar(ValueExpression rowCountVar) {
 		this.rowCountVar = rowCountVar;
 	}
 
-	public final void setRowIndexVar(ValueExpression rowIndexVar) {
+	public void setRowIndexVar(ValueExpression rowIndexVar) {
 		this.rowIndexVar = rowIndexVar;
 	}
 
-	public final void setCellTextWrap(ValueExpression cellTextWrap) {
+	public void setCellTextWrap(ValueExpression cellTextWrap) {
 		this.cellTextWrap = cellTextWrap;
 	}
 
-	public final void setBodyDroppable(ValueExpression bodyDroppable) {
+	public void setBodyDroppable(ValueExpression bodyDroppable) {
 		this.bodyDroppable = bodyDroppable;
 	}
 
@@ -287,15 +317,15 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			if (DataGridComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
-			LOG.debug("  selectable='"+selectable+"'");
-			LOG.debug("  selectionCardinality='"+selectionCardinality+"'");
-			LOG.debug("  selectedValues='"+selectedValues+"'");
 			LOG.debug("  dragEffects='"+dragEffects+"'");
 			LOG.debug("  dragTypes='"+dragTypes+"'");
 			LOG.debug("  draggable='"+draggable+"'");
 			LOG.debug("  dropEffects='"+dropEffects+"'");
 			LOG.debug("  dropTypes='"+dropTypes+"'");
 			LOG.debug("  droppable='"+droppable+"'");
+			LOG.debug("  selectable='"+selectable+"'");
+			LOG.debug("  selectionCardinality='"+selectionCardinality+"'");
+			LOG.debug("  selectedValues='"+selectedValues+"'");
 			LOG.debug("  checkable='"+checkable+"'");
 			LOG.debug("  checkCardinality='"+checkCardinality+"'");
 			LOG.debug("  checkedValues='"+checkedValues+"'");
@@ -315,14 +345,20 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			LOG.debug("  keySearchColumnId='"+keySearchColumnId+"'");
 			LOG.debug("  preferences='"+preferences+"'");
 			LOG.debug("  paged='"+paged+"'");
+			LOG.debug("  fullCriteriaCount='"+fullCriteriaCount+"'");
 			LOG.debug("  clientSelectionFullState='"+clientSelectionFullState+"'");
 			LOG.debug("  clientCheckFullState='"+clientCheckFullState+"'");
 			LOG.debug("  headerVisible='"+headerVisible+"'");
+			LOG.debug("  rowToolTipId='"+rowToolTipId+"'");
 			LOG.debug("  cursorValue='"+cursorValue+"'");
+			LOG.debug("  scopeColumnId='"+scopeColumnId+"'");
+			LOG.debug("  summary='"+summary+"'");
+			LOG.debug("  caption='"+caption+"'");
 			LOG.debug("  rowDragTypes='"+rowDragTypes+"'");
 			LOG.debug("  rowDragEffects='"+rowDragEffects+"'");
 			LOG.debug("  rowDropTypes='"+rowDropTypes+"'");
 			LOG.debug("  rowDropEffects='"+rowDropEffects+"'");
+			LOG.debug("  selectedCriteriaColumns='"+selectedCriteriaColumns+"'");
 			LOG.debug("  rowValueColumnId='"+rowValueColumnId+"'");
 			LOG.debug("  rowLabelColumnId='"+rowLabelColumnId+"'");
 			LOG.debug("  rowCountVar='"+rowCountVar+"'");
@@ -343,32 +379,6 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 
 		DataGridComponent component = (DataGridComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
-
-		if (selectionListeners != null) {
-			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
-		}
-
-		if (selectable != null) {
-			if (selectable.isLiteralText()==false) {
-				component.setValueExpression(Properties.SELECTABLE, selectable);
-
-			} else {
-				component.setSelectable(getBool(selectable.getExpressionString()));
-			}
-		}
-
-		if (selectionCardinality != null) {
-			if (selectionCardinality.isLiteralText()==false) {
-				component.setValueExpression(Properties.SELECTION_CARDINALITY, selectionCardinality);
-
-			} else {
-				component.setSelectionCardinality(selectionCardinality.getExpressionString());
-			}
-		}
-
-		if (selectedValues != null) {
-				component.setValueExpression(Properties.SELECTED_VALUES, selectedValues);
-		}
 
 		if (dragListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.DRAG_LISTENER_TYPE, dragListeners);
@@ -434,6 +444,32 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			} else {
 				component.setDroppable(getBool(droppable.getExpressionString()));
 			}
+		}
+
+		if (selectionListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
+		}
+
+		if (selectable != null) {
+			if (selectable.isLiteralText()==false) {
+				component.setValueExpression(Properties.SELECTABLE, selectable);
+
+			} else {
+				component.setSelectable(getBool(selectable.getExpressionString()));
+			}
+		}
+
+		if (selectionCardinality != null) {
+			if (selectionCardinality.isLiteralText()==false) {
+				component.setValueExpression(Properties.SELECTION_CARDINALITY, selectionCardinality);
+
+			} else {
+				component.setSelectionCardinality(selectionCardinality.getExpressionString());
+			}
+		}
+
+		if (selectedValues != null) {
+				component.setValueExpression(Properties.SELECTED_VALUES, selectedValues);
 		}
 
 		if (checkListeners != null) {
@@ -608,6 +644,15 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			}
 		}
 
+		if (fullCriteriaCount != null) {
+			if (fullCriteriaCount.isLiteralText()==false) {
+				component.setValueExpression(Properties.FULL_CRITERIA_COUNT, fullCriteriaCount);
+
+			} else {
+				component.setFullCriteriaCount(getBool(fullCriteriaCount.getExpressionString()));
+			}
+		}
+
 		if (clientSelectionFullState != null) {
 			if (clientSelectionFullState.isLiteralText()==false) {
 				component.setValueExpression(Properties.CLIENT_SELECTION_FULL_STATE, clientSelectionFullState);
@@ -635,12 +680,48 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			}
 		}
 
+		if (rowToolTipId != null) {
+			if (rowToolTipId.isLiteralText()==false) {
+				component.setValueExpression(Properties.ROW_TOOL_TIP_ID, rowToolTipId);
+
+			} else {
+				component.setRowToolTipId(rowToolTipId.getExpressionString());
+			}
+		}
+
 		if (cursorValue != null) {
 			if (cursorValue.isLiteralText()==false) {
 				component.setValueExpression(Properties.CURSOR_VALUE, cursorValue);
 
 			} else {
 				component.setCursorValue(cursorValue.getExpressionString());
+			}
+		}
+
+		if (scopeColumnId != null) {
+			if (scopeColumnId.isLiteralText()==false) {
+				component.setValueExpression(Properties.SCOPE_COLUMN_ID, scopeColumnId);
+
+			} else {
+				component.setScopeColumnId(scopeColumnId.getExpressionString());
+			}
+		}
+
+		if (summary != null) {
+			if (summary.isLiteralText()==false) {
+				component.setValueExpression(Properties.SUMMARY, summary);
+
+			} else {
+				component.setSummary(summary.getExpressionString());
+			}
+		}
+
+		if (caption != null) {
+			if (caption.isLiteralText()==false) {
+				component.setValueExpression(Properties.CAPTION, caption);
+
+			} else {
+				component.setCaption(caption.getExpressionString());
 			}
 		}
 
@@ -677,6 +758,15 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 
 			} else {
 				component.setRowDropEffects(rowDropEffects.getExpressionString());
+			}
+		}
+
+		if (selectedCriteriaColumns != null) {
+			if (selectedCriteriaColumns.isLiteralText()==false) {
+				component.setValueExpression(Properties.SELECTED_CRITERIA_COLUMNS, selectedCriteriaColumns);
+
+			} else {
+				component.setSelectedCriteriaColumns(selectedCriteriaColumns.getExpressionString());
 			}
 		}
 
@@ -740,10 +830,6 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 	}
 
 	public void release() {
-		selectionListeners = null;
-		selectable = null;
-		selectionCardinality = null;
-		selectedValues = null;
 		dragListeners = null;
 		dragEffects = null;
 		dragTypes = null;
@@ -753,6 +839,10 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		dropEffects = null;
 		dropTypes = null;
 		droppable = null;
+		selectionListeners = null;
+		selectable = null;
+		selectionCardinality = null;
+		selectedValues = null;
 		checkListeners = null;
 		checkable = null;
 		checkCardinality = null;
@@ -776,14 +866,20 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		keySearchColumnId = null;
 		preferences = null;
 		paged = null;
+		fullCriteriaCount = null;
 		clientSelectionFullState = null;
 		clientCheckFullState = null;
 		headerVisible = null;
+		rowToolTipId = null;
 		cursorValue = null;
+		scopeColumnId = null;
+		summary = null;
+		caption = null;
 		rowDragTypes = null;
 		rowDragEffects = null;
 		rowDropTypes = null;
 		rowDropEffects = null;
+		selectedCriteriaColumns = null;
 		rowValueColumnId = null;
 		rowLabelColumnId = null;
 		rowCountVar = null;

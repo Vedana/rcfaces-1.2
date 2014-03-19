@@ -3,9 +3,7 @@ package org.rcfaces.core.lang;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
@@ -23,18 +21,16 @@ import org.rcfaces.core.model.IFilterProperties;
 public final class FilterPropertiesMap extends AbstractProperties implements
         IFilterProperties {
 
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory.getLog(FilterPropertiesMap.class);
 
     static final boolean TEST_MAP_CONTENT = false;
 
     private static final long serialVersionUID = -6566852140453141630L;
 
-    private final Map map;
+    private final Map<String, Object> map;
 
-    public FilterPropertiesMap(Map map) {
-        this.map = new HashMap(map);
+    public FilterPropertiesMap(Map<String, Object> map) {
+        this.map = new HashMap<String, Object>(map);
     }
 
     public FilterPropertiesMap(IFilterProperties filterProperties) {
@@ -42,7 +38,7 @@ public final class FilterPropertiesMap extends AbstractProperties implements
     }
 
     public FilterPropertiesMap() {
-        this.map = new HashMap();
+        this.map = new HashMap<String, Object>();
     }
 
     public void clear() {
@@ -57,10 +53,9 @@ public final class FilterPropertiesMap extends AbstractProperties implements
         return map.put(key.toString(), value);
     }
 
-    public void putAll(Map t) {
+    public void putAll(Map<String, Object> t) {
         if (TEST_MAP_CONTENT) {
-            for (Iterator it = t.entrySet().iterator(); it.hasNext();) {
-                Map.Entry entry = (Map.Entry) it.next();
+            for (Map.Entry<String, Object> entry : t.entrySet()) {
 
                 Object key = entry.getKey();
                 if (key != null && (key instanceof String) == false) {
@@ -90,13 +85,13 @@ public final class FilterPropertiesMap extends AbstractProperties implements
     }
 
     public String[] listNames() {
-        Collection c = map.keySet();
+        Collection<String> c = map.keySet();
 
-        return (String[]) c.toArray(new String[c.size()]);
+        return c.toArray(new String[c.size()]);
     }
 
-    public Map toMap() {
-        return new HashMap(map);
+    public Map<String, Object> toMap() {
+        return new HashMap<String, Object>(map);
     }
 
     public Object saveState(FacesContext context) {
@@ -107,8 +102,7 @@ public final class FilterPropertiesMap extends AbstractProperties implements
         Object ret[] = new Object[map.size() * 2];
 
         int idx = 0;
-        for (Iterator it = map.entrySet().iterator(); it.hasNext();) {
-            Map.Entry entry = (Entry) it.next();
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
 
             ret[idx++] = entry.getKey();
             ret[idx++] = entry.getValue();
@@ -125,7 +119,7 @@ public final class FilterPropertiesMap extends AbstractProperties implements
         Object p[] = (Object[]) state;
 
         for (int i = 0; i < p.length;) {
-            map.put(p[i++], p[i++]);
+            map.put((String) p[i++], p[i++]);
         }
     }
 
@@ -136,10 +130,17 @@ public final class FilterPropertiesMap extends AbstractProperties implements
     public void setTransient(boolean newTransientValue) {
     }
 
+<<<<<<< HEAD
     public Object getProperty(Serializable name) {
         return map.get(name.toString());
+=======
+    @Override
+    public Object getProperty(String name) {
+        return map.get(name);
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
     }
 
+    @Override
     public int hashCode() {
         final int PRIME = 31;
         int result = 1;
@@ -147,6 +148,7 @@ public final class FilterPropertiesMap extends AbstractProperties implements
         return result;
     }
 
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -169,13 +171,20 @@ public final class FilterPropertiesMap extends AbstractProperties implements
         return true;
     }
 
-    private Map copyMap(IFilterProperties filterProperties) {
+    private Map<String, Object> copyMap(IFilterProperties filterProperties) {
         if (filterProperties instanceof FilterPropertiesMap) {
             // Pas besoin de copie !
             return filterProperties.toMap();
         }
 
-        return new HashMap(filterProperties.toMap());
+        return new HashMap<String, Object>(filterProperties.toMap());
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("[FilterPropertiesMap map='").append(map).append("']");
+        return builder.toString();
     }
 
     static {

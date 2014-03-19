@@ -39,7 +39,7 @@ var __statics = {
 
 		effect.f_performTick(component, cur, next);
 	}
-}
+};
 
 var __members = {
 	/**
@@ -90,7 +90,7 @@ var __members = {
 			
 		}, this.f_getStepMs());
 	}
-}
+};
 
 new f_class("f_timerEffect", {
 	extend: f_effect,

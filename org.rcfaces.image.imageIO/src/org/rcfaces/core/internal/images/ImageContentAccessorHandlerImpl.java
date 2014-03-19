@@ -18,6 +18,7 @@ import java.util.Set;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageWriter;
 
 import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.Rule;
@@ -48,7 +49,6 @@ import org.xml.sax.Attributes;
  */
 public class ImageContentAccessorHandlerImpl extends
         ImageContentAccessorHandler {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(ImageContentAccessorHandlerImpl.class);
@@ -65,9 +65,11 @@ public class ImageContentAccessorHandlerImpl extends
 
     private static final String NO_OPERATION_ID = "noOperation";
 
-    private final Map operationsById = new HashMap(32);
+    private final Map<String, IImageOperation> operationsById = new HashMap<String, IImageOperation>(
+            32);
 
-    private final Map validContentTypes = new HashMap(8);
+    private final Map<String, Boolean> validContentTypes = new HashMap<String, Boolean>(
+            8);
 
     private final FileNameMap fileNameMap;
 
@@ -77,7 +79,7 @@ public class ImageContentAccessorHandlerImpl extends
 
     private Boolean gifWriterEnabled;
 
-    private List imageResourceAdaptersList;
+    private List<ImageResourceAdapterBean> imageResourceAdaptersList;
 
     private ImageResourceAdapterBean imageResourceAdapters[];
 
@@ -89,6 +91,7 @@ public class ImageContentAccessorHandlerImpl extends
         return "ImageContentAccessorHandler";
     }
 
+    @Override
     public void startup(FacesContext facesContext) {
         super.startup(facesContext);
 
@@ -127,7 +130,7 @@ public class ImageContentAccessorHandlerImpl extends
         }
 
         if (gifWriterEnabled == null) {
-            Iterator it = ImageIO
+            Iterator<ImageWriter> it = ImageIO
                     .getImageWritersByMIMEType(GIFConversionImageOperation.MIME_TYPE);
 
             gifWriterEnabled = Boolean.valueOf(it.hasNext());
@@ -137,28 +140,30 @@ public class ImageContentAccessorHandlerImpl extends
         }
 
         if (imageResourceAdaptersList.size() > 0) {
-            imageResourceAdapters = (ImageResourceAdapterBean[]) imageResourceAdaptersList
+            imageResourceAdapters = imageResourceAdaptersList
                     .toArray(new ImageResourceAdapterBean[imageResourceAdaptersList
                             .size()]);
         }
         imageResourceAdaptersList = null;
     }
 
+    @Override
     public void configureRules(Digester digester) {
         super.configureRules(digester);
 
-        imageResourceAdaptersList = new ArrayList();
+        imageResourceAdaptersList = new ArrayList<ImageResourceAdapterBean>();
 
         digester.addRule("rcfaces-config/image-operations/operation",
                 new Rule() {
-                    private static final String REVISION = "$Revision$";
 
+                    @Override
                     public void begin(String namespace, String name,
                             Attributes attributes) throws Exception {
 
                         super.digester.push(new OperationBean());
                     }
 
+                    @Override
                     public void end(String namespace, String name)
                             throws Exception {
                         OperationBean operationBean = (OperationBean) super.digester
@@ -175,34 +180,31 @@ public class ImageContentAccessorHandlerImpl extends
         digester.addBeanPropertySetter(
                 "rcfaces-config/image-operations/operation/operation-class",
                 "className");
-        digester
-                .addBeanPropertySetter(
-                        "rcfaces-config/image-operations/operation/operation-force-suffix",
-                        "forceSuffix");
-        digester
-                .addBeanPropertySetter(
-                        "rcfaces-config/image-operations/operation/operation-response-mimeType",
-                        "responseMimeType");
-        digester
-                .addBeanPropertySetter(
-                        "rcfaces-config/image-operations/operation/operation-source-mimeType",
-                        "sourceMimeType");
-        digester
-                .addBeanPropertySetter(
-                        "rcfaces-config/image-operations/operation/operation-encoder-mimeType",
-                        "encoderMimeType");
+        digester.addBeanPropertySetter(
+                "rcfaces-config/image-operations/operation/operation-force-suffix",
+                "forceSuffix");
+        digester.addBeanPropertySetter(
+                "rcfaces-config/image-operations/operation/operation-response-mimeType",
+                "responseMimeType");
+        digester.addBeanPropertySetter(
+                "rcfaces-config/image-operations/operation/operation-source-mimeType",
+                "sourceMimeType");
+        digester.addBeanPropertySetter(
+                "rcfaces-config/image-operations/operation/operation-encoder-mimeType",
+                "encoderMimeType");
 
         digester.addRule(
                 "rcfaces-config/image-resource-adapters/resource-adapter",
                 new Rule() {
-                    private static final String REVISION = "$Revision$";
 
+                    @Override
                     public void begin(String namespace, String name,
                             Attributes attributes) throws Exception {
 
                         super.digester.push(new ImageResourceAdapterBean());
                     }
 
+                    @Override
                     public void end(String namespace, String name)
                             throws Exception {
                         ImageResourceAdapterBean imageResourceAdapterBean = (ImageResourceAdapterBean) super.digester
@@ -211,52 +213,47 @@ public class ImageContentAccessorHandlerImpl extends
                         addImageResourceAdapter(imageResourceAdapterBean);
                     }
                 });
-        digester
-                .addBeanPropertySetter(
-                        "rcfaces-config/image-resource-adapters/resource-adapter/adapter-id",
-                        "id");
-        digester
-                .addBeanPropertySetter(
-                        "rcfaces-config/image-resource-adapters/resource-adapter/adapter-name",
-                        "name");
-        digester
-                .addBeanPropertySetter(
-                        "rcfaces-config/image-resource-adapters/resource-adapter/adapter-class",
-                        "className");
+        digester.addBeanPropertySetter(
+                "rcfaces-config/image-resource-adapters/resource-adapter/adapter-id",
+                "id");
+        digester.addBeanPropertySetter(
+                "rcfaces-config/image-resource-adapters/resource-adapter/adapter-name",
+                "name");
+        digester.addBeanPropertySetter(
+                "rcfaces-config/image-resource-adapters/resource-adapter/adapter-class",
+                "className");
 
-        digester
-                .addRule(
-                        "rcfaces-config/image-resource-adapters/resource-adapter/content-type",
-                        new Rule() {
-                            private static final String REVISION = "$Revision$";
+        digester.addRule(
+                "rcfaces-config/image-resource-adapters/resource-adapter/content-type",
+                new Rule() {
 
-                            public void body(String namespace, String name,
-                                    String text) throws Exception {
+                    @Override
+                    public void body(String namespace, String name, String text)
+                            throws Exception {
 
-                                ImageResourceAdapterBean imageResourceAdapterBean = (ImageResourceAdapterBean) super.digester
-                                        .peek();
+                        ImageResourceAdapterBean imageResourceAdapterBean = (ImageResourceAdapterBean) super.digester
+                                .peek();
 
-                                imageResourceAdapterBean.addContentType(text);
-                            }
+                        imageResourceAdapterBean.addContentType(text);
+                    }
 
-                        });
+                });
 
-        digester
-                .addRule(
-                        "rcfaces-config/image-resource-adapters/resource-adapter/suffix",
-                        new Rule() {
-                            private static final String REVISION = "$Revision$";
+        digester.addRule(
+                "rcfaces-config/image-resource-adapters/resource-adapter/suffix",
+                new Rule() {
 
-                            public void body(String namespace, String name,
-                                    String text) throws Exception {
+                    @Override
+                    public void body(String namespace, String name, String text)
+                            throws Exception {
 
-                                ImageResourceAdapterBean imageResourceAdapterBean = (ImageResourceAdapterBean) super.digester
-                                        .peek();
+                        ImageResourceAdapterBean imageResourceAdapterBean = (ImageResourceAdapterBean) super.digester
+                                .peek();
 
-                                imageResourceAdapterBean.addSuffix(text);
-                            }
+                        imageResourceAdapterBean.addSuffix(text);
+                    }
 
-                        });
+                });
     }
 
     private void declareOperation(OperationBean operationBean) {
@@ -266,15 +263,16 @@ public class ImageContentAccessorHandlerImpl extends
                     + operationBean.getClassName() + "'.");
         }
 
-        Class clazz;
+        Class< ? extends IImageOperation> clazz;
         try {
             clazz = ClassLocator.load(operationBean.getClassName(), null,
-                    FacesContext.getCurrentInstance());
+                    FacesContext.getCurrentInstance(), IImageOperation.class);
 
         } catch (ClassNotFoundException ex) {
-            LOG.error("Can not load class '" + operationBean.getClassName()
-                    + "' specified by imageOperation id='"
-                    + operationBean.getId() + "'.", ex);
+            LOG.error(
+                    "Can not load class '" + operationBean.getClassName()
+                            + "' specified by imageOperation id='"
+                            + operationBean.getId() + "'.", ex);
 
             return;
         }
@@ -296,29 +294,30 @@ public class ImageContentAccessorHandlerImpl extends
             return;
         }
 
-        Constructor constructor;
+        Constructor< ? extends IImageOperation> constructor;
 
         try {
             constructor = clazz.getConstructor((Class[]) null);
 
         } catch (NoSuchMethodException ex) {
-            LOG.error("Can not get constructor for imageOperation id='"
-                    + operationBean.getId() + "' class='"
-                    + operationBean.getClassName() + "'.", ex);
+            LOG.error(
+                    "Can not get constructor for imageOperation id='"
+                            + operationBean.getId() + "' class='"
+                            + operationBean.getClassName() + "'.", ex);
             return;
         }
 
         IImageOperation operation;
         try {
-            operation = (IImageOperation) constructor
-                    .newInstance((Object[]) null);
+            operation = constructor.newInstance((Object[]) null);
 
         } catch (Throwable ex) {
-            LOG.error("Can not instanciate class '"
-                    + operationBean.getClassName()
-                    + "' specified by imageOperation id='"
-                    + operationBean.getId() + "' using constructor '"
-                    + constructor + "'.", ex);
+            LOG.error(
+                    "Can not instanciate class '"
+                            + operationBean.getClassName()
+                            + "' specified by imageOperation id='"
+                            + operationBean.getId() + "' using constructor '"
+                            + constructor + "'.", ex);
             return;
         }
 
@@ -351,30 +350,30 @@ public class ImageContentAccessorHandlerImpl extends
             operation.configure(operationBean.getParameterMap());
 
         } catch (Throwable ex) {
-            LOG.error("Can not configure bean, class '"
-                    + operationBean.getClassName()
-                    + "' specified by imageOperation id='"
-                    + operationBean.getId() + "' using constructor '"
-                    + constructor + "'.", ex);
+            LOG.error(
+                    "Can not configure bean, class '"
+                            + operationBean.getClassName()
+                            + "' specified by imageOperation id='"
+                            + operationBean.getId() + "' using constructor '"
+                            + constructor + "'.", ex);
             return;
         }
 
         operationsById.put(operationBean.getId(), operation);
     }
 
+    @Override
     public IImageOperation getImageOperation(String operationId) {
-        IImageOperation imageOperation = (IImageOperation) operationsById
-                .get(operationId);
+        IImageOperation imageOperation = operationsById.get(operationId);
 
         if (LOG.isDebugEnabled()) {
-            LOG
-                    .debug("Operation id='" + operationId + "' => "
-                            + imageOperation);
+            LOG.debug("Operation id='" + operationId + "' => " + imageOperation);
         }
 
         return imageOperation;
     }
 
+    @Override
     public IContentAccessor formatImageURL(FacesContext facesContext,
             IContentAccessor contentAccessor,
             IGeneratedImageInformation generatedImageInformation,
@@ -526,6 +525,7 @@ public class ImageContentAccessorHandlerImpl extends
         return newContentAccessor;
     }
 
+    @Override
     public String getMimeType(String url) {
         int idx = url.lastIndexOf('/');
         if (idx >= 0) {
@@ -563,10 +563,12 @@ public class ImageContentAccessorHandlerImpl extends
         return null;
     }
 
+    @Override
     public boolean isProviderEnabled() {
         return contentAccessorAvailable;
     }
 
+    @Override
     public int getValidContenType(String contentType) {
         IImageResourceAdapter imageResourceAdapters[] = listImageResourceAdapters(
                 contentType, null);
@@ -576,10 +578,11 @@ public class ImageContentAccessorHandlerImpl extends
 
         Boolean valid;
         synchronized (validContentTypes) {
-            valid = (Boolean) validContentTypes.get(contentType);
+            valid = validContentTypes.get(contentType);
 
             if (valid == null) {
-                Iterator it = ImageIO.getImageWritersByMIMEType(contentType);
+                Iterator<ImageWriter> it = ImageIO
+                        .getImageWritersByMIMEType(contentType);
                 valid = (it.hasNext()) ? Boolean.TRUE : Boolean.FALSE;
 
                 validContentTypes.put(contentType, valid);
@@ -593,6 +596,7 @@ public class ImageContentAccessorHandlerImpl extends
         return NO_VALIDATION;
     }
 
+    @Override
     protected boolean isOperationSupported(String operationId,
             IContentAccessor imageContentAccessor) {
 
@@ -618,6 +622,7 @@ public class ImageContentAccessorHandlerImpl extends
         imageResourceAdaptersList.add(imageResourceAdapterBean);
     }
 
+    @Override
     public IImageResourceAdapter[] listImageResourceAdapters(
             String contentType, String suffix) {
 
@@ -625,7 +630,7 @@ public class ImageContentAccessorHandlerImpl extends
             return IMAGE_RESOURCE_ADAPTER_EMPTY_ARRAY;
         }
 
-        List ret = null;
+        List<IImageResourceAdapter> ret = null;
 
         for (int i = 0; i < imageResourceAdapters.length; i++) {
             ImageResourceAdapterBean imageResourceAdapterBean = imageResourceAdapters[i];
@@ -642,7 +647,7 @@ public class ImageContentAccessorHandlerImpl extends
             }
 
             if (ret == null) {
-                ret = new ArrayList();
+                ret = new ArrayList<IImageResourceAdapter>();
             }
 
             ret.add(imageResourceAdapter);
@@ -652,8 +657,7 @@ public class ImageContentAccessorHandlerImpl extends
             return IMAGE_RESOURCE_ADAPTER_EMPTY_ARRAY;
         }
 
-        return (IImageResourceAdapter[]) ret
-                .toArray(new IImageResourceAdapter[ret.size()]);
+        return ret.toArray(new IImageResourceAdapter[ret.size()]);
     }
 
     /**
@@ -662,7 +666,6 @@ public class ImageContentAccessorHandlerImpl extends
      * @version $Revision$ $Date$
      */
     public static final class OperationBean {
-        private static final String REVISION = "$Revision$";
 
         private String name;
 
@@ -678,13 +681,13 @@ public class ImageContentAccessorHandlerImpl extends
 
         private String encoderMimeType;
 
-        private Map parameters = new HashMap();
+        private Map<String, Object> parameters = new HashMap<String, Object>();
 
         public String getClassName() {
             return className;
         }
 
-        public Map getParameterMap() {
+        public Map<String, Object> getParameterMap() {
             return parameters;
         }
 
@@ -752,9 +755,9 @@ public class ImageContentAccessorHandlerImpl extends
 
         private String className;
 
-        private Set contentTypes;
+        private Set<String> contentTypes;
 
-        private Set suffixes;
+        private Set<String> suffixes;
 
         private IImageResourceAdapter imageResourceAdapter;
 
@@ -791,21 +794,16 @@ public class ImageContentAccessorHandlerImpl extends
         }
 
         protected void resolveInstance() {
-            Class clazz;
+            Class< ? extends IImageResourceAdapter> clazz;
             try {
-                clazz = ClassLocator.load(className, null, FacesContext
-                        .getCurrentInstance());
+                clazz = ClassLocator.load(className, null,
+                        FacesContext.getCurrentInstance(),
+                        IImageResourceAdapter.class);
 
             } catch (Exception ex) {
                 throw new FacesException("Can not load class '" + className
                         + "' specified by imageAdapter id='" + getId() + "'.",
                         ex);
-            }
-
-            if (IImageResourceAdapter.class.isAssignableFrom(clazz) == false) {
-                throw new FacesException("Class '" + getClassName()
-                        + "' specified by imageAdapter id='" + getId()
-                        + "' must implement interface 'IImageResourceAdapter'.");
             }
 
             if ((clazz.getModifiers() & Modifier.ABSTRACT) > 0) {
@@ -815,8 +813,7 @@ public class ImageContentAccessorHandlerImpl extends
             }
 
             try {
-                imageResourceAdapter = (IImageResourceAdapter) clazz
-                        .newInstance();
+                imageResourceAdapter = clazz.newInstance();
 
             } catch (Exception ex) {
                 throw new FacesException("Can not load class '" + className
@@ -833,7 +830,7 @@ public class ImageContentAccessorHandlerImpl extends
             }
 
             if (suffixes == null) {
-                suffixes = new HashSet();
+                suffixes = new HashSet<String>();
             }
 
             suffixes.add(suffix.toLowerCase().trim());
@@ -853,7 +850,7 @@ public class ImageContentAccessorHandlerImpl extends
             }
 
             if (contentTypes == null) {
-                contentTypes = new HashSet();
+                contentTypes = new HashSet<String>();
             }
 
             contentTypes.add(contentType);

@@ -12,6 +12,9 @@ import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
  */
 public interface IFrameworkResourceGenerationInformation extends
         IGenerationResourceInformation {
+
+    String FRAMEWORK_ATTRIBUTE = "org.rcfaces.FrameworkResource";
+
     boolean isFrameworkResource();
 
 }

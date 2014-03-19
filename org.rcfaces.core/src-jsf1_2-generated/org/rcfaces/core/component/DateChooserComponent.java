@@ -3,6 +3,8 @@ package org.rcfaces.core.component;
 import org.rcfaces.core.internal.converter.LiteralDateConverter;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.converter.CalendarLayoutConverter;
+import org.rcfaces.core.internal.converter.TextPositionConverter
+			;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import java.lang.String;
 import org.apache.commons.logging.LogFactory;
@@ -21,7 +23,6 @@ import java.util.Set;
 import java.util.Arrays;
 import org.rcfaces.core.component.capability.IValueChangeEventCapability;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
-import org.rcfaces.core.internal.converter.TextPositionConverter;
 
 /**
  * <p>The dateChooser Component is a button that shows a calendar and help the user to choose a date. It can be associated to a entry field, the choosen date is then automatically entered in the field. It works like an <a href="/comps/imageButtonComponent.html">Image Button Component</a>. The dateChooser Component does <b>not</b> provide an Entry field.</p>
@@ -436,7 +437,8 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 	 * @return value format
 	 */
 	public String getForValueFormat(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.FOR_VALUE_FORMAT, facesContext);
+		String s = engine.getStringProperty(Properties.FOR_VALUE_FORMAT, facesContext);
+		return s;
 	}
 
 	/**
@@ -504,7 +506,8 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 	 * @return the label used
 	 */
 	public String getHomeDateLabel(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.HOME_DATE_LABEL, facesContext);
+		String s = engine.getStringProperty(Properties.HOME_DATE_LABEL, facesContext);
+		return s;
 	}
 
 	/**
@@ -532,7 +535,8 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 	}
 
 	public String getPopupStyleClass(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.POPUP_STYLE_CLASS, facesContext);
+		String s = engine.getStringProperty(Properties.POPUP_STYLE_CLASS, facesContext);
+		return s;
 	}
 
 	public void setPopupStyleClass(String popupStyleClass) {

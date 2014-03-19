@@ -1,10 +1,10 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IToolTipCapability;
 import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
 import org.apache.commons.logging.Log;
 import java.util.HashSet;
+import org.rcfaces.core.component.capability.IToolTipTextCapability;
 import java.lang.String;
 import org.apache.commons.logging.LogFactory;
 import java.util.Arrays;
@@ -12,7 +12,7 @@ import java.util.Set;
 import org.rcfaces.core.component.AbstractItemComponent;
 
 public class SelectItemComponent extends AbstractItemComponent implements 
-	IToolTipCapability {
+	IToolTipTextCapability {
 
 	private static final Log LOG = LogFactory.getLog(SelectItemComponent.class);
 
@@ -32,41 +32,25 @@ public class SelectItemComponent extends AbstractItemComponent implements
 		setId(componentId);
 	}
 
-	public void setToolTip(String text) {
+	public void setToolTipText(String text) {
 
 
-			setItemDescription(text);
+				setItemDescription(text);
 			
 	}
 
-	public String getToolTip() {
+	public String getToolTipText() {
 
 
-			return getItemDescription();
+				return getItemDescription();
 			
 	}
 
-	public java.lang.String getToolTipText() {
-		return getToolTipText(null);
-	}
+	public boolean isToolTipTextSetted() {
 
-	/**
-	 * See {@link #getToolTipText() getToolTipText()} for more details
-	 */
-	public java.lang.String getToolTipText(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.TOOL_TIP_TEXT, facesContext);
-	}
 
-	/**
-	 * Returns <code>true</code> if the attribute "toolTipText" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isToolTipTextSetted() {
-		return engine.isPropertySetted(Properties.TOOL_TIP_TEXT);
-	}
-
-	public void setToolTipText(java.lang.String toolTipText) {
-		engine.setProperty(Properties.TOOL_TIP_TEXT, toolTipText);
+				return getItemDescription()!=null;
+			
 	}
 
 	protected Set getCameliaFields() {

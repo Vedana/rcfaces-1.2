@@ -26,7 +26,6 @@ import javax.faces.render.Renderer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IImageCapability;
-import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
@@ -42,21 +41,21 @@ import org.rcfaces.core.item.BasicSelectItem;
 import org.rcfaces.core.item.IClientDataItem;
 import org.rcfaces.core.item.IImagesItem;
 import org.rcfaces.core.item.ISelectItem;
-import org.rcfaces.core.item.ISelectItemGroup;
 import org.rcfaces.core.lang.IAdaptable;
 import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredCollection;
-import org.rcfaces.core.model.IFiltredCollection2;
 import org.rcfaces.core.model.IFiltredCollection.IFiltredIterator;
+import org.rcfaces.core.model.IFiltredCollection2;
+import org.rcfaces.core.util.SelectItemTools;
 import org.rcfaces.renderkit.html.internal.EventDecoders;
+import org.rcfaces.renderkit.html.internal.EventDecoders.IEventDecoder;
+import org.rcfaces.renderkit.html.internal.EventDecoders.IEventObjectDecoder;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRequestContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
-import org.rcfaces.renderkit.html.internal.EventDecoders.IEventDecoder;
-import org.rcfaces.renderkit.html.internal.EventDecoders.IEventObjectDecoder;
 
 /**
  * 
@@ -66,7 +65,6 @@ import org.rcfaces.renderkit.html.internal.EventDecoders.IEventObjectDecoder;
 public abstract class AbstractSelectItemsDecorator extends
         AbstractComponentDecorator implements ISelectItemNodeWriter,
         IEventObjectDecoder {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(AbstractSelectItemsDecorator.class);
@@ -117,7 +115,7 @@ public abstract class AbstractSelectItemsDecorator extends
 
             this.selectItemsContext = context;
 
-            Iterator it = component.getChildren().iterator();
+            Iterator<UIComponent> it = iterateNodes(component);
             encodeComponents(it, 0, true);
 
             postEncodeContainer();
@@ -190,8 +188,8 @@ public abstract class AbstractSelectItemsDecorator extends
         }
 
         decoratorComponentData = requestContext.getComponentData(
-                getComponent(), getComponentClientId(requestContext
-                        .getFacesContext()), null);
+                getComponent(),
+                getComponentClientId(requestContext.getFacesContext()), null);
 
         return decoratorComponentData;
     }
@@ -404,11 +402,9 @@ public abstract class AbstractSelectItemsDecorator extends
             return true;
         }
 
-        SelectItem selectItems[] = (SelectItem[]) adapt(value,
-                SelectItem[].class);
+        SelectItem selectItems[] = adapt(value, SelectItem[].class);
         if (selectItems == null) {
-            ISelectItem selectItems2[] = (ISelectItem[]) adapt(value,
-                    ISelectItem[].class);
+            ISelectItem selectItems2[] = adapt(value, ISelectItem[].class);
 
             if (selectItems2 != null) {
                 selectItems = new SelectItem[selectItems2.length];
@@ -436,7 +432,7 @@ public abstract class AbstractSelectItemsDecorator extends
             return true;
         }
 
-        SelectItem selectItem = (SelectItem) adapt(value, SelectItem.class);
+        SelectItem selectItem = adapt(value, SelectItem.class);
         if (selectItem == null) {
             ISelectItem selectItem2 = (ISelectItem) adapt(value,
                     SelectItem.class);
@@ -455,11 +451,10 @@ public abstract class AbstractSelectItemsDecorator extends
         return true;
     }
 
-    private Object adapt(Object adaptable, Class adapterClass) {
+    private <T> T adapt(Object adaptable, Class<T> adapterClass) {
 
         if (adaptable instanceof IAdaptable) {
-            Object adapted = ((IAdaptable) adaptable).getAdapter(adapterClass,
-                    null);
+            T adapted = ((IAdaptable) adaptable).getAdapter(adapterClass, null);
             if (adapted != null) {
                 return adapted;
             }
@@ -473,52 +468,8 @@ public abstract class AbstractSelectItemsDecorator extends
     }
 
     protected SelectItem convertToSelectItem(Object value) {
-        if ((value == null) || (value instanceof SelectItem)) {
-            return (SelectItem) value;
-        }
-
-        if (value instanceof ISelectItem) {
-            if (value instanceof ISelectItemGroup) {
-                ISelectItemGroup selectItemGroup = (ISelectItemGroup) value;
-
-                SelectItemGroup sig = new SelectItemGroup(selectItemGroup
-                        .getLabel(), selectItemGroup.getDescription(),
-                        selectItemGroup.isDisabled(), selectItemGroup
-                                .getSelectItems());
-
-                sig.setValue(selectItemGroup.getValue());
-
-                return sig;
-            }
-
-            ISelectItem selectItem = (ISelectItem) value;
-
-            return new SelectItem(selectItem.getValue(), selectItem.getLabel(),
-                    selectItem.getDescription(), selectItem.isDisabled());
-        }
-
-        if (value instanceof IAdaptable) {
-            IAdaptable adaptable = (IAdaptable) value;
-
-            SelectItem selectItem = (SelectItem) adaptable.getAdapter(
-                    SelectItem.class, null);
-            if (selectItem != null) {
-                return selectItem;
-            }
-        }
-
-        if (Constants.ADAPT_SELECT_ITEMS) {
-            RcfacesContext rcfacesContext = getComponentRenderContext()
-                    .getRenderContext().getProcessContext().getRcfacesContext();
-            SelectItem selectItem = (SelectItem) rcfacesContext
-                    .getAdapterManager().getAdapter(value, SelectItem.class,
-                            null);
-            if (selectItem != null) {
-                return selectItem;
-            }
-        }
-
-        return null;
+        return SelectItemTools.convertToSelectItem(getComponentRenderContext()
+                .getFacesContext(), value);
     }
 
     private boolean mapSelectItem(ISelectItemMapper mapper, SelectItem si) {
@@ -589,16 +540,23 @@ public abstract class AbstractSelectItemsDecorator extends
     }
 
     protected void encodeNodes(UIComponent component) throws WriterException {
-        Iterator it = component.getChildren().iterator();
+        Iterator<UIComponent> it = iterateNodes(component);
 
         encodeComponents(it, 0, true);
     }
 
-    protected void encodeComponents(Iterator it, int depth, boolean visible)
+    protected Iterator<UIComponent> iterateNodes(UIComponent component)
             throws WriterException {
+        Iterator<UIComponent> it = component.getChildren().iterator();
+
+        return it;
+    }
+
+    protected void encodeComponents(Iterator<UIComponent> it, int depth,
+            boolean visible) throws WriterException {
 
         for (; it.hasNext();) {
-            UIComponent component = (UIComponent) it.next();
+            UIComponent component = it.next();
 
             if (component instanceof UISelectItems) {
                 UISelectItems uiSelectItems = (UISelectItems) component;
@@ -690,46 +648,47 @@ public abstract class AbstractSelectItemsDecorator extends
                 }
             }
 
-            Iterator it;
+            Iterator< ? > it;
             if (value instanceof IFiltredCollection2) {
-                it = ((IFiltredCollection2) value).iterator(getComponent(),
-                        filterProperties, max);
+                it = ((IFiltredCollection2< ? >) value).iterator(
+                        getComponent(), filterProperties, max);
             } else {
-                it = ((IFiltredCollection) value).iterator(filterProperties,
-                        max);
+                it = ((IFiltredCollection< ? >) value).iterator(
+                        filterProperties, max);
             }
 
-            try {
-                int sic = 0;
+            if (it != null) {
+                try {
+                    int sic = 0;
 
-                for (; it.hasNext();) {
-                    Object item = it.next();
+                    for (; it.hasNext();) {
+                        Object item = it.next();
 
-                    SelectItem si = convertToSelectItem(item);
-                    if (si == null) {
-                        if (LOG.isDebugEnabled()) {
-                            LOG.debug("Can not convert '" + item
-                                    + "' to SelectItem !");
+                        SelectItem si = convertToSelectItem(item);
+                        if (si == null) {
+                            if (LOG.isDebugEnabled()) {
+                                LOG.debug("Can not convert '" + item
+                                        + "' to SelectItem !");
+                            }
+                            continue;
                         }
-                        continue;
+
+                        encodeSelectItem(component, si, depth, visible);
+
+                        sic++;
                     }
 
-                    encodeSelectItem(component, si, depth, visible);
-
-                    sic++;
-                }
-
-                if (it instanceof IFiltredCollection.IFiltredIterator) {
-                    int s = ((IFiltredCollection.IFiltredIterator) it)
-                            .getSize();
-                    if (s > sic) {
-                        selectItemCount += s - sic;
+                    if (it instanceof IFiltredIterator) {
+                        int s = ((IFiltredIterator) it).getSize();
+                        if (s > sic) {
+                            selectItemCount += s - sic;
+                        }
                     }
-                }
 
-            } finally {
-                if (it instanceof IFiltredIterator) {
-                    ((IFiltredIterator) it).release();
+                } finally {
+                    if (it instanceof IFiltredIterator) {
+                        ((IFiltredIterator) it).release();
+                    }
                 }
             }
 
@@ -827,7 +786,8 @@ public abstract class AbstractSelectItemsDecorator extends
         }
 
         throw new WriterException("Illegal uiSelectItems value type ! (class='"
-                + value.getClass() + "')", null, component);
+                + value.getClass() + "' value='" + value + "')", null,
+                component);
 
     }
 
@@ -900,7 +860,7 @@ public abstract class AbstractSelectItemsDecorator extends
         // On regarde maintenant les enfants du composant qui contient le
         // SelectItem
         if (component.getChildCount() > 0) {
-            encodeComponents(component.getChildren().iterator(), depth + 1, v);
+            encodeComponents(iterateNodes(component), depth + 1, v);
         }
 
         selectItemsContext.popSelectItem();
@@ -930,8 +890,8 @@ public abstract class AbstractSelectItemsDecorator extends
             Object selectItemValue) {
 
         return ValuesTools.valueToString(selectItemValue, getConverter(),
-                componentContext.getComponent(), componentContext
-                        .getFacesContext());
+                componentContext.getComponent(),
+                componentContext.getFacesContext());
     }
 
     protected Object convertToItemValue(
@@ -951,7 +911,7 @@ public abstract class AbstractSelectItemsDecorator extends
     protected final List listComponents(Map childrenClientIds, String itemIds,
             Class capability) {
 
-        List l = null;
+        List<UIComponent> l = null;
 
         StringTokenizer st = new StringTokenizer(itemIds,
                 HtmlTools.LIST_SEPARATORS);
@@ -968,24 +928,24 @@ public abstract class AbstractSelectItemsDecorator extends
             }
 
             if (l == null) {
-                l = new ArrayList();
+                l = new ArrayList<UIComponent>();
             }
 
             l.add(item);
         }
 
         if (l == null) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
 
         return l;
 
     }
 
-    protected final List listSelectItems(Map childrenValues, String itemIds,
-            Class capability) {
+    protected final List<SelectItem> listSelectItems(Map childrenValues,
+            String itemIds, Class capability) {
 
-        List l = null;
+        List<SelectItem> l = null;
 
         StringTokenizer st = new StringTokenizer(itemIds,
                 HtmlTools.LIST_SEPARATORS);
@@ -1002,22 +962,23 @@ public abstract class AbstractSelectItemsDecorator extends
             }
 
             if (l == null) {
-                l = new ArrayList();
+                l = new ArrayList<SelectItem>();
             }
 
             l.add(item);
         }
 
         if (l == null) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
 
         return l;
 
     }
 
-    protected final Map mapChildrenClientId(Map map,
-            IRequestContext renderContext, UIComponent container) {
+    protected final Map<String, UIComponent> mapChildrenClientId(
+            Map<String, UIComponent> map, IRequestContext renderContext,
+            UIComponent container) {
 
         List children = container.getChildren();
         for (Iterator it = children.iterator(); it.hasNext();) {
@@ -1029,7 +990,7 @@ public abstract class AbstractSelectItemsDecorator extends
             }
 
             if (map == null) {
-                map = new HashMap();
+                map = new HashMap<String, UIComponent>();
             }
             map.put(childClientId, child);
 
@@ -1043,7 +1004,8 @@ public abstract class AbstractSelectItemsDecorator extends
         return map;
     }
 
-    protected final Map mapChildrenItemValues(Map map, FacesContext context,
+    protected final Map<Object, UIComponent> mapChildrenItemValues(
+            Map<Object, UIComponent> map, FacesContext context,
             UIComponent container) {
 
         List children = container.getChildren();
@@ -1059,7 +1021,7 @@ public abstract class AbstractSelectItemsDecorator extends
             }
 
             if (map == null) {
-                map = new HashMap();
+                map = new HashMap<Object, UIComponent>();
             }
             map.put(value, child);
 
@@ -1349,4 +1311,8 @@ public abstract class AbstractSelectItemsDecorator extends
 
         javaScriptWriter.writeln(");");
     }
+
+    public void refreshNode(UIComponent component) throws WriterException {
+    }
+
 }

@@ -22,24 +22,22 @@ import org.rcfaces.core.lang.provider.ISelectionProvider;
  * @version $Revision$ $Date$
  */
 public class SelectionTools extends CollectionTools {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(SelectionTools.class);
 
     private static final IValuesAccessor SELECTION_PROVIDER_VALUES_ACCESSOR = new IValuesAccessor() {
-        private static final String REVISION = "$Revision$";
-
-        public int getCount(Object checkProvider) {
-            return ((ISelectionProvider) checkProvider)
+        public int getCount(Object selectionProvider) {
+            return ((ISelectionProvider) selectionProvider)
                     .getSelectedValuesCount();
         }
 
-        public Object getFirst(Object checkProvider, Object refValues) {
-            return ((ISelectionProvider) checkProvider).getFirstSelectedValue();
+        public Object getFirst(Object selectionProvider, Object refValues) {
+            return ((ISelectionProvider) selectionProvider)
+                    .getFirstSelectedValue();
         }
 
-        public Object[] listValues(Object checkProvider, Object refValues) {
-            return convertToObjectArray(((ISelectionProvider) checkProvider)
+        public Object[] listValues(Object selectionProvider, Object refValues) {
+            return convertToObjectArray(((ISelectionProvider) selectionProvider)
                     .getSelectedValues());
         }
 
@@ -71,7 +69,7 @@ public class SelectionTools extends CollectionTools {
     public static int getCount(Object selectedValues) {
         IValuesAccessor valuesAccessor = getValuesAccessor(selectedValues,
                 ISelectionProvider.class, SELECTION_PROVIDER_VALUES_ACCESSOR,
-                true);
+                true, true);
         if (valuesAccessor == null) {
             return 0;
         }
@@ -81,7 +79,7 @@ public class SelectionTools extends CollectionTools {
     public static Object getFirst(Object selectedValues, Object refValue) {
         IValuesAccessor valuesAccessor = getValuesAccessor(selectedValues,
                 ISelectionProvider.class, SELECTION_PROVIDER_VALUES_ACCESSOR,
-                true);
+                true, true);
         if (valuesAccessor == null) {
             return null;
         }
@@ -91,7 +89,7 @@ public class SelectionTools extends CollectionTools {
     public static Object[] listValues(Object selectedValues, Object refValue) {
         IValuesAccessor valuesAccessor = getValuesAccessor(selectedValues,
                 ISelectionProvider.class, SELECTION_PROVIDER_VALUES_ACCESSOR,
-                true);
+                true, true);
         if (valuesAccessor == null) {
             return EMPTY_VALUES;
         }
@@ -101,7 +99,7 @@ public class SelectionTools extends CollectionTools {
     public static Object getAdaptedValues(Object value, boolean useValue) {
         IValuesAccessor valuesAccessor = getValuesAccessor(value,
                 ICheckProvider.class, SELECTION_PROVIDER_VALUES_ACCESSOR,
-                useValue);
+                useValue, true);
 
         if (valuesAccessor == null) {
             return null;
@@ -112,7 +110,8 @@ public class SelectionTools extends CollectionTools {
 
     public static boolean setAdaptedValues(Object value, Object values) {
         IValuesAccessor valuesAccessor = getValuesAccessor(value,
-                ICheckProvider.class, SELECTION_PROVIDER_VALUES_ACCESSOR, false);
+                ICheckProvider.class, SELECTION_PROVIDER_VALUES_ACCESSOR,
+                false, true);
 
         if (valuesAccessor == null) {
             return false;
@@ -148,7 +147,8 @@ public class SelectionTools extends CollectionTools {
 
     public static void selectAll(FacesContext facesContext,
             ISelectionComponent component) {
-        selectAll((UIComponent) component, SELECTION_PROVIDER_VALUES_ACCESSOR);
+        selectAll((UIComponent) component, SELECTION_PROVIDER_VALUES_ACCESSOR,
+                null);
     }
 
     public static void deselect(FacesContext facesContext,
@@ -181,13 +181,13 @@ public class SelectionTools extends CollectionTools {
     }
 
     public static void setSelectionValues(FacesContext facesContext,
-            ISelectionComponent component, Set valuesSet) {
+            ISelectionProvider component, Set<Object> valuesSet) {
 
         setValues((UIComponent) component, SELECTION_PROVIDER_VALUES_ACCESSOR,
                 valuesSet);
     }
 
-    public static Set selectionValuesToSet(FacesContext facesContext,
+    public static Set<Object> selectionValuesToSet(FacesContext facesContext,
             ISelectionComponent component, boolean immutable) {
         return valuesToSet((UIComponent) component,
                 SELECTION_PROVIDER_VALUES_ACCESSOR, immutable);

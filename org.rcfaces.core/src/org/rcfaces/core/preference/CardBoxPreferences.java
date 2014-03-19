@@ -18,7 +18,6 @@ import org.rcfaces.core.component.iterator.ICardIterator;
  * @version $Revision$ $Date$
  */
 public class CardBoxPreferences extends AbstractComponentPreferences {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = -8616195336828413449L;
 

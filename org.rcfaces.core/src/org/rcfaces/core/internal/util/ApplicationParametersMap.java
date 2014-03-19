@@ -19,8 +19,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public final class ApplicationParametersMap implements Map {
-    private static final String REVISION = "$Revision$";
+public final class ApplicationParametersMap implements Map<String, Object> {
 
     private static final Log LOG = LogFactory
             .getLog(ApplicationParametersMap.class);
@@ -51,7 +50,7 @@ public final class ApplicationParametersMap implements Map {
         throw new UnsupportedOperationException();
     }
 
-    public Set entrySet() {
+    public Set<Map.Entry<String, Object>> entrySet() {
         throw new UnsupportedOperationException();
     }
 
@@ -71,11 +70,11 @@ public final class ApplicationParametersMap implements Map {
         return false;
     }
 
-    public Set keySet() {
+    public Set<String> keySet() {
         throw new UnsupportedOperationException();
     }
 
-    public Object put(Object key, Object value) {
+    public Object put(String key, Object value) {
 
         Object old = getInitParameter(key);
         Object old2 = getAttribute(key);
@@ -106,11 +105,15 @@ public final class ApplicationParametersMap implements Map {
         return old2;
     }
 
-    public void putAll(Map arg0) {
+    public void putAll(Map< ? extends String, ? extends Object> arg0) {
         throw new UnsupportedOperationException();
     }
 
     public Object remove(Object key) {
+        return remove((String) key);
+    }
+
+    public Object remove(String key) {
         return put(key, REMOVED);
     }
 
@@ -118,7 +121,7 @@ public final class ApplicationParametersMap implements Map {
         throw new UnsupportedOperationException();
     }
 
-    public Collection values() {
+    public Collection<Object> values() {
         throw new UnsupportedOperationException();
     }
 
@@ -154,7 +157,7 @@ public final class ApplicationParametersMap implements Map {
         }
 
         // Ne compile pas sans le cast !!!
-        externalContext.getApplicationMap().put((String)key, value);
+        externalContext.getApplicationMap().put((String) key, value);
     }
 
 }

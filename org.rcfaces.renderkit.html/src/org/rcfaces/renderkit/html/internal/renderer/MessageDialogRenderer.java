@@ -11,13 +11,13 @@ import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
-import org.rcfaces.renderkit.html.internal.AbstractJavaScriptRenderer;
 import org.rcfaces.renderkit.html.internal.AbstractSelectItemsRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.MessageDialogDecorator;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -79,45 +79,45 @@ public class MessageDialogRenderer extends AbstractSelectItemsRenderer {
             htmlWriter.getJavaScriptEnableMode().enableOnInit();
         }
 
-        htmlWriter.startElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
+        htmlWriter.startElementNS(LAZY_INIT_TAG);
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
 
         String chaine = component.getTitle(facesContext);
         if (chaine != null) {
-            htmlWriter.writeAttribute("v:title", chaine);
+            htmlWriter.writeAttributeNS("title", chaine);
         }
         chaine = component.getText(facesContext);
         if (chaine != null) {
-            htmlWriter.writeAttribute("v:text", chaine);
+            htmlWriter.writeAttributeNS("text", chaine);
         }
         chaine = component.getDefaultValue(facesContext);
         if (chaine != null) {
-            htmlWriter.writeAttribute("v:defaultValue", chaine);
+            htmlWriter.writeAttributeNS("defaultValue", chaine);
         }
         chaine = component.getWidth(facesContext);
         if (chaine != null) {
-            htmlWriter.writeAttribute("v:width", chaine);
+            htmlWriter.writeAttributeNS("width", chaine);
         }
         chaine = component.getHeight(facesContext);
         if (chaine != null) {
-            htmlWriter.writeAttribute("v:height", chaine);
+            htmlWriter.writeAttributeNS("height", chaine);
         }
         chaine = component.getWaiRole(facesContext);
         if (chaine != null) {
-            htmlWriter.writeAttribute("v:waiRole", chaine);
+            htmlWriter.writeAttributeNS("waiRole", chaine);
         }
         if (component.isDialogPrioritySetted()) {
-            htmlWriter.writeAttribute("v:dialogPriority", component
-                    .getDialogPriority(facesContext));
+            htmlWriter.writeAttributeNS("dialogPriority",
+                    component.getDialogPriority(facesContext));
         }
         chaine = component.getStyleClass(facesContext);
         if (chaine != null) {
-            htmlWriter.writeAttribute("v:styleClass", chaine);
+            htmlWriter.writeAttributeNS("styleClass", chaine);
         }
         chaine = component.getLookId(facesContext);
         if (chaine != null) {
-            htmlWriter.writeAttribute("v:lookId", chaine);
+            htmlWriter.writeAttributeNS("lookId", chaine);
         }
         if (component.isImageURLSetted()) {
             IContentAccessors contentAccessors = component
@@ -130,12 +130,12 @@ public class MessageDialogRenderer extends AbstractSelectItemsRenderer {
                     String imageSrc = imageAccessor.resolveURL(facesContext,
                             null, null);
                     if (imageSrc != null) {
-                        htmlWriter.writeAttribute("v:imageURL", imageSrc);
+                        htmlWriter.writeURIAttributeNS("imageURL", imageSrc);
                     }
                 }
             }
         }
-        htmlWriter.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
+        htmlWriter.endElementNS(LAZY_INIT_TAG);
 
         declareLazyJavaScriptRenderer(htmlWriter);
 
@@ -143,4 +143,13 @@ public class MessageDialogRenderer extends AbstractSelectItemsRenderer {
 
     }
 
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addComponent(LAZY_INIT_TAG);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "title", "text",
+                "defaultValue", "width", "height", "waiRole", "dialogPriority",
+                "styleClass", "lookId", "imageURL" });
+    }
 }

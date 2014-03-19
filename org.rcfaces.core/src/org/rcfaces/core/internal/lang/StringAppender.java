@@ -17,7 +17,6 @@ import org.apache.commons.logging.LogFactory;
  * @version $Revision$ $Date$
  */
 public final class StringAppender implements CharSequence {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(StringAppender.class);
 
@@ -194,6 +193,10 @@ public final class StringAppender implements CharSequence {
         return this;
     }
 
+    public StringAppender append(Object obj) {
+        return append(String.valueOf(obj));
+    }
+
     public StringAppender append(boolean b) {
         if (b) {
             return append("true");
@@ -233,6 +236,7 @@ public final class StringAppender implements CharSequence {
         return append(String.valueOf(f));
     }
 
+    @Override
     public String toString() {
         if (count == 0) {
             return "";
@@ -299,14 +303,16 @@ public final class StringAppender implements CharSequence {
 
     public Writer createWriter() {
         return new Writer() {
-            private static final String REVISION = "$Revision$";
 
+            @Override
             public void close() {
             }
 
+            @Override
             public void flush() {
             }
 
+            @Override
             public void write(char[] cbuf, int off, int len) {
                 StringAppender.this.append(cbuf, off, len);
             }
@@ -315,10 +321,12 @@ public final class StringAppender implements CharSequence {
                 StringAppender.this.append(c);
             }
 
+            @Override
             public void write(String s, int off, int len) {
                 StringAppender.this.append(s, off, len);
             }
 
+            @Override
             public void write(String s) {
                 StringAppender.this.append(s);
             }

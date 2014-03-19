@@ -451,7 +451,8 @@ public class MessageDialogComponent extends CameliaInputComponent implements
 	 * @return title
 	 */
 	public String getTitle(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.TITLE, facesContext);
+		String s = engine.getStringProperty(Properties.TITLE, facesContext);
+		return s;
 	}
 
 	/**
@@ -479,7 +480,8 @@ public class MessageDialogComponent extends CameliaInputComponent implements
 	}
 
 	public String getDefaultValue(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_VALUE, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_VALUE, facesContext);
+		return s;
 	}
 
 	public void setDefaultValue(String defaultValue) {

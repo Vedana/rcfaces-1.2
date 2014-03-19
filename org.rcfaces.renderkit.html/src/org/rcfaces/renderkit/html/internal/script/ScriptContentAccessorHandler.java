@@ -44,20 +44,19 @@ import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
  */
 public class ScriptContentAccessorHandler extends
         AbstractScriptContentAccessorHandler {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(ImageContentAccessorHandler.class);
 
     private static final String MERGE_SCRIPT_ENABLED = Constants
-            .getPackagePrefix()
-            + ".MERGE_SCRIPT_FILES";
+            .getPackagePrefix() + ".MERGE_SCRIPT_FILES";
 
     private boolean contentAccessorAvailable;
 
     private RcfacesContext rcfacesContext;
 
-    private final Map operationsById = new HashMap(32);
+    private final Map<String, IScriptOperation> operationsById = new HashMap<String, IScriptOperation>(
+            32);
 
     private final FileNameMap fileNameMap;
 
@@ -113,8 +112,7 @@ public class ScriptContentAccessorHandler extends
 
         if (isProviderEnabled() == false) {
             if (LOG.isDebugEnabled()) {
-                LOG
-                        .debug("Provider is disabled, return an unsupported content accessor flag");
+                LOG.debug("Provider is disabled, return an unsupported content accessor flag");
             }
 
             return ContentAccessorFactory.UNSUPPORTED_CONTENT_ACCESSOR;
@@ -296,8 +294,7 @@ public class ScriptContentAccessorHandler extends
     }
 
     public IScriptOperation getScriptOperation(String operationId) {
-        IScriptOperation scriptOperation = (IScriptOperation) operationsById
-                .get(operationId);
+        IScriptOperation scriptOperation = operationsById.get(operationId);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Operation id='" + operationId + "' => "

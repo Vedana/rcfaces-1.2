@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.faces.FacesException;
+import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItems;
 import javax.faces.model.SelectItem;
 
@@ -32,19 +33,17 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
  */
 public class TextEditorToolFolderRenderer extends ToolFolderRenderer {
 
-    private static final String REVISION = "$Revision$";
-
     public static final String SEPARATOR = "separator";
 
     private static final Log LOG = LogFactory
             .getLog(TextEditorToolFolderRenderer.class);
 
-    private static final String DEFAULT_ITEM_TYPES = 
-    		//ITextEditorButtonType.CUT
-            //+ ", " + ITextEditorButtonType.COPY + ", "
-            //+ ITextEditorButtonType.PASTE + ", " + SEPARATOR + ","
-            ITextEditorButtonType.UNDO + ", " + ITextEditorButtonType.REDO
-            + ", " + SEPARATOR + "," + ITextEditorButtonType.FONT_NAME + ", "
+    private static final String DEFAULT_ITEM_TYPES =
+    // ITextEditorButtonType.CUT
+    // + ", " + ITextEditorButtonType.COPY + ", "
+    // + ITextEditorButtonType.PASTE + ", " + SEPARATOR + ","
+    ITextEditorButtonType.UNDO + ", " + ITextEditorButtonType.REDO + ", "
+            + SEPARATOR + "," + ITextEditorButtonType.FONT_NAME + ", "
             + ITextEditorButtonType.FONT_SIZE + ", " + SEPARATOR + ", "
             + ITextEditorButtonType.BOLD + ", " + ITextEditorButtonType.ITALIC
             + ", " + ITextEditorButtonType.UNDERLINE + ", "
@@ -106,7 +105,8 @@ public class TextEditorToolFolderRenderer extends ToolFolderRenderer {
 
     private static final String DEFAULT_TEXT_EDITOR_TOOL_FOLDER_STYLE_CLASS = "f_textEditorToolFolder";
 
-    private static final Map TOOL_ITEMS_RENDERER = new HashMap(32);
+    private static final Map<String, IToolFolderItemRenderer> TOOL_ITEMS_RENDERER = new HashMap<String, IToolFolderItemRenderer>(
+            32);
     static {
         TOOL_ITEMS_RENDERER.put(ITextEditorButtonType.BOLD,
                 new TextEditorButtonItemRenderer(ITextEditorButtonType.BOLD));
@@ -138,7 +138,6 @@ public class TextEditorToolFolderRenderer extends ToolFolderRenderer {
                         ITextEditorButtonType.JUSTIFY_FULL, "alignment"));
 
         TOOL_ITEMS_RENDERER.put(SEPARATOR, new IToolFolderItemRenderer() {
-            private static final String REVISION = "$Revision$";
 
             public void appendChildren(IHtmlWriter htmlWriter, List children) {
                 children.add(new ToolItemSeparatorComponent());
@@ -213,8 +212,8 @@ public class TextEditorToolFolderRenderer extends ToolFolderRenderer {
                         });
     }
 
-    protected List getChildren(IHtmlWriter htmlWriter) {
-        List children = new ArrayList();
+    protected List<UIComponent> getChildren(IHtmlWriter htmlWriter) {
+        List<UIComponent> children = new ArrayList<UIComponent>();
 
         String itemTypes = ((TextEditorToolFolderComponent) htmlWriter
                 .getComponentRenderContext().getComponent())
@@ -231,7 +230,7 @@ public class TextEditorToolFolderRenderer extends ToolFolderRenderer {
 
                 String type = st.nextToken().toLowerCase();
 
-                IToolFolderItemRenderer renderer = (IToolFolderItemRenderer) TOOL_ITEMS_RENDERER
+                IToolFolderItemRenderer renderer = TOOL_ITEMS_RENDERER
                         .get(type);
 
                 if (renderer == null) {
@@ -243,7 +242,7 @@ public class TextEditorToolFolderRenderer extends ToolFolderRenderer {
             }
         }
 
-        List l = super.getChildren(htmlWriter);
+        List<UIComponent> l = super.getChildren(htmlWriter);
         l.addAll(children);
 
         return l;
@@ -274,7 +273,7 @@ public class TextEditorToolFolderRenderer extends ToolFolderRenderer {
      * @version $Revision$ $Date$
      */
     protected interface IToolFolderItemRenderer {
-        void appendChildren(IHtmlWriter htmlWriter, List children);
+        void appendChildren(IHtmlWriter htmlWriter, List<UIComponent> children);
     }
 
     /**
@@ -284,8 +283,6 @@ public class TextEditorToolFolderRenderer extends ToolFolderRenderer {
      */
     protected static class TextEditorButtonItemRenderer implements
             IToolFolderItemRenderer {
-
-        private static final String REVISION = "$Revision$";
 
         private final String type;
 
@@ -300,7 +297,8 @@ public class TextEditorToolFolderRenderer extends ToolFolderRenderer {
             this.groupName = groupName;
         }
 
-        public void appendChildren(IHtmlWriter htmlWriter, List children) {
+        public void appendChildren(IHtmlWriter htmlWriter,
+                List<UIComponent> children) {
 
             TextEditorImageButtonComponent button = new TextEditorImageButtonComponent(
                     type);
@@ -312,9 +310,10 @@ public class TextEditorToolFolderRenderer extends ToolFolderRenderer {
 
             String forId = toolFolderComponent.getFor();
 
-            String forClientId = htmlWriter.getHtmlComponentRenderContext()
-                    .getHtmlRenderContext().computeBrotherComponentClientId(
-                            toolFolderComponent, forId);
+            String forClientId = htmlWriter
+                    .getHtmlComponentRenderContext()
+                    .getHtmlRenderContext()
+                    .computeBrotherComponentClientId(toolFolderComponent, forId);
 
             button.setFor(forClientId);
 
@@ -349,7 +348,8 @@ public class TextEditorToolFolderRenderer extends ToolFolderRenderer {
 
         protected abstract String listItems(IHtmlWriter htmlWriter);
 
-        public void appendChildren(IHtmlWriter htmlWriter, List children) {
+        public void appendChildren(IHtmlWriter htmlWriter,
+                List<UIComponent> children) {
 
             TextEditorComboComponent combo = new TextEditorComboComponent(type);
 
@@ -386,9 +386,10 @@ public class TextEditorToolFolderRenderer extends ToolFolderRenderer {
 
             String forId = toolFolderComponent.getFor();
 
-            String forClientId = htmlWriter.getHtmlComponentRenderContext()
-                    .getHtmlRenderContext().computeBrotherComponentClientId(
-                            toolFolderComponent, forId);
+            String forClientId = htmlWriter
+                    .getHtmlComponentRenderContext()
+                    .getHtmlRenderContext()
+                    .computeBrotherComponentClientId(toolFolderComponent, forId);
 
             combo.setFor(forClientId);
 
@@ -405,8 +406,6 @@ public class TextEditorToolFolderRenderer extends ToolFolderRenderer {
      */
     public static class FontNameItem extends SelectItem implements
             IStyleClassItem {
-
-        private static final String REVISION = "$Revision$";
 
         private static final long serialVersionUID = -6713360676011803876L;
 

@@ -17,7 +17,4 @@ public class CssStyleHandler extends org.rcfaces.core.internal.facelets.CameliaC
 		setTextBody(ctx, c);
 	}
 
-	protected void applyNextHandler(FaceletContext ctx, UIComponent c) {
-	}
-
 }

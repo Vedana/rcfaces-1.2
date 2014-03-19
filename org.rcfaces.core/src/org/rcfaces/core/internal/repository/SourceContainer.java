@@ -9,13 +9,14 @@ import java.io.CharArrayReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -43,16 +44,13 @@ import org.xml.sax.InputSource;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public abstract class SourceContainer {
-    private static final String REVISION = "$Revision$";
+public abstract class SourceContainer<T> {
 
     private static final Log LOG = LogFactory.getLog(SourceContainer.class);
 
     protected static final String EXTERNAL_REPOSITORIES_CONFIG_NAME = "external.repositories";
 
     private static final int BUFFER_INITIAL_SIZE = 16000;
-
-    private static final String NO_PARAMETER = "~#NO_PARAMETER#~";
 
     private final ServletConfig servletConfig;
 
@@ -64,7 +62,7 @@ public abstract class SourceContainer {
 
     private final boolean canUseHash;
 
-    private final Set modules;
+    private final Set<String> modules;
 
     private final String externalRepositoriesPropertyName;
 
@@ -72,12 +70,12 @@ public abstract class SourceContainer {
 
     private final String repositoryType;
 
-    private final Map contentByParameters = new HashMap();
+    private final Map<T, IParameterizedContent<T>> contentByParameters = new HashMap<T, IParameterizedContent<T>>();
 
     // private byte[] sourceBufferExternalGZip = null;
 
     public SourceContainer(ServletConfig config, String repositoryType,
-            Set modules, String charSet, boolean canUseGzip,
+            Set<String> modules, String charSet, boolean canUseGzip,
             boolean canUseETag, boolean canUseHash,
             String externalRepositoriesPropertyName, String repositoryVersion)
             throws ServletException {
@@ -110,6 +108,8 @@ public abstract class SourceContainer {
         return canUseHash;
     }
 
+    protected abstract T noParameter();
+
     protected StringAppender postConstructBuffer(
             BasicParameterizedContent parameterizedBuffer, StringAppender buffer) {
 
@@ -132,6 +132,11 @@ public abstract class SourceContainer {
 
     public String getVersion() {
         return repositoryVersion;
+    }
+
+    protected RcfacesContext getRcfacesContext() {
+        return RcfacesContext.getInstance(servletConfig.getServletContext(),
+                null, null);
     }
 
     protected URL getURL(String path) {
@@ -232,14 +237,13 @@ public abstract class SourceContainer {
         return null;
     }
 
-    private List listExternalFiles(InputStream inputStream, String source,
-            boolean nameAttribute) {
+    private List<SourceFile> listExternalFiles(InputStream inputStream,
+            String source, boolean nameAttribute) {
 
         Digester digester = new Digester();
         digester.setUseContextClassLoader(true);
 
         digester.setEntityResolver(new EntityResolver() {
-            private static final String REVISION = "$Revision$";
 
             public InputSource resolveEntity(String string, String string1) {
                 return new InputSource(new CharArrayReader(new char[0]));
@@ -247,13 +251,14 @@ public abstract class SourceContainer {
 
         });
 
-        final List list = new ArrayList();
+        final List<SourceFile> list = new ArrayList<SourceFile>();
 
         if (nameAttribute) {
             final String[] baseDirectoryRef = new String[1];
 
             digester.addRule("repository", new Rule() {
 
+                @Override
                 public void begin(String namespace, String name,
                         Attributes attributes) {
 
@@ -269,6 +274,7 @@ public abstract class SourceContainer {
 
             digester.addRule("repository/module", new Rule() {
 
+                @Override
                 public void begin(String namespace, String name,
                         Attributes attributes) {
 
@@ -285,6 +291,7 @@ public abstract class SourceContainer {
 
             digester.addRule("repository/module/file", new Rule() {
 
+                @Override
                 public void begin(String namespace, String name,
                         Attributes attributes) {
 
@@ -304,6 +311,7 @@ public abstract class SourceContainer {
         } else {
             digester.addRule("repository/file", new Rule() {
 
+                @Override
                 public void body(String namespace, String name, String text) {
                     SourceFile file = createSourceFile(null, text, null);
                     if (file != null) {
@@ -391,21 +399,19 @@ public abstract class SourceContainer {
         servletConfig.getServletContext().log(message, th);
     }
 
-    public IParameterizedContent getDefaultContent() throws ServletException {
-        return getContent(NO_PARAMETER);
+    public IParameterizedContent<T> getDefaultContent() throws ServletException {
+        return getContent(noParameter());
     }
 
-    public IParameterizedContent getContent(String parameter)
+    public IParameterizedContent<T> getContent(T parameter)
             throws ServletException {
 
-        IParameterizedContent parameterizedContent;
+        IParameterizedContent<T> parameterizedContent;
         synchronized (contentByParameters) {
-            parameterizedContent = (IParameterizedContent) contentByParameters
-                    .get(parameter);
+            parameterizedContent = contentByParameters.get(parameter);
 
             if (parameterizedContent == null) {
-                parameterizedContent = createParameterizedContent((parameter != NO_PARAMETER) ? parameter
-                        : null);
+                parameterizedContent = createParameterizedContent(parameter);
 
                 contentByParameters.put(parameter, parameterizedContent);
             }
@@ -416,7 +422,7 @@ public abstract class SourceContainer {
         return parameterizedContent;
     }
 
-    protected IParameterizedContent createParameterizedContent(String parameter) {
+    protected IParameterizedContent<T> createParameterizedContent(T parameter) {
         return new BasicParameterizedContent(parameter);
     }
 
@@ -428,17 +434,18 @@ public abstract class SourceContainer {
         try {
             char buf[] = new char[4096];
 
-            InputStreamReader inr = new InputStreamReader(
-                    new BufferedInputStream(inputStream, buf.length), charSet);
+            Reader reader = new InputStreamReader(new BufferedInputStream(
+                    inputStream, buf.length), charSet);
 
             for (;;) {
-                int len = inr.read(buf, 0, buf.length);
+                int len = reader.read(buf, 0, buf.length);
                 if (len < 1) {
                     break;
                 }
 
                 buffer.append(buf, 0, len);
             }
+
         } finally {
             inputStream.close();
         }
@@ -449,9 +456,9 @@ public abstract class SourceContainer {
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
-    public interface IParameterizedContent {
+    public interface IParameterizedContent<T> {
 
-        SourceContainer getContainer();
+        SourceContainer<T> getContainer();
 
         void initialize() throws ServletException;
 
@@ -471,8 +478,9 @@ public abstract class SourceContainer {
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
-    protected class BasicParameterizedContent implements IParameterizedContent {
-        protected final String parameter;
+    protected class BasicParameterizedContent implements
+            IParameterizedContent<T> {
+        protected final T parameter;
 
         private boolean initialized;
 
@@ -488,7 +496,7 @@ public abstract class SourceContainer {
 
         private String hash = null;
 
-        public BasicParameterizedContent(String parameter) {
+        public BasicParameterizedContent(T parameter) {
             this.parameter = parameter;
         }
 
@@ -516,7 +524,7 @@ public abstract class SourceContainer {
             buffer = null;
         }
 
-        public SourceContainer getContainer() {
+        public SourceContainer<T> getContainer() {
             return SourceContainer.this;
         }
 
@@ -649,7 +657,7 @@ public abstract class SourceContainer {
                 return;
             }
 
-            List files;
+            List<SourceFile> files;
             try {
                 files = listExternalFiles(inputStream, path, repositoryFormal);
 
@@ -668,14 +676,17 @@ public abstract class SourceContainer {
                 return;
             }
 
-            for (Iterator it = files.iterator(); it.hasNext();) {
-                SourceFile sourceFile = (SourceFile) it.next();
-
+            Set<URL> alreadyDone = new HashSet<URL>(files.size());
+            for (SourceFile sourceFile : files) {
                 URL fileURL = getURL(sourceFile.getFileName());
                 if (fileURL == null) {
                     error("Can not get URL for path '" + sourceFile + "'.",
                             null);
                     continue;
+                }
+
+                if (alreadyDone.add(fileURL) == false) {
+                    LOG.error("ALERT: URL '" + fileURL + "' is added TWICE !");
                 }
 
                 try {
@@ -700,14 +711,13 @@ public abstract class SourceContainer {
             SourceContainer.this.addURLContent(urlConnection, buffer);
         }
 
-        protected List filterFiles(List files) {
+        protected List<SourceFile> filterFiles(List<SourceFile> files) {
             return files;
         }
 
         protected void addRepositoryFiles() throws ServletException {
 
-            RcfacesContext rcfacesContext = RcfacesContext.getInstance(
-                    servletConfig.getServletContext(), null, null);
+            RcfacesContext rcfacesContext = getRcfacesContext();
 
             String repositoriesPaths[] = rcfacesContext.getRepositoryManager()
                     .listRepositoryLocations(repositoryType);
@@ -751,6 +761,7 @@ public abstract class SourceContainer {
             this.fileName = fileName;
         }
 
+        @Override
         public String toString() {
             return "[SourceFile fileName='" + fileName + "']";
         }

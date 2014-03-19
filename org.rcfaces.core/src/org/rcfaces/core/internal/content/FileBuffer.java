@@ -20,7 +20,6 @@ import org.rcfaces.core.internal.webapp.ExtendedHttpServlet;
  * @version $Revision$ $Date$
  */
 public class FileBuffer implements IFileBuffer {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(FileBuffer.class);
 
@@ -165,12 +164,14 @@ public class FileBuffer implements IFileBuffer {
         errored = true;
     }
 
+    @Override
     public String toString() {
         return "[FileBuffer name='" + bufferName + "' errored=" + errored
                 + " file='" + file + "' contentType='" + contentType
                 + "' lastModified=" + lastModified + " size=" + size + "]";
     }
 
+    @Override
     protected void finalize() throws Throwable {
         if (file != null) {
             if (LOG.isDebugEnabled()) {

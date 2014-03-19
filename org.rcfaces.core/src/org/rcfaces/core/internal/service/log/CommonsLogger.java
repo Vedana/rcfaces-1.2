@@ -25,19 +25,16 @@ import org.rcfaces.core.internal.service.log.LogService.ILogger;
  * @version $Revision$ $Date$
  */
 public class CommonsLogger implements ILogger {
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory.getLog(CommonsLogger.class);
 
     private static final String DEFAULT_LOG_LEVEL_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".client.DEFAULT_LOG_LEVEL";
+            .getPackagePrefix() + ".client.DEFAULT_LOG_LEVEL";
 
     private static final String LOG_LEVELS_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".client.LOG_LEVELS";
+            .getPackagePrefix() + ".client.LOG_LEVELS";
 
-    private static final Map LOG_LEVELS = new HashMap(8);
+    private static final Map<String, Object> LOG_LEVELS = new HashMap<String, Object>(
+            8);
 
     static {
         LOG_LEVELS.put("FATAL", new Integer(0));
@@ -119,12 +116,13 @@ public class CommonsLogger implements ILogger {
         return (filters != null);
     }
 
+    @SuppressWarnings("unchecked")
     protected IFilter[] loadFilters(FacesContext facesContext) {
 
-        Map initParameters = facesContext.getExternalContext()
+        Map<String, Object> initParameters = facesContext.getExternalContext()
                 .getInitParameterMap();
 
-        List l = new ArrayList();
+        List<LogService.Filter> l = new ArrayList<LogService.Filter>();
 
         String level = (String) initParameters.get(DEFAULT_LOG_LEVEL_PARAMETER);
         if (level != null) {
@@ -160,6 +158,6 @@ public class CommonsLogger implements ILogger {
             return LogService.EMPTY_FILTERS;
         }
 
-        return (IFilter[]) l.toArray(new IFilter[l.size()]);
+        return l.toArray(new IFilter[l.size()]);
     }
 }

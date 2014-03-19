@@ -15,16 +15,20 @@
 	vertical-align: baseline;
 }
 
-/*
-.f_fieldSet_body {
-	top: 0;
-	left: 0;
+.f_fieldSet_cellBody {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	vertical-align: top;
 }
 
-.f_fieldSet_cellBody {
+.f_fieldSet_content {
 	position:relative;
+	margin: 0;
+	padding: 0;
+	border: 0;
 }
-*/
+
 
 
 

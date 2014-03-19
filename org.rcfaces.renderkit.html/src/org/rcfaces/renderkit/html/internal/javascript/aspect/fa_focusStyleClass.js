@@ -22,7 +22,7 @@ var __members = {
 	f_getFocusStyleClass: function() {
 		if (this._focusStyleClass===undefined) {
 			// Appel depuis le constructor de l'objet !
-			this._focusStyleClass=f_core.GetAttribute(this, "v:focusStyleClass");
+			this._focusStyleClass=f_core.GetAttributeNS(this, "focusStyleClass");
 		}
 		
 		return this._focusStyleClass;

@@ -11,6 +11,7 @@ import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import javax.el.ValueExpression;
 import java.util.HashSet;
 import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.capability.ICaptionCapability;
 import java.util.Set;
 import java.util.Arrays;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
@@ -36,6 +37,7 @@ public class MessageComponent extends AbstractMessageComponent implements
 	ITextCapability,
 	ISeverityStyleClassCapability,
 	ISeverityImagesCapability,
+	ICaptionCapability,
 	IImageAccessorsCapability {
 
 	private static final Log LOG = LogFactory.getLog(MessageComponent.class);
@@ -44,7 +46,7 @@ public class MessageComponent extends AbstractMessageComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractMessageComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"imageHeight","text","fatalStyleClass","showIfMessage","styleClass","fatalImageURL","showActiveComponentMessage","errorStyleClass","warnStyleClass","infoStyleClass","infoImageURL","warnImageURL","errorImageURL","imageWidth","imageURL"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"imageHeight","text","fatalStyleClass","showIfMessage","styleClass","fatalImageURL","caption","showActiveComponentMessage","errorStyleClass","warnStyleClass","infoStyleClass","infoImageURL","warnImageURL","errorImageURL","imageWidth","imageURL"}));
 	}
 
 	public MessageComponent() {
@@ -344,6 +346,29 @@ public class MessageComponent extends AbstractMessageComponent implements
 
 			return getImageAccessors(null);
 		
+	}
+
+	public java.lang.String getCaption() {
+		return getCaption(null);
+	}
+
+	/**
+	 * See {@link #getCaption() getCaption()} for more details
+	 */
+	public java.lang.String getCaption(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.CAPTION, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "caption" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isCaptionSetted() {
+		return engine.isPropertySetted(Properties.CAPTION);
+	}
+
+	public void setCaption(java.lang.String caption) {
+		engine.setProperty(Properties.CAPTION, caption);
 	}
 
 	public boolean isShowIfMessage() {

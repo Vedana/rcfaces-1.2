@@ -13,8 +13,10 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jfree.ui.Drawable;
+import org.rcfaces.core.component.capability.ICaptionCapability;
 import org.rcfaces.core.component.capability.IImageFormatCapability;
 import org.rcfaces.core.component.capability.ISizeCapability;
+import org.rcfaces.core.component.capability.ITabIndexCapability;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
@@ -39,6 +41,7 @@ public abstract class AbstractChartRenderer extends AbstractCssRenderer {
 
     private static final String DEFAULT_IMAGE_MIME_TYPE = "image/jpeg";
 
+    @Override
     protected void encodeBegin(IComponentWriter writer) throws WriterException {
         super.encodeBegin(writer);
 
@@ -50,6 +53,21 @@ public abstract class AbstractChartRenderer extends AbstractCssRenderer {
         UIComponent component = componentContext.getComponent();
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
+
+        String caption = null;
+        if (component instanceof ICaptionCapability) {
+            caption = ((ICaptionCapability) component).getCaption();
+
+            if (caption != null) {
+                if (component instanceof ITabIndexCapability) {
+                    ITabIndexCapability tab = (ITabIndexCapability) component;
+
+                    if (tab.getTabIndex() == null) {
+                        tab.setTabIndex(Integer.valueOf(0));
+                    }
+                }
+            }
+        }
 
         htmlWriter.startElement(IHtmlElements.IMG);
 
@@ -152,6 +170,10 @@ public abstract class AbstractChartRenderer extends AbstractCssRenderer {
         }
         if (imageHeight > 0) {
             htmlWriter.writeHeight(imageHeight);
+        }
+
+        if (caption != null) {
+            htmlWriter.writeAriaLabel(caption);
         }
 
         htmlWriter.endElement(IHtmlElements.IMG);

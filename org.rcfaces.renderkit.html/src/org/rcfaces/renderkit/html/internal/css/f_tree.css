@@ -107,6 +107,11 @@
 	background: transparent url('tree/command.gif') no-repeat scroll 0 0;
 }
 
+.f_tree_command_leaf,
+.f_tree_command_leaf_selected {
+	cursor: default;
+}
+
 .f_tree_command_closed,
 .f_tree_command_closed_selected {
 	background-position: -16px 0;
@@ -117,9 +122,6 @@
 	padding: 0;
 	margin: 0 2px 0 0;
 	cursor: pointer;
-	-moz-user-focus: ignore;
-	width: 16px;
-	height: 16px;
 }
 
 .f_tree_label {
@@ -127,9 +129,16 @@
 	padding: 2px 1px 2px 1px;
 	text-decoration: inherit;
 	white-space: nowrap;
+	color: black;
+	text-decoration: none;
 }
 
-.f_tree_label_cursor {
+.f_tree_label:hover {
+	text-decoration: none;
+	color: black;
+}
+
+.f_tree_checkable .f_tree_label_cursor {
 	padding: 1px 0 1px 0;
 	border: 1px dotted black;
 }
@@ -149,4 +158,34 @@
 .f_tree_waiting {
 	height: 16px;
 }
+
+.f_tree_commandHasImages .f_tree_command {
+	background: none !important;
+	background-image: none !important;
+}
+
+.f_tree_caption {
+	position: absolute;
+	left: -10000px;
+	top: -10000px;
+	display: block;
+}
+
+.f_tree_checkButton {
+	border: 0;
+	padding: 0;
+	margin: 0;
+	width: 16px;
+	height: 16px;
+}
+
+.f_tree_checkImage {
+	border: 0;
+	padding: 0;
+	margin: 0;
+	width: 16px;
+	height: 16px;
+	vertical-align: top;	
+}
+
 

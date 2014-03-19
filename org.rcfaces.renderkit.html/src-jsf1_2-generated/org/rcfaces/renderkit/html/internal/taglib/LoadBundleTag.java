@@ -1,7 +1,6 @@
 package org.rcfaces.renderkit.html.internal.taglib;
 
 import javax.faces.component.UIComponent;
-import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.renderkit.html.component.LoadBundleComponent;
 import org.apache.commons.logging.LogFactory;
 import javax.servlet.jsp.tagext.Tag;
@@ -13,6 +12,7 @@ import javax.el.ValueExpression;
 import org.apache.commons.logging.Log;
 import javax.faces.component.UIViewRoot;
 import org.rcfaces.core.internal.tools.ListenersTools1_2;
+import org.rcfaces.renderkit.html.component.Properties;
 
 public class LoadBundleTag extends CameliaTag implements Tag {
 
@@ -28,23 +28,23 @@ public class LoadBundleTag extends CameliaTag implements Tag {
 		return LoadBundleComponent.COMPONENT_TYPE;
 	}
 
-	public final void setBundleName(ValueExpression bundleName) {
+	public void setBundleName(ValueExpression bundleName) {
 		this.bundleName = bundleName;
 	}
 
-	public final void setBaseName(ValueExpression baseName) {
+	public void setBaseName(ValueExpression baseName) {
 		this.baseName = baseName;
 	}
 
-	public final void setSide(ValueExpression side) {
+	public void setSide(ValueExpression side) {
 		this.side = side;
 	}
 
-	public final void setServerScope(ValueExpression serverScope) {
+	public void setServerScope(ValueExpression serverScope) {
 		this.serverScope = serverScope;
 	}
 
-	public final void setOverride(ValueExpression override) {
+	public void setOverride(ValueExpression override) {
 		this.override = override;
 	}
 

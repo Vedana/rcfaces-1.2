@@ -10,6 +10,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -17,7 +18,6 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  * @version $Revision$ $Date$
  */
 public class ViewErrorListenerRenderer extends AbstractJavaScriptRenderer {
-    private static final String REVISION = "$Revision$";
 
     public void encodeBegin(IComponentWriter writer) throws WriterException {
         super.encodeBegin(writer);
@@ -28,11 +28,11 @@ public class ViewErrorListenerRenderer extends AbstractJavaScriptRenderer {
         if (htmlComponentRenderContext.getHtmlRenderContext()
                 .getJavaScriptRenderContext().isCollectorMode() == false) {
 
-            htmlWriter.startElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
+            htmlWriter.startElementNS(LAZY_INIT_TAG);
             writeHtmlAttributes(htmlWriter);
             writeJavaScriptAttributes(htmlWriter);
 
-            htmlWriter.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
+            htmlWriter.endElementNS(LAZY_INIT_TAG);
 
             declareLazyJavaScriptRenderer(htmlWriter);
 
@@ -55,8 +55,9 @@ public class ViewErrorListenerRenderer extends AbstractJavaScriptRenderer {
                 .allocateVarName();
         jsWriter.setComponentVarName(varName);
 
-        jsWriter.write(varName).write('=').writeCall(getJavaScriptClassName(),
-                "f_newInstance").writeln(");");
+        jsWriter.write(varName).write('=')
+                .writeCall(getJavaScriptClassName(), "f_newInstance")
+                .writeln(");");
     }
 
     protected String getJavaScriptClassName() {
@@ -71,5 +72,11 @@ public class ViewErrorListenerRenderer extends AbstractJavaScriptRenderer {
     protected boolean sendCompleteComponent(
             IHtmlComponentRenderContext htmlComponentContext) {
         return false;
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addComponent(LAZY_INIT_TAG);
     }
 }

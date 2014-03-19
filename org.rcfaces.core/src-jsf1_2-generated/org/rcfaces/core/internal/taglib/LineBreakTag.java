@@ -26,19 +26,19 @@ public class LineBreakTag extends CameliaTag implements Tag {
 		return LineBreakComponent.COMPONENT_TYPE;
 	}
 
-	public final void setStyleClass(ValueExpression styleClass) {
+	public void setStyleClass(ValueExpression styleClass) {
 		this.styleClass = styleClass;
 	}
 
-	public final void setVisible(ValueExpression visible) {
+	public void setVisible(ValueExpression visible) {
 		this.visible = visible;
 	}
 
-	public final void setHiddenMode(ValueExpression hiddenMode) {
+	public void setHiddenMode(ValueExpression hiddenMode) {
 		this.hiddenMode = hiddenMode;
 	}
 
-	public final void setRendered(ValueExpression rendered) {
+	public void setRendered(ValueExpression rendered) {
 		this.rendered = rendered;
 	}
 

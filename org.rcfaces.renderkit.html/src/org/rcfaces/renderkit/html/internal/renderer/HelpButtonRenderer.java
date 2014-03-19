@@ -17,6 +17,7 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -24,7 +25,6 @@ import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
  * @version $Revision$ $Date$
  */
 public class HelpButtonRenderer extends ImageButtonRenderer {
-    private static final String REVISION = "$Revision$";
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.HELP_BUTTON;
@@ -58,7 +58,6 @@ public class HelpButtonRenderer extends ImageButtonRenderer {
      * @version $Revision$ $Date$
      */
     protected class HelpButtonDecorator extends ImageButtonDecorator {
-        private static final String REVISION = "$Revision$";
 
         public HelpButtonDecorator(IImageButtonFamilly imageButtonFamilly) {
             super(imageButtonFamilly);
@@ -82,7 +81,7 @@ public class HelpButtonRenderer extends ImageButtonRenderer {
                                 forId);
 
                 if (forClientId != null) {
-                    writer.writeAttribute("v:for", forClientId);
+                    writer.writeAttributeNS("for", forClientId);
                 }
             }
         }
@@ -104,5 +103,11 @@ public class HelpButtonRenderer extends ImageButtonRenderer {
                 writer.writeHeight(height);
             }
         }
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "for" });
     }
 }

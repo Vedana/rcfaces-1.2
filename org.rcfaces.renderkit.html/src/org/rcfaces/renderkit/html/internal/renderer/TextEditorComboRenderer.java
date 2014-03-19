@@ -10,6 +10,7 @@ import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -17,7 +18,6 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  * @version $Revision$ $Date$
  */
 public class TextEditorComboRenderer extends ComboRenderer {
-    private static final String REVISION = "$Revision$";
 
     protected void encodeBegin(IComponentWriter writer) throws WriterException {
         TextEditorComboComponent component = (TextEditorComboComponent) writer
@@ -45,21 +45,27 @@ public class TextEditorComboRenderer extends ComboRenderer {
 
         String type = combo.getType(facesContext);
         if (type != null) {
-            htmlWriter.writeAttribute("v:type", type);
+            htmlWriter.writeAttributeNS("type", type);
         }
 
         String forProperty = combo.getFor(facesContext);
         if (forProperty != null) {
-            htmlWriter.writeAttribute("v:for", forProperty);
+            htmlWriter.writeAttributeNS("for", forProperty);
 
             htmlWriter.getJavaScriptEnableMode().enableOnInit(); // Pour
-                                                                    // positionner
-                                                                    // la combo
-                                                                    // en
-                                                                    // fonction
-                                                                    // de l'état
-                                                                    // de la
-                                                                    // target
+                                                                 // positionner
+                                                                 // la combo
+                                                                 // en
+                                                                 // fonction
+                                                                 // de l'état
+                                                                 // de la
+                                                                 // target
         }
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "type", "for" });
     }
 }

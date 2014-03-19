@@ -19,7 +19,6 @@ import org.rcfaces.core.internal.renderkit.IRendererExtension;
  * @version $Revision$ $Date$
  */
 public class CameliaComponents {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(CameliaComponents.class);
 
@@ -63,19 +62,18 @@ public class CameliaComponents {
 
         } else {
             try {
-                Iterator kids = component.getFacetsAndChildren();
+                Iterator<UIComponent> kids = component.getFacetsAndChildren();
                 while (kids.hasNext()) {
-                    UIComponent kid = (UIComponent) kids.next();
+                    UIComponent kid = kids.next();
                     kid.processDecodes(context);
                 }
 
             } catch (RuntimeException e) {
                 if (LOG.isDebugEnabled()) {
-                    LOG
-                            .debug(
-                                    "Process decodes (by iterator) of children of component '"
-                                            + component.getId()
-                                            + "' throws exception.", e);
+                    LOG.debug(
+                            "Process decodes (by iterator) of children of component '"
+                                    + component.getId() + "' throws exception.",
+                            e);
                 }
 
                 throw e;

@@ -18,6 +18,10 @@ public class TreeTag extends AbstractInputTag implements Tag {
 
 	private static final Log LOG=LogFactory.getLog(TreeTag.class);
 
+	private ValueExpression caption;
+	private ValueExpression headingLevel;
+	private ValueExpression outlinedLabel;
+	private ValueExpression outlinedLabelMethod;
 	private ValueExpression doubleClickListeners;
 	private ValueExpression required;
 	private ValueExpression horizontalScrollPosition;
@@ -64,192 +68,220 @@ public class TreeTag extends AbstractInputTag implements Tag {
 	private ValueExpression bodyDroppable;
 	private ValueExpression cursorValue;
 	private ValueExpression expansionUseValue;
+	private ValueExpression schrodingerCheckable;
 	public String getComponentType() {
 		return TreeComponent.COMPONENT_TYPE;
 	}
 
-	public final void setDoubleClickListener(ValueExpression doubleClickListeners) {
+	public void setCaption(ValueExpression caption) {
+		this.caption = caption;
+	}
+
+	public void setHeadingLevel(ValueExpression headingLevel) {
+		this.headingLevel = headingLevel;
+	}
+
+	public void setOutlinedLabel(ValueExpression outlinedLabel) {
+		this.outlinedLabel = outlinedLabel;
+	}
+
+	public void setOutlinedLabelMethod(ValueExpression outlinedLabelMethod) {
+		this.outlinedLabelMethod = outlinedLabelMethod;
+	}
+
+	public void setDoubleClickListener(ValueExpression doubleClickListeners) {
 		this.doubleClickListeners = doubleClickListeners;
 	}
 
-	public final void setRequired(ValueExpression required) {
+	public void setRequired(ValueExpression required) {
 		this.required = required;
 	}
 
-	public final void setHorizontalScrollPosition(ValueExpression horizontalScrollPosition) {
+	public void setHorizontalScrollPosition(ValueExpression horizontalScrollPosition) {
 		this.horizontalScrollPosition = horizontalScrollPosition;
 	}
 
-	public final void setVerticalScrollPosition(ValueExpression verticalScrollPosition) {
+	public void setVerticalScrollPosition(ValueExpression verticalScrollPosition) {
 		this.verticalScrollPosition = verticalScrollPosition;
 	}
 
-	public final void setBorder(ValueExpression border) {
+	public void setBorder(ValueExpression border) {
 		this.border = border;
 	}
 
-	public final void setReadOnly(ValueExpression readOnly) {
+	public void setReadOnly(ValueExpression readOnly) {
 		this.readOnly = readOnly;
 	}
 
-	public final void setShowValue(ValueExpression showValue) {
+	public void setShowValue(ValueExpression showValue) {
 		this.showValue = showValue;
 	}
 
-	public final void setOverStyleClass(ValueExpression overStyleClass) {
+	public void setOverStyleClass(ValueExpression overStyleClass) {
 		this.overStyleClass = overStyleClass;
 	}
 
-	public final void setFilterProperties(ValueExpression filterProperties) {
+	public void setFilterProperties(ValueExpression filterProperties) {
 		this.filterProperties = filterProperties;
 	}
 
-	public final void setLoadListener(ValueExpression loadListeners) {
+	public void setLoadListener(ValueExpression loadListeners) {
 		this.loadListeners = loadListeners;
 	}
 
-	public final void setExpandListener(ValueExpression expandListeners) {
+	public void setExpandListener(ValueExpression expandListeners) {
 		this.expandListeners = expandListeners;
+<<<<<<< HEAD
+=======
 	}
 
-	public final void setDragListener(ValueExpression dragListeners) {
+	public void setPreSelectionListener(ValueExpression preSelectionListeners) {
+		this.preSelectionListeners = preSelectionListeners;
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
+	}
+
+	public void setDragListener(ValueExpression dragListeners) {
 		this.dragListeners = dragListeners;
 	}
 
-	public final void setDragEffects(ValueExpression dragEffects) {
+	public void setDragEffects(ValueExpression dragEffects) {
 		this.dragEffects = dragEffects;
 	}
 
-	public final void setDragTypes(ValueExpression dragTypes) {
+	public void setDragTypes(ValueExpression dragTypes) {
 		this.dragTypes = dragTypes;
 	}
 
-	public final void setDraggable(ValueExpression draggable) {
+	public void setDraggable(ValueExpression draggable) {
 		this.draggable = draggable;
 	}
 
-	public final void setDropListener(ValueExpression dropListeners) {
+	public void setDropListener(ValueExpression dropListeners) {
 		this.dropListeners = dropListeners;
 	}
 
-	public final void setDropCompleteListener(ValueExpression dropCompleteListeners) {
+	public void setDropCompleteListener(ValueExpression dropCompleteListeners) {
 		this.dropCompleteListeners = dropCompleteListeners;
 	}
 
-	public final void setDropEffects(ValueExpression dropEffects) {
+	public void setDropEffects(ValueExpression dropEffects) {
 		this.dropEffects = dropEffects;
 	}
 
-	public final void setDropTypes(ValueExpression dropTypes) {
+	public void setDropTypes(ValueExpression dropTypes) {
 		this.dropTypes = dropTypes;
 	}
 
-	public final void setDroppable(ValueExpression droppable) {
+	public void setDroppable(ValueExpression droppable) {
 		this.droppable = droppable;
 	}
 
-	public final void setCheckable(ValueExpression checkable) {
+	public void setCheckable(ValueExpression checkable) {
 		this.checkable = checkable;
 	}
 
-	public final void setCheckCardinality(ValueExpression checkCardinality) {
+	public void setCheckCardinality(ValueExpression checkCardinality) {
 		this.checkCardinality = checkCardinality;
 	}
 
-	public final void setCheckListener(ValueExpression checkListeners) {
+	public void setCheckListener(ValueExpression checkListeners) {
 		this.checkListeners = checkListeners;
 	}
 
-	public final void setCheckedValues(ValueExpression checkedValues) {
+	public void setCheckedValues(ValueExpression checkedValues) {
 		this.checkedValues = checkedValues;
 	}
 
-	public final void setClientCheckFullState(ValueExpression clientCheckFullState) {
+	public void setClientCheckFullState(ValueExpression clientCheckFullState) {
 		this.clientCheckFullState = clientCheckFullState;
 	}
 
-	public final void setSelectable(ValueExpression selectable) {
+	public void setSelectable(ValueExpression selectable) {
 		this.selectable = selectable;
 	}
 
-	public final void setSelectionCardinality(ValueExpression selectionCardinality) {
+	public void setSelectionCardinality(ValueExpression selectionCardinality) {
 		this.selectionCardinality = selectionCardinality;
 	}
 
-	public final void setSelectionListener(ValueExpression selectionListeners) {
+	public void setSelectionListener(ValueExpression selectionListeners) {
 		this.selectionListeners = selectionListeners;
 	}
 
-	public final void setSelectedValues(ValueExpression selectedValues) {
+	public void setSelectedValues(ValueExpression selectedValues) {
 		this.selectedValues = selectedValues;
 	}
 
-	public final void setClientSelectionFullState(ValueExpression clientSelectionFullState) {
+	public void setClientSelectionFullState(ValueExpression clientSelectionFullState) {
 		this.clientSelectionFullState = clientSelectionFullState;
 	}
 
-	public final void setPreloadedLevelDepth(ValueExpression preloadedLevelDepth) {
+	public void setPreloadedLevelDepth(ValueExpression preloadedLevelDepth) {
 		this.preloadedLevelDepth = preloadedLevelDepth;
 	}
 
-	public final void setExpandable(ValueExpression expandable) {
+	public void setExpandable(ValueExpression expandable) {
 		this.expandable = expandable;
 	}
 
-	public final void setExpandedValues(ValueExpression expandedValues) {
+	public void setExpandedValues(ValueExpression expandedValues) {
 		this.expandedValues = expandedValues;
 	}
 
-	public final void setDefaultImageURL(ValueExpression defaultImageURL) {
+	public void setDefaultImageURL(ValueExpression defaultImageURL) {
 		this.defaultImageURL = defaultImageURL;
 	}
 
-	public final void setDefaultSelectedImageURL(ValueExpression defaultSelectedImageURL) {
+	public void setDefaultSelectedImageURL(ValueExpression defaultSelectedImageURL) {
 		this.defaultSelectedImageURL = defaultSelectedImageURL;
 	}
 
-	public final void setDefaultExpandedImageURL(ValueExpression defaultExpandedImageURL) {
+	public void setDefaultExpandedImageURL(ValueExpression defaultExpandedImageURL) {
 		this.defaultExpandedImageURL = defaultExpandedImageURL;
 	}
 
-	public final void setDefaultCollapsedImageURL(ValueExpression defaultCollapsedImageURL) {
+	public void setDefaultCollapsedImageURL(ValueExpression defaultCollapsedImageURL) {
 		this.defaultCollapsedImageURL = defaultCollapsedImageURL;
 	}
 
-	public final void setDefaultDisabledImageURL(ValueExpression defaultDisabledImageURL) {
+	public void setDefaultDisabledImageURL(ValueExpression defaultDisabledImageURL) {
 		this.defaultDisabledImageURL = defaultDisabledImageURL;
 	}
 
-	public final void setDefaultLeafImageURL(ValueExpression defaultLeafImageURL) {
+	public void setDefaultLeafImageURL(ValueExpression defaultLeafImageURL) {
 		this.defaultLeafImageURL = defaultLeafImageURL;
 	}
 
-	public final void setDefaultSelectedLeafImageURL(ValueExpression defaultSelectedLeafImageURL) {
+	public void setDefaultSelectedLeafImageURL(ValueExpression defaultSelectedLeafImageURL) {
 		this.defaultSelectedLeafImageURL = defaultSelectedLeafImageURL;
 	}
 
-	public final void setDefaultExpandedLeafImageURL(ValueExpression defaultExpandedLeafImageURL) {
+	public void setDefaultExpandedLeafImageURL(ValueExpression defaultExpandedLeafImageURL) {
 		this.defaultExpandedLeafImageURL = defaultExpandedLeafImageURL;
 	}
 
-	public final void setDefaultDisabledLeafImageURL(ValueExpression defaultDisabledLeafImageURL) {
+	public void setDefaultDisabledLeafImageURL(ValueExpression defaultDisabledLeafImageURL) {
 		this.defaultDisabledLeafImageURL = defaultDisabledLeafImageURL;
 	}
 
-	public final void setHideRootExpandSign(ValueExpression hideRootExpandSign) {
+	public void setHideRootExpandSign(ValueExpression hideRootExpandSign) {
 		this.hideRootExpandSign = hideRootExpandSign;
 	}
 
-	public final void setBodyDroppable(ValueExpression bodyDroppable) {
+	public void setBodyDroppable(ValueExpression bodyDroppable) {
 		this.bodyDroppable = bodyDroppable;
 	}
 
-	public final void setCursorValue(ValueExpression cursorValue) {
+	public void setCursorValue(ValueExpression cursorValue) {
 		this.cursorValue = cursorValue;
 	}
 
-	public final void setExpansionUseValue(ValueExpression expansionUseValue) {
+	public void setExpansionUseValue(ValueExpression expansionUseValue) {
 		this.expansionUseValue = expansionUseValue;
+	}
+
+	public void setSchrodingerCheckable(ValueExpression schrodingerCheckable) {
+		this.schrodingerCheckable = schrodingerCheckable;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
@@ -257,6 +289,10 @@ public class TreeTag extends AbstractInputTag implements Tag {
 			if (TreeComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
+			LOG.debug("  caption='"+caption+"'");
+			LOG.debug("  headingLevel='"+headingLevel+"'");
+			LOG.debug("  outlinedLabel='"+outlinedLabel+"'");
+			LOG.debug("  outlinedLabelMethod='"+outlinedLabelMethod+"'");
 			LOG.debug("  required='"+required+"'");
 			LOG.debug("  horizontalScrollPosition='"+horizontalScrollPosition+"'");
 			LOG.debug("  verticalScrollPosition='"+verticalScrollPosition+"'");
@@ -295,6 +331,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 			LOG.debug("  bodyDroppable='"+bodyDroppable+"'");
 			LOG.debug("  cursorValue='"+cursorValue+"'");
 			LOG.debug("  expansionUseValue='"+expansionUseValue+"'");
+			LOG.debug("  schrodingerCheckable='"+schrodingerCheckable+"'");
 		}
 		if ((uiComponent instanceof TreeComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -307,6 +344,42 @@ public class TreeTag extends AbstractInputTag implements Tag {
 
 		TreeComponent component = (TreeComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
+
+		if (caption != null) {
+			if (caption.isLiteralText()==false) {
+				component.setValueExpression(Properties.CAPTION, caption);
+
+			} else {
+				component.setCaption(caption.getExpressionString());
+			}
+		}
+
+		if (headingLevel != null) {
+			if (headingLevel.isLiteralText()==false) {
+				component.setValueExpression(Properties.HEADING_LEVEL, headingLevel);
+
+			} else {
+				component.setHeadingLevel(headingLevel.getExpressionString());
+			}
+		}
+
+		if (outlinedLabel != null) {
+			if (outlinedLabel.isLiteralText()==false) {
+				component.setValueExpression(Properties.OUTLINED_LABEL, outlinedLabel);
+
+			} else {
+				component.setOutlinedLabel(outlinedLabel.getExpressionString());
+			}
+		}
+
+		if (outlinedLabelMethod != null) {
+			if (outlinedLabelMethod.isLiteralText()==false) {
+				component.setValueExpression(Properties.OUTLINED_LABEL_METHOD, outlinedLabelMethod);
+
+			} else {
+				component.setOutlinedLabelMethod(outlinedLabelMethod.getExpressionString());
+			}
+		}
 
 		if (doubleClickListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.DOUBLE_CLICK_LISTENER_TYPE, doubleClickListeners);
@@ -666,9 +739,22 @@ public class TreeTag extends AbstractInputTag implements Tag {
 				component.setExpansionUseValue(getBool(expansionUseValue.getExpressionString()));
 			}
 		}
+
+		if (schrodingerCheckable != null) {
+			if (schrodingerCheckable.isLiteralText()==false) {
+				component.setValueExpression(Properties.SCHRODINGER_CHECKABLE, schrodingerCheckable);
+
+			} else {
+				component.setSchrodingerCheckable(getBool(schrodingerCheckable.getExpressionString()));
+			}
+		}
 	}
 
 	public void release() {
+		caption = null;
+		headingLevel = null;
+		outlinedLabel = null;
+		outlinedLabelMethod = null;
 		doubleClickListeners = null;
 		required = null;
 		horizontalScrollPosition = null;
@@ -715,6 +801,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		bodyDroppable = null;
 		cursorValue = null;
 		expansionUseValue = null;
+		schrodingerCheckable = null;
 
 		super.release();
 	}

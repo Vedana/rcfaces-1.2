@@ -9,12 +9,14 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
+import org.rcfaces.core.component.capability.IHeadingZoneCapability;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.internal.capability.IPreferencesSettings;
 import javax.el.ValueExpression;
 import org.rcfaces.core.internal.converter.AsyncDecodeModeConverter;
 import java.util.HashSet;
 import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.capability.IHeadingLevelCapability;
 import org.rcfaces.core.component.CardComponent;
 import java.util.Set;
 import java.util.Arrays;
@@ -39,7 +41,9 @@ public class CardBoxComponent extends AbstractInputComponent implements
 	IAsyncRenderModeCapability,
 	IPreferencesSettings,
 	IVariableScopeCapability,
-	IAsyncDecodeModeCapability {
+	IAsyncDecodeModeCapability,
+	IHeadingZoneCapability,
+	IHeadingLevelCapability {
 
 	private static final Log LOG = LogFactory.getLog(CardBoxComponent.class);
 
@@ -47,7 +51,7 @@ public class CardBoxComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","scopeSaveValue","scopeVar","scopeValue","asyncDecodeMode","asyncRenderMode","preferences"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","headingLevel","scopeSaveValue","scopeVar","scopeValue","asyncDecodeMode","headingZone","asyncRenderMode","preferences"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="value";
 
@@ -84,7 +88,7 @@ public class CardBoxComponent extends AbstractInputComponent implements
 	public void select(CardComponent card) {
 
 
-			CardBoxTools.selectCard(this, card);
+				CardBoxTools.selectCard(this, card);
 			
 	}
 
@@ -257,6 +261,52 @@ public class CardBoxComponent extends AbstractInputComponent implements
 
 	public void setAsyncDecodeMode(int asyncDecodeMode) {
 		engine.setProperty(Properties.ASYNC_DECODE_MODE, asyncDecodeMode);
+	}
+
+	public boolean isHeadingZone() {
+		return isHeadingZone(null);
+	}
+
+	/**
+	 * See {@link #isHeadingZone() isHeadingZone()} for more details
+	 */
+	public boolean isHeadingZone(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.HEADING_ZONE, true, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "headingZone" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHeadingZoneSetted() {
+		return engine.isPropertySetted(Properties.HEADING_ZONE);
+	}
+
+	public void setHeadingZone(boolean headingZone) {
+		engine.setProperty(Properties.HEADING_ZONE, headingZone);
+	}
+
+	public java.lang.String getHeadingLevel() {
+		return getHeadingLevel(null);
+	}
+
+	/**
+	 * See {@link #getHeadingLevel() getHeadingLevel()} for more details
+	 */
+	public java.lang.String getHeadingLevel(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.HEADING_LEVEL, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "headingLevel" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHeadingLevelSetted() {
+		return engine.isPropertySetted(Properties.HEADING_LEVEL);
+	}
+
+	public void setHeadingLevel(java.lang.String headingLevel) {
+		engine.setProperty(Properties.HEADING_LEVEL, headingLevel);
 	}
 
 	protected Set getCameliaFields() {

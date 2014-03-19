@@ -13,5 +13,5 @@ import javax.faces.context.FacesContext;
 public interface IAdditionalInformationValuesCapability extends
         IAdditionalInformationProvider {
 
-    Class getAdditionalInformationValuesType(FacesContext facesContext);
+    Class< ? > getAdditionalInformationValuesType(FacesContext facesContext);
 }

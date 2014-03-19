@@ -4,7 +4,10 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -21,23 +24,33 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.AdditionalInformationComponent;
 import org.rcfaces.core.component.DataGridComponent;
+import org.rcfaces.core.component.ToolTipComponent;
 import org.rcfaces.core.component.capability.IAdditionalInformationValuesCapability;
+import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
+import org.rcfaces.core.component.capability.ICellClickableCapability;
 import org.rcfaces.core.component.capability.ICellImageCapability;
 import org.rcfaces.core.component.capability.ICellStyleClassCapability;
 import org.rcfaces.core.component.capability.ICellToolTipTextCapability;
 import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import org.rcfaces.core.component.capability.IClientFullStateCapability;
+import org.rcfaces.core.component.capability.ICriteriaCountCapability;
+import org.rcfaces.core.component.capability.ICriteriaManagerCapability;
 import org.rcfaces.core.component.capability.IDragAndDropEffects;
 import org.rcfaces.core.component.capability.IKeySearchColumnIdCapability;
+import org.rcfaces.core.component.capability.IRowToolTipIdCapability;
 import org.rcfaces.core.component.capability.ISelectedValuesCapability;
 import org.rcfaces.core.component.capability.IShowValueCapability;
 import org.rcfaces.core.component.capability.ISortEventCapability;
+import org.rcfaces.core.component.capability.IToolTipIdCapability;
 import org.rcfaces.core.component.iterator.IColumnIterator;
 import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.capability.IAdditionalInformationComponent;
+import org.rcfaces.core.internal.capability.ICellClickableSettings;
 import org.rcfaces.core.internal.capability.ICellImageSettings;
 import org.rcfaces.core.internal.capability.ICheckComponent;
 import org.rcfaces.core.internal.capability.ICheckRangeComponent;
+import org.rcfaces.core.internal.capability.ICriteriaConfiguration;
+import org.rcfaces.core.internal.capability.ICriteriaContainer;
 import org.rcfaces.core.internal.capability.IDraggableGridComponent;
 import org.rcfaces.core.internal.capability.IDroppableGridComponent;
 import org.rcfaces.core.internal.capability.IGridComponent;
@@ -47,50 +60,56 @@ import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IEventData;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
+import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
-import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.AdditionalInformationTools;
 import org.rcfaces.core.internal.tools.ArrayIndexesModel;
 import org.rcfaces.core.internal.tools.CheckTools;
 import org.rcfaces.core.internal.tools.CollectionTools;
+import org.rcfaces.core.internal.tools.CriteriaTools;
 import org.rcfaces.core.internal.tools.FilterExpressionTools;
 import org.rcfaces.core.internal.tools.FilteredDataModel;
 import org.rcfaces.core.internal.tools.GridServerSort;
 import org.rcfaces.core.internal.tools.SelectionTools;
 import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.lang.provider.ICursorProvider;
+import org.rcfaces.core.lang.provider.ISelectionProvider;
+import org.rcfaces.core.model.IClientDataModel;
+import org.rcfaces.core.model.IClientModel.IContentIndex;
 import org.rcfaces.core.model.IComponentRefModel;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredModel;
 import org.rcfaces.core.model.IIndexesModel;
 import org.rcfaces.core.model.IRangeDataModel;
 import org.rcfaces.core.model.IRangeDataModel2;
+import org.rcfaces.core.model.ISelectedCriteria;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.core.model.ISortedDataModel;
 import org.rcfaces.core.model.ITransactionalDataModel;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.HtmlValuesTools;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
+import org.rcfaces.renderkit.html.internal.IHtmlComponentWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 import org.rcfaces.renderkit.html.internal.service.DataGridService;
+import org.rcfaces.renderkit.html.internal.util.ClientDataModelTools;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
 public class DataGridRenderer extends AbstractGridRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(DataGridRenderer.class);
 
-    private static final String DATA_GRID_WRAP_CLASSNAME = "f_dataGrid_wrap";
-
-    private static final Map SORT_ALIASES = new HashMap(8);
+    private static final Map<String, String> SORT_ALIASES = new HashMap<String, String>(
+            8);
 
     static {
         SORT_ALIASES.put(ISortEventCapability.SORT_INTEGER,
@@ -108,6 +127,12 @@ public class DataGridRenderer extends AbstractGridRenderer {
         SORT_ALIASES.put(ISortEventCapability.SORT_SERVER, SORT_SERVER_COMMAND);
     }
 
+    private static final String CLIENT_DB_ENABLED_PROPERTY = "org.rcfaces.html.CLIENT_DB_ENABLED";
+
+    private static final String CLIENT_DB_REQUIRES_VB_PROPERTY = "org.rcfaces.html.CLIENT_DB_REQUIRES_VB";
+
+    private static final String DEFAULT_CONTENT_PRIMARY_KEY = "value";
+
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.DATA_GRID;
     }
@@ -122,7 +147,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
             if (((DataGridComponent) dg).isCellTextWrap(htmlWriter
                     .getComponentRenderContext().getFacesContext())) {
 
-                cssStyleClasses.addSpecificStyleClass(DATA_GRID_WRAP_CLASSNAME);
+                cssStyleClasses.addSpecificStyleClass(GRID_WRAP_CLASSNAME);
             }
         }
 
@@ -252,18 +277,20 @@ public class DataGridRenderer extends AbstractGridRenderer {
         super.writeGridColumnProperties(objectWriter, tableContext,
                 columnComponent, columnIndex);
 
-        UIColumn rowValueColumn = ((DataGridRenderContext) tableContext)
-                .getRowValueColumn();
+        DataGridRenderContext dataGridRenderContext = (DataGridRenderContext) tableContext;
 
+        UIColumn rowValueColumn = dataGridRenderContext.getRowValueColumn();
         if (rowValueColumn == columnComponent) {
             objectWriter.writeSymbol("_valueColumn").writeBoolean(true);
         }
 
-        UIColumn keySearchColumn = ((DataGridRenderContext) tableContext)
-                .getKeySearchColumn();
-
+        UIColumn keySearchColumn = dataGridRenderContext.getKeySearchColumn();
         if (keySearchColumn == columnComponent) {
             objectWriter.writeSymbol("_keySearch").writeBoolean(true);
+        }
+
+        if (dataGridRenderContext.isAllClickableCell(columnIndex)) {
+            objectWriter.writeSymbol("_cellClickable").writeBoolean(true);
         }
     }
 
@@ -305,13 +332,14 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
         DataModel dataModel = tableContext.getDataModel();
 
-        if ((dataModel instanceof ITransactionalDataModel) == false) {
+        ITransactionalDataModel transactionalDataModel = getAdapter(
+                ITransactionalDataModel.class, dataModel);
+
+        if (transactionalDataModel == null) {
             encodeJsRows(jsWriter, tableContext, sendFullStates,
                     unknownRowCount);
             return;
         }
-
-        ITransactionalDataModel transactionalDataModel = (ITransactionalDataModel) dataModel;
 
         try {
             transactionalDataModel.enableTransactionalObjects(true);
@@ -336,15 +364,18 @@ public class DataGridRenderer extends AbstractGridRenderer {
         boolean filtred = false;
         int firstRowCount = tableContext.getRowCount();
 
-        if (dataModel instanceof IComponentRefModel) {
-            ((IComponentRefModel) dataModel)
-                    .setComponent((UIComponent) gridComponent);
+        IComponentRefModel componentRefModel = getAdapter(
+                IComponentRefModel.class, dataModel);
+
+        if (componentRefModel != null) {
+            componentRefModel.setComponent((UIComponent) gridComponent);
         }
 
         IFilterProperties filtersMap = tableContext.getFiltersMap();
+        IFiltredModel filtredDataModel = getAdapter(IFiltredModel.class,
+                dataModel);
         if (filtersMap != null) {
-            if (dataModel instanceof IFiltredModel) {
-                IFiltredModel filtredDataModel = (IFiltredModel) dataModel;
+            if (filtredDataModel != null) {
 
                 filtredDataModel.setFilter(filtersMap);
                 tableContext.updateRowCount();
@@ -356,8 +387,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
                 tableContext.updateRowCount();
             }
 
-        } else if (dataModel instanceof IFiltredModel) {
-            IFiltredModel filtredDataModel = (IFiltredModel) dataModel;
+        } else if (filtredDataModel != null) {
 
             filtredDataModel.setFilter(FilterExpressionTools.EMPTY);
             tableContext.updateRowCount();
@@ -373,7 +403,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
         boolean searchEnd = (rows > 0);
         // int firstCount = -1;
         int count = -1;
-
+        int fullCriteriaRowCount = -1;
         if (searchEnd) {
             count = firstRowCount;
         }
@@ -382,8 +412,11 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
         ISortedComponent sortedComponents[] = tableContext
                 .listSortedComponents();
+        ISortedDataModel sortedDataModel = getAdapter(ISortedDataModel.class,
+                dataModel, sortedComponents);
         if (sortedComponents != null && sortedComponents.length > 0) {
-            if (dataModel instanceof ISortedDataModel) {
+
+            if (sortedDataModel != null) {
                 // On delegue au modele, le tri !
 
                 // Nous devons être OBLIGATOIREMENT en mode rowValueColumnId
@@ -392,8 +425,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
                             "Can not sort dataModel without attribute rowValueColumnId specified !");
                 }
 
-                ((ISortedDataModel) dataModel).setSortParameters(
-                        (UIComponent) gridComponent, sortedComponents);
+                sortedDataModel.setSortParameters((UIComponent) gridComponent,
+                        sortedComponents);
             } else {
                 // Il faut faire le tri à la main !
 
@@ -402,46 +435,78 @@ public class DataGridRenderer extends AbstractGridRenderer {
                         sortedComponents);
             }
 
-            // Apres le tri, on connait peu etre la taille
+            // Apres le tri, on connait peut etre la taille
             tableContext.updateRowCount();
         } else {
 
-            if (dataModel instanceof ISortedDataModel) {
+            if (sortedDataModel != null) {
                 // Reset des parametres de tri !
-                ((ISortedDataModel) dataModel).setSortParameters(
-                        (UIComponent) gridComponent, null);
+                sortedDataModel.setSortParameters((UIComponent) gridComponent,
+                        null);
             }
         }
 
+        ISelectedCriteria[] selectedCriteria = tableContext
+                .listSelectedCriteria();
+        if (selectedCriteria != null && selectedCriteria.length == 0) {
+            selectedCriteria = null;
+        }
+
         int rowIndex = tableContext.getFirst();
+        int newFirst = -1; // Dans les cas critiques ou on retourne à la page 1
 
-        // Initializer le IRandgeDataModel avant la selection/check/additionnal
-        // informations !
-        if (sortTranslations == null
-                && rows > 0
-                && ((dataModel instanceof IRangeDataModel) || (dataModel instanceof IRangeDataModel2))) {
-            // Specifie le range que si il n'y a pas de tri !
+        IRangeDataModel rangeDataModel = getAdapter(IRangeDataModel.class,
+                dataModel, null);
+        IRangeDataModel2 rangeDataModel2 = getAdapter(IRangeDataModel2.class,
+                dataModel, null);
 
-            int rangeLength = rows;
-            if (searchEnd) {
-                // On regardera si il y a bien une suite ...
-                rangeLength++;
+        if ((rangeDataModel != null || rangeDataModel2 != null) && rows >= 0) {
+            // Initializer le IRandgeDataModel avant la
+            // selection/check/additionnal
+            // informations !
+            if (sortTranslations == null && selectedCriteria == null) {
+                // Specifie le range que si il n'y a pas de tri !
+
+                int rangeLength = rows;
+                if (searchEnd) {
+                    // On regardera si il y a bien une suite ...
+                    rangeLength++;
+                }
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Encode set range rowIndex='" + rowIndex
+                            + "' rangeLength='" + rangeLength + "'.");
+                }
+
+                if (rangeDataModel != null) {
+                    rangeDataModel.setRowRange(rowIndex, rangeLength);
+                }
+
+                if (rangeDataModel2 != null) {
+                    rangeDataModel2.setRowRange(rowIndex, rangeLength,
+                            searchEnd);
+                }
+
+            } else {
+                // TOUT
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Encode set range to ALL => rowIndex='" + 0
+                            + "' rangeLength='" + rows + "'.");
+                }
+
+                if (rangeDataModel != null) {
+                    rangeDataModel.setRowRange(0, rows);
+                }
+
+                if (rangeDataModel2 != null) {
+                    rangeDataModel2.setRowRange(0, rows, searchEnd);
+                }
+
             }
+        }
 
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Encode set range rowIndex='" + rowIndex
-                        + "' rangeLength='" + rangeLength + "'.");
-            }
-
-            if (dataModel instanceof IRangeDataModel) {
-                ((IRangeDataModel) dataModel)
-                        .setRowRange(rowIndex, rangeLength);
-            }
-
-            if (dataModel instanceof IRangeDataModel2) {
-                ((IRangeDataModel2) dataModel).setRowRange(rowIndex,
-                        rangeLength, searchEnd);
-            }
+        if (selectedCriteria != null) {
+            searchEnd = true; // On force la recherche de la fin
         }
 
         int selectedIndexes[] = null;
@@ -585,7 +650,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
                             .listSortedIndexes();
 
                     if (tableContext.getClientAdditionalFullState() != IClientFullStateCapability.NONE_CLIENT_FULL_STATE) {
-                        writeFullStates(jsWriter, "f_setAdditionalStates",
+                        writeFullStates(jsWriter,
+                                "f_setAdditionalInformationStates",
                                 additionalIndexes);
                         additionalIndexes = null;
 
@@ -613,7 +679,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
                     if (tableContext.getClientAdditionalFullState() != IClientFullStateCapability.NONE_CLIENT_FULL_STATE) {
                         writeFullStates(jsWriter, tableContext,
-                                "f_setAdditionalStates", additionalObjects);
+                                "f_setAdditionalInformationStates",
+                                additionalObjects);
                         additionalObjects = null;
                     }
                 }
@@ -637,16 +704,17 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
             // Le tri a été fait coté serveur,
             // On connait peut être le nombre d'elements !
-            if (count < 0 && sortTranslations != null) {
+            if (/* count < 0 && Pour les CRITERES */sortTranslations != null) {
                 count = sortTranslations.length;
             }
 
-            if (count >= 0) {
+            if (count >= 0 && selectedCriteria == null) {
                 searchEnd = false;
             }
         }
 
-        Map varContext = facesContext.getExternalContext().getRequestMap();
+        Map<String, Object> varContext = facesContext.getExternalContext()
+                .getRequestMap();
         String rowCountVar = tableContext.getRowCountVar();
         if (rowCountVar != null) {
             varContext.put(rowCountVar, new Integer(count));
@@ -685,12 +753,64 @@ public class DataGridRenderer extends AbstractGridRenderer {
                 }
 
             }
+            int criteriaRowCountFirst = 0;
+            if (selectedCriteria != null) {
 
+                // On repositionne le FIRST !
+                int targetFirst = rowIndex;
+                rowIndex = 0;
+                for (int i = 0; i < targetFirst;) {
+
+                    int translatedRowIndex = rowIndex;
+
+                    if (sortTranslations != null) {
+                        if (translatedRowIndex >= sortTranslations.length) {
+                            break;
+                        }
+
+                        translatedRowIndex = sortTranslations[translatedRowIndex];
+                    }
+
+                    gridComponent.setRowIndex(translatedRowIndex);
+                    boolean available = gridComponent.isRowAvailable();
+                    if (available == false) {
+                        // Nous sommes à la fin du tableau, et il n'y a plus
+                        // rien a afficher
+                        // Finalement on retourne ligne 0
+                        rowIndex = 0;
+                        newFirst = 0;
+
+                        break;
+                    }
+
+                    if (rowIndexVar != null) {
+                        varContext.put(rowIndexVar, new Integer(i));
+                    }
+
+                    rowIndex++;
+
+                    if (acceptCriteria(facesContext, gridComponent,
+                            selectedCriteria) == false) {
+                        continue;
+                    }
+
+                    i++;
+                    criteriaRowCountFirst++;
+                }
+            }
+
+            int criteriaRowCount = 0;
             for (int i = 0;; i++) {
                 if (searchEnd == false) {
                     // Pas de recherche de la fin !
                     // On peut sortir tout de suite ...
-                    if (rows > 0 && i >= rows) {
+
+                    if (selectedCriteria != null) {
+                        if (rows > 0 && criteriaRowCount >= rows) {
+                            break;
+                        }
+
+                    } else if (rows > 0 && i >= rows) {
                         break;
                     }
                 }
@@ -700,6 +820,10 @@ public class DataGridRenderer extends AbstractGridRenderer {
                 if (rowValueColumn != null) {
                     if (sortTranslations != null) {
                         if (rowIndex >= sortTranslations.length) {
+                            if (selectedCriteria != null) {
+                                fullCriteriaRowCount = criteriaRowCountFirst
+                                        + criteriaRowCount;
+                            }
                             break;
                         }
 
@@ -741,6 +865,10 @@ public class DataGridRenderer extends AbstractGridRenderer {
                         }
                     } else {
                         if (rowIndex >= sortTranslations.length) {
+                            if (selectedCriteria != null) {
+                                fullCriteriaRowCount = criteriaRowCountFirst
+                                        + criteriaRowCount;
+                            }
                             break;
                         }
 
@@ -793,18 +921,34 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
                 if (available == false) {
                     count = rowIndex;
+                    fullCriteriaRowCount = criteriaRowCountFirst
+                            + criteriaRowCount;
                     break;
                 }
 
                 if (searchEnd) {
                     // On teste juste la validité de la fin !
-                    if (rows > 0 && i >= rows) {
+                    if (selectedCriteria != null) {
+                        if (rows > 0 && criteriaRowCount >= rows) {
+                            break;
+                        }
+
+                    } else if (rows > 0 && i >= rows) {
                         break;
                     }
                 }
 
                 if (rowIndexVar != null) {
                     varContext.put(rowIndexVar, new Integer(i));
+                }
+
+                if (selectedCriteria != null) {
+                    if (acceptCriteria(facesContext, gridComponent,
+                            selectedCriteria) == false) {
+                        rowIndex++;
+                        continue;
+                    }
+                    criteriaRowCount++;
                 }
 
                 if (rowValueColumn != null) {
@@ -871,6 +1015,45 @@ public class DataGridRenderer extends AbstractGridRenderer {
                 rowIndex++;
             }
 
+            if (selectedCriteria != null) {
+                if (gridComponent instanceof ICriteriaCountCapability) {
+                    if (((ICriteriaCountCapability) gridComponent)
+                            .isFullCriteriaCount()) {
+                        fullCriteriaRowCount = criteriaRowCount
+                                + criteriaRowCountFirst;
+                        for (int i = rowIndex;; i++) {
+
+                            int translatedRowIndex = i;
+
+                            if (sortTranslations != null) {
+                                if (translatedRowIndex >= sortTranslations.length) {
+                                    break;
+                                }
+
+                                translatedRowIndex = sortTranslations[translatedRowIndex];
+                            }
+
+                            gridComponent.setRowIndex(translatedRowIndex);
+                            boolean available = gridComponent.isRowAvailable();
+                            if (available == false) {
+                                // ???
+                                break;
+                            }
+
+                            if (rowIndexVar != null) {
+                                varContext.put(rowIndexVar, new Integer(i));
+                            }
+
+                            if (acceptCriteria(facesContext, gridComponent,
+                                    selectedCriteria) == false) {
+                                continue;
+                            }
+                            fullCriteriaRowCount++;
+                        }
+                    }
+                }
+            }
+
         } finally {
             gridComponent.setRowIndex(-1);
 
@@ -891,23 +1074,55 @@ public class DataGridRenderer extends AbstractGridRenderer {
         // * en mode liste, le dataModel ne pouvait pas encore donner le nombre
         // de rows
 
-        if (unknownRowCount && firstRowCount >= 0) {
-            encodeJsRowCount(jsWriter, tableContext, count);
+        if (selectedCriteria != null && rows > 0) {
+            encodeJsRowCount(jsWriter, tableContext, fullCriteriaRowCount,
+                    newFirst);
+
+        } else if ((unknownRowCount && firstRowCount >= 0)) {
+            encodeJsRowCount(jsWriter, tableContext, count, newFirst);
 
         } else if (rows > 0) {
             if (count > firstRowCount
                     || (gridComponent.getFirst() == 0 && count == 0)) {
-                encodeJsRowCount(jsWriter, tableContext, count);
+                encodeJsRowCount(jsWriter, tableContext, count, newFirst);
             }
 
         } else if (tableContext.getRowCount() < 0) {
-            encodeJsRowCount(jsWriter, tableContext, rowIndex);
+            encodeJsRowCount(jsWriter, tableContext, rowIndex, newFirst);
 
         } else if (filtred) {
             if (searchEnd && count == 0) {
-                encodeJsRowCount(jsWriter, tableContext, count);
+                encodeJsRowCount(jsWriter, tableContext, count, newFirst);
             }
         }
+    }
+
+    private boolean acceptCriteria(FacesContext facesContext,
+            IGridComponent gridComponent,
+            ISelectedCriteria[] selectedCriteriaArray) {
+
+        for (ISelectedCriteria selectedCriteria : selectedCriteriaArray) {
+            Set< ? > criteriaValues = selectedCriteria.listSelectedValues();
+            if (criteriaValues == null || criteriaValues.isEmpty()) {
+                continue;
+            }
+
+            ICriteriaConfiguration config = selectedCriteria.getConfig();
+
+            Object dataValue = CriteriaTools.getDataValue(facesContext,
+                    gridComponent, config);
+
+            // if (dataValue == null) {
+            // continue;
+            // }
+
+            if (criteriaValues.contains(dataValue) == false) {
+
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private Object updateAdditionalValues(FacesContext facesContext,
@@ -956,11 +1171,16 @@ public class DataGridRenderer extends AbstractGridRenderer {
     }
 
     protected void encodeJsRowCount(IJavaScriptWriter jsWriter,
-            AbstractGridRenderContext tableContext, int count)
+            AbstractGridRenderContext tableContext, int count, int newFirst)
             throws WriterException {
         jsWriter.writeMethodCall("f_setRowCount").writeInt(count).writeln(");");
+        if (newFirst >= 0) {
+            jsWriter.writeMethodCall("_changeFirst").writeInt(newFirst)
+                    .writeln(");");
+        }
     }
 
+    @SuppressWarnings("unused")
     protected void encodeJsRow(IJavaScriptWriter jsWriter,
             DataGridRenderContext tableContext, int index, String rowId,
             int iRowId, boolean selected, boolean checked, boolean additional,
@@ -1033,6 +1253,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
         String images[] = null;
         String cellStyleClasses[] = null;
         String cellToolTipTexts[] = null;
+        boolean clickableCells[] = null;
         int visibleColumns = 0;
 
         boolean designerMode = tableContext.isDesignerMode();
@@ -1136,10 +1357,85 @@ public class DataGridRenderer extends AbstractGridRenderer {
                 }
             }
 
+            boolean cCell = false;
+            if (tableContext.isAllClickableCell(i) == false
+                    && tableContext.isClickableCellSetted(i)) {
+                ICellClickableCapability capability = (ICellClickableCapability) dc;
+
+                cCell = ((ICellClickableCapability) dc).isCellClickable();
+            }
+
+            if (cCell) {
+                if (clickableCells == null) {
+                    clickableCells = new boolean[columnNumber];
+                }
+
+                clickableCells[i] = true;
+            }
+
             visibleColumns++;
         }
 
         if (ALLOCATE_ROW_STRINGS) {
+
+            ToolTipComponent tooltipComponent = null;
+
+            if (dataGridComponent instanceof IRowToolTipIdCapability) {
+                String tooltipClientId = ((IRowToolTipIdCapability) dataGridComponent)
+                        .getRowToolTipId();
+
+                if (tooltipClientId != null && tooltipClientId.length() > 0) {
+                    IRenderContext renderContext = jsWriter
+                            .getHtmlRenderContext();
+
+                    if (tooltipClientId.charAt(0) != ':') {
+                        tooltipClientId = renderContext
+                                .computeBrotherComponentClientId(
+                                        (UIComponent) dataGridComponent,
+                                        tooltipClientId);
+                    }
+
+                    if (tooltipClientId != null) {
+                        UIComponent comp = renderContext.getFacesContext()
+                                .getViewRoot().findComponent(tooltipClientId);
+                        if (comp instanceof ToolTipComponent) {
+                            tooltipComponent = (ToolTipComponent) comp;
+
+                            tableContext.registerTooltip(tooltipComponent);
+
+                            if (tooltipComponent.isRendered() == false) {
+                                tooltipComponent = null;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (tooltipComponent == null) {
+                tooltipComponent = tableContext.findTooltipByIdOrName(
+                        jsWriter.getComponentRenderContext(),
+                        (UIComponent) dataGridComponent, "#row", null);
+            }
+
+            String tooltipId = null;
+            String tooltipContent = null;
+            if (tooltipComponent != null) {
+                if (tooltipComponent.getAsyncRenderMode(facesContext) == IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
+                    tooltipContent = encodeToolTip(jsWriter, tooltipComponent);
+                    tooltipId = jsWriter.allocateString("##CONTENT");
+
+                } else {
+                    tooltipId = tooltipComponent.getClientId(facesContext);
+                }
+            }
+
+            if (tooltipId != null) {
+                tooltipId = jsWriter.allocateString(tooltipId);
+            }
+            if (tooltipContent != null) {
+                tooltipContent = jsWriter.allocateString(tooltipContent);
+            }
+
             for (int i = 0; i < values.length; i++) {
                 String v = values[i];
                 if (v == null || v == NULL_VALUE) {
@@ -1183,6 +1479,15 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
             if (rowIndex >= 0) {
                 objectLiteralWriter.writeSymbol("_rowIndex").writeInt(rowIndex);
+            }
+
+            if (tooltipId != null) {
+                objectLiteralWriter.writeSymbol("_toolTipId").write(tooltipId);
+
+                if (tooltipContent != null) {
+                    objectLiteralWriter.writeSymbol("_toolTipContent").write(
+                            tooltipContent);
+                }
             }
 
             if (tableContext.hasAdditionalInformations()) {
@@ -1299,16 +1604,75 @@ public class DataGridRenderer extends AbstractGridRenderer {
         }
         jsWriter.writeln(");");
 
+        String[] cellToolTipIds = null;
+        String[] cellToolTipContents = null;
+
+        for (int i = 0; i < columnNumber; i++) {
+            if (cellToolTipTexts != null && cellToolTipTexts[i] != null) {
+                continue;
+            }
+
+            String toolTipId = null;
+            if (dcs[i] instanceof IToolTipIdCapability) {
+                toolTipId = ((IToolTipIdCapability) dcs[i]).getToolTipId();
+            }
+
+            ToolTipComponent tooltipComponent = tableContext
+                    .findTooltipByIdOrName(
+                            jsWriter.getComponentRenderContext(), dcs[i],
+                            toolTipId, (UIComponent) dataGridComponent);
+
+            if (tooltipComponent == null) {
+                continue;
+            }
+
+            String toolTipClientId = null;
+            String toolTipContent = null;
+            if (tooltipComponent.getAsyncRenderMode(facesContext) == IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
+                toolTipContent = encodeToolTip(jsWriter, tooltipComponent);
+                toolTipClientId = "##CONTENT";
+
+            } else {
+                toolTipClientId = tooltipComponent.getClientId(facesContext);
+
+                // Le tooltip contient le numero de la ligne !!!!!
+                int idx = toolTipClientId.lastIndexOf(':' + tooltipComponent
+                        .getId());
+                if (idx > 0) {
+                    idx = toolTipClientId.lastIndexOf(':', idx - 1);
+                    if (idx > 0) {
+                        toolTipClientId = toolTipClientId.substring(0, idx + 1)
+                                + tooltipComponent.getId();
+                    }
+                }
+
+            }
+
+            if (toolTipClientId != null) {
+                if (cellToolTipIds == null) {
+                    cellToolTipIds = new String[columnNumber];
+                }
+                cellToolTipIds[i] = jsWriter.allocateString(toolTipClientId);
+            }
+            if (toolTipContent != null) {
+                if (cellToolTipContents == null) {
+                    cellToolTipContents = new String[columnNumber];
+                }
+                cellToolTipContents[i] = jsWriter
+                        .allocateString(toolTipContent);
+            }
+        }
+
         if (images != null || cellStyleClasses != null
-                || cellToolTipTexts != null) {
+                || cellToolTipIds != null || cellToolTipTexts != null
+                || clickableCells != null) {
 
             allocateStrings(jsWriter, images, images);
             allocateStrings(jsWriter, cellStyleClasses, cellStyleClasses);
             allocateStrings(jsWriter, cellToolTipTexts, cellToolTipTexts);
 
-            jsWriter.writeMethodCall("f_setCells2").write(rowVarName);
-            int pred = 0;
-
+            boolean setCells2 = false;
+            IObjectLiteralWriter contWriter = null;
             for (int i = 0; i < columnNumber; i++) {
                 if (tableContext.getColumnState(i) != AbstractGridRenderContext.VISIBLE) {
                     continue;
@@ -1329,19 +1693,41 @@ public class DataGridRenderer extends AbstractGridRenderer {
                     toolTipText = cellToolTipTexts[i];
                 }
 
+                String toolTipId = null;
+                if (cellToolTipIds != null) {
+                    toolTipId = cellToolTipIds[i];
+                }
+
+                String toolTipContent = null;
+                if (cellToolTipContents != null) {
+                    toolTipContent = cellToolTipContents[i];
+                }
+
+                boolean clickableCell = false;
+                if (clickableCells != null) {
+                    clickableCell = clickableCells[i];
+                }
+
                 if (imageURL == null && cellStyleClass == null
-                        && toolTipText == null) {
-                    pred++;
+                        && toolTipText == null && toolTipId == null
+                        && toolTipContent == null && clickableCell == false) {
                     continue;
                 }
 
-                for (; pred > 0; pred--) {
-                    jsWriter.write(',').writeNull();
+                if (setCells2 == false) {
+                    setCells2 = true;
+
+                    jsWriter.writeMethodCall("f_setCells2").write(rowVarName);
+
+                    jsWriter.write(',');
                 }
 
-                jsWriter.write(',');
+                if (contWriter == null) {
+                    contWriter = jsWriter.writeObjectLiteral(false);
+                }
+                contWriter.writeProperty(String.valueOf(i));
 
-                IObjectLiteralWriter objWriter = jsWriter
+                IObjectLiteralWriter objWriter = contWriter.getParent()
                         .writeObjectLiteral(true);
 
                 if (imageURL != null) {
@@ -1356,10 +1742,28 @@ public class DataGridRenderer extends AbstractGridRenderer {
                     objWriter.writeSymbol("_toolTipText").write(toolTipText);
                 }
 
+                if (toolTipId != null) {
+                    objWriter.writeSymbol("_toolTipId").write(toolTipId);
+                }
+
+                if (toolTipContent != null) {
+                    objWriter.writeSymbol("_toolTipContent").write(
+                            toolTipContent);
+                }
+
+                if (clickableCell) {
+                    objWriter.writeSymbol("_clickable").writeBoolean(true);
+                }
+
                 objWriter.end();
             }
 
-            jsWriter.writeln(");");
+            if (contWriter != null) {
+                contWriter.end();
+            }
+            if (setCells2) {
+                jsWriter.writeln(");");
+            }
 
         }
     }
@@ -1374,15 +1778,15 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
     public DataGridRenderContext createTableContext(
             IProcessContext processContext,
-            IScriptRenderContext scriptRenderContext, IGridComponent dg,
+            IJavaScriptRenderContext scriptRenderContext, IGridComponent dg,
             int rowIndex, int forcedRows, ISortedComponent sortedComponents[],
             String filterExpression, String showAdditional,
-            String hideAdditional) {
+            String hideAdditional, ISelectedCriteria[] criteriaContainers) {
 
         DataGridRenderContext tableContext = new DataGridRenderContext(
                 processContext, scriptRenderContext, dg, rowIndex, forcedRows,
                 sortedComponents, filterExpression, showAdditional,
-                hideAdditional);
+                hideAdditional, criteriaContainers);
 
         return tableContext;
     }
@@ -1394,20 +1798,23 @@ public class DataGridRenderer extends AbstractGridRenderer {
      */
     public class DataGridRenderContext extends AbstractGridRenderContext {
 
-        private static final String REVISION = "$Revision$";
-
         private UIColumn rowValueColumn;
 
         private UIColumn keySearchColumn;
 
+        private boolean[] clickableCellSettedArray;
+
+        private boolean[] allClickableCellArray;
+
         public DataGridRenderContext(IProcessContext processContext,
-                IScriptRenderContext scriptRenderContext, IGridComponent dg,
-                int rowIndex, int forcedRows,
+                IJavaScriptRenderContext scriptRenderContext,
+                IGridComponent dg, int rowIndex, int forcedRows,
                 ISortedComponent[] sortedComponents, String filterExpression,
-                String showAdditionals, String hideAdditionals) {
+                String showAdditionals, String hideAdditionals,
+                ISelectedCriteria[] criteriaContainers) {
             super(processContext, scriptRenderContext, dg, rowIndex,
                     forcedRows, sortedComponents, filterExpression,
-                    showAdditionals, hideAdditionals);
+                    showAdditionals, hideAdditionals, criteriaContainers);
 
             initializeDataGrid();
         }
@@ -1424,10 +1831,28 @@ public class DataGridRenderer extends AbstractGridRenderer {
                     .getRowValueColumn(getGridComponent());
             keySearchColumn = DataGridRenderer.this
                     .getKeySearchColumn(getGridComponent());
+
+            clickableCellSettedArray = new boolean[columns.length];
+            allClickableCellArray = new boolean[columns.length];
+
+            int i = 0;
+            for (UIColumn column : columns) {
+                if (column instanceof ICellClickableCapability) {
+                    allClickableCellArray[i] = ((ICellClickableCapability) column)
+                            .isAllCellClickable();
+                }
+
+                if (column instanceof ICellClickableSettings) {
+                    clickableCellSettedArray[i] = ((ICellClickableSettings) column)
+                            .isCellClickableSetted();
+                }
+
+                i++;
+            }
         }
 
         protected String convertAliasCommand(String command) {
-            return (String) SORT_ALIASES.get(command);
+            return SORT_ALIASES.get(command);
         }
 
         public UIColumn getRowValueColumn() {
@@ -1437,20 +1862,28 @@ public class DataGridRenderer extends AbstractGridRenderer {
         public UIColumn getKeySearchColumn() {
             return keySearchColumn;
         }
+
+        public boolean isClickableCellSetted(int i) {
+            return clickableCellSettedArray[i];
+        }
+
+        public boolean isAllClickableCell(int i) {
+            return allClickableCellArray[i];
+        }
     }
 
     protected void writeGridComponentAttributes(IHtmlWriter htmlWriter,
             AbstractGridRenderContext tableContext, IGridComponent dg)
             throws WriterException {
 
-    	super.writeGridComponentAttributes(htmlWriter, tableContext, dg);
-    	
+        super.writeGridComponentAttributes(htmlWriter, tableContext, dg);
+
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
 
         if (dg instanceof DataGridComponent) {
             if (((DataGridComponent) dg).isCellTextWrap(facesContext)) {
-                htmlWriter.writeAttribute("v:cellTextWrap", true);
+                htmlWriter.writeAttributeNS("cellTextWrap", true);
             }
         }
 
@@ -1458,7 +1891,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
             DataGridService dataGridServer = DataGridService
                     .getInstance(facesContext);
             if (dataGridServer != null) {
-                htmlWriter.writeAttribute("v:asyncRender", true);
+                htmlWriter.writeAttributeNS("asyncRender", true);
             }
         }
 
@@ -1473,11 +1906,13 @@ public class DataGridRenderer extends AbstractGridRenderer {
                 if (rowValueColumn != null) {
                     clientCursorValue = ValuesTools.convertValueToString(
                             cursorValue, rowValueColumn, facesContext);
+                } else {
+                    clientCursorValue = String.valueOf(cursorValue);
                 }
             }
 
             if (clientCursorValue != null) {
-                htmlWriter.writeAttribute("v:cursorValue", clientCursorValue);
+                htmlWriter.writeAttributeNS("cursorValue", clientCursorValue);
             }
 
         }
@@ -1500,7 +1935,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
             }
 
             if (clientShowValue != null) {
-                htmlWriter.writeAttribute("v:showValue", clientShowValue);
+                htmlWriter.writeAttributeNS("showValue", clientShowValue);
             }
         }
 
@@ -1509,12 +1944,104 @@ public class DataGridRenderer extends AbstractGridRenderer {
                     .getRowLabelColumnId(facesContext);
 
             if (columnId != null) {
-                htmlWriter.writeAttribute("v:rowLabelColumnId", columnId);
+                htmlWriter.writeAttributeNS("rowLabelColumnId", columnId);
+            }
+        }
+
+        String addOpenImageURL = getAdditionalInformationOpenImageURL(htmlWriter);
+        String addCloseImageURL = getAdditionalInformationCloseImageURL(htmlWriter);
+        if (addOpenImageURL != null && addCloseImageURL != null) {
+            htmlWriter.writeAttributeNS("addOpenImageURL", addOpenImageURL);
+            htmlWriter.writeAttributeNS("addCloseImageURL", addCloseImageURL);
+        }
+
+        writeClientDataModel(htmlWriter, tableContext.getDataModel(),
+                tableContext);
+    }
+
+    protected void writeClientDataModel(IHtmlWriter htmlWriter,
+            DataModel dataModel, AbstractGridRenderContext gridRenderContext)
+            throws WriterException {
+        IClientDataModel clientDataModel = getAdapter(IClientDataModel.class,
+                dataModel);
+        if (clientDataModel == null) {
+            return;
+        }
+
+        String contentName = clientDataModel.getContentName();
+        if (contentName == null) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("ContentName() returns NULL, disabled client data model !");
+            }
+            return;
+        }
+        String contentKey = clientDataModel.getContentKey();
+        String contentPK = clientDataModel.getContentPrimaryKey();
+        if (contentPK == null) {
+            contentPK = DEFAULT_CONTENT_PRIMARY_KEY;
+        }
+        int contentRowCount = clientDataModel.getContentRowCount();
+
+        if (contentName == null || contentKey == null || contentPK == null) {
+            LOG.error("IClientDataModel disabled, contentName='"
+                    + contentName
+                    + "' contentKey='"
+                    + contentKey
+                    + "' contentRowCount="
+                    + contentRowCount
+                    + " contentPrimaryKey='"
+                    + contentPK
+                    + "' gridId="
+                    + htmlWriter.getComponentRenderContext()
+                            .getComponentClientId());
+            return;
+        }
+
+        String contentIndexesString = ClientDataModelTools
+                .format(clientDataModel);
+
+        // htmlWriter.writeAttributeNS("indexedDb", true);
+        htmlWriter.writeAttributeNS("idbName", contentName);
+        htmlWriter.writeAttributeNS("idbKey", contentKey);
+        if (contentRowCount >= 0) {
+            htmlWriter.writeAttributeNS("idbCount", contentRowCount);
+        }
+        htmlWriter.writeAttributeNS("idbPK", contentPK);
+        if (contentIndexesString != null) {
+            htmlWriter.writeAttributeNS("idbIndex", contentIndexesString);
+        }
+
+        IContentIndex[] contentIndexes = clientDataModel.listContentIndexes();
+        for (IContentIndex contentIndex : contentIndexes) {
+            if (contentIndex.isIgnoreAccent()) {
+
+                htmlWriter.getComponentRenderContext().setAttribute(
+                        CLIENT_DB_REQUIRES_VB_PROPERTY, Boolean.TRUE);
+            }
+        }
+
+        htmlWriter.getComponentRenderContext().setAttribute(
+                CLIENT_DB_ENABLED_PROPERTY, Boolean.TRUE);
+    }
+
+    protected void encodeJavaScript(IJavaScriptWriter writer)
+            throws WriterException {
+        super.encodeJavaScript(writer);
+
+        if (writer.getComponentRenderContext().containsAttribute(
+                CLIENT_DB_ENABLED_PROPERTY)) {
+            writer.getJavaScriptRenderContext().appendRequiredClass(
+                    "f_dataGrid", "indexDb");
+
+            if (writer.getComponentRenderContext().containsAttribute(
+                    CLIENT_DB_REQUIRES_VB_PROPERTY)) {
+                writer.getJavaScriptRenderContext().appendRequiredClass("f_vb",
+                        null);
             }
         }
     }
 
-    protected void addUnlockProperties(Set unlockedProperties) {
+    protected void addUnlockProperties(Set<String> unlockedProperties) {
         super.addUnlockProperties(unlockedProperties);
 
         unlockedProperties.add("selectedItems");
@@ -1548,16 +2075,16 @@ public class DataGridRenderer extends AbstractGridRenderer {
                 }
 
                 if (rowValueColumn != null) {
-                    Set selectedValues = SelectionTools.selectionValuesToSet(
-                            facesContext, (ISelectionComponent) gridComponent,
-                            false);
+                    Set<Object> selectedValues = SelectionTools
+                            .selectionValuesToSet(facesContext,
+                                    (ISelectionComponent) gridComponent, false);
 
-                    Set newSelectedValues = updateValues(facesContext,
+                    Set<Object> newSelectedValues = updateValues(facesContext,
                             rowValueColumn, selectedValues, selectedRows,
                             deselectedRows);
 
                     SelectionTools.setSelectionValues(facesContext,
-                            (ISelectionComponent) gridComponent,
+                            (ISelectionProvider) gridComponent,
                             newSelectedValues);
 
                 } else if (gridComponent instanceof ISelectionRangeComponent) {
@@ -1596,11 +2123,11 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
                 if (rowValueColumn != null) {
 
-                    Set checkedValues = CheckTools.checkValuesToSet(
+                    Set<Object> checkedValues = CheckTools.checkValuesToSet(
                             facesContext, (ICheckComponent) gridComponent,
                             false);
 
-                    Set newCheckedValues = updateValues(facesContext,
+                    Set<Object> newCheckedValues = updateValues(facesContext,
                             rowValueColumn, checkedValues, checkedRows,
                             uncheckedRows);
 
@@ -1643,14 +2170,14 @@ public class DataGridRenderer extends AbstractGridRenderer {
             if (showAdditionalRows != null || hideAdditionalRows != null) {
                 if (rowValueColumn != null) {
 
-                    Set additionalValues = AdditionalInformationTools
+                    Set<Object> additionalValues = AdditionalInformationTools
                             .additionalInformationValuesToSet(
                                     facesContext,
                                     (IAdditionalInformationComponent) gridComponent,
                                     false);
 
-                    Set newAdditionalValues = updateValues(facesContext,
-                            rowValueColumn, additionalValues,
+                    Set<Object> newAdditionalValues = updateValues(
+                            facesContext, rowValueColumn, additionalValues,
                             showAdditionalRows, hideAdditionalRows);
 
                     AdditionalInformationTools.setAdditionalInformationValues(
@@ -1706,11 +2233,67 @@ public class DataGridRenderer extends AbstractGridRenderer {
             }
         }
 
+        if (gridComponent instanceof ICriteriaManagerCapability) {
+
+            ICriteriaManagerCapability manager = (ICriteriaManagerCapability) gridComponent;
+            ICriteriaContainer[] oldSelectedContainers = manager
+                    .listSelectedCriteriaContainers();
+
+            Set<ICriteriaContainer> oldContainerSet = new HashSet<ICriteriaContainer>();
+            if (oldSelectedContainers != null
+                    && oldSelectedContainers.length > 0) {
+                oldContainerSet.addAll(Arrays.asList(oldSelectedContainers));
+            }
+            String crit = componentData
+                    .getStringProperty("selectedCriteriaColumns");
+            if (crit != null) {
+
+                ISelectedCriteria[] selectedCriteria = null;
+                String criteria_s = componentData
+                        .getStringProperty("criteriaValues");
+                if (criteria_s != null) {
+                    selectedCriteria = CriteriaTools.computeCriteriaConfigs(
+                            facesContext, (IGridComponent) component,
+                            criteria_s);
+                }
+
+                if (selectedCriteria != null) {
+                    ICriteriaContainer[] newSelectedCriteria = new ICriteriaContainer[selectedCriteria.length];
+                    for (int i = 0; i < selectedCriteria.length; i++) {
+                        ISelectedCriteria iSelectedCriteria = selectedCriteria[i];
+
+                        Set<Object> values = iSelectedCriteria
+                                .listSelectedValues();
+                        SelectionTools.setSelectionValues(facesContext,
+                                iSelectedCriteria.getConfig(), values);
+
+                        ICriteriaContainer criteriaContainer = iSelectedCriteria
+                                .getConfig().getCriteriaContainer();
+                        newSelectedCriteria[i] = criteriaContainer;
+                        oldContainerSet.remove(criteriaContainer);
+                    }
+
+                    component.queueEvent(new PropertyChangeEvent(component,
+                            Properties.SELECTED_CRITERIA_COLUMNS,
+                            oldSelectedContainers, newSelectedCriteria));
+
+                    manager.setSelectedCriteriaContainers(newSelectedCriteria);
+                }
+
+                for (ICriteriaContainer criteriaContainer : oldContainerSet) {
+                    SelectionTools.setSelectionValues(facesContext,
+                            criteriaContainer.getCriteriaConfiguration(),
+                            Collections.emptySet());
+                }
+
+            }
+        }
+
         super.decode(context, component, componentData);
     }
 
-    private Set updateValues(FacesContext facesContext,
-            UIColumn columnComponent, Set values, String selectedRows,
+    private Set<Object> updateValues(FacesContext facesContext,
+            UIColumn columnComponent, Set<Object> values, String selectedRows,
             String deselectedRows) {
 
         if (HtmlTools.ALL_VALUE.equals(deselectedRows)) {
@@ -1718,7 +2301,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
         } else if (values.isEmpty() == false && deselectedRows != null
                 && deselectedRows.length() > 0) {
-            List deselect = HtmlValuesTools.parseValues(facesContext,
+            List<Object> deselect = HtmlValuesTools.parseValues(facesContext,
                     columnComponent, true, false, deselectedRows);
 
             if (deselect.isEmpty() == false) {
@@ -1727,7 +2310,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
         }
 
         if (selectedRows != null && selectedRows.length() > 0) {
-            List select = HtmlValuesTools.parseValues(facesContext,
+            List<Object> select = HtmlValuesTools.parseValues(facesContext,
                     columnComponent, true, false, selectedRows);
 
             if (select.isEmpty() == false) {
@@ -1748,8 +2331,9 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
             UIColumn rowValueColumn = getRowValueColumn(gridComponent);
             if (rowValueColumn != null) {
-                List select = HtmlValuesTools.parseValues(requestContext
-                        .getFacesContext(), rowValueColumn, true, false, value);
+                List select = HtmlValuesTools.parseValues(
+                        requestContext.getFacesContext(), rowValueColumn, true,
+                        false, value);
 
                 if (select.size() == 1) {
                     return select.get(0);
@@ -1780,4 +2364,22 @@ public class DataGridRenderer extends AbstractGridRenderer {
         return super.decodeEventObject(requestContext, component, eventData);
     }
 
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties
+                .addAttributes(null, new String[] { "cellTextWrap",
+                        "asyncRender", "cursorValue", "showValue",
+                        "rowLabelColumnId" });
+    }
+
+    protected String getAdditionalInformationOpenImageURL(
+            IHtmlComponentWriter writer) {
+        return null;
+    }
+
+    protected String getAdditionalInformationCloseImageURL(
+            IHtmlComponentWriter writer) {
+        return null;
+    }
 }

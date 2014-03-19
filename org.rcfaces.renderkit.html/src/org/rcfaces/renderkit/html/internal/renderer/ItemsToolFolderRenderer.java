@@ -17,12 +17,13 @@ import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.AbstractSelectItemsRenderer;
 import org.rcfaces.renderkit.html.internal.EventDecoders;
-import org.rcfaces.renderkit.html.internal.IHtmlWriter;
-import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.EventDecoders.IEventDecoder;
 import org.rcfaces.renderkit.html.internal.EventDecoders.IEventObjectDecoder;
+import org.rcfaces.renderkit.html.internal.IHtmlWriter;
+import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.ItemsToolFolderDecorator;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -30,19 +31,17 @@ import org.rcfaces.renderkit.html.internal.decorator.ItemsToolFolderDecorator;
  * @version $Revision$ $Date$
  */
 public class ItemsToolFolderRenderer extends AbstractSelectItemsRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final int IMMEDIATE_DETAIL = 0x400;
 
     protected static EventDecoders.IEventDecoder ITEM_SELECTION_DECODER = new EventDecoders.AbstractEventDecoder() {
-        private static final String REVISION = "$Revision$";
 
         public void decodeEvent(IRequestContext requestContext,
                 UIComponent component, IEventData eventData,
                 IEventObjectDecoder eventObjectDecoder) {
-            FacesEvent event = new ItemSelectionEvent(component, eventData
-                    .getEventValue(), null, eventData.getEventItem(), eventData
-                    .getEventDetail(),
+            FacesEvent event = new ItemSelectionEvent(component,
+                    eventData.getEventValue(), null, eventData.getEventItem(),
+                    eventData.getEventDetail(),
                     (eventData.getEventDetail() & IMMEDIATE_DETAIL) > 0);
 
             queueEvent(component, event);
@@ -81,10 +80,10 @@ public class ItemsToolFolderRenderer extends AbstractSelectItemsRenderer {
         writeCssAttributes(writer);
 
         if (itemsToolFolderComponent.isDisabled(facesContext)) {
-            writer.writeAttribute("v:disabled", true);
+            writer.writeAttributeNS("disabled", true);
         }
         if (itemsToolFolderComponent.isReadOnly(facesContext)) {
-            writer.writeAttribute("v:readOnly", true);
+            writer.writeAttributeNS("readOnly", true);
         }
 
         String verticalAlignment = itemsToolFolderComponent
@@ -147,4 +146,10 @@ public class ItemsToolFolderRenderer extends AbstractSelectItemsRenderer {
         return new ItemsToolFolderDecorator(component);
     }
 
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "disabled",
+                "readOnly" });
+    }
 }

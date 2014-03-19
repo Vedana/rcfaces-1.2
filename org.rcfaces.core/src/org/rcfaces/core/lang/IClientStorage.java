@@ -11,15 +11,15 @@ import java.util.Iterator;
  * @version $Revision$ $Date$
  */
 public interface IClientStorage {
-    Object getAttribute(String name);
+	Object getAttribute(String name);
 
-    Object setAttribute(String name, Object value);
+	Object setAttribute(String name, Object value);
 
-    Object removeAttribute(String name);
+	Object removeAttribute(String name);
 
-    boolean isEmpty();
+	boolean isEmpty();
 
-    int getSize();
+	int getSize();
 
-    Iterator listAttributeNames();
+	Iterator<String> listAttributeNames();
 }

@@ -1,0 +1,36 @@
+/*
+ * $Id$
+ */
+
+/**
+ *
+ * @class f_criteriaList
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+
+ 
+.f_criteriaList {
+	border: 1px dotted #999999;
+	background-color: #EEEEEE;
+	font: 11px Verdana, Geneva, Arial, Helvetica, sans-serif; 
+	text-align: left;
+	vertical-align: baseline;
+
+	box-sizing: border-box;	
+	
+	user-select: none;
+	
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.f_criteriaList_list {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	list-style-type: none;
+	user-select: none;
+}
+ 

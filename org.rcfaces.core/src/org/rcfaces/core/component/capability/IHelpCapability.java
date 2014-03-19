@@ -11,7 +11,7 @@ package org.rcfaces.core.component.capability;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public interface IHelpCapability extends IToolTipCapability {
+public interface IHelpCapability extends IToolTipTextCapability {
 
     /**
      * Returns a string value specifying the message to be shown by a <a

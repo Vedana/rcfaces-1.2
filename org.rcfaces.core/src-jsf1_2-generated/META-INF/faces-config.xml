@@ -203,6 +203,10 @@ A string specifying the message to display when there is no row to display.
 		</attribute>
 	</component>
 	<component>
+		<component-type>org.rcfaces.core.criteriaList</component-type>
+		<component-class>org.rcfaces.core.component.CriteriaListComponent</component-class>
+	</component>
+	<component>
 		<description><![CDATA[
 <p>The dataGrid Component is a grid component. It can be compared to the grid found in the list part of the modern file explorer. It allows sorts, resizing, contextual menus ...</p>
       <p>The dataGrid Component has the following capabilities :
@@ -236,6 +240,10 @@ A string specifying the message to display when there is no row to display.
 		<attribute>
 			<attribute-name>rowDropEffects</attribute-name>
 			<attribute-class>int</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>selectedCriteriaColumns</attribute-name>
+			<attribute-class>java.lang.Object</attribute-class>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -298,6 +306,10 @@ A string value specifying the name of the variable receiving the index of the cu
 		<attribute>
 			<attribute-name>rowValueConverter</attribute-name>
 			<attribute-class>javax.faces.convert.Converter</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>cellTextWrap</attribute-name>
+			<attribute-class>boolean</attribute-class>
 		</attribute>
 	</component>
 	<component>
@@ -814,6 +826,10 @@ A boolean value indicating wether the component should be hide when it is not av
 		</attribute>
 	</component>
 	<component>
+		<component-type>org.rcfaces.core.imageCriteriaButton</component-type>
+		<component-class>org.rcfaces.core.component.ImageCriteriaButtonComponent</component-class>
+	</component>
+	<component>
 		<component-type>org.rcfaces.core.textEditorImageButton</component-type>
 		<component-class>org.rcfaces.core.component.TextEditorImageButtonComponent</component-class>
 	</component>
@@ -905,6 +921,21 @@ An int value specifying the number of rows to be displayed.
 	<component>
 		<component-type>org.rcfaces.core.viewDialog</component-type>
 		<component-class>org.rcfaces.core.component.ViewDialogComponent</component-class>
+<<<<<<< HEAD
+=======
+		<attribute>
+			<attribute-name>viewURL</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>shellDecoratorName</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>returnFocusClientId</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	</component>
 	<component>
 		<component-type>org.rcfaces.core.submitWait</component-type>
@@ -1246,6 +1277,28 @@ A boolean value indicating wether the value is not determinated.
       	<li>Events Handling</li>
       </ul>
       </p>
+<<<<<<< HEAD
+=======
+      
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SuggestTextEntryComponent.html">suggestTextEntry</a> renderer is linked to the <a href="/jsdocs/index.html?f_suggestTextEntry.html" target="_blank">f_suggestTextEntry</a> javascript class. f_suggestTextEntry extends f_textEntry, fa_filterProperties, fa_commands</p>
+      
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_suggestTextEntry</td>
+			<td width="50%">Defines styles for the wrapper element</td>
+		</tr>
+		
+		</tbody>
+		</table>
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 ]]></description>
 		<component-type>org.rcfaces.core.suggestTextEntry</component-type>
 		<component-class>org.rcfaces.core.component.SuggestTextEntryComponent</component-class>
@@ -1298,6 +1351,34 @@ A string specifying a converter id or a binding to a converter object. This conv
 		<attribute>
 			<attribute-name>orderedItems</attribute-name>
 			<attribute-class>boolean</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>showPopupForOneResult</attribute-name>
+			<attribute-class>boolean</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>disableProposals</attribute-name>
+			<attribute-class>boolean</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>inputFormat</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>labelFormat</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>descriptionFormat</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>popupWidth</attribute-name>
+			<attribute-class>int</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>popupHeight</attribute-name>
+			<attribute-class>int</attribute-class>
 		</attribute>
 	</component>
 	<component>
@@ -1459,6 +1540,10 @@ A boolean value indicating wether the component should be get the focus when a m
 			<attribute-name>setFocusIfMessage</attribute-name>
 			<attribute-class>boolean</attribute-class>
 		</attribute>
+	</component>
+	<component>
+		<component-type>org.rcfaces.core.heading</component-type>
+		<component-class>org.rcfaces.core.component.HeadingComponent</component-class>
 	</component>
 	<component>
 		<description><![CDATA[
@@ -1890,6 +1975,10 @@ A boolean value that indicates wether a node is identified by it's value or by a
 			<attribute-name>expansionUseValue</attribute-name>
 			<attribute-class>boolean</attribute-class>
 		</attribute>
+		<attribute>
+			<attribute-name>schrodingerCheckable</attribute-name>
+			<attribute-class>boolean</attribute-class>
+		</attribute>
 	</component>
 	<component>
 		<component-type>org.rcfaces.core.itemsList</component-type>
@@ -1923,10 +2012,94 @@ A boolean value indicating wether the component should be get the focus when a m
 			<attribute-name>setFocusIfMessage</attribute-name>
 			<attribute-class>boolean</attribute-class>
 		</attribute>
+		<attribute>
+			<attribute-name>autoFocus</attribute-name>
+			<attribute-class>boolean</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>autoFocusFrom</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
 	</component>
 	<component>
 		<component-type>org.rcfaces.core.scheduler</component-type>
 		<component-class>org.rcfaces.core.component.SchedulerComponent</component-class>
+<<<<<<< HEAD
+=======
+		<attribute>
+			<attribute-name>dateBegin</attribute-name>
+			<attribute-class>java.util.Date</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>hourBegin</attribute-name>
+			<attribute-class>org.rcfaces.core.lang.Time</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>hourEnd</attribute-name>
+			<attribute-class>org.rcfaces.core.lang.Time</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>primaryTick</attribute-name>
+			<attribute-class>int</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>secondaryTick</attribute-name>
+			<attribute-class>int</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>showPrimaryTickLabel</attribute-name>
+			<attribute-class>boolean</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>showSecondaryTickLabel</attribute-name>
+			<attribute-class>boolean</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>periods</attribute-name>
+			<attribute-class>java.lang.Object</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>periodBegin</attribute-name>
+			<attribute-class>java.util.Date</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>periodEnd</attribute-name>
+			<attribute-class>java.util.Date</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>periodLabel</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>periodStyle</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>periodSelectable</attribute-name>
+			<attribute-class>boolean</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>periodToolTip</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>periodValue</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>periodType</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value holding the name of a request-scope attribute under which the model data for the
+          row selected by the current value of the "rowIndex" property (i.e.
+          also the current value of the "rowData" property) will be exposed.
+]]></description>
+			<attribute-name>var</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	</component>
 	<component>
 		<component-type>org.rcfaces.core.schedulerColumn</component-type>
@@ -1970,6 +2143,34 @@ TODO
 			<attribute-name>enableViewState</attribute-name>
 			<attribute-class>boolean</attribute-class>
 		</attribute>
+	</component>
+	<component>
+		<component-type>org.rcfaces.core.criteria</component-type>
+		<component-class>org.rcfaces.core.component.CriteriaComponent</component-class>
+	</component>
+	<component>
+		<component-type>org.rcfaces.core.criteriaItem</component-type>
+		<component-class>org.rcfaces.core.component.CriteriaItemComponent</component-class>
+	</component>
+	<component>
+		<component-type>org.rcfaces.core.criteriaItemFiller</component-type>
+		<component-class>org.rcfaces.core.component.CriteriaItemFillerComponent</component-class>
+	</component>
+	<component>
+		<component-type>org.rcfaces.core.toolTip</component-type>
+		<component-class>org.rcfaces.core.component.ToolTipComponent</component-class>
+	</component>
+	<component>
+		<component-type>org.rcfaces.core.toolTipManager</component-type>
+		<component-class>org.rcfaces.core.component.ToolTipManagerComponent</component-class>
+	</component>
+	<component>
+		<component-type>org.rcfaces.core.eventsCollector</component-type>
+		<component-class>org.rcfaces.core.component.EventsCollectorComponent</component-class>
+	</component>
+	<component>
+		<component-type>org.rcfaces.core.headingZone</component-type>
+		<component-class>org.rcfaces.core.component.HeadingZoneComponent</component-class>
 	</component>
 	<component>
 		<component-type>javax.faces.HtmlOutputText</component-type>

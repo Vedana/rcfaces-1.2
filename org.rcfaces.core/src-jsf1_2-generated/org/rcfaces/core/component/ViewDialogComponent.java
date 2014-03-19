@@ -1,15 +1,22 @@
 package org.rcfaces.core.component;
 
+import javax.faces.component.NamingContainer;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
+import java.util.Map;
+import java.util.Collections;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.ICloseEventCapability;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.capability.IImmediateCapability;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.component.capability.IServerDataCapability;
 import org.apache.commons.logging.Log;
 import java.util.Set;
+import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.component.capability.IDialogPriorityCapability;
 import org.rcfaces.core.component.capability.IClosableCapability;
+import java.lang.Object;
 import org.rcfaces.core.component.capability.IImageCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import java.lang.String;
@@ -17,11 +24,13 @@ import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.component.capability.IWAIRoleCapability;
 import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.internal.component.CameliaOutputComponent;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.ISizeCapability;
 import java.util.HashSet;
+import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import java.util.Arrays;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
@@ -42,7 +51,10 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 	ICloseEventCapability,
 	IClosableCapability,
 	IImmediateCapability,
-	IImageAccessorsCapability {
+	IClientDataCapability,
+	IServerDataCapability,
+	IImageAccessorsCapability,
+	NamingContainer {
 
 	private static final Log LOG = LogFactory.getLog(ViewDialogComponent.class);
 
@@ -50,7 +62,7 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"closeListener","lookId","text","shellDecoratorName","visible","styleClass","width","ariaLabel","dialogPriority","textDirection","ariaLevel","immediate","height","closable","hiddenMode","viewURL","imageURL","waiRole"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"returnFocusClientId","closeListener","lookId","text","shellDecoratorName","visible","styleClass","width","ariaLabel","dialogPriority","textDirection","ariaLevel","immediate","height","closable","hiddenMode","viewURL","imageURL","waiRole"}));
 	}
 
 	public ViewDialogComponent() {
@@ -84,6 +96,97 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 			}
 			
 			return Boolean.valueOf(isVisible(facesContext));
+		
+	}
+
+	public String getClientData(String name, FacesContext facesContext) {
+
+
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
+		 if (dataMapAccessor==null) {
+		 	return null;
+		 }
+            
+		return (String)dataMapAccessor.getData(name, facesContext);
+		
+	}
+
+	public Object getServerData(String name, FacesContext facesContext) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
+		if (dataMapAccessor==null) {
+			return null;
+		}
+		
+		return dataMapAccessor.getData(name, facesContext);
+		
+	}
+
+	public ValueExpression getServerDataValueExpression(String name, FacesContext facesContext) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
+		if (dataMapAccessor==null) {
+			return null;
+		}
+		
+		return dataMapAccessor.getValueExpression(name);
+		
+	}
+
+	public Map getClientDataMap(FacesContext facesContext) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "clientData", false);
+		if (dataMapAccessor==null) {
+			return Collections.EMPTY_MAP;
+		}
+            
+		return dataMapAccessor.getDataMap(facesContext);
+		
+	}
+
+	public Map getServerDataMap(FacesContext facesContext) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
+ 		if (dataMapAccessor==null) {
+			return Collections.EMPTY_MAP;
+		}
+            
+		Map map=dataMapAccessor.getDataMap(facesContext);
+		if (Constants.READ_ONLY_COLLECTION_LOCK_ENABLED) {
+			if (map.isEmpty()) {
+				return Collections.EMPTY_MAP;
+			}
+			map=Collections.unmodifiableMap(map);
+		}
+		return map;
+		
+	}
+
+	public String[] listClientDataKeys(FacesContext facesContext) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
+		if (dataMapAccessor==null) {
+			return ComponentTools.STRING_EMPTY_ARRAY;
+		}
+		
+		return dataMapAccessor.listDataKeys(facesContext);
+		
+	}
+
+	public String[] listServerDataKeys(FacesContext facesContext) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		if (dataMapAccessor==null) {
+			return ComponentTools.STRING_EMPTY_ARRAY;
+		}
+		
+		return dataMapAccessor.listDataKeys(facesContext);
 		
 	}
 
@@ -420,7 +523,7 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 	 * See {@link #isClosable() isClosable()} for more details
 	 */
 	public boolean isClosable(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.CLOSABLE, false, facesContext);
+		return engine.getBoolProperty(Properties.CLOSABLE, true, facesContext);
 	}
 
 	/**
@@ -458,12 +561,126 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 		engine.setProperty(Properties.IMMEDIATE, immediate);
 	}
 
+	public int getClientDataCount() {
+
+
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
+		 if (dataMapAccessor==null) {
+		 	return 0;
+		 }
+		 
+		 return dataMapAccessor.getDataCount();
+		
+	}
+
+	public String[] listClientDataKeys() {
+
+
+			return listClientDataKeys(null);
+		
+	}
+
+	public String removeClientData(String name) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
+		if (dataMapAccessor==null) {
+			return null;
+		}
+            
+		return (String)dataMapAccessor.removeData(name, null);
+		
+	}
+
+	public String setClientData(String name, String value) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
+            
+		return (String)dataMapAccessor.setData(name, value, null);
+		
+	}
+
+	public String getClientData(String name) {
+
+
+		 return getClientData(name, null);
+		
+	}
+
+	public Map getClientDataMap() {
+
+
+		return getClientDataMap(null);
+		
+	}
+
+	public String[] listServerDataKeys() {
+
+
+			return listServerDataKeys(null);
+		
+	}
+
+	public Object setServerData(String name, Object value) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
+            
+		return dataMapAccessor.setData(name, value, null);
+		
+	}
+
+	public Map getServerDataMap() {
+
+
+		return getServerDataMap(null);
+		
+	}
+
+	public int getServerDataCount() {
+
+
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		 if (dataMapAccessor==null) {
+		 	return 0;
+		 }
+            
+		return dataMapAccessor.getDataCount();
+		
+	}
+
+	public Object getServerData(String name) {
+
+
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		 if (dataMapAccessor==null) {
+		 	return null;
+		 }
+            
+		return dataMapAccessor.getData(name, null);
+		
+	}
+
+	public Object removeServerData(String name) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		if (dataMapAccessor==null) {
+		 	return null;
+		}
+            
+		return dataMapAccessor.removeData(name, null);
+		
+	}
+
 	public String getViewURL() {
 		return getViewURL(null);
 	}
 
 	public String getViewURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.VIEW_URL, facesContext);
+		String s = engine.getStringProperty(Properties.VIEW_URL, facesContext);
+		return s;
 	}
 
 	public void setViewURL(String viewURL) {
@@ -483,7 +700,8 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 	}
 
 	public String getShellDecoratorName(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.SHELL_DECORATOR_NAME, facesContext);
+		String s = engine.getStringProperty(Properties.SHELL_DECORATOR_NAME, facesContext);
+		return s;
 	}
 
 	public void setShellDecoratorName(String shellDecoratorName) {
@@ -496,6 +714,27 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 	 */
 	public boolean isShellDecoratorNameSetted() {
 		return engine.isPropertySetted(Properties.SHELL_DECORATOR_NAME);
+	}
+
+	public String getReturnFocusClientId() {
+		return getReturnFocusClientId(null);
+	}
+
+	public String getReturnFocusClientId(javax.faces.context.FacesContext facesContext) {
+		String s = engine.getStringProperty(Properties.RETURN_FOCUS_CLIENT_ID, facesContext);
+		return s;
+	}
+
+	public void setReturnFocusClientId(String returnFocusClientId) {
+		engine.setProperty(Properties.RETURN_FOCUS_CLIENT_ID, returnFocusClientId);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "returnFocusClientId" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isReturnFocusClientIdSetted() {
+		return engine.isPropertySetted(Properties.RETURN_FOCUS_CLIENT_ID);
 	}
 
 	protected Set getCameliaFields() {

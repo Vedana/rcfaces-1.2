@@ -14,7 +14,7 @@ import org.rcfaces.core.component.CardComponent;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public interface ICardIterator extends IComponentIterator {
+public interface ICardIterator extends IComponentIterator<CardComponent> {
     /**
      * Returns the next CardComponent in the iteration. Calling this method
      * repeatedly until the {@link #hasNext()} method returns false will return

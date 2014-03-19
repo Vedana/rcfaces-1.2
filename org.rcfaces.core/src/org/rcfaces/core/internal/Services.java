@@ -26,7 +26,6 @@ import org.xml.sax.SAXException;
  * @version $Revision$ $Date$
  */
 public class Services {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(Services.class);
 
@@ -36,7 +35,7 @@ public class Services {
 
     private boolean servicesLoaded = false;
 
-    private final Map services = new HashMap(32);
+    private final Map<String, Object> services = new HashMap<String, Object>(32);
 
     public static Services get() {
         return SINGLETON;
@@ -85,7 +84,7 @@ public class Services {
     private void loadServices(ClassLoader classLoader) {
         LOG.info("Load services using '" + classLoader + "'");
 
-        Enumeration enumeration;
+        Enumeration<URL> enumeration;
         try {
             enumeration = classLoader.getResources(RESOURCE_NAME);
 
@@ -95,7 +94,7 @@ public class Services {
         }
 
         for (; enumeration.hasMoreElements();) {
-            URL url = (URL) enumeration.nextElement();
+            URL url = enumeration.nextElement();
 
             loadService(classLoader, url);
         }
@@ -108,8 +107,6 @@ public class Services {
         digester.setUseContextClassLoader(true);
 
         digester.setEntityResolver(new EntityResolver() {
-            private static final String REVISION = "$Revision$";
-
             public InputSource resolveEntity(String string, String string1) {
                 return new InputSource(new CharArrayReader(new char[0]));
             }
@@ -117,14 +114,14 @@ public class Services {
         });
 
         digester.addRule("rcfaces-services/service", new Rule() {
-            private static final String REVISION = "$Revision$";
-
+            @Override
             public void begin(String namespace, String name,
                     Attributes attributes) throws Exception {
 
                 super.digester.push(new Service());
             }
 
+            @Override
             public void end(String namespace, String name) throws Exception {
                 Service service = (Service) super.digester.pop();
 
@@ -135,7 +132,7 @@ public class Services {
                     return;
                 }
 
-                Class clazz;
+                Class< ? > clazz;
                 try {
                     clazz = classLoader.loadClass(service.getClassName());
 

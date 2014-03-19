@@ -11,8 +11,7 @@ import javax.faces.model.DataModelListener;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class DataModelWrapper extends DataModel {
-    private static final String REVISION = "$Revision$";
+public class DataModelWrapper extends DataModel implements IDataModel {
 
     private DataModel dataModel;
 
@@ -20,46 +19,61 @@ public class DataModelWrapper extends DataModel {
         this.dataModel = dataModel;
     }
 
+    protected DataModel getWrappedDataModel() {
+        return dataModel;
+    }
+
+    @Override
     public void addDataModelListener(DataModelListener listener) {
         dataModel.addDataModelListener(listener);
     }
 
+    @Override
     public DataModelListener[] getDataModelListeners() {
         return dataModel.getDataModelListeners();
     }
 
+    @Override
     public int getRowCount() {
         return dataModel.getRowCount();
     }
 
+    @Override
     public Object getRowData() {
         return dataModel.getRowData();
     }
 
+    @Override
     public int getRowIndex() {
         return dataModel.getRowIndex();
     }
 
+    @Override
     public Object getWrappedData() {
         return dataModel.getWrappedData();
     }
 
+    @Override
     public boolean isRowAvailable() {
         return dataModel.isRowAvailable();
     }
 
+    @Override
     public void removeDataModelListener(DataModelListener listener) {
         dataModel.removeDataModelListener(listener);
     }
 
+    @Override
     public void setRowIndex(int rowIndex) {
         dataModel.setRowIndex(rowIndex);
     }
 
+    @Override
     public void setWrappedData(Object data) {
         dataModel.setWrappedData(data);
     }
 
+    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
@@ -68,6 +82,7 @@ public class DataModelWrapper extends DataModel {
         return result;
     }
 
+    @Override
     public boolean equals(Object obj) {
         if (this == obj)
             return true;

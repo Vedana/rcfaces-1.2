@@ -9,6 +9,5 @@ package org.rcfaces.renderkit.html.internal.renderer;
  * @version $Revision$ $Date$
  */
 public class TabNamingContainerRenderer extends TabRenderer {
-    private static final String REVISION = "$Revision$";
 
 }

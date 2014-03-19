@@ -4,7 +4,7 @@
  */
 package org.rcfaces.renderkit.html.internal.css;
 
-import org.rcfaces.renderkit.html.internal.IClientBrowser;
+import org.rcfaces.renderkit.html.internal.agent.IClientBrowser;
 
 /**
  * 

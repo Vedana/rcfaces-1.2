@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -32,18 +31,16 @@ import org.xml.sax.Attributes;
  */
 public class AdapterManagerImpl extends AbstractProvider implements
         IAdapterManager {
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory.getLog(AdapterManagerImpl.class);
 
-    protected final Map factories;
+    protected final Map<String, List<IAdapterFactory>> factories;
 
-    protected Map adapterLookup;
+    protected Map<String, Map<String, IAdapterFactory>> adapterLookup;
 
-    protected Map classSearchOrderLookup;
+    protected Map<Class< ? >, List<Class< ? >>> classSearchOrderLookup;
 
     public AdapterManagerImpl() {
-        factories = new HashMap(5);
+        factories = new HashMap<String, List<IAdapterFactory>>(5);
         adapterLookup = null;
 
         RcfacesContext rcfacesContext = RcfacesContext.getCurrentInstance();
@@ -57,18 +54,19 @@ public class AdapterManagerImpl extends AbstractProvider implements
         return "AdapterManager";
     }
 
+    @Override
     public void configureRules(Digester digester) {
         super.configureRules(digester);
 
         digester.addRule("rcfaces-config/adapters/adapter", new Rule() {
-            private static final String REVISION = "$Revision$";
-
+            @Override
             public void begin(String namespace, String name,
                     Attributes attributes) throws Exception {
 
                 super.digester.push(new AdapterBean());
             }
 
+            @Override
             public void end(String namespace, String name) throws Exception {
                 AdapterBean adapterBean = (AdapterBean) super.digester.pop();
 
@@ -108,7 +106,7 @@ public class AdapterManagerImpl extends AbstractProvider implements
          * dimension++; adapterClassName = adapterClassName.substring(0, dim); }
          */
 
-        Class adapterClass;
+        Class< ? > adapterClass;
         try {
             adapterClass = ClassLocator.load(adapterClassName, this,
                     facesContext);
@@ -119,10 +117,10 @@ public class AdapterManagerImpl extends AbstractProvider implements
             return;
         }
 
-        Class factoryClass;
+        Class< ? extends IAdapterFactory> factoryClass;
         try {
             factoryClass = ClassLocator.load(factoryClassName, this,
-                    facesContext);
+                    facesContext, IAdapterFactory.class);
 
         } catch (ClassNotFoundException e) {
             LOG.info("Factory class '" + factoryClassName
@@ -133,7 +131,7 @@ public class AdapterManagerImpl extends AbstractProvider implements
 
         IAdapterFactory adapterFactory;
         try {
-            adapterFactory = (IAdapterFactory) factoryClass.newInstance();
+            adapterFactory = factoryClass.newInstance();
 
         } catch (Throwable th) {
             LOG.info("Can not instanciate factory class '" + factoryClassName
@@ -145,18 +143,19 @@ public class AdapterManagerImpl extends AbstractProvider implements
         registerAdapters(adapterFactory, adapterClass);
     }
 
-    private Map getFactories(Class adaptable) {
+    private Map<String, IAdapterFactory> getFactories(Class< ? > adaptable) {
         // cache reference to lookup to protect against concurrent flush
-        Map lookup = adapterLookup;
+        Map<String, Map<String, IAdapterFactory>> lookup = adapterLookup;
         if (lookup == null) {
-            adapterLookup = lookup = new HashMap(30);
+            lookup = new HashMap<String, Map<String, IAdapterFactory>>(30);
+            adapterLookup = lookup;
         }
 
-        Map table = (Map) lookup.get(adaptable.getName());
+        Map<String, IAdapterFactory> table = lookup.get(adaptable.getName());
         if (table == null) {
             // calculate adapters for the class
-            table = new HashMap(4);
-            Class[] classes = computeClassOrder(adaptable);
+            table = new HashMap<String, IAdapterFactory>(4);
+            Class< ? >[] classes = computeClassOrder(adaptable);
             for (int i = 0; i < classes.length; i++) {
                 addFactoriesFor(classes[i].getName(), table);
             }
@@ -167,46 +166,49 @@ public class AdapterManagerImpl extends AbstractProvider implements
         return table;
     }
 
-    public Object getAdapter(Object adaptable, Class adapterType,
+    @SuppressWarnings("unchecked")
+    public <T> T getAdapter(Object adaptable, Class<T> adapterType,
             Object parameter) {
-        IAdapterFactory factory = (IAdapterFactory) getFactories(
-                adaptable.getClass()).get(adapterType.getName());
-        Object result = null;
+        IAdapterFactory factory = getFactories(adaptable.getClass()).get(
+                adapterType.getName());
+        T result = null;
         if (factory != null) {
             result = factory.getAdapter(adaptable, adapterType, parameter);
         }
 
         if (result == null && adapterType.isInstance(adaptable)) {
-            return adaptable;
+            result = (T) adaptable;
         }
 
         return result;
     }
 
-    private Class[] computeClassOrder(Class adaptable) {
-        List classes = null;
+    private Class< ? >[] computeClassOrder(Class< ? > adaptable) {
+        List<Class< ? >> classes = null;
         // cache reference to lookup to protect against concurrent flush
-        Map lookup = classSearchOrderLookup;
+        Map<Class< ? >, List<Class< ? >>> lookup = classSearchOrderLookup;
         if (lookup != null) {
-            classes = (List) lookup.get(adaptable);
+            classes = lookup.get(adaptable);
         }
 
         // compute class order only if it hasn't been cached before
         if (classes == null) {
-            classes = new ArrayList();
+            classes = new ArrayList<Class< ? >>();
             computeClassOrder(adaptable, classes);
             if (lookup == null) {
-                classSearchOrderLookup = lookup = new HashMap();
+                lookup = new HashMap<Class< ? >, List<Class< ? >>>();
+                classSearchOrderLookup = lookup;
             }
             lookup.put(adaptable, classes);
         }
 
-        return (Class[]) classes.toArray(new Class[classes.size()]);
+        return classes.toArray(new Class[classes.size()]);
     }
 
-    private void computeClassOrder(Class adaptable, Collection classes) {
-        Class clazz = adaptable;
-        Set seen = new HashSet(4);
+    private void computeClassOrder(Class< ? > adaptable,
+            Collection<Class< ? >> classes) {
+        Class< ? > clazz = adaptable;
+        Set<Class< ? >> seen = new HashSet<Class< ? >>(4);
         while (clazz != null) {
             classes.add(clazz);
             computeInterfaceOrder(clazz.getInterfaces(), classes, seen);
@@ -214,11 +216,12 @@ public class AdapterManagerImpl extends AbstractProvider implements
         }
     }
 
-    private void computeInterfaceOrder(Class[] interfaces, Collection classes,
-            Set seen) {
-        List newInterfaces = new ArrayList(interfaces.length);
+    private void computeInterfaceOrder(Class< ? >[] interfaces,
+            Collection<Class< ? >> classes, Set<Class< ? >> seen) {
+        List<Class< ? >> newInterfaces = new ArrayList<Class< ? >>(
+                interfaces.length);
         for (int i = 0; i < interfaces.length; i++) {
-            Class interfac = interfaces[i];
+            Class< ? > interfac = interfaces[i];
             if (seen.add(interfac)) {
                 // note we cannot recurse here without changing the resulting
                 // interface order
@@ -227,16 +230,16 @@ public class AdapterManagerImpl extends AbstractProvider implements
             }
         }
 
-        for (Iterator it = newInterfaces.iterator(); it.hasNext();) {
-            computeInterfaceOrder(((Class) it.next()).getInterfaces(), classes,
-                    seen);
+        for (Class< ? > clazz : newInterfaces) {
+            computeInterfaceOrder(clazz.getInterfaces(), classes, seen);
         }
     }
 
-    private void addFactoriesFor(String typeName, Map table) {
-        List factoryList;
+    private void addFactoriesFor(String typeName,
+            Map<String, IAdapterFactory> table) {
+        List<IAdapterFactory> factoryList;
         synchronized (factories) {
-            factoryList = (List) factories.get(typeName);
+            factoryList = factories.get(typeName);
         }
 
         if (factoryList == null) {
@@ -246,9 +249,9 @@ public class AdapterManagerImpl extends AbstractProvider implements
         synchronized (factoryList) {
             int size = factoryList.size();
             for (int i = 0; i < size; i++) {
-                IAdapterFactory factory = (IAdapterFactory) factoryList.get(i);
+                IAdapterFactory factory = factoryList.get(i);
 
-                Class[] adapters = factory.getAdapterList();
+                Class< ? >[] adapters = factory.getAdapterList();
                 for (int j = 0; j < adapters.length; j++) {
                     String adapterName = adapters[j].getName();
                     if (table.containsKey(adapterName)) {
@@ -261,7 +264,7 @@ public class AdapterManagerImpl extends AbstractProvider implements
         }
     }
 
-    public void registerAdapters(IAdapterFactory factory, Class adaptable) {
+    public void registerAdapters(IAdapterFactory factory, Class< ? > adaptable) {
         registerFactory(factory, adaptable.getName());
 
         flushLookup();
@@ -273,11 +276,11 @@ public class AdapterManagerImpl extends AbstractProvider implements
     }
 
     private void registerFactory(IAdapterFactory factory, String adaptableType) {
-        List list;
+        List<IAdapterFactory> list;
         synchronized (factories) {
-            list = (List) factories.get(adaptableType);
+            list = factories.get(adaptableType);
             if (list == null) {
-                list = new ArrayList(5);
+                list = new ArrayList<IAdapterFactory>(5);
                 factories.put(adaptableType, list);
             }
         }

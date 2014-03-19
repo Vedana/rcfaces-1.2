@@ -14,7 +14,6 @@ import javax.faces.convert.Converter;
  */
 public class AbstractNumberConverter extends
         javax.faces.convert.NumberConverter {
-    private static final String REVISION = "$Revision$";
 
     public static final Converter SINGLETON = new AbstractNumberConverter();
 
@@ -32,6 +31,7 @@ public class AbstractNumberConverter extends
         this.defaultValue = defaultValue;
     }
 
+    @Override
     public Object getAsObject(FacesContext context, UIComponent component,
             String value) {
         if (context == null) {
@@ -41,6 +41,7 @@ public class AbstractNumberConverter extends
         return super.getAsObject(context, component, value);
     }
 
+    @Override
     public String getAsString(FacesContext context, UIComponent component,
             Object value) {
         if (context == null) {

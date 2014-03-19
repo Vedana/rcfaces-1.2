@@ -22,7 +22,6 @@ import org.rcfaces.renderkit.html.internal.HtmlTools;
  * @version $Revision$ $Date$
  */
 public class ListDecorator extends ComboDecorator {
-    private static final String REVISION = "$Revision$";
 
     public ListDecorator(UIComponent component,
             IFilterProperties filterProperties, boolean jsVersion) {
@@ -40,7 +39,7 @@ public class ListDecorator extends ComboDecorator {
 
             StringTokenizer st = new StringTokenizer(value,
                     HtmlTools.LIST_SEPARATORS);
-            Set s = new HashSet(st.countTokens());
+            Set<String> s = new HashSet<String>(st.countTokens());
             for (; st.hasMoreTokens();) {
                 s.add(st.nextToken());
             }

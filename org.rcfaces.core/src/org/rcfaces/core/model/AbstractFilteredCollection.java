@@ -3,44 +3,40 @@
  */
 package org.rcfaces.core.model;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 
 import javax.faces.component.UIComponent;
-import javax.faces.model.SelectItem;
 
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public abstract class AbstractFilteredCollection implements Collection,
-        IFiltredCollection, IFiltredCollection2 {
-    private static final String REVISION = "$Revision$";
+public abstract class AbstractFilteredCollection<T> implements Collection<T>,
+        IFiltredCollection<T>, IFiltredCollection2<T> {
 
-    public static final Collection EMPTY_COLLECTION = new AbstractFilteredCollection() {
-        private static final String REVISION = "$Revision$";
+    public static final IFiltredCollection< ? > EMPTY_FILTERED_COLLECTION = emptyFilteredCollection();
 
-        protected boolean accept(IFilterProperties filter, SelectItem selectItem) {
-            return false;
-        }
-    };
+    public static final Collection< ? > EMPTY_COLLECTION = (Collection< ? >) EMPTY_FILTERED_COLLECTION;
 
-    public static final IFiltredCollection EMPTY_FILTERED_COLLECTION = (IFiltredCollection) EMPTY_COLLECTION;
+    public static <T> IFiltredCollection<T> emptyFilteredCollection() {
+        return new AbstractFilteredCollection<T>() {
+            @Override
+            protected boolean accept(IFilterProperties filter, T selectItem) {
+                return false;
+            }
+        };
+    }
 
-    protected final Collection collection;
+    protected final Collection<T> collection;
 
     public AbstractFilteredCollection() {
-        this(Collections.EMPTY_LIST);
+        this(Collections.<T> emptyList());
     }
 
-    public AbstractFilteredCollection(SelectItem selecItems[]) {
-        this(Arrays.asList(selecItems));
-    }
-
-    public AbstractFilteredCollection(Collection collection) {
+    public AbstractFilteredCollection(Collection<T> collection) {
         this.collection = collection;
     }
 
@@ -50,18 +46,17 @@ public abstract class AbstractFilteredCollection implements Collection,
      * @param selectItem
      * @return <code>true</code> if the selectItem is sent to the client.
      */
-    protected abstract boolean accept(IFilterProperties filter,
-            SelectItem selectItem);
+    protected abstract boolean accept(IFilterProperties filter, T selectItem);
 
     public int size() {
         return collection.size();
     }
 
-    public boolean add(Object o) {
+    public boolean add(T o) {
         return collection.add(o);
     }
 
-    public boolean addAll(Collection c) {
+    public boolean addAll(Collection< ? extends T> c) {
         return collection.addAll(c);
     }
 
@@ -73,7 +68,7 @@ public abstract class AbstractFilteredCollection implements Collection,
         return collection.contains(o);
     }
 
-    public boolean containsAll(Collection c) {
+    public boolean containsAll(Collection< ? > c) {
         return collection.containsAll(c);
     }
 
@@ -81,7 +76,7 @@ public abstract class AbstractFilteredCollection implements Collection,
         return collection.isEmpty();
     }
 
-    public Iterator iterator() {
+    public Iterator<T> iterator() {
         return collection.iterator();
     }
 
@@ -89,11 +84,11 @@ public abstract class AbstractFilteredCollection implements Collection,
         return collection.remove(o);
     }
 
-    public boolean removeAll(Collection c) {
+    public boolean removeAll(Collection< ? > c) {
         return collection.removeAll(c);
     }
 
-    public boolean retainAll(Collection c) {
+    public boolean retainAll(Collection< ? > c) {
         return collection.retainAll(c);
     }
 
@@ -101,16 +96,16 @@ public abstract class AbstractFilteredCollection implements Collection,
         return collection.toArray();
     }
 
-    public Object[] toArray(Object[] a) {
+    public <V> V[] toArray(V[] a) {
         return collection.toArray(a);
     }
 
-    public Iterator iterator(IFilterProperties filterProperties,
+    public Iterator<T> iterator(IFilterProperties filterProperties,
             int maxNumberResult) {
         return new FilteredIterator(filterProperties, maxNumberResult);
     }
 
-    public Iterator iterator(UIComponent component,
+    public Iterator<T> iterator(UIComponent component,
             IFilterProperties filterProperties, int maxNumberResult) {
         return new FilteredIterator(component, filterProperties,
                 maxNumberResult);
@@ -121,8 +116,7 @@ public abstract class AbstractFilteredCollection implements Collection,
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
-    protected class FilteredIterator implements IFiltredIterator {
-        private static final String REVISION = "$Revision$";
+    protected class FilteredIterator implements IFiltredIterator<T> {
 
         private final IFilterProperties filterProperties;
 
@@ -136,9 +130,9 @@ public abstract class AbstractFilteredCollection implements Collection,
 
         private int size;
 
-        private Iterator iterator;
+        private Iterator<T> iterator;
 
-        private SelectItem currentSelectItem;
+        private T currentSelectItem;
 
         public FilteredIterator(IFilterProperties filterProperties) {
             this(null, filterProperties, NO_MAXIMUM_RESULT_NUMBER);
@@ -183,7 +177,7 @@ public abstract class AbstractFilteredCollection implements Collection,
                 // d'autres ...
 
                 for (; iterator.hasNext();) {
-                    SelectItem selectItem = (SelectItem) iterator.next();
+                    T selectItem = iterator.next();
                     if (accept(filterProperties, selectItem) == false) {
                         continue;
                     }
@@ -201,7 +195,7 @@ public abstract class AbstractFilteredCollection implements Collection,
                     return false;
                 }
 
-                SelectItem selectItem = (SelectItem) iterator.next();
+                T selectItem = iterator.next();
                 if (accept(filterProperties, selectItem) == false) {
                     continue;
                 }
@@ -212,12 +206,12 @@ public abstract class AbstractFilteredCollection implements Collection,
             }
         }
 
-        public Object next() {
+        public T next() {
             if (currentSelectItem == null) {
                 throw new IllegalStateException("No more selectItems ...");
             }
 
-            Object old = currentSelectItem;
+            T old = currentSelectItem;
             currentSelectItem = null;
             currentIndex++;
 

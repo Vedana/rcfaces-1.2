@@ -20,7 +20,6 @@
 		return this.id;
 	},
 		 
-		 
 	/**
 	 * Returns the value.
 	 *
@@ -41,6 +40,10 @@
 		if (value===undefined) {
 			value="";
 		}
+		
+		if (value!==null && value!==undefined && typeof(value)!="string") {
+			value=String(value);
+		}
 	
 		var oldValue=this.value;	
 		this.value=value;
@@ -49,6 +52,10 @@
 			this.f_performPropertyChange(f_prop.VALUE, value, oldValue);
 		}
 	}
-}
+};
 
-new f_class("f_hiddenValue", null, null, __members, f_eventTarget, fa_serializable, fa_clientData);
+new f_class("f_hiddenValue", {
+	extend: f_eventTarget,
+	aspects: [fa_serializable, fa_clientData],
+	members: __members
+} );

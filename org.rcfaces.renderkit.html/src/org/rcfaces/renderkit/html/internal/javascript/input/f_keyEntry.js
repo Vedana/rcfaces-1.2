@@ -53,28 +53,29 @@ var __statics = {
 		
 		return true;
 	}
-}
+};
 
 var __members = {
 	
 	f_keyEntry: function() {
 		this.f_super(arguments);
 			
-		this._suggestionDelayMs=f_core.GetNumberAttribute(this, "v:suggestionDelayMs", f_keyEntry._DEFAULT_SUGGESTION_DELAY_MS);
+		this._suggestionDelayMs=f_core.GetNumberAttributeNS(this,"suggestionDelayMs", f_keyEntry._DEFAULT_SUGGESTION_DELAY_MS);
 		
-		this._suggestionMinChars=f_core.GetNumberAttribute(this, "v:suggestionMinChars", f_keyEntry._DEFAULT_SUGGESTION_MIN_CHARS);
+		this._suggestionMinChars=f_core.GetNumberAttributeNS(this,"suggestionMinChars", f_keyEntry._DEFAULT_SUGGESTION_MIN_CHARS);
 		
-		this._valueFormat=f_core.GetAttribute(this, "v:valueFormat");
-		this._forLabel=f_core.GetAttribute(this, "v:forLabel");
-		this._valueFormatLabel=f_core.GetAttribute(this, "v:valueFormatLabel");
-		this._noValueFormatLabel=f_core.GetAttribute(this, "v:noValueFormatLabel", "");
-		
+		this._valueFormat=f_core.GetAttributeNS(this,"valueFormat");
+		this._forLabel=f_core.GetAttributeNS(this,"forLabel");
+		this._valueFormatLabel=f_core.GetAttributeNS(this,"valueFormatLabel");
+		this._noValueFormatLabel=f_core.GetAttributeNS(this,"noValueFormatLabel", "");
+		this._valueFormatTooltip=f_core.GetAttributeNS(this,"valueFormatTooltip", "");
+		this._valueFormatDescription=f_core.GetAttributeNS(this,"valueFormatDescription", "");
 		this._filtred=true;
 		
 		var input=this.f_getInput();
 		
-		this._emptyMessage=f_core.GetAttribute(this, "v:emptyMessage");
-		if (this._emptyMessage && f_core.GetAttribute(input, "v:emptyMessage")) {
+		this._emptyMessage=f_core.GetAttributeNS(this,"emptyMessage");
+		if (this._emptyMessage && f_core.GetAttributeNS(input,"emptyMessage")) {
 			this._formattedValue="";
 			this._emptyMessageShown=true;
 			
@@ -82,19 +83,22 @@ var __members = {
 			this._formattedValue=input.value;
 		}
 			
-		this._selectedValue=f_core.GetAttribute(this, "v:selectedValue", "");
+		this._selectedValue=f_core.GetAttributeNS(this, "selectedValue", "");
+		this._keyErrored=f_core.GetBooleanAttributeNS(this, "invalidKey", false);
+
 		this._inputValue=this._selectedValue;
-		if (this._selectedValue) {
-			this._keyErrored=f_core.GetAttribute(this, "v:invalidKey", false);
+		if (!this._selectedValue && this._keyErrored) {
+			this._inputValue=input.value;
+			this._formattedValue="";
 		}
 		
-		this._maxTextLength=f_core.GetNumberAttribute(this, "v:maxTextLength", 0);
+		this._maxTextLength=f_core.GetNumberAttributeNS(this,"maxTextLength", 0);
 
-		this._gridStyleClass=f_core.GetNumberAttribute(this, "v:gridStyleClass", 0);
+		this._gridStyleClass=f_core.GetAttributeNS(this,"gridStyleClass");
 
-		this._forceValidation=f_core.GetBooleanAttribute(this, "v:forceValidation", false);
+		this._forceValidation=f_core.GetBooleanAttributeNS(this,"forceValidation", false);
 		
-		if(this._forceValidation) {
+		if (this._forceValidation) {
 			this._installCheckListener();
 		}
 		
@@ -102,8 +106,13 @@ var __members = {
 		
 		this.f_insertEventListenerFirst(f_event.KEYDOWN, this.f_onCancelDown);
 		this.f_insertEventListenerFirst(f_event.KEYUP, this.f_onSuggest);
+		this.f_insertEventListenerFirst(f_event.KEYPRESS, this.f_onKeyPress);
 		this.f_insertEventListenerFirst(f_event.FOCUS, this.f_onFocus);
 		this.f_insertEventListenerFirst(f_event.BLUR, this.f_onBlur);
+				
+		if (window.f_indexedDbEngine) {
+//			this._indexDb=f_indexedDbEngine.FromComponent(this);
+		}
 	},
 
 	f_finalize: function() {
@@ -116,24 +125,33 @@ var __members = {
 		}
 
 		this.f_getInput().onbeforedeactivate=null;
+
+		var indexDb=this._indexDb;
+		if (indexDb) {
+			this._indexDb=undefined; // f_indexedData
+			
+			f_classLoader.Destroy(indexDb);
+		}
 	
-		// this._suggestionDelayMs=undefined;  // number
-		// this._suggestionMinChars=undefined; // number
+		// this._valueFormatDescription=undefined; // String
+		// this._suggestionDelayMs=undefined;  // Number
+		// this._suggestionMinChars=undefined; // Number
 		// this._valueFormat=undefined; // String
 		// this._valueFormatLabel=undefined; // String
 		// this._noValueFormatLabel=undefined; // String
+		// this._valueFormatTooltip=undefined; // String
 		// this._forLabel=undefined; // String
 		// this._formattedValue=undefined; // String
 		// this._inputValue=undefined; // String
-		// this._focus=undefined; // boolean
+		// this._focus=undefined; // Boolean
 		// this._selectedValue=undefined; // String
-		// this._verifyingKey=undefined; // boolean
-		// this._editable=undefined; // boolean
-		// this._readOnly=undefined; // boolean 
+		// this._verifyingKey=undefined; // Boolean
+		// this._editable=undefined; // Boolean
+		// this._readOnly=undefined; // Boolean 
 		// this._maxTextLength=undefined; // number
-		// this._emptyMessageShown=undefined; boolean
-		// this._forceValidation=undefined; boolean
-		// this._required=undefined; boolean
+		// this._emptyMessageShown=undefined; Boolean
+		// this._forceValidation=undefined; Boolean
+		// this._required=undefined; Boolean
 		
 		var request=this._verifyRequest;
 		if (request) {
@@ -166,7 +184,7 @@ var __members = {
 	 */
 	_installCheckListener: function() {
 		var keyEntry=this;
-		var checkListeners={
+		var checkListeners = {
 				
 			f_performCheckValue: function(event) {
 				if (keyEntry._inputValue) {
@@ -193,7 +211,7 @@ var __members = {
 					return true;
 				}
 				
-				if (keyEntry._required) {
+				if (keyEntry.f_isRequired()) {
 					var summary=keyEntry.f_getClientValidatorParameter("REQUIRED_ERROR_SUMMARY");
 					var detail=keyEntry.f_getClientValidatorParameter("REQUIRED_ERROR_DETAIL");
 					
@@ -224,7 +242,6 @@ var __members = {
 
 		this._checkListeners=checkListeners;
 		f_core.AddCheckListener(this, checkListeners);
-	
 	},
 	
 	/**
@@ -286,6 +303,13 @@ var __members = {
 	 * @param f_event evt
 	 * @return Boolean
 	 */
+	f_onKeyPress: function(evt) {
+	},
+	/**
+	 * @method protected
+	 * @param f_event evt
+	 * @return Boolean
+	 */
 	f_onCancelDown: function(evt) {
 		var jsEvt=evt.f_getJsEvent();
 		if (jsEvt.cancelBubble) {
@@ -294,6 +318,9 @@ var __members = {
 		}
 
 		f_core.Debug(f_keyEntry, "_onCancelDown: Event keyCode="+jsEvt.keyCode);
+
+		var input=this.f_getInput();		
+		var inputValue=input.value;
 
 		switch(jsEvt.keyCode) {
 		case f_key.VK_DOWN:
@@ -308,9 +335,6 @@ var __members = {
 
 		case f_key.VK_SPACE:
 			if (jsEvt.ctrlKey) {
-				var input=this.f_getInput();
-				
-				var inputValue=input.value;
 				
 				if (inputValue) {
 					this._verifyKey(inputValue);
@@ -319,7 +343,7 @@ var __members = {
 			}
 		}
 
-		this._inputValue=this.f_getInput().value;
+		this._inputValue=inputValue;
 		this._inputSelection=undefined;
 		
 		return true;
@@ -360,8 +384,9 @@ var __members = {
 				
 				this.f_updateInputStyle();
 			}
-				
-			if (newInput!=this._selectedValue && this._selectedValue) {
+
+			if (this._selectedValue && newInput!=this._selectedValue && (this.f_isEditable() && !this.f_isReadOnly())) {
+				f_core.Debug(f_keyEntry, "f_onSuggest: value='"+this._selectedValue+"' not equals input ='"+newInput+"'");
 				this._selectedValue=null;
 	
 				this.f_fireEvent(f_event.SELECTION, jsEvt, null, null);
@@ -394,6 +419,9 @@ var __members = {
 	 * @see #f_getValue()
 	 */
 	f_getSelectedValue: function() {
+		if (this._selectedValue && (!this.f_isEditable() || this. f_isReadOnly())) {
+			return this._selectedValue;
+		}
 		return this.f_getValue();
 	},
 	/**
@@ -413,6 +441,13 @@ var __members = {
 	f_setValue: function(value) {
 		f_core.Assert(value===null || typeof(value)=="string", "f_keyEntry.f_setValue: Invalid value parameter ("+value+").");
 		
+		if (this._inputValue==value) {
+			f_core.Debug(f_keyEntry, "f_setValue: Same input value ='"+value+"', ignores it !");
+			return;
+		}
+
+		f_core.Debug(f_keyEntry, "f_setValue: set input value ='"+value+"'");
+
 		this._selectedValue="";		
 		this._inputValue=value;
 		this._formattedValue="";
@@ -422,22 +457,85 @@ var __members = {
 		this.f_updateInputStyle();
 		
 		this.f_getInput().value=value;
-		
+
 		if (!this._focus) {
 			this._verifyKey(value);
 		}
 	},
 	/**
+	 * @method hidden
+	 * @param String value
+	 * @param Object rowValues
+	 * @return void
+	 */
+	f_setSyncValues: function(value, rowValues) {
+		var label=f_core.FormatMessage(this._valueFormat, rowValues);
+	
+		this.fa_valueSelected(value, label, rowValues);
+	},
+	/**
+	 * @method private
+	 * @return void
+	 */
+	f_updateTitle: function(rowValues) {
+		var valueFormatTooltip=this._valueFormatTooltip;
+		if (valueFormatTooltip) {
+			var title="";
+			
+			if (this._keyErrored) {
+				title=f_resourceBundle.Get(f_keyEntry).f_formatParams("INVALIDKEY_ERROR_SUMMARY");
+
+			} else if (rowValues) {
+				title=f_core.FormatMessage(valueFormatTooltip, rowValues);
+			}
+			
+			this.f_getInput().title=title;
+		}
+		
+		var valueFormatDescription=this._valueFormatDescription;
+		if (valueFormatDescription) {
+			var desc="";
+			
+			if (this._keyErrored) {
+				desc=f_resourceBundle.Get(f_keyEntry).f_formatParams("INVALIDKEY_ERROR_SUMMARY");
+	
+			} else if (rowValues) {
+				desc=f_core.FormatMessage(valueFormatDescription, rowValues);
+			}
+			
+			var descriptionComponent=this.ownerDocument.getElementById(this.id+"::description");
+			if (descriptionComponent) {
+				f_core.SetTextNode(descriptionComponent, desc);
+			}
+		}
+	},
+	/**
 	 * @method protected
+	 * @param String value
+	 * @param String label
+	 * @param Object rowValues
+	 * @param optional Boolean focusNext
+	 * @return void
 	 */
 	fa_valueSelected: function(value, label, rowValues, focusNext) {
 		f_core.Debug(f_keyEntry, "fa_valueSelected: value='"+value+"' label='"+label+"'");
 
+		var indexDb=this._indexDb;
+		if (indexDb && !this._indexDbResponse && value!==undefined) {
+			indexDb.f_asyncFillRows([{
+				value: value,
+				label: label,
+				rowValues: rowValues
+			}]);
+		}
+
 		if (this.f_isReadOnly()) {
+			f_core.Debug(f_keyEntry, "fa_valueSelected: no modification readOnly");
 			return;
 		}
 		
 		if (this.f_fireEvent(f_event.PRE_SELECTION, null, rowValues, value)===false) {
+			f_core.Debug(f_keyEntry, "fa_valueSelected: preSelection cancel event");
 			return;
 		}
 		
@@ -446,12 +544,17 @@ var __members = {
 			this._formattedValue=this.f_getInput().value;
 			this._selectedValue="";
 			this._cancelVerification();
+
+			f_core.Debug(f_keyEntry, "fa_valueSelected: value is undefined  selectedValue='"+this._selectedValue+"'");
+
 			if(this._forLabel){
 				var labelComponent = f_core.GetElementById(this._forLabel);
 				if (labelComponent) {
 					labelComponent.f_setText(this._noValueFormatLabel);
 				}
 			}
+			this.f_updateTitle();
+			
 			this.f_fireEvent(f_event.SELECTION, null, null, null);		
 			return;
 		}
@@ -461,13 +564,15 @@ var __members = {
 		
 		this._formattedValue=(label)?label:"";
 		this._selectedValue=value;
+		f_core.Debug(f_keyEntry, "fa_valueSelected: value is defined selectedValue='"+this._selectedValue+"'");
 		this._inputValue=value;
-		if(this._forLabel){
+		if (this._forLabel){
 			var labelComponent = f_core.GetElementById(this._forLabel);
 			if (labelComponent) {
 				labelComponent.f_setText(f_core.FormatMessage(this._valueFormatLabel,rowValues));
 			}
 		}
+		this.f_updateTitle(rowValues);
 		
 		var input=this.f_getInput();
 		
@@ -479,12 +584,19 @@ var __members = {
 		}
 		
 		if (this.f_fireEvent(f_event.SELECTION, null, rowValues, value)===false) {
+			f_core.Debug(f_keyEntry, "fa_valueSelected: selection event returns false");
 			return;
 		}
 		
+		f_core.Debug(f_keyEntry, "fa_valueSelected: focusNext = '"+focusNext +"'");
 		if (focusNext===false) {		
 			/* Ca redonne le focus sous IE !!! (donc il doit être egal à undefined pour lors de l'appel ajax de vérification) */	
-			f_core.SelectText(input, value.length);
+			try {
+				f_core.SelectText(input, value.length);
+			} catch (ex) {
+				f_core.Debug(f_keyEntry, "fa_valueSelected: throws exception ", ex);
+			}
+			
 
 		} else if (focusNext===true) {
 			var comp=f_core.GetNextFocusableComponent(this);
@@ -524,9 +636,11 @@ var __members = {
 		// On affiche la clef, ou la valeur saisie
 		if (this.f_isEditable() && !this.f_isReadOnly()) {
 			
-			this.setAttribute("v:notFocusedValue", input.value);
+			f_core.SetAttributeNS(this, "notFocusedValue", input.value);
 			
 			input.value=this._inputValue;
+			
+			f_core.Debug(f_keyEntry, "f_onFocus: change inputValue to '"+input.value+"'");
 		}
 		
 		// Il faut tout selectionner car sous IE le focus se repositionne au début		
@@ -557,6 +671,7 @@ var __members = {
 		var inputValue=input.value;
 		
 		this._inputValue=inputValue;
+
 		if (inputValue && !this._selectedValue && this.f_isEditable() && !this.f_isReadOnly()) {
 			this._verifyKey(inputValue);
 		}
@@ -566,6 +681,9 @@ var __members = {
 			if (labelComponent) {
 				labelComponent.f_setText(this._noValueFormatLabel);
 			}
+		}
+		if (!inputValue) {
+			this.f_updateTitle();
 		}
 		
 		if (!inputValue && this._emptyMessage) {
@@ -604,11 +722,46 @@ var __members = {
 		var inputValue=this._inputValue;
 		this._verifyingKey=inputValue;					
 		this.f_updateInputStyle();		
-				
+			
 		this.f_appendCommand(function(keyEntry) {
-			keyEntry.f_callServer(this._verifyingKey);
+			var key=keyEntry._verifyingKey;
+			
+			if (!keyEntry._indexDb) {
+				return keyEntry.f_callServer(key);
+			}
+			keyEntry._requestIndexDb(key);
 		});
 		
+	},
+	/**
+	 * @method private
+	 * @param params
+	 * @param text
+	 */
+	_requestIndexDb: function(key) {
+		var indexDb=this._indexDb;
+
+		var self=this;
+		indexDb.f_asyncSearchKey(key, function(state) {
+			if (!state) {
+				return self.f_callServer(key);
+			}
+
+			if (self.f_processNextCommand()) {
+				return;
+			}
+			
+			self._verifyingKey=undefined;		
+			self.f_updateInputStyle();		
+			
+			self._indexDbResponse=true;
+			try {
+				self.fa_valueSelected(state.value, state.label, state.rowValues);
+				
+			} finally {
+				self._indexDbResponse=undefined;
+			}
+		});
 	},
 	/**
 	 * @method protected
@@ -617,15 +770,14 @@ var __members = {
 		var params={
 			gridId: this.id,
 			key: key
-		}
+		};
 	
 		var filterExpression=this.fa_getSerializedPropertiesExpression();
 		if (filterExpression) {
 			params.filterExpression=filterExpression;
 		}
 		
-		var url=f_env.GetViewURI();
-		var request=new f_httpRequest(this, url, f_httpRequest.JAVASCRIPT_MIME_TYPE);
+		var request=new f_httpRequest(this, f_httpRequest.JAVASCRIPT_MIME_TYPE);
 		var keyEntry=this;
 		request.f_setListener({
 			/**
@@ -653,6 +805,8 @@ var __members = {
  			 	f_core.Debug(f_keyEntry, "f_callServer.onError: continueProcess="+continueProcess); 			 	
  			 			
 		 		if (continueProcess===false) {
+		 			keyEntry.f_clearCommands();
+
 					keyEntry._loading=undefined;
 					keyEntry._verifyingKey=undefined;		
 					keyEntry.f_updateInputStyle();		
@@ -805,13 +959,22 @@ var __members = {
 	 */
 	fa_updateRequired: function() {
 		this.f_updateStyleClass();
-		this._required = true;
+//		this._required = true;  /// ????????
 
 		if (this._checkListeners) {
 			return;
 		}
 		
 		this._installCheckListener();
+	},
+	/**
+	 * Le clientValidateur ne gere pas le focus !
+	 * 
+	 * @method hidden
+	 * @returns true
+	 */
+	f_isFocusEventManager: function() {
+		return true;
 	},
 	/**
 	 * @method hidden
@@ -823,7 +986,7 @@ var __members = {
 	},
 	fa_updateFilterProperties: function() {		
 	}
-}
+};
 
 new f_class("f_keyEntry", {
 	extend: f_textEntry,

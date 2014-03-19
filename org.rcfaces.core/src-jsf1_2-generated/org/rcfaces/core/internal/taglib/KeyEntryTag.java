@@ -36,6 +36,8 @@ public class KeyEntryTag extends AbstractGridTag implements Tag {
 	private ValueExpression labelColumnId;
 	private ValueExpression selectedValue;
 	private ValueExpression valueFormat;
+	private ValueExpression valueFormatTooltip;
+	private ValueExpression valueFormatDescription;
 	private ValueExpression forceValidation;
 	private ValueExpression forLabel;
 	private ValueExpression valueFormatLabel;
@@ -44,91 +46,99 @@ public class KeyEntryTag extends AbstractGridTag implements Tag {
 		return KeyEntryComponent.COMPONENT_TYPE;
 	}
 
-	public final void setEmptyMessage(ValueExpression emptyMessage) {
+	public void setEmptyMessage(ValueExpression emptyMessage) {
 		this.emptyMessage = emptyMessage;
 	}
 
-	public final void setEmptyDataMessage(ValueExpression emptyDataMessage) {
+	public void setEmptyDataMessage(ValueExpression emptyDataMessage) {
 		this.emptyDataMessage = emptyDataMessage;
 	}
 
-	public final void setSelectionListener(ValueExpression selectionListeners) {
+	public void setSelectionListener(ValueExpression selectionListeners) {
 		this.selectionListeners = selectionListeners;
 	}
 
-	public final void setDisabled(ValueExpression disabled) {
+	public void setDisabled(ValueExpression disabled) {
 		this.disabled = disabled;
 	}
 
-	public final void setRequired(ValueExpression required) {
+	public void setRequired(ValueExpression required) {
 		this.required = required;
 	}
 
-	public final void setReadOnly(ValueExpression readOnly) {
+	public void setReadOnly(ValueExpression readOnly) {
 		this.readOnly = readOnly;
 	}
 
-	public final void setBorder(ValueExpression border) {
+	public void setBorder(ValueExpression border) {
 		this.border = border;
 	}
 
-	public final void setMaxTextLength(ValueExpression maxTextLength) {
+	public void setMaxTextLength(ValueExpression maxTextLength) {
 		this.maxTextLength = maxTextLength;
 	}
 
-	public final void setEditable(ValueExpression editable) {
+	public void setEditable(ValueExpression editable) {
 		this.editable = editable;
 	}
 
-	public final void setFilterProperties(ValueExpression filterProperties) {
+	public void setFilterProperties(ValueExpression filterProperties) {
 		this.filterProperties = filterProperties;
 	}
 
-	public final void setSuggestionDelayMs(ValueExpression suggestionDelayMs) {
+	public void setSuggestionDelayMs(ValueExpression suggestionDelayMs) {
 		this.suggestionDelayMs = suggestionDelayMs;
 	}
 
-	public final void setSuggestionMinChars(ValueExpression suggestionMinChars) {
+	public void setSuggestionMinChars(ValueExpression suggestionMinChars) {
 		this.suggestionMinChars = suggestionMinChars;
 	}
 
-	public final void setRowCountVar(ValueExpression rowCountVar) {
+	public void setRowCountVar(ValueExpression rowCountVar) {
 		this.rowCountVar = rowCountVar;
 	}
 
-	public final void setRowIndexVar(ValueExpression rowIndexVar) {
+	public void setRowIndexVar(ValueExpression rowIndexVar) {
 		this.rowIndexVar = rowIndexVar;
 	}
 
-	public final void setValueColumnId(ValueExpression valueColumnId) {
+	public void setValueColumnId(ValueExpression valueColumnId) {
 		this.valueColumnId = valueColumnId;
 	}
 
-	public final void setLabelColumnId(ValueExpression labelColumnId) {
+	public void setLabelColumnId(ValueExpression labelColumnId) {
 		this.labelColumnId = labelColumnId;
 	}
 
-	public final void setSelectedValue(ValueExpression selectedValue) {
+	public void setSelectedValue(ValueExpression selectedValue) {
 		this.selectedValue = selectedValue;
 	}
 
-	public final void setValueFormat(ValueExpression valueFormat) {
+	public void setValueFormat(ValueExpression valueFormat) {
 		this.valueFormat = valueFormat;
 	}
 
-	public final void setForceValidation(ValueExpression forceValidation) {
+	public void setValueFormatTooltip(ValueExpression valueFormatTooltip) {
+		this.valueFormatTooltip = valueFormatTooltip;
+	}
+
+	public void setValueFormatDescription(ValueExpression valueFormatDescription) {
+		this.valueFormatDescription = valueFormatDescription;
+	}
+
+	public void setForceValidation(ValueExpression forceValidation) {
 		this.forceValidation = forceValidation;
 	}
 
-	public final void setForLabel(ValueExpression forLabel) {
+	public void setForLabel(ValueExpression forLabel) {
 		this.forLabel = forLabel;
 	}
 
-	public final void setValueFormatLabel(ValueExpression valueFormatLabel) {
+	public void setValueFormatLabel(ValueExpression valueFormatLabel) {
 		this.valueFormatLabel = valueFormatLabel;
 	}
 
-	public final void setNoValueFormatLabel(ValueExpression noValueFormatLabel) {
+	public void setNoValueFormatLabel(ValueExpression noValueFormatLabel) {
 		this.noValueFormatLabel = noValueFormatLabel;
 	}
 
@@ -154,6 +164,8 @@ public class KeyEntryTag extends AbstractGridTag implements Tag {
 			LOG.debug("  labelColumnId='"+labelColumnId+"'");
 			LOG.debug("  selectedValue='"+selectedValue+"'");
 			LOG.debug("  valueFormat='"+valueFormat+"'");
+			LOG.debug("  valueFormatTooltip='"+valueFormatTooltip+"'");
+			LOG.debug("  valueFormatDescription='"+valueFormatDescription+"'");
 			LOG.debug("  forceValidation='"+forceValidation+"'");
 			LOG.debug("  forLabel='"+forLabel+"'");
 			LOG.debug("  valueFormatLabel='"+valueFormatLabel+"'");
@@ -324,6 +336,24 @@ public class KeyEntryTag extends AbstractGridTag implements Tag {
 			}
 		}
 
+		if (valueFormatTooltip != null) {
+			if (valueFormatTooltip.isLiteralText()==false) {
+				component.setValueExpression(Properties.VALUE_FORMAT_TOOLTIP, valueFormatTooltip);
+
+			} else {
+				component.setValueFormatTooltip(valueFormatTooltip.getExpressionString());
+			}
+		}
+
+		if (valueFormatDescription != null) {
+			if (valueFormatDescription.isLiteralText()==false) {
+				component.setValueExpression(Properties.VALUE_FORMAT_DESCRIPTION, valueFormatDescription);
+
+			} else {
+				component.setValueFormatDescription(valueFormatDescription.getExpressionString());
+			}
+		}
+
 		if (forceValidation != null) {
 			if (forceValidation.isLiteralText()==false) {
 				component.setValueExpression(Properties.FORCE_VALIDATION, forceValidation);
@@ -380,6 +410,8 @@ public class KeyEntryTag extends AbstractGridTag implements Tag {
 		labelColumnId = null;
 		selectedValue = null;
 		valueFormat = null;
+		valueFormatTooltip = null;
+		valueFormatDescription = null;
 		forceValidation = null;
 		forLabel = null;
 		valueFormatLabel = null;

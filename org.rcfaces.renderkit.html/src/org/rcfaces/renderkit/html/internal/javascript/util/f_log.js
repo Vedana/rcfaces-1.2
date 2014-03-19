@@ -103,7 +103,7 @@ var __statics = {
 
 		var logs=f_log._logs;
 		if (window._rcfacesExiting) {
-			if (logs) {
+			if (logs && logs[logName]) {
 				return logs[logName];
 			}
 			
@@ -127,7 +127,7 @@ var __statics = {
 		
 		var levels=f_log._Levels;
 		if (levels) {
-			var last;
+			var last=undefined;
 			
 			for(var name in levels) {
 				if (name.length && logName.indexOf(name)) {
@@ -363,7 +363,7 @@ var __members = {
 	f_isTraceEnabled: function() {
 		return (this._level>=f_log.TRACE);
 	}
-}
+};
 
 new f_class("f_log", { 
 	extend: f_object,

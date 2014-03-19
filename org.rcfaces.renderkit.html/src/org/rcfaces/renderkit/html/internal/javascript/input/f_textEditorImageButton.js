@@ -13,8 +13,8 @@ var __members = {
 	f_textEditorImageButton: function() {
 		this.f_super(arguments);
 		
-		this._type=f_core.GetAttribute(this, "v:type");
-		this._for=f_core.GetAttribute(this, "v:for");
+		this._type=f_core.GetAttributeNS(this,"type");
+		this._for=f_core.GetAttributeNS(this,"for");
 	},
 	/*
 	f_finalize: function() {

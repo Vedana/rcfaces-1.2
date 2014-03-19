@@ -26,16 +26,19 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IFilterCapability;
 import org.rcfaces.core.component.capability.IMaxResultNumberCapability;
 import org.rcfaces.core.internal.RcfacesContext;
+import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
+import org.rcfaces.core.internal.renderkit.IProcessContext;
+import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.lang.ApplicationException;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
+import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.IFilteredItemsRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
-import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
 
 /**
@@ -43,7 +46,6 @@ import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
  * @version $Revision$ $Date$
  */
 public class ItemsService extends AbstractHtmlService {
-    private static final String REVISION = "$Revision$";
 
     private static final String SERVICE_ID = Constants.getPackagePrefix()
             + ".Items";
@@ -92,6 +94,8 @@ public class ItemsService extends AbstractHtmlService {
                     SESSION_EXPIRED_SERVICE_ERROR, "No view !", null);
             return;
         }
+
+        String requestId = (String) parameters.get("requestId");
 
         String filterExpression = (String) parameters.get("filterExpression");
 
@@ -165,8 +169,8 @@ public class ItemsService extends AbstractHtmlService {
                     printWriter = response.getWriter();
 
                 } else {
-                    ConfiguredHttpServlet
-                            .setGzipContentEncoding((HttpServletResponse) response, true);
+                    ConfiguredHttpServlet.setGzipContentEncoding(
+                            (HttpServletResponse) response, true);
 
                     OutputStream outputStream = response.getOutputStream();
 
@@ -179,13 +183,16 @@ public class ItemsService extends AbstractHtmlService {
                     printWriter = new PrintWriter(writer, false);
                 }
 
+                IProcessContext processContext = AbstractProcessContext
+                        .getProcessContext(facesContext);
+
                 IFilterProperties filterProperties = HtmlTools
-                        .decodeFilterExpression(null, component,
+                        .decodeFilterExpression(processContext, component,
                                 filterExpression);
 
                 writeJs(facesContext, printWriter, filterCapability,
                         componentId, filtredItemsRenderer, filterProperties,
-                        maxResultNumber);
+                        maxResultNumber, requestId);
 
             } catch (IOException ex) {
 
@@ -226,11 +233,11 @@ public class ItemsService extends AbstractHtmlService {
     private void writeJs(FacesContext facesContext, PrintWriter printWriter,
             IFilterCapability component, String componentId,
             IFilteredItemsRenderer dgr, IFilterProperties filterProperties,
-            int maxResultNumber) throws IOException {
+            int maxResultNumber, String requestId) throws IOException {
 
         CharArrayWriter cw = null;
         PrintWriter pw = printWriter;
-        if (LOG.isTraceEnabled()) {
+        if (true) {
             cw = new CharArrayWriter(2000);
             pw = new PrintWriter(cw);
         }
@@ -240,18 +247,52 @@ public class ItemsService extends AbstractHtmlService {
 
         String varId = jsWriter.getComponentVarName();
 
-        jsWriter.write("var ").write(varId).write('=').writeCall("f_core",
-                "GetElementByClientId").writeString(componentId).writeln(
-                ", document);");
-        dgr.encodeFilteredItems(jsWriter, component, filterProperties,
-                maxResultNumber);
+        jsWriter.write("var ").write(varId).write('=')
+                .writeCall("f_core", "GetElementByClientId")
+                .writeString(componentId).writeln(", document);");
 
-        if (LOG.isTraceEnabled()) {
+        try {
+            if (requestId != null) {
+                jsWriter.writeMethodCall("f_startResponse")
+                        .writeString(requestId).writeln(");");
+            }
+
+            dgr.encodeFilteredItems(jsWriter, component, filterProperties,
+                    maxResultNumber);
+
+            if (requestId != null) {
+                jsWriter.writeMethodCall("f_endResponse")
+                        .writeString(requestId).writeln(");");
+            }
+
             pw.flush();
 
-            LOG.trace(cw.toString());
+            if (LOG.isTraceEnabled()) {
+                LOG.trace(cw.toString());
+            }
 
             printWriter.write(cw.toCharArray());
+
+        } catch (RuntimeException ex) {
+            sendException(facesContext, printWriter, (UIComponent) component,
+                    componentId, ex);
         }
+    }
+
+    protected void sendException(FacesContext facesContext,
+            PrintWriter printWriter, UIComponent component, String componentId,
+            RuntimeException ex) throws WriterException {
+        IJavaScriptWriter jsWriter = new JavaScriptResponseWriter(facesContext,
+                printWriter, RESPONSE_CHARSET, component, componentId);
+
+        String varId = jsWriter.getComponentVarName();
+
+        jsWriter.write("var ").write(varId).write('=')
+                .writeCall("f_core", "GetElementByClientId")
+                .writeString(componentId).writeln(", document);");
+
+        jsWriter.writeCall(varId, "f_performErrorEvent").write(null).write(',')
+                .writeInt(1).write(',').writeString(ex.getMessage())
+                .writeln(");");
     }
 }

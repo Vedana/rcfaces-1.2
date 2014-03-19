@@ -13,7 +13,6 @@ import org.apache.commons.logging.LogFactory;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractComponentWriter implements IComponentWriter {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(AbstractComponentWriter.class);

@@ -6,10 +6,15 @@ package org.rcfaces.core.internal.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -22,7 +27,22 @@ import org.apache.commons.logging.LogFactory;
 public class ClassLocator {
     private static final Log LOG = LogFactory.getLog(ClassLocator.class);
 
-    public static final Class load(String className, Object fallback,
+    @SuppressWarnings("unchecked")
+    public static final <T> Class< ? extends T> load(String className,
+            Object fallback, Object context, Class<T> clazz)
+            throws ClassNotFoundException {
+
+        Class< ? > clz = load(className, fallback, context);
+
+        if (clazz.isAssignableFrom(clz) == false) {
+            throw new FacesException("Specified Class '" + className
+                    + "' specified must implement '" + clazz.getName() + "'.");
+        }
+
+        return (Class<T>) clz;
+    }
+
+    public static final Class< ? > load(String className, Object fallback,
             Object context) throws ClassNotFoundException {
 
         ClassNotFoundException thOrigin = null;
@@ -50,13 +70,26 @@ public class ClassLocator {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Find class '" + className + "'", ex);
                 }
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Find class '" + className + "'", ex);
+                }
+
+            } catch (RuntimeException ex) {
+                if (rtOrigin == null) {
+                    rtOrigin = ex;
+                }
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Find class '" + className + "'", ex);
+                }
             }
         }
 
         if (fallback != null) {
-            Class cls;
+            Class< ? > cls;
             if (fallback instanceof Class) {
-                cls = (Class) fallback;
+                cls = (Class< ? >) fallback;
             } else {
                 cls = fallback.getClass();
             }
@@ -106,6 +139,19 @@ public class ClassLocator {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Find class '" + className + "' (classLocator)", ex);
             }
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Find class '" + className + "' (classLocator)", ex);
+            }
+
+        } catch (RuntimeException ex) {
+            if (rtOrigin == null) {
+                rtOrigin = ex;
+            }
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Find class '" + className + "' (classLocator)", ex);
+            }
         }
 
         if (context instanceof FacesContext) {
@@ -114,7 +160,13 @@ public class ClassLocator {
         }
 
         if (context instanceof ServletContext) {
-            context = ((ServletContext) context).getClass().getClassLoader();
+            try {
+                context = ((ServletContext) context).getClass()
+                        .getClassLoader();
+
+            } catch (RuntimeException ex) {
+                LOG.debug("Can not get classLoader of servletContext.", ex);
+            }
         }
 
         if (context instanceof ClassLoader) {
@@ -206,7 +258,27 @@ public class ClassLocator {
         }
 
         if (context instanceof ServletContext) {
-            context = ((ServletContext) context).getClass().getClassLoader();
+            try {
+                URL url = ((ServletContext) context)
+                        .getResource(resourceLocation);
+                if (url != null && testURL(url, thOrigin)) {
+                    return url;
+                }
+
+            } catch (MalformedURLException ex) {
+                LOG.debug("Malformed URL for '" + resourceLocation + "'.", ex);
+
+            } catch (RuntimeException ex) {
+                LOG.debug("Resource not found '" + resourceLocation + "'.", ex);
+            }
+
+            try {
+                context = ((ServletContext) context).getClass()
+                        .getClassLoader();
+
+            } catch (RuntimeException ex) {
+                LOG.debug("Can not get classLoader of ServletContext", ex);
+            }
         }
 
         if (context instanceof ClassLoader) {
@@ -248,5 +320,14 @@ public class ClassLocator {
         }
 
         return false;
+    }
+
+    public static ClassLoader getCurrentLoader(Object fallbackClass) {
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        if (loader != null) {
+            return loader;
+        }
+
+        return fallbackClass.getClass().getClassLoader();
     }
 }

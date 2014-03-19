@@ -33,7 +33,6 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
  * @version $Revision$ $Date$
  */
 public class ComboDecorator extends AbstractSelectItemsDecorator {
-    private static final String REVISION = "$Revision$";
 
     private final boolean jsVersion;
 
@@ -90,9 +89,10 @@ public class ComboDecorator extends AbstractSelectItemsDecorator {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#encodeNodeBegin(org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer.Context,
-     *      javax.faces.component.UIComponent, javax.faces.model.SelectItem,
-     *      boolean)
+     * @see
+     * org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#encodeNodeBegin
+     * (org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer.Context,
+     * javax.faces.component.UIComponent, javax.faces.model.SelectItem, boolean)
      */
     public int encodeNodeBegin(UIComponent component, SelectItem selectItem,
             boolean hasChildren, boolean isVisible) throws WriterException {

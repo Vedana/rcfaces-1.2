@@ -22,7 +22,7 @@ public interface IContentAccessor extends IContentPath {
 
     Object getAttribute(String attributeName);
 
-    Map getAttributes();
+    Map<String, Object> getAttributes();
 
     Object getContentRef();
 

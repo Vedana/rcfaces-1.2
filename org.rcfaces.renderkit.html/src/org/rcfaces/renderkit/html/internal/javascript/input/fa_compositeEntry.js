@@ -89,7 +89,7 @@ var __statics={
 	
 		return compositeEntry._onInputBlur(this, evt);		
 	}
-}
+};
 
 var __members={
 
@@ -101,13 +101,13 @@ var __members={
 		for(var i=0;i<inputs.length;i++) {
 			var input=inputs[i];
 			
-			var separators=f_core.GetAttribute(input, "v:separators");
+			var separators=f_core.GetAttributeNS(input,"separators");
 			if (separators) {
 				// Ce sont les separateurs du precedant !
 				inputs[i-1]._separators=separators;
 			}
 			
-			input._type=f_core.GetAttribute(input, "v:type");
+			input._type=f_core.GetAttributeNS(input,"type");
 			
 			if (i+1<inputs.length) {
 				input._nextInput=inputs[i+1];
@@ -308,7 +308,7 @@ var __members={
 				
 		f_core.Debug(fa_compositeEntry, "KeyPress: keyCode="+keyCode+" charCode="+charCode+" shift="+jsEvent.shift+" ctrl="+jsEvent.ctrl+" alt="+jsEvent.alt+" keyChar="+keyChar+"("+((keyChar.length>0)?keyChar.charCodeAt(0):"")+") min="+input._min+" max="+input._max+" default="+input._default);
 	
-		if (f_core.IsInternetExplorer()) {
+		if (f_core.IsInternetExplorer() || f_core.IsWebkit()) {
 			if (keyCode < 32) {
 				return true;
 			}
@@ -443,6 +443,6 @@ var __members={
 		
 		return false;
 	}
-}
+};
  
 new f_aspect("fa_compositeEntry", __statics, __members, fa_disabled, fa_readOnly);

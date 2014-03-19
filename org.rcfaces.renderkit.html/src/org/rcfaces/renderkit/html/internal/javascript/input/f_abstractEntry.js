@@ -5,7 +5,7 @@
 /**
  * f_abstractEntry class
  *
- * @class public f_abstractEntry extends f_input, fa_required, fa_selectionProvider<f_textSelection>, fa_subMenu, fa_immediate
+ * @class public abstract f_abstractEntry extends f_input, fa_required, fa_selectionProvider<f_textSelection>, fa_subMenu, fa_immediate
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -15,7 +15,7 @@ var __statics = {
 	 * @field private static final String
 	 */
 	_TEXT_MENU_ID: "#text"
-}
+};
 
 var __members = {
 /*
@@ -41,9 +41,9 @@ var __members = {
 	f_initializeOnFocus: function() {
 		this.f_super(arguments);
 				
-		this._emptyMessage=f_core.GetAttribute(this, "v:emptyMessage");
+		this._emptyMessage=f_core.GetAttributeNS(this, "emptyMessage");
 		if (this._emptyMessage) {
-			this._emptyMessageShown=f_core.GetBooleanAttribute(this.f_getInput(), "v:emptyMessageShown");
+			this._emptyMessageShown=f_core.GetBooleanAttributeNS(this.f_getInput(), "emptyMessageShown");
 		}
 		
 		if (this._emptyMessage) {
@@ -308,8 +308,7 @@ var __members = {
 	 * @return Number
 	 */
 	f_getMaxTextLength: f_class.ABSTRACT
-	
-}
+};
 
 new f_class("f_abstractEntry", {
 	extend: f_input,

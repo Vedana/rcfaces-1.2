@@ -15,8 +15,10 @@ import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.capability.IDragEventCapability;
 import org.rcfaces.core.internal.util.ComponentIterators;
 import org.rcfaces.core.component.IMenuComponent;
+import java.util.EnumSet;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import org.rcfaces.core.component.capability.IExpandEventCapability;
+import org.rcfaces.core.component.capability.IHeadingLevelCapability;
 import org.rcfaces.core.internal.capability.ICheckComponent;
 import org.rcfaces.core.component.capability.IDroppableCapability;
 import org.rcfaces.core.internal.capability.ISelectionComponent;
@@ -25,17 +27,22 @@ import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.tools.CheckTools;
 import org.rcfaces.core.component.capability.IScrollableCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import java.lang.Object;
 import org.rcfaces.core.component.capability.ICheckedValuesCapability;
+import org.rcfaces.core.internal.tools.OutlinedLabelTools;
 import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.capability.IDraggableCapability;
 import org.rcfaces.core.component.capability.IClientSelectionFullStateCapability;
 import org.rcfaces.core.component.capability.IShowValueCapability;
+import org.rcfaces.core.component.capability.IOutlinedLabelCapability;
 import org.rcfaces.core.component.capability.IDropCompleteEventCapability;
 import org.rcfaces.core.component.capability.IFilterCapability;
 import java.util.Arrays;
+import org.rcfaces.core.component.capability.ICaptionCapability;
 import org.rcfaces.core.component.capability.IMenuCapability;
 import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
+import org.rcfaces.core.component.capability.IOutlinedLabelCapability.Method;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IClientCheckFullStateCapability;
 import org.rcfaces.core.internal.tools.TreeTools;
@@ -80,6 +87,9 @@ import org.rcfaces.core.component.AbstractInputComponent;
  * </p>
  */
 public class TreeComponent extends AbstractInputComponent implements 
+	ICaptionCapability,
+	IHeadingLevelCapability,
+	IOutlinedLabelCapability,
 	IDoubleClickEventCapability,
 	IRequiredCapability,
 	IScrollableCapability,
@@ -119,7 +129,11 @@ public class TreeComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
+<<<<<<< HEAD
 		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"checkListener","preloadedLevelDepth","selectionCardinality","droppable","defaultDisabledLeafImageURL","dragListener","dragTypes","checkable","checkCardinality","dropListener","dropEffects","overStyleClass","loadListener","checkedValues","selectionListener","defaultLeafImageURL","showValue","verticalScrollPosition","defaultSelectedLeafImageURL","cursorValue","border","required","clientSelectionFullState","bodyDroppable","defaultCollapsedImageURL","defaultExpandedImageURL","filterProperties","defaultDisabledImageURL","defaultImageURL","dragEffects","expandListener","doubleClickListener","clientCheckFullState","selectedValues","horizontalScrollPosition","dropCompleteListener","dropTypes","expansionUseValue","readOnly","selectable","expandedValues","hideRootExpandSign","defaultSelectedImageURL","defaultExpandedLeafImageURL","draggable","expandable"}));
+=======
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"dragListener","dropListener","dropEffects","schrodingerCheckable","outlinedLabel","overStyleClass","loadListener","checkedValues","selectionListener","defaultLeafImageURL","cursorValue","required","border","preSelectionListener","bodyDroppable","defaultCollapsedImageURL","defaultDisabledImageURL","expandListener","doubleClickListener","clientCheckFullState","horizontalScrollPosition","dropCompleteListener","dropTypes","expandedValues","hideRootExpandSign","defaultExpandedLeafImageURL","expandable","checkListener","preloadedLevelDepth","droppable","selectionCardinality","dragTypes","defaultDisabledLeafImageURL","checkable","checkCardinality","showValue","verticalScrollPosition","defaultSelectedLeafImageURL","clientSelectionFullState","headingLevel","filterProperties","defaultExpandedImageURL","defaultImageURL","dragEffects","outlinedLabelMethod","caption","selectedValues","expansionUseValue","readOnly","selectable","defaultSelectedImageURL","draggable"}));
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="value";
 
@@ -207,7 +221,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	public void removeAllTreeNodes() {
 
 
-			ComponentIterators.removeAll(this, UISelectItem.class);
+				ComponentIterators.removeAll(this, UISelectItem.class);
 			
 	}
 
@@ -332,14 +346,14 @@ public class TreeComponent extends AbstractInputComponent implements
 
 	public Object getCursorValue(FacesContext facesContext) {
 
-
+			
 				if (engine.isPropertySetted(Properties.CURSOR_VALUE)) {
 					return engine.getValue(Properties.CURSOR_VALUE, facesContext);
 				}
-				
+
 				Object cursorValue=ComponentTools.getCursorValue(getValue(), this, facesContext);
-								
-				return cursorValue;				
+
+				return cursorValue;
 			
 	}
 
@@ -437,6 +451,108 @@ public class TreeComponent extends AbstractInputComponent implements
 								
 				engine.setValue(Properties.EXPANDED_VALUES, expandedValues);
 			
+	}
+
+	public EnumSet<Method> getOutlinedLabelMethodSet() {
+
+
+				String method=getOutlinedLabelMethod();
+				
+				return OutlinedLabelTools.normalize(method);
+			
+			
+	}
+
+	public java.lang.String getCaption() {
+		return getCaption(null);
+	}
+
+	/**
+	 * See {@link #getCaption() getCaption()} for more details
+	 */
+	public java.lang.String getCaption(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.CAPTION, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "caption" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isCaptionSetted() {
+		return engine.isPropertySetted(Properties.CAPTION);
+	}
+
+	public void setCaption(java.lang.String caption) {
+		engine.setProperty(Properties.CAPTION, caption);
+	}
+
+	public java.lang.String getHeadingLevel() {
+		return getHeadingLevel(null);
+	}
+
+	/**
+	 * See {@link #getHeadingLevel() getHeadingLevel()} for more details
+	 */
+	public java.lang.String getHeadingLevel(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.HEADING_LEVEL, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "headingLevel" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHeadingLevelSetted() {
+		return engine.isPropertySetted(Properties.HEADING_LEVEL);
+	}
+
+	public void setHeadingLevel(java.lang.String headingLevel) {
+		engine.setProperty(Properties.HEADING_LEVEL, headingLevel);
+	}
+
+	public java.lang.String getOutlinedLabel() {
+		return getOutlinedLabel(null);
+	}
+
+	/**
+	 * See {@link #getOutlinedLabel() getOutlinedLabel()} for more details
+	 */
+	public java.lang.String getOutlinedLabel(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.OUTLINED_LABEL, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "outlinedLabel" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isOutlinedLabelSetted() {
+		return engine.isPropertySetted(Properties.OUTLINED_LABEL);
+	}
+
+	public void setOutlinedLabel(java.lang.String outlinedLabel) {
+		engine.setProperty(Properties.OUTLINED_LABEL, outlinedLabel);
+	}
+
+	public java.lang.String getOutlinedLabelMethod() {
+		return getOutlinedLabelMethod(null);
+	}
+
+	/**
+	 * See {@link #getOutlinedLabelMethod() getOutlinedLabelMethod()} for more details
+	 */
+	public java.lang.String getOutlinedLabelMethod(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.OUTLINED_LABEL_METHOD, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "outlinedLabelMethod" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isOutlinedLabelMethodSetted() {
+		return engine.isPropertySetted(Properties.OUTLINED_LABEL_METHOD);
+	}
+
+	public void setOutlinedLabelMethod(java.lang.String outlinedLabelMethod) {
+		engine.setProperty(Properties.OUTLINED_LABEL_METHOD, outlinedLabelMethod);
 	}
 
 	public final void addDoubleClickListener(org.rcfaces.core.event.IDoubleClickListener listener) {
@@ -1186,7 +1302,8 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * @return image url
 	 */
 	public String getDefaultImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_IMAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_IMAGE_URL, facesContext);
+		return s;
 	}
 
 	/**
@@ -1222,7 +1339,8 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * @return selected image url
 	 */
 	public String getDefaultSelectedImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_SELECTED_IMAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_SELECTED_IMAGE_URL, facesContext);
+		return s;
 	}
 
 	/**
@@ -1258,7 +1376,8 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * @return expanded image url
 	 */
 	public String getDefaultExpandedImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_EXPANDED_IMAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_EXPANDED_IMAGE_URL, facesContext);
+		return s;
 	}
 
 	/**
@@ -1286,7 +1405,8 @@ public class TreeComponent extends AbstractInputComponent implements
 	}
 
 	public String getDefaultCollapsedImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_COLLAPSED_IMAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_COLLAPSED_IMAGE_URL, facesContext);
+		return s;
 	}
 
 	public void setDefaultCollapsedImageURL(String defaultCollapsedImageURL) {
@@ -1314,7 +1434,8 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * @return disabled image url
 	 */
 	public String getDefaultDisabledImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_DISABLED_IMAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_DISABLED_IMAGE_URL, facesContext);
+		return s;
 	}
 
 	/**
@@ -1350,7 +1471,8 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * @return leaf image url
 	 */
 	public String getDefaultLeafImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_LEAF_IMAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_LEAF_IMAGE_URL, facesContext);
+		return s;
 	}
 
 	/**
@@ -1378,7 +1500,8 @@ public class TreeComponent extends AbstractInputComponent implements
 	}
 
 	public String getDefaultSelectedLeafImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_SELECTED_LEAF_IMAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_SELECTED_LEAF_IMAGE_URL, facesContext);
+		return s;
 	}
 
 	public void setDefaultSelectedLeafImageURL(String defaultSelectedLeafImageURL) {
@@ -1398,7 +1521,8 @@ public class TreeComponent extends AbstractInputComponent implements
 	}
 
 	public String getDefaultExpandedLeafImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_EXPANDED_LEAF_IMAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_EXPANDED_LEAF_IMAGE_URL, facesContext);
+		return s;
 	}
 
 	public void setDefaultExpandedLeafImageURL(String defaultExpandedLeafImageURL) {
@@ -1418,7 +1542,8 @@ public class TreeComponent extends AbstractInputComponent implements
 	}
 
 	public String getDefaultDisabledLeafImageURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DEFAULT_DISABLED_LEAF_IMAGE_URL, facesContext);
+		String s = engine.getStringProperty(Properties.DEFAULT_DISABLED_LEAF_IMAGE_URL, facesContext);
+		return s;
 	}
 
 	public void setDefaultDisabledLeafImageURL(String defaultDisabledLeafImageURL) {
@@ -1539,6 +1664,26 @@ public class TreeComponent extends AbstractInputComponent implements
 	 */
 	public boolean isExpansionUseValueSetted() {
 		return engine.isPropertySetted(Properties.EXPANSION_USE_VALUE);
+	}
+
+	public boolean isSchrodingerCheckable() {
+		return isSchrodingerCheckable(null);
+	}
+
+	public boolean isSchrodingerCheckable(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.SCHRODINGER_CHECKABLE, false, facesContext);
+	}
+
+	public void setSchrodingerCheckable(boolean schrodingerCheckable) {
+		engine.setProperty(Properties.SCHRODINGER_CHECKABLE, schrodingerCheckable);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "schrodingerCheckable" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isSchrodingerCheckableSetted() {
+		return engine.isPropertySetted(Properties.SCHRODINGER_CHECKABLE);
 	}
 
 	protected Set getCameliaFields() {

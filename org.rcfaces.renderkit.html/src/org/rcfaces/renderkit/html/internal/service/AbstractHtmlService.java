@@ -5,14 +5,19 @@ package org.rcfaces.renderkit.html.internal.service;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Writer;
 
 import javax.faces.FacesException;
+import javax.faces.application.StateManager;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.service.AbstractService;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.lang.ApplicationException;
@@ -26,7 +31,6 @@ import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractHtmlService extends AbstractService {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(AbstractHtmlService.class);
 
@@ -47,8 +51,8 @@ public abstract class AbstractHtmlService extends AbstractService {
     static void sendJsError(FacesContext facesContext, ApplicationException ex,
             String componentId) {
 
-        sendJsError(facesContext, componentId, ex.getErrorCode(), ex
-                .getMessage(), ex.getErrorMessage());
+        sendJsError(facesContext, componentId, ex.getErrorCode(),
+                ex.getMessage(), ex.getErrorMessage());
     }
 
     static void sendJsError(FacesContext facesContext,
@@ -173,6 +177,123 @@ public abstract class AbstractHtmlService extends AbstractService {
 
         ((HttpServletResponse) response).setHeader(CAMELIA_RESPONSE_HEADER,
                 version);
+    }
+
+    protected String saveViewAndReturnStateId(FacesContext facesContext)
+            throws IOException {
+
+        final StringAppender sa = new StringAppender(512);
+
+        ResponseWriter responseWriter = new ResponseWriter() {
+
+            @Override
+            public void write(char[] cbuf, int off, int len) throws IOException {
+                sa.append(cbuf, off, len);
+            }
+
+            @Override
+            public void close() throws IOException {
+            }
+
+            @Override
+            public void writeURIAttribute(String arg0, Object arg1, String arg2)
+                    throws IOException {
+            }
+
+            @Override
+            public void writeText(char[] arg0, int arg1, int arg2)
+                    throws IOException {
+            }
+
+            @Override
+            public void writeText(Object arg0, String arg1) throws IOException {
+            }
+
+            @Override
+            public void writeComment(Object arg0) throws IOException {
+            }
+
+            @Override
+            public void writeAttribute(String name, Object value,
+                    String attributeName) throws IOException {
+            }
+
+            @Override
+            public void startElement(String arg0, UIComponent arg1)
+                    throws IOException {
+            }
+
+            @Override
+            public void startDocument() throws IOException {
+            }
+
+            @Override
+            public String getContentType() {
+                return null;
+            }
+
+            @Override
+            public String getCharacterEncoding() {
+                return null;
+            }
+
+            @Override
+            public void flush() throws IOException {
+            }
+
+            @Override
+            public void endElement(String arg0) throws IOException {
+            }
+
+            @Override
+            public void endDocument() throws IOException {
+            }
+
+            @Override
+            public ResponseWriter cloneWithWriter(Writer arg0) {
+                return this;
+            }
+        };
+
+        saveView(facesContext, responseWriter);
+
+        String state = sa.toString();
+        int idx = state.toLowerCase().indexOf("value=\"");
+        if (idx < 0) {
+            return null;
+        }
+        idx = state.indexOf('"', idx) + 1;
+        int idx2 = state.indexOf('"', idx);
+        if (idx2 < 0) {
+            return null;
+        }
+
+        String stateId = state.substring(idx, idx2);
+
+        return stateId;
+    }
+
+    protected void saveView(FacesContext facesContext,
+            ResponseWriter responseWriter) throws IOException {
+
+        ResponseWriter old = null;
+
+        if (responseWriter != null) {
+            old = facesContext.getResponseWriter();
+
+            facesContext.setResponseWriter(responseWriter);
+        }
+
+        StateManager stateManager = facesContext.getApplication()
+                .getStateManager();
+
+        Object state = stateManager.saveView(facesContext);
+
+        stateManager.writeState(facesContext, state);
+
+        if (old != null) {
+            facesContext.setResponseWriter(old);
+        }
     }
 
 }

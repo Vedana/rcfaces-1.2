@@ -31,6 +31,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * @author jbmeslin@vedana.com
@@ -119,11 +120,11 @@ public class SchedulerRenderer extends AbstractCssRenderer {
                 .getRenderContext().getProcessContext(), schedulerComponent,
                 false);
         if (dateBegin != null) {
-            htmlWriter.writeAttribute("v:dateBegin",
+            htmlWriter.writeAttributeNS("dateBegin",
                     convertDate(componentCalendar, dateBegin, false));
         }
 
-        htmlWriter.writeAttribute("v:columnNumber",
+        htmlWriter.writeAttributeNS("columnNumber",
                 String.valueOf(schedulerColumnList.size()));
 
         String width = schedulerComponent.getWidth(facesContext);
@@ -146,7 +147,7 @@ public class SchedulerRenderer extends AbstractCssRenderer {
         if (null != newWidth) {
             htmlWriter.writeStyle().writeWidth(newWidth);
         }
-        htmlWriter.writeAttribute("v:columnWidth", String.valueOf(columnWidth));
+        htmlWriter.writeAttributeNS("columnWidth", String.valueOf(columnWidth));
         String height = schedulerComponent.getHeight(facesContext);
         if (height == null) {
             height = String.valueOf(DEFAULT_HEIGHT);
@@ -165,9 +166,9 @@ public class SchedulerRenderer extends AbstractCssRenderer {
         int hourBegin = hbt.getHours() * 60 + hbt.getMinutes();
         int hourEnd = het.getHours() * 60 + het.getMinutes();
 
-        htmlWriter.writeAttribute("v:minutesDayBegin",
+        htmlWriter.writeAttributeNS("minutesDayBegin",
                 String.valueOf(hourBegin));
-        htmlWriter.writeAttribute("v:minutesDayEnd", String.valueOf(hourEnd));
+        htmlWriter.writeAttributeNS("minutesDayEnd", String.valueOf(hourEnd));
 
         int b = hourBegin % 30;
         hourBegin -= b;
@@ -179,7 +180,7 @@ public class SchedulerRenderer extends AbstractCssRenderer {
         int eastHeight = Double.valueOf(height).intValue() - getNorthHeight();
         double minPerPx = (double) eastHeight / (double) (hourEnd - hourBegin);
 
-        htmlWriter.writeAttribute("v:minPerPx", String.valueOf(minPerPx));
+        htmlWriter.writeAttributeNS("minPerPx", String.valueOf(minPerPx));
 
         createNorthWest(schedulerComponent, htmlWriter, facesContext);
         createNorth(schedulerComponent, htmlWriter, facesContext,
@@ -566,12 +567,7 @@ public class SchedulerRenderer extends AbstractCssRenderer {
             }
             String label = ((SchedulerColumnComponent) schedulerColumnList
                     .get(i)).getText();
-            // Date dateBegin = schedulerComponent.getDateBegin(facesContext);
-            // GregorianCalendar calendar = new GregorianCalendar();
-            // calendar.setTime(dateBegin);
-            // if (label.contains("#day")){
-            // label = calendar.get(Calendar.d)
-            // }
+
             htmlWriter.writeText(label);
             htmlWriter.endElement(IHtmlWriter.LABEL);
 
@@ -602,7 +598,8 @@ public class SchedulerRenderer extends AbstractCssRenderer {
 
         String var = schedulerComponent.getVar(facesContext);
 
-        Map requestMap = facesContext.getExternalContext().getRequestMap();
+        Map<String, Object> requestMap = facesContext.getExternalContext()
+                .getRequestMap();
 
         List periodClientData = schedulerComponent.getPeriodClientData();
 
@@ -652,7 +649,10 @@ public class SchedulerRenderer extends AbstractCssRenderer {
                             + componentCalendar.get(Calendar.MINUTE), null);
                 }
 
-                String periodStyle = schedulerComponent.getPeriodStyle();
+                String periodStyle = schedulerComponent
+                        .getPeriodStyle(facesContext);
+                String periodType = schedulerComponent
+                        .getPeriodType(facesContext);
 
                 boolean selectable = schedulerComponent
                         .isPeriodSelectable(facesContext);
@@ -676,6 +676,10 @@ public class SchedulerRenderer extends AbstractCssRenderer {
                     objectLiteralWriter.writeSymbol("_periodStyle")
                             .writeString(periodStyle);
                 }
+                if (periodType != null) {
+                    objectLiteralWriter.writeSymbol("_periodType").writeString(
+                            periodType);
+                }
 
                 componentCalendar.setTime(periodBegin);
                 objectLiteralWriter.writeSymbol("_begin").writeString(
@@ -689,7 +693,8 @@ public class SchedulerRenderer extends AbstractCssRenderer {
                         selectable);
 
                 if (periodClientData.isEmpty() == false) {
-                    Map clientDatas = new HashMap(periodClientData.size());
+                    Map<String, String> clientDatas = new HashMap<String, String>(
+                            periodClientData.size());
 
                     for (Iterator it = periodClientData.iterator(); it
                             .hasNext();) {
@@ -806,8 +811,16 @@ public class SchedulerRenderer extends AbstractCssRenderer {
             ITabIndexCapability tabIndexCapability) throws WriterException {
         Integer tabIndex = tabIndexCapability.getTabIndex();
         if (tabIndex != null) {
-            writer.writeAttribute("v:tabIndex", tabIndex.intValue());
+            writer.writeAttributeNS("tabIndex", tabIndex.intValue());
         }
         return writer;
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "dateBegin",
+                "columnNumber", "columnWidth", "minutesDayBegin",
+                "minutesDayEnd", "minPerPx", "tabIndex" });
     }
 }

@@ -5,7 +5,6 @@
 package org.rcfaces.renderkit.html.internal;
 
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
 
 import javax.faces.FacesException;
@@ -18,6 +17,7 @@ import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.repository.IRepository;
+import org.rcfaces.core.internal.repository.IRepository.ICriteria;
 import org.rcfaces.renderkit.html.internal.renderer.InitRenderer;
 
 /**
@@ -27,8 +27,6 @@ import org.rcfaces.renderkit.html.internal.renderer.InitRenderer;
  */
 public class JavaScriptRenderContext extends AbstractJavaScriptRenderContext {
 
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory
             .getLog(JavaScriptRenderContext.class);
 
@@ -36,7 +34,7 @@ public class JavaScriptRenderContext extends AbstractJavaScriptRenderContext {
 
     private static final String STRING_EMPTY_ARRAY[] = new String[0];
 
-    private Set uninitializedComponents = new HashSet();
+    private Set<String> uninitializedComponents = new HashSet<String>();
 
     public JavaScriptRenderContext(FacesContext facesContext) {
         super(facesContext);
@@ -46,7 +44,7 @@ public class JavaScriptRenderContext extends AbstractJavaScriptRenderContext {
             JavaScriptRenderContext javaScriptRenderContext) {
         super(javaScriptRenderContext);
 
-        this.uninitializedComponents = new HashSet(
+        this.uninitializedComponents = new HashSet<String>(
                 javaScriptRenderContext.uninitializedComponents);
     }
 
@@ -60,9 +58,9 @@ public class JavaScriptRenderContext extends AbstractJavaScriptRenderContext {
 
         JavaScriptWriterImpl jsImpl = new JavaScriptWriterImpl();
 
-        jsImpl.setWriter(writer, javaScriptComponent, this, htmlProcessContext
-                .useMetaContentScriptType(), htmlProcessContext
-                .useScriptCData());
+        jsImpl.setWriter(writer, javaScriptComponent, this,
+                htmlProcessContext.useMetaContentScriptType(),
+                htmlProcessContext.useScriptCData());
 
         return jsImpl;
     }
@@ -116,42 +114,47 @@ public class JavaScriptRenderContext extends AbstractJavaScriptRenderContext {
             if (isInitialized()) {
                 if (componentRenderContext.setAttribute(
                         LAZY_JAVASCRIPT_RENDERER, Boolean.TRUE) == null) {
-                    IHtmlWriter w = writer.getWriter();
+                    IHtmlWriter htmlWriter = writer.getWriter();
                     // On ecrit à la main le tag, car on ne peut pas le
                     // fermer
                     // directement dans le m�me tag !
-                    w.startElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
+                    htmlWriter
+                            .startElementNS(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
 
                     if (canLazyTagUsesBrother() == false) {
-                        w.writeAttribute("rid", componentRenderContext
-                                .getComponentClientId());
+                        htmlWriter.writeAttribute("rid",
+                                componentRenderContext.getComponentClientId());
                     }
 
                     IRepository.IFile files[] = renderContext
                             .getJavaScriptRenderContext().popRequiredFiles();
                     if (files != null && files.length > 0) {
-                        Locale locale = getUserLocale();
+                        ICriteria criteria = writer
+                                .getJavaScriptRenderContext().getCriteria();
+
                         StringAppender sb = new StringAppender(
                                 files.length * 32);
                         for (int i = 0; i < files.length; i++) {
                             if (i > 0) {
                                 sb.append(',');
                             }
-                            sb.append(files[i].getURI(locale));
+                            sb.append(files[i].getURI(criteria));
                         }
 
-                        w.writeAttribute("requiresBundle", sb.toString());
+                        htmlWriter.writeAttribute("requiresBundle",
+                                sb.toString());
                     }
 
                     // Il y a des nouveaux clientDatas ?
                     if (writer.getHtmlComponentRenderContext().hasClientDatas(
                             true)) {
-                        htmlComponentRenderer.writeClientData(w,
+                        htmlComponentRenderer.writeClientData(htmlWriter,
                                 (IClientDataCapability) componentRenderContext
                                         .getComponent());
                     }
 
-                    w.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
+                    htmlWriter
+                            .endElementNS(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
                 }
 
                 pushUnitializedComponent(componentRenderContext
@@ -159,6 +162,9 @@ public class JavaScriptRenderContext extends AbstractJavaScriptRenderContext {
 
                 return;
             }
+            // TODO A VOIR
+            pushUnitializedComponent(componentRenderContext
+                    .getComponentClientId());
         }
 
         if (sendComplete) {
@@ -198,7 +204,7 @@ public class JavaScriptRenderContext extends AbstractJavaScriptRenderContext {
             return STRING_EMPTY_ARRAY;
         }
 
-        String old[] = (String[]) uninitializedComponents
+        String old[] = uninitializedComponents
                 .toArray(new String[uninitializedComponents.size()]);
         uninitializedComponents.clear();
 

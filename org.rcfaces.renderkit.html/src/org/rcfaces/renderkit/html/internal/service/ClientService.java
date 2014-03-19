@@ -40,7 +40,6 @@ import org.w3c.dom.Document;
  * @version $Revision$ $Date$
  */
 public class ClientService extends AbstractClientService {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(ClientService.class);
 
@@ -239,8 +238,8 @@ public class ClientService extends AbstractClientService {
                 .setCameliaResponse(response, CLIENT_SERVICE_VERSION);
 
         if (ex.getErrorCode() != 0) {
-            response.setHeader(CAMELIA_ERROR_CODE, String.valueOf(ex
-                    .getErrorCode()));
+            response.setHeader(CAMELIA_ERROR_CODE,
+                    String.valueOf(ex.getErrorCode()));
         }
 
         if (ex.getErrorMessage() != null) {
@@ -321,8 +320,8 @@ public class ClientService extends AbstractClientService {
                 }
 
                 RcfacesContext.getInstance(facesContext)
-                        .getDocumentBuilderProvider().serialize(pw,
-                                (Document) ret);
+                        .getDocumentBuilderProvider()
+                        .serialize(pw, (Document) ret);
             }
 
         } catch (IOException ex) {

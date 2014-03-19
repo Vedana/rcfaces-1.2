@@ -15,6 +15,7 @@ import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.manager.IValidationParameters;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -23,14 +24,13 @@ import org.rcfaces.core.internal.renderkit.WriterException;
  */
 public class AbstractCompositeRenderer extends AbstractCssRenderer {
 
-    private static final String REVISION = "$Revision$";
-
     private static final int CHAR_SIZE = 8;
 
     public void writeSubInput(IHtmlWriter htmlWriter, String accessKey,
             Integer tabIndex, char ch, int chLength, int length,
             String curValue, boolean disabled, boolean readOnly,
-            boolean writeSize, Map attributes) throws WriterException {
+            boolean writeSize, Map<String, Object> attributes)
+            throws WriterException {
 
         String className = getSubStyleClassName(htmlWriter, ch, chLength);
 
@@ -58,13 +58,14 @@ public class AbstractCompositeRenderer extends AbstractCssRenderer {
     public static void writeSubInput(IHtmlWriter htmlWriter, String className,
             String accessKey, Integer tabIndex, char ch, int length,
             String curValue, boolean disabled, boolean readOnly,
-            boolean writeSize, Map attributes) throws WriterException {
+            boolean writeSize, Map<String, Object> attributes)
+            throws WriterException {
 
         IComponentRenderContext componentRenderContext = htmlWriter
                 .getComponentRenderContext();
 
-        StringAppender sa = new StringAppender(componentRenderContext
-                .getComponentClientId(), 8);
+        StringAppender sa = new StringAppender(
+                componentRenderContext.getComponentClientId(), 8);
 
         String separator = componentRenderContext.getRenderContext()
                 .getProcessContext().getNamingSeparator();
@@ -101,7 +102,7 @@ public class AbstractCompositeRenderer extends AbstractCssRenderer {
                     ((Math.floor(em) / 10.0) + 0.4) + "em");
         }
 
-        htmlWriter.writeAttribute("v:type", String.valueOf(ch));
+        htmlWriter.writeAttributeNS("type", String.valueOf(ch));
 
         if (tabIndex != null) {
             htmlWriter.writeTabIndex(tabIndex.intValue());
@@ -118,30 +119,33 @@ public class AbstractCompositeRenderer extends AbstractCssRenderer {
         }
 
         /*
-         * if (minValue != null) { htmlWriter.writeAttribute("v:min", minValue); }
+         * if (minValue != null) { htmlWriter.writeAttributeNS("min", minValue);
+         * }
          * 
-         * if (maxValue != null) { htmlWriter.writeAttribute("v:max", maxValue); }
+         * if (maxValue != null) { htmlWriter.writeAttributeNS("max", maxValue);
+         * }
          * 
-         * if (defaultValue != null) { htmlWriter.writeAttribute("v:default",
+         * if (defaultValue != null) { htmlWriter.writeAttributeNS("default",
          * defaultValue); }
          * 
          * if (separators != null && separators.length() > 0) {
-         * htmlWriter.writeAttribute("v:separators", separators); }
+         * htmlWriter.writeAttributeNS("separators", separators); }
          * 
-         * if (cycle) { htmlWriter.writeAttribute("v:cycle", true); }
+         * if (cycle) { htmlWriter.writeAttributeNS("cycle", true); }
          * 
-         * if (autoComplete != null) { htmlWriter.writeAttribute("v:auto",
+         * if (autoComplete != null) { htmlWriter.writeAttributeNS("auto",
          * autoComplete); }
          * 
          * if (step != null && step.length() > 0) {
-         * htmlWriter.writeAttribute("v:step", step); }
+         * htmlWriter.writeAttributeNS("step", step); }
          */
 
         if (attributes != null) {
-            for (Iterator it = attributes.entrySet().iterator(); it.hasNext();) {
-                Map.Entry entry = (Map.Entry) it.next();
+            for (Iterator<Map.Entry<String, Object>> it = attributes.entrySet()
+                    .iterator(); it.hasNext();) {
+                Map.Entry<String, Object> entry = it.next();
 
-                String attributeName = (String) entry.getKey();
+                String attributeName = entry.getKey();
                 String attributeValue = String.valueOf(entry.getValue());
 
                 htmlWriter.writeAttribute(attributeName, attributeValue);
@@ -193,8 +197,15 @@ public class AbstractCompositeRenderer extends AbstractCssRenderer {
                 EventsRenderer.appendCommand(sb, value);
             }
 
-            htmlWriter.writeAttribute("v:clientValidatorParams", sb.toString());
+            htmlWriter.writeAttributeNS("clientValidatorParams", sb.toString());
         }
+    }
 
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "type", "min",
+                "max", "default", "separators", "cycle", "auto", "step",
+                "clientValidatorParams" });
     }
 }

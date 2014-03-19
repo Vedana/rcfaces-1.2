@@ -30,9 +30,30 @@ var __statics = {
 	 * @field private static final String
 	 */
 	_SUGGESTION_MENU_ID: "#suggestion"
-}
+};
 
 var __members = {
+		
+	/**
+	 * @field private Number
+	 */
+	_lastRequestId: 0,
+	
+	/**
+	 * @field private Boolean
+	 */
+	_lockResponse: undefined,
+	
+	/**
+	 * @field private Boolean
+	 */
+	_requestDisableAutoComplete: undefined,
+	
+	/**
+	 * @field private String
+	 */
+	_requestText: undefined,
+		
 	f_suggestTextEntry: function() {
 		this.f_super(arguments);
 		
@@ -41,29 +62,34 @@ var __members = {
 		this._filtred=true;
 		this._rowCount=0;
 		
-		this._maxResultNumber=f_core.GetNumberAttribute(this, "v:maxResultNumber", f_suggestTextEntry._DEFAULT_ROWS_NUMBER);
+		this._maxResultNumber=f_core.GetNumberAttributeNS(this,"maxResultNumber", f_suggestTextEntry._DEFAULT_ROWS_NUMBER);
 		
-		this._suggestionDelayMs=f_core.GetNumberAttribute(this, "v:suggestionDelayMs", f_suggestTextEntry._DEFAULT_SUGGESTION_DELAY_MS);
+		this._suggestionDelayMs=f_core.GetNumberAttributeNS(this,"suggestionDelayMs", f_suggestTextEntry._DEFAULT_SUGGESTION_DELAY_MS);
 		
-		this._suggestionMinChars=f_core.GetNumberAttribute(this, "v:suggestionMinChars", f_suggestTextEntry._DEFAULT_SUGGESTION_MIN_CHARS);
+		this._suggestionMinChars=f_core.GetNumberAttributeNS(this,"suggestionMinChars", f_suggestTextEntry._DEFAULT_SUGGESTION_MIN_CHARS);
 		
-		this._caseSensitive=f_core.GetBooleanAttribute(this, "v:caseSensitive", false);
+		this._caseSensitive=f_core.GetBooleanAttributeNS(this,"caseSensitive", false);
 		
-		this._forceProposal=f_core.GetBooleanAttribute(this, "v:forceProposal", false);
+		this._forceProposal=f_core.GetBooleanAttributeNS(this,"forceProposal", false);
 		if (this._forceProposal && this._suggestionMinChars<1) {
 			this._suggestionMinChars=1;
 		}
 		
-		// Permet d'optimiser les propositions !
-		this._orderedResult=f_core.GetAttribute(this, "v:orderedResult");
-		this._orderedResult=true;
-
-		this._suggestionValue=f_core.GetAttribute(this, "v:suggestionValue");
+		this._disableProposals=f_core.GetBooleanAttributeNS(this,"disableProposals", false);
+			
+		this._showPopupForOneResult=f_core.GetBooleanAttributeNS(this, "showPopupForOneResult", false);
 		
-		this._moreResultsMessage=f_core.GetAttribute(this, "v:moreResultsMessage");
+		// Permet d'optimiser les propositions !
+		this._orderedResult=f_core.GetBooleanAttributeNS(this, "orderedResult", true);
+	//	this._orderedResult=true;
+
+		this._suggestionValue=f_core.GetAttributeNS(this, "suggestionValue");
+		
+		this._moreResultsMessage=f_core.GetAttributeNS(this, "moreResultsMessage");
 		
 		this.f_insertEventListenerFirst(f_event.KEYDOWN, this._onCancelDown);
 		this.f_insertEventListenerFirst(f_event.KEYUP, this._onSuggest);
+		this.f_insertEventListenerFirst(f_event.KEYPRESS, this._onKeyPressSuggest);
 		
 		var menu=this.f_newSubMenu(f_suggestTextEntry._SUGGESTION_MENU_ID);
 		menu.f_setCatchOnlyPopupKeys(true);
@@ -75,11 +101,34 @@ var __members = {
 			//var evtItem=evt.f_getItem();
 			var item=evt.f_getValue();
 	
+			var now=new Date().getTime();
+			//alert("now="+now);
+			suggestTextEntry._selectionDateMs=now;
+			
 			suggestTextEntry._setSuggestion(item._label, item._value, item, jsEvt);
 		});
 
+		menu.f_addEventListener("itemHover", function(evt) {
+			// var jsEvt=evt.f_getJsEvent();
+			var item=evt.f_getValue();
+			var details=evt.f_getDetailObject();
+
+			if (!item) { // Ca peut arriver si c'est l'indicateur de fin de liste !				
+				fa_aria.SetElementAriaActiveDescendant(suggestTextEntry, details.uiItem.id);
+				
+				return;
+			}
+
+			fa_aria.SetElementAriaActiveDescendant(suggestTextEntry, details.uiItem.id);
+			suggestTextEntry._proposeItem(item._label, true);
+		});
+		
 		this.f_insertEventListenerFirst(f_event.FOCUS, this._onFocus);
 		this.f_insertEventListenerFirst(f_event.BLUR, this._onBlur);
+		
+		if (window.f_indexedDbEngine) {
+			this._indexDb=f_indexedDbEngine.FromComponent(this);
+		}
 	},
 	f_finalize: function() {
 		var timerId=this._timerId;
@@ -90,6 +139,13 @@ var __members = {
 
 		this._results=undefined; //map[]  de string, number
 
+		var indexDb=this._indexDb;
+		if (indexDb) {
+			this._indexDb=undefined; // f_indexedData
+			
+			f_classLoader.Destroy(indexDb);
+		}
+		
 		// this._requestedText=undefined; // string
 		// this._suggestionDelayMs=undefined;  // number
 		// this._maxResultNumber=undefined; // number
@@ -103,6 +159,7 @@ var __members = {
 		// this._loading=undefined; // boolean
 		// this._moreResultsMessage=undefined; // String
 		// this._focus=undefined; // boolean
+		// this._disableProposals=undefined; // Boolean
 
 		// this._oldClassName=undefined; // string
 		// this._canSuggest=undefined; // boolean
@@ -177,10 +234,31 @@ var __members = {
 		switch(jsEvt.keyCode) {
 		case f_key.VK_DOWN:
 		case f_key.VK_UP:
+			if (f_core.IsInternetExplorer(7) || f_core.IsInternetExplorer(8)) {
+				break;
+			}
 			return f_core.CancelJsEvent(jsEvt);
 		}
 		
 		return true;
+	},
+	_onKeyPressSuggest: function(evt) {
+		var jsEvt=evt.f_getJsEvent();
+		
+		f_core.Debug(f_suggestTextEntry, "_onKeyPressSuggest: event="+jsEvt+" which="+jsEvt.which);
+		if (f_core.IsWebkit()) {
+			// Pas ca sinon lors d'un RETOUR sur le suggest, Firefox ne soumet plus !
+
+			if (jsEvt.which==f_key.VK_ENTER || jsEvt.which==f_key.VK_RETURN) {
+				// Sous Chrome le keypress ENTER genere une soumission !  (le capture ne bloque pas l'evenement)
+				var delta=new Date().getTime()-this._selectionDateMs;
+				if (delta<50) {
+					// On vient de fermer la popup ... on bloque la soumission
+					this._selectionDateMs=undefined;
+					return false;
+				}
+			}
+		}
 	},
 	/**
 	 * @method private
@@ -200,11 +278,12 @@ var __members = {
 		var cancel=false;
 		var value=this.f_getValue();
 		var showPopup=false;
-
+		var disableAutoComplete = false;
+		
 		switch(jsEvt.keyCode) {
 		case f_key.VK_DOWN:
 		case f_key.VK_UP:
-			if (menuOpened) {
+			if (menuOpened || this._disableProposals) {
 				return f_core.CancelJsEvent(jsEvt);
 			}
 
@@ -218,7 +297,11 @@ var __members = {
 			
 			showPopup=true;
 			break;
-
+			
+		case f_key.VK_BACK_SPACE:
+			disableAutoComplete = true;
+			break;
+			
 		case f_key.VK_ENTER:
 		case f_key.VK_RETURN:
 		case f_key.VK_TAB:
@@ -256,6 +339,10 @@ var __members = {
 			window.clearTimeout(timerId);
 		}
 		
+		if (this._disableProposals) {
+			return;
+		}
+		
 		var suggestionDelayMs=this._suggestionDelayMs;		
 		if (suggestionDelayMs<1) {
 			return;
@@ -275,10 +362,9 @@ var __members = {
 		
 		if (showPopup) {
 			this._lastValue=value;
-			this._onSuggestTimeOut();
+			this._onSuggestTimeOut(undefined, disableAutoComplete);
 			
 		} else {
-			
 			this._lastValue=value;
 
 			var suggestTextEntry=this;
@@ -307,7 +393,7 @@ var __members = {
 	 * @param String text
 	 * @return void
 	 */
-	_onSuggestTimeOut: function(text) {
+	_onSuggestTimeOut: function(text, disableAutoComplete) {
 		if (!this._focus || window._rcfacesExiting) {
 			return;
 		}
@@ -335,15 +421,15 @@ var __members = {
 		}
 
 		if (requestedText==t) {
-			this._showProposal();
+			this._showProposal(undefined, disableAutoComplete);
 			return;
 		}
 
 		var results=this._results;
 
-		if (results && results.length && typeof(requestedText)=="string" && !t.indexOf(requestedText)) {
+		if (results && results.length && this._orderedResult && typeof(requestedText)=="string" && !t.indexOf(requestedText)) {
 			if (this._filterProposals(new Array(), text)) {
-				this._showProposal();
+				this._showProposal(text, disableAutoComplete);
 				return;
 			}
 		}
@@ -354,15 +440,30 @@ var __members = {
 		p.text=t;
 		p.caseSensitive=this._caseSensitive;
 		
+		this._requestDisableAutoComplete=disableAutoComplete;
+		
 		this.f_setFilterProperties(p);
 	},
 	fa_updateFilterProperties: function() {
 		if (this._calling) {
 			return;
 		}
+
+		var oldCalling=this._calling;
+		try {
+			this._calling=true;
+	
+			if (this.f_fireEvent(f_event.MENU)==false) {
+				return;
+			}
 		
+		} finally {
+			this._calling=oldCalling;
+		}
+
 		var params=new Object;
 		params.componentId=this.id;
+		params.requestId=(++this._lastRequestId);
 		
 		var text=null;
 		var filterExpression=this.fa_getSerializedPropertiesExpression();
@@ -376,8 +477,61 @@ var __members = {
 			params.maxResultNumber=maxResultNumber;
 		}
 		
+		this._requestText=text;
+
 		this.f_appendCommand(function(suggestTextEntry) {
-			suggestTextEntry._callServer(params, text);
+			if (!suggestTextEntry._indexDb) {
+				return suggestTextEntry._callServer(params, text);
+			}
+			
+			suggestTextEntry._requestIndexDb(params, text);
+		});
+	},
+	/**
+	 * @method private
+	 * @param params
+	 * @param text
+	 */
+	_requestIndexDb: function(params, text) {
+		var indexDb=this._indexDb;
+	
+		var self=this;
+		indexDb.f_asyncSearch(text, 0, this.f_getMaxResultNumber(), function(state) {
+			if (state===null) {
+				return self._callServer(params, text);
+			}
+
+			if (self.f_processNextCommand()) {
+				return;
+			}
+						
+			self._results=undefined;
+			self._requestedText=text;
+			
+			var requestId=(++this._lastRequestId);
+			
+			self.f_startResponse(requestId);
+			
+			for(var i=0;i<state.length;i++) {
+				var row=state[i];
+				
+				self.f_appendItem2({
+					_value: row.value,
+					_label: row.label,
+					_description: row.description,
+					_imageURL: row.imageURL,
+					_clientDatas: row.clientDatas
+				});
+			}
+			
+			var count=state._resultNumber;
+			if (count===undefined) {
+				count=state.length;
+			}
+			
+			self.f_setRowCount(count);
+			
+			self.f_endResponse(requestId);
 		});
 	},
 	/**
@@ -387,16 +541,16 @@ var __members = {
 		this._calling=true;
 		
 		try {
-			if (this.f_fireEvent(f_event.MENU)==false) {
-				return;
-			}	
-		
+			// OO: Déplacé dans fa_updateFilterProperties()
+			// if (this.f_fireEvent(f_event.MENU)==false) {
+			// 	return;
+			// }
+			
 			this.f_setLoading(true);
 			
 			f_core.Debug(f_suggestTextEntry, "_callServer: Call server text='"+text+"' maxResultNumber="+params.maxResultNumber);
 		
-			var url=f_env.GetViewURI();	
-			var request=new f_httpRequest(this, url, f_httpRequest.JAVASCRIPT_MIME_TYPE);
+			var request=new f_httpRequest(this, f_httpRequest.JAVASCRIPT_MIME_TYPE);
 			var suggestTextEntry=this;
 			request.f_setListener({
 				/**
@@ -530,19 +684,24 @@ var __members = {
 	 * @return Object New item.
 	 */
 	f_appendItem: function(label, value, description, imageURL, clientDataName1, clientDataValue1, clientDataName2) {
-		var clientDatas;
+		if (this._lockResponse) {
+			return;
+		}
+		
+		var clientDatas=undefined;
+		
 		if (arguments.length>4) {
 			clientDatas=new Object;
 			
 			for(var i=4;i<arguments.length-1;) {
 				var keyArg=arguments[i++];
-				var valueArg=arguments[i++]
+				var valueArg=arguments[i++];
 
 				clientDatas[keyArg]=valueArg;
 			}
 		}
 		
-		var item={
+		var item = {
 			_label: label,
 			_value: value,
 			_description: description,
@@ -550,7 +709,7 @@ var __members = {
 			_clientDatas: clientDatas
 		};
 	
-		return this.f_appendItem(item);	
+		return this.f_appendItem2(item);	
 	},
 	
 	/**
@@ -558,6 +717,10 @@ var __members = {
 	 * @return Object New item.
 	 */
 	f_appendItem2: function(item) {
+		if (this._lockResponse) {
+			return;
+		}
+
 		var results=this._results;
 		if (!results) {
 			results=new Array;
@@ -571,29 +734,90 @@ var __members = {
 	
 	/**
 	 * @method hidden
+	 * @param String requestId
+	 * @return void
 	 */
-	f_setRowCount: function(rows) {
-		f_core.Debug(f_suggestTextEntry, "f_setRowCount rows="+rows+" canSuggest="+this._canSuggest);
+	f_startResponse: function(requestId) {
+		if (!requestId) {
+			return;
+		}
 		
-		this._rowCount=rows;
+		if (parseInt(requestId, 10)==this._lastRequestId) {			
+			this._lockResponse=undefined;			
+			this._results=undefined;
+			return;
+		}
 		
+		// On accepte pas cette réponse !
+		this._lockResponse=true;
+	},
+
+	/**
+	 * @method hidden
+	 * @param String requestId
+	 * @return void
+	 */
+	f_endResponse: function(requestId) {
+		
+		// On enregistre, même si ca nous concerne pas :-)
+		if (this._indexDb && this._results && this._results.length) {
+			this._indexDb.f_asyncFillRows(this._results, function(obj) {
+				var ret = {
+					value: obj._value,
+					label: obj._label,
+					description: obj._description
+				};
+				
+				if (obj._imageURL) {
+					ret.imageURL=obj._imageURL;
+				}
+				
+				if (obj._clientDatas) {
+					ret.clientDatas=obj._clientDatas;
+				}
+				
+				if (obj._disabled) {
+					ret.disabled=obj._disabled;
+				}
+				
+				return ret;
+			});
+		}
+		
+		if (this._lockResponse) {
+			this._lockResponse=undefined;
+			return;
+		}
+			
 		if (!this._canSuggest) {
 			return;
 		}
 
-		this._showProposal();
+		this._showProposal(this._requestText, this._requestDisableAutoComplete);		
+	},
+	/**
+	 * @method hidden
+	 */
+	f_setRowCount: function(rows) {
+		f_core.Debug(f_suggestTextEntry, "f_setRowCount rows="+rows+" canSuggest="+this._canSuggest);
+		
+		if (this._lockResponse) {
+			return;
+		}
+		
+		this._rowCount=rows;
 	},
 	/**
 	 * @method private
 	 */
-	_showProposal: function(jsEvt) {	
+	_showProposal: function(text, disableAutoComplete) {	
 		var results=this._results;
 		if (!results) {
 			return;
 		}
 			
 		var rs=new Array;
-		this._filterProposals(rs);
+		this._filterProposals(rs, text);
 	
 		if (!rs.length) {
 			return;
@@ -601,16 +825,58 @@ var __members = {
 		
 		f_core.Debug(f_suggestTextEntry, "_showProposal: result="+rs+" forceProposal="+this._forceProposal);
 		
-		if (!this._forceProposal && rs.length>1) {	
-			this._showPopup(jsEvt);
+		var mightShowPopup=(rs.length> 1 || (this._showPopupForOneResult && rs.length > 0));
+		if (!this._forceProposal && mightShowPopup) {	
+			this._showPopup(undefined, undefined, text);
 			return;
 		}
 		
-		this.f_showProposal(rs[0]._label, rs[0]._value, rs[0], jsEvt);
-		
-		if (rs.length>1) {	
-			this._showPopup(jsEvt);
+		if (disableAutoComplete) {
+			this._showPopup(undefined, undefined, text);
+			
+		} else {
+			if (!this.f_showProposal(rs[0]._label, rs[0]._value, rs[0], null)) {
+				mightShowPopup=true;
+			}
 		}
+		
+		if (mightShowPopup) {	
+			this._showPopup(undefined, undefined, text);
+		}
+	},
+	/**
+	 * @method protected
+	 * @param String format
+	 * @param Object item
+	 * @return String
+	 */
+	_format: function(format, item) {
+		
+		var st=f_core.FormatMessage(format, null, function(paramName) {
+			switch (paramName) {
+			case "label":
+				return item._label;
+				
+			case "value":
+				return item._value;
+				
+			case "description":
+				return item._description;
+			}
+			
+			if (item[paramName]!==undefined) {
+				return item[paramName];
+			}
+		
+			var cl=item._clientDatas;
+			if (cl && cl[paramName]!==undefined) {
+				return cl[paramName];
+			}
+			
+			return undefined;
+		});
+		
+		return st;
 	},
 	/**
 	 * @method private
@@ -618,7 +884,7 @@ var __members = {
 	 * @param optional Number autoSelect
 	 * @return void
 	 */
-	_showPopup: function(jsEvt, autoSelect) {
+	_showPopup: function(jsEvt, autoSelect, text) {
 		var menu=this.f_getSubMenuById(f_suggestTextEntry._SUGGESTION_MENU_ID);
 		if (!menu) {
 			f_core.Debug(f_suggestTextEntry, "_showPopup: no menu !");
@@ -634,10 +900,13 @@ var __members = {
 		menu.f_removeAllItems(menu);
 		
 		var results=new Array;
-		var complete=this._filterProposals(results);
+		var complete=this._filterProposals(results, text);
 		if (!results.length) {
 			return;
 		}
+		
+		var labelFormat=f_core.GetAttributeNS(this, "labelFormat");
+		var descriptionFormat=f_core.GetAttributeNS(this, "descriptionFormat");
 		
 		var i;
 		for(i=0;i<results.length;i++) {
@@ -645,11 +914,20 @@ var __members = {
 
 			var label=result._label;
 			var description=result._description;
-			if (description) {
-				label+=description;
+
+			if (labelFormat) {
+				label=this._format(labelFormat, result);
 			}
-	
-			var item=menu.f_appendItem(menu, "_result"+i, label, result);
+			
+			if (descriptionFormat) {
+				description=this._format(descriptionFormat, result);
+			}
+
+			var item=menu.f_appendItem2(menu, "_result"+i, {
+				_label: label,
+				_value: result, 
+				_acceleratorKey: description
+			});
 			
 			var imageURL=result._imageURL;
 			if (imageURL) {
@@ -658,7 +936,7 @@ var __members = {
 		}
 		
 		var message=this._moreResultsMessage;
-		if (!complete && message!="") {
+		if (!complete) {
 			if (!message) {
 				message=f_resourceBundle.Get(f_suggestTextEntry).f_get("MORE_RELEVANT_RESULTS");
 			}
@@ -667,18 +945,29 @@ var __members = {
 			menu.f_setItemDisabled(item, true);
 		}
 	
-		var params={
+		var params = {
 			component: this.f_getInput(),
-			position: f_popup.BOTTOM_COMPONENT
+			position: f_popup.BOTTOM_COMPONENT,
+			ariaOwns: this
 		};
 	
 		if (!f_core.IsInternetExplorer()) {
 			// Probleme de box modele !
 //			params.deltaX=-1;
-			params.deltaY=-1;
-			params.deltaWidth=-4;
+//			params.deltaY=-4;
+//			params.deltaWidth=-4;
 		}
 	
+		var pw=f_core.GetNumberAttributeNS(this, "popupWidth", -1);
+		if (pw>0) {
+			params.popupWidth=pw;
+		}
+		
+		var ph=f_core.GetNumberAttributeNS(this, "popupHeight", -1);
+		if (ph>0) {
+			params.maxPopupHeight=ph;
+		}
+		
 		f_core.Debug(f_suggestTextEntry, "_showPopup: open menu :"+menu);
 	
 		menu.f_open(jsEvt, params, autoSelect);
@@ -690,12 +979,17 @@ var __members = {
 	 * @param String proposalValue
 	 * @param hidden Object proposalItem
 	 * @param hidden Event jsEvt
-	 * @return void
+	 * @return Boolean
 	 */
 	f_showProposal: function(proposalLabel, proposalValue, proposalItem, jsEvt) {
+		var inputFormat=f_core.GetAttributeNS(this, "inputFormat");
+		if (inputFormat) {
+			proposalLabel=this._format(inputFormat, proposalItem);
+		}
+		
 		var label=this.f_getText();
 		
-		var labelCS=label
+		var labelCS=label;
 		var proposalLabelCS=proposalLabel;
 		
 		if (!this._caseSensitive) {
@@ -704,18 +998,24 @@ var __members = {
 		}
 		
 		if (proposalLabelCS.indexOf(labelCS)) {
-			return;
+			return false;
 		}
 
 		if (this._forceProposal) {
 			var results=this._results;
 			if (results && results.length && results.length==this._rowCount ) {
+				
+
 				// Recherche les caracteres supplementaires !
 				for(var i=label.length+1;i>=0 && i<=proposalLabelCS.length;i++) {
 					var l=proposalLabelCS.substring(0, i);
 					
 					for(var j=0;j<results.length;j++) {
 						var result=results[j]._label;
+						if (inputFormat) {
+							result=this._format(inputFormat, results[j]);
+						}
+						
 						var resultCS=(this._caseSensitive)?result:result.toLowerCase();
 						
 						if (resultCS.indexOf(labelCS)<0) {
@@ -739,16 +1039,25 @@ var __members = {
 			}
 		}
 		
-		this._setSuggestion(proposalLabel, proposalValue, proposalItem, jsEvt);
+		this._setSuggestion(proposalLabel, proposalValue, proposalItem, jsEvt, true);
 		
 		this.f_setSelection(new f_textSelection(label.length, proposalLabel.length, proposalLabel.substring(label.length)));
+		
+		return true;
 	},
 	/**
 	 * @method private
 	 */
-	_setSuggestion: function(label, value, item, jsEvt) {
+	_setSuggestion: function(label, value, item, jsEvt, inputAlreadyFormatted) {
 		f_core.Debug(f_suggestTextEntry, "_setSuggestion: label='"+label+"' value='"+value+"' item='"+item+"'.");
 
+		if (!inputAlreadyFormatted) {
+			var inputFormat=f_core.GetAttributeNS(this, "inputFormat");
+			if (inputFormat) {
+				label=this._format(inputFormat, item);
+			}
+		}
+		
 		this.f_setText(label, true);
 		this._setSuggestionValue(value, item, jsEvt);
 		this._lastValue=this.f_getValue();
@@ -789,7 +1098,11 @@ var __members = {
 		}
 		
 		if (!this._orderedResult) {
-			return false;
+			ret.push.apply(ret, results);
+			
+			var complete=(results.length==this._rowCount);
+			
+			return complete;
 		}
 		
 		if (!this._caseSensitive) {
@@ -821,7 +1134,7 @@ var __members = {
 			ret.push(results[i]);
 		}
 
-		var complete;
+		var complete=undefined;
 	
 //	alert("State="+state+" resultsLength="+results.length+" rowCount="+this._rowCount+" ordered="+this._orderedResult);
 	
@@ -957,8 +1270,38 @@ var __members = {
 		}
 		
 		this._focus=undefined;
+	},
+	/**
+	 * @method public
+	 * @param optional Boolean set  (Default value is <code>true</code>)
+	 * @return void
+	 */
+	f_setDisableProposals: function(set) {
+		if (set!==false) {
+			set=true;
+		}
+		
+		this._disableProposals=set;
+		
+		this.f_setProperty(f_prop.DISABLE_PROPOSALS, set);
+	},
+	/**
+	 * @method public
+	 * @override
+	 * @return Boolean
+	 */
+	f_isDisableProposals: function() {
+		return !!this._disableProposals;
+	},
+	
+	_closePopup: function() {
+		suggestTextEntry.setAttribute("aria-owns", details.uiPopup.id);		
+		fa_aria.SetElementAriaActiveDescendant(suggestTextEntry, details.uiItem.id);		
+	},
+	_proposeItem: function(text) {
+		//this.setAttribute("aria-activedescendant", tid);
 	}
-}
+};
 
 //new f_class("f_suggestTextEntry", null, __statics, __members, f_textEntry, fa_filterProperties, fa_commands);
 new f_class("f_suggestTextEntry", {

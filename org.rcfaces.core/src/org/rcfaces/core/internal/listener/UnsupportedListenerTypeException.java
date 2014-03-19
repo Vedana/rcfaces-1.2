@@ -12,7 +12,6 @@ import javax.faces.FacesException;
  * @version $Revision$ $Date$
  */
 public class UnsupportedListenerTypeException extends FacesException {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = 2303989217005897745L;
 

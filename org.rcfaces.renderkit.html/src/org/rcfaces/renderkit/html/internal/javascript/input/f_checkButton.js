@@ -21,7 +21,7 @@ var __statics = {
 	 */
 	_TEXT_ID_SUFFIX: "::text"
 	
-}
+};
 
 var __members = {
 	f_finalize: function() {
@@ -156,7 +156,14 @@ var __members = {
 	f_setValue: function(value) {
 		this.f_setSelected(!!value);
 	}
-}
+	/**
+	 * @method protected
+	 *
+	fa_getTabIndexElement: function() {
+		return this;
+	}
+	*/
+};
 
 new f_class("f_checkButton", {
 	extend: f_button,

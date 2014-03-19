@@ -4,6 +4,7 @@
 package org.rcfaces.core.internal.capability;
 
 import javax.faces.context.FacesContext;
+import javax.faces.event.FacesListener;
 
 /**
  * 
@@ -12,8 +13,10 @@ import javax.faces.context.FacesContext;
  */
 public interface IComponentLifeCycle {
     void constructPhase(FacesContext facesContext);
-    
+
     void initializePhase(FacesContext facesContext, boolean reused);
+
+    void settedPhase(FacesContext facesContext);
 
     void decodePhase(FacesContext facesContext);
 
@@ -22,7 +25,8 @@ public interface IComponentLifeCycle {
     void updatePhase(FacesContext facesContext);
 
     void renderPhase(FacesContext facesContext);
-    
-    boolean confirmListenerAppend(FacesContext facesContext, Class facesListenerClass);
-   
+
+    boolean confirmListenerAppend(FacesContext facesContext,
+            Class< ? extends FacesListener> facesListenerClass);
+
 }

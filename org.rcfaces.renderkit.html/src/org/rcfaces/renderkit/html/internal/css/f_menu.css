@@ -16,6 +16,8 @@
 	left: 0;
 	top: 0;
 	overflow: visible;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 
 	background-color: white;
 	margin: 0;
@@ -106,8 +108,8 @@
 	background-repeat: no-repeat;
 	background-position: center center;
 
-//	xxwidth: 18px;
-//	xxheight: 18px;	
+/* xxwidth: 18px;*/
+/*	xxheight: 18px; */	
 }
 
 .f_menu_item_image_check,
@@ -117,6 +119,7 @@
 .f_menu_item_image_radio_hover,
 .f_menu_item_image_radio_disabled {
 	background-image: url("menu/markers.gif");
+	background-position: 0 0;
 }
 
 .f_menu_item_image_check_hover {
@@ -143,11 +146,16 @@
 	text-decoration: underline;
 }
 
-.f_menu_item_text {
+.f_menu_item_text,
+.f_menu_item_text_empty {
 	vertical-align: middle;
 	height: 18px;
 	padding-left: 2px;
 	cursor: pointer;
+}
+
+.f_menu_item_text_empty {
+	font-style: italic;
 }
 
 .f_menu_item_disabled .f_menu_item_text, 

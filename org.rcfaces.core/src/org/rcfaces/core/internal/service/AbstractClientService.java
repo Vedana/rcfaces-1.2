@@ -16,7 +16,6 @@ import org.apache.commons.logging.LogFactory;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractClientService extends AbstractService {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(AbstractClientService.class);
@@ -26,7 +25,7 @@ public abstract class AbstractClientService extends AbstractService {
     public static IClientServiceRegistry getClientServiceRegistry(
             FacesContext facesContext) {
 
-        Map applicationMap = facesContext.getExternalContext()
+        Map<String, Object> applicationMap = facesContext.getExternalContext()
                 .getApplicationMap();
         synchronized (AbstractClientService.class) {
             IClientServiceRegistry clientServiceRegistry = (IClientServiceRegistry) applicationMap

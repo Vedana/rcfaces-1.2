@@ -53,7 +53,7 @@ public class ParameterDecoderPhaseListener implements PhaseListener {
             return;
         }
 
-        Map requestMap = externalContext.getRequestMap();
+        Map<String, Object> requestMap = externalContext.getRequestMap();
 
         StringTokenizer st = new StringTokenizer(parameter, ",");
         for (; st.hasMoreTokens();) {
@@ -82,5 +82,4 @@ public class ParameterDecoderPhaseListener implements PhaseListener {
     public PhaseId getPhaseId() {
         return PhaseId.RESTORE_VIEW;
     }
-
 }

@@ -28,7 +28,6 @@ import org.rcfaces.core.internal.util.StateHolderTools;
  * @version $Revision$ $Date$
  */
 public class ItemTools {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(ItemTools.class);
 

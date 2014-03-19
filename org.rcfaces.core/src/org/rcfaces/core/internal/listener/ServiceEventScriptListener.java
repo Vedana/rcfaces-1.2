@@ -13,7 +13,6 @@ import org.rcfaces.core.event.ServiceEvent;
  */
 public class ServiceEventScriptListener extends AbstractScriptListener
         implements IServiceEventListener {
-    private static final String REVISION = "$Revision$";
 
     public ServiceEventScriptListener(String scriptType, String command) {
         super(scriptType, command);

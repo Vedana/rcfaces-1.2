@@ -36,7 +36,7 @@ var __members = {
 			return value;
 		}
 		
-		value=f_core.GetAttribute(this, "v:value", null);
+		value=f_core.GetAttributeNS(this, "value", null);
 		this._value=value;
 		
 		return value;

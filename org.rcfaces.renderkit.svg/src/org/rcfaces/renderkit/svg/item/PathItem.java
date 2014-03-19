@@ -15,8 +15,6 @@ import org.rcfaces.renderkit.svg.component.PathComponent;
  * @version $Revision$ $Date$
  */
 public class PathItem extends NodeItem implements IPathItem {
-    private static final String REVISION = "$Revision$";
-
     private static final long serialVersionUID = -2897540950411472654L;
 
     private String clip;
@@ -374,6 +372,7 @@ public class PathItem extends NodeItem implements IPathItem {
         this.textAlign = textAlign;
     }
 
+    @Override
     public void restoreState(FacesContext facesContext, Object state) {
         Object states[] = (Object[]) state;
 
@@ -383,6 +382,7 @@ public class PathItem extends NodeItem implements IPathItem {
                 .getSuperclass(), states[1]);
     }
 
+    @Override
     public Object saveState(FacesContext facesContext) {
         Object state[] = new Object[2];
 
@@ -394,6 +394,7 @@ public class PathItem extends NodeItem implements IPathItem {
         return state;
     }
 
+    @Override
     public void participeKey(StringAppender sa) {
         super.participeKey(sa);
 

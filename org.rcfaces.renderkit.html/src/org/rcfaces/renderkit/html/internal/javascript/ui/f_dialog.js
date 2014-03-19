@@ -20,7 +20,7 @@ var __statics = {
 		styleClass: "f_dialog"
 	}
 
-}
+};
 
 var __members = {
 
@@ -44,12 +44,12 @@ var __members = {
 		var backgroundMode=null;
 		
 		if (this.nodeType==f_core.ELEMENT_NODE) {
-			title = f_core.GetAttribute(this, "v:title", null);
-			h=f_core.GetNumberAttribute(this, "v:height", -1);
-			w=f_core.GetNumberAttribute(this, "v:width", -1);
-			p=f_core.GetNumberAttribute(this, "v:dialogPriority", 0);
-			styleClass = f_core.GetAttribute(this, "v:styleClass", null);
-			backgroundMode = f_core.GetAttribute(this, "v:backgroundMode", null);
+			title = f_core.GetAttributeNS(this,"title", null);
+			h=f_core.GetNumberAttributeNS(this,"height", -1);
+			w=f_core.GetNumberAttributeNS(this,"width", -1);
+			p=f_core.GetNumberAttributeNS(this,"dialogPriority", 0);
+			styleClass = f_core.GetAttributeNS(this,"styleClass", null);
+			backgroundMode = f_core.GetAttributeNS(this,"backgroundMode", null);
 		}
 		
 		var shellDecorator=defaultFeatures.shellDecorator;
@@ -113,7 +113,7 @@ var __members = {
 	f_getDefaultFeatures: function() {
 		return f_dialog._DEFAULT_FEATURES;
 	}
-}
+};
 
 new f_class("f_dialog", {
 	extend: f_shell,

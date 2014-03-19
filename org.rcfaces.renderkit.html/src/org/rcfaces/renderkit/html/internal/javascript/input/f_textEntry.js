@@ -27,14 +27,18 @@ var __members = {
 			f_clientValidator.InstallValidator(this);
 		}
 	},
-	/*
 	f_finalize: function() {
 		// this._autoTab=undefined;  // boolean
 		// this._requiredInstalled=undefined; // boolean
+
+		var validator=this._validator;
+		if (validator) {
+			this._validator=undefined;
+			f_classLoader.Destroy(validator);
+		}
 		
 		this.f_super(arguments);
 	},
-	*/
 	f_update: function() {
 		
 		if (this.f_isAutoTab()) {
@@ -78,7 +82,7 @@ var __members = {
 			return autoTab;
 		}
 				
-		autoTab=!!f_core.GetBooleanAttribute(this, "v:autoTab");
+		autoTab=!!f_core.GetBooleanAttributeNS(this,"autoTab");
 		this._autoTab=autoTab;
 				
 		return autoTab;
@@ -90,6 +94,7 @@ var __members = {
 	 */
 	f_performSelectionEvent: function(evt) {
 		if (this.f_isDisabled()) {
+			evt.f_preventDefault();
 			return;
 		}
 		
@@ -110,6 +115,8 @@ var __members = {
 
 		evt.f_preventDefault();
 
+		f_core.Debug(f_textEntry, "f_performSelectionEvent: Fire SELECTION event");
+		
 		this.f_fireEvent(f_event.SELECTION, jsEvent);
 		
 		return false;
@@ -195,7 +202,7 @@ var __members = {
 		
 		this.f_super(arguments);
 	}
-}
+};
 
 new f_class("f_textEntry", {
 	extend: f_abstractEntry,

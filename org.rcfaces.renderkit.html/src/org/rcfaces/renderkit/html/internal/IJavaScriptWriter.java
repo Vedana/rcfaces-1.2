@@ -15,7 +15,8 @@ import org.rcfaces.core.internal.renderkit.WriterException;
  * @version $Revision$ $Date$
  */
 
-public interface IJavaScriptWriter extends IComponentWriter {
+public interface IJavaScriptWriter extends IHtmlComponentWriter,
+        IComponentWriter {
 
     IJavaScriptRenderContext getJavaScriptRenderContext();
 

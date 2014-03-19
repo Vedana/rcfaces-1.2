@@ -441,12 +441,30 @@
 		<parameter type="String" name="name" />
 		<parameter type="javax.faces.context.FacesContext" name="facesContext" />
 		<code>
+<<<<<<< HEAD
 		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
+=======
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		if (dataMapAccessor==null) {
 			return null;
 		}
 		
 		return dataMapAccessor.getData(name, facesContext);
+		</code>		
+	</method>
+	
+	<method id="getServerDataValueExpression" returnType="javax.el.ValueExpression">
+		<import>org.rcfaces.core.internal.component.IDataMapAccessor</import>
+		<parameter type="String" name="name" />
+		<parameter type="javax.faces.context.FacesContext" name="facesContext" />
+		<code>
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
+		if (dataMapAccessor==null) {
+			return null;
+		}
+		
+		return dataMapAccessor.getValueExpression(name);
 		</code>		
 	</method>
 	

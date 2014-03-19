@@ -12,24 +12,7 @@
 
 var __members = {
 	fa_checkManager: function() {
-		var v_checkCardinality=f_core.GetNumberAttribute(this, "v:checkCardinality", undefined);
-		if (v_checkCardinality===undefined) {
-			return;
-		}
-		
-		var clientCheckFullState=f_core.GetNumberAttribute(this, "v:clientCheckFullState", fa_clientFullState.NONE_CLIENT_FULL_STATE);
-		if (clientCheckFullState) {
-			this._clientCheckFullState=clientCheckFullState;
-
-			this._checkFullState=new Array;
-		}
-		
-		this._checkCardinality=v_checkCardinality;
-		this._checkable=true;
-		
-		this._checkedElementValues=new Array;
-		this._uncheckedElementValues=new Array;
-		this._currentChecks=new Array;	
+		this.f_isCheckable();
 	},
 
 	f_finalize: function() {
@@ -38,11 +21,11 @@ var __members = {
 		this._currentChecks=undefined; // any[]
 		// this._clearAllCheckedElements=undefined; // boolean
 
-		//this._checkFullState=undefined; // string[] or number[]
-		//this._clientCheckFullState=undefined; // number
+		//this._checkFullState=undefined; // String[] or Number[]
+		//this._clientCheckFullState=undefined; // Number
 		
-		//this._checkCardinality=undefined; // number
-		//this._checkable=undefined; // boolean
+		//this._checkCardinality=undefined; // Number
+		//this._checkable=undefined; // Boolean
 	},
 
 	f_serialize: {
@@ -74,7 +57,43 @@ var __members = {
 			}
 		}
 	},
-	
+
+	/**
+	 * Returns <code>true</code> if the component is checkable.
+	 * 
+	 * @method public
+	 * @return Boolean <code>true</code> if the component is checkable.
+	 */
+	f_isCheckable: function() {
+		var checkable=this._checkable;
+		
+		if (checkable!==undefined) {
+			return checkable;
+		}
+		
+		var v_checkCardinality=f_core.GetNumberAttributeNS(this,"checkCardinality", undefined);
+		if (v_checkCardinality===undefined) {
+			this._checkable=false;
+			return false;
+		}
+		
+		var clientCheckFullState=f_core.GetNumberAttributeNS(this,"clientCheckFullState", fa_clientFullState.NONE_CLIENT_FULL_STATE);
+		if (clientCheckFullState) {
+			this._clientCheckFullState=clientCheckFullState;
+
+			this._checkFullState=new Array;
+		}
+		
+		this._checkCardinality=v_checkCardinality;
+		this._checkable=true;
+		
+		this._checkedElementValues=new Array;
+		this._uncheckedElementValues=new Array;
+		this._currentChecks=new Array;
+		
+		return true;
+	},
+
 	/**
 	 * @method hidden
 	 * @return void
@@ -312,6 +331,9 @@ var __members = {
 		}
 		
 		var elementChecked=this.fa_isElementChecked(element);
+		if (elementChecked==checked) {
+			return false;
+		}
 		var elementValue=this.fa_getElementValue(element);
 		
 		switch(cardinality) {
@@ -451,7 +473,7 @@ var __members = {
 		f_core.Assert(typeof(checkedValues)=="object", "fa_checkManager.f_setCheckedValues: Invalid checkedValues parameter ("+selection+")");
 		f_core.Assert(show===undefined || typeof(show)=="boolean", "fa_checkManager.f_setCheckedValues: Invalid show parameter ("+show+")");
 		
-		f_core.Debug(fa_selectionManager, "f_setCheckedValues: Set checked values to '"+checkedValues+"' show='"+show+"'.");
+		f_core.Debug(fa_checkManager, "f_setCheckedValues: Set checked values to '"+checkedValues+"' show='"+show+"'.");
 		
 		if (!checkedValues || !checkedValues.length) {
 			this._uncheckAllElements();
@@ -480,7 +502,7 @@ var __members = {
 	 */
 	fa_setElementChecked: f_class.ABSTRACT
 	
-}
+};
 
 new f_aspect("fa_checkManager", {
 	extend: [ fa_itemsManager, fa_clientFullState ],

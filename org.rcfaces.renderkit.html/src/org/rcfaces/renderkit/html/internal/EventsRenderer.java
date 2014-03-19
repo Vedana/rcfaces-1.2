@@ -5,7 +5,6 @@
 package org.rcfaces.renderkit.html.internal;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.faces.FacesException;
@@ -27,7 +26,6 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools;
  * @version $Revision$ $Date$
  */
 public class EventsRenderer {
-    private static final String REVISION = "$Revision$";
 
     static final String DEFAULT_SUBMIT = "submit";
 
@@ -48,14 +46,12 @@ public class EventsRenderer {
 
     private static final FacesListener DEFAULT_SUBMIT_FACES_LISTENER = new AbstractScriptListener(
             IHtmlRenderContext.JAVASCRIPT_TYPE, DEFAULT_SUBMIT) {
-        private static final String REVISION = "$Revision$";
 
     };
 
     private static final FacesListener[] DEFAULT_SUBMIT_FACES_LISTENERS = new FacesListener[] { DEFAULT_SUBMIT_FACES_LISTENER };
 
     private static final IJavascriptMode ONFOCUS_JAVASCRIPT_ENABLE = new IJavascriptMode() {
-        private static final String REVISION = "$Revision$";
 
         public void enableJavaScriptMode(IJavaScriptEnableMode mode) {
             // mode.enableOnFocus(com);
@@ -66,7 +62,6 @@ public class EventsRenderer {
     };
 
     private static final IJavascriptMode ONINIT_JAVASCRIPT_ENABLE = new IJavascriptMode() {
-        private static final String REVISION = "$Revision$";
 
         public void enableJavaScriptMode(IJavaScriptEnableMode mode) {
             mode.enableOnInit();
@@ -74,14 +69,12 @@ public class EventsRenderer {
     };
 
     private static final IJavascriptMode NONE_JAVASCRIPT_ENABLE = new IJavascriptMode() {
-        private static final String REVISION = "$Revision$";
 
         public void enableJavaScriptMode(IJavaScriptEnableMode mode) {
         }
     };
 
     private static final IJavascriptMode SUBMIT_JAVASCRIPT_ENABLE = new IJavascriptMode() {
-        private static final String REVISION = "$Revision$";
 
         public void enableJavaScriptMode(IJavaScriptEnableMode mode) {
             mode.enableOnSubmit();
@@ -89,7 +82,6 @@ public class EventsRenderer {
     };
 
     private static final IJavascriptMode OVER_JAVASCRIPT_ENABLE = new IJavascriptMode() {
-        private static final String REVISION = "$Revision$";
 
         public void enableJavaScriptMode(IJavaScriptEnableMode mode) {
             mode.enableOnOver();
@@ -100,7 +92,8 @@ public class EventsRenderer {
 
     private static final int GLOBAL_SUBMIT_TYPE = 1;
 
-    private static final Map ENABLE_JAVASCRIPT_BY_LISTENER_TYPE = new HashMap(8);
+    private static final Map<String, IJavascriptMode> ENABLE_JAVASCRIPT_BY_LISTENER_TYPE = new HashMap<String, IJavascriptMode>(
+            8);
     static {
         // INIT
         ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
@@ -115,6 +108,8 @@ public class EventsRenderer {
                 JavaScriptClasses.EVENT_MOUSEOVER, OVER_JAVASCRIPT_ENABLE);
         ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
                 JavaScriptClasses.EVENT_MOUSEOUT, OVER_JAVASCRIPT_ENABLE);
+        ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(JavaScriptClasses.EVENT_CLICK,
+                OVER_JAVASCRIPT_ENABLE);
 
         // FOCUS
         ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
@@ -135,7 +130,8 @@ public class EventsRenderer {
                 JavaScriptClasses.EVENT_KEYUP_ATTRIBUTE,
                 ONFOCUS_JAVASCRIPT_ENABLE);
         ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
-                JavaScriptClasses.EVENT_PRE_SELECTION, ONFOCUS_JAVASCRIPT_ENABLE);
+                JavaScriptClasses.EVENT_PRE_SELECTION,
+                ONFOCUS_JAVASCRIPT_ENABLE);
         ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
                 JavaScriptClasses.EVENT_SELECTION, ONFOCUS_JAVASCRIPT_ENABLE);
         ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
@@ -162,17 +158,21 @@ public class EventsRenderer {
 
     }
 
-    public static void encodeEventListeners(IJavaScriptWriter js,
-            String varName, Map listenersByType, String actionListenerType)
-            throws WriterException {
+    public static void encodeEventListeners(IJavaScriptWriter javascriptWriter,
+            String varName, Map<String, FacesListener[]> listenersByType,
+            String actionListenerType) throws WriterException {
+
+        if (javascriptWriter.getComponentRenderContext().getRenderContext()
+                .getProcessContext().isDesignerMode()) {
+            return;
+        }
 
         if (listenersByType.isEmpty() == false) {
-            for (Iterator it = listenersByType.entrySet().iterator(); it
-                    .hasNext();) {
-                Map.Entry entry = (Map.Entry) it.next();
+            for (Map.Entry<String, FacesListener[]> entry : listenersByType
+                    .entrySet()) {
 
-                String listenerType = (String) entry.getKey();
-                FacesListener listeners[] = (FacesListener[]) entry.getValue();
+                String listenerType = entry.getKey();
+                FacesListener listeners[] = entry.getValue();
 
                 boolean submitSupport = true;
                 if (ListenerTools.ATTRIBUTE_NAME_SPACE.getValidationEventName()
@@ -180,15 +180,16 @@ public class EventsRenderer {
                     submitSupport = false;
                 }
 
-                encodeEventListeners(js, varName, listenerType, listeners,
-                        submitSupport);
+                encodeEventListeners(javascriptWriter, varName, listenerType,
+                        listeners, submitSupport);
             }
         }
 
         if (actionListenerType != null) {
             if (listenersByType.containsKey(actionListenerType) == false) {
                 // Il faut provoquer un Submit alors ...
-                encodeJavaScriptEventSubmit(js, varName, actionListenerType);
+                encodeJavaScriptEventSubmit(javascriptWriter, varName,
+                        actionListenerType);
             }
         }
     }
@@ -421,7 +422,7 @@ public class EventsRenderer {
 
             cnt++;
 
-            IJavascriptMode javascriptMode = (IJavascriptMode) ENABLE_JAVASCRIPT_BY_LISTENER_TYPE
+            IJavascriptMode javascriptMode = ENABLE_JAVASCRIPT_BY_LISTENER_TYPE
                     .get(listenerType);
             if (javascriptMode != null) {
                 javascriptMode.enableJavaScriptMode(javaScriptEnableMode);
@@ -450,7 +451,7 @@ public class EventsRenderer {
                         DEFAULT_PARTIAL_RENDERING_JAVA_SCRIPT_CLASSNAME, null);
             }
 
-            IJavascriptMode javascriptMode = (IJavascriptMode) ENABLE_JAVASCRIPT_BY_LISTENER_TYPE
+            IJavascriptMode javascriptMode = ENABLE_JAVASCRIPT_BY_LISTENER_TYPE
                     .get(listenerType);
             if (javascriptMode != null) {
                 javascriptMode.enableJavaScriptMode(javaScriptEnableMode);

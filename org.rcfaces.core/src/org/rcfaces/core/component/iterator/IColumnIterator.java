@@ -14,7 +14,7 @@ import javax.faces.component.UIColumn;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public interface IColumnIterator extends IComponentIterator {
+public interface IColumnIterator extends IComponentIterator<UIColumn> {
 
     /**
      * Returns the next UIColumn in the iteration. Calling this method

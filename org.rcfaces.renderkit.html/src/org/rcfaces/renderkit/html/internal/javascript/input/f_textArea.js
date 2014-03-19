@@ -75,16 +75,16 @@ var __statics = {
 		// f_core.Debug(f_textArea, "_MaxTextLengthKeyDown: keyCode="+keyCode+" charCode="+charCode+" shift="+jsEvent.shift+" ctrl="+jsEvent.ctrl+" alt="+jsEvent.alt+" keyChar="+keyChar+"("+((keyChar.length>0)?keyChar.charCodeAt(0):"")+")");
 	
 		// Il faut compter les CRs !!!
-		if (f_core.IsInternetExplorer()) {
-			if (keyCode < 32 && keyCode!=13) {
-				return true;
+		
+		 if (f_core.IsGecko()) {
+				if (keyCode>0 && keyCode!=13) {
+					return true;
+				}
+				//keyCode=charCode;
 			}
-		} else if (f_core.IsGecko()) {
-			if (keyCode>0 && keyCode!=13) {
-				return true;
-			}
-			//keyCode=charCode;
-		}
+		 else if (keyCode < 32 && keyCode!=13) {
+			return true;
+		} 
 
 		return f_textArea._ChangeText(textArea, keyChar);
 	},
@@ -128,10 +128,10 @@ var __statics = {
 			var selectionEnd=selection[1];
 			
 			if (selectionStart>=_maxTextLength) {
-				selectionStart=_maxTextLength
+				selectionStart=_maxTextLength;
 			}
 			if (selectionEnd>=_maxTextLength) {
-				selectionEnd=_maxTextLength
+				selectionEnd=_maxTextLength;
 			}
 			
 			_input.value=value.substring(0, _maxTextLength);
@@ -205,15 +205,15 @@ var __statics = {
 			input.onpaste=null;
 		}
 	}
-}
+};
 
 var __members = {
 	f_textArea: function() {
 		this.f_super(arguments);
 
-		this._maxTextLength=f_core.GetNumberAttribute(this, "v:maxTextLength", 0);
+		this._maxTextLength=f_core.GetNumberAttributeNS(this,"maxTextLength", 0);
 		if (this._maxTextLength>0) {
-			this._ignoreWhenFull=f_core.GetBooleanAttribute(this, "v:ignoreWhenFull", false);
+			this._ignoreWhenFull=f_core.GetBooleanAttributeNS(this,"ignoreWhenFull", false);
 
 			f_textArea._InstallMaxTextLength(this);
 			
@@ -237,8 +237,48 @@ var __members = {
 	 */
 	f_getMaxTextLength: function() {
 		return this._maxTextLength;
+	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	fa_updateRequired: function() {
+		this.f_updateStyleClass();
+
+		if (this._requiredInstalled) {
+			return;
+		}
+		
+		this._requiredInstalled=true;
+	
+		this.f_addEventListener(f_event.VALIDATION, this._validate);		
+	},
+	/**
+	 * @method private 
+	 * @param f_event event
+	 * @return Boolean
+	 */
+	_validate: function(event) {
+		if (this.f_isRequired()==false) {
+			return;
+		}
+				
+		var value=this.f_getValue();
+		if (value) {
+			return true;
+		}
+		
+		var message=f_resourceBundle.Get(f_textArea).f_formatParams("REQUIRED_SUMMARY");
+		if (!message) {	
+			message=f_locale.Get().f_formatMessageParams("javax_faces_component_UIInput_REQUIRED", null, "Validation Error: Value is required.");
+		}
+		
+		var messageContext=f_messageContext.Get(event);	
+		messageContext.f_addMessage(this, f_messageObject.SEVERITY_ERROR, message, null);
+		
+		return false;
 	}
-}
+};
 
 new f_class("f_textArea", {
 	extend: f_abstractEntry,

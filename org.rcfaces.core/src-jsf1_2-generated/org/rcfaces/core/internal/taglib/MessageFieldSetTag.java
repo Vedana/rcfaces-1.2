@@ -33,47 +33,47 @@ public class MessageFieldSetTag extends FieldSetTag implements Tag {
 		return MessageFieldSetComponent.COMPONENT_TYPE;
 	}
 
-	public final void setFor(ValueExpression forValue) {
+	public void setFor(ValueExpression forValue) {
 		this.forValue = forValue;
 	}
 
-	public final void setErrorStyleClass(ValueExpression errorStyleClass) {
+	public void setErrorStyleClass(ValueExpression errorStyleClass) {
 		this.errorStyleClass = errorStyleClass;
 	}
 
-	public final void setFatalStyleClass(ValueExpression fatalStyleClass) {
+	public void setFatalStyleClass(ValueExpression fatalStyleClass) {
 		this.fatalStyleClass = fatalStyleClass;
 	}
 
-	public final void setInfoStyleClass(ValueExpression infoStyleClass) {
+	public void setInfoStyleClass(ValueExpression infoStyleClass) {
 		this.infoStyleClass = infoStyleClass;
 	}
 
-	public final void setWarnStyleClass(ValueExpression warnStyleClass) {
+	public void setWarnStyleClass(ValueExpression warnStyleClass) {
 		this.warnStyleClass = warnStyleClass;
 	}
 
-	public final void setErrorImageURL(ValueExpression errorImageURL) {
+	public void setErrorImageURL(ValueExpression errorImageURL) {
 		this.errorImageURL = errorImageURL;
 	}
 
-	public final void setFatalImageURL(ValueExpression fatalImageURL) {
+	public void setFatalImageURL(ValueExpression fatalImageURL) {
 		this.fatalImageURL = fatalImageURL;
 	}
 
-	public final void setInfoImageURL(ValueExpression infoImageURL) {
+	public void setInfoImageURL(ValueExpression infoImageURL) {
 		this.infoImageURL = infoImageURL;
 	}
 
-	public final void setWarnImageURL(ValueExpression warnImageURL) {
+	public void setWarnImageURL(ValueExpression warnImageURL) {
 		this.warnImageURL = warnImageURL;
 	}
 
-	public final void setSetFocusIfMessage(ValueExpression setFocusIfMessage) {
+	public void setSetFocusIfMessage(ValueExpression setFocusIfMessage) {
 		this.setFocusIfMessage = setFocusIfMessage;
 	}
 
-	public final void setShowActiveComponentMessage(ValueExpression showActiveComponentMessage) {
+	public void setShowActiveComponentMessage(ValueExpression showActiveComponentMessage) {
 		this.showActiveComponentMessage = showActiveComponentMessage;
 	}
 

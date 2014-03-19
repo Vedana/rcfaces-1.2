@@ -18,6 +18,7 @@ var __statics = {
 	_EVENTS: {
 			change: f_event.CHANGE,
 			check: f_event.CHECK,
+			click: f_event.CLICK,
 			blur: f_event.BLUR,
 			dblClick: f_event.DBLCLICK,
 			drag: f_event.DRAG,
@@ -65,6 +66,7 @@ var __statics = {
 		cb[f_event.CHANGE]={_dom: "onchange" }; 
 		cb[f_event.CHECK]=null;
 		cb[f_event.CLOSE]=noLock;
+		cb[f_event.CLICK]={_dom: "onclick" };
 		cb[f_event.DBLCLICK]={_dom: "ondblclick" }; 
 		cb[f_event.DRAG]=null;
 		cb[f_event.DROP]=null;
@@ -99,7 +101,7 @@ var __members = {
 		this.f_super(arguments);
 		
 		if (this.nodeType==f_core.ELEMENT_NODE) {
-			var events=f_core.GetAttribute(this, "v:events");
+			var events=f_core.GetAttributeNS(this,"events");
 			if (events) {
 				this.f_initEventAtts(f_eventTarget._EVENTS, events);
 			}

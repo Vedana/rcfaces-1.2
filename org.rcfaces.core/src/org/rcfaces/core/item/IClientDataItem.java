@@ -11,7 +11,7 @@ import java.util.Map;
  * @version $Revision$ $Date$
  */
 public interface IClientDataItem {
-    Map getClientDataMap();
+    Map<String, String> getClientDataMap();
 
     boolean isClientDataEmpty();
 }

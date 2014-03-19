@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
@@ -19,6 +20,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.AdditionalInformationComponent;
 import org.rcfaces.core.component.capability.IAdditionalInformationCardinalityCapability;
+import org.rcfaces.core.component.capability.IAlertLoadingMessageCapability;
 import org.rcfaces.core.component.capability.IAlignmentCapability;
 import org.rcfaces.core.component.capability.ICellImageCapability;
 import org.rcfaces.core.component.capability.ICellStyleClassCapability;
@@ -28,6 +30,7 @@ import org.rcfaces.core.component.capability.ICheckableCapability;
 import org.rcfaces.core.component.capability.IClientAdditionalInformationFullStateCapability;
 import org.rcfaces.core.component.capability.IClientCheckFullStateCapability;
 import org.rcfaces.core.component.capability.IClientSelectionFullStateCapability;
+import org.rcfaces.core.component.capability.ICriteriaManagerCapability;
 import org.rcfaces.core.component.capability.IDisabledCapability;
 import org.rcfaces.core.component.capability.IDraggableCapability;
 import org.rcfaces.core.component.capability.IDroppableCapability;
@@ -38,6 +41,7 @@ import org.rcfaces.core.component.capability.IOrderedChildrenCapability;
 import org.rcfaces.core.component.capability.IPagedCapability;
 import org.rcfaces.core.component.capability.IResizableCapability;
 import org.rcfaces.core.component.capability.IRowStyleClassCapability;
+import org.rcfaces.core.component.capability.IScopeColumnIdCapability;
 import org.rcfaces.core.component.capability.ISelectableCapability;
 import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
 import org.rcfaces.core.component.capability.IShowValueCapability;
@@ -47,10 +51,12 @@ import org.rcfaces.core.component.capability.ISortEventCapability;
 import org.rcfaces.core.component.capability.ISortManagerCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
+import org.rcfaces.core.component.capability.IWheelSelectionCapability;
 import org.rcfaces.core.component.capability.IWidthCapability;
 import org.rcfaces.core.component.capability.IWidthRangeCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.iterator.IColumnIterator;
+import org.rcfaces.core.component.iterator.IToolTipIterator;
 import org.rcfaces.core.internal.capability.IAdditionalInformationComponent;
 import org.rcfaces.core.internal.capability.ICellImageSettings;
 import org.rcfaces.core.internal.capability.ICellStyleClassSettings;
@@ -58,37 +64,41 @@ import org.rcfaces.core.internal.capability.ICellToolTipTextSettings;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
 import org.rcfaces.core.internal.capability.ISortedComponentsCapability;
+import org.rcfaces.core.internal.capability.IToolTipComponent;
 import org.rcfaces.core.internal.component.IImageAccessors;
 import org.rcfaces.core.internal.component.IStatesImageAccessors;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.listener.IScriptListener;
 import org.rcfaces.core.internal.listener.IServerActionListener;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
-import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.internal.tools.CriteriaTools;
 import org.rcfaces.core.lang.FilterPropertiesMap;
 import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.core.model.IFilterProperties;
+import org.rcfaces.core.model.ISelectedCriteria;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
+import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public abstract class AbstractGridRenderContext {
-    private static final String REVISION = "$Revision$";
-
+public abstract class AbstractGridRenderContext extends TooltipContainerRenderContext {
     private static final Log LOG = LogFactory
             .getLog(AbstractGridRenderContext.class);
 
-    private static final ISortedComponent SORTED_COMPONENT_EMPTY_ARRAY[] = new ISortedComponent[0];
+    private static final ISortedComponent[] SORTED_COMPONENT_EMPTY_ARRAY = new ISortedComponent[0];
+
+    private static final ISelectedCriteria[] CRITERIA_CONTAINER_EMPTY_ARRAY = new ISelectedCriteria[0];
 
     public static final int SERVER_HIDDEN = 1;
 
@@ -136,7 +146,9 @@ public abstract class AbstractGridRenderContext {
 
     private boolean hasTitleColumnImages;
 
-    private ISortedComponent sortedComponents[];
+    private ISortedComponent[] sortedComponents;
+
+    private ISelectedCriteria[] selectedCriteria;
 
     private int rows;
 
@@ -170,7 +182,7 @@ public abstract class AbstractGridRenderContext {
 
     private boolean designerMode;
 
-    private IScriptRenderContext scriptRenderContext;
+    private IJavaScriptRenderContext scriptRenderContext;
 
     private boolean hasScrollBars;
 
@@ -193,6 +205,8 @@ public abstract class AbstractGridRenderContext {
     private String columnStyleClasses[];
 
     private String rowStyleClasses[];
+
+    private String defaultCellToolTipIds[];
 
     protected int gridWidth;
 
@@ -218,15 +232,28 @@ public abstract class AbstractGridRenderContext {
 
     private boolean isDroppable;
 
+    private boolean wheelSelection = true;
+
+    private String alertLoadingMessage = null;
+
+    private String scopeColId = null;
+
     private AbstractGridRenderContext(IProcessContext processContext,
-            IScriptRenderContext scriptRenderContext,
+            IJavaScriptRenderContext scriptRenderContext,
             IGridComponent gridComponent, ISortedComponent sortedComponents[],
-            boolean checkTitleImages) {
+            boolean checkTitleImages, ISelectedCriteria[] criteriaConfigs) {
+        super((UIComponent) gridComponent);
+
         this.processContext = processContext;
         this.scriptRenderContext = scriptRenderContext;
 
         this.gridComponent = gridComponent;
         this.sortedComponents = sortedComponents;
+
+        if (criteriaConfigs == null) {
+            criteriaConfigs = listCriteriaContainers((UIComponent) gridComponent);
+        }
+        this.selectedCriteria = criteriaConfigs;
 
         if (gridComponent instanceof ISizeCapability) {
             computeGridSize((ISizeCapability) gridComponent);
@@ -249,6 +276,9 @@ public abstract class AbstractGridRenderContext {
             isDroppable = ((IDroppableCapability) gridComponent).isDroppable();
         }
 
+        // Accessibility : get scope column
+        scopeColId = findScopeColumnId(gridComponent);
+
         initialize(checkTitleImages);
 
     }
@@ -265,6 +295,7 @@ public abstract class AbstractGridRenderContext {
         }
     }
 
+    @SuppressWarnings("unused")
     protected void initialize(boolean checkTitleImages) {
 
         if (gridComponent instanceof IHeaderVisibilityCapability) {
@@ -291,6 +322,17 @@ public abstract class AbstractGridRenderContext {
                             .getClientSelectionFullState();
                 }
             }
+
+        }
+
+        if (gridComponent instanceof IWheelSelectionCapability) {
+            wheelSelection = ((IWheelSelectionCapability) gridComponent)
+                    .isWheelSelection();
+        }
+
+        if (gridComponent instanceof IAlertLoadingMessageCapability) {
+            alertLoadingMessage = ((IAlertLoadingMessageCapability) gridComponent)
+                    .getAlertLoadingMessage();
         }
 
         if (gridComponent instanceof ICheckableCapability) {
@@ -312,6 +354,8 @@ public abstract class AbstractGridRenderContext {
                 }
             }
         }
+
+        // temporaire avant création de la capability tooltip2
 
         if (gridComponent instanceof IAdditionalInformationComponent) {
             additionalInformations = ((IAdditionalInformationComponent) gridComponent)
@@ -379,7 +423,8 @@ public abstract class AbstractGridRenderContext {
             UIComponent orderedChildren[] = ((IOrderedChildrenCapability) gridComponent)
                     .getOrderedChildren();
             if (orderedChildren != null && orderedChildren.length > 0) {
-                List cs = new ArrayList(orderedChildren.length);
+                List<UIColumn> cs = new ArrayList<UIColumn>(
+                        orderedChildren.length);
 
                 for (int i = 0; i < orderedChildren.length; i++) {
                     UIComponent c = orderedChildren[i];
@@ -388,10 +433,10 @@ public abstract class AbstractGridRenderContext {
                         continue;
                     }
 
-                    cs.add(c);
+                    cs.add((UIColumn) c);
                 }
 
-                columns = (UIColumn[]) cs.toArray(new UIColumn[cs.size()]);
+                columns = cs.toArray(new UIColumn[cs.size()]);
             }
         }
 
@@ -402,6 +447,7 @@ public abstract class AbstractGridRenderContext {
         columnIds = new String[columns.length];
         columnWidths = new String[columns.length];
         columnWidthsInPixel = new int[columns.length];
+        defaultCellToolTipIds = new String[columns.length];
 
         FacesContext facesContext = processContext.getFacesContext();
 
@@ -424,7 +470,10 @@ public abstract class AbstractGridRenderContext {
                 columnIds[i] = columnId;
             }
 
-            if (column instanceof IVisibilityCapability) {
+            if (column.isRendered() == false) {
+                columnStates[i] = SERVER_HIDDEN;
+
+            } else if (column instanceof IVisibilityCapability) {
                 Boolean v = ((IVisibilityCapability) column).getVisibleState();
                 if (v != null && v.booleanValue() == false) {
                     // Pas visible du tout !
@@ -494,13 +543,14 @@ public abstract class AbstractGridRenderContext {
             if (column instanceof IResizableCapability) {
                 if (((IResizableCapability) column).isResizable()) {
 
-                    if (widthNotSpecified) {
-                        LOG
-                                .error("You must specify a width for a resizable column ! (#"
-                                        + i
-                                        + ", columnId="
-                                        + columnId
-                                        + ", idw=" + idw + ", dw='" + dw + "')");
+                    if (false && widthNotSpecified) {
+                        LOG.error("You must specify a width for a resizable column ! (#"
+                                + i
+                                + ", columnId="
+                                + columnId
+                                + ", idw="
+                                + idw
+                                + ", dw='" + dw + "')");
 
                         // Fred if dw = 0 should this be triggered ?
                         // See f_grid.js 2198
@@ -592,6 +642,14 @@ public abstract class AbstractGridRenderContext {
                     hasCellToolTipText = true;
                 }
             }
+
+            if (column instanceof IToolTipComponent) {
+                IToolTipIterator tooltipIterator = ((IToolTipComponent) column)
+                        .listToolTips();
+                // TODO
+            }
+
+            // cell
 
             if (column instanceof ICellToolTipTextCapability) {
                 String ctt = ((ICellToolTipTextCapability) column)
@@ -763,7 +821,7 @@ public abstract class AbstractGridRenderContext {
         }
 
         if (resizable && (hasScrollBars == false || widthNotSpecified)) {
-            resizable = false;
+            // resizable = false; // Avec le nouveau LAYOUT plus la peine ....
         }
 
         dataModel = gridComponent.getDataModelValue();
@@ -816,10 +874,10 @@ public abstract class AbstractGridRenderContext {
     protected AbstractGridRenderContext(
             IHtmlComponentRenderContext componentRenderContext) {
         this(componentRenderContext.getRenderContext().getProcessContext(),
-                componentRenderContext.getRenderContext()
-                        .getScriptRenderContext(),
+                componentRenderContext.getHtmlRenderContext()
+                        .getJavaScriptRenderContext(),
                 (IGridComponent) componentRenderContext.getComponent(),
-                computeSortedComponents(componentRenderContext), true);
+                computeSortedComponents(componentRenderContext), true, null);
 
         designerMode = componentRenderContext.getRenderContext()
                 .getProcessContext().isDesignerMode();
@@ -830,6 +888,17 @@ public abstract class AbstractGridRenderContext {
             filtersMap = ((IFilterCapability) gridComponent)
                     .getFilterProperties();
         }
+    }
+
+    private static ISelectedCriteria[] listCriteriaContainers(
+            UIComponent component) {
+
+        if (component instanceof ICriteriaManagerCapability) {
+            return CriteriaTools
+                    .listSelectedCriteria((ICriteriaManagerCapability) component);
+        }
+
+        return CRITERIA_CONTAINER_EMPTY_ARRAY;
     }
 
     private static ISortedComponent[] computeSortedComponents(
@@ -846,12 +915,13 @@ public abstract class AbstractGridRenderContext {
     }
 
     protected AbstractGridRenderContext(IProcessContext processContext,
-            IScriptRenderContext scriptRenderContext,
+            IJavaScriptRenderContext scriptRenderContext,
             IGridComponent gridComponent, int rowIndex, int forcedRows,
             ISortedComponent sortedComponents[], String filterExpression,
-            String showAdditionals, String hideAdditionals) {
+            String showAdditionals, String hideAdditionals,
+            ISelectedCriteria[] criteriaContainers) {
         this(processContext, scriptRenderContext, gridComponent,
-                sortedComponents, false);
+                sortedComponents, false, criteriaContainers);
 
         this.first = rowIndex;
         this.forcedRows = forcedRows;
@@ -884,6 +954,10 @@ public abstract class AbstractGridRenderContext {
         return columnIds[index];
     }
 
+    public String getScopeColId() {
+        return scopeColId;
+    }
+
     public void updateRowCount() {
         rowCount = -2;
     }
@@ -899,10 +973,10 @@ public abstract class AbstractGridRenderContext {
     public final int getFirst() {
         return first;
     }
-    
+
     public final void resetFirst() {
-    	first = 0;
-    	gridComponent.setFirst(0);
+        first = 0;
+        gridComponent.setFirst(0);
     }
 
     public final boolean isPaged() {
@@ -911,6 +985,10 @@ public abstract class AbstractGridRenderContext {
 
     public final ISortedComponent[] listSortedComponents() {
         return sortedComponents;
+    }
+
+    public final ISelectedCriteria[] listSelectedCriteria() {
+        return selectedCriteria;
     }
 
     public final int getForcedRows() {
@@ -1148,6 +1226,83 @@ public abstract class AbstractGridRenderContext {
     public boolean isDroppable() {
         return isDroppable;
     }
-    
+
+    public boolean isWheelSelection() {
+        return wheelSelection;
+    }
+
+    public String getAlertLoadingMessage() {
+        return alertLoadingMessage;
+    }
+
+    /**
+     * Accessibility : get the column holding the scope="row" attribbute
+     * 
+     * @param dg
+     *            ComponentsGrid component
+     * @return
+     */
+    private String findScopeColumnId(IGridComponent grid) {
+        // 1st case : column id attribute is set
+        if (grid instanceof IScopeColumnIdCapability) {
+            String scopeColumnId = ((IScopeColumnIdCapability) grid)
+                    .getScopeColumnId();
+
+            if (scopeColumnId != null) {
+                for (IColumnIterator it = grid.listColumns(); it.hasNext();) {
+                    UIColumn column = it.next();
+                    if (scopeColumnId.equals(column.getId())) {
+                        return column.getId();
+                    }
+                }
+                // ID not found !!!
+                throw new FacesException("Can not find column '"
+                        + scopeColumnId + "'.");
+            }
+        }
+
+        // Get first visible column that has a binding
+        for (IColumnIterator it = grid.listColumns(); it.hasNext();) {
+            UIColumn column = it.next();
+            if (column.isRendered()) {
+                // Column must be visible
+                if (column instanceof IVisibilityCapability
+                        && !((IVisibilityCapability) column).isVisible()) {
+                    continue;
+                }
+                if (isColumnDataBound(column)) {
+                    return column.getId();
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Is column content data-bound ?
+     * 
+     * @param column
+     *            Grid column
+     * @return true if a column or one of its children is data-bound
+     */
+    private boolean isColumnDataBound(UIComponent column) {
+        // The column must have a variable content via a Value Expression
+        ValueExpression valueExpression = column
+                .getValueExpression(Properties.VALUE);
+        if (valueExpression != null) {
+            return true;
+        }
+        List<UIComponent> children = column.getChildren();
+        for (UIComponent child : children) {
+            if (isColumnDataBound(child)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public IProcessContext getProcessContext() {
+        return processContext;
+    }
 
 }

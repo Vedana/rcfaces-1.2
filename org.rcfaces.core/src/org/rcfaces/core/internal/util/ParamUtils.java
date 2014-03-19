@@ -18,8 +18,6 @@ import org.rcfaces.core.internal.tools.ParameterTools;
  * @version $Revision$ $Date$
  */
 public class ParamUtils {
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory.getLog(ParamUtils.class);
 
     public static String formatMessage(UIComponent component, String pattern) {
@@ -39,7 +37,7 @@ public class ParamUtils {
             segments[i] = new StringAppender();
         }
         int part = 0;
-        int formatNumber = 0;
+        // int formatNumber = 0;
         boolean inQuote = false;
         int braceStack = 0;
 
@@ -96,7 +94,7 @@ public class ParamUtils {
                 if (braceStack == 1) {
                     part = 0;
                     makeFormat(segments, parameters);
-                    formatNumber++;
+                    // formatNumber++;
 
                     segments[1].setLength(0);
                     segments[2].setLength(0);

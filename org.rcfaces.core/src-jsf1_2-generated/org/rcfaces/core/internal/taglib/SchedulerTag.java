@@ -42,108 +42,120 @@ public class SchedulerTag extends CameliaTag implements Tag {
 	private ValueExpression periodSelectable;
 	private ValueExpression periodToolTip;
 	private ValueExpression periodValue;
+	private ValueExpression periodType;
 	private ValueExpression var;
 	public String getComponentType() {
 		return SchedulerComponent.COMPONENT_TYPE;
 	}
 
-	public final void setWidth(ValueExpression width) {
+	public void setWidth(ValueExpression width) {
 		this.width = width;
 	}
 
-	public final void setHeight(ValueExpression height) {
+	public void setHeight(ValueExpression height) {
 		this.height = height;
 	}
 
-	public final void setHorizontalScrollPosition(ValueExpression horizontalScrollPosition) {
+	public void setHorizontalScrollPosition(ValueExpression horizontalScrollPosition) {
 		this.horizontalScrollPosition = horizontalScrollPosition;
 	}
 
-	public final void setVerticalScrollPosition(ValueExpression verticalScrollPosition) {
+	public void setVerticalScrollPosition(ValueExpression verticalScrollPosition) {
 		this.verticalScrollPosition = verticalScrollPosition;
 	}
 
-	public final void setLiteralLocale(ValueExpression literalLocale) {
+	public void setLiteralLocale(ValueExpression literalLocale) {
 		this.literalLocale = literalLocale;
 	}
 
-	public final void setLiteralTimeZone(ValueExpression literalTimeZone) {
+	public void setLiteralTimeZone(ValueExpression literalTimeZone) {
 		this.literalTimeZone = literalTimeZone;
 	}
 
-	public final void setStyleClass(ValueExpression styleClass) {
+	public void setStyleClass(ValueExpression styleClass) {
 		this.styleClass = styleClass;
+<<<<<<< HEAD
+=======
 	}
 
-	public final void setImmediate(ValueExpression immediate) {
+	public void setTabIndex(ValueExpression tabIndex) {
+		this.tabIndex = tabIndex;
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
+	}
+
+	public void setImmediate(ValueExpression immediate) {
 		this.immediate = immediate;
 	}
 
-	public final void setSelectionListener(ValueExpression selectionListeners) {
+	public void setSelectionListener(ValueExpression selectionListeners) {
 		this.selectionListeners = selectionListeners;
 	}
 
-	public final void setDateBegin(ValueExpression dateBegin) {
+	public void setDateBegin(ValueExpression dateBegin) {
 		this.dateBegin = dateBegin;
 	}
 
-	public final void setHourBegin(ValueExpression hourBegin) {
+	public void setHourBegin(ValueExpression hourBegin) {
 		this.hourBegin = hourBegin;
 	}
 
-	public final void setHourEnd(ValueExpression hourEnd) {
+	public void setHourEnd(ValueExpression hourEnd) {
 		this.hourEnd = hourEnd;
 	}
 
-	public final void setPrimaryTick(ValueExpression primaryTick) {
+	public void setPrimaryTick(ValueExpression primaryTick) {
 		this.primaryTick = primaryTick;
 	}
 
-	public final void setSecondaryTick(ValueExpression secondaryTick) {
+	public void setSecondaryTick(ValueExpression secondaryTick) {
 		this.secondaryTick = secondaryTick;
 	}
 
-	public final void setShowPrimaryTickLabel(ValueExpression showPrimaryTickLabel) {
+	public void setShowPrimaryTickLabel(ValueExpression showPrimaryTickLabel) {
 		this.showPrimaryTickLabel = showPrimaryTickLabel;
 	}
 
-	public final void setShowSecondaryTickLabel(ValueExpression showSecondaryTickLabel) {
+	public void setShowSecondaryTickLabel(ValueExpression showSecondaryTickLabel) {
 		this.showSecondaryTickLabel = showSecondaryTickLabel;
 	}
 
-	public final void setPeriods(ValueExpression periods) {
+	public void setPeriods(ValueExpression periods) {
 		this.periods = periods;
 	}
 
-	public final void setPeriodBegin(ValueExpression periodBegin) {
+	public void setPeriodBegin(ValueExpression periodBegin) {
 		this.periodBegin = periodBegin;
 	}
 
-	public final void setPeriodEnd(ValueExpression periodEnd) {
+	public void setPeriodEnd(ValueExpression periodEnd) {
 		this.periodEnd = periodEnd;
 	}
 
-	public final void setPeriodLabel(ValueExpression periodLabel) {
+	public void setPeriodLabel(ValueExpression periodLabel) {
 		this.periodLabel = periodLabel;
 	}
 
-	public final void setPeriodStyle(ValueExpression periodStyle) {
+	public void setPeriodStyle(ValueExpression periodStyle) {
 		this.periodStyle = periodStyle;
 	}
 
-	public final void setPeriodSelectable(ValueExpression periodSelectable) {
+	public void setPeriodSelectable(ValueExpression periodSelectable) {
 		this.periodSelectable = periodSelectable;
 	}
 
-	public final void setPeriodToolTip(ValueExpression periodToolTip) {
+	public void setPeriodToolTip(ValueExpression periodToolTip) {
 		this.periodToolTip = periodToolTip;
 	}
 
-	public final void setPeriodValue(ValueExpression periodValue) {
+	public void setPeriodValue(ValueExpression periodValue) {
 		this.periodValue = periodValue;
 	}
 
-	public final void setVar(ValueExpression var) {
+	public void setPeriodType(ValueExpression periodType) {
+		this.periodType = periodType;
+	}
+
+	public void setVar(ValueExpression var) {
 		this.var = var;
 	}
 
@@ -175,6 +187,7 @@ public class SchedulerTag extends CameliaTag implements Tag {
 			LOG.debug("  periodSelectable='"+periodSelectable+"'");
 			LOG.debug("  periodToolTip='"+periodToolTip+"'");
 			LOG.debug("  periodValue='"+periodValue+"'");
+			LOG.debug("  periodType='"+periodType+"'");
 			LOG.debug("  var='"+var+"'");
 		}
 		if ((uiComponent instanceof SchedulerComponent)==false) {
@@ -400,6 +413,15 @@ public class SchedulerTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (periodType != null) {
+			if (periodType.isLiteralText()==false) {
+				component.setValueExpression(Properties.PERIOD_TYPE, periodType);
+
+			} else {
+				component.setPeriodType(periodType.getExpressionString());
+			}
+		}
+
 		if (var != null) {
 			if (var.isLiteralText()==false) {
 				component.setValueExpression(Properties.VAR, var);
@@ -435,6 +457,7 @@ public class SchedulerTag extends CameliaTag implements Tag {
 		periodSelectable = null;
 		periodToolTip = null;
 		periodValue = null;
+		periodType = null;
 		var = null;
 
 		super.release();

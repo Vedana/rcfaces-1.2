@@ -18,6 +18,8 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 
 	private static final Log LOG=LogFactory.getLog(FieldSetTag.class);
 
+	private ValueExpression headingZone;
+	private ValueExpression headingLevel;
 	private ValueExpression fontBold;
 	private ValueExpression fontItalic;
 	private ValueExpression fontName;
@@ -26,6 +28,7 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 	private ValueExpression text;
 	private ValueExpression textDirection;
 	private ValueExpression textAlignment;
+	private ValueExpression audioDescription;
 	private ValueExpression verticalAlignment;
 	private ValueExpression borderType;
 	private ValueExpression imageURL;
@@ -39,71 +42,83 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 		return FieldSetComponent.COMPONENT_TYPE;
 	}
 
-	public final void setFontBold(ValueExpression fontBold) {
+	public void setHeadingZone(ValueExpression headingZone) {
+		this.headingZone = headingZone;
+	}
+
+	public void setHeadingLevel(ValueExpression headingLevel) {
+		this.headingLevel = headingLevel;
+	}
+
+	public void setFontBold(ValueExpression fontBold) {
 		this.fontBold = fontBold;
 	}
 
-	public final void setFontItalic(ValueExpression fontItalic) {
+	public void setFontItalic(ValueExpression fontItalic) {
 		this.fontItalic = fontItalic;
 	}
 
-	public final void setFontName(ValueExpression fontName) {
+	public void setFontName(ValueExpression fontName) {
 		this.fontName = fontName;
 	}
 
-	public final void setFontSize(ValueExpression fontSize) {
+	public void setFontSize(ValueExpression fontSize) {
 		this.fontSize = fontSize;
 	}
 
-	public final void setFontUnderline(ValueExpression fontUnderline) {
+	public void setFontUnderline(ValueExpression fontUnderline) {
 		this.fontUnderline = fontUnderline;
 	}
 
-	public final void setText(ValueExpression text) {
+	public void setText(ValueExpression text) {
 		this.text = text;
 	}
 
-	public final void setTextDirection(ValueExpression textDirection) {
+	public void setTextDirection(ValueExpression textDirection) {
 		this.textDirection = textDirection;
 	}
 
-	public final void setTextAlignment(ValueExpression textAlignment) {
+	public void setTextAlignment(ValueExpression textAlignment) {
 		this.textAlignment = textAlignment;
 	}
 
-	public final void setVerticalAlignment(ValueExpression verticalAlignment) {
+	public void setAudioDescription(ValueExpression audioDescription) {
+		this.audioDescription = audioDescription;
+	}
+
+	public void setVerticalAlignment(ValueExpression verticalAlignment) {
 		this.verticalAlignment = verticalAlignment;
 	}
 
-	public final void setBorderType(ValueExpression borderType) {
+	public void setBorderType(ValueExpression borderType) {
 		this.borderType = borderType;
 	}
 
-	public final void setImageURL(ValueExpression imageURL) {
+	public void setImageURL(ValueExpression imageURL) {
 		this.imageURL = imageURL;
 	}
 
-	public final void setImageHeight(ValueExpression imageHeight) {
+	public void setImageHeight(ValueExpression imageHeight) {
 		this.imageHeight = imageHeight;
 	}
 
-	public final void setImageWidth(ValueExpression imageWidth) {
+	public void setImageWidth(ValueExpression imageWidth) {
 		this.imageWidth = imageWidth;
 	}
 
-	public final void setScopeSaveValue(ValueExpression scopeSaveValue) {
+	public void setScopeSaveValue(ValueExpression scopeSaveValue) {
 		this.scopeSaveValue = scopeSaveValue;
 	}
 
-	public final void setScopeValue(ValueExpression scopeValue) {
+	public void setScopeValue(ValueExpression scopeValue) {
 		this.scopeValue = scopeValue;
 	}
 
-	public final void setScopeVar(ValueExpression scopeVar) {
+	public void setScopeVar(ValueExpression scopeVar) {
 		this.scopeVar = scopeVar;
 	}
 
-	public final void setOverStyleClass(ValueExpression overStyleClass) {
+	public void setOverStyleClass(ValueExpression overStyleClass) {
 		this.overStyleClass = overStyleClass;
 	}
 
@@ -112,6 +127,8 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 			if (FieldSetComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
+			LOG.debug("  headingZone='"+headingZone+"'");
+			LOG.debug("  headingLevel='"+headingLevel+"'");
 			LOG.debug("  fontBold='"+fontBold+"'");
 			LOG.debug("  fontItalic='"+fontItalic+"'");
 			LOG.debug("  fontName='"+fontName+"'");
@@ -120,6 +137,7 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 			LOG.debug("  text='"+text+"'");
 			LOG.debug("  textDirection='"+textDirection+"'");
 			LOG.debug("  textAlignment='"+textAlignment+"'");
+			LOG.debug("  audioDescription='"+audioDescription+"'");
 			LOG.debug("  verticalAlignment='"+verticalAlignment+"'");
 			LOG.debug("  borderType='"+borderType+"'");
 			LOG.debug("  imageURL='"+imageURL+"'");
@@ -141,6 +159,24 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 
 		FieldSetComponent component = (FieldSetComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
+
+		if (headingZone != null) {
+			if (headingZone.isLiteralText()==false) {
+				component.setValueExpression(Properties.HEADING_ZONE, headingZone);
+
+			} else {
+				component.setHeadingZone(getBool(headingZone.getExpressionString()));
+			}
+		}
+
+		if (headingLevel != null) {
+			if (headingLevel.isLiteralText()==false) {
+				component.setValueExpression(Properties.HEADING_LEVEL, headingLevel);
+
+			} else {
+				component.setHeadingLevel(headingLevel.getExpressionString());
+			}
+		}
 
 		if (fontBold != null) {
 			if (fontBold.isLiteralText()==false) {
@@ -211,6 +247,15 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 
 			} else {
 				component.setTextAlignment(textAlignment.getExpressionString());
+			}
+		}
+
+		if (audioDescription != null) {
+			if (audioDescription.isLiteralText()==false) {
+				component.setValueExpression(Properties.AUDIO_DESCRIPTION, audioDescription);
+
+			} else {
+				component.setAudioDescription(audioDescription.getExpressionString());
 			}
 		}
 
@@ -297,6 +342,8 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 	}
 
 	public void release() {
+		headingZone = null;
+		headingLevel = null;
 		fontBold = null;
 		fontItalic = null;
 		fontName = null;
@@ -305,6 +352,7 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 		text = null;
 		textDirection = null;
 		textAlignment = null;
+		audioDescription = null;
 		verticalAlignment = null;
 		borderType = null;
 		imageURL = null;

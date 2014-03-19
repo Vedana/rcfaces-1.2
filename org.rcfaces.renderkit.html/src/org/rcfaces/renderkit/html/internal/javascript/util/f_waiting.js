@@ -108,9 +108,9 @@ var __statics = {
 		
 		var className="f_waiting";
 		node.className=className+((inlineMode)?" f_waiting_inline":" f_waiting_absolute");
-		node.setAttribute("v:class", className);
+		f_core.SetAttributeNS(node, "class", className);
 		if (lookId) {
-			node.setAttribute("v:lookId", lookId);
+			f_core.SetAttributeNS(node, "lookId", lookId);
 		}
 
 		node._inlineMode=inlineMode;
@@ -488,7 +488,7 @@ var __members = {
 			
 		}, f_waiting._STEP_MS);
 	}
-}
+};
 
 new f_class("f_waiting", {
 	extend: f_object,

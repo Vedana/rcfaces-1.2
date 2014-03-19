@@ -3,6 +3,7 @@
  */
 package org.rcfaces.core.internal.contentStorage;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -10,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.zip.GZIPOutputStream;
 
 import org.apache.commons.logging.Log;
@@ -19,32 +19,29 @@ import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.util.Base64;
 import org.rcfaces.core.internal.util.MessageDigestSelector;
+import org.rcfaces.core.internal.webapp.ExtendedHttpServlet;
 
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class GZipedResolvedContent implements IGzippedResolvedContent,
-        Serializable {
-    private static final String REVISION = "$Revision$";
+public class GZipedResolvedContent implements IResolvedContent, Serializable {
 
     private static final long serialVersionUID = -6336824522228175406L;
 
     private static final Log LOG = LogFactory
             .getLog(GZipedResolvedContent.class);
 
-    private static final int NOT_GZIPED = 0;
-
-    private static final int GZIPPED = 1;
-
-    private static final int GZIP_ERROR = 2;
-
-    private static final int GZIP_NONE = 3;
+    private enum GzipedState {
+        NOT_GZIPED, GZIPED, GZIP_ERROR, GZIP_NONE
+    }
 
     private static final String TEMP_FILE_PREFIX = "gzippedFile_";
 
     private static final String TEMP_FILE_SUFFIX;
+
+    private static final int BUFFER_SIZE = 1024 * 32;
 
     static {
         TEMP_FILE_SUFFIX = "." + Constants.getVersion() + ".dat";
@@ -56,7 +53,7 @@ public class GZipedResolvedContent implements IGzippedResolvedContent,
 
     private int length;
 
-    private transient int gzipState = NOT_GZIPED;
+    private transient GzipedState gzipState = GzipedState.NOT_GZIPED;
 
     private transient File gzippedFile;
 
@@ -101,19 +98,17 @@ public class GZipedResolvedContent implements IGzippedResolvedContent,
     }
 
     public void setVersioned(boolean versioned) {
-        source.setVersioned(versioned);
-    }
-
-    public IResolvedContent getSource() {
-        return source;
+        // source.setVersioned(versioned);
+        throw new IllegalStateException(
+                "Can not set version of gziped resolvedContent");
     }
 
     public boolean isGzipped() {
-        return getGZipState() == GZIPPED;
+        return getGZipState() == GzipedState.GZIPED;
     }
 
     public String getHash() {
-        if (getGZipState() != GZIPPED) {
+        if (getGZipState() != GzipedState.GZIPED) {
             return source.getHash();
         }
 
@@ -121,23 +116,32 @@ public class GZipedResolvedContent implements IGzippedResolvedContent,
     }
 
     public InputStream getInputStream() throws IOException {
-        if (getGZipState() != GZIPPED) {
+        if (getGZipState() != GzipedState.GZIPED) {
             return source.getInputStream();
         }
 
-        return new FileInputStream(gzippedFile);
+        return new BufferedInputStream(new FileInputStream(gzippedFile),
+                BUFFER_SIZE);
     }
 
     public int getLength() {
-        if (getGZipState() != GZIPPED) {
+        if (getGZipState() != GzipedState.GZIPED) {
             return source.getLength();
         }
 
         return length;
     }
 
-    private synchronized int getGZipState() {
-        if (gzipState != NOT_GZIPED) {
+    public String getContentEncoding() {
+        if (getGZipState() != GzipedState.GZIPED) {
+            return null;
+        }
+
+        return ExtendedHttpServlet.GZIP_CONTENT_ENCODING;
+    }
+
+    private synchronized GzipedState getGZipState() {
+        if (gzipState != GzipedState.NOT_GZIPED) {
             return gzipState;
         }
 
@@ -148,7 +152,7 @@ public class GZipedResolvedContent implements IGzippedResolvedContent,
                         + Constants.MINIMUM_GZIP_BUFFER_SIZE + ")");
             }
 
-            gzipState = GZIP_NONE;
+            gzipState = GzipedState.GZIP_NONE;
             return gzipState;
         }
 
@@ -209,17 +213,18 @@ public class GZipedResolvedContent implements IGzippedResolvedContent,
                 }
             }
 
-            gzipState = GZIPPED;
+            gzipState = GzipedState.GZIPED;
 
         } catch (IOException ex) {
             LOG.error("Can not gzip content '" + getResourceKey() + "'.", ex);
 
-            gzipState = GZIP_ERROR;
+            gzipState = GzipedState.GZIP_ERROR;
         }
 
         return gzipState;
     }
 
+    @Override
     protected void finalize() throws Throwable {
         if (gzippedFile != null) {
             if (LOG.isDebugEnabled()) {
@@ -231,8 +236,9 @@ public class GZipedResolvedContent implements IGzippedResolvedContent,
                 gzippedFile.delete();
 
             } catch (Throwable th) {
-                LOG.error("Can not delete file '"
-                        + gzippedFile.getAbsolutePath() + "'.", th);
+                LOG.error(
+                        "Can not delete file '" + gzippedFile.getAbsolutePath()
+                                + "'.", th);
             }
             gzippedFile = null;
         }

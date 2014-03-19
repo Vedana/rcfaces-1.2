@@ -54,7 +54,7 @@ var __statics={
 		f_accelerator._AcceleratorsByFor=undefined;
 	}
 	*/
-}
+};
 
 var __members={
 
@@ -63,29 +63,29 @@ var __members={
 		
 		if (this.nodeType==f_core.ELEMENT_NODE) {
 			// Du DOM
-			this._character=f_core.GetAttribute(this, "v:character", undefined);
+			this._character=f_core.GetAttributeNS(this, "character", undefined);
 	
-			var vk=f_core.GetAttribute(this, "v:virtualKey");
+			var vk=f_core.GetAttributeNS(this, "virtualKey");
 			if (vk) {
 				this._virtualKeys = [ parseInt(vk, 10) ];
 			}
 	
-			this._keyFlags = f_core.GetNumberAttribute(this, "v:keyFlags");
+			this._keyFlags = f_core.GetNumberAttributeNS(this, "keyFlags");
 	
-			this._ignoreEditableComponent=f_core.GetBooleanAttribute(this, "v:ignoreEditableComponent");
+			this._ignoreEditableComponent=f_core.GetBooleanAttributeNS(this, "ignoreEditableComponent");
 	
 			f_key.AddAccelerator(this._character, this._virtualKeys, this._keyFlags, this, this._performKeyEvent, this._ignoreEditableComponent);
 	
-			var events=f_core.GetAttribute(this, "v:events");
+			var events=f_core.GetAttributeNS(this, "events");
 			if (events) {
 				this.f_initEventAtts(f_accelerator._EVENTS, events);
 			}
 			
-			var forComponent=f_core.GetAttribute(this, "v:for");
+			var forComponentId=f_core.GetAttributeNS(this, "for");
 			
 			if (forComponent) {
-				this._forComponentId=fa_namingContainer.ComputeComponentId(this, forComponent);
-				this._forItemValue=f_core.GetAttribute(this, "v:forItemValue");
+				this._forComponentId=fa_namingContainer.ComputeComponentId(this, forComponentId);
+				this._forItemValue=f_core.GetAttributeNS(this, "forItemValue");
 					
 				this.f_insertEventListenerFirst(f_event.KEYPRESS, this._forListener);
 			}
@@ -230,7 +230,7 @@ var __members={
 	f_isIgnoreEditableComponent: function() {
 		return this._ignoreEditableComponent;
 	}
-}
+};
  
 new f_class("f_accelerator", {
 	extend: f_object,

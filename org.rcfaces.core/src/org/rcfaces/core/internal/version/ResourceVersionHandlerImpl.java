@@ -32,14 +32,11 @@ import org.rcfaces.core.provider.AbstractProvider;
 public class ResourceVersionHandlerImpl extends AbstractProvider implements
         IResourceVersionHandler, IContentVersionHandler {
 
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory
             .getLog(ResourceVersionHandlerImpl.class);
 
     private static final String APPLICATION_VERSION_URI_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".APPLICATION_VERSION";
+            .getPackagePrefix() + ".APPLICATION_VERSION";
 
     private static final String HASHCODE_KEYWORD = "hashcode";
 
@@ -51,7 +48,7 @@ public class ResourceVersionHandlerImpl extends AbstractProvider implements
 
     private String version;
 
-    private Map hashCodeByURL = null;
+    private Map<String, ResourceHashCode> hashCodeByURL = null;
 
     public ResourceVersionHandlerImpl() {
     }
@@ -60,6 +57,7 @@ public class ResourceVersionHandlerImpl extends AbstractProvider implements
         return "ResourceVersionHandler";
     }
 
+    @Override
     public void startup(FacesContext facesContext) {
 
         ExternalContext externalContext = facesContext.getExternalContext();
@@ -67,8 +65,7 @@ public class ResourceVersionHandlerImpl extends AbstractProvider implements
         String applicationVersionURI = ApplicationVersionServlet
                 .getApplicationVersionURI(externalContext.getApplicationMap());
         if (applicationVersionURI == null) {
-            LOG
-                    .debug("Can not find application version pattern ! (Servlet can be not defined)");
+            LOG.debug("Can not find application version pattern ! (Servlet can be not defined)");
             this.prefixURI = null;
             this.version = null;
             return;
@@ -79,12 +76,8 @@ public class ResourceVersionHandlerImpl extends AbstractProvider implements
         if (version == null || "none".equalsIgnoreCase(version)) {
             this.prefixURI = null;
             this.version = null;
-            LOG
-                    .info("Disable application version rewriting engine. (context parameter '"
-                            + APPLICATION_VERSION_URI_PARAMETER
-                            + "="
-                            + version
-                            + "')");
+            LOG.info("Disable application version rewriting engine. (context parameter '"
+                    + APPLICATION_VERSION_URI_PARAMETER + "=" + version + "')");
             return;
         }
 
@@ -92,7 +85,8 @@ public class ResourceVersionHandlerImpl extends AbstractProvider implements
             version = HASHCODE_KEYWORD;
 
             prefixURI = applicationVersionURI;
-            hashCodeByURL = new HashMap(HASHCODE_CACHE_INITIAL_SIZE);
+            hashCodeByURL = new HashMap<String, ResourceHashCode>(
+                    HASHCODE_CACHE_INITIAL_SIZE);
 
             LOG.info("Use resource hashcode as the resource version.");
 
@@ -215,7 +209,7 @@ public class ResourceVersionHandlerImpl extends AbstractProvider implements
 
         ResourceHashCode tag;
         synchronized (hashCodeByURL) {
-            tag = (ResourceHashCode) hashCodeByURL.get(absolutePath);
+            tag = hashCodeByURL.get(absolutePath);
             if (tag == null) {
                 tag = new ResourceHashCode(absolutePath, url);
                 hashCodeByURL.put(absolutePath, tag);
@@ -231,8 +225,6 @@ public class ResourceVersionHandlerImpl extends AbstractProvider implements
      * @version $Revision$ $Date$
      */
     private static final class ResourceHashCode {
-
-        private static final String REVISION = "$Revision$";
 
         private static final String NULL_HASH_CODE = "ERR";
 

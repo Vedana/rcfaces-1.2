@@ -30,8 +30,6 @@ import org.rcfaces.core.internal.validator.IServerConverter;
  * @version $Revision$ $Date$
  */
 public class ClientValidatorTools {
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory.getLog(CheckTools.class);
 
     private static final String CLIENT_VALIDATION_CONTEXT_PROPERTY = "org.rcfaces.core.CLIENT_VALIDATOR_CONTEXT";
@@ -65,9 +63,8 @@ public class ClientValidatorTools {
         if (valueHolder.getConverter() != null) {
 
             if (LOG.isDebugEnabled()) {
-                LOG
-                        .debug("Converter of valueHolder is already setted for component='"
-                                + clientValidationCapability + "'.");
+                LOG.debug("Converter of valueHolder is already setted for component='"
+                        + clientValidationCapability + "'.");
             }
             return;
         }
@@ -124,7 +121,7 @@ public class ClientValidatorTools {
             return null;
         }
 
-        Iterator it = new CommandParserIterator(validator);
+        Iterator<ICommand> it = new CommandParserIterator(validator);
         if (it.hasNext() == false) {
             if (transientAttributesManager != null) {
                 transientAttributesManager.setTransientAttribute(
@@ -133,7 +130,7 @@ public class ClientValidatorTools {
             return null;
         }
 
-        final CommandParserIterator.ICommand command = (ICommand) it.next();
+        final CommandParserIterator.ICommand command = it.next();
 
         if (it.hasNext()) {
             throw new FacesException(
@@ -172,8 +169,6 @@ public class ClientValidatorTools {
         }
 
         IClientValidationContext clientValidatorContext = new IClientValidationContext() {
-            private static final String REVISION = "$Revision$";
-
             public ICommand getClientValidatorCommand() {
                 return command;
             }

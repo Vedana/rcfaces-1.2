@@ -12,8 +12,6 @@ import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
  * @version $Revision$ $Date$
  */
 public class BasicContentModel extends AbstractContentModel {
-    private static final String REVISION = "$Revision$";
-
     protected transient IGeneratedResourceInformation generatedInformation;
 
     protected transient IGenerationResourceInformation generationInformation;
@@ -25,6 +23,7 @@ public class BasicContentModel extends AbstractContentModel {
         super(value);
     }
 
+    @Override
     public void setInformations(
             IGenerationResourceInformation generationInformation,
             IGeneratedResourceInformation generatedInformation) {

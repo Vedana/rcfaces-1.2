@@ -28,14 +28,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.image.IGeneratedImageInformation;
 import org.rcfaces.core.image.IGenerationImageInformation;
-import org.rcfaces.core.image.IImageContentModel;
 import org.rcfaces.core.image.IImageIOOperation;
 import org.rcfaces.core.image.IImageOperation;
 import org.rcfaces.core.image.IImageOperationContentModel;
 import org.rcfaces.core.image.IIndexedImageOperation;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.content.AbstractOperationContentModel;
-import org.rcfaces.core.internal.content.ContentAdapterFactory;
 import org.rcfaces.core.internal.content.IBufferOperation;
 import org.rcfaces.core.internal.content.IFileBuffer;
 import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
@@ -51,8 +49,6 @@ import org.rcfaces.core.internal.resource.IResourceLoaderFactory.IResourceLoader
 public class ImageOperationContentModel extends AbstractOperationContentModel
         implements IImageOperationContentModel {
 
-    private static final String REVISION = "$Revision$";
-
     private static final long serialVersionUID = 3641020501370064750L;
 
     private static final Log LOG = LogFactory
@@ -67,6 +63,7 @@ public class ImageOperationContentModel extends AbstractOperationContentModel
                 bufferOperation, specifiedResourceKey);
     }
 
+    @Override
     public void setInformations(
             IGenerationResourceInformation generationInformation,
             IGeneratedResourceInformation generatedInformation) {
@@ -93,6 +90,7 @@ public class ImageOperationContentModel extends AbstractOperationContentModel
         return imageContentAccessorHandler;
     }
 
+    @Override
     protected IBufferOperation createBufferOperation(FacesContext facesContext) {
 
         IImageOperation imageOperation = getImageContentAccessorHandler(
@@ -101,6 +99,8 @@ public class ImageOperationContentModel extends AbstractOperationContentModel
         return imageOperation;
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
     protected IFileBuffer createFileBuffer() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
@@ -170,7 +170,8 @@ public class ImageOperationContentModel extends AbstractOperationContentModel
             generatedImageInformation.setResponseMimeType(responseMimeType);
         }
 
-        Iterator it = ImageIO.getImageWritersByMIMEType(encoderMimeType);
+        Iterator<ImageWriter> it = ImageIO
+                .getImageWritersByMIMEType(encoderMimeType);
         if (it.hasNext() == false) {
             LOG.error("Can not write image for mime type '" + encoderMimeType
                     + "'.");
@@ -178,7 +179,7 @@ public class ImageOperationContentModel extends AbstractOperationContentModel
             return INVALID_BUFFERED_FILE;
         }
 
-        ImageWriter imageWriter = (ImageWriter) it.next();
+        ImageWriter imageWriter = it.next();
 
         ImageWriteParam imageWriteParam = imageWriter.getDefaultWriteParam();
         setupWriteParam(generationInformation, imageWriteParam);
@@ -297,7 +298,8 @@ public class ImageOperationContentModel extends AbstractOperationContentModel
         }
 
         try {
-            Iterator it = ImageIO.getImageReadersByMIMEType(sourceContentType);
+            Iterator<ImageReader> it = ImageIO
+                    .getImageReadersByMIMEType(sourceContentType);
 
             if (it.hasNext() == false) {
                 throw new IOException("Can not get codec to read image '"
@@ -305,7 +307,7 @@ public class ImageOperationContentModel extends AbstractOperationContentModel
                         + "')");
             }
 
-            ImageReader imageReader = (ImageReader) it.next();
+            ImageReader imageReader = it.next();
 
             try {
                 ImageInputStream imageInputStream = ImageIO
@@ -344,6 +346,7 @@ public class ImageOperationContentModel extends AbstractOperationContentModel
         return new FileRenderedImage(imageName);
     }
 
+    @Override
     protected IResourceLoaderFactory getResourceLoaderFactory(
             FacesContext facesContext) {
 
@@ -362,7 +365,7 @@ public class ImageOperationContentModel extends AbstractOperationContentModel
     }
 
     protected RenderedImage filter(BufferedImage image,
-            IImageOperation imageOperations[], Map parameters[]) {
+            IImageOperation imageOperations[], Map<String, Object>[] parameters) {
 
         BufferedImage workImage = null;
 
@@ -412,20 +415,18 @@ public class ImageOperationContentModel extends AbstractOperationContentModel
 
                 } else if (support == IIndexedImageOperation.INDEX_COLOR_MODEL_NOT_SUPPORTED) {
                     if (LOG.isTraceEnabled()) {
-                        LOG
-                                .trace("Image operation '"
-                                        + imageOperation.getName()
-                                        + "' does not support current color model : convert image to ARGB.");
+                        LOG.trace("Image operation '"
+                                + imageOperation.getName()
+                                + "' does not support current color model : convert image to ARGB.");
                     }
 
                     if (workingColorModel != null) {
                         if (LOG.isTraceEnabled()) {
-                            LOG
-                                    .trace("WorkingColorModel is defined, convert image to model.");
+                            LOG.trace("WorkingColorModel is defined, convert image to model.");
                         }
 
-                        image = new BufferedImage(workingColorModel, image
-                                .getRaster(), false, null);
+                        image = new BufferedImage(workingColorModel,
+                                image.getRaster(), false, null);
                         workingColorModel = null;
                     }
 
@@ -446,8 +447,7 @@ public class ImageOperationContentModel extends AbstractOperationContentModel
 
             if (workingColorModel != null) {
                 if (LOG.isTraceEnabled()) {
-                    LOG
-                            .trace("WorkingColorModel is defined, convert image to model.");
+                    LOG.trace("WorkingColorModel is defined, convert image to model.");
                 }
 
                 image = new BufferedImage(workingColorModel, image.getRaster(),
@@ -456,8 +456,8 @@ public class ImageOperationContentModel extends AbstractOperationContentModel
             }
 
             if (workImage == null) {
-                workImage = new BufferedImage(image.getWidth(), image
-                        .getHeight(), image.getType());
+                workImage = new BufferedImage(image.getWidth(),
+                        image.getHeight(), image.getType());
             }
 
             image = ((IImageIOOperation) imageOperation).filter(parameters[i],
@@ -467,8 +467,7 @@ public class ImageOperationContentModel extends AbstractOperationContentModel
 
         if (workingColorModel != null) {
             if (LOG.isTraceEnabled()) {
-                LOG
-                        .trace("WorkingColorModel is defined, convert image to model.");
+                LOG.trace("WorkingColorModel is defined, convert image to model.");
             }
 
             image = new BufferedImage(workingColorModel, image.getRaster(),

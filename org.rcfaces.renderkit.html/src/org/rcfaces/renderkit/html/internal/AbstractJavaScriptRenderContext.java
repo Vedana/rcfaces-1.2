@@ -26,17 +26,20 @@ import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.repository.IRepository;
+import org.rcfaces.core.internal.repository.IRepository.ICriteria;
 import org.rcfaces.core.internal.repository.IRepository.IFile;
+import org.rcfaces.core.internal.repository.LocaleCriteria;
 import org.rcfaces.core.internal.service.log.LogService;
 import org.rcfaces.core.internal.tools.ContextTools;
 import org.rcfaces.core.lang.IClientStorage;
 import org.rcfaces.core.util.ClientStorageManager;
 import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository;
-import org.rcfaces.renderkit.html.internal.javascript.JavaScriptRepositoryServlet;
 import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository.IClass;
+import org.rcfaces.renderkit.html.internal.javascript.JavaScriptRepositoryServlet;
 import org.rcfaces.renderkit.html.internal.renderer.MessagesRepository;
 import org.rcfaces.renderkit.html.internal.service.LogHtmlService;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptTools;
+import org.rcfaces.renderkit.html.timing.PerformanceTimingProvider;
 
 /**
  * 
@@ -45,7 +48,6 @@ import org.rcfaces.renderkit.html.internal.util.JavaScriptTools;
  */
 public abstract class AbstractJavaScriptRenderContext implements
         IJavaScriptRenderContext {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(AbstractJavaScriptRenderContext.class);
@@ -54,20 +56,16 @@ public abstract class AbstractJavaScriptRenderContext implements
             .getLog("org.rcfaces.html.javascript.LOG_INTERMEDIATE_PROFILING");
 
     private static final String LAZY_TAG_USES_BROTHER_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".LAZY_TAG_USES_BROTHER";
+            .getPackagePrefix() + ".LAZY_TAG_USES_BROTHER";
 
     private static final String ENABLE_LOG_CLIENT_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".client.ENABLE_LOG";
+            .getPackagePrefix() + ".client.ENABLE_LOG";
 
     private static final String ENABLE_SCRIPT_VERIFY_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".client.SCRIPT_VERIFY";
+            .getPackagePrefix() + ".client.SCRIPT_VERIFY";
 
     private static final String CLEAN_UP_ON_SUBMIT_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".client.CLEAN_UP_ON_SUBMIT";
+            .getPackagePrefix() + ".client.CLEAN_UP_ON_SUBMIT";
 
     private static final String JAVASCRIPT_WRITER = "camelia.html.javascript.writer";
 
@@ -91,10 +89,10 @@ public abstract class AbstractJavaScriptRenderContext implements
 
     private final IJavaScriptRepository repository;
 
-    protected final Set waitingRequiredClassesNames = new HashSet(
+    protected final Set<Object> waitingRequiredClassesNames = new HashSet<Object>(
             DECLARED_CLASSES_INIT_SIZE);
 
-    private final Set declaredClasses;
+    private final Set<String> declaredClasses;
 
     private VariablePool variablePool;
 
@@ -112,9 +110,9 @@ public abstract class AbstractJavaScriptRenderContext implements
 
     private MessagesRepository facesMessagesRepository;
 
-    private Map strings;
+    private Map<String, String> strings;
 
-    private Map componentIds;
+    private Map<String, String> componentIds;
 
     private Locale userLocale;
 
@@ -124,15 +122,18 @@ public abstract class AbstractJavaScriptRenderContext implements
 
     private boolean transientState;
 
+    private ICriteria criteria;
+
     public AbstractJavaScriptRenderContext(FacesContext facesContext) {
         parent = null;
 
         repository = JavaScriptRepositoryServlet.getRepository(facesContext);
         declaredFiles = JavaScriptRepositoryServlet
                 .getContextRepository(facesContext);
-        declaredClasses = new HashSet(DECLARED_CLASSES_INIT_SIZE);
+        declaredClasses = new HashSet<String>(DECLARED_CLASSES_INIT_SIZE);
 
-        Map map = facesContext.getExternalContext().getApplicationMap();
+        Map<String, Object> map = facesContext.getExternalContext()
+                .getApplicationMap();
         synchronized (facesContext.getApplication()) {
             variablePool = (VariablePool) map.get(VARIABLES_POOL_PROPERTY);
             if (variablePool == null) {
@@ -156,6 +157,12 @@ public abstract class AbstractJavaScriptRenderContext implements
                 LOG.debug("Set lazyTagUsesBrother=" + lazyTagUsesBrother);
             }
         }
+
+        IRepository.IContext repositoryContext = JavaScriptRepositoryServlet
+                .getContextRepository(facesContext);
+
+        criteria = repositoryContext.getCriteria();
+        userLocale = LocaleCriteria.getLocale(criteria);
     }
 
     protected AbstractJavaScriptRenderContext(
@@ -163,7 +170,7 @@ public abstract class AbstractJavaScriptRenderContext implements
         this.parent = parent;
         this.repository = parent.repository;
         this.declaredFiles = parent.declaredFiles.copy();
-        this.declaredClasses = new HashSet(parent.declaredClasses);
+        this.declaredClasses = new HashSet<String>(parent.declaredClasses);
         this.initialized = parent.initialized;
 
         this.filesToRequire = parent.filesToRequire;
@@ -355,8 +362,7 @@ public abstract class AbstractJavaScriptRenderContext implements
         private static final long serialVersionUID = -3122263677480314082L;
 
         private static final String JAVASCRIPT_VARIABLE_PREFIX_PARAMETER = Constants
-                .getPackagePrefix()
-                + ".JAVASCRIPT_VARIABLE_PREFIX";
+                .getPackagePrefix() + ".JAVASCRIPT_VARIABLE_PREFIX";
 
         private static final String DEFAULT_JAVASCRIPT_VARIABLE_PREFIX = "_";
 
@@ -393,6 +399,7 @@ public abstract class AbstractJavaScriptRenderContext implements
             }
         }
 
+        @SuppressWarnings("unused")
         public String getVarName(int idx) {
             if (USE_VARIABLE_CACHE == false) {
                 return jsVariablePrefix + idx;
@@ -456,10 +463,10 @@ public abstract class AbstractJavaScriptRenderContext implements
                 return null;
             }
 
-            strings = new HashMap(STRINGS_INITIAL_SIZE);
+            strings = new HashMap<String, String>(STRINGS_INITIAL_SIZE);
 
         } else {
-            key = (String) strings.get(text);
+            key = strings.get(text);
             if (key != null || allocate == false) {
                 return key;
             }
@@ -494,10 +501,10 @@ public abstract class AbstractJavaScriptRenderContext implements
                 return null;
             }
 
-            componentIds = new HashMap(COMPONENTS_INITIAL_SIZE);
+            componentIds = new HashMap<String, String>(COMPONENTS_INITIAL_SIZE);
 
         } else {
-            key = (String) componentIds.get(text);
+            key = componentIds.get(text);
             if (key != null || allocate == false) {
                 return key;
             }
@@ -528,31 +535,35 @@ public abstract class AbstractJavaScriptRenderContext implements
         Object ret[] = (Object[]) state;
 
         initialized = ((Boolean) ret[0]).booleanValue();
-        declaredFiles.restoreState(repository, ret[1]);
+        declaredFiles.restoreState(facesContext, repository, ret[1]);
     }
 
     public Object saveState(FacesContext facesContext) {
         initialized = true; // Il est forcement initialisé !
 
         return new Object[] { Boolean.valueOf(initialized),
-                declaredFiles.saveState() };
+                declaredFiles.saveState(facesContext) };
     }
 
-    public boolean isTransient() {
+    public final boolean isTransient() {
         return transientState;
     }
 
-    public void setTransient(boolean newTransientValue) {
+    public final void setTransient(boolean newTransientValue) {
         transientState = newTransientValue;
     }
 
-    public Locale getUserLocale() {
-        if (userLocale != null) {
-            return userLocale;
+    public final ICriteria getCriteria() {
+        if (parent != null) {
+            return parent.getCriteria();
         }
+        return criteria;
+    }
 
-        userLocale = ContextTools.getUserLocale(null);
-
+    public final Locale getUserLocale() {
+        if (parent != null) {
+            return parent.getUserLocale();
+        }
         return userLocale;
     }
 
@@ -574,7 +585,7 @@ public abstract class AbstractJavaScriptRenderContext implements
         FacesContext facesContext = writer.getFacesContext();
         ExternalContext externalContext = facesContext.getExternalContext();
 
-        Map requestMap = externalContext.getRequestMap();
+        Map<String, Object> requestMap = externalContext.getRequestMap();
         if (requestMap.containsKey(JAVASCRIPT_INITIALIZED_PROPERTY)) {
             return;
         }
@@ -656,6 +667,28 @@ public abstract class AbstractJavaScriptRenderContext implements
             writer.writeCall("f_env", "DisableClientValidation").writeln(");");
         }
 
+        Set<String> systemNames = processContext.getSystemParametersNames();
+        if (systemNames != null && systemNames.isEmpty() == false) {
+            writer.writeCall("f_env", "SetSystemParameterNames");
+
+            boolean first = true;
+            for (String name : systemNames) {
+                if (first) {
+                    first = false;
+                } else {
+                    writer.write(',');
+                }
+
+                writer.writeString(name);
+            }
+
+            writer.writeln(");");
+        }
+
+        if (htmlRenderContext.isClientValidation() == false) {
+            writer.writeCall("f_env", "DisableClientValidation").writeln(");");
+        }
+
         boolean flatIdentifier = processContext.isFlatIdentifierEnabled();
         if (flatIdentifier) {
             writer.writeCall("fa_namingContainer", "SetSeparator").writeln(
@@ -667,8 +700,8 @@ public abstract class AbstractJavaScriptRenderContext implements
 
                 if (separator != null) {
                     writer.writeCall("fa_namingContainer", "SetSeparator")
-                            .writeString(String.valueOf(separator)).writeln(
-                                    ");");
+                            .writeString(String.valueOf(separator))
+                            .writeln(");");
                 }
             }
         }
@@ -678,8 +711,8 @@ public abstract class AbstractJavaScriptRenderContext implements
 
         int pred = 0;
 
-        String requestURI = getRequestURL(facesContext, facesContext
-                .getViewRoot());
+        String requestURI = getRequestURL(facesContext,
+                facesContext.getViewRoot());
         if (requestURI != null) {
             for (; pred > 0; pred--) {
                 writer.write(',').writeNull();
@@ -736,6 +769,17 @@ public abstract class AbstractJavaScriptRenderContext implements
         }
 
         writer.writeln(");");
+
+        PerformanceTimingProvider performanceTimingProvider = PerformanceTimingProvider
+                .get(facesContext);
+        if (performanceTimingProvider != null) {
+            int features = performanceTimingProvider
+                    .getClientPerformanceTimingFeatures();
+            if (features > 0) {
+                writer.writeCall("f_env", "EnablePerformanceTiming")
+                        .writeInt(features).writeln(");");
+            }
+        }
 
         String logProperty = (String) initParameter
                 .get(ENABLE_LOG_CLIENT_PARAMETER);
@@ -829,7 +873,7 @@ public abstract class AbstractJavaScriptRenderContext implements
             return;
         }
 
-        Map messages = null;
+        Map<FacesMessage, String> messages = null;
         StringAppender sa = null;
 
         FacesContext facesContext = htmlRenderContext.getFacesContext();
@@ -843,14 +887,14 @@ public abstract class AbstractJavaScriptRenderContext implements
             }
 
             if (messages == null) {
-                messages = new HashMap();
+                messages = new HashMap<FacesMessage, String>();
             }
 
             Iterator it = facesContext.getMessages(clientId);
             for (; it.hasNext();) {
                 FacesMessage facesMessage = (FacesMessage) it.next();
 
-                String varName = (String) messages.get(facesMessage);
+                String varName = messages.get(facesMessage);
                 if (varName == null) {
                     varName = JavaScriptTools.writeMessage(facesContext,
                             writer, facesMessage);
@@ -872,8 +916,9 @@ public abstract class AbstractJavaScriptRenderContext implements
                 continue;
             }
 
-            writer.writeCall("f_messageContext", "AppendMessages").writeString(
-                    clientId).write(',').write(sa.toString()).writeln(");");
+            writer.writeCall("f_messageContext", "AppendMessages")
+                    .writeString(clientId).write(',').write(sa.toString())
+                    .writeln(");");
 
             sa.setLength(0);
         }

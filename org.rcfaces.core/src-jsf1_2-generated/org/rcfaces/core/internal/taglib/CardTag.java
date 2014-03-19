@@ -29,31 +29,31 @@ public class CardTag extends AbstractOutputTag implements Tag {
 		return CardComponent.COMPONENT_TYPE;
 	}
 
-	public final void setTextAlignment(ValueExpression textAlignment) {
+	public void setTextAlignment(ValueExpression textAlignment) {
 		this.textAlignment = textAlignment;
 	}
 
-	public final void setVerticalAlignment(ValueExpression verticalAlignment) {
+	public void setVerticalAlignment(ValueExpression verticalAlignment) {
 		this.verticalAlignment = verticalAlignment;
 	}
 
-	public final void setScopeSaveValue(ValueExpression scopeSaveValue) {
+	public void setScopeSaveValue(ValueExpression scopeSaveValue) {
 		this.scopeSaveValue = scopeSaveValue;
 	}
 
-	public final void setScopeValue(ValueExpression scopeValue) {
+	public void setScopeValue(ValueExpression scopeValue) {
 		this.scopeValue = scopeValue;
 	}
 
-	public final void setScopeVar(ValueExpression scopeVar) {
+	public void setScopeVar(ValueExpression scopeVar) {
 		this.scopeVar = scopeVar;
 	}
 
-	public final void setAsyncDecodeMode(ValueExpression asyncDecodeMode) {
+	public void setAsyncDecodeMode(ValueExpression asyncDecodeMode) {
 		this.asyncDecodeMode = asyncDecodeMode;
 	}
 
-	public final void setLoadListener(ValueExpression loadListeners) {
+	public void setLoadListener(ValueExpression loadListeners) {
 		this.loadListeners = loadListeners;
 	}
 

@@ -10,8 +10,8 @@ package org.rcfaces.core.internal.contentAccessor;
  */
 public abstract class AbstractContentProxyHandler implements
         IContentProxyHandler {
-    private static final String REVISION = "$Revision$";
 
+    @Override
     public boolean equals(Object obj) {
         if (obj == null
                 || (obj instanceof AbstractContentProxyHandler) == false) {
@@ -21,10 +21,12 @@ public abstract class AbstractContentProxyHandler implements
         return getId().equals(((AbstractContentProxyHandler) obj).getId());
     }
 
+    @Override
     public int hashCode() {
         return getId().hashCode();
     }
 
+    @Override
     public String toString() {
         return "[AbstractContentProxyHandler '" + getId() + "']";
     }

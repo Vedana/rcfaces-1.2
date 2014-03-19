@@ -16,13 +16,12 @@ import javax.faces.event.FacesListener;
  * @version $Revision$ $Date$
  */
 public class SortEvent extends ActionEvent {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = -2421248938907618744L;
 
     private final Object dataModel;
 
-    private Comparator sortComparator;
+    private Comparator< ? > sortComparator;
 
     private ISortConverter sortConverter;
 
@@ -35,19 +34,21 @@ public class SortEvent extends ActionEvent {
         this.dataModel = dataModel;
     }
 
+    @Override
     public boolean isAppropriateListener(FacesListener listener) {
         return (listener instanceof ISortListener);
     }
 
+    @Override
     public void processListener(FacesListener listener) {
         ((ISortListener) listener).processSort(this);
     }
 
-    public void setSortComparator(Comparator comparator) {
+    public void setSortComparator(Comparator< ? > comparator) {
         this.sortComparator = comparator;
     }
 
-    public Comparator getSortComparator() {
+    public Comparator< ? > getSortComparator() {
         return sortComparator;
     }
 

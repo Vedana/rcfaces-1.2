@@ -13,7 +13,6 @@ import javax.faces.event.FacesListener;
  * @version $Revision$ $Date$
  */
 public class UserEvent extends ActionEvent {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = 6509010645116536466L;
 
@@ -32,10 +31,12 @@ public class UserEvent extends ActionEvent {
         this.detail = detail;
     }
 
+    @Override
     public boolean isAppropriateListener(FacesListener listener) {
         return (listener instanceof IUserEventListener);
     }
 
+    @Override
     public void processListener(FacesListener listener) {
         ((IUserEventListener) listener).processUserEvent(this);
     }

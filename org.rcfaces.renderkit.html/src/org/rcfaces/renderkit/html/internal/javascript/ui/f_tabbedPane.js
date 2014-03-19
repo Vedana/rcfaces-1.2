@@ -264,7 +264,7 @@ var __statics = {
 	Initializer: function() {
 		f_tabbedPane._PrepareImages();
 	}
-}
+};
 
 var __members = {
 
@@ -274,7 +274,7 @@ var __members = {
 		// On laisse tomber, les images sont maintenant directement réferencées dans le HTML ...
 		// f_tabbedPane._PrepareImages();
 		
-		this._tabIndex=f_core.GetAttribute(this, "v:tabIndex");
+		this._tabIndex=f_core.GetAttributeNS(this,"tabIndex");
 	},
 	f_finalize: function() {
 		var title=this._title;
@@ -358,6 +358,7 @@ var __members = {
 			this._resizeHeight=true;
 //		}
 		
+		/*
 		if (this._resizeWidth || this._resizeHeight) {
 			this._resize();
 			
@@ -368,6 +369,7 @@ var __members = {
 				this.f_updateCardStyle(this._selectedCard);
 			}
 		}
+		*/
 	},
 	/**
 	 * @method private
@@ -413,7 +415,7 @@ var __members = {
 				//mleft-=f_core.ComputeBorderLength(textTitle, "left");
 				//mright-=f_core.ComputeBorderLength(textTitle, "right");
 				
-				var l=f_core.ComputeBorderLength(mask.parentNode, "left")
+				var l=f_core.ComputeBorderLength(mask.parentNode, "left");
 				mleft-=l;
 				mright-=l;
 			}
@@ -865,7 +867,7 @@ var __members = {
 			f_core.AppendChild(trText, textTitle);
 			
 			textLink=f_core.CreateElement(textTitle, "a", {
-				href: f_core.JAVASCRIPT_VOID
+				href: f_core.CreateJavaScriptVoid0()
 	//			tabIndex: (this._tabIndex)?(this._tabIndex):0  // ????
 			});
 			
@@ -1166,7 +1168,7 @@ var __members = {
 	f_listTabs: function() {
 		return this.f_listCards();
 	}
-}
+};
  
 new f_class("f_tabbedPane", {
 	extend: f_cardBox,

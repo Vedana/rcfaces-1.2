@@ -18,8 +18,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IPartialRenderingCapability;
 import org.rcfaces.core.internal.RcfacesContext;
+import org.rcfaces.core.internal.renderkit.designer.IDesignerEngine;
 import org.rcfaces.core.internal.tools.AsyncModeTools;
 import org.rcfaces.core.internal.tools.ValuesTools;
+import org.rcfaces.core.lang.IAdaptable;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -27,10 +29,11 @@ import org.rcfaces.core.internal.tools.ValuesTools;
  */
 public abstract class AbstractCameliaRenderer0 extends Renderer implements
         IDefaultUnlockedPropertiesRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(AbstractCameliaRenderer0.class);
+
+    private static final boolean LOG_DEBUG = LOG.isDebugEnabled();
 
     private static final String HIDE_CHILDREN_PROPERTY = "camelia.ASYNC_TREE_MODE";
 
@@ -41,6 +44,7 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
     private final String defaultUnlockedProperties[];
 
     protected AbstractCameliaRenderer0() {
+<<<<<<< HEAD
         /*
          * Set unlockedProperties = new HashSet();
          * addUnlockProperties(unlockedProperties);
@@ -51,11 +55,25 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
          * 
          * } else { defaultUnlockedProperties = EMPTY_STRING_ARRAY; }
          */
+=======
+        Set<String> unlockedProperties = new HashSet<String>();
+        addUnlockProperties(unlockedProperties);
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 
+<<<<<<< HEAD
         defaultUnlockedProperties = EMPTY_STRING_ARRAY;
+=======
+        if (unlockedProperties.isEmpty() == false) {
+            defaultUnlockedProperties = unlockedProperties
+                    .toArray(new String[unlockedProperties.size()]);
+
+        } else {
+            defaultUnlockedProperties = EMPTY_STRING_ARRAY;
+        }
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
     }
 
-    protected void addUnlockProperties(Set unlockedProperties) {
+    protected void addUnlockProperties(Set<String> unlockedProperties) {
     }
 
     public String[] getDefaultUnlockedProperties(FacesContext facesContext,
@@ -66,6 +84,11 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
     @Override
     public final void encodeBegin(FacesContext context, UIComponent component)
             throws IOException {
+
+        if (LOG_DEBUG) {
+            LOG.debug("Encode begin START '" + component.getClientId(context)
+                    + "' rendererType=" + component.getRendererType());
+        }
 
         super.encodeBegin(context, component);
 
@@ -105,6 +128,11 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
         if (writer instanceof ISgmlWriter) {
             ((ISgmlWriter) writer).endComponent();
         }
+
+        if (LOG_DEBUG) {
+            LOG.debug("Encode begin END '" + component.getClientId(context)
+                    + "' rendererType=" + component.getRendererType());
+        }
     }
 
     protected abstract void encodeBegin(IComponentWriter writer)
@@ -120,9 +148,21 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
     @Override
     public void encodeChildren(FacesContext facesContext, UIComponent component)
             throws IOException {
+
         if ((this instanceof IAsyncRenderer) == false) {
+
+            if (LOG_DEBUG) {
+                LOG.debug("Encode children of '"
+                        + component.getClientId(facesContext) + "'");
+            }
+
             super.encodeChildren(facesContext, component);
             return;
+        }
+
+        if (LOG_DEBUG) {
+            LOG.debug("Encode children of '"
+                    + component.getClientId(facesContext) + "' IASync Renderer");
         }
 
         IRenderContext renderContext = getRenderContext(facesContext);
@@ -133,10 +173,20 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
                 .getComponentRenderContext();
 
         if (componentRenderContext.containsAttribute(HIDE_CHILDREN_PROPERTY)) {
+            if (LOG_DEBUG) {
+                LOG.debug("Encode END children of '"
+                        + component.getClientId(facesContext)
+                        + "'  HIDE_CHILDREN");
+            }
             return;
         }
 
         super.encodeChildren(facesContext, component);
+
+        if (LOG_DEBUG) {
+            LOG.debug("Encode END children of '"
+                    + component.getClientId(facesContext) + "'");
+        }
     }
 
     @Override
@@ -166,6 +216,11 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
     @Override
     public void encodeEnd(FacesContext context, UIComponent component)
             throws IOException {
+
+        if (LOG_DEBUG) {
+            LOG.debug("Encode end START '" + component.getClientId(context)
+                    + "' rendererType=" + component.getRendererType());
+        }
 
         IRenderContext renderContext = getRenderContext(context);
 
@@ -215,12 +270,44 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
         }
 
         renderContext.popComponent(component);
+
+        if (LOG_DEBUG) {
+            LOG.debug("Encode end END '" + component.getClientId(context)
+                    + "' rendererType=" + component.getRendererType());
+        }
     }
 
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
     }
 
     protected abstract IRequestContext getRequestContext(FacesContext context);
+<<<<<<< HEAD
+=======
+
+    @Override
+    public final void decode(FacesContext context, UIComponent component) {
+
+        if (LOG_DEBUG) {
+            LOG.debug("Decode START '" + component.getClientId(context)
+                    + "' rendererType=" + component.getRendererType());
+        }
+
+        IRequestContext requestContext = getRequestContext(context);
+
+        String requestComponentId = getRequestComponentId(requestContext,
+                component);
+
+        IComponentData componentData = requestContext.getComponentData(
+                component, requestComponentId, this);
+
+        decode(requestContext, component, componentData);
+
+        if (LOG_DEBUG) {
+            LOG.debug("Decode END '" + component.getClientId(context)
+                    + "' rendererType=" + component.getRendererType());
+        }
+    }
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 
     protected String getRequestComponentId(IRequestContext requestContext,
             UIComponent component) {
@@ -236,11 +323,22 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
     }
 
     public void decodeChildren(FacesContext context, UIComponent component) {
-        for (Iterator children = component.getFacetsAndChildren(); children
+
+        if (LOG_DEBUG) {
+            LOG.debug("Decode chidlren START '"
+                    + component.getClientId(context) + "'");
+        }
+
+        for (Iterator<UIComponent> children = component.getFacetsAndChildren(); children
                 .hasNext();) {
-            UIComponent child = (UIComponent) children.next();
+            UIComponent child = children.next();
 
             decodeChild(context, component, child);
+        }
+
+        if (LOG_DEBUG) {
+            LOG.debug("Decode chidlren END '" + component.getClientId(context)
+                    + "'");
         }
     }
 
@@ -266,6 +364,32 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
         return ValuesTools.valueToString(value, component, facesContext);
     }
 
+<<<<<<< HEAD
+=======
+    protected <T> T getAdapter(Class<T> adapter, Object object) {
+        return getAdapter(adapter, object, this);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T getAdapter(Class<T> adapter, Object object,
+            Object params) {
+
+        if (object == null) {
+            throw new NullPointerException("Object is null !");
+        }
+
+        if (object instanceof IAdaptable) {
+            return ((IAdaptable) object).getAdapter(adapter, params);
+        }
+
+        if (adapter.isAssignableFrom(object.getClass())) {
+            return (T) object;
+        }
+
+        return null;
+    }
+
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
     @Override
     public Object getConvertedValue(FacesContext context,
             UIComponent component, Object submittedValue)
@@ -296,7 +420,7 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
         Renderer renderer = renderKit.getRenderer(component.getFamily(),
                 rendererType);
 
-        if (LOG.isDebugEnabled()) {
+        if (LOG_DEBUG) {
             LOG.debug("getRenderer(id='" + component.getId() + " family='"
                     + component.getFamily() + "' rendererType='" + rendererType
                     + "' class='" + component.getClass().getName()
@@ -315,5 +439,58 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
     protected boolean isComponentVisible(
             IComponentRenderContext componentRenderContext) {
         return componentRenderContext.containsAttribute(COMPONENT_HIDDEN) == false;
+    }
+
+    protected final void designerBeginChildren(IComponentWriter writer,
+            String facetName) throws WriterException {
+
+        IDesignerEngine designerEngine = writer.getComponentRenderContext()
+                .getRenderContext().getProcessContext().getDesignerEngine();
+
+        if (designerEngine == null) {
+            return;
+        }
+
+        if (writer instanceof ISgmlWriter) {
+            ((ISgmlWriter) writer).endComponent();
+        }
+
+        designerEngine.beginChildren(writer.getComponentRenderContext()
+                .getComponent(), facetName, writer);
+    }
+
+    protected final void designerEndChildren(IComponentWriter writer,
+            String facetName) throws WriterException {
+        IDesignerEngine designerEngine = writer.getComponentRenderContext()
+                .getRenderContext().getProcessContext().getDesignerEngine();
+
+        if (designerEngine == null) {
+            return;
+        }
+
+        if (writer instanceof ISgmlWriter) {
+            ((ISgmlWriter) writer).endComponent();
+        }
+
+        designerEngine.endChildren(writer.getComponentRenderContext()
+                .getComponent(), facetName, writer);
+    }
+
+    protected final void designerEditableZone(IComponentWriter writer,
+            String propertyName) throws WriterException {
+
+        IDesignerEngine designerEngine = writer.getComponentRenderContext()
+                .getRenderContext().getProcessContext().getDesignerEngine();
+
+        if (designerEngine == null) {
+            return;
+        }
+
+        if (writer instanceof ISgmlWriter) {
+            ((ISgmlWriter) writer).endComponent();
+        }
+
+        designerEngine.editableZone(writer.getComponentRenderContext()
+                .getComponent(), propertyName, writer);
     }
 }

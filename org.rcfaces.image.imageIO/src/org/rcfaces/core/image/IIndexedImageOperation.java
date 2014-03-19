@@ -23,7 +23,7 @@ public interface IIndexedImageOperation extends IImageOperation {
 
     int indexedColorModelSupport();
 
-    IndexColorModel filter(Map requestParameter, IndexColorModel source,
-            BufferedImage sourceImage);
+    IndexColorModel filter(Map<String, Object> requestParameter,
+            IndexColorModel source, BufferedImage sourceImage);
 
 }

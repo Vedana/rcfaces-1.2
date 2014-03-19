@@ -1,6 +1,10 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
+<<<<<<< HEAD
+=======
+import org.rcfaces.core.component.capability.ILayoutPositionCapability;
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 import org.rcfaces.core.component.capability.IUserEventCapability;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.tools.MarginTools;
@@ -8,6 +12,7 @@ import org.rcfaces.core.component.capability.IServerDataCapability;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import org.rcfaces.core.component.capability.IInitEventCapability;
 import org.rcfaces.core.internal.tools.ComponentTools;
+<<<<<<< HEAD
 import org.rcfaces.core.internal.capability.IAnchoredPositionSettings;
 import java.lang.Object;
 import org.rcfaces.core.component.capability.IPartialRenderingCapability;
@@ -20,6 +25,22 @@ import org.rcfaces.core.component.capability.IStyleClassCapability;
 import java.util.Arrays;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import org.rcfaces.core.component.capability.IMarginCapability;
+=======
+import java.lang.Object;
+import org.rcfaces.core.component.capability.IPartialRenderingCapability;
+import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
+import org.rcfaces.core.component.capability.IWAIRoleCapability;
+import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
+import org.rcfaces.core.component.capability.IAlertLoadingMessageCapability;
+import org.rcfaces.core.internal.manager.IServerDataManager;
+import org.rcfaces.core.component.capability.ISizeCapability;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import java.util.Arrays;
+import org.rcfaces.core.component.capability.IWheelSelectionCapability;
+import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import org.rcfaces.core.component.capability.IMarginCapability;
+import javax.el.ELContext;
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import java.util.Map;
 import org.apache.commons.logging.LogFactory;
@@ -48,7 +69,10 @@ import java.util.HashSet;
 import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IHelpCapability;
 import org.rcfaces.core.component.capability.ISortManagerCapability;
+<<<<<<< HEAD
 import org.rcfaces.core.component.capability.IAnchoredPositionCapability;
+=======
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 
 /**
  * Technical component, used as a basis for building new RCFaces components.
@@ -63,21 +87,27 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 	ISortManagerCapability,
 	ISortEventCapability,
 	IMouseEventCapability,
-	ITabIndexCapability,
 	IUnlockedClientAttributesCapability,
+	ITabIndexCapability,
 	IPropertyChangeEventCapability,
 	IServerDataCapability,
+	IAlertLoadingMessageCapability,
 	IMarginCapability,
-	IKeyEventCapability,
 	IResetEventCapability,
+	IKeyEventCapability,
 	IUserEventCapability,
 	IPositionCapability,
 	IPartialRenderingCapability,
 	IStyleClassCapability,
 	ILookAndFeelCapability,
 	ISizeCapability,
+	IWheelSelectionCapability,
 	IWAIRoleCapability,
+<<<<<<< HEAD
 	IAnchoredPositionCapability,
+=======
+	ILayoutPositionCapability,
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	IInitEventCapability,
 	IHiddenModeCapability,
 	IImmediateCapability,
@@ -89,7 +119,11 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaDataComponent.CAMELIA_ATTRIBUTES);
 	static {
+<<<<<<< HEAD
 		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"bottomPosition","blurListener","visible","backgroundColor","marginLeft","var","errorListener","tabIndex","focusListener","leftPosition","propertyChangeListener","helpURL","ariaLevel","topPosition","height","keyDownListener","hiddenMode","mouseOverListener","value","waiRole","mouseOutListener","foregroundColor","lookId","rightPosition","helpMessage","userEventListener","marginTop","width","styleClass","marginRight","partialRendering","keyUpListener","keyPressListener","resetListener","ariaLabel","rows","initListener","immediate","unlockedClientAttributeNames","marginBottom","sortListener","toolTipText","first","y","sortManager","margins","x"}));
+=======
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"visible","marginLeft","backgroundColor","tabIndex","errorListener","focusListener","propertyChangeListener","helpURL","height","keyDownListener","mouseOverListener","value","right","alertLoadingMessage","mouseOutListener","waiRole","lookId","userEventListener","wheelSelection","marginTop","styleClass","width","resetListener","rows","bottom","toolTipText","sortManager","horizontalCenter","blurListener","var","ariaLevel","hiddenMode","left","foregroundColor","top","helpMessage","marginRight","keyUpListener","partialRendering","keyPressListener","ariaLabel","verticalCenter","initListener","marginBottom","unlockedClientAttributeNames","immediate","sortListener","first","y","x","margins"}));
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	}
 
 
@@ -109,6 +143,18 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 			map=Collections.unmodifiableMap(map);
 		}
 		return map;
+		
+	}
+
+	public ValueExpression getServerDataValueExpression(String name, FacesContext facesContext) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
+		if (dataMapAccessor==null) {
+			return null;
+		}
+		
+		return dataMapAccessor.getValueExpression(name);
 		
 	}
 
@@ -187,7 +233,11 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 	public Object getServerData(String name, FacesContext facesContext) {
 
 
+<<<<<<< HEAD
 		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
+=======
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		if (dataMapAccessor==null) {
 			return null;
 		}
@@ -213,6 +263,28 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 		
 		return dataMapAccessor.listDataKeys(facesContext);
 		
+	}
+
+	@Override
+	protected void processEngineUpdates(FacesContext context) {
+
+
+			
+        super.processEngineUpdates(context);
+
+        ELContext elContext = context.getELContext();
+
+        int first = getFirst();
+        ValueExpression vae = getValueExpression("first");
+        if (vae != null) {
+        	// JS de Bull demande de forcer systématiquement le setValue()
+            //Number num = (Number) vae.getValue(elContext);
+            //if (num != null && num.intValue() != first) {
+                vae.setValue(elContext, Integer.valueOf(first));
+            //}
+        }
+        
+			
 	}
 
 	public void setHiddenMode(String hiddenMode) {
@@ -525,29 +597,6 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 		return getFacesListeners(org.rcfaces.core.event.IMouseOverListener.class);
 	}
 
-	public java.lang.Integer getTabIndex() {
-		return getTabIndex(null);
-	}
-
-	/**
-	 * See {@link #getTabIndex() getTabIndex()} for more details
-	 */
-	public java.lang.Integer getTabIndex(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntegerProperty(Properties.TAB_INDEX, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "tabIndex" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isTabIndexSetted() {
-		return engine.isPropertySetted(Properties.TAB_INDEX);
-	}
-
-	public void setTabIndex(java.lang.Integer tabIndex) {
-		engine.setProperty(Properties.TAB_INDEX, tabIndex);
-	}
-
 	public java.lang.String getUnlockedClientAttributeNames() {
 		return getUnlockedClientAttributeNames(null);
 	}
@@ -569,6 +618,29 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 
 	public void setUnlockedClientAttributeNames(java.lang.String unlockedClientAttributeNames) {
 		engine.setProperty(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, unlockedClientAttributeNames);
+	}
+
+	public java.lang.Integer getTabIndex() {
+		return getTabIndex(null);
+	}
+
+	/**
+	 * See {@link #getTabIndex() getTabIndex()} for more details
+	 */
+	public java.lang.Integer getTabIndex(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntegerProperty(Properties.TAB_INDEX, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "tabIndex" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTabIndexSetted() {
+		return engine.isPropertySetted(Properties.TAB_INDEX);
+	}
+
+	public void setTabIndex(java.lang.Integer tabIndex) {
+		engine.setProperty(Properties.TAB_INDEX, tabIndex);
 	}
 
 	public final void addPropertyChangeListener(org.rcfaces.core.event.IPropertyChangeListener listener) {
@@ -631,6 +703,29 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
             
 		return dataMapAccessor.removeData(name, null);
 		
+	}
+
+	public java.lang.String getAlertLoadingMessage() {
+		return getAlertLoadingMessage(null);
+	}
+
+	/**
+	 * See {@link #getAlertLoadingMessage() getAlertLoadingMessage()} for more details
+	 */
+	public java.lang.String getAlertLoadingMessage(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ALERT_LOADING_MESSAGE, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "alertLoadingMessage" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAlertLoadingMessageSetted() {
+		return engine.isPropertySetted(Properties.ALERT_LOADING_MESSAGE);
+	}
+
+	public void setAlertLoadingMessage(java.lang.String alertLoadingMessage) {
+		engine.setProperty(Properties.ALERT_LOADING_MESSAGE, alertLoadingMessage);
 	}
 
 	public java.lang.String getMarginBottom() {
@@ -725,6 +820,18 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 		engine.setProperty(Properties.MARGIN_TOP, marginTop);
 	}
 
+	public final void addResetListener(org.rcfaces.core.event.IResetListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeResetListener(org.rcfaces.core.event.IResetListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listResetListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IResetListener.class);
+	}
+
 	public final void addKeyUpListener(org.rcfaces.core.event.IKeyUpListener listener) {
 		addFacesListener(listener);
 	}
@@ -759,18 +866,6 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 
 	public final javax.faces.event.FacesListener [] listKeyPressListeners() {
 		return getFacesListeners(org.rcfaces.core.event.IKeyPressListener.class);
-	}
-
-	public final void addResetListener(org.rcfaces.core.event.IResetListener listener) {
-		addFacesListener(listener);
-	}
-
-	public final void removeResetListener(org.rcfaces.core.event.IResetListener listener) {
-		removeFacesListener(listener);
-	}
-
-	public final javax.faces.event.FacesListener [] listResetListeners() {
-		return getFacesListeners(org.rcfaces.core.event.IResetListener.class);
 	}
 
 	public final void addUserEventListener(org.rcfaces.core.event.IUserEventListener listener) {
@@ -946,6 +1041,29 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 		engine.setProperty(Properties.HEIGHT, height);
 	}
 
+	public boolean isWheelSelection() {
+		return isWheelSelection(null);
+	}
+
+	/**
+	 * See {@link #isWheelSelection() isWheelSelection()} for more details
+	 */
+	public boolean isWheelSelection(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.WHEEL_SELECTION, true, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "wheelSelection" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isWheelSelectionSetted() {
+		return engine.isPropertySetted(Properties.WHEEL_SELECTION);
+	}
+
+	public void setWheelSelection(boolean wheelSelection) {
+		engine.setProperty(Properties.WHEEL_SELECTION, wheelSelection);
+	}
+
 	public java.lang.String getAriaLabel() {
 		return getAriaLabel(null);
 	}
@@ -1015,6 +1133,7 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 		engine.setProperty(Properties.WAI_ROLE, waiRole);
 	}
 
+<<<<<<< HEAD
 	public int getBottomPosition() {
 		return getBottomPosition(null);
 	}
@@ -1105,6 +1224,144 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 
 	public void setTopPosition(int topPosition) {
 		engine.setProperty(Properties.TOP_POSITION, topPosition);
+=======
+	public java.lang.Number getBottom() {
+		return getBottom(null);
+	}
+
+	/**
+	 * See {@link #getBottom() getBottom()} for more details
+	 */
+	public java.lang.Number getBottom(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.BOTTOM, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "bottom" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isBottomSetted() {
+		return engine.isPropertySetted(Properties.BOTTOM);
+	}
+
+	public void setBottom(java.lang.Number bottom) {
+		engine.setProperty(Properties.BOTTOM, bottom);
+	}
+
+	public java.lang.Number getHorizontalCenter() {
+		return getHorizontalCenter(null);
+	}
+
+	/**
+	 * See {@link #getHorizontalCenter() getHorizontalCenter()} for more details
+	 */
+	public java.lang.Number getHorizontalCenter(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.HORIZONTAL_CENTER, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "horizontalCenter" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHorizontalCenterSetted() {
+		return engine.isPropertySetted(Properties.HORIZONTAL_CENTER);
+	}
+
+	public void setHorizontalCenter(java.lang.Number horizontalCenter) {
+		engine.setProperty(Properties.HORIZONTAL_CENTER, horizontalCenter);
+	}
+
+	public java.lang.Number getLeft() {
+		return getLeft(null);
+	}
+
+	/**
+	 * See {@link #getLeft() getLeft()} for more details
+	 */
+	public java.lang.Number getLeft(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.LEFT, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "left" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isLeftSetted() {
+		return engine.isPropertySetted(Properties.LEFT);
+	}
+
+	public void setLeft(java.lang.Number left) {
+		engine.setProperty(Properties.LEFT, left);
+	}
+
+	public java.lang.Number getRight() {
+		return getRight(null);
+	}
+
+	/**
+	 * See {@link #getRight() getRight()} for more details
+	 */
+	public java.lang.Number getRight(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.RIGHT, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "right" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isRightSetted() {
+		return engine.isPropertySetted(Properties.RIGHT);
+	}
+
+	public void setRight(java.lang.Number right) {
+		engine.setProperty(Properties.RIGHT, right);
+	}
+
+	public java.lang.Number getTop() {
+		return getTop(null);
+	}
+
+	/**
+	 * See {@link #getTop() getTop()} for more details
+	 */
+	public java.lang.Number getTop(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.TOP, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "top" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTopSetted() {
+		return engine.isPropertySetted(Properties.TOP);
+	}
+
+	public void setTop(java.lang.Number top) {
+		engine.setProperty(Properties.TOP, top);
+	}
+
+	public java.lang.Number getVerticalCenter() {
+		return getVerticalCenter(null);
+	}
+
+	/**
+	 * See {@link #getVerticalCenter() getVerticalCenter()} for more details
+	 */
+	public java.lang.Number getVerticalCenter(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.VERTICAL_CENTER, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "verticalCenter" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isVerticalCenterSetted() {
+		return engine.isPropertySetted(Properties.VERTICAL_CENTER);
+	}
+
+	public void setVerticalCenter(java.lang.Number verticalCenter) {
+		engine.setProperty(Properties.VERTICAL_CENTER, verticalCenter);
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	}
 
 	public final void addInitListener(org.rcfaces.core.event.IInitListener listener) {

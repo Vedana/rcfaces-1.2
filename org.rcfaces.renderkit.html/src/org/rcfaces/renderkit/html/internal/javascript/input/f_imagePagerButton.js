@@ -13,10 +13,10 @@ var __members = {
 	f_imagePagerButton: function() {
 		this.f_super(arguments);
 		
-		this._type=f_core.GetAttribute(this, "v:type");
+		this._type=f_core.GetAttributeNS(this,"type");
 		
-		var forComponent=f_core.GetAttribute(this, "v:for");
-		this._hideIfDisabled=f_core.GetBooleanAttribute(this, "v:hideIfDisabled", false);
+		var forComponent=f_core.GetAttributeNS(this,"for");
+		this._hideIfDisabled=f_core.GetBooleanAttributeNS(this,"hideIfDisabled", false);
 		
 		// this.f_setDisabled(true); // D'office !  on attend la synchro !
 		// C'est fait sur le serveur !
@@ -40,43 +40,9 @@ var __members = {
 	fa_pagedComponentInitialized: function(pagedComponent) {
 		this._pagedComponent=pagedComponent;
 		
-		var disabled=true;
 		var type=this._type;
 		
-		var rows=pagedComponent.f_getRows();
-		// rows = nombre de ligne affichée
-		
-		var rowCount=pagedComponent.f_getRowCount(); 
-		// rowCount peut etre negatif, si on ne connait pas le nombre
-		
-		if (pagedComponent && type && rowCount && rows) {
-			type=type.toLowerCase();
-			
-			var first=pagedComponent.f_getFirst();
-			//var maxRows=pagedComponent.f_getMaxRows();
-			// Nombre de ligne 
-
-			switch(type) {
-			case "first":
-			case "prev":
-				disabled=(first<1);
-				break;
-				
-			case "next":
-			case "last":
-				disabled=(rowCount>0 && first+rows>=rowCount);
-				break;			
-
-			default:
-				var pageN=parseInt(type, 10);
-				if (!isNaN(pageN) && (first/rows)!=pageN) {
-					disabled=(rowCount>=0 && pageN*rows>rowCount);
-				}
-			}
-			
-		}
-		
-		f_core.Debug(f_imagePagerButton, "fa_pagedComponentInitialized: Update image: id="+this.id+" type="+type+" disabled="+disabled+" first="+first+" rows="+rows+" rowCount="+rowCount);
+		var disabled=this._isDisabled(type, pagedComponent);
 		
 		this.f_setDisabled(disabled);	
 		
@@ -85,12 +51,54 @@ var __members = {
 			this._updateImage();
 		}
 	},
+	/**
+	 * @method protected
+	 * 
+	 * @param String type
+	 * @param Element pagedComponent
+	 * @return Boolean 
+	 */
+	_isDisabled: function(type, pagedComponent) {
+
+		var first=pagedComponent.f_getFirst();		
+		var rows=pagedComponent.f_getRows();
+		// rows = nombre de ligne affichée
+		
+		var rowCount=pagedComponent.f_getRowCount(); 
+		// rowCount peut etre negatif, si on ne connait pas le nombre
+		
+		f_core.Debug(f_imagePagerButton, "fa_pagedComponentInitialized: Update image: id="+this.id+" type="+type+" first="+first+" rows="+rows+" rowCount="+rowCount);
+		
+		if (!pagedComponent || !type || !rowCount || !rows) {
+			return true;
+		}
+		
+		type=type.toLowerCase();
+			
+		switch(type) {
+		case "first":
+		case "prev":
+			return (first<1);
+				
+		case "next":
+		case "last":
+			return (rowCount>0 && first+rows>=rowCount);
+
+		default:
+			var pageN=parseInt(type, 10);
+			if (!isNaN(pageN) && (first/rows)!=pageN) {
+				return (rowCount>=0 && pageN*rows>rowCount);
+			}
+		}
+			
+		return true;
+	},
 	
 	fa_updateDisabled: function(set) {
 		this.f_super(arguments, set);
 		
 		if (this._hideIfDisabled) {
-			this.f_setVisible(this.f_isDisabled());
+			this.f_setVisible(!set);
 		}
 	},
 
@@ -112,6 +120,19 @@ var __members = {
 		if (!pagedComponent) {
 			return false;
 		}
+
+		this._processSelection(pagedComponent, type);
+		
+		return false;
+	},
+	/**
+	 * 
+	 * @method protected
+	 * @param pagedComponent
+	 * @param type
+	 * @return void
+	 */
+	_processSelection: function(pagedComponent, type) {
 
 		var first=pagedComponent.f_getFirst();
 		var rows=pagedComponent.f_getRows();
@@ -153,8 +174,6 @@ var __members = {
 		if (newFirst>=0) {
 			pagedComponent.f_setFirst(newFirst);
 		}
-		
-		return false;
 	},
 	
 	f_update: function() {
@@ -166,7 +185,7 @@ var __members = {
 			fa_pagedComponent.RegisterPager(forComponent, this);
 		}
 	}
-}
+};
 
 new f_class("f_imagePagerButton", {
 	extend: f_imageButton,

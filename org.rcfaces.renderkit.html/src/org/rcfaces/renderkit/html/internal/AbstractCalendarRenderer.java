@@ -33,6 +33,7 @@ import org.rcfaces.core.lang.Period;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.renderkit.html.internal.decorator.CalendarDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -40,7 +41,6 @@ import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
-    private static final String REVISION = "$Revision$";
 
     protected void decode(IRequestContext context, UIComponent component,
             IComponentData componentData) {
@@ -90,34 +90,34 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
                 sb.setLength(0);
                 HtmlTools.formatDate(maxDate, sb, processContext,
                         calendarComponent, true);
-                htmlWriter.writeAttribute("v:maxDate", sb.toString());
+                htmlWriter.writeAttributeNS("maxDate", sb.toString());
             }
 
             if (minDate != null) {
                 sb.setLength(0);
                 HtmlTools.formatDate(minDate, sb, processContext,
                         calendarComponent, true);
-                htmlWriter.writeAttribute("v:minDate", sb.toString());
+                htmlWriter.writeAttributeNS("minDate", sb.toString());
             }
 
             if (cursorDate != null) {
                 sb.setLength(0);
                 HtmlTools.formatDate(cursorDate, sb, processContext,
                         calendarComponent, true);
-                htmlWriter.writeAttribute("v:cursorDate", sb.toString());
+                htmlWriter.writeAttributeNS("cursorDate", sb.toString());
             }
 
             if (twoDigitYearStart != null) {
                 sb.setLength(0);
                 HtmlTools.formatDate(twoDigitYearStart, sb, processContext,
                         calendarComponent, true);
-                htmlWriter.writeAttribute("v:twoDigitYearStart", sb.toString());
+                htmlWriter.writeAttributeNS("twoDigitYearStart", sb.toString());
             }
         }
 
         int wdays = calendarComponent.getDisabledWeekDays(facesContext);
         if (wdays > 0) {
-            htmlWriter.writeAttribute("v:disabledWeekDays", wdays);
+            htmlWriter.writeAttributeNS("disabledWeekDays", wdays);
         }
 
         int clientDatesStrategy = calendarComponent
@@ -125,7 +125,7 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
         if (clientDatesStrategy == IClientDatesStrategyCapability.MONTH_DATES_STRATEGY
                 || clientDatesStrategy == IClientDatesStrategyCapability.YEAR_DATES_STRATEGY) {
 
-            htmlWriter.writeAttribute("v:clientDatesStrategy",
+            htmlWriter.writeAttributeNS("clientDatesStrategy",
                     clientDatesStrategy);
         }
 
@@ -134,14 +134,14 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
 
             int layout = calendarLayout.getCalendarLayout();
             if (layout != ICalendarLayoutCapability.DEFAULT_LAYOUT) {
-                htmlWriter.writeAttribute("v:layout", layout);
+                htmlWriter.writeAttributeNS("layout", layout);
             }
         }
 
         if (calendarComponent instanceof IMultipleSelectCapability) {
             if (((IMultipleSelectCapability) calendarComponent)
                     .isMultipleSelect()) {
-                htmlWriter.writeAttribute("v:multiple", true);
+                htmlWriter.writeAttributeNS("multiple", true);
             }
         }
     }
@@ -312,11 +312,11 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
         }
 
         if (value instanceof IAdaptable) {
-            return (Date) ((IAdaptable) value).getAdapter(Date.class, null);
+            return ((IAdaptable) value).getAdapter(Date.class, null);
         }
 
-        return (Date) RcfacesContext.getInstance(facesContext)
-                .getAdapterManager().getAdapter(value, Date.class, null);
+        return RcfacesContext.getInstance(facesContext).getAdapterManager()
+                .getAdapter(value, Date.class, null);
     }
 
     public static Date[] convertValueToDateArray(FacesContext facesContext,
@@ -333,8 +333,8 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
             Date ds[] = new Date[Array.getLength(value)];
 
             for (int i = 0; i < ds.length; i++) {
-                Date next = convertValueToDate(facesContext, Array
-                        .get(value, i));
+                Date next = convertValueToDate(facesContext,
+                        Array.get(value, i));
 
                 if (next == null) {
                     return null;
@@ -353,7 +353,7 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
                 return null;
             }
 
-            List ds = new ArrayList(c.size());
+            List<Date> ds = new ArrayList<Date>(c.size());
 
             for (Iterator it = c.iterator(); it.hasNext();) {
                 Date next = convertValueToDate(facesContext, it.next());
@@ -365,10 +365,10 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
                 ds.add(next);
             }
 
-            return (Date[]) ds.toArray(new Date[ds.size()]);
+            return ds.toArray(new Date[ds.size()]);
         }
 
-        return (Date[]) RcfacesContext.getCurrentInstance().getAdapterManager()
+        return RcfacesContext.getCurrentInstance().getAdapterManager()
                 .getAdapter(value, Date[].class, null);
     }
 
@@ -407,10 +407,10 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
         }
 
         if (value instanceof IAdaptable) {
-            return (Period) ((IAdaptable) value).getAdapter(Period.class, null);
+            return ((IAdaptable) value).getAdapter(Period.class, null);
         }
 
-        return (Period) RcfacesContext.getCurrentInstance().getAdapterManager()
+        return RcfacesContext.getCurrentInstance().getAdapterManager()
                 .getAdapter(value, Period.class, null);
     }
 
@@ -428,8 +428,8 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
             Period ds[] = new Period[Array.getLength(value)];
 
             for (int i = 0; i < ds.length; i++) {
-                Period next = convertValueToPeriod(facesContext, Array.get(
-                        value, i));
+                Period next = convertValueToPeriod(facesContext,
+                        Array.get(value, i));
 
                 if (next == null) {
                     return null;
@@ -448,7 +448,7 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
                 return null;
             }
 
-            List ds = new ArrayList(c.size());
+            List<Period> ds = new ArrayList<Period>(c.size());
 
             for (Iterator it = c.iterator(); it.hasNext();) {
                 Period next = convertValueToPeriod(facesContext, it.next());
@@ -460,11 +460,20 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
                 ds.add(next);
             }
 
-            return (Period[]) ds.toArray(new Period[ds.size()]);
+            return ds.toArray(new Period[ds.size()]);
         }
 
-        return (Period[]) RcfacesContext.getCurrentInstance()
-                .getAdapterManager().getAdapter(value, Period[].class, null);
+        return RcfacesContext.getCurrentInstance().getAdapterManager()
+                .getAdapter(value, Period[].class, null);
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null,
+                new String[] { "maxDate", "minDate", "cursorDate",
+                        "twoDigitYearStart", "disabledWeekDays",
+                        "clientDatesStrategy", "layout", "multiple" });
     }
 
 }

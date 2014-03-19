@@ -3,6 +3,7 @@ package org.rcfaces.core.component;
 import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IOverStyleClassCapability;
+import org.rcfaces.core.component.capability.ILayoutManagerCapability;
 import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.AbstractBasicComponent;
@@ -12,17 +13,22 @@ import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.internal.converter.AsyncDecodeModeConverter;
 import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.capability.IHeadingLevelCapability;
 import java.util.Set;
 import org.rcfaces.core.component.capability.IInitEventCapability;
+import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import org.rcfaces.core.component.capability.IAsyncDecodeModeCapability;
 import org.rcfaces.core.component.capability.ITypedComponentCapability;
 import org.rcfaces.core.component.capability.IBackgroundImageCapability;
 import java.lang.String;
 import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
+import org.rcfaces.core.component.capability.IHeadingZoneCapability;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
 import javax.el.ValueExpression;
 import java.util.HashSet;
+import org.rcfaces.core.component.capability.IClickEventCapability;
+import org.rcfaces.core.internal.converter.LayoutManagerTypeConverter;
 import java.util.Arrays;
 import org.rcfaces.core.internal.capability.IVariableScopeCapability;
 import org.rcfaces.core.component.capability.IMenuCapability;
@@ -46,11 +52,16 @@ import org.rcfaces.core.component.capability.IMenuCapability;
  * </p>
  */
 public class BoxComponent extends AbstractBasicComponent implements 
+	IHeadingZoneCapability,
+	IHeadingLevelCapability,
 	IBackgroundImageCapability,
 	IBorderCapability,
 	IMouseEventCapability,
+	IClickEventCapability,
+	IDoubleClickEventCapability,
 	IInitEventCapability,
 	ILoadEventCapability,
+	ILayoutManagerCapability,
 	IMenuCapability,
 	IAsyncRenderModeCapability,
 	IAsyncDecodeModeCapability,
@@ -65,7 +76,7 @@ public class BoxComponent extends AbstractBasicComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractBasicComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"backgroundImageVerticalRepeat","horizontalScroll","backgroundImageVerticalPosition","backgroundImageHorizontalRepeat","overStyleClass","type","asyncDecodeMode","backgroundImageHorizontalPosition","loadListener","asyncRenderMode","initListener","scopeSaveValue","scopeVar","mouseOverListener","verticalScroll","scopeValue","backgroundImageURL","border","mouseOutListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headingLevel","backgroundImageVerticalRepeat","horizontalScroll","backgroundImageVerticalPosition","backgroundImageHorizontalRepeat","doubleClickListener","overStyleClass","type","asyncDecodeMode","asyncRenderMode","loadListener","backgroundImageHorizontalPosition","initListener","scopeSaveValue","scopeVar","mouseOverListener","verticalScroll","clickListener","scopeValue","backgroundImageURL","border","headingZone","mouseOutListener","layoutType"}));
 	}
 
 	public BoxComponent() {
@@ -89,6 +100,59 @@ public class BoxComponent extends AbstractBasicComponent implements
 
 			setAsyncDecodeMode(((Integer)AsyncDecodeModeConverter.SINGLETON.getAsObject(null, this, asyncDecodeMode)).intValue());
 		
+	}
+
+	public void setLayoutType(String type) {
+
+
+			setLayoutType(((Integer)LayoutManagerTypeConverter.SINGLETON.getAsObject(null, this, type)).intValue());
+		
+	}
+
+	public boolean isHeadingZone() {
+		return isHeadingZone(null);
+	}
+
+	/**
+	 * See {@link #isHeadingZone() isHeadingZone()} for more details
+	 */
+	public boolean isHeadingZone(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.HEADING_ZONE, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "headingZone" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHeadingZoneSetted() {
+		return engine.isPropertySetted(Properties.HEADING_ZONE);
+	}
+
+	public void setHeadingZone(boolean headingZone) {
+		engine.setProperty(Properties.HEADING_ZONE, headingZone);
+	}
+
+	public java.lang.String getHeadingLevel() {
+		return getHeadingLevel(null);
+	}
+
+	/**
+	 * See {@link #getHeadingLevel() getHeadingLevel()} for more details
+	 */
+	public java.lang.String getHeadingLevel(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.HEADING_LEVEL, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "headingLevel" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHeadingLevelSetted() {
+		return engine.isPropertySetted(Properties.HEADING_LEVEL);
+	}
+
+	public void setHeadingLevel(java.lang.String headingLevel) {
+		engine.setProperty(Properties.HEADING_LEVEL, headingLevel);
 	}
 
 	public java.lang.String getBackgroundImageHorizontalPosition() {
@@ -253,6 +317,30 @@ public class BoxComponent extends AbstractBasicComponent implements
 		return getFacesListeners(org.rcfaces.core.event.IMouseOverListener.class);
 	}
 
+	public final void addClickListener(org.rcfaces.core.event.IClickListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeClickListener(org.rcfaces.core.event.IClickListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listClickListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IClickListener.class);
+	}
+
+	public final void addDoubleClickListener(org.rcfaces.core.event.IDoubleClickListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeDoubleClickListener(org.rcfaces.core.event.IDoubleClickListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listDoubleClickListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IDoubleClickListener.class);
+	}
+
 	public final void addInitListener(org.rcfaces.core.event.IInitListener listener) {
 		addFacesListener(listener);
 	}
@@ -275,6 +363,29 @@ public class BoxComponent extends AbstractBasicComponent implements
 
 	public final javax.faces.event.FacesListener [] listLoadListeners() {
 		return getFacesListeners(org.rcfaces.core.event.ILoadListener.class);
+	}
+
+	public int getLayoutType() {
+		return getLayoutType(null);
+	}
+
+	/**
+	 * See {@link #getLayoutType() getLayoutType()} for more details
+	 */
+	public int getLayoutType(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.LAYOUT_TYPE,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "layoutType" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isLayoutTypeSetted() {
+		return engine.isPropertySetted(Properties.LAYOUT_TYPE);
+	}
+
+	public void setLayoutType(int layoutType) {
+		engine.setProperty(Properties.LAYOUT_TYPE, layoutType);
 	}
 
 	public IMenuComponent getMenu() {

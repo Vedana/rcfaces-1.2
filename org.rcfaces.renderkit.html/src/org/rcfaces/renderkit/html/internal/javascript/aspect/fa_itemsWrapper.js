@@ -145,10 +145,11 @@ var __members = {
 	 * @method public
 	 * @param Object item
 	 * @param Boolean checked
+	 * @param optional Boolean notFireChecked
 	 * @return void
 	 */
-	f_setItemChecked: function(item, checked) {
-		this._getItemsWrapper().f_setItemChecked(item, checked);
+	f_setItemChecked: function(item, checked, notFireChecked) {
+		this._getItemsWrapper().f_setItemChecked(item, checked, notFireChecked);
 	},
 	/**
 	 * @method public

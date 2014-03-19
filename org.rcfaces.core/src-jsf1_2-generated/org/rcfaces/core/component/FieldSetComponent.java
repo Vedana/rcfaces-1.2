@@ -2,26 +2,29 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IOverStyleClassCapability;
-import org.rcfaces.core.component.capability.IImageCapability;
-import org.rcfaces.core.component.familly.IContentAccessors;
-import org.rcfaces.core.component.capability.IImageSizeCapability;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IImageSizeCapability;
 import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.capability.IHeadingLevelCapability;
+import java.util.Set;
+import org.rcfaces.core.component.capability.IFontCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.component.capability.IImageCapability;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import org.rcfaces.core.component.capability.IHeadingZoneCapability;
+import org.rcfaces.core.component.capability.IAudioDescriptionCapability;
 import org.rcfaces.core.component.capability.IBorderTypeCapability;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.ITextAlignmentCapability;
 import java.util.HashSet;
-import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.AbstractOutputComponent;
-import java.util.Set;
 import java.util.Arrays;
-import org.rcfaces.core.internal.capability.IVariableScopeCapability;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
-import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
-import org.rcfaces.core.component.capability.IFontCapability;
+import org.rcfaces.core.internal.capability.IVariableScopeCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
 
 /**
  * <p>The fieldSet Component is a container with a title (text and/or picture).</p>
@@ -41,10 +44,13 @@ import org.rcfaces.core.component.capability.ITextCapability;
  * </p>
  */
 public class FieldSetComponent extends AbstractOutputComponent implements 
+	IHeadingZoneCapability,
+	IHeadingLevelCapability,
 	IFontCapability,
 	ITextCapability,
 	ITextDirectionCapability,
 	ITextAlignmentCapability,
+	IAudioDescriptionCapability,
 	IVerticalAlignmentCapability,
 	IBorderTypeCapability,
 	IImageCapability,
@@ -59,7 +65,7 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"imageHeight","fontName","text","borderType","fontBold","overStyleClass","fontSize","textDirection","scopeSaveValue","fontItalic","verticalAlignment","fontUnderline","scopeVar","textAlignment","scopeValue","imageURL","imageWidth"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"imageHeight","headingLevel","fontName","text","borderType","fontBold","overStyleClass","fontSize","audioDescription","textDirection","scopeSaveValue","fontItalic","verticalAlignment","fontUnderline","scopeVar","textAlignment","scopeValue","headingZone","imageWidth","imageURL"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="text";
 
@@ -77,6 +83,52 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 
 			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
 		
+	}
+
+	public boolean isHeadingZone() {
+		return isHeadingZone(null);
+	}
+
+	/**
+	 * See {@link #isHeadingZone() isHeadingZone()} for more details
+	 */
+	public boolean isHeadingZone(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.HEADING_ZONE, true, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "headingZone" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHeadingZoneSetted() {
+		return engine.isPropertySetted(Properties.HEADING_ZONE);
+	}
+
+	public void setHeadingZone(boolean headingZone) {
+		engine.setProperty(Properties.HEADING_ZONE, headingZone);
+	}
+
+	public java.lang.String getHeadingLevel() {
+		return getHeadingLevel(null);
+	}
+
+	/**
+	 * See {@link #getHeadingLevel() getHeadingLevel()} for more details
+	 */
+	public java.lang.String getHeadingLevel(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.HEADING_LEVEL, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "headingLevel" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHeadingLevelSetted() {
+		return engine.isPropertySetted(Properties.HEADING_LEVEL);
+	}
+
+	public void setHeadingLevel(java.lang.String headingLevel) {
+		engine.setProperty(Properties.HEADING_LEVEL, headingLevel);
 	}
 
 	public java.lang.Boolean getFontBold() {
@@ -261,6 +313,29 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 
 	public void setTextAlignment(java.lang.String textAlignment) {
 		engine.setProperty(Properties.TEXT_ALIGNMENT, textAlignment);
+	}
+
+	public java.lang.String getAudioDescription() {
+		return getAudioDescription(null);
+	}
+
+	/**
+	 * See {@link #getAudioDescription() getAudioDescription()} for more details
+	 */
+	public java.lang.String getAudioDescription(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.AUDIO_DESCRIPTION, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "audioDescription" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAudioDescriptionSetted() {
+		return engine.isPropertySetted(Properties.AUDIO_DESCRIPTION);
+	}
+
+	public void setAudioDescription(java.lang.String audioDescription) {
+		engine.setProperty(Properties.AUDIO_DESCRIPTION, audioDescription);
 	}
 
 	public java.lang.String getVerticalAlignment() {

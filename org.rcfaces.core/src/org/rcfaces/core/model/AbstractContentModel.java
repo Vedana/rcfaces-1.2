@@ -17,7 +17,6 @@ import org.rcfaces.core.lang.IContentFamily;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractContentModel implements IContentModel {
-    private static final String REVISION = "$Revision$";
 
     private Object wrappedData;
 
@@ -30,7 +29,8 @@ public abstract class AbstractContentModel implements IContentModel {
         this.wrappedData = wrappedData;
     }
 
-    public void setInformations(IGenerationResourceInformation generationInformation,
+    public void setInformations(
+            IGenerationResourceInformation generationInformation,
             IGeneratedResourceInformation generatedInformation) {
     }
 
@@ -65,6 +65,9 @@ public abstract class AbstractContentModel implements IContentModel {
     }
 
     public void setContentEngineId(String contentEngineId) {
+        if (contentEngineId != null) {
+            contentEngineId = contentEngineId.intern();
+        }
         this.contentEngineId = contentEngineId;
     }
 

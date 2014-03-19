@@ -14,7 +14,8 @@ import org.rcfaces.core.component.ImageRadioButtonComponent;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public interface IImageRadioButtonIterator extends IComponentIterator {
+public interface IImageRadioButtonIterator extends
+        IComponentIterator<ImageRadioButtonComponent> {
 
     /**
      * Returns the next ImageRadioButtonComponent in the iteration. Calling this

@@ -15,9 +15,8 @@ import org.rcfaces.core.event.SelectionEvent;
  */
 public class SelectionActionListener extends AbstractActionListener implements
         ISelectionListener {
-    private static final String REVISION = "$Revision$";
 
-    private static final Class actionParameters[] = { SelectionEvent.class };
+    private static final Class< ? > actionParameters[] = { SelectionEvent.class };
 
     public SelectionActionListener() {
     }

@@ -15,7 +15,6 @@ import org.rcfaces.core.event.ServiceEvent;
  */
 public class ServiceEventActionListener extends
         AbstractReturnValueActionListener implements IServiceEventListener {
-    private static final String REVISION = "$Revision$";
 
     private static final Class actionParameters[] = { ServiceEvent.class };
 

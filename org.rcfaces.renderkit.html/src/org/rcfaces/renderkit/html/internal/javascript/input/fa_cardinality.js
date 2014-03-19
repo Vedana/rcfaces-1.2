@@ -30,6 +30,6 @@ var __statics = {
 	 * @field public static final Number
 	 */
 	ONEMANY_CARDINALITY: 4
-}
+};
 
 new f_aspect("fa_cardinality", __statics);

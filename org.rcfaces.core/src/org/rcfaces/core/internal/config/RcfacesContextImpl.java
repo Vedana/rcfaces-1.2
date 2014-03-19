@@ -5,23 +5,17 @@ package org.rcfaces.core.internal.config;
 
 import java.io.CharArrayReader;
 import java.io.Externalizable;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.io.Serializable;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import javax.faces.FactoryFinder;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
@@ -49,6 +43,8 @@ import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
 import org.rcfaces.core.internal.repository.IRepositoryManager;
 import org.rcfaces.core.internal.repository.RepositoryManagerImpl;
 import org.rcfaces.core.internal.service.IServicesRegistry;
+import org.rcfaces.core.internal.util.ConfigurationLoader;
+import org.rcfaces.core.internal.validator.ClientValidatorsRegistryImpl;
 import org.rcfaces.core.internal.validator.IClientValidatorsRegistry;
 import org.rcfaces.core.internal.version.IResourceVersionHandler;
 import org.rcfaces.core.internal.version.ResourceVersionHandlerImpl;
@@ -63,16 +59,9 @@ import org.xml.sax.InputSource;
 public class RcfacesContextImpl extends RcfacesContext implements
         Externalizable {
 
-    private static final String REVISION = "$Revision$";
-
     private static final long serialVersionUID = -4224530723124583628L;
 
     private static final Log LOG = LogFactory.getLog(RcfacesContextImpl.class);
-
-    private static final String RCFACES_CONFIG_FILENAME = "rcfaces-config.xml";
-
-    private static final String RCFACES_RESOURCE_NAME = "META-INF/"
-            + RCFACES_CONFIG_FILENAME;
 
     private static final Package[] KERNEL_CONFIG_FILENAMES = new Package[] {
             RcfacesContext.class.getPackage(),
@@ -98,7 +87,8 @@ public class RcfacesContextImpl extends RcfacesContext implements
 
     private transient BorderRenderersRegistryImpl borderRenderersRegistry;
 
-    private final Map attributes = new HashMap(32);
+    private final Map<String, Serializable> attributes = new HashMap<String, Serializable>(
+            32);
 
     private transient IContentVersionHandler contentVersionHandler;
 
@@ -127,6 +117,7 @@ public class RcfacesContextImpl extends RcfacesContext implements
     public RcfacesContextImpl() {
     }
 
+    @Override
     protected void initialize(FacesContext facesContext) {
         if (facesContext == null) {
             facesContext = FacesContext.getCurrentInstance();
@@ -138,8 +129,8 @@ public class RcfacesContextImpl extends RcfacesContext implements
             LOG.info("Designer MODE  detected.");
         }
 
-        facesContext.getExternalContext().getApplicationMap().put(
-                RCFACES_VERSION_PROPERTY, Constants.getVersion());
+        facesContext.getExternalContext().getApplicationMap()
+                .put(RCFACES_VERSION_PROPERTY, Constants.getVersion());
 
         initializeRegistries(null);
 
@@ -156,20 +147,21 @@ public class RcfacesContextImpl extends RcfacesContext implements
             LOG.debug("Ignore clientValidators registry (designer mode)");
 
         } else {
-            LOG.debug("Initialize service registry");
+            LOG.debug("Initializing service registry");
             servicesRegistry = createServicesRegistry();
 
-            LOG.debug("Initialize clientValidators registry");
+            LOG.debug("Initializing clientValidators registry");
             clientValidatorsRegistry = createClientValidatorsRegistry();
         }
 
-        LOG.debug("Initialize border renderers registry");
+        LOG.debug("Initializing border renderers registry");
         borderRenderersRegistry = createBorderRenderersRegistry();
 
-        LOG.debug("Initialize providers registry");
+        LOG.debug("Initializing providers registry");
         providersRegistry = createProvidersRegistry();
     }
 
+    @Override
     public final IServicesRegistry getServicesRegistry() {
         return servicesRegistry;
     }
@@ -180,9 +172,9 @@ public class RcfacesContextImpl extends RcfacesContext implements
         LifecycleFactory lifecycleFactory = (LifecycleFactory) FactoryFinder
                 .getFactory(FactoryFinder.LIFECYCLE_FACTORY);
 
-        Iterator it = lifecycleFactory.getLifecycleIds();
+        Iterator<String> it = lifecycleFactory.getLifecycleIds();
         for (; it.hasNext();) {
-            String lifecycleId = (String) it.next();
+            String lifecycleId = it.next();
 
             Lifecycle lifecycle = lifecycleFactory.getLifecycle(lifecycleId);
 
@@ -215,6 +207,7 @@ public class RcfacesContextImpl extends RcfacesContext implements
         return services;
     }
 
+    @Override
     public final IClientValidatorsRegistry getClientValidatorsRegistry() {
         return clientValidatorsRegistry;
     }
@@ -223,6 +216,7 @@ public class RcfacesContextImpl extends RcfacesContext implements
         return new ClientValidatorsRegistryImpl();
     }
 
+    @Override
     public final IProvidersRegistry getProvidersRegistry() {
         return providersRegistry;
     }
@@ -231,6 +225,7 @@ public class RcfacesContextImpl extends RcfacesContext implements
         return new ProvidersRegistry();
     }
 
+    @Override
     public final IBorderRenderersRegistry getBorderRenderersRegistry() {
         return borderRenderersRegistry;
     }
@@ -240,15 +235,15 @@ public class RcfacesContextImpl extends RcfacesContext implements
     }
 
     public final Serializable setAttribute(String property, Serializable value) {
-        return (Serializable) attributes.put(property, value);
+        return attributes.put(property, value);
     }
 
     public final Serializable getAttribute(String property) {
-        return (Serializable) attributes.get(property);
+        return attributes.get(property);
     }
 
     public final Serializable removeAttribute(String property) {
-        return (Serializable) attributes.remove(property);
+        return attributes.remove(property);
     }
 
     private void loadConfigs(FacesContext facesContext) {
@@ -258,7 +253,6 @@ public class RcfacesContextImpl extends RcfacesContext implements
         digester.setUseContextClassLoader(true);
 
         digester.setEntityResolver(new EntityResolver() {
-            private static final String REVISION = "$Revision$";
 
             public InputSource resolveEntity(String string, String string1) {
                 return new InputSource(new CharArrayReader(new char[0]));
@@ -269,7 +263,7 @@ public class RcfacesContextImpl extends RcfacesContext implements
         LOG.debug("Declare configurations rules.");
         configureRules(digester);
 
-        List urls = new ArrayList(32);
+        List<URL> urls = new ArrayList<URL>(32);
 
         LOG.debug("Search configuration files ...");
         for (int i = 0; i < KERNEL_CONFIG_FILENAMES.length; i++) {
@@ -289,134 +283,14 @@ public class RcfacesContextImpl extends RcfacesContext implements
             urls.add(url);
         }
 
-        ClassLoader contextClassLoader = Thread.currentThread()
-                .getContextClassLoader();
-        if (contextClassLoader != null) {
+        ConfigurationLoader configurationLoader = ConfigurationLoader
+                .scanRCFacesConfig(facesContext.getExternalContext(), urls);
 
-            Enumeration enumeration = null;
-            try {
-                enumeration = contextClassLoader
-                        .getResources(RCFACES_RESOURCE_NAME);
+        configurationLoader.parse(digester);
 
-            } catch (IOException e) {
-                LOG.error("Can not scan resources '" + RCFACES_RESOURCE_NAME
-                        + "' into context classloader.");
-            }
-
-            if (enumeration != null) {
-                for (; enumeration.hasMoreElements();) {
-                    URL url = (URL) enumeration.nextElement();
-
-                    LOG.debug("Rcfaces resource in meta-inf detected : " + url);
-
-                    urls.add(url);
-                }
-            }
-
-            ExternalContext externalContext = facesContext.getExternalContext();
-
-            String configFilenames = externalContext
-                    .getInitParameter(CAMELIA_CONFIG_FILES_PARAMETER);
-
-            if (configFilenames != null) {
-                // LOG.debug("Value for parameter '"+
-                // CAMELIA_CONFIG_FILES_PARAMETER + "' detected : '"+
-                // configFilenames + "'.");
-
-                StringTokenizer st = new StringTokenizer(configFilenames,
-                        ",;\t \r\n");
-
-                for (; st.hasMoreTokens();) {
-                    String filename = st.nextToken();
-
-                    LOG.debug("An item of value of parameter '"
-                            + CAMELIA_CONFIG_FILES_PARAMETER + "' detected : '"
-                            + filename + "'.");
-
-                    URL url = contextClassLoader.getResource(filename);
-
-                    if (url == null) {
-                        try {
-                            url = externalContext.getResource(filename);
-
-                        } catch (MalformedURLException ex) {
-                            LOG.error("Malformed url for filename '" + filename
-                                    + "'.", ex);
-                        }
-                    }
-
-                    if (url == null) {
-                        LOG.debug("Configuration file '" + filename
-                                + "' does not exist.");
-                        continue;
-                    }
-
-                    LOG.debug("Configuration file '" + filename
-                            + "' registred.");
-
-                    urls.add(url);
-                }
-            }
-        }
-
-        loadConfigurations(digester, urls);
-
-        loadProvidersConfiguration(facesContext, urls);
+        loadProvidersConfiguration(facesContext, configurationLoader);
 
         LOG.info("Rcfaces config loaded.");
-    }
-
-    private void loadConfigurations(Digester digester, List urls) {
-
-        if (urls.isEmpty()) {
-            return;
-        }
-
-        for (Iterator it = urls.iterator(); it.hasNext();) {
-            URL url = (URL) it.next();
-
-            InputStream inputStream;
-            try {
-                inputStream = url.openStream();
-
-            } catch (IOException e) {
-                LOG.error("Can not open url '" + url + "'.", e);
-                continue;
-            }
-
-            if (inputStream == null) {
-                LOG.debug("Configuration file '" + url + "' does not exist.");
-                continue;
-            }
-
-            loadConfig(digester, inputStream, url.toString());
-        }
-    }
-
-    private void loadConfig(Digester digester, InputStream inputStream,
-            String resourceName) {
-
-        LOG.debug("Loading rcfaces config file '" + resourceName + "' ...");
-
-        try {
-            digester.parse(inputStream);
-
-        } catch (Throwable th) {
-            LOG.error("Can not parse Rcfaces config file '" + resourceName
-                    + "'.", th);
-            return;
-
-        } finally {
-            try {
-                inputStream.close();
-
-            } catch (IOException e) {
-                LOG.error("Can not close Rcfaces config file '" + resourceName
-                        + "'.", e);
-            }
-        }
-
-        LOG.debug("Rcfaces config file '" + resourceName + "' loaded !");
     }
 
     private void configureRules(Digester digester) {
@@ -433,12 +307,12 @@ public class RcfacesContextImpl extends RcfacesContext implements
     }
 
     private void loadProvidersConfiguration(FacesContext facesContext,
-            final List urls) {
+            final ConfigurationLoader configurationLoader) {
 
         IProvidersConfigurator providersConfigurator = new IProvidersConfigurator() {
 
             public void parseConfiguration(Digester digester) {
-                loadConfigurations(digester, urls);
+                configurationLoader.parse(digester);
             }
 
         };
@@ -452,7 +326,7 @@ public class RcfacesContextImpl extends RcfacesContext implements
 
     protected void initializeConfigs(FacesContext facesContext) {
 
-        Map applicationMap = facesContext.getExternalContext()
+        Map<String, Object> applicationMap = facesContext.getExternalContext()
                 .getApplicationMap();
 
         applicationVersion = (String) applicationMap
@@ -476,31 +350,34 @@ public class RcfacesContextImpl extends RcfacesContext implements
 
             listenerManagerStrategy = convertedStartegy.intValue();
 
-            LOG
-                    .debug("Set listener manager stategy to '" + strategyName
-                            + "'.");
+            LOG.debug("Set listener manager stategy to '" + strategyName + "'.");
         }
 
         LOG.debug("Initialize all configs: done.");
     }
 
+    @Override
     public final String getApplicationVersion() {
         return applicationVersion;
     }
 
+    @Override
     public void setDefaultContentVersionHandler(
             IContentVersionHandler contentVersionHandler) {
         this.contentVersionHandler = contentVersionHandler;
     }
 
+    @Override
     public final IContentVersionHandler getDefaultContentVersionHandler() {
         return contentVersionHandler;
     }
 
+    @Override
     public IContentProxyHandler getDefaultContentProxyHandler() {
         return contentProxyHandler;
     }
 
+    @Override
     public void setDefaultContentProxyHandler(
             IContentProxyHandler contentProxyHandler) {
         this.contentProxyHandler = contentProxyHandler;
@@ -514,71 +391,87 @@ public class RcfacesContextImpl extends RcfacesContext implements
         // On ne serialize rien !
     }
 
+    @Override
     public IAdapterManager getAdapterManager() {
         return adapterManager;
     }
 
+    @Override
     public void setAdapterManager(IAdapterManager adapterManager) {
         this.adapterManager = adapterManager;
     }
 
+    @Override
     public boolean isDesignerMode() {
         return designerMode;
     }
 
+    @Override
     public IContentAccessorRegistry getContentAccessorRegistry() {
         return contentAccessorRegistry;
     }
 
+    @Override
     public void setContentAccessorRegistry(
             IContentAccessorRegistry contentAccessorRegistry) {
         this.contentAccessorRegistry = contentAccessorRegistry;
     }
 
+    @Override
     public IResourceVersionHandler getResourceVersionHandler() {
         return resourceVersionHandler;
     }
 
+    @Override
     public void setResourceVersionHandler(
             IResourceVersionHandler resourceVersionHandler) {
         this.resourceVersionHandler = resourceVersionHandler;
     }
 
+    @Override
     public IContentStorageEngine getContentStorageEngine() {
         return indirectContentRepository;
     }
 
+    @Override
     public void setContentStorageEngine(
             IContentStorageEngine indirectContentRepository) {
         this.indirectContentRepository = indirectContentRepository;
     }
 
+    @Override
     public IResourceProxyHandler getResourceProxyHandler() {
         return resourceProxyHandler;
     }
 
+    @Override
     public void setResourceProxyHandler(
             IResourceProxyHandler resourceProxyHandler) {
         this.resourceProxyHandler = resourceProxyHandler;
     }
 
+    @Override
     public IDocumentBuilderProvider getDocumentBuilderProvider() {
         return documentBuilderProvider;
     }
 
+    @Override
     public void setDocumentBuilderProvider(
             IDocumentBuilderProvider documentBuilderProvider) {
         this.documentBuilderProvider = documentBuilderProvider;
     }
 
+    @Override
     public IRepositoryManager getRepositoryManager() {
         return repositoryManager;
     }
 
+    @Override
     public void setRepositoryManager(IRepositoryManager repositoryManager) {
         this.repositoryManager = repositoryManager;
     }
 
+    @Override
     public int getListenerManagerStrategy() {
         return listenerManagerStrategy;
     }

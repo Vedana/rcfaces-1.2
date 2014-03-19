@@ -13,7 +13,6 @@ import org.apache.commons.logging.LogFactory;
  * @version $Revision$ $Date$
  */
 public class Constants {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(Constants.class);
 
@@ -79,6 +78,10 @@ public class Constants {
 
     public static final boolean GENERATE_RCFACES_INIT_TIMER = true;
 
+    public static final boolean DISABLE_HEADING_ZONE = false;
+
+    public static final boolean REDUCE_USER_AGENT_TO_BROWSER_TYPE = true;
+
     static {
         if (BUILDER_VERSION != null) {
             version = BUILDER_VERSION;
@@ -109,9 +112,7 @@ public class Constants {
         LOG.info("CLIENT_NAMING_SEPARATOR_SUPPORT="
                 + CLIENT_NAMING_SEPARATOR_SUPPORT);
 
-        LOG
-                .info("GROUP_NAME_NAMESPACE_SUPPORT="
-                        + GROUP_NAME_NAMESPACE_SUPPORT);
+        LOG.info("GROUP_NAME_NAMESPACE_SUPPORT=" + GROUP_NAME_NAMESPACE_SUPPORT);
 
         LOG.info("NORMALIZE_STYLE_MARGINS=" + NORMALIZE_STYLE_MARGINS);
 

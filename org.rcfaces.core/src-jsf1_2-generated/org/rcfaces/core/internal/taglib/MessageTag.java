@@ -30,65 +30,70 @@ public class MessageTag extends AbstractMessageTag implements Tag {
 	private ValueExpression infoImageURL;
 	private ValueExpression warnImageURL;
 	private ValueExpression imageURL;
+	private ValueExpression caption;
 	private ValueExpression showIfMessage;
 	private ValueExpression showActiveComponentMessage;
 	public String getComponentType() {
 		return MessageComponent.COMPONENT_TYPE;
 	}
 
-	public final void setImageHeight(ValueExpression imageHeight) {
+	public void setImageHeight(ValueExpression imageHeight) {
 		this.imageHeight = imageHeight;
 	}
 
-	public final void setImageWidth(ValueExpression imageWidth) {
+	public void setImageWidth(ValueExpression imageWidth) {
 		this.imageWidth = imageWidth;
 	}
 
-	public final void setText(ValueExpression text) {
+	public void setText(ValueExpression text) {
 		this.text = text;
 	}
 
-	public final void setErrorStyleClass(ValueExpression errorStyleClass) {
+	public void setErrorStyleClass(ValueExpression errorStyleClass) {
 		this.errorStyleClass = errorStyleClass;
 	}
 
-	public final void setFatalStyleClass(ValueExpression fatalStyleClass) {
+	public void setFatalStyleClass(ValueExpression fatalStyleClass) {
 		this.fatalStyleClass = fatalStyleClass;
 	}
 
-	public final void setInfoStyleClass(ValueExpression infoStyleClass) {
+	public void setInfoStyleClass(ValueExpression infoStyleClass) {
 		this.infoStyleClass = infoStyleClass;
 	}
 
-	public final void setWarnStyleClass(ValueExpression warnStyleClass) {
+	public void setWarnStyleClass(ValueExpression warnStyleClass) {
 		this.warnStyleClass = warnStyleClass;
 	}
 
-	public final void setErrorImageURL(ValueExpression errorImageURL) {
+	public void setErrorImageURL(ValueExpression errorImageURL) {
 		this.errorImageURL = errorImageURL;
 	}
 
-	public final void setFatalImageURL(ValueExpression fatalImageURL) {
+	public void setFatalImageURL(ValueExpression fatalImageURL) {
 		this.fatalImageURL = fatalImageURL;
 	}
 
-	public final void setInfoImageURL(ValueExpression infoImageURL) {
+	public void setInfoImageURL(ValueExpression infoImageURL) {
 		this.infoImageURL = infoImageURL;
 	}
 
-	public final void setWarnImageURL(ValueExpression warnImageURL) {
+	public void setWarnImageURL(ValueExpression warnImageURL) {
 		this.warnImageURL = warnImageURL;
 	}
 
-	public final void setImageURL(ValueExpression imageURL) {
+	public void setImageURL(ValueExpression imageURL) {
 		this.imageURL = imageURL;
 	}
 
-	public final void setShowIfMessage(ValueExpression showIfMessage) {
+	public void setCaption(ValueExpression caption) {
+		this.caption = caption;
+	}
+
+	public void setShowIfMessage(ValueExpression showIfMessage) {
 		this.showIfMessage = showIfMessage;
 	}
 
-	public final void setShowActiveComponentMessage(ValueExpression showActiveComponentMessage) {
+	public void setShowActiveComponentMessage(ValueExpression showActiveComponentMessage) {
 		this.showActiveComponentMessage = showActiveComponentMessage;
 	}
 
@@ -109,6 +114,7 @@ public class MessageTag extends AbstractMessageTag implements Tag {
 			LOG.debug("  infoImageURL='"+infoImageURL+"'");
 			LOG.debug("  warnImageURL='"+warnImageURL+"'");
 			LOG.debug("  imageURL='"+imageURL+"'");
+			LOG.debug("  caption='"+caption+"'");
 			LOG.debug("  showIfMessage='"+showIfMessage+"'");
 			LOG.debug("  showActiveComponentMessage='"+showActiveComponentMessage+"'");
 		}
@@ -232,6 +238,15 @@ public class MessageTag extends AbstractMessageTag implements Tag {
 			}
 		}
 
+		if (caption != null) {
+			if (caption.isLiteralText()==false) {
+				component.setValueExpression(Properties.CAPTION, caption);
+
+			} else {
+				component.setCaption(caption.getExpressionString());
+			}
+		}
+
 		if (showIfMessage != null) {
 			if (showIfMessage.isLiteralText()==false) {
 				component.setValueExpression(Properties.SHOW_IF_MESSAGE, showIfMessage);
@@ -264,6 +279,7 @@ public class MessageTag extends AbstractMessageTag implements Tag {
 		infoImageURL = null;
 		warnImageURL = null;
 		imageURL = null;
+		caption = null;
 		showIfMessage = null;
 		showActiveComponentMessage = null;
 

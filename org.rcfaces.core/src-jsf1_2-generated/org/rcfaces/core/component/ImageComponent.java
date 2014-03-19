@@ -1,8 +1,10 @@
 package org.rcfaces.core.component;
 
+import org.rcfaces.core.component.capability.IToolTipIdCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.capability.IImageCapability;
+import org.rcfaces.core.internal.tools.ToolTipTools;
 import java.lang.String;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IImageSizeCapability;
@@ -10,6 +12,8 @@ import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.capability.IAlternateTextCapability;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
+import org.rcfaces.core.component.iterator.IToolTipIterator;
+import org.rcfaces.core.internal.capability.IToolTipComponent;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.IFilterCapability;
 import java.util.HashSet;
@@ -39,6 +43,8 @@ public class ImageComponent extends AbstractOutputComponent implements
 	IImageSizeCapability,
 	IAlternateTextCapability,
 	IFilterCapability,
+	IToolTipIdCapability,
+	IToolTipComponent,
 	IImageAccessorsCapability {
 
 	private static final Log LOG = LogFactory.getLog(ImageComponent.class);
@@ -47,7 +53,7 @@ public class ImageComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"imageHeight","filterProperties","alternateText","imageWidth","imageURL"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"imageHeight","filterProperties","alternateText","toolTipId","imageWidth","imageURL"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="imageURL";
 
@@ -65,11 +71,18 @@ public class ImageComponent extends AbstractOutputComponent implements
 
 				Object value=getLocalValue();
 				if (value==null) {
-					value=getValueExpression(Properties.VALUE);
+				value=getValueExpression(Properties.VALUE);
 				}
-			
+
 				return ImageAccessorTools.createImageAccessor(facesContext, value);
 			
+	}
+
+	public IToolTipIterator listToolTips() {
+
+
+			return ToolTipTools.listToolTips(this);
+		
 	}
 
 	public void setFilterProperties(String properties) {
@@ -201,6 +214,29 @@ public class ImageComponent extends AbstractOutputComponent implements
 
 	public void setFilterProperties(org.rcfaces.core.model.IFilterProperties filterProperties) {
 		engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
+	}
+
+	public java.lang.String getToolTipId() {
+		return getToolTipId(null);
+	}
+
+	/**
+	 * See {@link #getToolTipId() getToolTipId()} for more details
+	 */
+	public java.lang.String getToolTipId(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.TOOL_TIP_ID, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "toolTipId" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isToolTipIdSetted() {
+		return engine.isPropertySetted(Properties.TOOL_TIP_ID);
+	}
+
+	public void setToolTipId(java.lang.String toolTipId) {
+		engine.setProperty(Properties.TOOL_TIP_ID, toolTipId);
 	}
 
 	protected Set getCameliaFields() {

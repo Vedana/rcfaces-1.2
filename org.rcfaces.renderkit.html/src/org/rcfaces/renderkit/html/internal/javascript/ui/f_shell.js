@@ -213,10 +213,9 @@ var __statics = {
 	 * @field public static final Number
 	 */
 	DESTROYED_STATUS: 0x31
-}
+};
 
 var __members = {
-
 
 	/**
 	 * @field private String
@@ -265,7 +264,7 @@ var __members = {
 	_showNextShell: true,
 
 	/**
-	 * @field private 
+	 * @field private any
 	 */
 	_returnValue: undefined,
 	
@@ -278,7 +277,12 @@ var __members = {
 	 * @field protected String
 	 */
 	_shellDecoratorName: undefined,
-
+	
+	/**
+	 * @field protected String
+	 */
+	_returnFocusClientId: undefined,
+	
 	/**
 	 * <p>Construct a new <code>f_shell</code> with the specified
      * initial values.</p>
@@ -306,20 +310,22 @@ var __members = {
 		this._shellManager=f_shellManager.Get();
 		
 		if (this.nodeType==f_core.ELEMENT_NODE) {			
-			var events=f_core.GetAttribute(this, "v:events");
+			var events=f_core.GetAttributeNS(this,"events");
 			if (events) {
 				this.f_initEventAtts(f_shell._EVENTS, events);
 			}
 
-			var shellDecoratorName = f_core.GetAttribute(this, "v:shellDecorator");
+			var shellDecoratorName = f_core.GetAttributeNS(this,"shellDecorator");
 			if (shellDecoratorName) {
 				this._shellDecoratorName = shellDecoratorName;
 			}
 			
-			var closable = f_core.GetBooleanAttribute(this, "v:closable");
+			var closable = f_core.GetBooleanAttributeNS(this,"closable");
 			if (closable === true) {
 				this._style |= f_shell.CLOSE_STYLE;
 			}
+			
+			this._returnFocusClientId = f_core.GetAttributeNS(this,"returnFocusClientId");
 		}
 		
 	},
@@ -530,16 +536,30 @@ var __members = {
 	},
 	
 	/**
+	 *  <p>Set the body of the shell
+	 *  </p>
+	 *
+	 * @method protected
+	 * @param HTMLElement shellBody
+	 * @return void
+	 */
+	f_setBody: function(shellBody) {
+     	f_core.Debug(f_shell, "f_setBody: fill body in "+shellBody);		
+     	
+     	this._shellBody=shellBody;
+	},
+	/**
 	 *  <p>construct the content of the shell 
 	 *  </p>
 	 *
 	 * @method protected
+	 * @param HTMLElement shellBody
 	 * @return void
 	 */
 	f_fillBody: function(shellBody) {
      	f_core.Debug(f_shell, "f_fillBody: fill body in "+shellBody);		
      	
-     	this._shellBody=shellBody;
+     	this.f_setBody(shellBody);
 	},
 
 	/**
@@ -599,26 +619,35 @@ var __members = {
 
 	/**
 	 * @method public
-	 * @param Function returnValueFunction
+	 * @param optional Function returnValueFunction
+	 * @param optional String returnFocusClientId
 	 * @return void
 	 */
-	f_open: function(returnValueFunction) {
+	f_open: function(returnValueFunction, returnFocusClientId) {
 		f_core.Assert(
 			this.f_getStatus()!=f_shell.OPENING_STATUS &&
 			this.f_getStatus()!=f_shell.OPENED_STATUS &&
 			this.f_getStatus()!=f_shell.CLOSING_STATUS, "f_open: Invalid shell state ! ("+this._status+")");
 		
-		this._returnValueFunction=returnValueFunction;
+		if (returnValueFunction!==undefined) {
+			this._returnValueFunction=returnValueFunction;
+		}
+		
+		if (returnFocusClientId!==undefined) {
+			this._returnFocusClientId=returnFocusClientId;
+		}
 		
 		this._shellManager.f_openShell(this);
 	},	
 
 	/**
 	 * @method public
-	 * @param optional Function returnValue
+	 * @param optional any returnValue
 	 * @return void
 	 */
 	f_close: function(returnValue) {
+		f_core.Debug(f_shell, "f_close: Request shell close '"+this+"'  returnValue='"+returnValue+"'");
+		
 		if (this.f_getStatus()!=f_shell.OPENED_STATUS) {
 			return;
 		}
@@ -663,7 +692,7 @@ var __members = {
 			
 		//function(type, jsEvt, item, value, selectionProvider, detail) 
 		this.f_fireEvent(f_event.CLOSE, null, null, returnValue, null, null);
-		
+
 		var returnValueFunction=this._returnValueFunction;
 		if (typeof(returnValueFunction)=="function") {
 			try {
@@ -677,6 +706,15 @@ var __members = {
 			
 		} else if (returnValue===false) {
 			this.f_cancelNextShell();
+		}
+		
+		var returnFocusClientId=this._returnFocusClientId;
+		if (returnFocusClientId && this._showNextShell!==false) {
+			var elt=f_core.GetElementByClientId(returnFocusClientId);
+			
+			if (elt) {
+				f_core.SetFocus(elt, true);
+			}
 		}
 	},
 	
@@ -745,6 +783,16 @@ var __members = {
 		if (title) {
 			shellDecorator.f_setDecorationValue(f_shellDecorator.TITLE_DECORATOR, title);
 		}
+	},
+	/**
+	 * @method protected
+	 * @return f_shellDecorator shellDecorator
+	 */
+	f_getShellDecorator: function() {
+		
+		var shellDecorator = this._shellManager.f_getShellDecorator(this);
+		
+		return shellDecorator;
 	},
 	/**
 	 * @method public
@@ -821,7 +869,41 @@ var __members = {
 		this._shellDecoratorName = shellDecoratorName;
 		
 	},
-	
+	/**
+	 * @method public
+	 * @param String id Identifier of component.
+	 * @return HTMLElement
+	 */
+	f_findComponent: function(id) {
+		return fa_namingContainer.FindComponents(this, arguments);
+	},
+	/**
+	 * @method public
+	 * @param String id Identifier of component.
+	 * @return HTMLElement
+	 */
+	f_findSiblingComponent: function(id) {
+		return fa_namingContainer.FindSiblingComponents(this, arguments);
+	},
+	/**
+	 * Specify the clientId of a component which will get focus when the shell will be closed
+	 * 
+	 * @method public
+	 * @param String clientId Identifier of component.
+	 * @return void
+	 */
+	f_setReturnFocusClientId: function(clientId) {
+    	f_core.Assert(clientId===null || clientId===undefined || typeof(clientId)=="string", "f_shell.f_setReturnFocusClientId: Invalid clientId parameter '"+backgroundMode+"'.");
+    	
+    	this._returnFocusClientId=clientId;
+	},
+	/**
+	 * @method public
+	 * @return String Id Identifier of component which will get focus when the shell will be closed
+	 */
+	f_getReturnFocusClientId: function() {
+     	return this._returnFocusClientId;
+	},
 	/**
 	 * @method public
 	 * @return String
@@ -829,7 +911,7 @@ var __members = {
 	_toString: function() {
 		return "[f_shell id="+this._id+" styleClass='"+this._styleClass+"']";
 	}
-}
+};
 
 new f_class("f_shell", {
 	extend: f_object,

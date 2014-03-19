@@ -4,7 +4,6 @@
 package org.rcfaces.core.internal.converter;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.faces.component.UIComponent;
@@ -19,14 +18,14 @@ import org.rcfaces.core.model.AbstractConverter;
  * @version $Revision$ $Date$
  */
 public class CalendarModeConverter extends AbstractConverter {
-    private static final String REVISION = "$Revision$";
 
     public static final Converter SINGLETON = new CalendarModeConverter();
 
     private static final Integer DEFAULT_CALENDAR_MODE = new Integer(
             ICalendarModeCapability.DEFAULT_CALENDAR_MODE);
 
-    private static Map CALENDAR_MODES = new HashMap(5);
+    private static Map<String, Integer> CALENDAR_MODES = new HashMap<String, Integer>(
+            5);
     static {
         CALENDAR_MODES.put(ICalendarModeCapability.DATE_CALENDAR_MODE_NAME,
                 new Integer(ICalendarModeCapability.DATE_CALENDAR_MODE));
@@ -39,8 +38,9 @@ public class CalendarModeConverter extends AbstractConverter {
     /*
      * (non-Javadoc)
      * 
-     * @see javax.faces.convert.Converter#getAsObject(javax.faces.context.FacesContext,
-     *      javax.faces.component.UIComponent, java.lang.String)
+     * @see
+     * javax.faces.convert.Converter#getAsObject(javax.faces.context.FacesContext
+     * , javax.faces.component.UIComponent, java.lang.String)
      */
     public Object getAsObject(FacesContext context, UIComponent component,
             String value) {
@@ -51,7 +51,7 @@ public class CalendarModeConverter extends AbstractConverter {
 
         value = value.toLowerCase();
 
-        Integer i = (Integer) CALENDAR_MODES.get(value);
+        Integer i = CALENDAR_MODES.get(value);
         if (i != null) {
             return i;
         }
@@ -63,25 +63,25 @@ public class CalendarModeConverter extends AbstractConverter {
     /*
      * (non-Javadoc)
      * 
-     * @see javax.faces.convert.Converter#getAsString(javax.faces.context.FacesContext,
-     *      javax.faces.component.UIComponent, java.lang.Object)
+     * @see
+     * javax.faces.convert.Converter#getAsString(javax.faces.context.FacesContext
+     * , javax.faces.component.UIComponent, java.lang.Object)
      */
     public String getAsString(FacesContext context, UIComponent component,
             Object value) {
 
         if (value == null) {
-            return (String) CALENDAR_MODES.get(DEFAULT_CALENDAR_MODE);
+            value = DEFAULT_CALENDAR_MODE;
         }
 
         if ((value instanceof Integer) == false) {
             throw new IllegalArgumentException("Value must be an Integer !");
         }
 
-        for (Iterator it = CALENDAR_MODES.entrySet().iterator(); it.hasNext();) {
-            Map.Entry entry = (Map.Entry) it.next();
+        for (Map.Entry<String, Integer> entry : CALENDAR_MODES.entrySet()) {
 
             if (value.equals(entry.getValue())) {
-                return (String) entry.getKey();
+                return entry.getKey();
             }
         }
 

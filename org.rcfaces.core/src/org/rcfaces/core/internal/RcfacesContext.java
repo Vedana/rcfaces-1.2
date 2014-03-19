@@ -41,8 +41,6 @@ import org.rcfaces.core.internal.version.IResourceVersionHandler;
  * @version $Revision$ $Date$
  */
 public abstract class RcfacesContext {
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory.getLog(RcfacesContext.class);
 
     private static final String CAMELIA_CONTEXT_PROPERTY = "org.rcfaces.core.internal.CAMELIA_CONTEXT";
@@ -93,8 +91,15 @@ public abstract class RcfacesContext {
         isJSF1_2 = is1_2;
     }
 
+<<<<<<< HEAD
     protected static final String CAMELIA_CONFIG_FILES_PARAMETER = Constants
             .getPackagePrefix() + ".CONFIG_FILES";
+=======
+    public static final String RCFACES_CONFIG_FILES_PARAMETER = Constants
+            .getPackagePrefix() + ".CONFIG_FILES";
+
+    public static final String RCFACES_CONFIG_FILENAME = "rcfaces-config.xml";
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 
     protected static final String LISTENER_MANAGER_STRATEGY_PARAMETER = Constants
             .getPackagePrefix() + ".LISTENER_MANAGER_STRATEGY";
@@ -102,7 +107,6 @@ public abstract class RcfacesContext {
     protected static final String APPLICATION_VERSION_PROPERTY = "org.rcfaces.core.internal.APPLICATION_VERSION";
 
     private static final Lifecycle EMPTY_LIFECYCLE = new Lifecycle() {
-        private static final String REVISION = "$Revision$";
 
         @Override
         public void addPhaseListener(PhaseListener listener) {
@@ -142,7 +146,7 @@ public abstract class RcfacesContext {
             }
         }
 
-        Map applicationMap = facesContext.getExternalContext()
+        Map<String, Object> applicationMap = facesContext.getExternalContext()
                 .getApplicationMap();
 
         RcfacesContext cameliaContext;

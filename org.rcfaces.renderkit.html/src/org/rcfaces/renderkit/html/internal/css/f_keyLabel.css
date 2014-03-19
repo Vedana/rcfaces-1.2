@@ -12,7 +12,8 @@
  
 .f_keyLabel,
 .f_keyLabel_item {
-	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+
 	padding: 0;
 	margin: 0;
 	border: 0;
@@ -21,9 +22,6 @@
 	list-style-image: none;
 	list-style-position: outside;
 	list-style-type: none;
-}
-
-.f_keyLabel {
 }
 
 .f_keyLabel_item {
@@ -39,6 +37,8 @@
 	padding-left: 0;
 }
 
+/*
 .f_keyLabel_item_last {
 }
+*/
  

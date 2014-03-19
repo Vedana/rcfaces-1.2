@@ -1,7 +1,6 @@
 package org.rcfaces.renderkit.html.internal.taglib;
 
 import javax.faces.component.UIComponent;
-import org.rcfaces.core.internal.component.Properties;
 import javax.servlet.jsp.JspException;
 import org.apache.commons.logging.LogFactory;
 import javax.servlet.jsp.tagext.Tag;
@@ -14,6 +13,7 @@ import org.rcfaces.renderkit.html.component.JavaScriptComponent;
 import org.apache.commons.logging.Log;
 import javax.faces.component.UIViewRoot;
 import org.rcfaces.core.internal.tools.ListenersTools1_2;
+import org.rcfaces.renderkit.html.component.Properties;
 import org.rcfaces.core.component.capability.ITextCapability;
 
 public class JavaScriptTag extends CameliaTag implements Tag {
@@ -33,35 +33,35 @@ public class JavaScriptTag extends CameliaTag implements Tag {
 		return JavaScriptComponent.COMPONENT_TYPE;
 	}
 
-	public final void setText(ValueExpression text) {
+	public void setText(ValueExpression text) {
 		this.text = text;
 	}
 
-	public final void setUserAgent(ValueExpression userAgent) {
+	public void setUserAgent(ValueExpression userAgent) {
 		this.userAgent = userAgent;
 	}
 
-	public final void setSrc(ValueExpression src) {
+	public void setSrc(ValueExpression src) {
 		this.src = src;
 	}
 
-	public final void setSrcCharSet(ValueExpression srcCharSet) {
+	public void setSrcCharSet(ValueExpression srcCharSet) {
 		this.srcCharSet = srcCharSet;
 	}
 
-	public final void setRequiredFiles(ValueExpression requiredFiles) {
+	public void setRequiredFiles(ValueExpression requiredFiles) {
 		this.requiredFiles = requiredFiles;
 	}
 
-	public final void setRequiredClasses(ValueExpression requiredClasses) {
+	public void setRequiredClasses(ValueExpression requiredClasses) {
 		this.requiredClasses = requiredClasses;
 	}
 
-	public final void setRequiredModules(ValueExpression requiredModules) {
+	public void setRequiredModules(ValueExpression requiredModules) {
 		this.requiredModules = requiredModules;
 	}
 
-	public final void setRequiredSets(ValueExpression requiredSets) {
+	public void setRequiredSets(ValueExpression requiredSets) {
 		this.requiredSets = requiredSets;
 	}
 

@@ -14,5 +14,5 @@ import org.rcfaces.core.lang.provider.ISelectionProvider;
  */
 public interface ISelectedValuesCapability extends ISelectionProvider {
 
-    Class getSelectedValuesType(FacesContext facesContext);
+    Class< ? > getSelectedValuesType(FacesContext facesContext);
 }

@@ -41,79 +41,79 @@ public class ComboGridTag extends KeyEntryTag implements Tag {
 		return ComboGridComponent.COMPONENT_TYPE;
 	}
 
-	public final void setAdditionalInformationListener(ValueExpression additionalInformationListeners) {
+	public void setAdditionalInformationListener(ValueExpression additionalInformationListeners) {
 		this.additionalInformationListeners = additionalInformationListeners;
 	}
 
-	public final void setAdditionalInformationValues(ValueExpression additionalInformationValues) {
+	public void setAdditionalInformationValues(ValueExpression additionalInformationValues) {
 		this.additionalInformationValues = additionalInformationValues;
 	}
 
-	public final void setClientAdditionalInformationFullState(ValueExpression clientAdditionalInformationFullState) {
+	public void setClientAdditionalInformationFullState(ValueExpression clientAdditionalInformationFullState) {
 		this.clientAdditionalInformationFullState = clientAdditionalInformationFullState;
 	}
 
-	public final void setAdditionalInformationCardinality(ValueExpression additionalInformationCardinality) {
+	public void setAdditionalInformationCardinality(ValueExpression additionalInformationCardinality) {
 		this.additionalInformationCardinality = additionalInformationCardinality;
 	}
 
-	public final void setRowStyleClass(ValueExpression rowStyleClass) {
+	public void setRowStyleClass(ValueExpression rowStyleClass) {
 		this.rowStyleClass = rowStyleClass;
 	}
 
-	public final void setManyResultsMessage(ValueExpression manyResultsMessage) {
+	public void setManyResultsMessage(ValueExpression manyResultsMessage) {
 		this.manyResultsMessage = manyResultsMessage;
 	}
 
-	public final void setMessage(ValueExpression message) {
+	public void setMessage(ValueExpression message) {
 		this.message = message;
 	}
 
-	public final void setOneResultMessage(ValueExpression oneResultMessage) {
+	public void setOneResultMessage(ValueExpression oneResultMessage) {
 		this.oneResultMessage = oneResultMessage;
 	}
 
-	public final void setZeroResultMessage(ValueExpression zeroResultMessage) {
+	public void setZeroResultMessage(ValueExpression zeroResultMessage) {
 		this.zeroResultMessage = zeroResultMessage;
 	}
 
-	public final void setPaged(ValueExpression paged) {
+	public void setPaged(ValueExpression paged) {
 		this.paged = paged;
 	}
 
-	public final void setHeaderVisible(ValueExpression headerVisible) {
+	public void setHeaderVisible(ValueExpression headerVisible) {
 		this.headerVisible = headerVisible;
 	}
 
-	public final void setPopupWidth(ValueExpression popupWidth) {
+	public void setPopupWidth(ValueExpression popupWidth) {
 		this.popupWidth = popupWidth;
 	}
 
-	public final void setPopupHeight(ValueExpression popupHeight) {
+	public void setPopupHeight(ValueExpression popupHeight) {
 		this.popupHeight = popupHeight;
 	}
 
-	public final void setPagerStyleClass(ValueExpression pagerStyleClass) {
+	public void setPagerStyleClass(ValueExpression pagerStyleClass) {
 		this.pagerStyleClass = pagerStyleClass;
 	}
 
-	public final void setPagerLookId(ValueExpression pagerLookId) {
+	public void setPagerLookId(ValueExpression pagerLookId) {
 		this.pagerLookId = pagerLookId;
 	}
 
-	public final void setPopupStyleClass(ValueExpression popupStyleClass) {
+	public void setPopupStyleClass(ValueExpression popupStyleClass) {
 		this.popupStyleClass = popupStyleClass;
 	}
 
-	public final void setGridStyleClass(ValueExpression gridStyleClass) {
+	public void setGridStyleClass(ValueExpression gridStyleClass) {
 		this.gridStyleClass = gridStyleClass;
 	}
 
-	public final void setGridLookId(ValueExpression gridLookId) {
+	public void setGridLookId(ValueExpression gridLookId) {
 		this.gridLookId = gridLookId;
 	}
 
-	public final void setSearchFieldVisible(ValueExpression searchFieldVisible) {
+	public void setSearchFieldVisible(ValueExpression searchFieldVisible) {
 		this.searchFieldVisible = searchFieldVisible;
 	}
 

@@ -14,7 +14,8 @@ import org.rcfaces.core.component.ComponentsColumnComponent;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public interface IComponentsColumnIterator extends IComponentIterator {
+public interface IComponentsColumnIterator extends
+        IComponentIterator<ComponentsColumnComponent> {
 
     /**
      * Returns the next ComponentsColumnComponent in the iteration. Calling this

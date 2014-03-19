@@ -19,16 +19,16 @@ import org.rcfaces.core.internal.util.ComponentIterators;
  * @version $Revision$ $Date$
  */
 public class ToolBarTools {
-    private static final String REVISION = "$Revision$";
 
     private static final IToolItemIterator EMPTY_TOOL_ITEM_ITERATOR = new ToolItemListIterator(
-            Collections.EMPTY_LIST);
+            Collections.<ToolItemComponent> emptyList());
 
     private static final IToolFolderIterator EMPTY_TOOL_FOLDER_ITERATOR = new ToolFolderListIterator(
-            Collections.EMPTY_LIST);
+            Collections.<ToolFolderComponent> emptyList());
 
     public static IToolItemIterator listToolItems(ToolFolderComponent component) {
-        List list = ComponentIterators.list(component, ToolItemComponent.class);
+        List<ToolItemComponent> list = ComponentIterators.list(component,
+                ToolItemComponent.class);
         if (list.isEmpty()) {
             return EMPTY_TOOL_ITEM_ITERATOR;
         }
@@ -37,7 +37,7 @@ public class ToolBarTools {
     }
 
     public static IToolFolderIterator listToolFolders(ToolBarComponent component) {
-        List list = ComponentIterators.list(component,
+        List<ToolFolderComponent> list = ComponentIterators.list(component,
                 ToolFolderComponent.class);
         if (list.isEmpty()) {
             return EMPTY_TOOL_FOLDER_ITERATOR;
@@ -52,16 +52,15 @@ public class ToolBarTools {
      * @version $Revision$ $Date$
      */
     private static final class ToolItemListIterator extends
-            ComponentIterators.ComponentListIterator implements
-            IToolItemIterator {
-        private static final String REVISION = "$Revision$";
+            ComponentIterators.ComponentListIterator<ToolItemComponent>
+            implements IToolItemIterator {
 
-        public ToolItemListIterator(List list) {
+        public ToolItemListIterator(List<ToolItemComponent> list) {
             super(list);
         }
 
         public final ToolItemComponent next() {
-            return (ToolItemComponent) nextComponent();
+            return nextComponent();
         }
 
         public ToolItemComponent[] toArray() {
@@ -75,16 +74,15 @@ public class ToolBarTools {
      * @version $Revision$ $Date$
      */
     private static final class ToolFolderListIterator extends
-            ComponentIterators.ComponentListIterator implements
-            IToolFolderIterator {
-        private static final String REVISION = "$Revision$";
+            ComponentIterators.ComponentListIterator<ToolFolderComponent>
+            implements IToolFolderIterator {
 
-        public ToolFolderListIterator(List list) {
+        public ToolFolderListIterator(List<ToolFolderComponent> list) {
             super(list);
         }
 
         public final ToolFolderComponent next() {
-            return (ToolFolderComponent) nextComponent();
+            return nextComponent();
         }
 
         public ToolFolderComponent[] toArray() {

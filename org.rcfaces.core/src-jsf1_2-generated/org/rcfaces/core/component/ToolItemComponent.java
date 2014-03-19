@@ -2,6 +2,8 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IInputTypeCapability;
+import org.rcfaces.core.internal.converter.TextPositionConverter
+			;
 import org.rcfaces.core.component.capability.IRadioGroupCapability;
 import java.lang.String;
 import org.apache.commons.logging.LogFactory;
@@ -23,7 +25,6 @@ import org.rcfaces.core.component.capability.IStyleClassCapability;
 import java.util.Set;
 import java.util.Arrays;
 import org.rcfaces.core.component.ToolFolderComponent;
-import org.rcfaces.core.internal.converter.TextPositionConverter;
 
 /**
  * <b>EXPERIMENTAL</b>

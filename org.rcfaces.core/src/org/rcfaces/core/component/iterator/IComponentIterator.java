@@ -14,7 +14,7 @@ import javax.faces.component.UIComponent;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public interface IComponentIterator {
+public interface IComponentIterator<T> {
 
     /**
      * Returns the number of components in this list.
@@ -41,7 +41,7 @@ public interface IComponentIterator {
      * @exception NoSuchElementException
      *                iteration has no more component.
      */
-    UIComponent nextComponent();
+    T nextComponent();
 
     /**
      * Returns an array containing all of the components in this list in proper

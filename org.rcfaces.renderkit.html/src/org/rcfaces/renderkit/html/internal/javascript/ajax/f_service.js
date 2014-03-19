@@ -66,8 +66,17 @@ var __statics= {
 	/**
 	 * @field private static Number
 	 */
-	_Id: 0
-	
+	_Id: 0,
+
+	/**
+	 * @field private static final
+	 */
+	_EVENTS: {
+		error: f_event.ERROR,
+		propertyChange: f_event.PROPERTY_CHANGE,
+		user: f_event.USER
+	}
+
 };
 
 var __members={
@@ -75,7 +84,12 @@ var __members={
 	f_service: function() {
 		this.f_super(arguments);
 		
-		this._serviceId=f_core.GetAttribute(this, "v:serviceId");
+		this._serviceId=f_core.GetAttributeNS(this, "serviceId");
+		
+		var events=f_core.GetAttributeNS(this, "events");
+		if (events) {
+			this.f_initEventAtts(f_service._EVENTS, events);
+		}
 	},
 	f_finalize: function() {
 		// this._serviceId=undefined;  // string
@@ -136,6 +150,11 @@ var __members={
 	 * @return String Request identifier.
 	 */
 	f_asyncCall: function(resultCallback, parameter, progressMonitor, contentSizePercent) {
+		
+		if (f_core.DesignerMode) {
+			throw new Error("Designer mode enabled");
+		}
+		
 		var requestId=this._allocateRequestId();
 		
 		this._setRequestState(requestId, f_service.INIT_STATE);
@@ -157,17 +176,21 @@ var __members={
 	 * @return any Result of request.
 	 */
 	f_syncCall: function(parameter, progressMonitor) {
+		
+		if (f_core.DesignerMode) {
+			throw new Error("Designer mode enabled");
+		}
+
 		var requestId=this._allocateRequestId();
 		
-		var subProgressMonitor;
+		var subProgressMonitor=undefined;
 		if (progressMonitor) {
 			subProgressMonitor=f_subProgressMonitor.f_newInstance(progressMonitor, f_service._TOTAL_WORK_PROGRESS_MONITOR);
 		}
 		
 		this._setRequestState(requestId, f_service.INIT_STATE);
 
-		var url=f_env.GetViewURI();
-		var request=new f_httpRequest(this, url);
+		var request=new f_httpRequest(this);
 		var params=this._prepareRequest(request, requestId, parameter);
 
 		// var ret=
@@ -205,7 +228,6 @@ var __members={
 			
 			var content=request.f_getResponse();
 	
-			var state;
 			if (responseContentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)>=0) {
 				// Il nous faut un retour ... on a pas trop le choix concernant l'Eval		
 				content=f_core.WindowScopeEval(content);
@@ -230,7 +252,7 @@ var __members={
 	 * @method private
 	 */
 	_prepareRequest: function(request, requestId, parameter) {
-		var params;
+		var params=undefined;
 		var type;		
 				
 		if (parameter==null) {
@@ -255,7 +277,7 @@ var __members={
 			params.data=String(parameter);
 		}
 	
-		if (!type) {
+		if (type && params) {
 			var filterExpression=this.fa_getSerializedPropertiesExpression();
 			if (filterExpression) {
 				params.filterExpression=filterExpression;
@@ -276,11 +298,10 @@ var __members={
 	 * @return void
 	 */
 	_asyncCallServer: function(requestId, resultCallback, parameter, progressMonitor, showLoading) {
-		var url=f_env.GetViewURI();
-		var request=new f_httpRequest(this, url);
+		var request=new f_httpRequest(this);
 		var params=this._prepareRequest(request, requestId, parameter);
 		
-		var subProgressMonitor;
+		var subProgressMonitor=undefined;
 		if (progressMonitor) {
 			var total=(showLoading)?f_service._TOTAL_WORK_PROGRESS_MONITOR:1;
 
@@ -297,7 +318,7 @@ var __members={
 			onInit: function(request) {						
 				service._setRequestState(requestId, f_service.REQUESTING_STATE);
 				
-				if (showLoading) {
+				if (showLoading && subProgressMonitor) {
 					subProgressMonitor.f_work(f_service._INIT_PROGRESS_MONITOR);
 				}
 			},
@@ -312,7 +333,7 @@ var __members={
 							
 				service._setRequestState(requestId, f_service.LOADING_STATE);
 
-				if (showLoading) {
+				if (showLoading && subProgressMonitor) {
 					subProgressMonitor.f_work(f_service._LOADING_PROGRESS_MONITOR);
 				}
 			},
@@ -320,7 +341,7 @@ var __members={
 			 * @method public
 			 */
 	 		onLoad: function(request, content, contentType) {
-				if (showLoading) {
+				if (showLoading && subProgressMonitor) {
 					subProgressMonitor.f_work(f_service._LOADED_PROGRESS_MONITOR);
 				}
 

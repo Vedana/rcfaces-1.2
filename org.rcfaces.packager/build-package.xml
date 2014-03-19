@@ -85,7 +85,7 @@
 			<fileset dir="${build}/js_optimizer*"/>
 		</delete>
 
-		<java taskname="OptimizeJs Level1" classname="com.vedana.camelia.generator.js.parser.JsOptimizer">
+		<java taskname="OptimizeJs Level1" classname="com.vedana.camelia.generator.js.parser.JsOptimizer" failonerror="true">
 			<classpath refid="generator.classpath" />
 			<classpath refid="commons.classpath" />
 
@@ -111,7 +111,7 @@
 			<arg value="${integration.type}${integrationVersion}" />
 		</java>
 
-		<java taskname="OptimizeJs Level2" classname="com.vedana.camelia.generator.js.parser.JsOptimizer">
+		<java taskname="OptimizeJs Level2" classname="com.vedana.camelia.generator.js.parser.JsOptimizer" failonerror="true">
 			<classpath refid="generator.classpath" />
 			<classpath refid="commons.classpath" />
 
@@ -142,7 +142,7 @@
 
 		</java>
 
-		<java taskname="OptimizeJs Level3" classname="com.vedana.camelia.generator.js.parser.JsOptimizer">
+		<java taskname="OptimizeJs Level3" classname="com.vedana.camelia.generator.js.parser.JsOptimizer" failonerror="true">
 			<classpath refid="generator.classpath" />
 			<classpath refid="commons.classpath" />
 
@@ -380,7 +380,7 @@
 			</fileset>
 		</path>
 
-		<java taskname="Prepare bootStrap" classname="${generator.classname}">
+		<java taskname="Prepare bootStrap" classname="${generator.classname}" failonerror="true">
 			<classpath refid="generator.classpath" />
 			<classpath refid="generated.classpath" />
 
@@ -411,9 +411,6 @@
 			<arg path="${build.version.path}/src-svg-bootstrap" />
 
 			<arg value="+renderKitPrefix:svg" />
-			<arg value="svg" />
-
-			<arg value="+renderKitRender:svg" />
 			<arg value="svg" />
 		</java>
 
@@ -446,7 +443,7 @@
 		<echo message="  html-model=${metadas.xml.html}" />
 		<echo message="  svg-model=${metadas.xml.svg}" />
 
-		<java taskname="Build template" classname="${generator.classname}">
+		<java taskname="Build template" classname="${generator.classname}" failonerror="true">
 			<classpath refid="generator.classpath" />
 			<classpath refid="generated.classpath" />
 
@@ -753,8 +750,29 @@
 		<copy todir="${build.version.path}/bin-${pass.type}">
 			<fileset dir="${build.version.path}/src-${pass.type}">
 				<exclude name="**/*.java" />
+				<exclude name="**/*.css" />
 			</fileset>
 		</copy>
+		
+		<java taskname="processCSS" failonerror="true" classname="org.rcfaces.css.internal.CssSteadyStateParser" fork="true">
+			<classpath>
+				<path refid="generator.classpath" />
+				<fileset dir="${build-core}/lib">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${build-core}/lib/jsf${jsf.version}">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${pass.build}/lib">
+					<include name="*.jar" />
+				</fileset>
+				<path path="${build.version.path}/bin-core" />
+			</classpath>
+	
+			<arg path="${build.version.path}/bin-${pass.type}/org/rcfaces/renderkit/${pass.type}/internal/css" />
+			<arg path="${build.version.path}/src-${pass.type}/org/rcfaces/renderkit/${pass.type}/internal/css" />
+		</java>
+
 
 		<!-- ### le JAR #### -->
 		
@@ -1012,6 +1030,74 @@
 		
 		<echo message="BuildId:   M${build.number}" />
 
+	</target>
+	
+	<target name="localMakeComponent">
+		<property name="jsf.version" value="1_2" />
+		<property name="base-core" location="${basedir}/../org.rcfaces.core" />
+		<property name="base-html" location="${basedir}/../org.rcfaces.renderkit.html" />
+		<property name="base-imageIO" location="${basedir}/../org.rcfaces.image.imageIO" />
+		<property name="base-svg" location="${basedir}/../org.rcfaces.renderkit.svg" />
+		<property name="base-jfreechart" location="${basedir}/../org.rcfaces.jfreechart" />
+
+		<property name="metadas.xml.core" location="${base-core}/metadatas" />
+		<property name="metadas.xml.html" location="${base-html}/metadatas" />
+		<property name="metadas.xml.svg" location="${base-svg}/metadatas" />
+
+		<property name="generator.classname" value="com.vedana.camelia.generator.components_1_2.CameliaGenerator1_2" />
+
+		<path id="generated.classpath">
+			<path location="${base-core}/bin" />
+			<path location="${base-html}/bin" />
+			<path location="${base-imageIO}/bin" />
+			<path location="${base-svg}/bin" />
+			<path location="${base-jfreechart}/bin" />
+
+			<fileset dir="${base-core}/lib">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${base-core}/lib/jsf${jsf.version}">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+
+		
+		<java taskname="Build template" classname="${generator.classname}" failonerror="true">
+			<classpath refid="generator.classpath" />
+			<classpath refid="generated.classpath" />
+
+			<arg value="+template" />
+			<arg path="${metadas.xml.core}" />
+
+			<arg value="+repository" />
+			<arg path="${metadas.xml.core}" />
+
+			<arg value="+repository" />
+			<arg path="${metadas.xml.html}" />
+
+			<arg value="+repository" />
+			<arg path="${metadas.xml.svg}" />
+
+			<arg value="+classPath" />
+			<arg pathref="generated.classpath" />
+
+			<arg value="+renderKit:core" />
+			<arg path="${base-core}/src-jsf${jsf.version}-generated" />
+
+			<arg value="+renderKit:html" />
+			<arg path="${base-html}/src-jsf${jsf.version}-generated" />
+
+			<arg value="+renderKit:svg" />
+			<arg path="${base-svg}/src-jsf${jsf.version}-generated" />
+
+			<arg value="+renderKitPrefix:svg" />
+			<arg value="svg" />
+		</java>
+		
+		<eclipse.refreshLocal resource="${base-core}/src-jsf${jsf.version}-generated" depth="infinite" />
+		<eclipse.refreshLocal resource="${base-html}/src-jsf${jsf.version}-generated" depth="infinite" />
+		<eclipse.refreshLocal resource="${base-svg}/src-jsf${jsf.version}-generated" depth="infinite" />
+		
 	</target>
 
 </project>

@@ -28,7 +28,6 @@ import org.rcfaces.core.internal.renderkit.WriterException;
  */
 public abstract class AbstractHtmlWriter extends
         AbstractHtmlComponentRenderContext implements IHtmlWriter {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(AbstractHtmlWriter.class);
 
@@ -44,6 +43,8 @@ public abstract class AbstractHtmlWriter extends
 
     private static final String SUB_COMPONENTS_IDS_PROPERTY = "org.rcfaces.core.internal.writer.SUB_COMPONENTS_IDS";
 
+    private static final String RCFACES_NS = "v";
+
     static {
         if (VERIFY_TAG_STACK) {
             LOG.debug("Verify tags stack enabled.");
@@ -56,12 +57,13 @@ public abstract class AbstractHtmlWriter extends
 
     private ICssWriter cssWriter;
 
-    private Set subComponents;
+    private Set<String> subComponents;
 
     public AbstractHtmlWriter(AbstractRenderContext renderContext) {
         this(renderContext, renderContext.getFacesContext().getResponseWriter());
     }
 
+    @SuppressWarnings("unchecked")
     protected AbstractHtmlWriter(AbstractRenderContext renderContext,
             ResponseWriter responseWriter) {
         super(renderContext.getFacesContext(), renderContext.getComponent(),
@@ -71,7 +73,7 @@ public abstract class AbstractHtmlWriter extends
 
         this.responseWriter = responseWriter;
 
-        subComponents = (Set) ((ITransientAttributesManager) renderContext
+        subComponents = (Set<String>) ((ITransientAttributesManager) renderContext
                 .getComponent())
                 .getTransientAttribute(SUB_COMPONENTS_IDS_PROPERTY);
     }
@@ -259,15 +261,17 @@ public abstract class AbstractHtmlWriter extends
         return this;
     }
 
+    @SuppressWarnings("unchecked")
     public ISgmlWriter startElement(String name, UIComponent component)
             throws WriterException {
         closeCssWriter();
 
         if (VERIFY_TAG_STACK) {
-            Stack tagStack = (Stack) getFacesContext().getExternalContext()
-                    .getRequestMap().get(TAG_STACK_PROPERTY);
+            Stack<Object> tagStack = (Stack<Object>) getFacesContext()
+                    .getExternalContext().getRequestMap()
+                    .get(TAG_STACK_PROPERTY);
             if (tagStack == null) {
-                tagStack = new Stack();
+                tagStack = new Stack<Object>();
 
                 getFacesContext().getExternalContext().getRequestMap()
                         .put(TAG_STACK_PROPERTY, tagStack);
@@ -500,7 +504,7 @@ public abstract class AbstractHtmlWriter extends
     }
 
     public IHtmlWriter writeSrc(String src) throws WriterException {
-        writeAttribute("src", src);
+        writeURIAttribute("src", src);
 
         return this;
     }
@@ -573,7 +577,15 @@ public abstract class AbstractHtmlWriter extends
     }
 
     public IHtmlWriter writeHRef(String url) throws WriterException {
-        writeAttribute("href", url);
+        writeURIAttribute("href", url);
+
+        return this;
+    }
+
+    public IHtmlWriter writeHRef_JavascriptVoid0() throws WriterException {
+        writeURIAttribute("href", "javascript:void("
+                + ((HtmlRenderContext) renderContext).allocateJavaScriptVoid0()
+                + ")");
 
         return this;
     }
@@ -611,6 +623,7 @@ public abstract class AbstractHtmlWriter extends
         return this;
     }
 
+    @SuppressWarnings("unused")
     public IHtmlWriter writeRole(String role) throws WriterException {
         if (Constants.ACCESSIBILITY_ROLE_SUPPORT == false) {
             return this;
@@ -635,6 +648,12 @@ public abstract class AbstractHtmlWriter extends
     public IHtmlWriter writeAriaActivedescendant(String clientId)
             throws WriterException {
         writeAttribute("aria-activedescendant", clientId);
+        return this;
+    }
+
+    public IHtmlWriter writeAriaRequired(boolean required)
+            throws WriterException {
+        writeAttribute("aria-required", required);
         return this;
     }
 
@@ -696,7 +715,7 @@ public abstract class AbstractHtmlWriter extends
 
     public void addSubFocusableComponent(String subComponentClientId) {
         if (subComponents == null) {
-            subComponents = new HashSet(4);
+            subComponents = new HashSet<String>(4);
 
             ((ITransientAttributesManager) renderContext.getComponent())
                     .setTransientAttribute(SUB_COMPONENTS_IDS_PROPERTY,
@@ -713,7 +732,60 @@ public abstract class AbstractHtmlWriter extends
             return STRING_EMPTY_ARRAY;
         }
 
-        return (String[]) subComponents
-                .toArray(new String[subComponents.size()]);
+        return subComponents.toArray(new String[subComponents.size()]);
+    }
+
+    public String getRcfacesNamespace() {
+        return RCFACES_NS;
+    }
+
+    public String computeRcfacesNamespace(String name) {
+        return RCFACES_NS + ":" + name;
+    }
+
+    public IHtmlWriter writeAttributeNS(String name, String value)
+            throws WriterException {
+
+        writeAttribute(computeRcfacesNamespace(name), value);
+        return this;
+    }
+
+    public IHtmlWriter writeAttributeNS(String name, long value)
+            throws WriterException {
+
+        writeAttribute(computeRcfacesNamespace(name), value);
+        return this;
+    }
+
+    public IHtmlWriter writeAttributeNS(String name, boolean value)
+            throws WriterException {
+
+        writeAttribute(computeRcfacesNamespace(name), value);
+        return this;
+    }
+
+    public IHtmlWriter writeURIAttributeNS(String name, Object value)
+            throws WriterException {
+
+        writeURIAttribute(computeRcfacesNamespace(name), value);
+        return this;
+    }
+
+    public IHtmlWriter writeAttributeNS(String name, String[] values,
+            String separator) throws WriterException {
+
+        writeAttribute(computeRcfacesNamespace(name), values, separator);
+        return this;
+    }
+
+    public IHtmlWriter startElementNS(String name) throws WriterException {
+
+        startElement(computeRcfacesNamespace(name));
+        return this;
+    }
+
+    public IHtmlWriter endElementNS(String name) throws WriterException {
+        endElement(computeRcfacesNamespace(name));
+        return this;
     }
 }

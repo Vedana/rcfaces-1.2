@@ -24,7 +24,6 @@ import org.apache.commons.logging.LogFactory;
  */
 public class ClassLoaderResourceLoaderFactory extends
         AbstractResourceLoaderFactory {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(ClassLoaderResourceLoaderFactory.class);
@@ -44,7 +43,6 @@ public class ClassLoaderResourceLoaderFactory extends
      * @version $Revision$ $Date$
      */
     private static class ClassLoaderResourceLoader implements IResourceLoader {
-        private static final String REVISION = "$Revision$";
 
         private final ServletContext servletContext;
 
@@ -115,17 +113,15 @@ public class ClassLoaderResourceLoaderFactory extends
                 contentType = urlConnection.getContentType();
 
                 if (LOG.isDebugEnabled()) {
-                    LOG
-                            .debug("Resource '"
-                                    + resourceURL
-                                    + "' contentType='"
-                                    + contentType
-                                    + "' contentLength="
-                                    + contentLength
-                                    + " lastModified="
-                                    + ((lastModified > 0) ? new Date(
-                                            lastModified).toString() : String
-                                            .valueOf(lastModified)));
+                    LOG.debug("Resource '"
+                            + resourceURL
+                            + "' contentType='"
+                            + contentType
+                            + "' contentLength="
+                            + contentLength
+                            + " lastModified="
+                            + ((lastModified > 0) ? new Date(lastModified)
+                                    .toString() : String.valueOf(lastModified)));
                 }
 
             } catch (IOException ex) {

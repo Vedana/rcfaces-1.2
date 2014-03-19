@@ -4,9 +4,13 @@
  */
 package org.rcfaces.renderkit.html.internal;
 
+import java.util.Set;
+
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.lang.IContentFamily;
+import org.rcfaces.renderkit.html.internal.agent.IClientBrowser;
+import org.rcfaces.renderkit.html.internal.util.CarriageReturnNormalizerMode;
 
 /**
  * 
@@ -22,9 +26,7 @@ public interface IHtmlProcessContext extends IProcessContext {
             + ".SEPARATOR_CHAR";
 
     String USE_META_CONTENT_SCRIPT_TYPE_PARAMETER = Constants
-            .getPackagePrefix()
-
-            + ".USE_META_CONTENT_SCRIPT_TYPE";
+            .getPackagePrefix() + ".USE_META_CONTENT_SCRIPT_TYPE";
 
     String USE_META_CONTENT_STYLE_TYPE_PARAMETER = Constants.getPackagePrefix()
             + ".USE_META_CONTENT_STYLE_TYPE";
@@ -42,18 +44,29 @@ public interface IHtmlProcessContext extends IProcessContext {
             + ".client.DEBUG_MODE";
 
     String MULTI_WINDOW_MODE_APPLICATION_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".client.MULTI_WINDOW_MODE";
+            .getPackagePrefix() + ".client.MULTI_WINDOW_MODE";
 
     String PROFILER_MODE_APPLICATION_PARAMETER = Constants.getPackagePrefix()
             + ".client.PROFILER_MODE";
+
+    String SYSTEM_PARAMETERS_NAMES_APPLICATION_PARAMETER = Constants
+            .getPackagePrefix() + ".client.SYSTEM_PARAMETERS_NAMES";
+
+    String HTML_PROCESS_RULES_FORCED_PARAMETER = Constants.getPackagePrefix()
+            + ".PROCESS_RULES_FORCED";
 
     boolean isFlatIdentifierEnabled();
 
     String getStyleSheetURI(String uri, boolean containsContextPath);
 
+    String getModuleStyleSheetURI(String moduleName, String uri,
+            boolean containsContextPath);
+
     IContentAccessor getStyleSheetContentAccessor(String uri,
             IContentFamily contentType);
+
+    IContentAccessor getModuleStyleSheetContentAccessor(String moduleName,
+            String uri, IContentFamily contentType);
 
     String getNameSpaceURI();
 
@@ -64,6 +77,14 @@ public interface IHtmlProcessContext extends IProcessContext {
     boolean useScriptCData();
 
     IClientBrowser getClientBrowser();
+
+    Set<String> getSystemParametersNames();
+
+    boolean isHtmlEscapingDisabled();
+
+    Set<String> listCssProcessRulesForced();
+
+    CarriageReturnNormalizerMode getCarriageReturnNormalizerMode();
 
     // boolean keepDisabledState();
 }

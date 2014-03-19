@@ -22,7 +22,7 @@ var __members = {
 	f_isReadOnly: function() {
 		if (this._readOnly===undefined) {
 			// Appel depuis le constructor de l'objet !
-			this._readOnly=f_core.GetBooleanAttribute(this, "v:readOnly", false);
+			this._readOnly=f_core.GetBooleanAttributeNS(this, "readOnly", false);
 		}
 
 		return this._readOnly;
@@ -59,7 +59,7 @@ var __members = {
 	 * @return void
 	 */
 	fa_updateReadOnly: f_class.ABSTRACT
-}
+};
 
 new f_aspect("fa_readOnly", {
 	members: __members

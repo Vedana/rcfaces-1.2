@@ -28,6 +28,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlRequestContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.ISubInputClientIdRenderer;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -36,7 +37,6 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  */
 public class RadioButtonRenderer extends AbstractInputRenderer implements
         ISubInputClientIdRenderer {
-    private static final String REVISION = "$Revision$";
 
     protected static final String INPUT_STYLECLASS_SUFFIX = "_input";
 
@@ -60,14 +60,16 @@ public class RadioButtonRenderer extends AbstractInputRenderer implements
 
         FacesContext facesContext = componentRenderContext.getFacesContext();
 
-        htmlWriter.startElement(IHtmlWriter.LABEL);
+        htmlWriter.startElement(IHtmlWriter.SPAN);
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
         writeValidatorParameters(htmlWriter, radioButton);
 
         if (radioButton.isRequired()) {
-            htmlWriter.writeAttribute("v:required", true);
+            htmlWriter.writeAttributeNS("required", true);
+
+            htmlWriter.writeAriaRequired(true);
 
             htmlWriter.getJavaScriptEnableMode().enableOnSubmit();
         }
@@ -94,7 +96,7 @@ public class RadioButtonRenderer extends AbstractInputRenderer implements
             writeLabel(htmlWriter, radioButton, labelClassName, buttonId);
         }
 
-        htmlWriter.endElement(IHtmlWriter.LABEL);
+        htmlWriter.endElement(IHtmlWriter.SPAN);
 
         htmlWriter.getJavaScriptEnableMode().enableOnFocus();
 
@@ -136,13 +138,15 @@ public class RadioButtonRenderer extends AbstractInputRenderer implements
         /*
          * On se base sur le separator ! if (htmlWriter.isJavaScriptEnabled() ==
          * false) { // Pour le FOCUS, pour retrouver le composant parent !
-         * htmlWriter.writeAttribute("v:container", componentClientId); }
+         * htmlWriter.writeAttributeNS("container", componentClientId); }
          */
 
         String accessKey = radioButtonComponent.getAccessKey(facesContext);
         if (accessKey != null) {
             htmlWriter.writeAccessKey(accessKey);
         }
+
+        writeTabIndex(htmlWriter, radioButtonComponent);
 
         htmlWriter.endElement(IHtmlWriter.INPUT);
 
@@ -155,8 +159,7 @@ public class RadioButtonRenderer extends AbstractInputRenderer implements
                 htmlWriter.writeAutoComplete(IHtmlWriter.AUTOCOMPLETE_OFF);
 
                 String name = htmlWriter.getComponentRenderContext()
-                        .getComponentClientId()
-                        + "::value";
+                        .getComponentClientId() + "::value";
                 htmlWriter.writeName(name);
 
                 htmlWriter.writeValue(svalue);
@@ -169,14 +172,22 @@ public class RadioButtonRenderer extends AbstractInputRenderer implements
         return htmlWriter;
     }
 
+    protected IHtmlWriter writeUserInputAttributes(IHtmlWriter writer,
+            UIComponent component) throws WriterException {
+        return writer;
+    }
+
     protected IHtmlWriter writeLabel(IHtmlWriter htmlWriter,
             RadioButtonComponent button, String className,
             String componentClientId) throws WriterException {
-        htmlWriter.startElement(IHtmlWriter.SPAN);
+        htmlWriter.startElement(IHtmlWriter.LABEL);
 
         htmlWriter.writeId(componentClientId + TEXT_ID_SUFFIX);
         htmlWriter.writeClass(className);
         writeTextDirection(htmlWriter, button);
+
+        String inputId = componentClientId + INPUT_ID_SUFFIX;
+        htmlWriter.writeFor(inputId);
 
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
@@ -187,7 +198,7 @@ public class RadioButtonRenderer extends AbstractInputRenderer implements
         }
         HtmlTools.writeSpanAccessKey(htmlWriter, button, text, true);
 
-        htmlWriter.endElement(IHtmlWriter.SPAN);
+        htmlWriter.endElement(IHtmlWriter.LABEL);
 
         return htmlWriter;
     }
@@ -339,5 +350,12 @@ public class RadioButtonRenderer extends AbstractInputRenderer implements
     public String computeSubInputClientId(IRenderContext renderContext,
             UIComponent component, String clientId) {
         return clientId + INPUT_ID_SUFFIX;
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "required",
+                "container" });
     }
 }

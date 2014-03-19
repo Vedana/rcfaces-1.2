@@ -35,8 +35,10 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.service.IServicesRegistry;
+import org.rcfaces.core.internal.tools.CriteriaTools;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.model.DefaultSortedComponent;
+import org.rcfaces.core.model.ISelectedCriteria;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
@@ -52,7 +54,6 @@ import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
  * @version $Revision$ $Date$
  */
 public class ComponentsGridService extends AbstractHtmlService {
-    private static final String REVISION = "$Revision$";
 
     private static final String SERVICE_ID = Constants.getPackagePrefix()
             + ".ComponentsGrid";
@@ -179,6 +180,13 @@ public class ComponentsGridService extends AbstractHtmlService {
                 }
             }
 
+			ISelectedCriteria[] criteriaConfigs = null;
+			String criteria_s = (String) parameters.get("criteria");
+			if (criteria_s != null) {
+				criteriaConfigs = CriteriaTools.computeCriteriaConfigs(
+						facesContext, dgc, criteria_s);
+			}
+
             ComponentsGridRenderer dgr = getComponentsGridRenderer(
                     facesContext, dgc);
             if (dgr == null) {
@@ -223,7 +231,7 @@ public class ComponentsGridService extends AbstractHtmlService {
                 writeJs(facesContext, printWriter, dgc, componentsGridId, dgr,
                         rowIndex, forcedRows, sortedComponents,
                         filterExpression, showAdditional, hideAdditional,
-                        unknownRowCount);
+						unknownRowCount, criteriaConfigs);
 
             } catch (IOException ex) {
                 throw new FacesException(
@@ -290,7 +298,8 @@ public class ComponentsGridService extends AbstractHtmlService {
             ComponentsGridRenderer dgr, int rowIndex, int forcedRows,
             ISortedComponent sortedComponents[], String filterExpression,
             String showAdditional, String hideAdditional,
-            boolean unknownRowCount) throws IOException {
+			boolean unknownRowCount, ISelectedCriteria[] criteriaContainers)
+			throws IOException {
 
         IProcessContext processContext = HtmlProcessContextImpl
                 .getHtmlProcessContext(facesContext);
@@ -311,12 +320,12 @@ public class ComponentsGridService extends AbstractHtmlService {
 
         String varId = jsWriter.getComponentVarName();
 
-        jsWriter.write("var ").write(varId).write('=').writeCall("f_core",
-                "GetElementByClientId").writeString(componentClientId).writeln(
-                ", document);");
+		jsWriter.write("var ").write(varId).write('=')
+				.writeCall("f_core", "GetElementByClientId")
+				.writeString(componentClientId).writeln(", document);");
 
-        jsWriter.writeMethodCall("f_startNewPage").writeInt(rowIndex).writeln(
-                ");");
+		jsWriter.writeMethodCall("f_startNewPage").writeInt(rowIndex)
+				.writeln(");");
 
         ResponseWriter oldResponseWriter = facesContext.getResponseWriter();
         ResponseStream oldResponseStream = facesContext.getResponseStream();
@@ -342,10 +351,11 @@ public class ComponentsGridService extends AbstractHtmlService {
             // get(facesContext)
 
             ComponentsGridRenderer.ComponentsGridRenderContext listContext = dgr
-                    .createComponentsGridContext(processContext, jsWriter
-                            .getJavaScriptRenderContext(), dgc, rowIndex,
-                            forcedRows, sortedComponents, filterExpression,
-                            showAdditional, hideAdditional);
+					.createComponentsGridContext(processContext,
+							jsWriter.getJavaScriptRenderContext(), dgc,
+							rowIndex, forcedRows, sortedComponents,
+							filterExpression, showAdditional, hideAdditional,
+							criteriaContainers);
 
             int rowCount = dgr.encodeChildren(jsWriter, listContext, true,
                     unknownRowCount);
@@ -357,7 +367,13 @@ public class ComponentsGridService extends AbstractHtmlService {
 
             jsWriter.writeMethodCall("f_updateNewPage").writeln(");");
 
-            saveView(facesContext);
+			String viewStateId = saveViewAndReturnStateId(facesContext);
+
+			if (viewStateId != null) {
+				jsWriter.writeCall("f_classLoader", "ChangeJsfViewId")
+						.write(varId).write(',').writeString(viewStateId)
+						.write(')');
+			}
 
         } finally {
 
@@ -377,15 +393,6 @@ public class ComponentsGridService extends AbstractHtmlService {
 
             printWriter.write(cw.toCharArray());
         }
-    }
-
-    private void saveView(FacesContext facesContext) throws IOException {
-        StateManager stateManager = facesContext.getApplication()
-                .getStateManager();
-
-        Object state = stateManager.saveView(facesContext);
-
-        stateManager.writeState(facesContext, state);
     }
 
     public void setupComponent(IComponentRenderContext componentRenderContext) {

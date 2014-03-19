@@ -18,6 +18,8 @@ public class ItemsListTag extends AbstractInputTag implements Tag {
 
 	private static final Log LOG=LogFactory.getLog(ItemsListTag.class);
 
+	private ValueExpression headingZone;
+	private ValueExpression headingLevel;
 	private ValueExpression doubleClickListeners;
 	private ValueExpression textPosition;
 	private ValueExpression borderType;
@@ -39,71 +41,79 @@ public class ItemsListTag extends AbstractInputTag implements Tag {
 		return ItemsListComponent.COMPONENT_TYPE;
 	}
 
-	public final void setDoubleClickListener(ValueExpression doubleClickListeners) {
+	public void setHeadingZone(ValueExpression headingZone) {
+		this.headingZone = headingZone;
+	}
+
+	public void setHeadingLevel(ValueExpression headingLevel) {
+		this.headingLevel = headingLevel;
+	}
+
+	public void setDoubleClickListener(ValueExpression doubleClickListeners) {
 		this.doubleClickListeners = doubleClickListeners;
 	}
 
-	public final void setTextPosition(ValueExpression textPosition) {
+	public void setTextPosition(ValueExpression textPosition) {
 		this.textPosition = textPosition;
 	}
 
-	public final void setBorderType(ValueExpression borderType) {
+	public void setBorderType(ValueExpression borderType) {
 		this.borderType = borderType;
 	}
 
-	public final void setSelectionListener(ValueExpression selectionListeners) {
+	public void setSelectionListener(ValueExpression selectionListeners) {
 		this.selectionListeners = selectionListeners;
 	}
 
-	public final void setCheckListener(ValueExpression checkListeners) {
+	public void setCheckListener(ValueExpression checkListeners) {
 		this.checkListeners = checkListeners;
 	}
 
-	public final void setCheckedValues(ValueExpression checkedValues) {
+	public void setCheckedValues(ValueExpression checkedValues) {
 		this.checkedValues = checkedValues;
 	}
 
-	public final void setReadOnly(ValueExpression readOnly) {
+	public void setReadOnly(ValueExpression readOnly) {
 		this.readOnly = readOnly;
 	}
 
-	public final void setDefaultImageURL(ValueExpression defaultImageURL) {
+	public void setDefaultImageURL(ValueExpression defaultImageURL) {
 		this.defaultImageURL = defaultImageURL;
 	}
 
-	public final void setDefaultSelectedImageURL(ValueExpression defaultSelectedImageURL) {
+	public void setDefaultSelectedImageURL(ValueExpression defaultSelectedImageURL) {
 		this.defaultSelectedImageURL = defaultSelectedImageURL;
 	}
 
-	public final void setDefaultHoverImageURL(ValueExpression defaultHoverImageURL) {
+	public void setDefaultHoverImageURL(ValueExpression defaultHoverImageURL) {
 		this.defaultHoverImageURL = defaultHoverImageURL;
 	}
 
-	public final void setDefaultDisabledImageURL(ValueExpression defaultDisabledImageURL) {
+	public void setDefaultDisabledImageURL(ValueExpression defaultDisabledImageURL) {
 		this.defaultDisabledImageURL = defaultDisabledImageURL;
 	}
 
-	public final void setDefaultItemInputType(ValueExpression defaultItemInputType) {
+	public void setDefaultItemInputType(ValueExpression defaultItemInputType) {
 		this.defaultItemInputType = defaultItemInputType;
 	}
 
-	public final void setDefaultItemLookId(ValueExpression defaultItemLookId) {
+	public void setDefaultItemLookId(ValueExpression defaultItemLookId) {
 		this.defaultItemLookId = defaultItemLookId;
 	}
 
-	public final void setDefaultItemStyleClass(ValueExpression defaultItemStyleClass) {
+	public void setDefaultItemStyleClass(ValueExpression defaultItemStyleClass) {
 		this.defaultItemStyleClass = defaultItemStyleClass;
 	}
 
-	public final void setDefaultItemGroupName(ValueExpression defaultItemGroupName) {
+	public void setDefaultItemGroupName(ValueExpression defaultItemGroupName) {
 		this.defaultItemGroupName = defaultItemGroupName;
 	}
 
-	public final void setItemPadding(ValueExpression itemPadding) {
+	public void setItemPadding(ValueExpression itemPadding) {
 		this.itemPadding = itemPadding;
 	}
 
-	public final void setItemHiddenMode(ValueExpression itemHiddenMode) {
+	public void setItemHiddenMode(ValueExpression itemHiddenMode) {
 		this.itemHiddenMode = itemHiddenMode;
 	}
 
@@ -112,6 +122,8 @@ public class ItemsListTag extends AbstractInputTag implements Tag {
 			if (ItemsListComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
+			LOG.debug("  headingZone='"+headingZone+"'");
+			LOG.debug("  headingLevel='"+headingLevel+"'");
 			LOG.debug("  textPosition='"+textPosition+"'");
 			LOG.debug("  borderType='"+borderType+"'");
 			LOG.debug("  checkedValues='"+checkedValues+"'");
@@ -138,6 +150,24 @@ public class ItemsListTag extends AbstractInputTag implements Tag {
 
 		ItemsListComponent component = (ItemsListComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
+
+		if (headingZone != null) {
+			if (headingZone.isLiteralText()==false) {
+				component.setValueExpression(Properties.HEADING_ZONE, headingZone);
+
+			} else {
+				component.setHeadingZone(getBool(headingZone.getExpressionString()));
+			}
+		}
+
+		if (headingLevel != null) {
+			if (headingLevel.isLiteralText()==false) {
+				component.setValueExpression(Properties.HEADING_LEVEL, headingLevel);
+
+			} else {
+				component.setHeadingLevel(headingLevel.getExpressionString());
+			}
+		}
 
 		if (doubleClickListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.DOUBLE_CLICK_LISTENER_TYPE, doubleClickListeners);
@@ -274,6 +304,8 @@ public class ItemsListTag extends AbstractInputTag implements Tag {
 	}
 
 	public void release() {
+		headingZone = null;
+		headingLevel = null;
 		doubleClickListeners = null;
 		textPosition = null;
 		borderType = null;

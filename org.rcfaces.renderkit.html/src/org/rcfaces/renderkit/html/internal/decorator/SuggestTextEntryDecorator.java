@@ -29,7 +29,6 @@ import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
  * @version $Revision$ $Date$
  */
 public class SuggestTextEntryDecorator extends AbstractSelectItemsDecorator {
-    private static final String REVISION = "$Revision$";
 
     private final int maxResultNumber;
 
@@ -57,7 +56,9 @@ public class SuggestTextEntryDecorator extends AbstractSelectItemsDecorator {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#createContext(org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter)
+     * @see
+     * org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#createContext
+     * (org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter)
      */
     protected SelectItemsContext createJavaScriptContext() {
         IComponentRenderContext componentRenderContext = javaScriptWriter
@@ -72,9 +73,10 @@ public class SuggestTextEntryDecorator extends AbstractSelectItemsDecorator {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#encodeNodeBegin(org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer.Context,
-     *      javax.faces.component.UIComponent, javax.faces.model.SelectItem,
-     *      boolean)
+     * @see
+     * org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#encodeNodeBegin
+     * (org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer.Context,
+     * javax.faces.component.UIComponent, javax.faces.model.SelectItem, boolean)
      */
     public int encodeNodeBegin(UIComponent component, SelectItem selectItem,
             boolean hasChildren, boolean isVisible) throws WriterException {

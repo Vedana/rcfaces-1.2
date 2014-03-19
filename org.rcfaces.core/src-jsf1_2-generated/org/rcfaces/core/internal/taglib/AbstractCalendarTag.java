@@ -30,51 +30,51 @@ public abstract class AbstractCalendarTag extends AbstractInputTag implements Ta
 	private ValueExpression maxDate;
 	private ValueExpression cursorDate;
 	private ValueExpression disabledWeekDays;
-	public final void setSelectionListener(ValueExpression selectionListeners) {
+	public void setSelectionListener(ValueExpression selectionListeners) {
 		this.selectionListeners = selectionListeners;
 	}
 
-	public final void setReadOnly(ValueExpression readOnly) {
+	public void setReadOnly(ValueExpression readOnly) {
 		this.readOnly = readOnly;
 	}
 
-	public final void setLiteralLocale(ValueExpression literalLocale) {
+	public void setLiteralLocale(ValueExpression literalLocale) {
 		this.literalLocale = literalLocale;
 	}
 
-	public final void setLiteralTimeZone(ValueExpression literalTimeZone) {
+	public void setLiteralTimeZone(ValueExpression literalTimeZone) {
 		this.literalTimeZone = literalTimeZone;
 	}
 
-	public final void setComponentLocale(ValueExpression componentLocale) {
+	public void setComponentLocale(ValueExpression componentLocale) {
 		this.componentLocale = componentLocale;
 	}
 
-	public final void setComponentTimeZone(ValueExpression componentTimeZone) {
+	public void setComponentTimeZone(ValueExpression componentTimeZone) {
 		this.componentTimeZone = componentTimeZone;
 	}
 
-	public final void setClientDatesStrategy(ValueExpression clientDatesStrategy) {
+	public void setClientDatesStrategy(ValueExpression clientDatesStrategy) {
 		this.clientDatesStrategy = clientDatesStrategy;
 	}
 
-	public final void setTwoDigitYearStart(ValueExpression twoDigitYearStart) {
+	public void setTwoDigitYearStart(ValueExpression twoDigitYearStart) {
 		this.twoDigitYearStart = twoDigitYearStart;
 	}
 
-	public final void setMinDate(ValueExpression minDate) {
+	public void setMinDate(ValueExpression minDate) {
 		this.minDate = minDate;
 	}
 
-	public final void setMaxDate(ValueExpression maxDate) {
+	public void setMaxDate(ValueExpression maxDate) {
 		this.maxDate = maxDate;
 	}
 
-	public final void setCursorDate(ValueExpression cursorDate) {
+	public void setCursorDate(ValueExpression cursorDate) {
 		this.cursorDate = cursorDate;
 	}
 
-	public final void setDisabledWeekDays(ValueExpression disabledWeekDays) {
+	public void setDisabledWeekDays(ValueExpression disabledWeekDays) {
 		this.disabledWeekDays = disabledWeekDays;
 	}
 

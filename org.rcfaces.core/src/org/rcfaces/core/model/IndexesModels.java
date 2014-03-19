@@ -21,7 +21,6 @@ import org.rcfaces.core.internal.tools.ArrayIndexesModel;
  * @version $Revision$ $Date$
  */
 public class IndexesModels {
-    private static final String REVISION = "$Revision$";
 
     private static final Object[] OBJECT_EMPTY_ARRAY = new Object[0];
 

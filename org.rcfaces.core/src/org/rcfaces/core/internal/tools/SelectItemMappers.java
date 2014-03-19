@@ -15,10 +15,8 @@ import org.rcfaces.core.item.IImagesItem;
  * @version $Revision$ $Date$
  */
 public class SelectItemMappers {
-    private static final String REVISION = "$Revision$";
 
     public static final ISelectItemMapper SEARCH_IMAGE_MAPPER = new ISelectItemMapper() {
-        private static final String REVISION = "$Revision$";
 
         public boolean map(SelectItem si) {
             if (si instanceof IImagesItem) {

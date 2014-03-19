@@ -40,6 +40,7 @@ import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.component.capability.ITabIndexCapability;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.component.capability.IToolTipCapability;
+import org.rcfaces.core.component.capability.IToolTipTextCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.component.capability.IWAIRoleCapability;
 import org.rcfaces.core.event.PropertyChangeEvent;
@@ -60,16 +61,17 @@ import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.renderkit.html.internal.EventDecoders.IEventDecoder;
 import org.rcfaces.renderkit.html.internal.EventDecoders.IEventObjectDecoder;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceContributor;
 import org.rcfaces.renderkit.html.internal.service.AsyncRenderService;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
+@SuppressWarnings("deprecation")
 public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
-        implements IEventObjectDecoder {
-
-    private static final String REVISION = "$Revision$";
+        implements IEventObjectDecoder, INamespaceContributor {
 
     private static final Log LOG = LogFactory
             .getLog(AbstractHtmlRenderer.class);
@@ -79,6 +81,8 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
     private static final String COMPONENT_DECORATOR = "camelia.component.decorator";
 
     private static final String RIGHT_TO_LEFT = "RTL";
+
+    private static final String DEFAULT_MODULE_IMAGE_URL_PROPERTY = "--default--";
 
     protected void encodeBegin(IComponentWriter writer) throws WriterException {
         super.encodeBegin(writer);
@@ -118,8 +122,15 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
             IComponentDecorator componentDecorator) throws WriterException {
     }
 
+    @Deprecated
     protected final IHtmlWriter writeTitle(IHtmlWriter writer,
             IToolTipCapability element) throws WriterException {
+
+        return writeTitle(writer, (IToolTipTextCapability) element);
+    }
+
+    protected final IHtmlWriter writeTitle(IHtmlWriter writer,
+            IToolTipTextCapability element) throws WriterException {
         String title = element.getToolTipText();
 
         if (title == null) {
@@ -155,7 +166,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
     protected final IHtmlWriter writeRequired(IHtmlWriter writer,
             IRequiredCapability component) throws WriterException {
         if (component.isRequired()) {
-            writer.writeAttribute("v:required", true);
+            writer.writeAttributeNS("required", true);
         }
 
         return writer;
@@ -164,19 +175,19 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
     protected final IHtmlWriter writeImmediate(IHtmlWriter writer,
             IImmediateCapability component) throws WriterException {
         if (component.isImmediate()) {
-            writer.writeAttribute("v:immediate", true);
+            writer.writeAttributeNS("immediate", true);
         }
 
         return writer;
     }
-    
+
     protected IHtmlWriter writeAriaLabel(IHtmlWriter writer,
             IWAIRoleCapability component) throws WriterException {
-       
-    	String ariaLabel = component.getAriaLabel();
-    	if(ariaLabel != null) {
-    		writer.writeAriaLabel(ariaLabel);
-    	}
+
+        String ariaLabel = component.getAriaLabel();
+        if (ariaLabel != null) {
+            writer.writeAriaLabel(ariaLabel);
+        }
 
         return writer;
     }
@@ -188,7 +199,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
             return writer;
         }
 
-        writer.writeAttribute("v:focusStyleClass", focusStyleClass);
+        writer.writeAttributeNS("focusStyleClass", focusStyleClass);
 
         return writer;
     }
@@ -216,7 +227,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
             message = ParamUtils.formatMessage(
                     (UIComponent) pagerMessageCapability, message);
 
-            htmlWriter.writeAttribute("v:message", message);
+            htmlWriter.writeAttributeNS("message", message);
 
             String zeroResultMessage = pagerMessageCapability
                     .getZeroResultMessage();
@@ -225,7 +236,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
                         .formatMessage((UIComponent) pagerMessageCapability,
                                 zeroResultMessage);
 
-                htmlWriter.writeAttribute("v:zeroResultMessage",
+                htmlWriter.writeAttributeNS("zeroResultMessage",
                         zeroResultMessage);
             }
 
@@ -235,7 +246,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
                 oneResultMessage = ParamUtils.formatMessage(
                         (UIComponent) pagerMessageCapability, oneResultMessage);
 
-                htmlWriter.writeAttribute("v:oneResultMessage",
+                htmlWriter.writeAttributeNS("oneResultMessage",
                         oneResultMessage);
             }
 
@@ -246,7 +257,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
                         (UIComponent) pagerMessageCapability,
                         manyResultsMessage);
 
-                htmlWriter.writeAttribute("v:manyResultMessage",
+                htmlWriter.writeAttributeNS("manyResultMessage",
                         manyResultsMessage);
             }
         }
@@ -268,7 +279,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
 
             String lookId = lookAndFeelCapability.getLookId();
             if (lookId != null) {
-                writer.writeAttribute("v:lookid", lookId);
+                writer.writeAttributeNS("lookid", lookId);
             }
         }
 
@@ -284,8 +295,9 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
 
         return writer;
     }
-    
-    protected IHtmlWriter writeUserInputAttributes(IHtmlWriter writer, UIComponent component) throws WriterException {
+
+    protected IHtmlWriter writeUserInputAttributes(IHtmlWriter writer,
+            UIComponent component) throws WriterException {
         if (component instanceof ITabIndexCapability) {
             writeTabIndex(writer, (ITabIndexCapability) component);
         }
@@ -304,8 +316,10 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
         UIComponent component = writer.getComponentRenderContext()
                 .getComponent();
 
-        if (component instanceof IToolTipCapability) {
-            writeTitle(writer, (IToolTipCapability) component);
+        writeRole(writer, component);
+
+        if (component instanceof IToolTipTextCapability) {
+            writeTitle(writer, (IToolTipTextCapability) component);
         }
 
         if (component instanceof IHelpCapability) {
@@ -333,7 +347,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
         }
 
         if (component instanceof IWAIRoleCapability) {
-           writeAriaLabel(writer ,(IWAIRoleCapability) component);
+            writeAriaLabel(writer, (IWAIRoleCapability) component);
         }
 
         if (component instanceof NamingContainer) {
@@ -351,8 +365,6 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
         }
 
         writeUserInputAttributes(writer, component);
-        
-        writeRole(writer, component);
 
         return writer;
     }
@@ -376,6 +388,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
             switch (textDirection) {
             case ITextDirectionCapability.RIGHT_LEFT_TEXT_DIRECTION:
                 htmlWriter.writeDir(RIGHT_TO_LEFT);
+                break;
             }
         }
 
@@ -388,13 +401,13 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
         int horizontalScrollPosition = scrollableComponent
                 .getHorizontalScrollPosition();
         if (horizontalScrollPosition > 0) {
-            writer.writeAttribute("v:hsp", horizontalScrollPosition);
+            writer.writeAttributeNS("hsp", horizontalScrollPosition);
         }
 
         int verticalScrollPosition = scrollableComponent
                 .getVerticalScrollPosition();
         if (verticalScrollPosition > 0) {
-            writer.writeAttribute("v:vsp", verticalScrollPosition);
+            writer.writeAttributeNS("vsp", verticalScrollPosition);
         }
 
         return writer;
@@ -416,7 +429,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
                     null, null);
 
             if (resolvedHelpURL != null) {
-                writer.writeAttribute("v:helpURL", resolvedHelpURL);
+                writer.writeAttributeNS("helpURL", resolvedHelpURL);
             }
         }
 
@@ -425,7 +438,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
             helpMessage = ParamUtils.formatMessage((UIComponent) helpComponent,
                     helpMessage);
 
-            writer.writeAttribute("v:helpMessage", helpMessage);
+            writer.writeAttributeNS("helpMessage", helpMessage);
         }
 
         return writer;
@@ -458,12 +471,12 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
                     unlockedProperties = ups;
 
                 } else if (ups != null && ups.length > 0) {
-                    Set s = new HashSet(Arrays.asList(unlockedProperties));
+                    Set<String> s = new HashSet<String>(
+                            Arrays.asList(unlockedProperties));
 
                     s.addAll(Arrays.asList(ups));
 
-                    unlockedProperties = (String[]) s.toArray(new String[s
-                            .size()]);
+                    unlockedProperties = s.toArray(new String[s.size()]);
                 }
             }
         }
@@ -493,10 +506,10 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
             }
         }
 
-        if (component instanceof IToolTipCapability) {
+        if (component instanceof IToolTipTextCapability) {
             String hp = componentData.getStringProperty("toolTip");
             if (hp != null) {
-                IToolTipCapability toolTipCapability = (IToolTipCapability) component;
+                IToolTipTextCapability toolTipCapability = (IToolTipTextCapability) component;
 
                 String old = toolTipCapability.getToolTipText();
 
@@ -752,8 +765,8 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
             return;
         }
 
-        AsyncRenderService.setAsyncRenderer(writer
-                .getHtmlComponentRenderContext(), asyncRenderMode);
+        AsyncRenderService.setAsyncRenderer(
+                writer.getHtmlComponentRenderContext(), asyncRenderMode);
         if (asyncRenderMode == IAsyncRenderModeCapability.TREE_ASYNC_RENDER_MODE) {
             hideChildren(writer.getComponentRenderContext());
         }
@@ -772,8 +785,9 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
             return componentDecorator;
         }
 
-        componentDecorator = createComponentDecorator(componentRenderContext
-                .getFacesContext(), componentRenderContext.getComponent());
+        componentDecorator = createComponentDecorator(
+                componentRenderContext.getFacesContext(),
+                componentRenderContext.getComponent());
         componentRenderContext.setAttribute(COMPONENT_DECORATOR,
                 componentDecorator);
         return componentDecorator;
@@ -794,6 +808,8 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
             IReadOnlyCapability readOnlyCapability) throws WriterException {
         if (readOnlyCapability.isReadOnly()) {
             writer.writeReadOnly();
+
+            // writer.writeAttribute("aria-readonly", true);
         }
 
         return writer;
@@ -810,9 +826,16 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
 
     protected IHtmlWriter writeChecked(IHtmlWriter writer,
             ISelectedCapability selectedCapability) throws WriterException {
-        if (selectedCapability.isSelected()) {
+        System.out.println("TEST CHECK  "
+                + writer.getComponentRenderContext().getComponentClientId());
+
+        boolean isSelected = selectedCapability.isSelected();
+        if (isSelected) {
             writer.writeChecked();
         }
+        System.out.println("CHECK  "
+                + writer.getComponentRenderContext().getComponentClientId()
+                + " => " + isSelected);
 
         return writer;
     }
@@ -820,7 +843,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
     protected IHtmlWriter writeNamingContainer(IHtmlWriter writer,
             NamingContainer namingContainer) throws WriterException {
 
-        writer.writeAttribute("v:nc", true);
+        writer.writeAttributeNS("nc", true);
 
         return writer;
     }
@@ -856,6 +879,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
         return true;
     }
 
+    @SuppressWarnings("unused")
     public String convertClientId(FacesContext context, String clientId) {
         if (Constants.CLIENT_NAMING_SEPARATOR_SUPPORT == false) {
             return super.convertClientId(context, clientId);
@@ -878,25 +902,25 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
         String infoStyleClass = severityStyleClassCapability
                 .getInfoStyleClass();
         if (infoStyleClass != null) {
-            htmlWriter.writeAttribute("v:infoStyleClass", infoStyleClass);
+            htmlWriter.writeAttributeNS("infoStyleClass", infoStyleClass);
         }
 
         String warnStyleClass = severityStyleClassCapability
                 .getWarnStyleClass();
         if (warnStyleClass != null) {
-            htmlWriter.writeAttribute("v:warnStyleClass", warnStyleClass);
+            htmlWriter.writeAttributeNS("warnStyleClass", warnStyleClass);
         }
 
         String errorStyleClass = severityStyleClassCapability
                 .getErrorStyleClass();
         if (errorStyleClass != null) {
-            htmlWriter.writeAttribute("v:errorStyleClass", errorStyleClass);
+            htmlWriter.writeAttributeNS("errorStyleClass", errorStyleClass);
         }
 
         String fatalStyleClass = severityStyleClassCapability
                 .getFatalStyleClass();
         if (fatalStyleClass != null) {
-            htmlWriter.writeAttribute("v:fatalStyleClass", fatalStyleClass);
+            htmlWriter.writeAttributeNS("fatalStyleClass", fatalStyleClass);
         }
     }
 
@@ -927,7 +951,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
             String infoImageURL = infoImageAccessor.resolveURL(facesContext,
                     null, null);
             if (infoImageURL != null) {
-                htmlWriter.writeAttribute("v:infoImageURL", infoImageURL);
+                htmlWriter.writeURIAttributeNS("infoImageURL", infoImageURL);
             }
         }
 
@@ -935,7 +959,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
             String warnImageURL = warnImageAccessor.resolveURL(facesContext,
                     null, null);
             if (warnImageURL != null) {
-                htmlWriter.writeAttribute("v:warnImageURL", warnImageURL);
+                htmlWriter.writeURIAttributeNS("warnImageURL", warnImageURL);
             }
         }
 
@@ -943,7 +967,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
             String errorImageURL = errorImageAccessor.resolveURL(facesContext,
                     null, null);
             if (errorImageURL != null) {
-                htmlWriter.writeAttribute("v:errorImageURL", errorImageURL);
+                htmlWriter.writeURIAttributeNS("errorImageURL", errorImageURL);
             }
         }
 
@@ -951,7 +975,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
             String fatalImageURL = fatalImageAccessor.resolveURL(facesContext,
                     null, null);
             if (fatalImageURL != null) {
-                htmlWriter.writeAttribute("v:fatalImageURL", fatalImageURL);
+                htmlWriter.writeURIAttributeNS("fatalImageURL", fatalImageURL);
             }
         }
 
@@ -984,4 +1008,45 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
         return null;
     }
 
+    protected final String computeAndCacheImageURL(IHtmlComponentWriter writer,
+            String moduleName, String path) {
+
+        if (moduleName == null) {
+            moduleName = DEFAULT_MODULE_IMAGE_URL_PROPERTY;
+        }
+
+        String key = "imageURL|" + moduleName + "|" + path;
+
+        String url = (String) writer.getComponentRenderContext().getAttribute(
+                key);
+        if (url != null) {
+            return url;
+        }
+
+        IHtmlProcessContext htmlProcessContext = ((IHtmlComponentRenderContext) writer
+                .getComponentRenderContext()).getHtmlRenderContext()
+                .getHtmlProcessContext();
+
+        if (moduleName == DEFAULT_MODULE_IMAGE_URL_PROPERTY) {
+            url = htmlProcessContext.getStyleSheetURI(path, true);
+        } else {
+            url = htmlProcessContext.getModuleStyleSheetURI(moduleName, path,
+                    true);
+        }
+
+        writer.getComponentRenderContext().setAttribute(key, url);
+
+        return url;
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+
+        nameSpaceProperties.addAttributes(null, new String[] { "required",
+                "immediate", "focusStyleClass", "message", "zeroResultMessage",
+                "oneResultMessage", "manyResultMessage", "lookid", "hsp",
+                "vsp", "helpURL", "helpMessage", "nc", "infoStyleClass",
+                "warnStyleClass", "errorStyleClass", "fatalStyleClass",
+                "infoImageURL", "warnImageURL", "errorImageURL",
+                "fatalImageURL", "data" });
+    }
 }

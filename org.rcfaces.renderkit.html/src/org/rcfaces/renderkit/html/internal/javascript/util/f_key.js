@@ -248,7 +248,7 @@ var __statics = {
 		f_key._CurrentScopes=undefined;
 		f_key._Scopes=undefined;
 
-		f_key._SetDomEvent(false);
+		f_key.UninstallDomEvent(document);
 	},
 	/**
 	 * @method hidden static final
@@ -337,12 +337,14 @@ var __statics = {
 			return scope;
 		}
 		
+		// Installation du scope MAIN
+		
 		// Le scope de base à besoin du alt pour les keyHandlers !
 		scope._altKey=true;
 		
 		f_key.EnterScope(scopeName);
 
-		f_key._SetDomEvent(true);
+		f_key.InstallDomEvent(document);
 		
 		return scope;
 	},
@@ -414,7 +416,7 @@ var __statics = {
 	/** 
 	 * @method hidden static
 	 * @param String character
-	 * @param String virtualKeys
+	 * @param Number[] virtualKeys
 	 * @param Number keyFlags
 	 * @param HTMLElement component
 	 * @param function method
@@ -595,7 +597,7 @@ var __statics = {
 	 * @return Boolean
 	 */
 	_IsComponentEditable: function(evt) {
-		var target;
+		var target=undefined;
 		if (evt.target) {
 			target = evt.target;
 			
@@ -612,12 +614,12 @@ var __statics = {
 		var keyCode = jsEvent.keyCode;
 		var charCode = jsEvent.charCode;
 		
-		var keyChar;
+		var keyChar="";
 		
-		if (!charCode) {
+		if (!charCode && keyCode>=32) {
 			keyChar = String.fromCharCode(keyCode);
 
-		} else {
+		} else if (charCode>=32) {
 			keyChar = String.fromCharCode(charCode);
 		}
 		
@@ -629,7 +631,7 @@ var __statics = {
 		
 		if (f_core.IsGecko()) {
 			if (jsEvent.type=="keypress" && jsEvent.which) {
-				keyChar=0; // C'est une touche de fonction !
+				keyChar=undefined; // C'est une touche de fonction !
 				
 			} else if (keyCode<=0) {
 				keyCode=charCode;
@@ -681,17 +683,37 @@ var __statics = {
 		}
 		
 		var mask=0;
-		if (jsEvent.altKey) {
-			mask|=f_key.KF_ALT;
-		}
-		if (jsEvent.ctrlKey) {
-			mask|=f_key.KF_CONTROL;
-		}
-		if (jsEvent.shiftKey) {
-			mask|=f_key.KF_SHIFT;
-		}
-		if (jsEvent.metaKey) {
-			mask|=f_key.KF_META;
+		
+		if (true) {
+			// Pas de gestion du META en tant que tel ! (pour l'instant)
+			
+			if (jsEvent.altKey && jsEvent.ctrlKey) {
+				mask|=f_key.KF_META;
+				
+			} else if (jsEvent.altKey) {
+				mask|=f_key.KF_ALT;
+
+			} else if (jsEvent.ctrlKey) {
+				mask|=f_key.KF_CONTROL;
+			}
+			if (jsEvent.shiftKey) {
+				mask|=f_key.KF_SHIFT;
+			}
+			
+		} else {		
+			// Quand le META sera géré correctement !
+			if (jsEvent.altKey) {
+				mask|=f_key.KF_ALT;
+			}
+			if (jsEvent.ctrlKey) {
+				mask|=f_key.KF_CONTROL;
+			}
+			if (jsEvent.shiftKey) {
+				mask|=f_key.KF_SHIFT;
+			}
+			if (jsEvent.metaKey) {
+				mask|=f_key.KF_META;
+			}
 		}
 		
 		for(var i=0;i<accelerators.length;i++) {
@@ -737,13 +759,13 @@ var __statics = {
 	
 		var styleSheet=childWindow.document.styleSheets[0];
 
-/* C'est fait par le CSS propriétaire de IE  !
+/* C'est fait par le CSS propriétaire de IE  ! a voir dans I8 et +*/
 		if (f_core.IsInternetExplorer()) {
-		//	styleSheet.addRule("SPAN.f_accessKey", "text-decoration: underline");	
+			styleSheet.addRule(".f_accessKey", "text-decoration: underline");	
 			return;
 		}
-*/	
-		if (f_core.IsGecko()) {
+	
+		if (f_core.IsGecko() || f_core.IsWebkit()) { 
 			try {
 				styleSheet.insertRule(".f_accessKey { text-decoration: underline }", styleSheet.cssRules.length);
 
@@ -755,38 +777,38 @@ var __statics = {
 	},
 	
 	/**
-	 * @method private static
+	 * @method hidden static
+	 * @param Document doc
+	 * @return void
 	 */
-	_SetDomEvent: function(set) {
+	InstallDomEvent: function(doc) {
 		
-		f_core.Debug(f_key, "_SetDomEvent: Set dom events ("+set+")");
+		f_core.Debug(f_key, "InstallDomEvent: Install on document '"+doc+"'");
 
 		if (f_core.IsInternetExplorer()) {
-			if (set) {
-				document.onkeydown=f_key._PerformKey;
-				
-//				document.onkeypress=f_key._CatchKey; // Ca peut jamais arrivé, car on a changé le code touche !
-//				document.attachEvent("onkeydown", listener);
-				
-			} else  {
-				document.onkeydown=null;
-//				document.onkeypress=null;
-	//			document.detachEvent("onkeydown", listener);
-			}
-			
+			doc.onkeydown=f_key._PerformKey;
 			return;
 		}
 		
-		if (set) {
-			document.addEventListener("keydown", f_key._PerformKey, true);
-			document.addEventListener("keypress", f_key._CatchKey, true);
-			//window.addEventListener("keydown", listener, false);
-			
-		} else {
-			document.removeEventListener("keydown", f_key._PerformKey, true);
-			document.removeEventListener("keypress", f_key._CatchKey, true);
-			//window.removeEventListener("keydown", listener, false);
+		doc.addEventListener("keydown", f_key._PerformKey, true);
+		doc.addEventListener("keypress", f_key._CatchKey, true);
+	},
+	/**
+	 * @method hidden static
+	 * @param Document doc
+	 * @return void
+	 */
+	UninstallDomEvent: function(doc) {
+		
+		f_core.Debug(f_key, "UninstallDomEvent: Uninstall on document '"+doc+"'");
+
+		if (f_core.IsInternetExplorer()) {
+			doc.onkeydown=null;
+			return;
 		}
+
+		doc.removeEventListener("keydown", f_key._PerformKey, true);
+		doc.removeEventListener("keypress", f_key._CatchKey, true);
 	},
 	/**
 	 * @method hidden static
@@ -803,7 +825,7 @@ var __statics = {
 		
 		return false;
 	}
-}
+};
 
 new f_class("f_key", {
 	statics: __statics

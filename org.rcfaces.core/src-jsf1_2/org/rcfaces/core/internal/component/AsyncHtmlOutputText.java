@@ -14,8 +14,8 @@ import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
  * @version $Revision$ $Date$
  */
 public class AsyncHtmlOutputText extends HtmlOutputText {
-    private static final String REVISION = "$Revision$";
 
+    @Override
     public boolean isTransient() {
         if (super.isTransient() == false) {
             return false;

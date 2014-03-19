@@ -12,6 +12,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
+import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,12 +27,11 @@ import org.rcfaces.core.internal.util.WebXmlParser.ServletBean;
  * @version $Revision$ $Date$
  */
 public class ServletTools {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(ServletTools.class);
 
     public static String computeResourceURI(ServletContext servletContext,
-            String defaultURI, Class servletClass) {
+            String defaultURI, Class< ? extends Servlet> servletClass) {
 
         WebXmlParser parser = new WebXmlParser(servletContext);
 
@@ -39,10 +39,8 @@ public class ServletTools {
                 .getName());
 
         if (LOG.isDebugEnabled()) {
-            LOG
-                    .debug("Search pattern associated to servlet class '"
-                            + servletClass + "' => " + servlets.length
-                            + " response(s)");
+            LOG.debug("Search pattern associated to servlet class '"
+                    + servletClass + "' => " + servlets.length + " response(s)");
         }
 
         if (servlets.length < 1) {
@@ -141,22 +139,27 @@ public class ServletTools {
 
         public static final Lifecycle SINGLETON = new EmptyLifecycle();
 
+        @Override
         public void addPhaseListener(PhaseListener listener) {
             // System.out.println("Add phase listener !");
         }
 
+        @Override
         public void execute(FacesContext context) throws FacesException {
             // System.out.println("EXECUTE !");
         }
 
+        @Override
         public PhaseListener[] getPhaseListeners() {
             return null;
         }
 
+        @Override
         public void removePhaseListener(PhaseListener listener) {
             // System.out.println("Remove phase listener !");
         }
 
+        @Override
         public void render(FacesContext context) throws FacesException {
             // System.out.println("Render !");
         }

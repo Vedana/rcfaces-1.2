@@ -24,14 +24,14 @@ var __members = {
 	
 	fa_additionalInformationManager: function() {
 		if (this._additionalInformationCardinality===undefined) {
-			var v_additionalInformationCardinality=f_core.GetNumberAttribute(this, "v:additionalInformationCardinality", undefined);
+			var v_additionalInformationCardinality=f_core.GetNumberAttributeNS(this,"additionalInformationCardinality", undefined);
 	
 			if (v_additionalInformationCardinality===undefined) {
 				return;
 			}
 			this._additionalInformationCardinality=v_additionalInformationCardinality;
 							
-			var clientAdditionalFullState=f_core.GetNumberAttribute(this, "v:clientAdditionalInformationFullState", fa_clientFullState.NONE_CLIENT_FULL_STATE);
+			var clientAdditionalFullState=f_core.GetNumberAttributeNS(this,"clientAdditionalInformationFullState", fa_clientFullState.NONE_CLIENT_FULL_STATE);
 			if (clientAdditionalFullState) {
 				this._clientAdditionalFullState=clientAdditionalFullState;
 
@@ -471,7 +471,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @param Object[] additional The new additional.
-	 * @return optional Boolean show Show the first new shown element.
+	 * @param optional Boolean show Show the first new shown element.
 	 * @return void
 	 */
 	f_expandAdditionalInformations: function(additional, show) {
@@ -511,7 +511,7 @@ var __members = {
 	 * @method protected abstract
 	 */
 	fa_setAdditionalElementVisible: f_class.ABSTRACT
-}
+};
 
 new f_aspect("fa_additionalInformationManager", {
 	extend: [ fa_itemsManager, fa_clientFullState ],

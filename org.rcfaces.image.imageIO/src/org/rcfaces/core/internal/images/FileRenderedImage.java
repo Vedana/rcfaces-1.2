@@ -34,8 +34,6 @@ import org.rcfaces.core.internal.resource.IResourceLoaderFactory.IResourceLoader
  * @version $Revision$ $Date$
  */
 class FileRenderedImage extends FileBuffer implements IBufferedImage {
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory.getLog(FileRenderedImage.class);
 
     private static final int INITIAL_BUFFER_SIZE = 1024 * 8;
@@ -79,8 +77,8 @@ class FileRenderedImage extends FileBuffer implements IBufferedImage {
                         + " to type " + destImageType);
             }
 
-            BufferedImage bimage = new BufferedImage(image.getWidth(), image
-                    .getHeight(), destImageType);
+            BufferedImage bimage = new BufferedImage(image.getWidth(),
+                    image.getHeight(), destImageType);
 
             Graphics2D g = bimage.createGraphics();
             try {

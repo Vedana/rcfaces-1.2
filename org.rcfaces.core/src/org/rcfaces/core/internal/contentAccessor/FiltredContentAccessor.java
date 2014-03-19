@@ -1,5 +1,8 @@
 package org.rcfaces.core.internal.contentAccessor;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -7,7 +10,8 @@ package org.rcfaces.core.internal.contentAccessor;
  */
 public class FiltredContentAccessor extends AbstractContentAccessor implements
         IFiltredContentAccessor {
-    private static final String REVISION = "$Revision$";
+    private static final Log LOG = LogFactory
+            .getLog(FiltredContentAccessor.class);
 
     private final String filter;
 
@@ -30,10 +34,11 @@ public class FiltredContentAccessor extends AbstractContentAccessor implements
         return filter;
     }
 
+    @Override
     public String toString() {
         return "[FiltredContentAccessor filter='" + filter + "' contentType="
                 + getContentFamily() + " pathType="
-                + BasicContentPath.getPathTypeName(getPathType())
+                + AbstractContentPath.getPathTypeName(getPathType())
                 + " versionHandler=" + getContentVersionHandler() + " root="
                 + getParentAccessor() + "]";
     }

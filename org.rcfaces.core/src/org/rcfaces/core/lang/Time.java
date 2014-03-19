@@ -16,8 +16,8 @@ import javax.faces.context.FacesContext;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class Time extends DefaultAdaptable implements Serializable, Comparable {
-    private static final String REVISION = "$Revision$";
+public class Time extends DefaultAdaptable implements Serializable,
+		Comparable<Time> {
 
     private static final long serialVersionUID = -5495525689862764775L;
 
@@ -85,10 +85,11 @@ public class Time extends DefaultAdaptable implements Serializable, Comparable {
         return time % 1000;
     }
 
-    public int compareTo(Object o) {
-        return time - ((Time) o).time;
+	public int compareTo(Time o) {
+		return time - o.time;
     }
 
+    @Override
     public int hashCode() {
         return time;
     }
@@ -122,6 +123,7 @@ public class Time extends DefaultAdaptable implements Serializable, Comparable {
         return calendar.getTime();
     }
 
+    @Override
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
@@ -135,6 +137,7 @@ public class Time extends DefaultAdaptable implements Serializable, Comparable {
         return true;
     }
 
+    @Override
     public String toString() {
         return "[Time " + getHours() + ":" + getMinutes() + ":" + getSeconds()
                 + "." + getMillis() + "]";

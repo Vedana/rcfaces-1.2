@@ -12,6 +12,7 @@ import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import org.rcfaces.core.component.capability.IExpandEventCapability;
 import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.capability.IHeadingLevelCapability;
 import java.util.Set;
 import org.rcfaces.core.component.capability.IFontCapability;
 import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
@@ -19,9 +20,10 @@ import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import java.lang.String;
 import org.rcfaces.core.component.capability.ITabIndexCapability;
 import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
+import org.rcfaces.core.component.capability.IHeadingZoneCapability;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import org.rcfaces.core.component.capability.IDisabledCapability;
 import javax.el.ValueExpression;
+import org.rcfaces.core.component.capability.IDisabledCapability;
 import org.rcfaces.core.component.capability.ITextAlignmentCapability;
 import java.util.HashSet;
 import org.rcfaces.core.component.AbstractOutputComponent;
@@ -49,6 +51,8 @@ import org.rcfaces.core.component.capability.ITextCapability;
  */
 public class ExpandBarComponent extends AbstractOutputComponent implements 
 	IExpandEventCapability,
+	IHeadingZoneCapability,
+	IHeadingLevelCapability,
 	IAsyncRenderModeCapability,
 	IFontCapability,
 	IDisabledCapability,
@@ -74,7 +78,7 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontName","accessKey","groupName","blurListener","collapsedText","tabIndex","userExpandable","focusListener","overStyleClass","loadListener","selectionListener","collapseEffect","scopeValue","border","text","expandListener","fontBold","fontSize","asyncRenderMode","collapsed","textDirection","fontItalic","scopeSaveValue","readOnly","fontUnderline","scopeVar","textAlignment","disabled"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontName","accessKey","groupName","blurListener","collapsedText","tabIndex","userExpandable","focusListener","overStyleClass","loadListener","selectionListener","collapseEffect","scopeValue","border","headingZone","text","headingLevel","expandListener","fontBold","fontSize","asyncRenderMode","textDirection","collapsed","fontItalic","scopeSaveValue","readOnly","fontUnderline","scopeVar","textAlignment","disabled"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="text";
 
@@ -104,6 +108,52 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 
 	public final javax.faces.event.FacesListener [] listExpandListeners() {
 		return getFacesListeners(org.rcfaces.core.event.IExpandListener.class);
+	}
+
+	public boolean isHeadingZone() {
+		return isHeadingZone(null);
+	}
+
+	/**
+	 * See {@link #isHeadingZone() isHeadingZone()} for more details
+	 */
+	public boolean isHeadingZone(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.HEADING_ZONE, true, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "headingZone" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHeadingZoneSetted() {
+		return engine.isPropertySetted(Properties.HEADING_ZONE);
+	}
+
+	public void setHeadingZone(boolean headingZone) {
+		engine.setProperty(Properties.HEADING_ZONE, headingZone);
+	}
+
+	public java.lang.String getHeadingLevel() {
+		return getHeadingLevel(null);
+	}
+
+	/**
+	 * See {@link #getHeadingLevel() getHeadingLevel()} for more details
+	 */
+	public java.lang.String getHeadingLevel(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.HEADING_LEVEL, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "headingLevel" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHeadingLevelSetted() {
+		return engine.isPropertySetted(Properties.HEADING_LEVEL);
+	}
+
+	public void setHeadingLevel(java.lang.String headingLevel) {
+		engine.setProperty(Properties.HEADING_LEVEL, headingLevel);
 	}
 
 	public int getAsyncRenderMode() {
@@ -627,7 +677,8 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 	 * @return the effect : slideUp|slideUpTrans
 	 */
 	public String getCollapseEffect(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.COLLAPSE_EFFECT, facesContext);
+		String s = engine.getStringProperty(Properties.COLLAPSE_EFFECT, facesContext);
+		return s;
 	}
 
 	/**
@@ -663,7 +714,8 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 	 * @return text
 	 */
 	public String getCollapsedText(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.COLLAPSED_TEXT, facesContext);
+		String s = engine.getStringProperty(Properties.COLLAPSED_TEXT, facesContext);
+		return s;
 	}
 
 	/**

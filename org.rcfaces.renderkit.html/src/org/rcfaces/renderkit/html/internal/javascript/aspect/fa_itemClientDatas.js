@@ -104,7 +104,7 @@ var __members = {
 	 * @return Object Item associated with the value.
 	 */
 	f_getItemByValue: f_class.ABSTRACT
-}
+};
 
 new f_aspect("fa_itemClientDatas", {
 	members: __members

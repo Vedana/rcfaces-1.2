@@ -59,10 +59,19 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 	private ValueExpression ariaLabel;
 	private ValueExpression ariaLevel;
 	private ValueExpression waiRole;
+<<<<<<< HEAD
 	private ValueExpression bottomPosition;
 	private ValueExpression leftPosition;
 	private ValueExpression rightPosition;
 	private ValueExpression topPosition;
+=======
+	private ValueExpression bottom;
+	private ValueExpression horizontalCenter;
+	private ValueExpression left;
+	private ValueExpression right;
+	private ValueExpression top;
+	private ValueExpression verticalCenter;
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	private ValueExpression initListeners;
 	private ValueExpression hiddenMode;
 	private ValueExpression valueLocked;
@@ -70,170 +79,171 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 	private ValueExpression margins;
 	private ValueExpression value;
 	private ValueExpression converter;
-	public final void setHelpMessage(ValueExpression helpMessage) {
+	public void setHelpMessage(ValueExpression helpMessage) {
 		this.helpMessage = helpMessage;
 	}
 
-	public final void setHelpURL(ValueExpression helpURL) {
+	public void setHelpURL(ValueExpression helpURL) {
 		this.helpURL = helpURL;
 	}
 
-	public final void setToolTipText(ValueExpression toolTipText) {
+	public void setToolTipText(ValueExpression toolTipText) {
 		this.toolTipText = toolTipText;
 	}
 
-	public final void setBlurListener(ValueExpression blurListeners) {
+	public void setBlurListener(ValueExpression blurListeners) {
 		this.blurListeners = blurListeners;
 	}
 
-	public final void setFocusListener(ValueExpression focusListeners) {
+	public void setFocusListener(ValueExpression focusListeners) {
 		this.focusListeners = focusListeners;
 	}
 
-	public final void setBackgroundColor(ValueExpression backgroundColor) {
+	public void setBackgroundColor(ValueExpression backgroundColor) {
 		this.backgroundColor = backgroundColor;
 	}
 
-	public final void setForegroundColor(ValueExpression foregroundColor) {
+	public void setForegroundColor(ValueExpression foregroundColor) {
 		this.foregroundColor = foregroundColor;
 	}
 
-	public final void setVisible(ValueExpression visible) {
+	public void setVisible(ValueExpression visible) {
 		this.visible = visible;
 	}
 
-	public final void setErrorListener(ValueExpression errorListeners) {
+	public void setErrorListener(ValueExpression errorListeners) {
 		this.errorListeners = errorListeners;
 	}
 
-	public final void setDisabled(ValueExpression disabled) {
+	public void setDisabled(ValueExpression disabled) {
 		this.disabled = disabled;
 	}
 
-	public final void setValidationListener(ValueExpression validationListeners) {
+	public void setValidationListener(ValueExpression validationListeners) {
 		this.validationListeners = validationListeners;
 	}
 
-	public final void setFontBold(ValueExpression fontBold) {
+	public void setFontBold(ValueExpression fontBold) {
 		this.fontBold = fontBold;
 	}
 
-	public final void setFontItalic(ValueExpression fontItalic) {
+	public void setFontItalic(ValueExpression fontItalic) {
 		this.fontItalic = fontItalic;
 	}
 
-	public final void setFontName(ValueExpression fontName) {
+	public void setFontName(ValueExpression fontName) {
 		this.fontName = fontName;
 	}
 
-	public final void setFontSize(ValueExpression fontSize) {
+	public void setFontSize(ValueExpression fontSize) {
 		this.fontSize = fontSize;
 	}
 
-	public final void setFontUnderline(ValueExpression fontUnderline) {
+	public void setFontUnderline(ValueExpression fontUnderline) {
 		this.fontUnderline = fontUnderline;
 	}
 
-	public final void setMouseOutListener(ValueExpression mouseOutListeners) {
+	public void setMouseOutListener(ValueExpression mouseOutListeners) {
 		this.mouseOutListeners = mouseOutListeners;
 	}
 
-	public final void setMouseOverListener(ValueExpression mouseOverListeners) {
+	public void setMouseOverListener(ValueExpression mouseOverListeners) {
 		this.mouseOverListeners = mouseOverListeners;
 	}
 
-	public final void setUnlockedClientAttributeNames(ValueExpression unlockedClientAttributeNames) {
+	public void setUnlockedClientAttributeNames(ValueExpression unlockedClientAttributeNames) {
 		this.unlockedClientAttributeNames = unlockedClientAttributeNames;
 	}
 
-	public final void setTabIndex(ValueExpression tabIndex) {
+	public void setTabIndex(ValueExpression tabIndex) {
 		this.tabIndex = tabIndex;
 	}
 
-	public final void setPropertyChangeListener(ValueExpression propertyChangeListeners) {
+	public void setPropertyChangeListener(ValueExpression propertyChangeListeners) {
 		this.propertyChangeListeners = propertyChangeListeners;
 	}
 
-	public final void setMarginBottom(ValueExpression marginBottom) {
+	public void setMarginBottom(ValueExpression marginBottom) {
 		this.marginBottom = marginBottom;
 	}
 
-	public final void setMarginLeft(ValueExpression marginLeft) {
+	public void setMarginLeft(ValueExpression marginLeft) {
 		this.marginLeft = marginLeft;
 	}
 
-	public final void setMarginRight(ValueExpression marginRight) {
+	public void setMarginRight(ValueExpression marginRight) {
 		this.marginRight = marginRight;
 	}
 
-	public final void setMarginTop(ValueExpression marginTop) {
+	public void setMarginTop(ValueExpression marginTop) {
 		this.marginTop = marginTop;
 	}
 
-	public final void setKeyUpListener(ValueExpression keyUpListeners) {
+	public void setKeyUpListener(ValueExpression keyUpListeners) {
 		this.keyUpListeners = keyUpListeners;
 	}
 
-	public final void setKeyDownListener(ValueExpression keyDownListeners) {
+	public void setKeyDownListener(ValueExpression keyDownListeners) {
 		this.keyDownListeners = keyDownListeners;
 	}
 
-	public final void setKeyPressListener(ValueExpression keyPressListeners) {
+	public void setKeyPressListener(ValueExpression keyPressListeners) {
 		this.keyPressListeners = keyPressListeners;
 	}
 
-	public final void setX(ValueExpression x) {
+	public void setX(ValueExpression x) {
 		this.x = x;
 	}
 
-	public final void setY(ValueExpression y) {
+	public void setY(ValueExpression y) {
 		this.y = y;
 	}
 
-	public final void setUserEventListener(ValueExpression userEventListeners) {
+	public void setUserEventListener(ValueExpression userEventListeners) {
 		this.userEventListeners = userEventListeners;
 	}
 
-	public final void setPartialRendering(ValueExpression partialRendering) {
+	public void setPartialRendering(ValueExpression partialRendering) {
 		this.partialRendering = partialRendering;
 	}
 
-	public final void setStyleClass(ValueExpression styleClass) {
+	public void setStyleClass(ValueExpression styleClass) {
 		this.styleClass = styleClass;
 	}
 
-	public final void setLookId(ValueExpression lookId) {
+	public void setLookId(ValueExpression lookId) {
 		this.lookId = lookId;
 	}
 
-	public final void setWidth(ValueExpression width) {
+	public void setWidth(ValueExpression width) {
 		this.width = width;
 	}
 
-	public final void setHeight(ValueExpression height) {
+	public void setHeight(ValueExpression height) {
 		this.height = height;
 	}
 
-	public final void setTextAlignment(ValueExpression textAlignment) {
+	public void setTextAlignment(ValueExpression textAlignment) {
 		this.textAlignment = textAlignment;
 	}
 
-	public final void setAccessKey(ValueExpression accessKey) {
+	public void setAccessKey(ValueExpression accessKey) {
 		this.accessKey = accessKey;
 	}
 
-	public final void setAriaLabel(ValueExpression ariaLabel) {
+	public void setAriaLabel(ValueExpression ariaLabel) {
 		this.ariaLabel = ariaLabel;
 	}
 
-	public final void setAriaLevel(ValueExpression ariaLevel) {
+	public void setAriaLevel(ValueExpression ariaLevel) {
 		this.ariaLevel = ariaLevel;
 	}
 
-	public final void setWaiRole(ValueExpression waiRole) {
+	public void setWaiRole(ValueExpression waiRole) {
 		this.waiRole = waiRole;
 	}
 
+<<<<<<< HEAD
 	public final void setBottomPosition(ValueExpression bottomPosition) {
 		this.bottomPosition = bottomPosition;
 	}
@@ -251,22 +261,49 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 	}
 
 	public final void setInitListener(ValueExpression initListeners) {
+=======
+	public void setBottom(ValueExpression bottom) {
+		this.bottom = bottom;
+	}
+
+	public void setHorizontalCenter(ValueExpression horizontalCenter) {
+		this.horizontalCenter = horizontalCenter;
+	}
+
+	public void setLeft(ValueExpression left) {
+		this.left = left;
+	}
+
+	public void setRight(ValueExpression right) {
+		this.right = right;
+	}
+
+	public void setTop(ValueExpression top) {
+		this.top = top;
+	}
+
+	public void setVerticalCenter(ValueExpression verticalCenter) {
+		this.verticalCenter = verticalCenter;
+	}
+
+	public void setInitListener(ValueExpression initListeners) {
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		this.initListeners = initListeners;
 	}
 
-	public final void setHiddenMode(ValueExpression hiddenMode) {
+	public void setHiddenMode(ValueExpression hiddenMode) {
 		this.hiddenMode = hiddenMode;
 	}
 
-	public final void setValueLocked(ValueExpression valueLocked) {
+	public void setValueLocked(ValueExpression valueLocked) {
 		this.valueLocked = valueLocked;
 	}
 
-	public final void setImmediate(ValueExpression immediate) {
+	public void setImmediate(ValueExpression immediate) {
 		this.immediate = immediate;
 	}
 
-	public final void setMargins(ValueExpression margins) {
+	public void setMargins(ValueExpression margins) {
 		this.margins = margins;
 	}
 
@@ -310,10 +347,19 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 			LOG.debug("  ariaLabel='"+ariaLabel+"'");
 			LOG.debug("  ariaLevel='"+ariaLevel+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
+<<<<<<< HEAD
 			LOG.debug("  bottomPosition='"+bottomPosition+"'");
 			LOG.debug("  leftPosition='"+leftPosition+"'");
 			LOG.debug("  rightPosition='"+rightPosition+"'");
 			LOG.debug("  topPosition='"+topPosition+"'");
+=======
+			LOG.debug("  bottom='"+bottom+"'");
+			LOG.debug("  horizontalCenter='"+horizontalCenter+"'");
+			LOG.debug("  left='"+left+"'");
+			LOG.debug("  right='"+right+"'");
+			LOG.debug("  top='"+top+"'");
+			LOG.debug("  verticalCenter='"+verticalCenter+"'");
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  valueLocked='"+valueLocked+"'");
 			LOG.debug("  immediate='"+immediate+"'");
@@ -645,6 +691,7 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 			}
 		}
 
+<<<<<<< HEAD
 		if (bottomPosition != null) {
 			if (bottomPosition.isLiteralText()==false) {
 				component.setValueExpression(Properties.BOTTOM_POSITION, bottomPosition);
@@ -678,6 +725,59 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 
 			} else {
 				component.setTopPosition(getInt(topPosition.getExpressionString()));
+=======
+		if (bottom != null) {
+			if (bottom.isLiteralText()==false) {
+				component.setValueExpression(Properties.BOTTOM, bottom);
+
+			} else {
+				component.setBottom(getNumber(bottom.getExpressionString()));
+			}
+		}
+
+		if (horizontalCenter != null) {
+			if (horizontalCenter.isLiteralText()==false) {
+				component.setValueExpression(Properties.HORIZONTAL_CENTER, horizontalCenter);
+
+			} else {
+				component.setHorizontalCenter(getNumber(horizontalCenter.getExpressionString()));
+			}
+		}
+
+		if (left != null) {
+			if (left.isLiteralText()==false) {
+				component.setValueExpression(Properties.LEFT, left);
+
+			} else {
+				component.setLeft(getNumber(left.getExpressionString()));
+			}
+		}
+
+		if (right != null) {
+			if (right.isLiteralText()==false) {
+				component.setValueExpression(Properties.RIGHT, right);
+
+			} else {
+				component.setRight(getNumber(right.getExpressionString()));
+			}
+		}
+
+		if (top != null) {
+			if (top.isLiteralText()==false) {
+				component.setValueExpression(Properties.TOP, top);
+
+			} else {
+				component.setTop(getNumber(top.getExpressionString()));
+			}
+		}
+
+		if (verticalCenter != null) {
+			if (verticalCenter.isLiteralText()==false) {
+				component.setValueExpression(Properties.VERTICAL_CENTER, verticalCenter);
+
+			} else {
+				component.setVerticalCenter(getNumber(verticalCenter.getExpressionString()));
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 			}
 		}
 
@@ -780,10 +880,19 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 		ariaLabel = null;
 		ariaLevel = null;
 		waiRole = null;
+<<<<<<< HEAD
 		bottomPosition = null;
 		leftPosition = null;
 		rightPosition = null;
 		topPosition = null;
+=======
+		bottom = null;
+		horizontalCenter = null;
+		left = null;
+		right = null;
+		top = null;
+		verticalCenter = null;
+>>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		initListeners = null;
 		hiddenMode = null;
 		valueLocked = null;

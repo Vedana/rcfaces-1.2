@@ -16,7 +16,6 @@ import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
  * @version $Revision$ $Date$
  */
 public class ClientValidationRenderer extends AbstractJavaScriptRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(ClientValidationRenderer.class);

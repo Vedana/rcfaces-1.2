@@ -12,5 +12,4 @@ import org.rcfaces.core.internal.content.AbstractBufferOperation;
  */
 public abstract class AbstractScriptOperation extends AbstractBufferOperation
         implements IScriptOperation {
-    private static final String REVISION = "$Revision$";
 }

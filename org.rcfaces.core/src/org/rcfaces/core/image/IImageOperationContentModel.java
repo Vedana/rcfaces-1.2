@@ -14,5 +14,5 @@ import org.rcfaces.core.model.IContentModel;
  */
 public interface IImageOperationContentModel extends IContentModel {
 
-    Map getFilterParameters();
+    Map<String, Object> getFilterParameters();
 }

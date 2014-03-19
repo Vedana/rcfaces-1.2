@@ -14,7 +14,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponentBase;
@@ -35,7 +34,6 @@ import org.rcfaces.core.internal.util.StateHolderTools;
  */
 public class AbstractInformation implements StateHolder,
         IResourceKeyParticipant {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(AbstractInformation.class);
 
@@ -43,7 +41,7 @@ public class AbstractInformation implements StateHolder,
 
     private static final int INITIAL_SERIALIZATION_SIZE = 16000;
 
-    private Map attributes;
+    private Map<String, Object> attributes;
 
     private boolean transientState;
 
@@ -63,19 +61,20 @@ public class AbstractInformation implements StateHolder,
         cachedParticipeKey = null;
 
         if (attributes == null) {
-            attributes = new HashMap();
+            attributes = new HashMap<String, Object>();
         }
 
         return attributes.put(attributeName, attributeValue);
     }
 
-    public final Map getAttributes() {
+    public final Map<String, Object> getAttributes() {
         if (attributes == null) {
-            return Collections.EMPTY_MAP;
+            return Collections.emptyMap();
         }
         return attributes;
     }
 
+    @Override
     public int hashCode() {
         return computeCachedParticipeKey().hashCode();
     }
@@ -93,6 +92,7 @@ public class AbstractInformation implements StateHolder,
         return cachedParticipeKey;
     }
 
+    @Override
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
@@ -111,7 +111,7 @@ public class AbstractInformation implements StateHolder,
 
         Object states[] = (Object[]) state;
 
-        attributes = new HashMap(states.length / 2);
+        attributes = new HashMap<String, Object>(states.length / 2);
 
         for (int i = 0; i < states.length;) {
             String key = (String) states[i++];
@@ -129,8 +129,9 @@ public class AbstractInformation implements StateHolder,
         Object ret[] = new Object[attributes.size() * 2];
 
         int i = 0;
-        for (Iterator it = attributes.entrySet().iterator(); it.hasNext();) {
-            Map.Entry entry = (Entry) it.next();
+        for (Iterator<Map.Entry<String, Object>> it = attributes.entrySet()
+                .iterator(); it.hasNext();) {
+            Map.Entry<String, Object> entry = it.next();
 
             ret[i++] = entry.getKey();
 
@@ -203,10 +204,11 @@ public class AbstractInformation implements StateHolder,
     }
 
     public void participeKey(StringAppender sa) {
-        for (Iterator it = attributes.entrySet().iterator(); it.hasNext();) {
-            Map.Entry entry = (Entry) it.next();
+        for (Iterator<Map.Entry<String, Object>> it = attributes.entrySet()
+                .iterator(); it.hasNext();) {
+            Map.Entry<String, Object> entry = it.next();
 
-            String key = (String) entry.getKey();
+            String key = entry.getKey();
 
             sa.append(IResourceKeyParticipant.RESOURCE_KEY_SEPARATOR).append(
                     key);
@@ -263,11 +265,11 @@ public class AbstractInformation implements StateHolder,
         }
 
         if (value instanceof Collection) {
-            Collection cl = (Collection) value;
+            Collection< ? > cl = (Collection< ? >) value;
 
             sa.append('[');
             boolean first = true;
-            for (Iterator it = cl.iterator(); it.hasNext();) {
+            for (Iterator< ? > it = cl.iterator(); it.hasNext();) {
                 if (first) {
                     first = false;
                 } else {

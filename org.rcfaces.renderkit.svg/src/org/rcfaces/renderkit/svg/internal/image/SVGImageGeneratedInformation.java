@@ -13,8 +13,6 @@ import org.rcfaces.core.image.GeneratedImageInformation;
  * @version $Revision$ $Date$
  */
 public class SVGImageGeneratedInformation extends GeneratedImageInformation {
-    private static final String REVISION = "$Revision$";
-
     private static final String SHAPE_VALUES_PROPERTY = "org.rcfaces.svg.SHAPE_VALUES";
 
     private static final String GLOBAL_TRANSFORM_PROPERTY = "org.rcfaces.svg.GLOBAL_TRANSFORM";

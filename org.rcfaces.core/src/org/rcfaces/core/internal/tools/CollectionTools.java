@@ -38,7 +38,6 @@ import org.rcfaces.core.model.IRangeDataModel;
  * @version $Revision$ $Date$
  */
 public class CollectionTools {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(CollectionTools.class);
 
@@ -48,7 +47,8 @@ public class CollectionTools {
 
     private static final boolean SORT_INDICES = true;
 
-    private static final Map IMPLEMENTATION_TYPES = new HashMap(64);
+    private static final Map<Class< ? >, Class< ? >> IMPLEMENTATION_TYPES = new HashMap<Class< ? >, Class< ? >>(
+            64);
     static {
         IMPLEMENTATION_TYPES.put(Collection.class, ArrayList.class);
         IMPLEMENTATION_TYPES.put(List.class, ArrayList.class);
@@ -59,7 +59,6 @@ public class CollectionTools {
     }
 
     private static final IValuesAccessor NULL_VALUES_ACCESSOR = new AbstractValuesAccessor() {
-        private static final String REVISION = "$Revision$";
 
         public int getCount(Object value) {
             return 0;
@@ -75,7 +74,6 @@ public class CollectionTools {
     };
 
     private static final IValuesAccessor ARRAY_VALUES_ACCESSOR = new AbstractValuesAccessor() {
-        private static final String REVISION = "$Revision$";
 
         public int getCount(Object array) {
             return Array.getLength(array);
@@ -95,7 +93,6 @@ public class CollectionTools {
     };
 
     private static final IValuesAccessor STRING_VALUES_ACCESSOR = new AbstractValuesAccessor() {
-        private static final String REVISION = "$Revision$";
 
         public int getCount(Object array) {
             return StringList.countTokens((String) array);
@@ -112,7 +109,6 @@ public class CollectionTools {
     };
 
     private static final IValuesAccessor COLLECTION_VALUES_ACCESSOR = new AbstractValuesAccessor() {
-        private static final String REVISION = "$Revision$";
 
         public int getCount(Object collection) {
             return ((Collection) collection).size();
@@ -138,7 +134,6 @@ public class CollectionTools {
     };
 
     private static final IValuesAccessor MAP_VALUES_ACCESSOR = new AbstractValuesAccessor() {
-        private static final String REVISION = "$Revision$";
 
         public int getCount(Object map) {
             return ((Map) map).size();
@@ -154,7 +149,6 @@ public class CollectionTools {
     };
 
     private static final IValuesAccessor INDEXES_MODEL_VALUES_ACCESSOR = new AbstractValuesAccessor() {
-        private static final String REVISION = "$Revision$";
 
         public int getCount(Object indexesModel) {
             return ((IIndexesModel) indexesModel).countIndexes();
@@ -172,8 +166,8 @@ public class CollectionTools {
     };
 
     protected static IValuesAccessor getValuesAccessor(Object values,
-            Class providerClass, IValuesAccessor providerValuesAccessor,
-            boolean useValue) {
+            Class< ? > providerClass, IValuesAccessor providerValuesAccessor,
+            boolean useValue, boolean indexSupported) {
 
         if (values == null) {
             if (useValue == false) {
@@ -210,7 +204,7 @@ public class CollectionTools {
             return MAP_VALUES_ACCESSOR;
         }
 
-        if (values instanceof IIndexesModel) {
+        if (indexSupported && (values instanceof IIndexesModel)) {
             if (useValue == false) {
                 return null;
             }
@@ -347,12 +341,16 @@ public class CollectionTools {
             return;
         }
 
-        List rowDatas = getRowDatas((IGridComponent) component, indices);
-        if (rowDatas.isEmpty()) {
+        if (component instanceof IGridComponent) {
+            List<Object> rowDatas = getRowDatas((IGridComponent) component,
+                    indices);
+            if (rowDatas.isEmpty()) {
+                return;
+            }
+
+            select(component, valuesAccessor, values, rowDatas);
             return;
         }
-
-        select(component, valuesAccessor, values, rowDatas);
     }
 
     public static void select(UIComponent component,
@@ -375,12 +373,16 @@ public class CollectionTools {
             return;
         }
 
-        List rowDatas = getRowDatas((IGridComponent) component, start, end);
-        if (rowDatas.isEmpty()) {
+        if (component instanceof IGridComponent) {
+            List<Object> rowDatas = getRowDatas((IGridComponent) component,
+                    start, end);
+            if (rowDatas.isEmpty()) {
+                return;
+            }
+
+            select(component, valuesAccessor, values, rowDatas);
             return;
         }
-
-        select(component, valuesAccessor, values, rowDatas);
     }
 
     public static void select(UIComponent component,
@@ -400,23 +402,27 @@ public class CollectionTools {
             return;
         }
 
-        Object rowData = getRowData((IGridComponent) component, index);
-        if (rowData == null) {
-            LOG.error("No rowData for index='" + index + "'.");
+        if (component instanceof IGridComponent) {
+            Object rowData = getRowData((IGridComponent) component, index);
+            if (rowData == null) {
+                LOG.error("No rowData for index='" + index + "'.");
+                return;
+            }
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Select index=" + index + " => " + rowData
+                        + "   selectedValues=" + values);
+            }
+
+            select(component, valuesAccessor, values,
+                    Collections.singleton(rowData));
+
             return;
         }
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Select index=" + index + " => " + rowData
-                    + "   selectedValues=" + values);
-        }
-
-        select(component, valuesAccessor, values, Collections
-                .singleton(rowData));
     }
 
     public static void selectAll(UIComponent component,
-            IValuesAccessor valuesAccessor) {
+            IValuesAccessor valuesAccessor, IAllValuesProvider allValuesProvider) {
 
         if ((component instanceof IGridComponent) == false) {
             throw new UnsupportedOperationException(
@@ -442,12 +448,25 @@ public class CollectionTools {
             return;
         }
 
-        List rowDatas = getRowDatas((IGridComponent) component);
-        if (rowDatas.isEmpty()) {
+        if (component instanceof IGridComponent) {
+            List rowDatas = getRowDatas((IGridComponent) component);
+            if (rowDatas.isEmpty()) {
+                return;
+            }
+
+            select(component, valuesAccessor, values, rowDatas);
             return;
         }
 
-        select(component, valuesAccessor, values, rowDatas);
+        if (allValuesProvider != null) {
+            List<Object> rowDatas = allValuesProvider.listAllValues(component);
+            if (rowDatas.isEmpty()) {
+                return;
+            }
+
+            select(component, valuesAccessor, values, rowDatas);
+            return;
+        }
     }
 
     public static void select(UIComponent component,
@@ -471,20 +490,22 @@ public class CollectionTools {
             return;
         }
 
-        select(component, valuesAccessor, values, Collections
-                .singletonList(rowValue));
+        select(component, valuesAccessor, values,
+                Collections.singletonList(rowValue));
     }
 
-    private static Object select(UIComponent component,
-            IValuesAccessor valuesAccessor, Object values, Collection rowDatas) {
+    private static <T> T select(UIComponent component,
+            IValuesAccessor valuesAccessor, T values,
+            Collection<Object> rowDatas) {
 
         if (values.getClass().isArray()) {
 
             int length = Array.getLength(values);
 
-            List l = null;
+            List<Object> l = null;
 
-            next_data: for (Iterator it = rowDatas.iterator(); it.hasNext();) {
+            next_data: for (Iterator<Object> it = rowDatas.iterator(); it
+                    .hasNext();) {
                 Object rowData = it.next();
 
                 for (int i = 0; i < length; i++) {
@@ -496,7 +517,7 @@ public class CollectionTools {
                 }
 
                 if (l == null) {
-                    l = new ArrayList();
+                    l = new ArrayList<Object>();
 
                 } else if (l.contains(rowData)) {
                     continue;
@@ -509,13 +530,13 @@ public class CollectionTools {
                 return values;
             }
 
-            Class type = values.getClass().getComponentType();
+            Class< ? > type = values.getClass().getComponentType();
 
-            Object newValues = Array.newInstance(type, length + l.size());
+            T newValues = (T) Array.newInstance(type, length + l.size());
 
             System.arraycopy(values, 0, newValues, 0, length);
 
-            for (Iterator it = l.iterator(); it.hasNext(); length++) {
+            for (Iterator<Object> it = l.iterator(); it.hasNext(); length++) {
                 Array.set(newValues, length, it.next());
             }
 
@@ -525,9 +546,10 @@ public class CollectionTools {
         }
 
         if (values instanceof String) {
-            Set set = valuesToSet(values, false);
+            Set<String> set = CollectionTools.<String> valuesToSet(values,
+                    false);
 
-            set.addAll(rowDatas);
+            set.addAll((Collection) rowDatas);
 
             String newValues = StringList.joinTokens(set);
 
@@ -537,20 +559,20 @@ public class CollectionTools {
 
             valuesAccessor.setComponentValues(component, newValues);
 
-            return newValues;
+            return (T) newValues;
         }
 
         if (values instanceof Collection) {
-            Collection collection = cloneCollection(component, valuesAccessor,
-                    (Collection) values);
+            Collection<Object> collection = CollectionTools
+                    .<Object> cloneCollection(component, valuesAccessor,
+                            (Collection<Object>) values);
 
-            if (collection instanceof Set) {
-                collection.addAll(rowDatas);
-                return collection;
+            if (rowDatas instanceof Set) {
+                collection.addAll((Set) rowDatas);
+                return (T) collection;
             }
 
-            for (Iterator it = rowDatas.iterator(); it.hasNext();) {
-                Object rowData = it.next();
+            for (Object rowData : rowDatas) {
 
                 if (collection.contains(rowData)) {
                     continue;
@@ -559,15 +581,15 @@ public class CollectionTools {
                 collection.add(rowData);
             }
 
-            return collection;
+            return (T) collection;
         }
 
         throw new FacesException("Select index is not implemented for values="
                 + values);
     }
 
-    private static Collection cloneCollection(UIComponent component,
-            IValuesAccessor valuesAccessor, Collection collection) {
+    private static <T> Collection<T> cloneCollection(UIComponent component,
+            IValuesAccessor valuesAccessor, Collection<T> collection) {
 
         boolean copy = true;
 
@@ -583,8 +605,8 @@ public class CollectionTools {
             Method method = collection.getClass().getMethod("clone",
                     (Class[]) null);
 
-            collection = (Collection) method
-                    .invoke(collection, (Object[]) null);
+            collection = (Collection<T>) method.invoke(collection,
+                    (Object[]) null);
 
         } catch (Throwable th) {
             LOG.info("Can not copy the collection ! ("
@@ -695,8 +717,8 @@ public class CollectionTools {
             return;
         }
 
-        deselect(component, valuesAccessor, values, Collections
-                .singletonList(rowValue));
+        deselect(component, valuesAccessor, values,
+                Collections.singletonList(rowValue));
     }
 
     public static void deselect(UIComponent component,
@@ -716,20 +738,23 @@ public class CollectionTools {
             return;
         }
 
-        Object rowData = getRowData((IGridComponent) component, index);
+        if (component instanceof IGridComponent) {
+            Object rowData = getRowData((IGridComponent) component, index);
 
-        if (rowData == null) {
-            LOG.error("No rowData for index='" + index + "'.");
+            if (rowData == null) {
+                LOG.error("No rowData for index='" + index + "'.");
+                return;
+            }
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Deselect index=" + index + " => " + rowData
+                        + "   selectedValues=" + values);
+            }
+
+            deselect(component, valuesAccessor, values,
+                    Collections.singleton(rowData));
             return;
         }
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Deselect index=" + index + " => " + rowData
-                    + "   selectedValues=" + values);
-        }
-
-        deselect(component, valuesAccessor, values, Collections
-                .singleton(rowData));
     }
 
     public static void deselect(UIComponent component,
@@ -756,12 +781,16 @@ public class CollectionTools {
             return;
         }
 
-        List rowDatas = getRowDatas((IGridComponent) component, indices);
-        if (rowDatas.isEmpty()) {
+        if (component instanceof IGridComponent) {
+            List< ? > rowDatas = getRowDatas((IGridComponent) component,
+                    indices);
+            if (rowDatas.isEmpty()) {
+                return;
+            }
+
+            deselect(component, valuesAccessor, values, rowDatas);
             return;
         }
-
-        deselect(component, valuesAccessor, values, rowDatas);
     }
 
     public static void deselect(UIComponent component,
@@ -784,16 +813,21 @@ public class CollectionTools {
             return;
         }
 
-        List rowDatas = getRowDatas((IGridComponent) component, start, end);
-        if (rowDatas.isEmpty()) {
+        if (component instanceof IGridComponent) {
+            List< ? > rowDatas = getRowDatas((IGridComponent) component, start,
+                    end);
+            if (rowDatas.isEmpty()) {
+                return;
+            }
+
+            deselect(component, valuesAccessor, values, rowDatas);
             return;
         }
-
-        deselect(component, valuesAccessor, values, rowDatas);
     }
 
     private static Object deselect(UIComponent component,
-            IValuesAccessor valuesAccessor, Object values, Collection rowDatas) {
+            IValuesAccessor valuesAccessor, Object values,
+            Collection< ? > rowDatas) {
 
         if (values.getClass().isArray()) {
 
@@ -802,9 +836,7 @@ public class CollectionTools {
                 return values;
             }
 
-            for (Iterator it = rowDatas.iterator(); it.hasNext();) {
-                Object rowData = it.next();
-
+            for (Object rowData : rowDatas) {
                 for (int i = 0; i < length;) {
                     if (Array.get(values, i).equals(rowData) == false) {
                         i++;
@@ -825,7 +857,7 @@ public class CollectionTools {
                 return values;
             }
 
-            Class type = values.getClass().getComponentType();
+            Class< ? > type = values.getClass().getComponentType();
 
             Object newValues = Array.newInstance(type, length);
             if (length > 0) {
@@ -838,7 +870,8 @@ public class CollectionTools {
         }
 
         if (values instanceof String) {
-            Set set = valuesToSet(values, false);
+            Set<String> set = CollectionTools.<String> valuesToSet(values,
+                    false);
 
             set.removeAll(rowDatas);
 
@@ -854,17 +887,15 @@ public class CollectionTools {
         }
 
         if (values instanceof Collection) {
-            Collection collection = cloneCollection(component, valuesAccessor,
-                    (Collection) values);
+            Collection< ? > collection = cloneCollection(component,
+                    valuesAccessor, (Collection< ? >) values);
 
             if (collection instanceof Set) {
                 collection.removeAll(rowDatas);
                 return collection;
             }
 
-            for (Iterator it = rowDatas.iterator(); it.hasNext();) {
-                Object rowData = it.next();
-
+            for (Object rowData : rowDatas) {
                 collection.remove(rowData);
             }
 
@@ -895,7 +926,8 @@ public class CollectionTools {
         return indexesModel;
     }
 
-    private static List getRowDatas(IGridComponent gridComponent, int[] indices) {
+    private static <T> List<T> getRowDatas(IGridComponent gridComponent,
+            int[] indices) {
 
         int rowCount = gridComponent.getRowCount();
         if (rowCount > 0) {
@@ -911,7 +943,7 @@ public class CollectionTools {
             Arrays.sort(indices);
         }
 
-        List rowDatas = null;
+        List<T> rowDatas = null;
         try {
             for (int i = 0; i < indices.length; i++) {
                 int index = indices[i];
@@ -921,7 +953,7 @@ public class CollectionTools {
                     continue;
                 }
 
-                Object rowData = gridComponent.getRowData();
+                T rowData = (T) gridComponent.getRowData();
 
                 if (rowData == null) {
                     LOG.error("No rowData for index='" + index + "'.");
@@ -933,7 +965,7 @@ public class CollectionTools {
                 }
 
                 if (rowDatas == null) {
-                    rowDatas = new ArrayList(indices.length - i);
+                    rowDatas = new ArrayList<T>(indices.length - i);
                 }
                 rowDatas.add(rowData);
             }
@@ -943,7 +975,7 @@ public class CollectionTools {
         }
 
         if (rowDatas == null) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
 
         return rowDatas;
@@ -1038,8 +1070,8 @@ public class CollectionTools {
         return rowDatas;
     }
 
-    private static List getRowDatas(IGridComponent gridComponent, int start,
-            int end) {
+    private static <T> List<T> getRowDatas(IGridComponent gridComponent,
+            int start, int end) {
 
         DataModel dataModel = gridComponent.getDataModelValue();
 
@@ -1047,7 +1079,7 @@ public class CollectionTools {
             ((IRangeDataModel) dataModel).setRowRange(start, end - start + 1);
         }
 
-        List rowDatas = null;
+        List<T> rowDatas = null;
         try {
             for (int index = start; index <= end; index++) {
                 gridComponent.setRowIndex(index);
@@ -1057,7 +1089,7 @@ public class CollectionTools {
                     break;
                 }
 
-                Object rowData = gridComponent.getRowData();
+                T rowData = (T) gridComponent.getRowData();
 
                 if (rowData == null) {
                     LOG.error("RowData is null for index='" + index + "'.");
@@ -1069,7 +1101,7 @@ public class CollectionTools {
                 }
 
                 if (rowDatas == null) {
-                    rowDatas = new ArrayList(end - index + 1);
+                    rowDatas = new ArrayList<T>(end - index + 1);
                 }
 
                 rowDatas.add(rowData);
@@ -1080,7 +1112,7 @@ public class CollectionTools {
         }
 
         if (rowDatas == null) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
 
         return rowDatas;
@@ -1212,7 +1244,6 @@ public class CollectionTools {
      */
     private static abstract class AbstractValuesAccessor implements
             IValuesAccessor {
-        private static final String REVISION = "$Revision$";
 
         public Object getComponentValues(UIComponent component) {
             throw new IllegalStateException("Not implemented !");
@@ -1296,26 +1327,26 @@ public class CollectionTools {
     }
 
     protected static void setValues(UIComponent component,
-            IValuesAccessor valuesAccessor, Collection values) {
+            IValuesAccessor valuesAccessor, Collection<Object> values) {
 
         Object newValues = createNewValues(component, valuesAccessor);
 
         select(component, valuesAccessor, newValues, values);
     }
 
-    protected static Set valuesToSet(UIComponent component,
+    protected static Set<Object> valuesToSet(UIComponent component,
             IValuesAccessor valuesAccessor, boolean immutable) {
         Object value = valuesAccessor.getComponentValues(component);
 
         return valuesToSet(value, immutable);
     }
 
-    public static Set valuesToSet(Object value, boolean immutable) {
+    public static <T> Set<T> valuesToSet(Object value, boolean immutable) {
         if (value == null) {
             if (immutable == false) {
-                return new OrderedSet();
+                return new OrderedSet<T>();
             }
-            return Collections.EMPTY_SET;
+            return Collections.emptySet();
         }
 
         if (value.getClass().isArray()) {
@@ -1323,15 +1354,15 @@ public class CollectionTools {
 
             if (length < 1) {
                 if (immutable == false) {
-                    return new OrderedSet();
+                    return new OrderedSet<T>();
                 }
-                return Collections.EMPTY_SET;
+                return Collections.emptySet();
             }
 
-            Set set = new OrderedSet();
+            Set<T> set = new OrderedSet<T>();
 
             for (int i = 0; i < length; i++) {
-                set.add(Array.get(value, i));
+                set.add((T) Array.get(value, i));
             }
 
             if (LOG.isDebugEnabled() && immutable) {
@@ -1346,12 +1377,12 @@ public class CollectionTools {
 
             if (ss.length == 0) {
                 if (immutable == false) {
-                    return new OrderedSet();
+                    return new OrderedSet<T>();
                 }
-                return Collections.EMPTY_SET;
+                return Collections.emptySet();
             }
 
-            Set set = new OrderedSet(Arrays.asList(ss));
+            Set<T> set = new OrderedSet<T>(Arrays.<T> asList((T[]) ss));
 
             if (LOG.isDebugEnabled() && immutable) {
                 return Collections.unmodifiableSet(set);
@@ -1362,23 +1393,23 @@ public class CollectionTools {
 
         if (value instanceof Set) {
             if (immutable == false) {
-                return new OrderedSet((Set) value);
+                return new OrderedSet<T>((Set<T>) value);
             }
 
             if (LOG.isDebugEnabled() && immutable) {
-                return Collections.unmodifiableSet((Set) value);
+                return Collections.unmodifiableSet((Set<T>) value);
             }
 
-            return (Set) value;
+            return (Set<T>) value;
         }
 
         if (value instanceof Collection) {
-            Collection col = (Collection) value;
+            Collection<T> col = (Collection<T>) value;
             if (col.isEmpty() && immutable) {
-                return Collections.EMPTY_SET;
+                return Collections.emptySet();
             }
 
-            Set set = new OrderedSet((Collection) value);
+            Set<T> set = new OrderedSet<T>(col);
 
             if (LOG.isDebugEnabled() && immutable) {
                 return Collections.unmodifiableSet(set);
@@ -1388,13 +1419,13 @@ public class CollectionTools {
         }
 
         if (immutable == false) {
-            Set set = new OrderedSet();
-            set.add(value);
+            Set<T> set = new OrderedSet<T>();
+            set.add((T) value);
 
             return set;
         }
 
-        return Collections.singleton(value);
+        return Collections.singleton((T) value);
     }
 
     /**
@@ -1414,5 +1445,9 @@ public class CollectionTools {
      */
     public interface IComponentValueTypeCapability {
         IComponentValueType getComponentValueType();
+    }
+
+    public interface IAllValuesProvider {
+        List<Object> listAllValues(UIComponent component);
     }
 }

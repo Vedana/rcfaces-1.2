@@ -12,15 +12,16 @@ import org.rcfaces.core.internal.renderkit.WriterException;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public interface IHtmlWriter extends ISgmlWriter, IHtmlElements {
+public interface IHtmlWriter extends ISgmlWriter, IHtmlComponentWriter,
+        IHtmlElements {
+
+    String getRcfacesNamespace();
 
     void enableJavaScript();
 
     IJavaScriptEnableMode getJavaScriptEnableMode();
 
     void addSubFocusableComponent(String subComponentClientId);
-
-    IHtmlComponentRenderContext getHtmlComponentRenderContext();
 
     IHtmlWriter writeType(String type) throws WriterException;
 
@@ -92,6 +93,8 @@ public interface IHtmlWriter extends ISgmlWriter, IHtmlElements {
 
     IHtmlWriter writeHRef(String url) throws WriterException;
 
+    IHtmlWriter writeHRef_JavascriptVoid0() throws WriterException;
+
     IHtmlWriter writeHttpEquiv(String equiv, String content)
             throws WriterException;
 
@@ -106,24 +109,45 @@ public interface IHtmlWriter extends ISgmlWriter, IHtmlElements {
     IHtmlWriter writeBorder(int size) throws WriterException;
 
     IHtmlWriter writeAutoComplete(String mode) throws WriterException;
-    
+
+    IHtmlWriter writeAriaRequired(boolean required) throws WriterException;
+
     IHtmlWriter writeAriaDisabled(boolean disabled) throws WriterException;
-    
+
     IHtmlWriter writeAriaSelected(boolean selected) throws WriterException;
-    
+
     IHtmlWriter writeAriaExpanded(boolean expanded) throws WriterException;
-    
+
     IHtmlWriter writeAriaLabel(String ariaLabel) throws WriterException;
-    
+
     IHtmlWriter writeAriaLabelledBy(String clientId) throws WriterException;
-    
-    IHtmlWriter writeAriaActivedescendant(String clientId) throws WriterException;
-    
+
+    IHtmlWriter writeAriaActivedescendant(String clientId)
+            throws WriterException;
+
     IHtmlWriter writeAriaControls(String[] listId) throws WriterException;
-    
+
     IHtmlWriter writeAriaLevel(int level) throws WriterException;
-    
-    
+
     // IHtmlWriter writeAttributeNS(String ns, String name, String value)throws
     // WriterException;
+
+    IHtmlWriter writeAttributeNS(String name, String value)
+            throws WriterException;
+
+    IHtmlWriter writeAttributeNS(String name, long value)
+            throws WriterException;
+
+    IHtmlWriter writeAttributeNS(String name, boolean value)
+            throws WriterException;
+
+    IHtmlWriter writeURIAttributeNS(String name, Object value)
+            throws WriterException;
+
+    IHtmlWriter writeAttributeNS(String name, String values[], String separator)
+            throws WriterException;
+
+    IHtmlWriter startElementNS(String initTagName) throws WriterException;
+
+    IHtmlWriter endElementNS(String initTagName) throws WriterException;
 }

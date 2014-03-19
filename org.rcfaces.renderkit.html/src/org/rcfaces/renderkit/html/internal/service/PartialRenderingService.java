@@ -10,9 +10,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.zip.GZIPOutputStream;
 
 import javax.faces.FacesException;
@@ -33,7 +31,6 @@ import org.rcfaces.core.component.ComponentsGridComponent;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
-import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.util.PartialRenderingContextImpl;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
@@ -41,7 +38,6 @@ import org.rcfaces.core.partialRendering.IPartialRenderingContext;
 import org.rcfaces.core.partialRendering.PartialRenderingContextFactory;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
-import org.rcfaces.renderkit.html.internal.HtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
@@ -53,7 +49,6 @@ import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
  * @version $Revision$ $Date$
  */
 public class PartialRenderingService extends AbstractHtmlService {
-    private static final String REVISION = "$Revision$";
 
     private static final String SERVICE_ID = Constants.getPackagePrefix()
             + ".PartialRendering";
@@ -263,7 +258,7 @@ public class PartialRenderingService extends AbstractHtmlService {
 
             jsWriter.writeMethodCall("f_updateNewPage").writeln(");");
 */
-            saveView(facesContext);
+            saveView(facesContext, null);
 
         } finally {
 
@@ -283,15 +278,6 @@ public class PartialRenderingService extends AbstractHtmlService {
 
             printWriter.write(cw.toCharArray());
         }
-    }
-
-    private void saveView(FacesContext facesContext) throws IOException {
-        StateManager stateManager = facesContext.getApplication()
-                .getStateManager();
-
-        Object state = stateManager.saveView(facesContext);
-
-        stateManager.writeState(facesContext, state);
     }
 
     public void setupComponent(IComponentRenderContext componentRenderContext) {

@@ -23,7 +23,7 @@ var __members = {
 		var required=this._required;
 		if (required===undefined) {
 			// Appel depuis le constructor de l'objet !
-			required=f_core.GetBooleanAttribute(this, "v:required", false);
+			required=f_core.GetBooleanAttributeNS(this, "required", false);
 			this._required=required;
 		}
 
@@ -62,7 +62,7 @@ var __members = {
 	 * @return void
 	 */
 	fa_updateRequired: f_class.ABSTRACT
-}
+};
 
 new f_aspect("fa_required", {
 	members: __members

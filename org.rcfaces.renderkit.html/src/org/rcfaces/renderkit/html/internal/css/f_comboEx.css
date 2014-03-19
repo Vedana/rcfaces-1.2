@@ -20,6 +20,7 @@ TABLE.f_comboEx UL,
 TABLE.f_comboEx LI,
 TABLE.f_comboEx SPAN {
 	-moz-user-select: none;
+	user-select: none;
 }
 
 TABLE.f_comboEx INPUT {

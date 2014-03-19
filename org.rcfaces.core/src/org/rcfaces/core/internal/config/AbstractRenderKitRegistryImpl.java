@@ -17,23 +17,23 @@ import org.apache.commons.logging.LogFactory;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-abstract class AbstractRenderKitRegistryImpl {
-    private static final String REVISION = "$Revision$";
+public abstract class AbstractRenderKitRegistryImpl {
 
     private static final Log LOG = LogFactory
             .getLog(AbstractRenderKitRegistryImpl.class);
 
     private static final Object LOAD_CONFIG_LOCK = new Object();
 
-    private transient Map renderKitsById = null;
+    private transient Map<String, RenderKit> renderKitsById = null;
 
-    synchronized Map initialize(FacesContext facesContext) {
+    @SuppressWarnings("unchecked")
+    synchronized Map<String, RenderKit> initialize(FacesContext facesContext) {
         synchronized (LOAD_CONFIG_LOCK) {
             if (renderKitsById != null) {
                 return renderKitsById;
             }
 
-            Map applicationMap = null;
+            Map<String, Object> applicationMap = null;
             String applicationPropertyId = getApplicationPropertyId();
             if (applicationPropertyId != null) {
 
@@ -44,12 +44,12 @@ abstract class AbstractRenderKitRegistryImpl {
                 applicationMap = facesContext.getExternalContext()
                         .getApplicationMap();
 
-                renderKitsById = (Map) applicationMap
+                renderKitsById = (Map<String, RenderKit>) applicationMap
                         .get(applicationPropertyId);
             }
 
             if (renderKitsById == null) {
-                renderKitsById = new HashMap(16);
+                renderKitsById = new HashMap<String, RenderKit>(16);
 
                 if (applicationMap != null) {
                     applicationMap.put(applicationPropertyId, renderKitsById);
@@ -83,9 +83,9 @@ abstract class AbstractRenderKitRegistryImpl {
             renderKitId = RenderKitFactory.HTML_BASIC_RENDER_KIT;
         }
 
-        Map renderKitsById = initialize(facesContext);
+        Map<String, RenderKit> renderKitsById = initialize(facesContext);
 
-        RenderKit renderKit = (RenderKit) renderKitsById.get(renderKitId);
+        RenderKit renderKit = renderKitsById.get(renderKitId);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("getRenderKit: returns '" + renderKit
@@ -101,10 +101,10 @@ abstract class AbstractRenderKitRegistryImpl {
         }
 
         if (renderKitsById == null) {
-            renderKitsById = new HashMap();
+            renderKitsById = new HashMap<String, RenderKit>();
         }
 
-        RenderKit renderKit = (RenderKit) renderKitsById.get(renderKitId);
+        RenderKit renderKit = renderKitsById.get(renderKitId);
         if (renderKit == null) {
             renderKit = createRenderKit();
             renderKitsById.put(renderKitId, renderKit);
@@ -121,7 +121,6 @@ abstract class AbstractRenderKitRegistryImpl {
      * @version $Revision$ $Date$
      */
     protected static abstract class RenderKit {
-        private static final String REVISION = "$Revision$";
 
     }
 }

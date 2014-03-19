@@ -29,7 +29,7 @@ var __statics = {
  		redirect[f_event.KEYDOWN]=true;
  		redirect[f_event.KEYUP]=true;
 	}
-}
+};
  
 var __members = {
 
@@ -47,7 +47,11 @@ var __members = {
 			});
 		} else {
 			this.f_initializeOnFocus();
-		}			
+		}	
+		
+		if (f_core.IsWebkit()) {
+			this.f_setInitEventReturn(f_event.KEYPRESS, true);
+		}
 		
 		if (f_core.IsDebugEnabled(f_input)) {
 			var input=this.f_getInput();
@@ -148,7 +152,7 @@ var __members = {
 			return;
 		}
 		if (!this.tabIndex) {
-			this._tabIndex = 0;	// Default tabbing   NON ???
+		//	this._tabIndex = 0;	// Default tabbing   NON ???
 		}
 		
 		var input=this.f_getInput();
@@ -233,15 +237,19 @@ var __members = {
 		this.f_setProperty(f_prop.DISABLED, disabled);
 	},
 	/**
+	 * update the component according to its disabled state
+	 * 
 	 * @method protected
+	 * @param Boolean disabled
+	 * @return void
 	 */
 	f_updateDisabled: function(disabled) {
 		this.f_updateStyleClass();
-		if (disabled) {
-			this.f_getInput().tabIndex=-1;
-		} else {
-			this.f_getInput().tabIndex=this.fa_getTabIndex();
-		}
+		
+		var tabIndex = this.fa_getTabIndex(); // Initialisation eventuelle
+		var tabIndexElement=this.fa_getTabIndexElement();
+		
+		tabIndexElement.tabIndex=(disabled)?(-1):tabIndex;
 	},
 	/**
 	 * Returns the read only state.
@@ -340,7 +348,7 @@ var __members = {
 			value=String(value);
 
 		} else if (typeof(value)!="string") {
-			f_core.Error(f_input, "f_setValue: Invalid value: "+value + " (typeof=" + typeof(value) +")");
+			f_core.Info(f_input, "f_setValue: Invalid value: "+value + " (typeof=" + typeof(value) +")");
 			return false;
 		}
 
@@ -432,7 +440,7 @@ var __members = {
 	f_performMessageChanges: function() {	
 		var messages=f_messageContext.ListMessages(this);
 		
-		var msg;
+		var msg=undefined;
 		for(var j=0;j<messages.length;j++) {
 			var m=messages[j];
 			
@@ -493,12 +501,12 @@ var __members = {
 		}
 		
 		this.f_super(arguments, type, target);
-	}
-}
+	}	
+};
 
 new f_class("f_input", {
 	extend: f_component, 
-	aspects: [ fa_message, fa_focusStyleClass, fa_tabIndex],
+	aspects: [ fa_message, fa_focusStyleClass, fa_tabIndex, fa_basicToolTipContainer],
 	members: __members,
 	statics: __statics
 });

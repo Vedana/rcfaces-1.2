@@ -19,6 +19,7 @@ import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.util.ClassLocator;
 import org.rcfaces.core.internal.util.StateHolderTools;
 
 /**
@@ -28,7 +29,6 @@ import org.rcfaces.core.internal.util.StateHolderTools;
  */
 public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
         implements IDeltaPropertiesAccessor {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(BasicDeltaPropertiesAccessor.class);
@@ -41,7 +41,27 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
 
     private final IPropertiesAccessor parent;
 
-    private Map properties;
+    private Map<String, Object> properties;
+
+    private static IUnproxifyValueExpression unproxifyValueExpression = null;
+
+    static {
+        try {
+            ClassLocator.load("org.apache.jasper.el.JspValueExpression",
+                    BasicDeltaPropertiesAccessor.class, null);
+
+            Class< ? > cl = ClassLocator
+                    .load("org.rcfaces.core.internal.jasper.JasperUnproxifyValueExpression",
+                            BasicDeltaPropertiesAccessor.class, null);
+            unproxifyValueExpression = (IUnproxifyValueExpression) cl
+                    .newInstance();
+
+        } catch (ClassNotFoundException ex) {
+            LOG.error(ex.getMessage());
+        } catch (Throwable ex) {
+            LOG.error(ex.getMessage());
+        }
+    }
 
     public BasicDeltaPropertiesAccessor(IPropertiesAccessor parent) {
         this.parent = parent;
@@ -143,6 +163,11 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
             ValueExpression valueExpression) {
 
         Object initialValue = parent.getProperty(propertyName);
+
+        if (unproxifyValueExpression != null) {
+            valueExpression = unproxifyValueExpression.process(valueExpression);
+        }
+
         if (initialValue != null && initialValue.equals(valueExpression)) {
             return;
         }
@@ -184,6 +209,10 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
 
         // Pas de valeur initiale !
 
+        if (properties == null) {
+            return null;
+        }
+
         // On positionne donc un UNDEFINED dans le delta !
         Object old = properties.put(propertyName, UNDEFINED);
         if (old == UNDEFINED) {
@@ -194,6 +223,21 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
         return old;
     }
 
+    public void clearProperties(FacesContext facesContext) {
+
+        Set<String> names = keySet();
+        if (names.isEmpty()) {
+            return;
+        }
+
+        if (properties == null) {
+            properties = createMap(PROPERTY_INITIAL_SIZE);
+        }
+        for (String propertyName : names) {
+            properties.put(propertyName, UNDEFINED);
+        }
+    }
+
     public Object saveState(FacesContext context) {
         if (hasModifiedProperties() == false) {
             return null;
@@ -201,8 +245,9 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
 
         Object rets[] = new Object[properties.size() * 2];
         int i = 0;
-        for (Iterator it = properties.entrySet().iterator(); it.hasNext();) {
-            Map.Entry entry = (Map.Entry) it.next();
+        for (Iterator<Map.Entry<String, Object>> it = properties.entrySet()
+                .iterator(); it.hasNext();) {
+            Map.Entry<String, Object> entry = it.next();
 
             rets[i++] = entry.getKey();
 
@@ -236,7 +281,7 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
 
         Object datas[] = (Object[]) state;
 
-        properties = new HashMap(datas.length / 2);
+        properties = createMap(datas.length / 2);
 
         for (int i = 0; i < datas.length;) {
             String key = (String) datas[i++];
@@ -254,20 +299,21 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
         properties = null;
     }
 
-    public Set keySet() {
-        Set l = parent.keySet();
+    public Set<String> keySet() {
+        Set<String> l = parent.keySet();
         if (properties == null || properties.isEmpty()) {
             // Pas de propriétés locales !
             return l;
         }
 
-        Set v = new HashSet(l.size() + properties.size());
+        Set<String> v = new HashSet<String>(l.size() + properties.size());
         v.addAll(l);
 
-        for (Iterator it = properties.entrySet().iterator(); it.hasNext();) {
-            Map.Entry entry = (Map.Entry) it.next();
+        for (Iterator<Map.Entry<String, Object>> it = properties.entrySet()
+                .iterator(); it.hasNext();) {
+            Map.Entry<String, Object> entry = it.next();
 
-            String key = (String) entry.getKey();
+            String key = entry.getKey();
             Object value = entry.getValue();
 
             if (value == UNDEFINED) {
@@ -290,13 +336,14 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
             return parent.size();
         }
 
-        Set l = parent.keySet();
+        Set<String> l = parent.keySet();
 
         int cnt = l.size();
-        for (Iterator it = properties.entrySet().iterator(); it.hasNext();) {
-            Map.Entry entry = (Map.Entry) it.next();
+        for (Iterator<Map.Entry<String, Object>> it = properties.entrySet()
+                .iterator(); it.hasNext();) {
+            Map.Entry<String, Object> entry = it.next();
 
-            String key = (String) entry.getKey();
+            String key = entry.getKey();
             Object value = entry.getValue();
 
             boolean contains = l.contains(key);
@@ -321,18 +368,23 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
         return cnt;
     }
 
+    public IPropertiesAccessor copyOriginalState(FacesContext facesContext) {
+        throw new IllegalStateException("No copy original state");
+    }
+
+    @Override
     public String toString() {
         if (hasModifiedProperties() == false) {
             return "{Delta: NONE}";
         }
 
-        Set keys = keySet();
+        Set<String> keys = keySet();
 
         String s = "{Delta: ";
 
         boolean first = true;
-        for (Iterator it = keys.iterator(); it.hasNext();) {
-            String key = (String) it.next();
+        for (Iterator<String> it = keys.iterator(); it.hasNext();) {
+            String key = it.next();
 
             if (first) {
                 first = false;

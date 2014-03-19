@@ -24,9 +24,9 @@ public class MessageDigestSelector {
     private static final Log LOG = LogFactory
             .getLog(MessageDigestSelector.class);
 
-    private static final Set notSupported = new HashSet(32);
+    private static final Set<String> notSupported = new HashSet<String>(32);
 
-    private static final Set supported = new HashSet(32);
+    private static final Set<String> supported = new HashSet<String>(32);
 
     public static MessageDigest getInstance(String[] algorithmNames) {
         String algorithmName = null;
@@ -73,9 +73,7 @@ public class MessageDigestSelector {
                 if (messageDigest != null) {
                     supported.add(algorithmName);
 
-                    LOG
-                            .debug("Mark algorithm '" + algorithmName
-                                    + "' enabled.");
+                    LOG.debug("Mark algorithm '" + algorithmName + "' enabled.");
 
                     return messageDigest;
                 }

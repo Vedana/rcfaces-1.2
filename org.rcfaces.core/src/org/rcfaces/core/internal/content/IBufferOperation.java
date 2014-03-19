@@ -16,6 +16,6 @@ public interface IBufferOperation {
 
     void setName(String name);
 
-    void configure(Map configuration);
+    void configure(Map<String, Object> configuration);
 
 }

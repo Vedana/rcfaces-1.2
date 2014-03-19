@@ -8,8 +8,6 @@ package org.rcfaces.renderkit.html.internal;
  * @version $Revision$ $Date$
  */
 public final class JavaScriptClasses {
-    private static final String REVISION = "$Revision$";
-
     public static final String ACCELERATOR = "f_accelerator";
 
     public static final String ADDITIONAL_INFORMATION = "f_additionalInformation";
@@ -36,9 +34,13 @@ public final class JavaScriptClasses {
 
     public static final String COMBO_GRID = "f_comboGrid";
 
+    public static final String COMPONENT = "f_component";
+
     public static final String COMPONENTS_LIST = "f_componentsList";
 
     public static final String COMPONENTS_GRID = "f_componentsGrid";
+
+    public static final String CRITERIA_LIST = "f_criteriaList";
 
     public static final String CUSTOM_BUTTON = "f_customButton";
 
@@ -49,7 +51,7 @@ public final class JavaScriptClasses {
     public static final String DATE_ENTRY = "f_dateEntry";
 
     public static final String EXPAND_BAR = "f_expandBar";
-    
+
     public static final String EXTERNAL_BOX = "f_externalBox";
 
     public static final String FIELD_SET = "f_fieldSet";
@@ -59,6 +61,8 @@ public final class JavaScriptClasses {
     public static final String FOCUS_MANAGER = "f_focusManager";
 
     public static final String GRID = "f_grid";
+
+    public static final String HEADING = "f_heading";
 
     public static final String HELP_BUTTON = "f_helpButton";
 
@@ -75,6 +79,8 @@ public final class JavaScriptClasses {
     public static final String IMAGE_CHECK_BUTTON = "f_imageCheckButton";
 
     public static final String IMAGE_COMBO = "f_imageCombo";
+
+    public static final String IMAGE_CRITERIA_BUTTON = "f_imageCriteriaButton";
 
     public static final String IMAGE_PAGER_BUTTON = "f_imagePagerButton";
 
@@ -164,6 +170,10 @@ public final class JavaScriptClasses {
 
     public static final String TOOL_FOLDER = "f_toolFolder";
 
+    public static final String TOOLTIP = "f_toolTip";
+
+    public static final String TOOLTIP_MANAGER = "f_toolTipManager";
+
     public static final String TREE = "f_tree";
 
     public static final String VIEW_ERROR_LISTENER = "f_viewErrorListener";
@@ -171,6 +181,10 @@ public final class JavaScriptClasses {
     public static final String WAITING_SHELL = "f_waitingShell";
 
     public static final String VIEW_DIALOG = "f_viewDialog";
+
+    public static final String EVENT_CLICK = "click";
+
+    public static final String EVENT_CLICK_CST = "f_event.CLICK";
 
     public static final String EVENT_CHECK = "check";
 
@@ -219,9 +233,9 @@ public final class JavaScriptClasses {
     public static final String EVENT_MOUSEOVER = "mouseover";
 
     public static final String EVENT_MOUSEOVER_CST = "f_event.MOUSEOVER";
-    
+
     public static final String EVENT_PRE_SELECTION = "preSelection";
-    
+
     public static final String EVENT_PRE_SELECTION_CST = "f_event.PRE_SELECTION";
 
     public static final String EVENT_RESET = "reset";
@@ -276,6 +290,8 @@ public final class JavaScriptClasses {
 
     public static final String EVENT_BLUR_ATTRIBUTE = "blur";
 
+    public static final String EVENT_CLICK_ATTRIBUTE = "click";
+
     public static final String EVENT_CHECK_ATTRIBUTE = "check";
 
     public static final String EVENT_CLOSE_ATTRIBUTE = "close";
@@ -305,7 +321,7 @@ public final class JavaScriptClasses {
     public static final String EVENT_MOUSEOUT_ATTRIBUTE = "mouseOut";
 
     public static final String EVENT_MOUSEOVER_ATTRIBUTE = "mouseOver";
-    
+
     public static final String EVENT_PRE_SELECTION_ATTRIBUTE = "preSelection";
 
     public static final String EVENT_SORT_ATTRIBUTE = "sort";

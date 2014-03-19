@@ -20,6 +20,7 @@ import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.util.ServletTools;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.internal.webapp.ExpirationDate;
+import org.rcfaces.core.internal.webapp.ExtendedHttpServlet;
 
 /**
  * 
@@ -27,8 +28,6 @@ import org.rcfaces.core.internal.webapp.ExpirationDate;
  * @version $Revision$ $Date$
  */
 public class ContentStorageServlet extends ConfiguredHttpServlet {
-
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = 2315096075392789304L;
 
@@ -40,8 +39,7 @@ public class ContentStorageServlet extends ConfiguredHttpServlet {
     private static final String CONTENT_STORAGE_URL_PROPERTY = "org.rcfaces.core.internal.contentStorage.CONTENT_STORAGE_URL";
 
     private static final String NO_CACHE_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".NO_CACHE";
+            .getPackagePrefix() + ".NO_CACHE";
 
     private static final int MAX_BUFFER_SIZE = 8192;
 
@@ -49,6 +47,7 @@ public class ContentStorageServlet extends ConfiguredHttpServlet {
 
     private boolean noCache;
 
+    @Override
     public void init(ServletConfig config) throws ServletException {
 
         super.init(config);
@@ -63,28 +62,28 @@ public class ContentStorageServlet extends ConfiguredHttpServlet {
                 getServletContext(), DEFAULT_CONTENT_STORAGE_BASE_URL,
                 getClass());
         if (contentStorageBaseURL == null) {
-            LOG
-                    .info("Base of content storage is invalid, ignore content service.");
+            LOG.info("Base of content storage is invalid, ignore content service.");
             return;
         }
 
-        LOG
-                .debug("Base of content storage is '" + contentStorageBaseURL
-                        + "'.");
+        LOG.debug("Base of content storage is '" + contentStorageBaseURL + "'.");
 
         getServletContext().setAttribute(CONTENT_STORAGE_URL_PROPERTY,
                 contentStorageBaseURL);
     }
 
-    public static String getContentStorageBaseURI(Map applicationMap) {
+    public static String getContentStorageBaseURI(
+            Map<String, Object> applicationMap) {
         return (String) applicationMap.get(CONTENT_STORAGE_URL_PROPERTY);
     }
 
+    @Override
     protected void doHead(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
     }
 
+    @Override
     protected void doGet(final HttpServletRequest request,
             final HttpServletResponse response) throws ServletException,
             IOException {
@@ -146,7 +145,6 @@ public class ContentStorageServlet extends ConfiguredHttpServlet {
         final IOException exceptionRef[] = new IOException[1];
         RcfacesContext.runIntoFacesContext(getServletContext(), request,
                 response, new Runnable() {
-                    private static final String REVISION = "$Revision$";
 
                     public void run() {
                         try {
@@ -219,8 +217,7 @@ public class ContentStorageServlet extends ConfiguredHttpServlet {
                 if (etag.equals(ifETag)) {
 
                     if (LOG.isDebugEnabled()) {
-                        LOG
-                                .debug("Client sent the same ETag, send a NOT MODIFIED response.");
+                        LOG.debug("Client sent the same ETag, send a NOT MODIFIED response.");
                     }
 
                     response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
@@ -231,12 +228,24 @@ public class ContentStorageServlet extends ConfiguredHttpServlet {
             }
         }
 
-        if (resolvedContent instanceof IGzippedResolvedContent) {
-            IGzippedResolvedContent gzippedResolvedContent = (IGzippedResolvedContent) resolvedContent;
+        if (resolvedContent instanceof IGzipedResolvedContent) {
 
-            if (hasGzipSupport(request) == false
-                    || gzippedResolvedContent.isGzipped() == false) {
-                resolvedContent = gzippedResolvedContent.getSource();
+            setVaryAcceptEncoding(response);
+
+            if (hasGzipSupport(request)) {
+                IResolvedContent gzipedResolvedContent = ((IGzipedResolvedContent) resolvedContent)
+                        .getGzipedContent();
+
+                if (gzipedResolvedContent != null) {
+                    resolvedContent = gzipedResolvedContent;
+
+                    if (ExtendedHttpServlet.GZIP_CONTENT_ENCODING
+                            .equals(resolvedContent.getContentEncoding())) {
+                        // On encode pas forcement en GZIP (taille<256 octets)
+
+                        setGzipContentEncoding(response, false);
+                    }
+                }
             }
         }
 
@@ -247,8 +256,7 @@ public class ContentStorageServlet extends ConfiguredHttpServlet {
                 if (hash.equals(isHash)) {
 
                     if (LOG.isDebugEnabled()) {
-                        LOG
-                                .debug("Client sent the same HashCode, send a NOT MODIFIED response.");
+                        LOG.debug("Client sent the same HashCode, send a NOT MODIFIED response.");
                     }
 
                     response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
@@ -267,18 +275,13 @@ public class ContentStorageServlet extends ConfiguredHttpServlet {
 
                 if (ifModifiedSince >= modificationDate) {
                     if (LOG.isDebugEnabled()) {
-                        LOG
-                                .debug("Client sent a valid date for last modification, send a NOT MODIFIED response.");
+                        LOG.debug("Client sent a valid date for last modification, send a NOT MODIFIED response.");
                     }
 
                     response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
                     return;
                 }
             }
-        }
-
-        if (resolvedContent instanceof IGzippedResolvedContent) {
-            setGzipContentEncoding(response, true);
         }
 
         String contentType = resolvedContent.getContentType();

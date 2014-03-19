@@ -31,6 +31,10 @@ public class JavaScriptEnableModeImpl implements IJavaScriptEnableMode,
 
     public static final int ONOVER = 0x800;
 
+    public static final int ONLAYOUT = 0x1000;
+
+    public static final int PASSIVE_MASK = ONLAYOUT;
+
     private int mode = 0;
 
     JavaScriptEnableModeImpl() {
@@ -60,6 +64,10 @@ public class JavaScriptEnableModeImpl implements IJavaScriptEnableMode,
         mode |= ONOVER;
     }
 
+    public void enableOnLayout() {
+        mode |= ONLAYOUT;
+    }
+
     public int getMode() {
         return mode;
     }
@@ -83,6 +91,9 @@ public class JavaScriptEnableModeImpl implements IJavaScriptEnableMode,
         }
         if ((mode & ONMESSAGE) > 0) {
             s += " MESSAGE";
+        }
+        if ((mode & ONLAYOUT) > 0) {
+            s += " LAYOUT";
         }
 
         return s + " (" + mode + ")]";

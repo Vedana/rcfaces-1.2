@@ -48,7 +48,7 @@ public class GrayOperation extends AbstractImageOperation implements
         return true;
     }
 
-    public IndexColorModel filter(Map requestParameter, IndexColorModel source,
+    public IndexColorModel filter(Map<String, Object> requestParameter, IndexColorModel source,
             BufferedImage sourceImage) {
         int mapSize = source.getMapSize();
 

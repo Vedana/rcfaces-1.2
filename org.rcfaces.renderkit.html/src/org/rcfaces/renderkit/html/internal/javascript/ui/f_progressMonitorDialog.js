@@ -75,7 +75,7 @@ var __statics = {
 			doc=document;
 		}
 		
-		var dialog=doc.createElement("v:progressMonitorDialog");
+		var dialog=doc.createElement(f_core._VNS+":progressMonitorDialog");
 		
 		f_core.AppendChild(doc.body, dialog);
 		

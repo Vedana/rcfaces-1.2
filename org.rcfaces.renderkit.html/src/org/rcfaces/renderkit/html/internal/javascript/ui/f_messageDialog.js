@@ -68,7 +68,7 @@ var __statics = {
     	return true;
     }
     */
-}
+};
 
 var __members = {
 
@@ -100,15 +100,15 @@ var __members = {
 		this.f_super(arguments, f_shell.PRIMARY_MODAL_STYLE | f_shell.MOVE_STYLE);
 		
 		if (this.nodeType==f_core.ELEMENT_NODE) {
-			this._text=f_core.GetAttribute(this, "v:text");
-			this._defaultValue=f_core.GetAttribute(this, "v:defaultValue");
+			this._text=f_core.GetAttributeNS(this,"text");
+			this._defaultValue=f_core.GetAttributeNS(this,"defaultValue");
 			
-			var imageURL=f_core.GetAttribute(this, "v:imageURL");
+			var imageURL=f_core.GetAttributeNS(this,"imageURL");
 			if (imageURL) {
 				this.f_setImageURL(imageURL);
 			}
 
-			var events=f_core.GetAttribute(this, "v:events");
+			var events=f_core.GetAttributeNS(this,"events");
 			if (events) {
 				this.f_initEventAtts(f_messageDialog._EVENTS, events);
 			}

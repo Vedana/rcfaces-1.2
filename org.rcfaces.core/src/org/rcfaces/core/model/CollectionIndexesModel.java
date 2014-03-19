@@ -14,21 +14,19 @@ import java.util.List;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class CollectionIndexesModel extends AbstractIndexesModel implements
+public class CollectionIndexesModel<T> extends AbstractIndexesModel implements
         Serializable, ICommitableObject {
-    private static final String REVISION = "$Revision$";
-
     private static final long serialVersionUID = -3821092264981658279L;
 
     protected static final int[] EMPTY_SELECTION = new int[0];
 
     protected static final int UNKNOWN_INDEX = -1;
 
-    protected final Collection collection;
+    protected final Collection<T> collection;
 
     protected boolean commited;
 
-    public CollectionIndexesModel(Collection collection) {
+    public CollectionIndexesModel(Collection<T> collection) {
         this.collection = collection;
     }
 
@@ -38,7 +36,7 @@ public class CollectionIndexesModel extends AbstractIndexesModel implements
         }
 
         if (collection instanceof List) {
-            return getIndex(((List) collection).get(0));
+            return getIndex(((List<T>) collection).get(0));
         }
 
         return getIndex(collection.iterator().next());
@@ -57,7 +55,7 @@ public class CollectionIndexesModel extends AbstractIndexesModel implements
         int n[] = new int[collection.size()];
         int pos = 0;
         int unknownIndex = getUnknownIndex();
-        for (Iterator it = collection.iterator(); it.hasNext();) {
+        for (Iterator<T> it = collection.iterator(); it.hasNext();) {
             int idx = getIndex(it.next());
 
             if (idx == unknownIndex) {
@@ -107,7 +105,7 @@ public class CollectionIndexesModel extends AbstractIndexesModel implements
         return collection.contains(getKey(index));
     }
 
-    protected int getIndex(Object object) {
+    protected int getIndex(T object) {
         if (object instanceof Number) {
             return ((Number) object).intValue();
         }
@@ -115,8 +113,10 @@ public class CollectionIndexesModel extends AbstractIndexesModel implements
         return getUnknownIndex();
     }
 
-    protected Object getKey(int index) {
-        return new Integer(index);
+    protected T getKey(int index) {
+        T key = (T) new Integer(index);
+
+        return key;
     }
 
     protected int getUnknownIndex() {
@@ -187,7 +187,7 @@ public class CollectionIndexesModel extends AbstractIndexesModel implements
 
         int count = 0;
         int unknownIndex = getUnknownIndex();
-        for (Iterator it = collection.iterator(); it.hasNext();) {
+        for (Iterator<T> it = collection.iterator(); it.hasNext();) {
             int idx = getIndex(it.next());
 
             if (idx == unknownIndex) {
@@ -204,7 +204,7 @@ public class CollectionIndexesModel extends AbstractIndexesModel implements
         this.commited = true;
 
         if (collection instanceof ArrayList) {
-            ((ArrayList) collection).trimToSize();
+            ((ArrayList<T>) collection).trimToSize();
         }
     }
 
@@ -213,6 +213,6 @@ public class CollectionIndexesModel extends AbstractIndexesModel implements
     }
 
     public IIndexesModel copy() {
-        return new CollectionIndexesModel(collection);
+        return new CollectionIndexesModel<T>(collection);
     }
 }

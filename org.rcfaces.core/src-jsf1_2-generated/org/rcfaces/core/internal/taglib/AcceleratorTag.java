@@ -32,27 +32,27 @@ public class AcceleratorTag extends CameliaTag implements Tag {
 		return AcceleratorComponent.COMPONENT_TYPE;
 	}
 
-	public final void setKeyPressListener(ValueExpression keyPressListeners) {
+	public void setKeyPressListener(ValueExpression keyPressListeners) {
 		this.keyPressListeners = keyPressListeners;
 	}
 
-	public final void setValidationListener(ValueExpression validationListeners) {
+	public void setValidationListener(ValueExpression validationListeners) {
 		this.validationListeners = validationListeners;
 	}
 
-	public final void setFor(ValueExpression forValue) {
+	public void setFor(ValueExpression forValue) {
 		this.forValue = forValue;
 	}
 
-	public final void setForItemValue(ValueExpression forItemValue) {
+	public void setForItemValue(ValueExpression forItemValue) {
 		this.forItemValue = forItemValue;
 	}
 
-	public final void setKeyBinding(ValueExpression keyBinding) {
+	public void setKeyBinding(ValueExpression keyBinding) {
 		this.keyBinding = keyBinding;
 	}
 
-	public final void setIgnoreEditableComponent(ValueExpression ignoreEditableComponent) {
+	public void setIgnoreEditableComponent(ValueExpression ignoreEditableComponent) {
 		this.ignoreEditableComponent = ignoreEditableComponent;
 	}
 

@@ -25,6 +25,6 @@ var __statics = {
 	 * @field public static final Number
 	 */
     TWOWAYS_CLIENT_FULL_STATE: 2
-}
+};
 
 new f_aspect("fa_clientFullState", __statics);

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.StringTokenizer;
 
 import javax.faces.FacesException;
@@ -23,12 +22,12 @@ import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.repository.IHierarchicalRepository;
-import org.rcfaces.core.internal.repository.IRepository;
 import org.rcfaces.core.internal.repository.IHierarchicalRepository.IHierarchicalFile;
 import org.rcfaces.core.internal.repository.IHierarchicalRepository.IModule;
 import org.rcfaces.core.internal.repository.IHierarchicalRepository.ISet;
+import org.rcfaces.core.internal.repository.IRepository;
+import org.rcfaces.core.internal.repository.IRepository.ICriteria;
 import org.rcfaces.core.internal.repository.IRepository.IFile;
-import org.rcfaces.core.internal.tools.ContextTools;
 import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.renderkit.html.component.JavaScriptComponent;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
@@ -36,12 +35,12 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptRenderContext;
+import org.rcfaces.renderkit.html.internal.agent.UserAgentRuleTools;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.JavaScriptFilesCollectorDecorator;
 import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository;
 import org.rcfaces.renderkit.html.internal.javascript.JavaScriptRepositoryServlet;
 import org.rcfaces.renderkit.html.internal.util.FileItemSource;
-import org.rcfaces.renderkit.html.internal.util.UserAgentTools;
 
 /**
  * 
@@ -49,7 +48,6 @@ import org.rcfaces.renderkit.html.internal.util.UserAgentTools;
  * @version $Revision$ $Date$
  */
 public class JavaScriptRenderer extends AbstractFilesCollectorRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(JavaScriptRenderer.class);
 
@@ -74,7 +72,7 @@ public class JavaScriptRenderer extends AbstractFilesCollectorRenderer {
                         "In order to use userAgentVary property, you must declare <v:init userAgentVary=\"true\" ...>");
             }
 
-            if (UserAgentTools.accept(facesContext, javaScriptComponent) == false) {
+            if (UserAgentRuleTools.accept(facesContext, javaScriptComponent) == false) {
                 return;
             }
         }
@@ -117,8 +115,9 @@ public class JavaScriptRenderer extends AbstractFilesCollectorRenderer {
                 FileItemSource fileItemSource = sources[i];
 
                 IContentAccessor contentAccessor = ContentAccessorFactory
-                        .createFromWebResource(facesContext, fileItemSource
-                                .getSource(), IContentFamily.SCRIPT);
+                        .createFromWebResource(facesContext,
+                                fileItemSource.getSource(),
+                                IContentFamily.SCRIPT);
 
                 String source = contentAccessor.resolveURL(facesContext, null,
                         null);
@@ -203,14 +202,14 @@ public class JavaScriptRenderer extends AbstractFilesCollectorRenderer {
             return;
         }
 
-        final List files = new ArrayList(32);
+        final List<Object> files = new ArrayList<Object>(32);
 
         if (requiredFiles != null) {
             StringTokenizer st = new StringTokenizer(requiredFiles, ",");
             for (; st.hasMoreTokens();) {
                 String requiredFile = st.nextToken().trim();
 
-                IRepository.IFile file = repository.getSetByName(requiredFile);
+                IFile file = repository.getSetByName(requiredFile);
                 if (file == null) {
                     file = repository.getModuleByName(requiredFile);
                     if (file == null) {
@@ -319,7 +318,7 @@ public class JavaScriptRenderer extends AbstractFilesCollectorRenderer {
         }
 
         if (javaScriptRenderContext.isCollectorMode()) {
-            javaScriptRenderContext.appendRequiredFiles((IFile[]) files
+            javaScriptRenderContext.appendRequiredFiles(files
                     .toArray(new IFile[files.size()]));
 
             return;
@@ -348,9 +347,13 @@ public class JavaScriptRenderer extends AbstractFilesCollectorRenderer {
 
         jsWriter.writeCall(cameliaClassLoader, "f_requiresBundle");
 
-        Locale locale = ContextTools.getUserLocale(facesContext);
+        ICriteria criteria = repositoryContext.getCriteria();
         for (int i = 0; i < fs.length; i++) {
-            String src = fs[i].getURI(locale);
+            String src = fs[i].getURI(criteria);
+            if (src == null) {
+                throw new NullPointerException("Can not get URI of file '"
+                        + fs[i] + "' criteria='" + criteria + "'");
+            }
 
             if (i > 0) {
                 jsWriter.write(',');

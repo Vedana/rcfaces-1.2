@@ -16,20 +16,20 @@ var __statics={
 	 */
 	DEFAULT_TYPE: "default"
 	
-}
+};
 
 var __members={
 
 	fa_initializeInput: function(input) {
-		input._min=f_core.GetNumberAttribute(input, "v:min");
-		input._max=f_core.GetNumberAttribute(input, "v:max");
-		input._default=f_core.GetNumberAttribute(input, "v:default");
+		input._min=f_core.GetNumberAttributeNS(input,"min");
+		input._max=f_core.GetNumberAttributeNS(input,"max");
+		input._default=f_core.GetNumberAttributeNS(input,"default");
 
-		input._cycle=f_core.GetBooleanAttribute(input, "v:cycle");
+		input._cycle=f_core.GetBooleanAttributeNS(input,"cycle");
 				
-		input._autoCompletion=f_core.GetBooleanAttribute(input, "v:auto");
+		input._autoCompletion=f_core.GetBooleanAttributeNS(input,"auto");
 		
-		var step=f_core.GetAttribute(input, "v:step");
+		var step=f_core.GetAttributeNS(input,"step");
 		if (step) {
 			input._step=step;
 		}
@@ -372,7 +372,7 @@ var __members={
 		return s;
 	}
 	
-}
+};
  
 new f_aspect("fa_compositeNumEntry", {
 	extend: [ fa_compositeEntry ],

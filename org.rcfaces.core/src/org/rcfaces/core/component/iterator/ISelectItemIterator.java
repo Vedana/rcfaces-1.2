@@ -10,7 +10,7 @@ import javax.faces.component.UISelectItem;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public interface ISelectItemIterator extends IComponentIterator {
+public interface ISelectItemIterator extends IComponentIterator<UISelectItem> {
 
     UISelectItem next();
 
