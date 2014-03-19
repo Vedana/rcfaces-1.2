@@ -15,7 +15,6 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  * @version $Revision$ $Date$
  */
 public class ResetButtonRenderer extends ButtonRenderer {
-    private static final String REVISION = "$Revision$";
 
     /*
      * (non-Javadoc)
