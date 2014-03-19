@@ -11,5 +11,5 @@ import org.rcfaces.renderkit.html.internal.AbstractHtmlRenderer;
  * @version $Revision$ $Date$
  */
 public class ScopeRenderer extends AbstractHtmlRenderer {
-    private static final String REVISION = "$Revision$";
+    
 }

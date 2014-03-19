@@ -15,7 +15,7 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  * @version $Revision$ $Date$
  */
 public class RulerRenderer extends AbstractCssRenderer {
-    private static final String REVISION = "$Revision$";
+    
 
     public void encodeEnd(IComponentWriter writer) throws WriterException {
 
