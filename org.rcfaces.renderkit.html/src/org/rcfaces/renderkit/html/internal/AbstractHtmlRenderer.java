@@ -824,18 +824,27 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
         return writer;
     }
 
+    @SuppressWarnings("unused")
     protected IHtmlWriter writeChecked(IHtmlWriter writer,
             ISelectedCapability selectedCapability) throws WriterException {
-        System.out.println("TEST CHECK  "
-                + writer.getComponentRenderContext().getComponentClientId());
+
+        if (false) {
+            System.out
+                    .println("TEST CHECK  "
+                            + writer.getComponentRenderContext()
+                                    .getComponentClientId());
+        }
 
         boolean isSelected = selectedCapability.isSelected();
         if (isSelected) {
             writer.writeChecked();
         }
-        System.out.println("CHECK  "
-                + writer.getComponentRenderContext().getComponentClientId()
-                + " => " + isSelected);
+
+        if (false) {
+            System.out.println("CHECK  "
+                    + writer.getComponentRenderContext().getComponentClientId()
+                    + " => " + isSelected);
+        }
 
         return writer;
     }
