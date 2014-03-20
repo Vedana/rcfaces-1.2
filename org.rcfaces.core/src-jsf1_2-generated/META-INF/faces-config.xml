@@ -7,10 +7,15 @@
       <p>It allows to associate an accelerator key to an action or another component.</p>
       <p>The accelerator Component has the following capabilities :
       <ul>
-        <li>Key pressed</li>
-        <li>Association to another component</li>
+        <li>IKeyPressEventCapability</li>
+		<li>IImmediateCapability</li>
+		<li>IValidationEventCapability</li>
+		<li>IForCapability</li>
       </ul>
       </p>
+      
+        
+      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/AcceleratorComponent.html">accelerator</a> renderer is linked to the <a href="/jsdocs/index.html?f_accelerator.html" target="_blank">f_accelerator</a> javascript class. f_accelerator extends f_object, fa_immediate, fa_eventTarget</p>
 ]]></description>
 		<component-type>org.rcfaces.core.accelerator</component-type>
 		<component-class>org.rcfaces.core.component.AcceleratorComponent</component-class>
@@ -43,18 +48,36 @@ A string value specifying the key associated to the component. for example "Alt+
       <p>It can have a graphical representation or not; But it is mainly used to apply a collective treatment to a set of component, for example show or hide a group of component.</p>
       <p>The Box Component has the following capabilities :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Margin</li>
-        <li>Help</li>
-        <li>Visibility</li>
-      	<li>Background Image</li>
-      	<li>Border</li>
-      	<li>Events Handling</li>
-      	<li>Contextual Menu</li>
-      	<li>Async Render (AJAX)</li>
+        <li>IBackgroundImageCapability</li>
+		<li>IBorderCapability</li>
+		<li>IMouseEventCapability</li>
+		<li>IInitEventCapability</li>
+		<li>ILoadEventCapability</li>
+		<li>IMenuCapability</li>
+		<li>IAsyncRenderModeCapability</li>
+		<li>IAsyncDecodeModeCapability</li>
+		<li>ITypedComponentCapability</li>
+		<li>IOverStyleClassCapability</li>
+		<li>IScrollableCapability</li>
       </ul>
       </p>
+      
+      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/BoxComponent.html">box</a> renderer is linked to the <a href="/jsdocs/index.html?f_box.html" target="_blank">f_box</a> javascript class. f_box extends f_component, fa_asyncRender, fa_subMenu</p>
+      
+     <p>Table of component style classes : </p>
+
+	<table border="1" cellpadding="3" cellspacing="0" width="100%">
+	<tbody>
+	<tr style="text-align:left">
+		<th  width="33%">Style Name</th>
+		<th  width="50%">Description</th>
+	</tr>
+	<tr style="text-align:left">
+		<td width="33%">f_box</td>
+		<td width="50%">Defines styles for the wrapper element of the component</td>
+	</tr>
+      </tbody>
+	</table>
 ]]></description>
 		<component-type>org.rcfaces.core.box</component-type>
 		<component-class>org.rcfaces.core.component.BoxComponent</component-class>
@@ -74,22 +97,82 @@ A boolean value indicating wether the vertical scroll is shown.
 		</attribute>
 	</component>
 	<component>
+		<description><![CDATA[
+<p>The externalBox Component is a container based on the standard HTML tag &lt;IFrame&gt;.  .</p>
+      <p>The externalBox Component has the following capabilities :
+      <ul>
+	<li>ILoadEventCapability</li>
+	<li>IOverStyleClassCapability</li>       
+     </ul>
+     </p>
+     
+     
+        <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ExternalBoxComponent.html">externalBox</a> renderer is link to the <a href="/jsdocs/index.html?f_externalBox.html" target="_blank">f_externalBox</a> javascript class. f_externalBox extends f_component</p>
+		
+
+    <p>Table of component style classes : </p>
+   
+   <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_externalBox</td>
+			<td id="ermvsh" width="50%">Defines styles for the wrapper Frame element</td>
+		</tr>
+		
+		
+		</tbody>
+		</table>
+]]></description>
 		<component-type>org.rcfaces.core.externalBox</component-type>
 		<component-class>org.rcfaces.core.component.ExternalBoxComponent</component-class>
+		<attribute>
+			<attribute-name>scrolling</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>contentURL</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
 	</component>
 	<component>
 		<description><![CDATA[
 <p>The button Component is equivalent to the standard HTML tag &lt;BUTTON&gt;.</p>
       <p>The button Component has the following capabilities :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text &amp; font</li>
-        <li>Help</li>
-        <li>Visibility, Read-Only, Disabled</li>
-      	<li>Events Handling</li>
+        <li>ITextCapability</li>
+		<li>ITextDirectionCapability</li>
+		<li>ISelectionEventCapability</li>
+		<li>IReadOnlyCapability</li>
+		<li>IAlternateTextCapability</li>
+		<li>IFocusStyleClassCapability</li> 
       </ul>
       </p>
+      
+	  <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ButtonComponent.html">button</a> renderer is linked to the <a href="/jsdocs/index.html?f_button.html" target="_blank">f_button</a> javascript class. f_box extends f_component, fa_asyncRender, fa_subMenu</p>
+      
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_button</td>
+			<td width="50%">Defines styles for the wrapper Input element</td>
+		</tr>
+		
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.button</component-type>
 		<component-class>org.rcfaces.core.component.ButtonComponent</component-class>
@@ -99,49 +182,82 @@ A boolean value indicating wether the vertical scroll is shown.
 <p>The checkButton Component is equivalent to the &lt;INPUT TYPE="checkbox"&gt; HTML tag.</p>
       <p>The checkButton Component has the following capabilities :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text &amp; font</li>
-        <li>Help</li>
-        <li>Visibility, Read-Only, Disabled</li>
-      	<li>Events Handling</li>
+        <li>ITextCapability</li>
+		<li>ITextDirectionCapability</li>
+		<li>IHorizontalTextPositionCapability</li>
+		<li>ISelectionEventCapability</li>
+		<li>IReadOnlyCapability</li>
+		<li>IAlternateTextCapability</li>
+		<li>IFocusStyleClassCapability</li>
+		<li>ISeverityStyleClassCapability</li>
+		<li>ISelectedCapability</li>
       </ul>
       </p>
+      
+      
+      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/CheckButtonComponent.html">checkButton</a> renderer is linked to the <a href="/jsdocs/index.html?f_checkButton">f_checkButton</a> javascript class. f_checkButton extends f_button</p>
+      
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_checkButton</td>
+			<td width="50%">Defines styles for the wrapper DIV element</td>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_checkButton_input</td>
+			<td width="50%">Defines styles for the wrapper Input button element </td>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_checkButton_text</td>
+			<td width="50%">Defines styles for the wrapper Span element containing the text </td>
+		</tr>
+		
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.checkButton</component-type>
 		<component-class>org.rcfaces.core.component.CheckButtonComponent</component-class>
 	</component>
 	<component>
 		<description><![CDATA[
-<p>The checkButton3States Component is a <a href="/comps/checkButtonComponent.html">CheckButton</a> with 3 states : Check, unchecked and undefined. It is often used to show the state of a group of checkButtons</p>
-      <p>This component is <b>experimental</b>.</p>
-      <p>The checkButton3States Component has the following capabilities :
-      <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text &amp; font</li>
-        <li>Help</li>
-        <li>Visibility, Read-Only, Disabled</li>
-      	<li>Events Handling</li>
-      </ul>
-      </p>
-]]></description>
-		<component-type>org.rcfaces.core.checkButton3States</component-type>
-		<component-class>org.rcfaces.core.component.CheckButton3StatesComponent</component-class>
-	</component>
-	<component>
-		<description><![CDATA[
 <p>The combo Component is equivalent to the standard HTML tag &lt;SELECT SIZE=1&gt;.</p>
       <p>The combo Component has the following capabilities :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text &amp; font</li>
-        <li>Help</li>
-        <li>Visibility, Read-Only, Disabled</li>
-      	<li>Events Handling</li>
+        <li>ISelectionEventCapability</li>
+		<li>IRequiredCapability</li>
+		<li>IFocusStyleClassCapability</li>
+		<li>ISeverityStyleClassCapability</li>
+		<li>IFilterCapability </li>
       </ul>
       </p>
+      
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ComboComponent.html">comboComponent</a> renderer is linked to the <a href="/jsdocs/index.html?f_combo.html" target="_blank">f_combo</a> javascript class. f_combo extends f_abstractList, fa_selectionProvider</p>
+      
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_combo</td>
+			<td width="50%">Defines styles for the wrapper Select element</td>
+		</tr>
+		
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.combo</component-type>
 		<component-class>org.rcfaces.core.component.ComboComponent</component-class>
@@ -182,15 +298,56 @@ A string value holding the current value of the component.
       and can give direct access to a specific page ("a la Google").</p>
       <p>The pager Component has the following capabilities :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text &amp; font</li>
-        <li>Help</li>
-        <li>Visibility, Read-Only, Disabled</li>
-      	<li>Events Handling</li>
-      	<li>Association with another component</li>
+        <li>IRequiredCapability</li>
+		<li>IAutoTabCapability</li>
+		<li>IValueChangeEventCapability</li>
+		<li>IFocusStyleClassCapability</li>
+		<li>ISelectionEventCapability</li>
+		<li>IReadOnlyCapability</li>
+		<li>INumberFormatTypeCapability</li>
+		<li>ILiteralLocaleCapability</li>
+		<li>IComponentLocaleCapability</li>
+		<li>ISeverityStyleClassCapability</li>
+		<li>IAlternateTextCapability</li>
+		<li>IValidationParameters</li>
       </ul>
       </p>
+      
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/PagerComponent.html">pager</a> renderer is linked to the <a href="/jsdocs/index.html?f_pager.html" target="_blank">f_pager</a> javascript class. f_pager extends f_component, fa_pager</p>
+      
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_pager</td>
+			<td width="50%">Defines styles for the wrapper DIV element</td>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_pager_button_first</td>
+			<td width="50%">Defines styles for the wrapper SPAN element</td>
+		</tr>
+		<tr  style="text-align:left">
+			<td width="33%">f_pager_button_next</td>
+			<td width="50%">Defines styles for the wrapper SPAN element</td>
+		</tr>
+		<tr  style="text-align:left">
+			<td width="33%">f_pager_button_last</td>
+			<td width="50%">Defines styles for the wrapper SPAN element</td>
+		</tr>
+		<tr  style="text-align:left">
+			<td width="33%">f_pager_button_prev</td>
+			<td width="50%">Defines styles for the wrapper SPAN element</td>
+		</tr>
+		
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.pager</component-type>
 		<component-class>org.rcfaces.core.component.PagerComponent</component-class>
@@ -211,17 +368,82 @@ A string specifying the message to display when there is no row to display.
 <p>The dataGrid Component is a grid component. It can be compared to the grid found in the list part of the modern file explorer. It allows sorts, resizing, contextual menus ...</p>
       <p>The dataGrid Component has the following capabilities :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text, font &amp; images</li>
-        <li>Margin &amp; border</li>
-        <li>Help</li>
-        <li>Visibility, Read-Only, Disabled</li>
-      	<li>Events Handling</li>
-      	<li>Contextual actions in cell, row or table scope</li>
-      	<li>...</li>
+        <li>ISelectionEventCapability</li>
+		<li>ISelectableCapability</li>
+		<li>ISelectionCardinalityCapability</li>
+		<li>ISelectedValuesCapability</li>
+		<li>IDragEventCapability</li>
+		<li>IDraggableCapability</li>
+		<li>IDropEventCapability</li>
+		<li>IDropCompleteEventCapability</li>
+		<li>IDroppableCapability</li>
+		<li>ICheckEventCapability</li>
+		<li>ICheckableCapability</li>
+		<li>ICheckCardinalityCapability</li>
+		<li>ICheckedValuesCapability</li>
+		<li>IAdditionalInformationEventCapability</li>
+		<li>IAdditionalInformationValuesCapability</li>
+		<li>IClientAdditionalInformationFullStateCapability</li>
+		<li>IAdditionalInformationCardinalityCapability</li>
+		<li>IDoubleClickEventCapability</li>
+		<li>ILoadEventCapability</li>
+		<li>IRequiredCapability</li>
+		<li>IRowStyleClassCapability</li>
+		<li>IEmptyDataMessageCapability</li>
+		<li>IReadOnlyCapability</li>
+		<li>IDisabledCapability</li>
+		<li>IMenuCapability</li>
+		<li>IScrollableCapability</li>
+		<li>IFilterCapability</li>
+		<li>IShowValueCapability</li>
+		<li>IPreferencesSettings</li>
+		<li>IPagedCapability</li>
+		<li>IClientSelectionFullStateCapability</li>
+		<li>IClientCheckFullStateCapability</li>
+		<li>IHeaderVisibilityCapability</li>
+		<li>ICursorProvider</li>
+		<li>IGridComponent</li>
+		<li>IDroppableGridComponent</li>
+		<li>IOrderedChildrenCapability</li>
+		<li>ISortedChildrenCapability</li>
+		<li>IComponentValueTypeCapability</li>
+		<li>ISelectionRangeComponent</li>
+		<li>ICheckRangeComponent</li>
+		<li>ISortedComponentsCapability</li>
+		<li>IAdditionalInformationRangeComponent</li>
+		<li>IDraggableGridComponent</li>
       </ul>
       </p>
+      
+      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/DataGridComponent.html">dataGridComponent</a> renderer is link to the <a href="/jsdocs/index.html?f_dataGrid.html" target="_blank">f_dataGrid</a> javascript class. f_dataGrid extends f_grid, fa_readOnly, fa_checkManager, fa_droppable, fa_draggable, fa_autoOpen</p>
+		
+		<p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_dataGrid</td>
+			<td id="ermvsh" width="50%">Defines styles for the wrapper DIV element.</td>
+		</tr>
+		<tr  style="text-align:left">
+			<td width="33%">f_grid_dataTitle_scroll</td>
+			<td id="ermvsh" width="50%">Defines styles for the wrapper DIV element for the header of colums.</td>
+		</tr>
+		<tr  style="text-align:left">
+			<td width="33%">f_grid_dataBody_scroll</td>
+			<td id="ermvsh" width="50%">Defines styles for the wrapper DIV element for the body.</td>
+		</tr>
+		<tr  style="text-align:left">
+			<td width="33%">f_grid_sortManager</td>
+			<td id="ermvsh" width="50%">Defines styles for the wrapper DIV element for the pop-up od the sort manager.</td>
+		</tr>
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.dataGrid</component-type>
 		<component-class>org.rcfaces.core.component.DataGridComponent</component-class>
@@ -281,7 +503,56 @@ A string value specifying the name of the variable receiving the index of the cu
 	</component>
 	<component>
 		<description><![CDATA[
-Reserved for future use
+<p>The componentGrid Component is a grid component. It can be compared to the grid found in the list part of the modern file explorer. It allows sorts, resizing, contextual menus ...</p>
+  	<p>The componentGrid Component is an evolution of <a href="/comps/dataGridComponent.html">dataGrid component</a>. This component is a component container, it allows to:
+  	<ul>
+  		<li>ISelectionEventCapability</li>
+		<li>ISelectableCapability</li>
+		<li>ISelectionCardinalityCapability</li>
+		<li>ISelectedValuesCapability</li>
+		<li>IClientSelectionFullStateCapability</li>
+		<li>IAdditionalInformationEventCapability</li>
+		<li>IAdditionalInformationValuesCapability</li>
+		<li>IClientAdditionalInformationFullStateCapability</li>
+		<li>IAdditionalInformationCardinalityCapability</li>
+		<li>IDoubleClickEventCapability</li>
+		<li>ILoadEventCapability</li>
+		<li>IRequiredCapability</li>
+		<li>IBorderCapability</li>
+		<li>IRowStyleClassCapability</li>
+		<li>IShowValueCapability</li>
+		<li>IEmptyDataMessageCapability</li>
+		<li>IMenuCapability</li>
+		<li>IScrollableCapability</li>
+		<li>IPreferencesSettings</li>
+		<li>IPagedCapability</li>
+		<li>IHeaderVisibilityCapability</li>
+		<li>IGridComponent</li>
+		<li>IOrderedChildrenCapability</li>
+		<li>ISortedChildrenCapability</li>
+		<li>IComponentValueTypeCapability</li>
+		<li>ISelectionRangeComponent</li>
+		<li>ISortedComponentsCapability</li>
+		<li>IAdditionalInformationRangeComponent</li>	
+		</ul></p>
+		
+		<p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ComponentsGridComponent.html"> componentsGrid </a> renderer is link to the <a href="/jsdocs/index.html?f_componentsGrid.html" target="_blank">f_componentsGrid</a> javascript class. f_componentsGrid extends f_grid</p>
+		
+		<p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_componentsGrid</td>
+			<td id="ermvsh" width="50%">Defines styles for the wrapper DIV element. Contains f_grid styles.</td>
+		</tr>
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.componentsGrid</component-type>
 		<component-class>org.rcfaces.core.component.ComponentsGridComponent</component-class>
@@ -313,8 +584,87 @@ A string value specifying the name of the variable receiving the index of the cu
 		</attribute>
 	</component>
 	<component>
+		<description><![CDATA[
+<p>The comboGrid Component has the same fonctionalities as the combo component but the popup is based on a dataGrid.
+		The comboGrid can have multiple columns, be filtered, paged and some other datagrid capabilities</p>
+		<p>The comboGrid Component has the following capabilities :
+		<ul>
+		<li>IAdditionalInformationEventCapability</li>
+		<li>IAdditionalInformationValuesCapability</li>
+		<li>IClientAdditionalInformationFullStateCapability</li>
+		<li>IAdditionalInformationCardinalityCapability</li>
+		<li>IRowStyleClassCapability</li>
+		<li>IPagerMessageCapability</li>
+		<li>IFilterCapability</li>
+		<li>IPagedCapability</li>
+		<li>IHeaderVisibilityCapability</li>
+		<li>IOrderedChildrenCapability</li>
+		<li>ISortedChildrenCapability</li>
+		<li>IComponentValueTypeCapability</li>
+		<li>IAdditionalInformationRangeComponent</li>
+		</ul>
+		</p>
+		<p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ComboGridComponent.html"> comboGrid </a> renderer is link to the <a href="/jsdocs/index.html?f_comboGrid.html" target="_blank">f_comboGrid</a> javascript class. f_comboGrid extends f_keyEntry, fa_dataGridPopup</p>
+		
+		<p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_comboGrid</td>
+			<td id="ermvsh" width="50%">Defines styles for the wrapper Table element</td>
+		</tr>
+		<tr style="text-align:left">
+			<td width="33%">f_comboGrid_input</td>
+			<td width="50%">Defines styles for the Input Text</td>
+		</tr>
+		<tr style="text-align:left">
+			<td width="33%">f_comboGrid_popup</td>
+			<td width="50%">Defines styles for the wrapper DIV elment of the pop-up. Contains fa_dataGridPopup styles</td>
+		</tr>
+		
+		</tbody>
+		</table>
+]]></description>
 		<component-type>org.rcfaces.core.comboGrid</component-type>
 		<component-class>org.rcfaces.core.component.ComboGridComponent</component-class>
+		<attribute>
+			<attribute-name>popupWidth</attribute-name>
+			<attribute-class>int</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>popupHeight</attribute-name>
+			<attribute-class>int</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>pagerStyleClass</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>pagerLookId</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>popupStyleClass</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>gridStyleClass</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>gridLookId</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>searchFieldVisible</attribute-name>
+			<attribute-class>boolean</attribute-class>
+		</attribute>
 	</component>
 	<component>
 		<component-type>org.rcfaces.core.keyLabel</component-type>
@@ -326,7 +676,39 @@ A string value specifying the name of the variable receiving the index of the cu
 	</component>
 	<component>
 		<description><![CDATA[
-Shows the components for each data with pagination.
+<p>The componentslist component Shows the components for each data with pagination.</p>
+		<p>The componentslist Component has the following capabilities :
+		<ul>
+		<li>IMenuCapability</li>
+		<li>IBorderCapability</li>
+		<li>IBorderTypeCapability</li>
+		<li>IScrollableCapability</li>
+		<li>IShowValueCapability </li>
+		</ul>
+		</p>
+		
+		
+		<p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ComponentsListComponent.html"> componentsList </a> renderer is link to the <a href="/jsdocs/index.html?f_componentsGrid.html" target="_blank">f_componentslist</a> javascript class. f_componentslist extends f_component, fa_pagedComponent</p>
+		
+		<p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_componentslist</td>
+			<td id="ermvsh" width="50%">Defines styles for the wrapper DIV element. Contains a Table</td>
+		</tr>
+		<tr  style="text-align:left">
+			<td width="33%">f_componentslist_cell</td>
+			<td id="ermvsh" width="50%">Defines styles for the wrapper TD element for the row.</td>
+		</tr>
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.componentsList</component-type>
 		<component-class>org.rcfaces.core.component.ComponentsListComponent</component-class>
@@ -378,16 +760,52 @@ An item specialized for date values.
 <p>The calendar Component shows a calendar. It can be customized in differents ways (days off, holidays, tool tips ...).</p>
       <p>The calendar Component has the following capabilities :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text, font &amp; image</li>
-        <li>Margin &amp; border</li>
-        <li>Help</li>
-        <li>Visibility, Read-Only, Disabled</li>
-      	<li>Events Handling</li>
-      	<li>Calendar functions</li>
+        <li>ISelectionEventCapability</li>
+		<li>IReadOnlyCapability</li>
+		<li>ILiteralLocaleCapability</li>
+		<li>ILiteralTimeZoneCapability</li>
+		<li>IComponentLocaleCapability</li>
+		<li>IComponentTimeZoneCapability</li>
+		<li>IClientDatesStrategyCapability</li> 
+		<li>IBorderCapability</li>
+		<li>ICalendarLayoutCapability</li>
+		<li>IMultipleSelectCapability</li>
+		<li>ICalendarModeCapability</li>
       </ul>
       </p>
+      
+       
+	  <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/CalendarComponent.html">calendar</a> renderer is linked to the <a href="/jsdocs/index.html?f_calendar.html" target="_blank">f_calendar</a> javascript class. f_calendar extends f_component, fa_readOnly, fa_disabled, fa_itemsWrapper</p>
+
+       <p> Table of the main component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_calendar_yearCursor</td>
+			<td width="50%">Defines styles for the wrapper Table element used to change years of the calendar. Contains other style</td>
+		</tr>
+		<tr  style="text-align:left">
+			<td width="33%">f_calendar_monthList</td>
+			<td width="50%">Defines styles for the wrapper Table element the element containing the  months of year  </td>
+		</tr>
+		<tr  style="text-align:left">
+			<td width="33%">f_calendar_dayList</td>
+			<td width="50%">Defines styles for the wrapper Table element the element containing the day list of year  </td>
+		</tr>
+		<tr  style="text-align:left">
+			<td width="33%">f_calendar_day</td>
+			<td width="50%">Defines styles for the A element</td>
+		</tr>
+		
+		
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.calendar</component-type>
 		<component-class>org.rcfaces.core.component.CalendarComponent</component-class>
@@ -401,16 +819,45 @@ An item specialized for date values.
 <p>The dateEntry Component is a specialized <a href="/comps/textEntryComponent.html">textEntry Component</a>. it sports auto-completion related to the validity of the numbers entered as a date.</p>
       <p>The dateEntry Component has the following capabilities :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text, font &amp; separators</li>
-        <li>Margin &amp; border</li>
-        <li>Help</li>
-        <li>Visibility, Read-Only, Disabled</li>
-      	<li>Events Handling</li>
-      	<li>Calendar functions</li>
+        <li>PIRequiredCapability</li>
+		<li>IAutoTabCapability</li>
+		<li>IValueChangeEventCapability</li>
+		<li>IFocusStyleClassCapability</li>
+		<li>ISeverityStyleClassCapability</li>
+		<li>IDateFormatCapability</li>
+		<li>IValidationParameters</li>
       </ul>
       </p>
+      
+        <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/DateEntryComponent.html">dateEntry</a> renderer is link to the <a href="/jsdocs/index.html?f_dateEntry.html" target="_blank">f_dateEntry</a> javascript class. f_dateEntry extends f_compositeNumEntry, fa_calendarPopup</p>
+		
+		<p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_dateEntry</td>
+			<td id="ermvsh" width="50%">Defines styles for the wrapper DIV element</td>
+		</tr>
+		<tr  style="text-align:left">
+			<td width="33%">f_dateEntry_dd</td>
+			<td id="ermvsh" width="50%">Defines styles for day INPUT element.</td>
+		</tr>
+		<tr  style="text-align:left">
+			<td width="33%">f_dateEntry_MM</td>
+			<td id="ermvsh" width="50%">Defines styles for month INPUT element.</td>
+		</tr>
+		<tr  style="text-align:left">
+			<td width="33%">f_dateEntry_yyyy</td>
+			<td id="ermvsh" width="50%">Defines styles for years INPUT element.</td>
+		</tr>
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.dateEntry</component-type>
 		<component-class>org.rcfaces.core.component.DateEntryComponent</component-class>
@@ -441,16 +888,38 @@ The date selected by default.
 <p>The dateChooser Component is a button that shows a calendar and help the user to choose a date. It can be associated to a entry field, the choosen date is then automatically entered in the field. It works like an <a href="/comps/imageButtonComponent.html">Image Button Component</a>. The dateChooser Component does <b>not</b> provide an Entry field.</p>
       <p>The dateChooser Component has the following capabilities :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text, font &amp; image</li>
-        <li>Margin &amp; border</li>
-        <li>Help</li>
-        <li>Visibility, Read-Only, Disabled</li>
-      	<li>Events Handling</li>
-      	<li>Association with another component</li>
+        <li>IImageButtonFamilly,
+		<li>IValueChangeEventCapability,
+		<li>IForCapability,
+		<li>ICalendarLayoutCapability</li>
       </ul>
       </p>
+      
+      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/DateChooserComponent.html">dateChooser</a> renderer is link to the <a href="/jsdocs/index.html?f_dateChooser.html" target="_blank">f_dateChooser</a> javascript class. f_dateChooser extends f_imageButton, fa_calendarPopup</p>
+		
+		<p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_dateChooser</td>
+			<td id="ermvsh" width="50%">Defines styles for the wrapper DIV element.</td>
+		</tr>
+		<tr  style="text-align:left">
+			<td width="33%">f_dateChooser_image</td>
+			<td id="ermvsh" width="50%">Defines styles for the wrapper IMG element for the calendar icone  .</td>
+		</tr>
+		<tr  style="text-align:left">
+			<td width="33%">f_dateChooser_popup</td>
+			<td id="ermvsh" width="50%">Defines styles for the wrapper DIV element for the calendar pop-up.</td>
+		</tr>
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.dateChooser</component-type>
 		<component-class>org.rcfaces.core.component.DateChooserComponent</component-class>
@@ -501,18 +970,54 @@ A string specifying the label associated with the home button.
 <p>The expandBar Component is a container that can be collapsed to show only a title bar. Expand Bars can be managed by group : only one element of the group is expanded.</p>
       <p>The expandBar Component has the following capabilities :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text, font &amp; image</li>
-        <li>Margin &amp; border</li>
-        <li>Help</li>
-        <li>Visibility</li>
-      	<li>Background Image</li>
-      	<li>Events Handling</li>
-      	<li>Contextual Menu</li>
-      	<li>Async Render (AJAX)</li>
+        <li>IExpandEventCapability</li>
+		<li>IAsyncRenderModeCapability</li>
+		<li>IFontCapability</li>
+		<li>IDisabledCapability</li>
+		<li>IReadOnlyCapability</li>
+		<li>ITextCapability</li>
+		<li>ITextDirectionCapability</li>
+		<li>ITextAlignmentCapability</li>
+		<li>ICollapsableCapability</li>
+		<li>IBorderCapability</li>
+		<li>IAccessKeyCapability</li>
+		<li>ITabIndexCapability</li>
+		<li>IRadioGroupCapability</li>
+		<li>IFocusBlurEventCapability</li>
+		<li>ISelectionEventCapability</li>
+		<li>ILoadEventCapability</li>
+		<li>IVariableScopeCapability</li>
+		<li>IOverStyleClassCapability</li>
+		<li>IAsyncRenderComponent</li>
       </ul>
       </p>
+      
+        <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ExpandBarComponent.html">expandBar</a> renderer is link to the <a href="/jsdocs/index.html?f_expandBar.html" target="_blank">f_expandBar</a> javascript class. f_expandBar extends f_component, fa_disabled, fa_readOnly, fa_collapsed, fa_groupName, fa_overStyleClass</p>
+		
+		<p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_expandBar</td>
+			<td id="ermvsh" width="50%">Defines styles for the wrapper UL element</td>
+		</tr>
+		<tr  style="text-align:left">
+			<td width="33%">f_expandBar_head</td>
+			<td id="ermvsh" width="50%">Defines styles for the LI element for the title.</td>
+		</tr>
+		<tr  style="text-align:left">
+			<td width="33%">f_expandBar_body</td>
+			<td id="ermvsh" width="50%">Defines styles for the element for the body.</td>
+		</tr>
+		
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.expandBar</component-type>
 		<component-class>org.rcfaces.core.component.ExpandBarComponent</component-class>
@@ -604,18 +1109,57 @@ A boolean value indicating whether or not this component should be rendered
 <p>The fieldSet Component is a container with a title (text and/or picture).</p>
       <p>The fieldSet Component has the following capabilities :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text, font &amp; image</li>
-        <li>Margin &amp; border</li>
-        <li>Help</li>
-        <li>Visibility</li>
-      	<li>Background Image</li>
-      	<li>Events Handling</li>
-      	<li>Contextual Menu</li>
-      	<li>Async Render (AJAX)</li>
-      </ul>
-      </p>
+        <li>IFontCapability</li>
+	<li>ITextCapability</li>
+	<li>ITextDirectionCapability</li>
+	<li>ITextAlignmentCapability</li>
+	<li>IVerticalAlignmentCapability</li>
+	<li>IBorderTypeCapability</li>
+	<li>IImageCapability</li>
+	<li>IImageSizeCapability</li>
+	<li>IVariableScopeCapability</li>
+	<li>IOverStyleClassCapability</li>
+	<li>IImageAccessorsCapability</li>       
+     </ul>
+     </p>
+     
+     
+        <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/FieldSetComponent.html">fieldSet</a> renderer is link to the <a href="/jsdocs/index.html?f_fieldSet.html" target="_blank">f_fieldSet</a> javascript class. f_fieldSet extends f_component, fa_overStyleClass</p>
+		
+
+    <p>Table of component style classes : </p>
+   
+    <table border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody >
+	<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		<tr style="text-align:left">
+		<td width="33%">f_fieldSet
+		</td>
+		<td width="50%">
+		Defines styles for the wrapper DIV element
+		</td>
+		</tr>
+		<tr style="text-align:left">
+		<td  width="33%">
+		f_fieldSet_cellBody
+		</td>
+		<td width="50%">
+		Edit style of fieldSet body
+		</td>
+		</tr>
+		<tr style="text-align:left">
+		<td width="33%">
+		fb_rounded
+		</td>
+		<td width="50%">
+		The border rouned style class (contains the title)
+		</td>
+		</tr>
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.fieldSet</component-type>
 		<component-class>org.rcfaces.core.component.FieldSetComponent</component-class>
@@ -625,16 +1169,54 @@ A boolean value indicating whether or not this component should be rendered
 <p>The helpButton Component is an <A href="/comps/imageButtonComponent.html">ImageButton</A>. It opens a new page showing the url specified in the "helpUrl" property of a component linked by the "for" property.</p>
       <p>The helpButton Component has the following capabilities :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text, font &amp; image</li>
-        <li>Margin &amp; border</li>
-        <li>Help</li>
-        <li>Visibility, Read-Only, Disabled</li>
-      	<li>Events Handling</li>
-      	<li>Association with another component</li>
+       <li>IForCapability</li>
       </ul>
       </p>
+	   
+      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/HelpButtonComponent.html">helpButton</a> renderer is link to the <a href="/jsdocs/index.html?f_helpButton.html" target="_blank">f_helpButton</a> javascript class. f_helpButton extends f_imageButton</p>
+		
+	
+     <p>Table of component style classes : </p>
+     
+<table border="1" cellpadding="3" cellspacing="0"  width="100%">
+<tbody >
+<tr  style="text-align:left">
+<td bgcolor="#eeeeee"  width="33%">
+Style Name
+</td>
+<td bgcolor="#eeeeee"  width="50%">
+Description
+</td>
+</tr>
+<tr  style="text-align:left">
+<td  width="33%">
+f_helpButton
+</td>The server reported an error while performing the "cvs commit" command.
+  org.rcfaces.core: cvs commit: sticky tag `1.3' for file `metadatas/camelia-doc.xml' is not a branch
+  org.rcfaces.core: cvs [commit aborted]: correct above errors first!
+
+<td width="50%">
+Defines styles for the wrapper DIV element
+</td>
+</tr>
+<tr style="text-align:left">
+<td  width="33%">
+f_helpButton_ctext
+</td>
+<td width="50%">
+Defines styles for the button Text
+</td>
+</tr>
+<tr style="text-align:left">
+<td width="33%">
+f_helpButton_cimage
+</td>
+<td width="50%">
+Defines styles for the button Image
+</td>
+</tr>
+</tbody>
+</table>
 ]]></description>
 		<component-type>org.rcfaces.core.helpButton</component-type>
 		<component-class>org.rcfaces.core.component.HelpButtonComponent</component-class>
@@ -644,36 +1226,36 @@ A boolean value indicating whether or not this component should be rendered
 <p>The ImageSubmitButton Component is a <a href="/comps/submitButtonComponent.html">submitButton Component</a> that can show an image.</p>
       <p>The ImageSubmitButton Component has the following capabilities :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text, font &amp; image</li>
-        <li>Margin &amp; border</li>
-        <li>Help</li>
-        <li>Visibility, Read-Only, Disabled</li>
-      	<li>Events Handling</li>
+         <li>IImageButtonFamilly </li>
       </ul>
       </p>
+      
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageSubmitButtonComponent.html">imageSubmitButton</a> renderer is linked to the <a href="/jsdocs/index.html?f_imageSubmitButton.html" target="_blank">f_imageSubmitButton</a> javascript class. f_imageSubmitButton extends f_imageButton</p>
+      
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_imageSubmitButton</td>
+			<td width="50%">Defines styles for the wrapper A element</td>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_imageSubmitButton_image</td>
+			<td width="50%">Defines styles for the IMG element</td>
+		</tr>
+		
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.imageSubmitButton</component-type>
 		<component-class>org.rcfaces.core.component.ImageSubmitButtonComponent</component-class>
-	</component>
-	<component>
-		<description><![CDATA[
-<p>The helpMessageZone Component is a placeholder for help messages. The messages are shown when the pointer hover a component and this component has a "helpMessage" property.</p>
-      <p>The helpMessageZone Component has the following capabilities :
-      <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text, font &amp; position</li>
-        <li>Margin &amp; border</li>
-        <li>Help</li>
-        <li>Visibility</li>
-      	<li>Events Handling</li>
-      </ul>
-      </p>
-]]></description>
-		<component-type>org.rcfaces.core.helpMessageZone</component-type>
-		<component-class>org.rcfaces.core.component.HelpMessageZoneComponent</component-class>
 	</component>
 	<component>
 		<description><![CDATA[
@@ -688,6 +1270,25 @@ A boolean value indicating whether or not this component should be rendered
       	<li>Events Handling</li>
       </ul>
       </p>
+      
+     
+    <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/HyperLinkComponent.html">hyperLink</a> renderer is link to the <a href="/jsdocs/index.html?f_hyperLink.html" target="_blank">f_hyperLink</a> javascript class. f_hyperLink extends f_input, fa_immediate, fa_value</p>
+	  
+      
+    <p>Table of component style classes : </p>
+
+	<table border="1" cellpadding="3" cellspacing="0" width="100%">
+	<tbody >
+	<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+	<tr id="pwsif0" style="text-align:left">
+		<td  width="33%">f_hyperLink</td>
+		<td  width="50%">Defines styles for the wrapper element of the component</td>
+	</tr>
+      </tbody>
+	</table>
 ]]></description>
 		<component-type>org.rcfaces.core.hyperLink</component-type>
 		<component-class>org.rcfaces.core.component.HyperLinkComponent</component-class>
@@ -697,15 +1298,34 @@ A boolean value indicating whether or not this component should be rendered
 <p>The image Component shows an image (it's equivalent to &lt;img .../&gt;).</p>
       <p>The image Component has the following capabilities :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Image</li>
-        <li>Margin</li>
-        <li>Help</li>
-        <li>Visibility</li>
-      	<li>Events Handling</li>
-      </ul>
+	        <li>IImageCapability</li>
+		<li>IImageSizeCapability</li>
+		<li>IAlternateTextCapability</li>
+		<li>IFilterCapability</li>
+		<li>IImageAccessorsCapability</li>      </ul>
       </p>
+      
+      
+        
+      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageComponent.html">image</a> renderer is linked to the <a href="/jsdocs/index.html?f_image.html" target="_blank">f_image</a> javascript class. f_image extends f_filtredComponent</p>
+      
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_image</td>
+			<td width="50%">Defines styles for the wrapper IMG element</td>
+		</tr>
+		
+		
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.image</component-type>
 		<component-class>org.rcfaces.core.component.ImageComponent</component-class>
@@ -715,15 +1335,41 @@ A boolean value indicating whether or not this component should be rendered
 <p>The imageButton Component is a <a href="/comps/buttonComponent.html">button Component</a> that can show an image.</p>
       <p>The imageButton Component has the following capabilities :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text, font &amp; image</li>
-        <li>Margin &amp; border</li>
-        <li>Help</li>
-        <li>Visibility, Read-Only, Disabled</li>
-      	<li>Events Handling</li>
+        <li>IImageButtonFamilly </li>
+		 <li>IImageAccessorsCapability </li>
       </ul>
       </p>
+      
+         
+      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageButtonComponent.html">imageButton</a> renderer is linked to the <a href="/jsdocs/index.html?f_imageButton.html" target="_blank">f_imageButton</a> javascript class. f_imageButton extends f_component, fa_readOnly, fa_disabled, fa_tabIndex, fa_borderType, fa_images, fa_immediate, fa_value, fa_aria</p>
+      
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_imageButton</td>
+			<td width="50%">Defines styles for the wrapper IMG element</td>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_imageButton_text</td>
+			<td width="50%">Defines styles for the wrapper SPAN element for text</td>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_imageButton_image</td>
+			<td width="50%">Defines styles for the wrapper IMG element</td>
+		</tr>
+		
+		
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.imageButton</component-type>
 		<component-class>org.rcfaces.core.component.ImageButtonComponent</component-class>
@@ -734,9 +1380,19 @@ A boolean value indicating whether or not this component should be rendered
       <p>It allows to access and store value on the client and on the server while keeping it concealed. The clientData Component can also be used.</p>
       <p>The hiddenValue Component has the following capability :
       <ul>
-        <li>Property changed Event handling</li>
+        <li>IClientDataCapability</li>
+		<li>IServerDataCapability</li>
+		<li>IPropertyChangeEventCapability</li>
+		<li>IImmediateCapability</li>
+		<li>IValueLockedCapability</li>
+		<li>IValidationEventCapability</li>
+		<li>IUserEventCapability</li>
+		<li>IClientDataManager</li>
+		<li>IServerDataManager</li>
       </ul>
       </p>
+      
+        <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/HiddenValueComponent.html">hiddenValue</a> renderer is link to the <a href="/jsdocs/index.html?f_hiddenValue.html" target="_blank">f_hiddenValue</a> javascript class. f_hiddenValue extends f_eventTarget, fa_serializable, fa_clientData</p>
 ]]></description>
 		<component-type>org.rcfaces.core.hiddenValue</component-type>
 		<component-class>org.rcfaces.core.component.HiddenValueComponent</component-class>
@@ -746,14 +1402,34 @@ A boolean value indicating whether or not this component should be rendered
 <p>The imageCheckButton Component is a <a href="/comps/checkButtonComponent.html">checkButton Component</a> with an image instead of the checkBox.</p>
       <p>The imageCheckButton Component has the following capabilities :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text, font &amp; image</li>
-        <li>Help</li>
-        <li>Visibility, Read-Only, Disabled</li>
-      	<li>Events Handling</li>
+        <li>IImageButtonFamilly</li>
       </ul>
       </p>
+      
+      
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageCheckButtonComponent.html">imageCheckButton</a> renderer is linked to the <a href="/jsdocs/index.html?f_imageCheckButton.html" target="_blank">f_imageCheckButton</a> javascript class. f_imageCheckButton extends f_imageButton, fa_selected</p>
+      
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_imageCheckButton</td>
+			<td width="50%">Defines styles for the wrapper A element</td>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_imageCheckButton_image</td>
+			<td width="50%">Defines styles for the  IMG element</td>
+		</tr>
+		
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.imageCheckButton</component-type>
 		<component-class>org.rcfaces.core.component.ImageCheckButtonComponent</component-class>
@@ -763,14 +1439,45 @@ A boolean value indicating whether or not this component should be rendered
 <p>The imageCombo Component is a <a href="/comps/comboComponent.html">combo Component</a> with an image added to the text.</p>
       <p>The imageCombo Component has the following capabilities :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text, font &amp; image</li>
-        <li>Help</li>
-        <li>Visibility, Read-Only, Disabled</li>
-      	<li>Events Handling</li>
+        <li>IImageButtonFamilly</li>
+		<li>IShowDropDownMarkCapability</li>
       </ul>
       </p>
+      
+      
+      
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageComboComponent.html">imageCombo</a> renderer is linked to the <a href="/jsdocs/index.html?f_imageCombo.html" target="_blank">f_imageCombo</a> javascript class. f_imageCombo extends f_imageButton, fa_subMenu, fa_itemsWrapper</p>
+      
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_imageCombo</td>
+			<td width="50%">Defines styles for the wrapper DIV element</td>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_imageCheckButton_ctext</td>
+			<td width="50%">Defines styles for the  Text element of the combo</td>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_imageCheckButton_cimage</td>
+			<td width="50%">Defines styles for the IMG element of the combo</td>
+		</tr>
+		<tr  style="text-align:left">
+			<td width="33%">f_menu_popup</td>
+			<td width="50%">Defines styles for the pop-up element of the combo</td>
+		</tr>
+		
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.imageCombo</component-type>
 		<component-class>org.rcfaces.core.component.ImageComboComponent</component-class>
@@ -789,13 +1496,7 @@ Experimental : do not use!
       and can give direct access to a specific page ("a la Google").</p>
       <p>The imagePagerButton Component has the following capabilities :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text, font &amp; image</li>
-        <li>Help</li>
-        <li>Visibility, Read-Only, Disabled</li>
-      	<li>Events Handling</li>
-      	<li>Association with another component</li>
+        <li>IForCapability</li>
       </ul>
       </p>
       <p>The authorized types are :
@@ -807,6 +1508,35 @@ Experimental : do not use!
         <li>&lt;number&gt; where number is a page number</li>
       </ul>
       </p>
+      
+        <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImagePagerButtonComponent.html">imagePagerButton</a> renderer is linked to the <a href="/jsdocs/index.html?f_imagePagerButton.html" target="_blank">f_imagePagerButton</a> javascript class. f_imagePagerButton extends f_imageButton, fa_pager</p>
+      
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_imagePagerButton</td>
+			<td width="50%">Defines styles for the wrapper DIV element</td>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_imagePagerButton_text</td>
+			<td width="50%">Defines styles for the SPAN element of the button</td>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_imagePagerButton_image</td>
+			<td width="50%">Defines styles for the A and IMG elements of the button</td>
+		</tr>
+		
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.imagePagerButton</component-type>
 		<component-class>org.rcfaces.core.component.ImagePagerButtonComponent</component-class>
@@ -838,14 +1568,33 @@ A boolean value indicating wether the component should be hide when it is not av
 <p>The imageRadioButton Component is a <a href="/comps/radioButtonComponent.html">radioButton Component</a> with an image instead of the rounded box.</p>
       <p>The imageRadioButton Component has the following capabilities :
         <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text &amp; font</li>
-        <li>Help</li>
-        <li>Visibility, Read-Only, Disabled</li>
-      	<li>Events Handling</li>
+        <li>IImageButtonFamilly </li>
       </ul>
       </p>
+      
+	<p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageRadioButtonComponent.html">imageRadioButton</a> renderer is linked to the <a href="/jsdocs/index.html?f_imageRadioButton.html" target="_blank">f_imageRadioButton</a> javascript class. f_imageRadioButton extends f_imageCheckButton, fa_groupName, fa_required</p>
+      
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_imageRadioButton</td>
+			<td width="50%">Defines styles for the wrapper A element</td>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_imageRadioButton_image</td>
+			<td width="50%">Defines styles for the  IMG element</td>
+		</tr>
+		
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.imageRadioButton</component-type>
 		<component-class>org.rcfaces.core.component.ImageRadioButtonComponent</component-class>
@@ -855,15 +1604,33 @@ A boolean value indicating wether the component should be hide when it is not av
 <p>The imageResetButton Component is a <a href="/comps/resetButtonComponent.html">resetButton Component</a> that can show an image.</p>
       <p>The imageResetButton Component has the following capabilities :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text, font &amp; image</li>
-        <li>Margin &amp; border</li>
-        <li>Help</li>
-        <li>Visibility, Read-Only, Disabled</li>
-      	<li>Events Handling</li>
+        <li>IImageButtonFamilly </li>
       </ul>
       </p>
+      
+      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageResetButtonComponent.html">imageResetButton</a> renderer is linked to the <a href="/jsdocs/index.html?f_imageResetButton.html" target="_blank">f_imageResetButton</a> javascript class. f_imageResetButton extends f_imageButton</p>
+      
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_imageResetButton</td>
+			<td width="50%">Defines styles for the wrapper A element</td>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_imageResetButton_image</td>
+			<td width="50%">Defines styles for the  IMG element</td>
+		</tr>
+		
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.imageResetButton</component-type>
 		<component-class>org.rcfaces.core.component.ImageResetButtonComponent</component-class>
@@ -874,9 +1641,30 @@ A boolean value indicating wether the component should be hide when it is not av
       <p>It is used often when simple HTML is not desirable : for example if a part of a page is loaded via AJAX it might be easier to have only a jsf tree memory represantation.</p>
       <p>The lineBreak Component has the following capability :
       <ul>
-        <li>Visibility</li>
+        <li>IStyleClassCapability</li>
+		<li>IVisibilityCapability</li>
+		<li>IHiddenModeCapability</li>
       </ul>
       </p>
+      
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/LineBreakComponent.html">lineBreak</a> renderer is linked to the <a href="/jsdocs/index.html?f_lineBreak.html" target="_blank">f_lineBreak</a> javascript class. f_lineBreak extends f_component</p>
+      
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_lineBreak</td>
+			<td width="50%">Defines styles for the wrapper element</td>
+		</tr>
+		
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.lineBreak</component-type>
 		<component-class>org.rcfaces.core.component.LineBreakComponent</component-class>
@@ -895,14 +1683,29 @@ A boolean value indicating whether or not this component should be rendered
 <p>The list Component is based on the standard HTML tag &lt;SELECT&gt;.</p>
       <p>The list Component has the following capabilities :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text ,&amp; font</li>
-        <li>Help</li>
-        <li>Visibility, Read-Only, Disabled</li>
-      	<li>Events Handling</li>
+        <li>IMultipleSelectCapability</li>
+	 	<li>IDoubleClickEventCapability</li>
       </ul>
       </p>
+      
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ListComponent.html">list</a> renderer is linked to the <a href="/jsdocs/index.html?f_list.html" target="_blank">f_list</a> javascript class. f_list extends f_abstractList, fa_selectionProvider<String[]></p>
+      
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_list</td>
+			<td width="50%">Defines styles for the wrapper SELECT element</td>
+		</tr>
+		
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.list</component-type>
 		<component-class>org.rcfaces.core.component.ListComponent</component-class>
@@ -919,10 +1722,47 @@ An int value specifying the number of rows to be displayed.
 		<component-class>org.rcfaces.core.component.MessageDialogComponent</component-class>
 	</component>
 	<component>
+		<description><![CDATA[
+<p>The viewDialog component represents popup modal view. It is based on the standard HTML tag &lt;IFrame&gt;.  </p>
+ 
+	<p>The viewDialog Component has the following capabilities : 
+		<ul>
+			<li>IImageCapability</li>
+			<li>IStyleClassCapability</li>
+			<li>ITextCapability</li>
+			<li>ITextDirectionCapability</li>
+			<li>IVisibilityCapability</li>
+			<li>IDialogPriorityCapability</li>
+			<li>ISizeCapability</li>
+			<li>IHiddenModeCapability</li>
+			<li>ILookAndFeelCapability</li>
+			<li>IWAIRoleCapability</li>
+			<li>ICloseEventCapability</li>
+			<li>IClosableCapability</li>
+			<li>IImmediateCapability</li>
+			<li>IImageAccessorsCapability </li>
+		</ul>
+	</p>
+      
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ViewDialogComponent.html">viewDialog</a> renderer is linked to the <a href="/jsdocs/index.html?f_viewDialog.html" target="_blank">f_viewDialog</a> javascript class. f_viewDialog extends f_dialog, fa_immediate </p>     
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_viewDialog</td>
+			<td width="50%">Defines styles for the wrapper FRAME element</td>
+		</tr>
+		</tbody>
+		</table>
+]]></description>
 		<component-type>org.rcfaces.core.viewDialog</component-type>
 		<component-class>org.rcfaces.core.component.ViewDialogComponent</component-class>
-<<<<<<< HEAD
-=======
 		<attribute>
 			<attribute-name>viewURL</attribute-name>
 			<attribute-class>java.lang.String</attribute-class>
@@ -935,7 +1775,6 @@ An int value specifying the number of rows to be displayed.
 			<attribute-name>returnFocusClientId</attribute-name>
 			<attribute-class>java.lang.String</attribute-class>
 		</attribute>
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	</component>
 	<component>
 		<component-type>org.rcfaces.core.submitWait</component-type>
@@ -946,15 +1785,44 @@ An int value specifying the number of rows to be displayed.
 <p>The message Component is a placeholder for error messages (only one is shown).</p>
       <p>The message Component has the following capabilities :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text, font &amp; image</li>
-        <li>Margin</li>
-        <li>Help</li>
-        <li>Visibility</li>
-      	<li>Events Handling</li>
+        <li>IImageSizeCapability</li>
+		<li>ITextCapability</li>
+		<li>ISeverityStyleClassCapability</li>
+		<li>ISeverityImagesCapability</li>
+		<li>IImageAccessorsCapability</li>
       </ul>
       </p>
+      
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/MessageComponent.html">message</a> renderer is linked to the <a href="/jsdocs/index.html?f_message.html" target="_blank">f_message</a> javascript class. f_message extends f_component, fa_message1</p>
+      
+      
+       <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_message</td>
+			<td width="50%">Defines styles for the wrapper DIV element</td>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_message_summary</td>
+			<td width="50%">Defines styles for the summary error message</td>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_message_detail</td>
+			<td width="50%">Defines styles for the detail error message</td>
+		</tr>
+	
+		
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.message</component-type>
 		<component-class>org.rcfaces.core.component.MessageComponent</component-class>
@@ -971,23 +1839,6 @@ A boolean value indicating wether the component should be shown when a message i
 		</attribute>
 	</component>
 	<component>
-		<description><![CDATA[
-<p>The messageFieldSet Component is a <a href="/comps/fieldSetComponent.html">fieldSet Component</a> combined with a <a href="/comps/messageComponent.html">message COmponent</a> in the title part.</p>
-      <p>The messageFieldSet Component has the following capabilities :
-      <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text, font &amp; image</li>
-        <li>Margin &amp; border</li>
-        <li>Help</li>
-        <li>Visibility</li>
-      	<li>Background Image</li>
-      	<li>Events Handling</li>
-      	<li>Contextual Menu</li>
-      	<li>Async Render (AJAX)</li>
-      </ul>
-      </p>
-]]></description>
 		<component-type>org.rcfaces.core.messageFieldSet</component-type>
 		<component-class>org.rcfaces.core.component.MessageFieldSetComponent</component-class>
 		<attribute>
@@ -1007,15 +1858,27 @@ A boolean value indicating wether the component should be get the focus when a m
 <p>The messages Component is a placeholder for error messages (several messages can be shown simultaneously).</p>
       <p>The messages Component has the following capabilities :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text, font &amp; image</li>
-        <li>Margin</li>
-        <li>Help</li>
-        <li>Visibility</li>
-      	<li>Events Handling</li>
+        <li>ISeverityStyleClassCapability</li>
       </ul>
       </p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/MessagesComponent.html">messages</a> renderer is linked to the <a href="/jsdocs/index.html?f_messages.html" target="_blank">f_messages</a> javascript class. f_messages extends  f_component, fa_messageText</p>
+      
+         <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_messages</td>
+			<td width="50%">Defines styles for the wrapper  element</td>
+		</tr>
+		
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.messages</component-type>
 		<component-class>org.rcfaces.core.component.MessagesComponent</component-class>
@@ -1040,14 +1903,35 @@ A boolean value indicating wether the component should be shown when a message i
 <p>The menu Component provides a way of creating desktop style menus on web pages. It allows sub-menus, check and radio menu items and image menus. It also provides pop-up menus.</p>
       <p>The menu Component has the following capabilities :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text, font &amp; images</li>
-        <li>Help</li>
-        <li>Visibility, Read-Only, Disabled</li>
-      	<li>Events Handling</li>
+        <li>IPreloadedLevelDepthCapability</li>
+	<li>IMenuEventCapability</li>
+	<li>ISelectionEventCapability</li>
+	<li>ICheckEventCapability</li>
+	<li>ICheckedValuesCapability</li>
+	<li>ICheckComponent</li>
+	<li>IMenuComponent</li>
+	<li>IComponentValueTypeCapability</li>
       </ul>
       </p>
+      
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/MenuComponent.html">menu</a> renderer is linked to the <a href="/jsdocs/index.html?f_menu.html" target="_blank">f_menu</a> javascript class. f_menu extends f_menuBase</p>
+      
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_menu</td>
+			<td width="50%">Defines styles for the wrapper UL element. Coantains f_grid_popup and f_menu_item styles</td>
+		</tr>
+		
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.menu</component-type>
 		<component-class>org.rcfaces.core.component.MenuComponent</component-class>
@@ -1198,6 +2082,25 @@ An int value specifying the upper limit for the value of the component.
       	<li>Events Handling</li>
       </ul>
       </p>
+      
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/PasswordEntrykComponent.html">passwordEntry</a> renderer is linked to the <a href="/jsdocs/index.html?f_passwordEntry.html" target="_blank">f_passwordEntry</a> javascript class. f_passwordEntry extends f_textEntry</p>
+      
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_passwordEntry</td>
+			<td width="50%">Defines styles for the INPUT element</td>
+		</tr>
+		
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.passwordEntry</component-type>
 		<component-class>org.rcfaces.core.component.PasswordEntryComponent</component-class>
@@ -1215,6 +2118,25 @@ An int value specifying the upper limit for the value of the component.
         <li>Visibility</li>
       </ul>
       </p>
+      
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ProgressBarComponent.html">progressBar</a> renderer is linked to the <a href="/jsdocs/index.html?f_progressBar.html" target="_blank">f_progressBar</a> javascript class. f_progressBar extends f_component</p>
+      
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_progressBar</td>
+			<td width="50%">Defines styles for the wrapper DIV element</td>
+		</tr>
+		
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.progressBar</component-type>
 		<component-class>org.rcfaces.core.component.ProgressBarComponent</component-class>
@@ -1242,43 +2164,15 @@ A boolean value indicating wether the value is not determinated.
 	</component>
 	<component>
 		<description><![CDATA[
-<p>The progressIndicator Component indicates the evolution of a task. It uses the <a href="/comps/progressBarComponent.html">porgressBar Component</a> and add text information to it.</p>
-      <p>The progressIndicator Component has the following capabilities :
-      <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text, font &amp; image</li>
-        <li>Margin &amp; border</li>
-        <li>Help</li>
-        <li>Visibility</li>
-      </ul>
-      </p>
-]]></description>
-		<component-type>org.rcfaces.core.progressIndicator</component-type>
-		<component-class>org.rcfaces.core.component.ProgressIndicatorComponent</component-class>
-		<attribute>
-			<description><![CDATA[
-A boolean value indicating wether the value is not determinated.
-]]></description>
-			<attribute-name>indeterminate</attribute-name>
-			<attribute-class>boolean</attribute-class>
-		</attribute>
-	</component>
-	<component>
-		<description><![CDATA[
 <p>The suggestTextEntry is a <a href="/comps/textEntryCOmponent.html">textEntry Component</a> with an autosuggestion feature that shows in the form of a dropdown list.</p>
       <p>The suggestTextEntry Component has the following capabilities :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text &amp; font</li>
-        <li>Help</li>
-        <li>Visibility, Read-Only, Disabled</li>
-      	<li>Events Handling</li>
+        <li>IFilterCapability</li>
+		 <li>IMaxResultNumberCapability</li>
+		 <li>ISuggestionEventCapability</li>
+		 <li>IMenuEventCapability</li>
       </ul>
       </p>
-<<<<<<< HEAD
-=======
       
        <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SuggestTextEntryComponent.html">suggestTextEntry</a> renderer is linked to the <a href="/jsdocs/index.html?f_suggestTextEntry.html" target="_blank">f_suggestTextEntry</a> javascript class. f_suggestTextEntry extends f_textEntry, fa_filterProperties, fa_commands</p>
       
@@ -1298,7 +2192,6 @@ A boolean value indicating wether the value is not determinated.
 		
 		</tbody>
 		</table>
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 ]]></description>
 		<component-type>org.rcfaces.core.suggestTextEntry</component-type>
 		<component-class>org.rcfaces.core.component.SuggestTextEntryComponent</component-class>
@@ -1386,14 +2279,39 @@ A string specifying a converter id or a binding to a converter object. This conv
 <p>The radioButton Component is based on the standard HTML tag &lt;INPUT TYPE="radio"&gt;. It can interoperate automatically with other radioButtons from the same group.</p>
       <p>The radioButton Component has the following capabilities :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text &amp; font</li>
-        <li>Help</li>
-        <li>Visibility, Read-Only, Disabled</li>
-      	<li>Events Handling</li>
+        <li>ITextCapability</li>
+		<li>ITextDirectionCapability</li>
+		<li>IHorizontalTextPositionCapability</li>
+		<li>ISelectionEventCapability</li>
+		<li>IReadOnlyCapability</li>
+		<li>IAlternateTextCapability</li>
+		<li>ISeverityStyleClassCapability</li>
+		<li>IFocusStyleClassCapability</li>
+		<li>ISelectedCapability</li>
+		<li>IRadioValueCapability</li>
+		<li>IRequiredCapability</li>
+		<li>IValidationParameters</li>
       </ul>
       </p>
+      
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/radioButtonComponent.html">radioButton</a> renderer is linked to the <a href="/jsdocs/index.html?f_radioButton.html" target="_blank">f_radioButton</a> javascript class. f_radioButton extends f_checkButton, fa_groupName, fa_required, fa_clientValidatorParameters</p>
+      
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_radioButton</td>
+			<td width="50%">Defines styles for the wrapper element</td>
+		</tr>
+		
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.radioButton</component-type>
 		<component-class>org.rcfaces.core.component.RadioButtonComponent</component-class>
@@ -1411,6 +2329,25 @@ A string specifying a converter id or a binding to a converter object. This conv
       	<li>Events Handling</li>
       </ul>
       </p>
+      
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ResetButtonComponent.html">resetButton</a> renderer is linked to the <a href="/jsdocs/index.html?f_resetButton.html" target="_blank">f_resetButton</a> javascript class. f_resetButton extends f_button</p>
+      
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_resetButton</td>
+			<td width="50%">Defines styles for the wrapper element</td>
+		</tr>
+		
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.resetButton</component-type>
 		<component-class>org.rcfaces.core.component.ResetButtonComponent</component-class>
@@ -1421,12 +2358,36 @@ A string specifying a converter id or a binding to a converter object. This conv
       <p>It is used often when simple HTML is not desirable : for example if a part of a page is loaded via AJAX it might be easier to have only a jsf tree memory represantation.</p>
       <p>The ruler Component has the following capability :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Visibility</li>
-        <li>Margin</li>
+        <li>IPositionCapability</li>
+	<li>IMarginCapability</li>
+	<li>ISizeCapability</li>
+	<li>IVisibilityCapability</li>
+	<li>IHiddenModeCapability</li>
+	<li>ILookAndFeelCapability</li>
+	<li>IOrientationCapability</li>
+	<li>IForegroundBackgroundColorCapability</li>
+	<li>IAlignmentCapability</li>
       </ul>
       </p>
+      
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/RulerComponent.html">ruler</a> renderer is linked to the <a href="/jsdocs/index.html?f_ruler.html" target="_blank">f_ruler</a> javascript class. f_ruler extends f_component</p>
+      
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_ruler</td>
+			<td width="50%">Defines styles for the HR element</td>
+		</tr>
+		
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.ruler</component-type>
 		<component-class>org.rcfaces.core.component.RulerComponent</component-class>
@@ -1464,6 +2425,25 @@ A string value specifying the margins for the component (compliant to CSS margin
       	<li>Events Handling</li>
       </ul>
       </p>
+      
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SubmitButtonComponent.html">submitButton</a> renderer is linked to the <a href="/jsdocs/index.html?f_submitButton.html" target="_blank">f_submitButton</a> javascript class. f_submitButton extends f_button</p>
+      
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_imageSubmitButton</td>
+			<td width="50%">Defines styles for the wrapper A element</td>
+		</tr>
+				
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.submitButton</component-type>
 		<component-class>org.rcfaces.core.component.SubmitButtonComponent</component-class>
@@ -1482,6 +2462,38 @@ A string value specifying the margins for the component (compliant to CSS margin
       	<li>limits and step</li>
       </ul>
       </p>
+      
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SpinnerComponent.html">spinner</a> renderer is linked to the <a href="/jsdocs/index.html?f_spinner.html" target="_blank">f_spinner</a> javascript class. f_spinner extends f_textEntry, fa_spinner</p>
+      
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_spinner</td>
+			<td width="50%">Defines styles for the wrapper element</td>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_spinner_input</td>
+			<td width="50%">Defines styles for the INPUT element</td>
+		</tr>
+		<tr  style="text-align:left">
+			<td width="33%">f_spinner_up</td>
+			<td width="50%">Defines styles for the IMG element of the up button</td>
+		</tr>
+		<tr  style="text-align:left">
+			<td width="33%">f_spinner_down</td>
+			<td width="50%">Defines styles for the IMG elemen of the down button</td>
+		</tr>
+		
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.spinner</component-type>
 		<component-class>org.rcfaces.core.component.SpinnerComponent</component-class>
@@ -1560,6 +2572,8 @@ A boolean value indicating wether the component should be get the focus when a m
       	<li>Association with another component</li>
       </ul>
       </p>
+      
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/StyledTextComponent.html">styledText</a> renderer is linked to the <a href="/jsdocs/index.html?f_styledText.html" target="_blank">f_styledText</a> javascript class. f_lineBreak extends f_text</p>
 ]]></description>
 		<component-type>org.rcfaces.core.styledText</component-type>
 		<component-class>org.rcfaces.core.component.StyledTextComponent</component-class>
@@ -1569,13 +2583,37 @@ A boolean value indicating wether the component should be get the focus when a m
 <p>The cardBox Component is similar to the <a href="/comps/tabbedPaneComponent.html">tabbedPane Component</a> without title and borders. It is usefull for showing alternatively different contents on the same page.</p>
       <p>The cardBox Component has the following capabilities :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Help</li>
-        <li>Visibility, Read-Only, Disabled</li>
-      	<li>Events Handling</li>
+        <li>ISelectionEventCapability</li>
+		<li>IAsyncRenderModeCapability</li>
+		<li>IPreferencesSettings</li>
+		<li>IVariableScopeCapability</li>
+		<li>IAsyncDecodeModeCapability</li>
       </ul>
       </p>
+      
+      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/CardBoxComponent.html">cardBox</a> renderer is linked to the <a href="/jsdocs/index.html?f_cardBox.html" target="_blank">f_cardBox</a> javascript class. f_cardBox extends f_component, fa_immediateu</p>
+      
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_cardBox</td>
+			<td width="50%">Defines styles for the wrapper DIV element</td>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_cardBox_card</td>
+			<td width="50%">Defines styles for the wrapper DIV element for each <a href="/apidocs/index.html?org/rcfaces/core/component/CardComponent.html">card</a></td>
+		</tr>
+		
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.cardBox</component-type>
 		<component-class>org.rcfaces.core.component.CardBoxComponent</component-class>
@@ -1592,14 +2630,43 @@ An element belonging to a <a href="/comps/cardBoxComponent.html">cardBox Compone
 <p>The tabbedPane Component provides a way to show more information on a single page. It can download the data asynchronously via AJAX.</p>
       <p>The tabbedPane Component has the following capabilities :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text, font &amp; image</li>
-        <li>Help</li>
-        <li>Visibility, Read-Only, Disabled</li>
-      	<li>Events Handling</li>
+        <li>ICloseEventCapability</li>
+		 <li>IClosableCapability</li>
+		 <li>IPreSelectionEventCapability</li>
+		 <li>IShowValueCapability</li>
       </ul>
       </p>
+      
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TabbedPaneComponent.html">tabbedPane</a> renderer is linked to the <a href="/jsdocs/index.html?f_tabbedPane.html" target="_blank">f_tabbedPane</a> javascript class. f_tabbedPane extends f_cardBox</p>
+      
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_tabbedPane</td>
+			<td width="50%">Defines styles for the wrapper element</td>
+		</tr>
+		<tr  style="text-align:left">
+			<td width="33%">f_tabbedPane_title</td>
+			<td width="50%">Defines styles for the TABLE element </td>
+		</tr>
+		<tr  style="text-align:left">
+			<td width="33%">f_tabbedPane_content</td>
+			<td width="50%">Defines styles for the DIV element</td>
+		</tr>
+			<tr  style="text-align:left">
+			<td width="33%">f_tabbedPane_tab</td>
+			<td width="50%">Defines styles for the DIV element</td>
+		</tr>
+		
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.tabbedPane</component-type>
 		<component-class>org.rcfaces.core.component.TabbedPaneComponent</component-class>
@@ -1620,16 +2687,34 @@ An element belonging to a <a href="/comps/tabbedPaneComponent.html">tabbedPane C
 <p>The text Component is a placeholder for displaying text.</p>
       <p>The text Component has the following capabilities :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text, font &amp; justification</li>
-        <li>Margin</li>
-        <li>Help</li>
-        <li>Visibility</li>
-      	<li>Events Handling</li>
-      	<li>Association with another component</li>
+        <li>ITextCapability</li>
+		<li>ITextDirectionCapability</li>
+		<li>IFontCapability</li>
+		<li>ITextAlignmentCapability</li>
+		<li>IAccessKeyCapability</li>
+		<li>IForCapability</li>
+		<li>ITypedComponentCapability </li>
       </ul>
       </p>
+      
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TextComponent.html">text</a> renderer is linked to the <a href="/jsdocs/index.html?f_text.html" target="_blank">f_text</a> javascript class. f_text extends f_component</p>
+      
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_text</td>
+			<td width="50%">Defines styles for the wrapper element</td>
+		</tr>
+		
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.text</component-type>
 		<component-class>org.rcfaces.core.component.TextComponent</component-class>
@@ -1639,14 +2724,39 @@ An element belonging to a <a href="/comps/tabbedPaneComponent.html">tabbedPane C
 <p>The textAreaEntry Component is based on the standard HTML tag &lt;TEXTAREA&gt; and is a <a href="/comps/textEntryComponent.html">textEntry Component</a>.</p>
       <p>The textAreaEntry Component has the following capabilities :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text &amp; font</li>
-        <li>Help</li>
-        <li>Visibility, Read-Only, Disabled</li>
-      	<li>Events Handling</li>
+        <li>IRequiredCapability</li>
+		<li>ITextCapability</li>
+		<li>ITextDirectionCapability</li>
+		<li>IEmptyMessageCapability</li>
+		<li>IReadOnlyCapability</li>
+		<li>IValueChangeEventCapability</li>
+		<li>IMenuCapability</li>
+		<li>IFocusStyleClassCapability</li>
+		<li>ISeverityStyleClassCapability</li>
+		<li>ISelectionEventCapability</li>
+		<li>IAlternateTextCapability</li>
+		<li>IMaxTextLengthCapability </li>
       </ul>
       </p>
+      
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TextAreaComponent.html">textArea</a> renderer is linked to the <a href="/jsdocs/index.html?f_textArea.html" target="_blank">f_textArea</a> javascript class. f_textArea extends f_abstractEntry</p>
+      
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_textArea</td>
+			<td width="50%">Defines styles for the wrapper element</td>
+		</tr>
+		
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.textArea</component-type>
 		<component-class>org.rcfaces.core.component.TextAreaComponent</component-class>
@@ -1670,22 +2780,90 @@ An int value specifying the number of rows to be displayed.
 		</attribute>
 	</component>
 	<component>
+		<description><![CDATA[
+<p>The textEditorToolFolder component is a container allowing to edit text and have a specific toolBar </p>
+ 
+	<p>The textEditorToolFolder Component has the following capabilities : 
+		<ul>
+			<li>IRequiredCapability</li>
+			<li>ITextCapability</li>
+			<li>ITextDirectionCapability</li>
+			<li>IEmptyMessageCapability</li>
+			<li>IReadOnlyCapability</li>
+			<li>IValueChangeEventCapability</li>
+			<li>IMenuCapability</li>
+			<li>IFocusStyleClassCapability</li>
+			<li>ISeverityStyleClassCapability</li>
+			<li>ISelectionEventCapability</li>
+			<li>IAlternateTextCapability</li>
+		</ul>
+	</p>
+      
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TextEditorComponent.html">textEditorToolFolder</a> renderer is linked to the <a href="/jsdocs/index.html?f_textEditor.html" target="_blank">f_textEditor</a> javascript class. f_textEditor extends f_component</p>     
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_textEditor</td>
+			<td width="50%">Defines styles for the wrapper DIV element</td>
+		</tr>
+		</tbody>
+		</table>
+]]></description>
 		<component-type>org.rcfaces.core.textEditor</component-type>
 		<component-class>org.rcfaces.core.component.TextEditorComponent</component-class>
+		<attribute>
+			<attribute-name>valueMimeType</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
 	</component>
 	<component>
 		<description><![CDATA[
 <p>The textEntry Component is based on the standard HTML tag &lt;INPUT TYPE="text"&gt;.</p>
       <p>The textEntry Component has the following capabilities :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text &amp; font</li>
-        <li>Help</li>
-        <li>Visibility, Read-Only, Disabled</li>
-      	<li>Events Handling</li>
+        <li>IRequiredCapability</li>
+		<li>IAutoTabCapability</li>
+		<li>ITextCapability</li>
+		<li>ITextDirectionCapability</li>
+		<li>IEmptyMessageCapability</li>
+		<li>IReadOnlyCapability</li>
+		<li>IValueChangeEventCapability</li>
+		<li>IMenuCapability</li>
+		<li>IFocusStyleClassCapability</li>
+		<li>ISeverityStyleClassCapability</li>
+		<li>IAlternateTextCapability</li>
+		<li>IMaxTextLengthCapability</li>
+		<li>IClientValidationCapability</li>
+		<li>ISelectionEventCapability</li>
+		<li>IValidationParameters </li>
       </ul>
       </p>
+      
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TextEntryComponent.html">textEntry</a> renderer is linked to the <a href="/jsdocs/index.html?f_textEntry.html" target="_blank">f_textEntry</a> javascript class. f_textEntry extends f_abstractEntry</p>
+      
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_textEntry</td>
+			<td width="50%">Defines styles for the wrapper element</td>
+		</tr>
+		
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.textEntry</component-type>
 		<component-class>org.rcfaces.core.component.TextEntryComponent</component-class>
@@ -1795,7 +2973,33 @@ An int value specifying the step used for the millisecond field when increasing/
 	</component>
 	<component>
 		<description><![CDATA[
-<b>EXPERIMENTAL</b>
+<p>The toolBar component allows developers to easily add toolbars containing diffenrent components </p>
+ 
+	<p>The toolBar Component has the following capabilities : 
+		<ul>
+				<li>IInitEventCapability</li>
+			<li>IVerticalAlignmentCapability</li>
+			<li>IBorderTypeCapability</li>
+			<li>IImageAccessorsCapability </li>
+		</ul>
+	</p>
+      
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ToolBarComponent.html">toolBar</a> renderer is linked to the <a href="/jsdocs/index.html?f_toolBar.html" target="_blank">f_toolBar</a> javascript class. f_toolBar extends f_component</p>     
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_toolBar</td>
+			<td width="50%">Defines styles for the wrapper DIV element</td>
+		</tr>
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.toolBar</component-type>
 		<component-class>org.rcfaces.core.component.ToolBarComponent</component-class>
@@ -1880,16 +3084,76 @@ An int value specifying the step used for the millisecond field when increasing/
       It allows contextual menus ...</p>
       <p>The tree Component has the following capabilities :
       <ul>
-        <li>Position &amp; Size</li>
-        <li>Foreground &amp; Background Color</li>
-        <li>Text, font &amp; images</li>
-        <li>Margin &amp; border</li>
-        <li>Help</li>
-        <li>Visibility, Read-Only, Disabled</li>
-      	<li>Events Handling</li>
-      	<li>Contextual actions in node or tree scope</li>
+        <li>IDoubleClickEventCapability</li>
+		<li>IRequiredCapability</li>
+		<li>IScrollableCapability</li>
+		<li>IBorderCapability</li>
+		<li>IReadOnlyCapability</li>
+		<li>IMenuCapability</li>
+		<li>IShowValueCapability</li>
+		<li>IOverStyleClassCapability</li>
+		<li>IFilterCapability</li>
+		<li>ILoadEventCapability</li>
+		<li>IExpandEventCapability</li>
+		<li>IPreSelectionEventCapability</li>
+		<li>IDragEventCapability</li>
+		<li>IDraggableCapability</li>
+		<li>IDropEventCapability</li>
+		<li>IDropCompleteEventCapability</li>
+		<li>IDroppableCapability</li>
+		<li>ICheckableCapability</li>
+		<li>ICheckCardinalityCapability</li>
+		<li>ICheckEventCapability</li>
+		<li>ICheckedValuesCapability</li>
+		<li>IClientCheckFullStateCapability</li>
+		<li>ISelectableCapability</li>
+		<li>ISelectionCardinalityCapability</li>
+		<li>ISelectionEventCapability</li>
+		<li>ISelectedValuesCapability</li>
+		<li>IClientSelectionFullStateCapability</li>
+		<li>IPreloadedLevelDepthCapability</li>
+		<li>IExpandableCapability</li>
+		<li>IExpandedValuesCapability</li>
+		<li>ICheckComponent</li>
+		<li>ISelectionComponent</li>
+		<li>IComponentValueTypeCapability</li>
       </ul>
       </p>
+      
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TreeComponent.html">tree</a> renderer is linked to the <a href="/jsdocs/index.html?f_tree.html" target="_blank">f_tree</a> javascript class. f_tree extends f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager<String[]>, fa_checkManager, fa_itemClientDatas, fa_scrollPositions, fa_overStyleClass, fa_filterProperties, fa_droppable, fa_draggable, fa_autoScroll, fa_autoOpen</p>
+      
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_tree</td>
+			<td width="50%">Defines styles for the wrapper DIV element</td>
+		</tr>
+		<tr  style="text-align:left">
+			<td width="33%">f_tree_body</td>
+			<td width="50%">Defines styles for the wrapper UL element</td>
+		</tr>
+		<tr  style="text-align:left">
+			<td width="33%">f_tree_parent</td>
+			<td width="50%">Defines styles for the wrapper LI element of the parent nodes</td>
+		</tr>
+		<tr  style="text-align:left">
+			<td width="33%">f_tree_depth</td>
+			<td width="50%">Defines styles for the DIV element of the depth node</td>
+		</tr>
+		<tr  style="text-align:left">
+			<td width="33%">f_tree_node</td>
+			<td width="50%">Defines styles for the DIV element of the node</td>
+		</tr>
+		
+		</tbody>
+		</table>
 ]]></description>
 		<component-type>org.rcfaces.core.tree</component-type>
 		<component-class>org.rcfaces.core.component.TreeComponent</component-class>
@@ -1995,6 +3259,8 @@ A node belonging to a tree.
 		<description><![CDATA[
 <p>The focusManager Component is a non-visual component.</p>
       <p>It allows to deal with the focus on the current page.</p>
+      
+      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/FocuManagerComponent.html">focuManager</a> renderer is link to the <a href="/jsdocs/index.html?f_focuManager.html" target="_blank">f_focuManager</a> javascript class. f_focuManager extends f_object, fa_serializable</p>
 ]]></description>
 		<component-type>org.rcfaces.core.focusManager</component-type>
 		<component-class>org.rcfaces.core.component.FocusManagerComponent</component-class>
@@ -2022,10 +3288,43 @@ A boolean value indicating wether the component should be get the focus when a m
 		</attribute>
 	</component>
 	<component>
+		<description><![CDATA[
+<p>The scheduler Component shows a planning</p>
+      <p>The scheduler Component has the following capabilities :
+      <ul>
+        <li>IWidthCapability</li>
+		<li>IHeightCapability</li>
+		<li>IScrollableCapability</li>
+		<li>ILiteralLocaleCapability</li>
+		<li>ILiteralTimeZoneCapability</li>
+		<li>IStyleClassCapability</li>
+		<li>ITabIndexCapability</li>
+		<li>IImmediateCapability</li>
+		<li>ISelectionEventCapability </li>
+      </ul>
+      </p>
+      
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SchedulerComponent.html">scheduler</a> renderer is linked to the <a href="/jsdocs/index.html?f_scheduler.html" target="_blank">f_scheduler</a> javascript class. f_scheduler extends f_component, fa_items, fa_selectionManager</p>
+      
+      <p> Table of component style classes: </p>
+		<table border="1" cellpadding="3" cellspacing="0" width="100%">
+		<tbody>
+		
+		<tr style="text-align:left">
+			<th  width="33%">Style Name</th>
+			<th  width="50%">Description</th>
+		</tr>
+		
+		<tr  style="text-align:left">
+			<td width="33%">f_scheduler</td>
+			<td width="50%">Defines styles for the wrapper DIV element</td>
+		</tr>
+		
+		</tbody>
+		</table>
+]]></description>
 		<component-type>org.rcfaces.core.scheduler</component-type>
 		<component-class>org.rcfaces.core.component.SchedulerComponent</component-class>
-<<<<<<< HEAD
-=======
 		<attribute>
 			<attribute-name>dateBegin</attribute-name>
 			<attribute-class>java.util.Date</attribute-class>
@@ -2099,7 +3398,6 @@ A string value holding the name of a request-scope attribute under which the mod
 			<attribute-name>var</attribute-name>
 			<attribute-class>java.lang.String</attribute-class>
 		</attribute>
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	</component>
 	<component>
 		<component-type>org.rcfaces.core.schedulerColumn</component-type>
@@ -2123,9 +3421,19 @@ A string value holding the name of a request-scope attribute under which the mod
       <p>It allows to (synchronously or asynchronously) call AJAX services from the client.</p>
       <p>The service Component has the following capability :
       <ul>
-        <li>Property changed Event handling</li>
+        <li>IClientDataCapability</li>
+		<li>IServerDataCapability</li>
+		<li>IPropertyChangeEventCapability</li>
+		<li>IServiceEventCapability</li>
+		<li>IFilterCapability</li>
+		<li>IComponentLocaleCapability</li>
+		<li>IComponentTimeZoneCapability</li>
+		<li>IClientDataManager</li>
+		<li>IServerDataManager </li>
       </ul>
       </p>
+      
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ServiceComponent.html">service</a> renderer is linked to the <a href="/jsdocs/index.html?f_service.html" target="_blank">f_service</a> javascript class. f_service extends f_object, fa_serializable, fa_eventTarget, fa_filterProperties, fa_commands</p>
 ]]></description>
 		<component-type>org.rcfaces.core.service</component-type>
 		<component-class>org.rcfaces.core.component.ServiceComponent</component-class>

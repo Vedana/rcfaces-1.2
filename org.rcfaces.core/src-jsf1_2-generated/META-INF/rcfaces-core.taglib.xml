@@ -51,14 +51,6 @@
 		</component>
 	</tag>
 	<tag>
-		<tag-name>checkButton3States</tag-name>
-		<component>
-			<component-type>org.rcfaces.core.checkButton3States</component-type>
-			<renderer-type>org.rcfaces.core.checkButton3States</renderer-type>
-			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
-		</component>
-	</tag>
-	<tag>
 		<tag-name>combo</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.combo</component-type>
@@ -241,14 +233,6 @@
 			<component-type>org.rcfaces.core.imageSubmitButton</component-type>
 			<renderer-type>org.rcfaces.core.imageSubmitButton</renderer-type>
 			<handler-class>org.rcfaces.core.internal.facelets.ButtonHandler</handler-class>
-		</component>
-	</tag>
-	<tag>
-		<tag-name>helpMessageZone</tag-name>
-		<component>
-			<component-type>org.rcfaces.core.helpMessageZone</component-type>
-			<renderer-type>org.rcfaces.core.helpMessageZone</renderer-type>
-			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
 		</component>
 	</tag>
 	<tag>
@@ -467,14 +451,6 @@
 		<component>
 			<component-type>org.rcfaces.core.progressBar</component-type>
 			<renderer-type>org.rcfaces.core.progressBar</renderer-type>
-			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
-		</component>
-	</tag>
-	<tag>
-		<tag-name>progressIndicator</tag-name>
-		<component>
-			<component-type>org.rcfaces.core.progressIndicator</component-type>
-			<renderer-type>org.rcfaces.core.progressIndicator</renderer-type>
 			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
 		</component>
 	</tag>
