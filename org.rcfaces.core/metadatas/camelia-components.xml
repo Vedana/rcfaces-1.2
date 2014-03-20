@@ -11,16 +11,10 @@
 		<tagAttribute id="immediate" type="boolean" generate="true" />
 		<tagAttribute id="rendered" type="boolean" generate="false" />
 
-<<<<<<< HEAD
-		<tagAttribute id="value" type="java.lang.Object" generate="true"/>
-					
-		<method id="broadcast" >
-=======
 		<tagAttribute id="value" type="java.lang.Object"
 			generate="true" />
 
 		<method id="broadcast">
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 			<parameter type="javax.faces.event.FacesEvent" name="event" />
 			<import>javax.faces.event.ValueChangeEvent</import>
 			<import>javax.faces.event.FacesListener</import>
@@ -89,12 +83,9 @@
 				FacesListener listeners[]=getFacesListeners(FacesListener.class);
 				ComponentTools.broadcast(this, event, listeners);
 
-<<<<<<< HEAD
-=======
 			</code>
 		</method>
 
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		<method id="getLocalValue" returnType="java.lang.Object">
 			<code>
 				Object value=super.getLocalValue();
@@ -107,21 +98,12 @@
 			</code>
 		</method>
 
-<<<<<<< HEAD
-		<method id="getConvertedValue" modifier="protected" final="false" returnType="java.lang.Object">
-=======
 		<method id="getConvertedValue" modifier="protected" final="false"
 			returnType="java.lang.Object">
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 			<parameter type="javax.faces.context.FacesContext" name="context" />
 			<parameter type="java.lang.Object" name="submittedValue" />
-<<<<<<< HEAD
-			
-			<code>				
-=======
 
 			<code>
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 				if (NULL_VALUE.equals(submittedValue)) {
 				submittedValue=null;
 				}
@@ -184,12 +166,6 @@
 		<!-- <method id="getValue"/> <method id="getCachedValue"/> <method id="clearCachedValue"/> 
 			<field id="cachedValue" type="java.lang.Object" value="null"/> -->
 
-<<<<<<< HEAD
-		<field id="cachedValue" type="java.lang.Object" value="null"/>
-		-->
-				
-=======
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		<method id="getDataModelValue" returnType="javax.faces.model.DataModel">
 			<code>
 				return getDataModel();
@@ -203,16 +179,6 @@
 				return null; */
 			</code>
 		</method>
-<<<<<<< HEAD
-		
-		<tagAttribute id="rendered" type="boolean" generate="false"/>
-		<tagAttribute id="saveCompleteState" type="boolean" generate="true"/>
-	</facesComponent>
-	
-	<facesComponent id="cameliaGrid" extends="javax.faces.component.UIComponentBase" implements="javax.faces.component.NamingContainer" >
-		<field id="dataModel" type="javax.faces.model.DataModel" value="null" modifiers="transient"/>
-=======
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 
 		<tagAttribute id="rendered" type="boolean" generate="false" />
 		<tagAttribute id="saveCompleteState" type="boolean"
@@ -314,8 +280,6 @@
 	</facesComponent>
 
 	<component id="abstractBasic" abstract="true" extends="cameliaBase">
-		<implements id="org.rcfaces.core.internal.capability.IAnchoredPositionSettings" />		
-
 		<capability id="IUnlockedClientAttributesCapability" />
 		<capability id="IPartialRenderingCapability" />
 
@@ -327,11 +291,7 @@
 		<capability id="IWAIRoleCapability" />
 
 		<capability id="IPositionCapability" />
-<<<<<<< HEAD
-		<capability id="IAnchoredPositionCapability" />
-=======
 		<capability id="ILayoutPositionCapability" />
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		<capability id="ISizeCapability" />
 		<capability id="IMarginCapability" />
 		<capability id="IHelpCapability" />
@@ -444,11 +404,7 @@
 		<capability id="ISortManagerCapability" />
 		<capability id="ISortEventCapability" />
 		<capability id="ITabIndexCapability" />
-<<<<<<< HEAD
-		<capability id="IImmediateCapability" forceComponent="true"/>
-=======
 		<capability id="IImmediateCapability" forceComponent="true" />
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		<capability id="IWheelSelectionCapability" />
 		<capability id="IAlertLoadingMessageCapability" />
 
@@ -624,29 +580,12 @@
 			<parameter type="String" name="name" />
 			<parameter type="ValueExpression" name="binding" />
 			<code>
-<<<<<<< HEAD
-			if(name.equals(Properties.DISABLED)){
-				name = Properties.ITEM_DISABLED;
-			}
-			super.setValueExpression(name, binding);
-			</code>
-		</method>
-
-		<attribute id="itemValue" type="java.lang.String" writeComponent="false"/>
-		<attribute id="itemLabel" type="java.lang.String" writeComponent="false"/>
-		<attribute id="itemDescription" type="java.lang.String" writeComponent="false"/>
-		<attribute id="itemDisabled" type="boolean" writeComponent="false"/>
-	</component>
-	
-	
-=======
 				if(name.equals(Properties.DISABLED)){
 				name = Properties.ITEM_DISABLED;
 				}
 				super.setValueExpression(name, binding);
 			</code>
 		</method>
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 
 		<attribute id="itemValue" type="java.lang.String"
 			writeComponent="false" />
@@ -808,8 +747,6 @@
 
 		<capability id="ILayoutManagerCapability" />
 
-		<capability id="ILayoutManagerCapability" />
-
 		<capability id="IMenuCapability" />
 		<capability id="IAsyncRenderModeCapability" />
 		<capability id="IAsyncDecodeModeCapability" />
@@ -818,19 +755,11 @@
 
 		<capability id="IOverStyleClassCapability" />
 
-<<<<<<< HEAD
-		<method id="setAsyncRenderMode(String)" />		
-		<method id="setAsyncDecodeMode(String)" />	
-
-		<method id="setLayoutType(String)" />	
-		
-=======
 		<method id="setAsyncRenderMode(String)" />
 		<method id="setAsyncDecodeMode(String)" />
 
 		<method id="setLayoutType(String)" />
 
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		<attribute id="horizontalScroll" type="boolean" />
 		<attribute id="verticalScroll" type="boolean" />
 
@@ -850,11 +779,7 @@
 
 	<component id="button" extends="abstractCommand">
 		<implements id="org.rcfaces.core.internal.capability.IToolTipComponent" />
-<<<<<<< HEAD
-		
-=======
 
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		<capability id="ITextCapability" />
 		<capability id="ITextDirectionCapability" />
 		<capability id="ISelectionEventCapability" />
@@ -864,23 +789,6 @@
 		<capability id="IToolTipIdCapability" />
 
 		<action id="action" type="selection" default="true" />
-<<<<<<< HEAD
-	
-	<!-- 
-		<method id="getValue" returnType="java.lang.Object">
-			<code>
-				return getValue(null);
-			</code>
-		</method>
-		<method id="getValue" returnType="java.lang.Object">
-			<parameter type="javax.faces.context.FacesContext" name="context" />
-			<code>
-				return engine.getValue(Properties.VALUE, context);
-			</code>
-		</method>-->
-		
-<!--		<propertyValue>text</propertyValue> -->
-=======
 
 		<!-- <method id="getValue" returnType="java.lang.Object"> <code> return 
 			getValue(null); </code> </method> <method id="getValue" returnType="java.lang.Object"> 
@@ -888,7 +796,6 @@
 			return engine.getValue(Properties.VALUE, context); </code> </method> -->
 
 		<!-- <propertyValue>text</propertyValue> -->
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	</component>
 
 	<component id="checkButton" extends="abstractInput">
@@ -1025,14 +932,6 @@
 		render="false" converter="true">
 		<implements id="javax.faces.component.ValueHolder" />
 		<implements id="org.rcfaces.core.internal.capability.ICellImageSettings" />
-<<<<<<< HEAD
-		<implements id="org.rcfaces.core.internal.capability.ICellStyleClassSettings" />		
-		<implements id="org.rcfaces.core.internal.capability.ICellToolTipTextSettings" />
-		<implements id="org.rcfaces.core.internal.capability.IImageAccessorsCapability" />
-		<implements id="org.rcfaces.core.internal.capability.ICriteriaContainer" importMethods="false" />
-		<implements id="org.rcfaces.core.internal.capability.IToolTipComponent" />
-		
-=======
 		<implements
 			id="org.rcfaces.core.internal.capability.ICellStyleClassSettings" />
 		<implements
@@ -1045,7 +944,6 @@
 			importMethods="false" />
 		<implements id="org.rcfaces.core.internal.capability.IToolTipComponent" />
 
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		<capability id="IVisibilityCapability" />
 		<capability id="IHiddenModeCapability" />
 		<capability id="ITextCapability" />
@@ -1068,31 +966,17 @@
 		<capability id="ICellImageCapability" />
 		<capability id="ICellStyleClassCapability" />
 		<capability id="ICellToolTipTextCapability" />
-<<<<<<< HEAD
-		<capability id="IToolTipIdCapability" />
-		<capability id="ITitleToolTipIdCapability" />
-		
-		<capability id="ISelectionEventCapability" />		
-=======
 		<capability id="ICellClickableCapability" />
 		<capability id="IToolTipIdCapability" />
 		<capability id="ITitleToolTipIdCapability" />
 
 		<capability id="ISelectionEventCapability" />
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		<capability id="IDoubleClickEventCapability" />
 		<capability id="IUserEventCapability" />
 		<capability id="IInitEventCapability" />
-<<<<<<< HEAD
-	
-		<attribute id="value" type="java.lang.Object" writeComponent="false"/>
-		
-		<!-- <attribute id="imagesProviderId" type="java.lang.String" setted="true"/>-->
-=======
 
 		<attribute id="value" type="java.lang.Object"
 			writeComponent="false" />
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 
 		<!-- <attribute id="imagesProviderId" type="java.lang.String" setted="true"/> -->
 
@@ -1103,11 +987,7 @@
 		<method id="getConverter()" />
 
 		<method id="getVisibleState(javax.faces.context.FacesContext)" />
-<<<<<<< HEAD
-	
-=======
 
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		<method id="getLocalValue" returnType="java.lang.Object">
 			<code>
 				return engine.getLocalValue(Properties.VALUE);
@@ -1133,24 +1013,6 @@
 		<method id="setHiddenMode(String)" />
 
 		<method id="setAscending(String)" />
-<<<<<<< HEAD
-		
-		
-		<method id="getCriteriaManager" returnType="org.rcfaces.core.component.capability.ICriteriaManagerCapability">
-			<code>
-				return CriteriaTools.getCriteriaManager(this);
-			</code>
-		</method>
-		
-		<method id="getCriteriaConfiguration" returnType="org.rcfaces.core.internal.capability.ICriteriaConfiguration">
-			<import>org.rcfaces.core.internal.tools.CriteriaTools</import>
-			<code>
-				return CriteriaTools.getFirstCriteriaConfiguration(this);
-			</code>
-		</method>
-		
-		
-=======
 
 
 		<method id="getCriteriaManager"
@@ -1169,7 +1031,6 @@
 		</method>
 
 
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	</component>
 
 	<component id="comboColumn" extends="cameliaValueColumn"
@@ -1259,15 +1120,6 @@
 	</component>
 
 	<component id="criteriaList" extends="abstractBasic">
-<<<<<<< HEAD
-		<capability id="IForCapability" required="true"/>
-
-		<attribute id="criteriaFormat" type="java.lang.String"/>
-
-		<attribute id="noCriteriaMessage" type="java.lang.String"/>		
-	</component>
-	
-=======
 		<capability id="IForCapability" required="true" />
 
 		<attribute id="criteriaFormat" type="java.lang.String" />
@@ -1275,17 +1127,7 @@
 		<attribute id="noCriteriaMessage" type="java.lang.String" />
 	</component>
 
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	<component id="dataGrid" extends="abstractData">
-<<<<<<< HEAD
-		<implements id="org.rcfaces.core.internal.capability.IGridComponent" importMethods="false" />
-		<implements id="org.rcfaces.core.internal.capability.IDraggableGridComponent" importMethods="false" />
-		<implements id="org.rcfaces.core.internal.capability.IDroppableGridComponent" importMethods="false" />
-		<implements id="org.rcfaces.core.internal.capability.ISelectionRangeComponent" importMethods="false" />
-		<implements id="org.rcfaces.core.internal.capability.ICheckRangeComponent" importMethods="false" />
-		<implements id="org.rcfaces.core.internal.capability.IAdditionalInformationRangeComponent" importMethods="false" />
-		<implements id="org.rcfaces.core.internal.capability.IToolTipComponent"/>
-=======
 		<implements id="org.rcfaces.core.internal.capability.IGridComponent"
 			importMethods="false" />
 		<implements
@@ -1304,7 +1146,6 @@
 			id="org.rcfaces.core.internal.capability.IAdditionalInformationRangeComponent"
 			importMethods="false" />
 		<implements id="org.rcfaces.core.internal.capability.IToolTipComponent" />
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 
 		<implements
 			id="org.rcfaces.core.component.capability.ISortedChildrenCapability"
@@ -1321,25 +1162,16 @@
 			id="org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability"
 			importMethods="false" />
 
-<<<<<<< HEAD
-		<implements id="org.rcfaces.core.component.capability.ICriteriaManagerCapability" importMethods="false" properties="selectedCriteriaColumns" />
-=======
 		<implements
 			id="org.rcfaces.core.component.capability.ICriteriaManagerCapability"
 			importMethods="false" properties="selectedCriteriaColumns" />
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 
 		<capability id="IDragEventCapability" />
 		<capability id="IDraggableCapability" />
 		<capability id="IDropEventCapability" />
 		<capability id="IDropCompleteEventCapability" />
 		<capability id="IDroppableCapability" />
-<<<<<<< HEAD
-		
-		<method id="setDragEffects(String)" />	
-=======
 		<method id="setDragEffects(String)" />
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		<method id="setDragTypes(String)" />
 		<method id="setDropEffects(String)" />
 		<method id="setDropTypes(String)" />
@@ -1361,14 +1193,9 @@
 		<capability id="ISelectionEventCapability" />
 		<capability id="ISelectableCapability" />
 		<capability id="ISelectionCardinalityCapability" />
-<<<<<<< HEAD
-		<capability id="ISelectedValuesCapability" onlyValueBinding="true" />
-	
-=======
 		<capability id="ISelectedValuesCapability"
 			onlyValueBinding="true" />
 
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		<capability id="ICheckEventCapability" />
 		<capability id="ICheckableCapability" />
 		<capability id="ICheckCardinalityCapability" />
@@ -1405,13 +1232,7 @@
 		<capability id="IClientSelectionFullStateCapability" />
 		<capability id="IClientCheckFullStateCapability" />
 
-<<<<<<< HEAD
-		<capability id="IHeaderVisibilityCapability" default="true"/>
-
-		<capability id="IRowToolTipIdCapability" />
-=======
 		<capability id="IHeaderVisibilityCapability" default="true" />
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 
 		<capability id="IRowToolTipIdCapability" />
 
@@ -1429,15 +1250,6 @@
 		<attribute id="rowIndexVar" type="java.lang.String"
 			noValueBinding="true" />
 
-<<<<<<< HEAD
-		<attribute id="cellTextWrap" type="boolean" default="false"/>
-		
-		<attribute id="bodyDroppable" type="boolean" default="false"/>
-				
-		<action id="action" type="selection" default="true"/>
-		
-		<method id="getComponentValueType" returnType="org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType">
-=======
 		<attribute id="cellTextWrap" type="boolean" default="false" />
 
 		<attribute id="bodyDroppable" type="boolean" default="false" />
@@ -1446,7 +1258,6 @@
 
 		<method id="getComponentValueType"
 			returnType="org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType">
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 			<import>org.rcfaces.core.internal.tools.GridTools</import>
 			<code>
 				return GridTools.DATA_GRID_VALUE_TYPE;
@@ -1517,11 +1328,7 @@
 			]]></code>
 		</method>
 		<method id="setSelectedValues">
-<<<<<<< HEAD
-			<parameter type="java.lang.Object" name="selectedValues" />		
-=======
 			<parameter type="java.lang.Object" name="selectedValues" />
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 			<code><![CDATA[
 				if (engine.isPropertySetted(Properties.SELECTED_VALUES)==false) {
 					if (SelectionTools.setAdaptedValues(getValue(), selectedValues)) {
@@ -1567,11 +1374,7 @@
 			]]></code>
 		</method>
 		<method id="setCheckedValues">
-<<<<<<< HEAD
-			<parameter type="java.lang.Object" name="checkedValues" />		
-=======
 			<parameter type="java.lang.Object" name="checkedValues" />
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 			<code><![CDATA[
 				if (engine.isPropertySetted(Properties.CHECKED_VALUES)==false) {
 					if (CheckTools.setAdaptedValues(getValue(), checkedValues)) {
@@ -1597,12 +1400,8 @@
 			</code>
 		</method>
 		<method id="getFirstAdditionalInformationValue" returnType="java.lang.Object">
-<<<<<<< HEAD
-			<import>org.rcfaces.core.internal.tools.AdditionalInformationTools</import>
-=======
 			<import>org.rcfaces.core.internal.tools.AdditionalInformationTools
 			</import>
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 			<code>
 				return
 				AdditionalInformationTools.getFirst(getAdditionalInformationValues(),
@@ -1618,12 +1417,8 @@
 			</code>
 		</method>
 		<method id="listAdditionalInformationValues" returnType="java.lang.Object[]">
-<<<<<<< HEAD
-			<import>org.rcfaces.core.internal.tools.AdditionalInformationTools</import>
-=======
 			<import>org.rcfaces.core.internal.tools.AdditionalInformationTools
 			</import>
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 			<code>
 				return
 				AdditionalInformationTools.listValues(getAdditionalInformationValues(),
@@ -1631,82 +1426,6 @@
 			</code>
 		</method>
 
-
-<!-- Criteria/Filtred -->
-
-		<method id="listCriteriaContainers" returnType="org.rcfaces.core.internal.capability.ICriteriaContainer[]">
-			<import>org.rcfaces.core.internal.tools.CriteriaTools</import>
-			<code>
-			return CriteriaTools.listCriteriaContainers(null, this);
-			</code>
-		</method>
-
-		<method id="listSelectedCriteriaContainers" returnType="org.rcfaces.core.internal.capability.ICriteriaContainer[]">
-			<import>org.rcfaces.core.internal.tools.CriteriaTools</import>
-			<code>
-				return CriteriaTools.getSelectedCriteriaColumns(null, this, engine, Properties.SELECTED_CRITERIA_COLUMNS);
-			</code>
-		</method>
-		
-		<method id="setSelectedCriteriaContainers" returnType="void">
-			<import>org.rcfaces.core.internal.tools.CriteriaTools</import>
-			<parameter name="components" type="org.rcfaces.core.internal.capability.ICriteriaContainer[]" />
-			<code>
-				CriteriaTools.setSelectedCriteriaColumns(null, this, engine, components, Properties.SELECTED_CRITERIA_COLUMNS);
-			</code>
-		</method>
-
-		<method id="processSelectedCriteria" returnType="org.rcfaces.core.model.ICriteriaSelectedResult">
-			<import>org.rcfaces.core.internal.tools.CriteriaTools</import>
-			<code>
-				return CriteriaTools.processCriteriaConfig(this, null);
-			</code>
-		</method>
-		<method id="processSelectedCriteria" returnType="org.rcfaces.core.model.ICriteriaSelectedResult">
-			<import>org.rcfaces.core.internal.tools.CriteriaTools</import>
-			<parameter type="org.rcfaces.core.model.ISelectedCriteria[]" name="configs" />
-			<code>
-				return CriteriaTools.processCriteriaConfig(this, configs);
-			</code>
-		</method>
-
-<!-- Criteria/Filtred -->
-
-		<method id="listCriteriaContainers" returnType="org.rcfaces.core.internal.capability.ICriteriaContainer[]">
-			<import>org.rcfaces.core.internal.tools.CriteriaTools</import>
-			<code>
-			return CriteriaTools.listCriteriaContainers(null, this);
-			</code>
-		</method>
-
-		<method id="listSelectedCriteriaContainers" returnType="org.rcfaces.core.internal.capability.ICriteriaContainer[]">
-			<import>org.rcfaces.core.internal.tools.CriteriaTools</import>
-			<code>
-				return CriteriaTools.getSelectedCriteriaColumns(null, this, engine, Properties.SELECTED_CRITERIA_COLUMNS);
-			</code>
-		</method>
-		
-		<method id="setSelectedCriteriaContainers" returnType="void">
-			<import>org.rcfaces.core.internal.tools.CriteriaTools</import>
-			<parameter name="components" type="org.rcfaces.core.internal.capability.ICriteriaContainer[]" />
-			<code>
-				CriteriaTools.setSelectedCriteriaColumns(null, this, engine, components, Properties.SELECTED_CRITERIA_COLUMNS);
-			</code>
-		</method>
-
-		<method id="processSelectedCriteria" returnType="org.rcfaces.core.model.ICriteriaSelectedResult">
-			<import>org.rcfaces.core.internal.tools.CriteriaTools</import>
-			<code>
-				return CriteriaTools.processCriteriaConfig(this, null);
-			</code>
-		</method>
-		<method id="processSelectedCriteria" returnType="org.rcfaces.core.model.ICriteriaSelectedResult">
-			<import>org.rcfaces.core.internal.tools.CriteriaTools</import>
-			<parameter type="org.rcfaces.core.model.ISelectedCriteria[]" name="configs" />
-			<code>
-				return CriteriaTools.processCriteriaConfig(this, configs);
-			</code>
-		</method>
 
 		<!-- Criteria/Filtred -->
 
@@ -2032,11 +1751,8 @@
 			</code>
 		</method>
 
-<<<<<<< HEAD
-=======
 		<!-- Cursor value -->
 
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		<method id="getCursorValue" returnType="java.lang.Object">
 			<parameter type="javax.faces.context.FacesContext" name="facesContext" />
 			<import>org.rcfaces.core.internal.tools.ComponentTools</import>
@@ -2051,33 +1767,9 @@
 			</code>
 		</method>
 
-<<<<<<< HEAD
-<!-- 		Pas bon pour les additionalInformations
-		<method id="restoreDescendantState" modifier="protected">
-			<code/>
-		</method>
-		<method id="saveDescendantState" modifier="protected">
-			<code/>
-		</method>
-		-->
-		
-		<method id="setFilterProperties(String)" returnType="void" />
-		
-	</component>
-	
-	<component id="componentsGrid" extends="abstractData">
-		<implements id="org.rcfaces.core.internal.capability.IGridComponent" importMethods="false" />
-		<implements id="org.rcfaces.core.component.capability.ISortedChildrenCapability" properties="sortedChildren"/>
-		<implements id="org.rcfaces.core.component.capability.IOrderedChildrenCapability" properties="orderedChildren" />
-		<implements id="org.rcfaces.core.internal.capability.ISelectionRangeComponent" importMethods="false" />
-		<implements id="org.rcfaces.core.internal.capability.IAdditionalInformationRangeComponent" importMethods="false" />
-		
-		<implements id="org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability" importMethods="false" />
-=======
 		<!-- Pas bon pour les additionalInformations <method id="restoreDescendantState" 
 			modifier="protected"> <code/> </method> <method id="saveDescendantState" 
 			modifier="protected"> <code/> </method> -->
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 
 		<method id="setFilterProperties(String)" returnType="void" />
 
@@ -2142,15 +1834,6 @@
 
 		<capability id="IHeaderVisibilityCapability" default="true" />
 
-<<<<<<< HEAD
-		<attribute id="rowCountVar" type="java.lang.String" noValueBinding="true"/>
-		<attribute id="rowIndexVar" type="java.lang.String" noValueBinding="true"/>
-		<attribute id="rowValue" type="java.lang.String" onlyValueBinding="true"/>
-		<attribute id="rowValueConverter" type="javax.faces.convert.Converter"/>
-		<attribute id="cellTextWrap" type="boolean" default="false"/>
-	
-		<method id="getComponentValueType" returnType="org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType">
-=======
 		<capability id="IScopeColumnIdCapability" />
 
 		<capability id="IGridCaptionCapability" />
@@ -2166,7 +1849,6 @@
 
 		<method id="getComponentValueType"
 			returnType="org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType">
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 			<import>org.rcfaces.core.internal.tools.GridTools</import>
 			<code>
 				return GridTools.COMPONENTS_GRID_VALUE_TYPE;
@@ -2231,11 +1913,7 @@
 			]]></code>
 		</method>
 		<method id="setSelectedValues">
-<<<<<<< HEAD
-			<parameter type="java.lang.Object" name="selectedValues" />		
-=======
 			<parameter type="java.lang.Object" name="selectedValues" />
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 			<code><![CDATA[
 				if (engine.isPropertySetted(Properties.SELECTED_VALUES)==false) {
 					if (SelectionTools.setAdaptedValues(getValue(), selectedValues)) {
@@ -2261,12 +1939,8 @@
 			</code>
 		</method>
 		<method id="getFirstAdditionalInformationValue" returnType="java.lang.Object">
-<<<<<<< HEAD
-			<import>org.rcfaces.core.internal.tools.AdditionalInformationTools</import>
-=======
 			<import>org.rcfaces.core.internal.tools.AdditionalInformationTools
 			</import>
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 			<code>
 				return
 				AdditionalInformationTools.getFirst(getAdditionalInformationValues(),
@@ -2282,12 +1956,8 @@
 			</code>
 		</method>
 		<method id="listAdditionalInformationValues" returnType="java.lang.Object[]">
-<<<<<<< HEAD
-			<import>org.rcfaces.core.internal.tools.AdditionalInformationTools</import>
-=======
 			<import>org.rcfaces.core.internal.tools.AdditionalInformationTools
 			</import>
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 			<code>
 				return
 				AdditionalInformationTools.listValues(getAdditionalInformationValues(),
@@ -2583,12 +2253,8 @@
 			</code>
 		</method>
 		<method id="getFirstAdditionalInformationValue" returnType="java.lang.Object">
-<<<<<<< HEAD
-			<import>org.rcfaces.core.internal.tools.AdditionalInformationTools</import>
-=======
 			<import>org.rcfaces.core.internal.tools.AdditionalInformationTools
 			</import>
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 			<code>
 				return
 				AdditionalInformationTools.getFirst(getAdditionalInformationValues(),
@@ -2604,12 +2270,8 @@
 			</code>
 		</method>
 		<method id="listAdditionalInformationValues" returnType="java.lang.Object[]">
-<<<<<<< HEAD
-			<import>org.rcfaces.core.internal.tools.AdditionalInformationTools</import>
-=======
 			<import>org.rcfaces.core.internal.tools.AdditionalInformationTools
 			</import>
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 			<code>
 				return
 				AdditionalInformationTools.listValues(getAdditionalInformationValues(),
@@ -2790,15 +2452,10 @@
 		<attribute id="suggestionDelayMs" type="int" />
 		<attribute id="suggestionMinChars" type="int" />
 
-<<<<<<< HEAD
-		<attribute id="valueColumnId" type="java.lang.String" required="true"/>
-		<attribute id="labelColumnId" type="java.lang.String"/>
-=======
 		<attribute id="rowCountVar" type="java.lang.String"
 			noValueBinding="true" />
 		<attribute id="rowIndexVar" type="java.lang.String"
 			noValueBinding="true" />
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 
 		<attribute id="valueColumnId" type="java.lang.String"
 			required="true" />
@@ -3297,25 +2954,13 @@
 	</component>
 
 	<component id="image" extends="abstractOutput">
-<<<<<<< HEAD
-		<implements id="org.rcfaces.core.internal.capability.IImageAccessorsCapability" />
-=======
 		<implements
 			id="org.rcfaces.core.internal.capability.IImageAccessorsCapability" />
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		<implements id="org.rcfaces.core.internal.capability.IToolTipComponent" />
 
 		<capability id="IImageCapability" />
 		<capability id="IImageSizeCapability" />
 		<capability id="IAlternateTextCapability" />
-<<<<<<< HEAD
-	
-		<capability id="IFilterCapability"/>
-		
-		<capability id="IToolTipIdCapability" />
-						
-		<method id="getImageAccessors" returnType="org.rcfaces.core.component.familly.IContentAccessors">
-=======
 
 		<capability id="IFilterCapability" />
 
@@ -3323,7 +2968,6 @@
 
 		<method id="getImageAccessors"
 			returnType="org.rcfaces.core.component.familly.IContentAccessors">
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 			<import>org.rcfaces.core.internal.tools.ImageAccessorTools</import>
 			<parameter type="javax.faces.context.FacesContext" name="facesContext" />
 			<code>
@@ -3422,14 +3066,6 @@
 	</component>
 
 	<component id="imagePagerButton" extends="imageButton">
-
-		<capability id="IForCapability" required="true"/>
-
-		<attribute id="type" type="java.lang.String" required="true"/>		
-		<attribute id="hideIfDisabled" type="boolean" required="false"/>		
-	</component>	
-
-	<component id="imageCriteriaButton" extends="imageButton">
 
 		<capability id="IForCapability" required="true" />
 
@@ -3642,12 +3278,7 @@
 
 		<capability id="IPreloadedLevelDepthCapability" />
 		<capability id="IMenuEventCapability" />
-<<<<<<< HEAD
-		<capability id="ISelectionEventCapability" />		
-		<capability id="IPreSelectionEventCapability" />
-=======
 		<capability id="ISelectionEventCapability" />
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		<capability id="ICheckEventCapability" />
 		<capability id="ICheckedValuesCapability" onlyValueBinding="true" />
 
@@ -3725,10 +3356,6 @@
 
 	<component id="menuRadioItem" extends="menuCheckItem" render="false">
 		<capability id="IRadioValueCapability" />
-	</component>
-	
-	<component id="menuCriteria" extends="menu" render="false">
-		
 	</component>
 
 	<component id="numberEntry" extends="abstractInput">
@@ -3820,20 +3447,6 @@
 				setValue(number);
 			</code>
 		</method>
-		
-		<method id="setNumber">
-			<parameter type="java.lang.Number" name="number" />
-			<code>
-				setValue(number);
-			</code>
-		</method>
-
-		<method id="setNumber">
-			<parameter type="java.lang.Number" name="number" />
-			<code>
-				setValue(number);
-			</code>
-		</method>
 
 		<attribute id="minimum" type="java.lang.Number" />
 		<method id="setMinimum(String)" />
@@ -3891,11 +3504,6 @@
 		<attribute id="suggestionValue" type="java.lang.Object" />
 		<attribute id="suggestionConverter" type="javax.faces.convert.Converter" />
 		<attribute id="moreResultsMessage" type="java.lang.String" />
-<<<<<<< HEAD
-		<attribute id="orderedItems" type="boolean" default="true" />
-		<attribute id="showPopupForOneResult" type="boolean" />
-	
-=======
 		<attribute id="orderedItems" type="boolean" default="false" />
 		<attribute id="showPopupForOneResult" type="boolean" />
 		<attribute id="disableProposals" type="boolean" />
@@ -3907,7 +3515,6 @@
 		<attribute id="popupWidth" type="int" />
 		<attribute id="popupHeight" type="int" />
 
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		<method id="setSuggestionConverter(String)" />
 		<method
 			id="setSuggestionConverter(String,javax.faces.context.FacesContext)" />
@@ -4738,13 +4345,8 @@
 				return TreeTools.isExpanded(context, this, value);
 			</code>
 		</method>
-<<<<<<< HEAD
-		
-<!--  Cursor  -->		
-=======
 
 		<!-- Cursor -->
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		<method id="getCursorValue" returnType="java.lang.Object">
 			<parameter type="javax.faces.context.FacesContext" name="facesContext" />
 			<import>org.rcfaces.core.internal.tools.ComponentTools</import>
@@ -4772,11 +4374,7 @@
 			]]></code>
 		</method>
 		<method id="setSelectedValues">
-<<<<<<< HEAD
-			<parameter type="java.lang.Object" name="selectedValues" />		
-=======
 			<parameter type="java.lang.Object" name="selectedValues" />
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 			<code><![CDATA[
 				if (engine.isPropertySetted(Properties.SELECTED_VALUES)==false) {
 					if (SelectionTools.setAdaptedValues(getValue(), selectedValues)) {
@@ -4806,11 +4404,7 @@
 			]]></code>
 		</method>
 		<method id="setCheckedValues">
-<<<<<<< HEAD
-			<parameter type="java.lang.Object" name="checkedValues" />		
-=======
 			<parameter type="java.lang.Object" name="checkedValues" />
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 			<code><![CDATA[
 				if (engine.isPropertySetted(Properties.CHECKED_VALUES)==false) {
 					if (CheckTools.setAdaptedValues(getValue(), checkedValues)) {
@@ -5039,15 +4633,6 @@
 		<attribute id="periodEnd" type="java.util.Date" />
 		<method id="setPeriodEnd(String)" />
 		<method id="getPeriodEnd(javax.faces.context.FacesContext)" />
-<<<<<<< HEAD
-		<attribute id="periodLabel" type="java.lang.String"/>
-		<attribute id="periodStyle" type="java.lang.String"/>
-		<attribute id="periodSelectable" type="boolean" generate="false"/>
-		<attribute id="periodToolTip" type="java.lang.String"/>
-		<attribute id="periodValue" type="java.lang.String"/>
-		<attribute id="periodType" type="java.lang.String"/>
-		
-=======
 		<attribute id="periodLabel" type="java.lang.String" />
 		<attribute id="periodStyle" type="java.lang.String" />
 		<attribute id="periodSelectable" type="boolean" generate="false" />
@@ -5055,7 +4640,6 @@
 		<attribute id="periodValue" type="java.lang.String" />
 		<attribute id="periodType" type="java.lang.String" />
 
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		<attribute id="var" type="java.lang.String" />
 
 
@@ -5177,26 +4761,16 @@
 				throw new FacesException("Can not set value of 'SelectItemsIterator', use 'items' attribute to set the collection.");
 			]]></code>
 		</method>
-<<<<<<< HEAD
-		
-=======
 
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		<method id="getValue" returnType="java.lang.Object">
 			<code>
 				return getValue(null);
 			</code>
 		</method>
-<<<<<<< HEAD
-		
-		<method id="getValue" returnType="java.lang.Object">
-			<import>org.rcfaces.core.internal.tools.SelectItemsIteratorTools</import>
-=======
 
 		<method id="getValue" returnType="java.lang.Object">
 			<import>org.rcfaces.core.internal.tools.SelectItemsIteratorTools
 			</import>
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 			<parameter type="javax.faces.context.FacesContext" name="context" />
 			<code>
 				return SelectItemsIteratorTools.getValue(this, context);
@@ -5251,11 +4825,8 @@
 		<capability id="IServiceEventCapability" />
 		<capability id="IFilterCapability" />
 		<capability id="IErrorEventCapability" />
-<<<<<<< HEAD
-=======
 
 		<capability id="IVisibilityCapability" />
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 
 		<!-- Dans la sérialisation on en a besoin !!!! -->
 		<capability id="IComponentLocaleCapability" />
@@ -5291,185 +4862,6 @@
 
 
 	<component id="criteria" extends="cameliaBase" render="false">
-<<<<<<< HEAD
-	
-		<implements id="org.rcfaces.core.internal.capability.ISelectionComponent" importMethods="false" />
-		<implements id="org.rcfaces.core.internal.capability.ICriteriaConfiguration" importMethods="false" />
-
-		<capability id="ISelectionCardinalityCapability" />
-		<capability id="ISelectedValuesCapability" onlyValueBinding="true" />
-		
-		<attribute id="criteriaValue" type="java.lang.Object"/>
-
-		<attribute id="criteriaTitle" type="java.lang.String" />
-
-		<attribute id="criteriaConverter" type="javax.faces.convert.Converter" />
-		<method id="setCriteriaConverter">
-			<parameter type="String" name="converterId" />
-			<code>			
-				setCriteriaConverter(converterId, null);
-			</code>
-		</method>
-				
-		<method id="setCriteriaConverter">
-			<import>org.rcfaces.core.internal.tools.ComponentTools</import>
-			<import>javax.faces.convert.Converter</import>
-			<parameter type="String" name="converterId" />
-			<parameter type="javax.faces.context.FacesContext" name="facesContext" />
-			<code>
-				Converter converter=ComponentTools.createConverter(facesContext, converterId);
-	
-				setCriteriaConverter(converter);
-			</code>
-		</method>
-
-		<attribute id="labelConverter" type="javax.faces.convert.Converter" />
-		<method id="setLabelConverter">
-			<parameter type="String" name="converterId" />
-			<code>			
-				setLabelConverter(converterId, null);
-			</code>
-		</method>
-				
-		<method id="setLabelConverter">
-			<import>org.rcfaces.core.internal.tools.ComponentTools</import>
-			<import>javax.faces.convert.Converter</import>
-			<parameter type="String" name="converterId" />
-			<parameter type="javax.faces.context.FacesContext" name="facesContext" />
-			<code>
-				Converter converter=ComponentTools.createConverter(facesContext, converterId);
-	
-				setLabelConverter(converter);
-			</code>
-		</method>
-
-			
-	<!-- Selection/deselection -->
-		<method id="select" returnType="void">
-			<parameter type="java.lang.Object" name="rowValue" />
-			<import>org.rcfaces.core.internal.tools.SelectionTools</import>
-			<import>org.rcfaces.core.internal.tools.CollectionTools</import>
-			<code>
-				SelectionTools.select(null, this, rowValue);
-			</code>
-		</method>		
-		<method id="selectAll" returnType="void">
-			<import>org.rcfaces.core.internal.tools.SelectionTools</import>
-			<import>org.rcfaces.core.internal.tools.CollectionTools</import>
-			<code>
-				SelectionTools.selectAll(null, this);
-			</code>
-		</method>
-
-		<method id="deselect" returnType="void">
-			<import>org.rcfaces.core.internal.tools.SelectionTools</import>
-			<parameter type="java.lang.Object" name="rowValue" />
-			<code>
-				SelectionTools.deselect(null, this, rowValue);
-			</code>
-		</method>
-		<method id="deselectAll" returnType="void">
-			<import>org.rcfaces.core.internal.tools.SelectionTools</import>
-			<code>
-				SelectionTools.deselectAll(null, this);
-			</code>
-		</method>
-	
-		<method id="getSelectedValuesCount" returnType="int">
-			<import>org.rcfaces.core.internal.tools.SelectionTools</import>
-			<code>
-				return SelectionTools.getCount(getSelectedValues());
-			</code>
-		</method>
-		<method id="getFirstSelectedValue" returnType="java.lang.Object">
-			<import>org.rcfaces.core.internal.tools.SelectionTools</import>
-			<code>
-				return SelectionTools.getFirst(getSelectedValues(), null);
-			</code>
-		</method>
-		<method id="listSelectedValues" returnType="java.lang.Object[]">
-			<import>org.rcfaces.core.internal.tools.SelectionTools</import>
-			<code>
-				return SelectionTools.listValues(getSelectedValues(), null);
-			</code>
-		</method>
-
-		<method id="setSelectionCardinality(String)" />
-
-		<method id="listAvailableCriteriaItems" returnType="org.rcfaces.core.item.CriteriaItem[]">
-			<import>org.rcfaces.core.internal.tools.CriteriaTools</import>
-			<code>
-				return CriteriaTools.listAvailableCriteriaItems(this, null);
-			</code>
-		</method>
-		<method id="listAvailableCriteriaItems" returnType="org.rcfaces.core.item.CriteriaItem[]">
-			<import>org.rcfaces.core.internal.tools.CriteriaTools</import>
-			<parameter type="org.rcfaces.core.model.ISelectedCriteria[]" name="configs" />
-			<code>
-				return CriteriaTools.listAvailableCriteriaItems(this, configs);
-			</code>
-		</method>
-
-		<method id="getCriteriaContainer" returnType="org.rcfaces.core.internal.capability.ICriteriaContainer">
-			<import>org.rcfaces.core.internal.tools.CriteriaTools</import>
-			<code>
-				return CriteriaTools.getCriteriaContainer(this);
-			</code>
-		</method>
-		<method id="getCriteriaCardinality" returnType="int">
-			<code>
-				return getSelectionCardinality();
-			</code>
-		</method>
-	
-	</component>
-
-	<component id="criteriaItem" extends="selectItem" render="false">
-		<attribute id="logicalFilter" type="java.lang.String"/>
-		<attribute id="startingValue" type="java.lang.Object"/>
-	</component>
-
-	<component id="criteriaItemFiller" extends="cameliaItems" render="false">
-		<attribute id="logicalFilter" type="java.lang.String"/>
-		<attribute id="itemValue" type="java.lang.Object"/>
-	</component>
-	
-	<component id="toolTip" extends="abstractBasic">
-		<implements id="org.rcfaces.core.internal.capability.IAsyncRenderComponent" />
-
-		<capability id="IBackgroundImageCapability" />
-		<capability id="IBorderCapability" />
-		
-		<capability id="IInitEventCapability" />
-		<capability id="ILoadEventCapability" />
-		
-		<capability id="IAsyncRenderModeCapability" />
-		<capability id="IVariableScopeCapability" />		
-		
-		<capability id="ILookAndFeelCapability" />
-		<capability id="IStyleClassCapability" />
-
-	
-		<method id="setAsyncRenderMode(String)" />		
-		
-		<attribute id="toolTipId" type="java.lang.String" />
-
-		<attribute id="position" type="java.lang.String" />
-	</component>
-	
-	<component id="toolTipManager" extends="cameliaBase">
-		<attribute id="showDelayMs" type="int" default="-1"/>
-		<attribute id="neighbourThresholdMs" type="int" default="-1" />
-	</component>
-
-<!--
-	<component id="imagesBar" extends="">
-	</component>	
--->
-<!--
-	<component id="clientValidation" extends="cameliaBase">
-		<capability id="IValidationEventCapability" />		
-=======
 
 		<implements id="org.rcfaces.core.internal.capability.ISelectionComponent"
 			importMethods="false" />
@@ -5606,7 +4998,6 @@
 			</code>
 		</method>
 
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	</component>
 
 	<component id="criteriaItem" extends="selectItem" render="false">

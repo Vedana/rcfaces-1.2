@@ -49,7 +49,7 @@ import org.rcfaces.core.event.ValidationEvent;
  */
 public abstract class ${CLASS} extends ${PARENT.CLASS} implements
 		IRCFacesComponent, IContainerManager, ITransientAttributesManager${IMPLEMENTS} {
-	private static final String REVISION = "$Revision$";
+	private static final String REVISION = "$Revision: 1.6 $";
 
 	private static final Log LOG = LogFactory.getLog(${CLASS}.class);
 
@@ -478,12 +478,6 @@ ${FIELDS}
     	for(int i=0;i<fcs.length;i++) {
     		removeFacesListener(fcs[i]);
     	}
-    }
-
-	protected final IDataMapAccessor getDataMapAccessor(FacesContext context, String name,
-            boolean modify) {
-            
-    	return engine.getDataMapAccessor(context, name, modify);
     }
 	
 	public String toString() {
