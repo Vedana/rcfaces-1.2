@@ -11,7 +11,6 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  * @version $Revision$ $Date$
  */
 public class ImageResetButtonRenderer extends ImageButtonRenderer {
-    private static final String REVISION = "$Revision$";
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.IMAGE_RESET_BUTTON;

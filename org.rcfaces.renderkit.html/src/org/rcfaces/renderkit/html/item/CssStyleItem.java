@@ -13,7 +13,6 @@ import org.rcfaces.core.item.IFileItem;
  * @version $Revision$ $Date$
  */
 public class CssStyleItem extends UserAgentVaryFileItem {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = 7658229482218017683L;
 

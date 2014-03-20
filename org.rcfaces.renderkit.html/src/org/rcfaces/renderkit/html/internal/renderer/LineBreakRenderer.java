@@ -15,7 +15,6 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  * @version $Revision$ $Date$
  */
 public class LineBreakRenderer extends AbstractCssRenderer {
-    private static final String REVISION = "$Revision$";
 
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
         // TextComponent textComponent = (TextComponent) writer.getComponent();
@@ -35,7 +34,8 @@ public class LineBreakRenderer extends AbstractCssRenderer {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#getJavaScriptClassName()
+     * @see org.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#
+     * getJavaScriptClassName()
      */
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.LINE_BREAK;

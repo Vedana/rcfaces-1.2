@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: f_tabbedPane.js,v 1.19.2.5 2014/02/27 13:12:55 jbmeslin Exp $
  */
 
 /**
@@ -371,10 +371,11 @@ var __members = {
 		}
 		*/
 	},
+	
 	/**
 	 * @method private
 	 */
-	_resize:function() {
+	_resize: function() {
 		
 		var width=undefined;
 		if (this._resizeWidth) {		

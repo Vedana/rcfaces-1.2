@@ -18,8 +18,6 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  */
 public class AdditionalInformationRenderer extends AbstractCssRenderer {
 
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory
             .getLog(AdditionalInformationRenderer.class);
 

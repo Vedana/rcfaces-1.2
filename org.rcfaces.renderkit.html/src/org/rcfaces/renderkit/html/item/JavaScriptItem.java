@@ -13,7 +13,6 @@ import org.rcfaces.core.item.IFileItem;
  * @version $Revision$ $Date$
  */
 public class JavaScriptItem extends UserAgentVaryFileItem {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = -4358051605814119312L;
 

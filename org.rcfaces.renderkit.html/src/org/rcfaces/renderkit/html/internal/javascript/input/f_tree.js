@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: f_tree.js,v 1.57.2.37 2014/02/06 16:21:56 oeuillot Exp $
  */
 
 /**
@@ -7,7 +7,7 @@
  *
  * @class f_tree extends f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager<String[]>, fa_checkManager, fa_itemClientDatas, fa_scrollPositions, fa_overStyleClass, fa_filterProperties, fa_treeDnd, fa_tabIndex, fa_outlinedLabel
  * @author olivier Oeuillot
- * @version $Revision$
+ * @version $REVISION: $
  */
  
 var __statics = {

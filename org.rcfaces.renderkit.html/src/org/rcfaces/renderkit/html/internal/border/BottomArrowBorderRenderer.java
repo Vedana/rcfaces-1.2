@@ -11,7 +11,6 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
  * @version $Revision$ $Date$
  */
 public class BottomArrowBorderRenderer extends NoneBorderRenderer {
-    private static final String REVISION = "$Revision$";
 
     protected String getComboImageVerticalAlign(IHtmlWriter writer) {
         return "bottom";

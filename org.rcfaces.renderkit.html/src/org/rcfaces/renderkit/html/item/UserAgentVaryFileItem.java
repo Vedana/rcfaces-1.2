@@ -16,7 +16,6 @@ import org.rcfaces.renderkit.html.component.capability.IUserAgentVaryCapability;
  */
 public class UserAgentVaryFileItem extends FileItem implements
         IUserAgentVaryFileItem {
-    private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = 7658229482218017683L;
 

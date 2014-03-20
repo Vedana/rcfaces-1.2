@@ -17,7 +17,6 @@ import org.rcfaces.renderkit.html.internal.decorator.ListDecorator;
  * @version $Revision$ $Date$
  */
 public class ListRenderer extends ComboRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final int DEFAULT_ROW_NUMBER = 4;
 
@@ -40,7 +39,8 @@ public class ListRenderer extends ComboRenderer {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#getJavaScriptClassName()
+     * @see org.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#
+     * getJavaScriptClassName()
      */
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.LIST;
