@@ -28,13 +28,37 @@ import org.rcfaces.core.component.capability.IAsyncDecodeModeCapability;
  * <p>The cardBox Component is similar to the <a href="/comps/tabbedPaneComponent.html">tabbedPane Component</a> without title and borders. It is usefull for showing alternatively different contents on the same page.</p>
  * <p>The cardBox Component has the following capabilities :
  * <ul>
- * <li>Position &amp; Size</li>
- * <li>Foreground &amp; Background Color</li>
- * <li>Help</li>
- * <li>Visibility, Read-Only, Disabled</li>
- * <li>Events Handling</li>
+ * <li>ISelectionEventCapability</li>
+ * <li>IAsyncRenderModeCapability</li>
+ * <li>IPreferencesSettings</li>
+ * <li>IVariableScopeCapability</li>
+ * <li>IAsyncDecodeModeCapability</li>
  * </ul>
  * </p>
+ * 
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/CardBoxComponent.html">cardBox</a> renderer is linked to the <a href="/jsdocs/index.html?f_cardBox.html" target="_blank">f_cardBox</a> javascript class. f_cardBox extends f_component, fa_immediateu</p>
+ * 
+ * <p> Table of component style classes: </p>
+ * <table border="1" cellpadding="3" cellspacing="0" width="100%">
+ * <tbody>
+ * 
+ * <tr style="text-align:left">
+ * <th  width="33%">Style Name</th>
+ * <th width="50%">Description</th>
+ * </tr>
+ * 
+ * <tr  style="text-align:left">
+ * <td width="33%">f_cardBox</td>
+ * <td width="50%">Defines styles for the wrapper DIV element</td>
+ * </tr>
+ * 
+ * <tr  style="text-align:left">
+ * <td width="33%">f_cardBox_card</td>
+ * <td width="50%">Defines styles for the wrapper DIV element for each <a href="/apidocs/index.html?org/rcfaces/core/component/CardComponent.html">card</a></td>
+ * </tr>
+ * 
+ * </tbody>
+ * </table>
  */
 public class CardBoxComponent extends AbstractInputComponent implements 
 	ISelectionEventCapability,

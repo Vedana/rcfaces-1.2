@@ -1,8 +1,8 @@
 package org.rcfaces.renderkit.svg.component;
 
-import org.rcfaces.core.internal.component.Properties;
 import java.lang.Object;
 import java.util.Map;
+import org.rcfaces.renderkit.svg.component.Properties;
 import java.util.Collections;
 import java.lang.String;
 import org.apache.commons.logging.LogFactory;

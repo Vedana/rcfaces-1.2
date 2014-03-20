@@ -21,16 +21,51 @@ import org.rcfaces.core.internal.converter.CalendarModeConverter
  * <p>The calendar Component shows a calendar. It can be customized in differents ways (days off, holidays, tool tips ...).</p>
  * <p>The calendar Component has the following capabilities :
  * <ul>
- * <li>Position &amp; Size</li>
- * <li>Foreground &amp; Background Color</li>
- * <li>Text, font &amp; image</li>
- * <li>Margin &amp; border</li>
- * <li>Help</li>
- * <li>Visibility, Read-Only, Disabled</li>
- * <li>Events Handling</li>
- * <li>Calendar functions</li>
+ * <li>ISelectionEventCapability</li>
+ * <li>IReadOnlyCapability</li>
+ * <li>ILiteralLocaleCapability</li>
+ * <li>ILiteralTimeZoneCapability</li>
+ * <li>IComponentLocaleCapability</li>
+ * <li>IComponentTimeZoneCapability</li>
+ * <li>IClientDatesStrategyCapability</li>
+ * <li>IBorderCapability</li>
+ * <li>ICalendarLayoutCapability</li>
+ * <li>IMultipleSelectCapability</li>
+ * <li>ICalendarModeCapability</li>
  * </ul>
  * </p>
+ * 
+ * 
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/CalendarComponent.html">calendar</a> renderer is linked to the <a href="/jsdocs/index.html?f_calendar.html" target="_blank">f_calendar</a> javascript class. f_calendar extends f_component, fa_readOnly, fa_disabled, fa_itemsWrapper</p>
+ * <p> Table of the main component style classes: </p>
+ * <table border="1" cellpadding="3" cellspacing="0" width="100%">
+ * <tbody>
+ * 
+ * <tr style="text-align:left">
+ * <th  width="33%">Style Name</th>
+ * <th width="50%">Description</th>
+ * </tr>
+ * 
+ * <tr  style="text-align:left">
+ * <td width="33%">f_calendar_yearCursor</td>
+ * <td width="50%">Defines styles for the wrapper Table element used to change years of the calendar. Contains other style</td>
+ * </tr>
+ * <tr  style="text-align:left">
+ * <td width="33%">f_calendar_monthList</td>
+ * <td width="50%">Defines styles for the wrapper Table element the element containing the  months of year  </td>
+ * </tr>
+ * <tr  style="text-align:left">
+ * <td width="33%">f_calendar_dayList</td>
+ * <td width="50%">Defines styles for the wrapper Table element the element containing the day list of year  </td>
+ * </tr>
+ * <tr  style="text-align:left">
+ * <td width="33%">f_calendar_day</td>
+ * <td width="50%">Defines styles for the A element</td>
+ * </tr>
+ * 
+ * 
+ * </tbody>
+ * </table>
  */
 public class CalendarComponent extends AbstractCalendarComponent implements 
 	IBorderCapability,

@@ -26,14 +26,35 @@ import org.rcfaces.core.internal.tools.CheckTools;
  * <p>The menu Component provides a way of creating desktop style menus on web pages. It allows sub-menus, check and radio menu items and image menus. It also provides pop-up menus.</p>
  * <p>The menu Component has the following capabilities :
  * <ul>
- * <li>Position &amp; Size</li>
- * <li>Foreground &amp; Background Color</li>
- * <li>Text, font &amp; images</li>
- * <li>Help</li>
- * <li>Visibility, Read-Only, Disabled</li>
- * <li>Events Handling</li>
+ * <li>IPreloadedLevelDepthCapability</li>
+ * <li>IMenuEventCapability</li>
+ * <li>ISelectionEventCapability</li>
+ * <li>ICheckEventCapability</li>
+ * <li>ICheckedValuesCapability</li>
+ * <li>ICheckComponent</li>
+ * <li>IMenuComponent</li>
+ * <li>IComponentValueTypeCapability</li>
  * </ul>
  * </p>
+ * 
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/MenuComponent.html">menu</a> renderer is linked to the <a href="/jsdocs/index.html?f_menu.html" target="_blank">f_menu</a> javascript class. f_menu extends f_menuBase</p>
+ * 
+ * <p> Table of component style classes: </p>
+ * <table border="1" cellpadding="3" cellspacing="0" width="100%">
+ * <tbody>
+ * 
+ * <tr style="text-align:left">
+ * <th  width="33%">Style Name</th>
+ * <th width="50%">Description</th>
+ * </tr>
+ * 
+ * <tr  style="text-align:left">
+ * <td width="33%">f_menu</td>
+ * <td width="50%">Defines styles for the wrapper UL element. Coantains f_grid_popup and f_menu_item styles</td>
+ * </tr>
+ * 
+ * </tbody>
+ * </table>
  */
 public class MenuComponent extends CameliaSelectManyComponent implements 
 	IPreloadedLevelDepthCapability,

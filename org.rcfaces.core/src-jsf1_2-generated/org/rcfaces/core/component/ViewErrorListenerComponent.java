@@ -48,7 +48,7 @@ public class ViewErrorListenerComponent extends CameliaBaseComponent implements
 	public String getClientData(String name, FacesContext facesContext) {
 
 
-		 IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", false);
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
 		 if (dataMapAccessor==null) {
 		 	return null;
 		 }
@@ -60,11 +60,7 @@ public class ViewErrorListenerComponent extends CameliaBaseComponent implements
 	public Object getServerData(String name, FacesContext facesContext) {
 
 
-<<<<<<< HEAD
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
-=======
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		if (dataMapAccessor==null) {
 			return null;
 		}
@@ -88,7 +84,7 @@ public class ViewErrorListenerComponent extends CameliaBaseComponent implements
 	public Map getClientDataMap(FacesContext facesContext) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "clientData", false);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "clientData", false);
 		if (dataMapAccessor==null) {
 			return Collections.EMPTY_MAP;
 		}
@@ -100,7 +96,7 @@ public class ViewErrorListenerComponent extends CameliaBaseComponent implements
 	public Map getServerDataMap(FacesContext facesContext) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "serverData", false);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
  		if (dataMapAccessor==null) {
 			return Collections.EMPTY_MAP;
 		}
@@ -119,7 +115,7 @@ public class ViewErrorListenerComponent extends CameliaBaseComponent implements
 	public String[] listClientDataKeys(FacesContext facesContext) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", false);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
 		if (dataMapAccessor==null) {
 			return ComponentTools.STRING_EMPTY_ARRAY;
 		}
@@ -131,7 +127,7 @@ public class ViewErrorListenerComponent extends CameliaBaseComponent implements
 	public String[] listServerDataKeys(FacesContext facesContext) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
 		if (dataMapAccessor==null) {
 			return ComponentTools.STRING_EMPTY_ARRAY;
 		}
@@ -143,7 +139,7 @@ public class ViewErrorListenerComponent extends CameliaBaseComponent implements
 	public int getClientDataCount() {
 
 
-		 IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", false);
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
 		 if (dataMapAccessor==null) {
 		 	return 0;
 		 }
@@ -162,7 +158,7 @@ public class ViewErrorListenerComponent extends CameliaBaseComponent implements
 	public String removeClientData(String name) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", false);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
 		if (dataMapAccessor==null) {
 			return null;
 		}
@@ -174,7 +170,7 @@ public class ViewErrorListenerComponent extends CameliaBaseComponent implements
 	public String setClientData(String name, String value) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", true);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
             
 		return (String)dataMapAccessor.setData(name, value, null);
 		
@@ -204,7 +200,7 @@ public class ViewErrorListenerComponent extends CameliaBaseComponent implements
 	public Object setServerData(String name, Object value) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", true);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
             
 		return dataMapAccessor.setData(name, value, null);
 		
@@ -220,7 +216,7 @@ public class ViewErrorListenerComponent extends CameliaBaseComponent implements
 	public int getServerDataCount() {
 
 
-		 IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
 		 if (dataMapAccessor==null) {
 		 	return 0;
 		 }
@@ -232,7 +228,7 @@ public class ViewErrorListenerComponent extends CameliaBaseComponent implements
 	public Object getServerData(String name) {
 
 
-		 IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
 		 if (dataMapAccessor==null) {
 		 	return null;
 		 }
@@ -244,7 +240,7 @@ public class ViewErrorListenerComponent extends CameliaBaseComponent implements
 	public Object removeServerData(String name) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
 		if (dataMapAccessor==null) {
 		 	return null;
 		}

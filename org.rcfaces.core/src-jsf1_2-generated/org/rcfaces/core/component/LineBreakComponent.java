@@ -20,9 +20,30 @@ import org.rcfaces.core.internal.converter.HiddenModeConverter;
  * <p>It is used often when simple HTML is not desirable : for example if a part of a page is loaded via AJAX it might be easier to have only a jsf tree memory represantation.</p>
  * <p>The lineBreak Component has the following capability :
  * <ul>
- * <li>Visibility</li>
+ * <li>IStyleClassCapability</li>
+ * <li>IVisibilityCapability</li>
+ * <li>IHiddenModeCapability</li>
  * </ul>
  * </p>
+ * 
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/LineBreakComponent.html">lineBreak</a> renderer is linked to the <a href="/jsdocs/index.html?f_lineBreak.html" target="_blank">f_lineBreak</a> javascript class. f_lineBreak extends f_component</p>
+ * 
+ * <p> Table of component style classes: </p>
+ * <table border="1" cellpadding="3" cellspacing="0" width="100%">
+ * <tbody>
+ * 
+ * <tr style="text-align:left">
+ * <th  width="33%">Style Name</th>
+ * <th width="50%">Description</th>
+ * </tr>
+ * 
+ * <tr  style="text-align:left">
+ * <td width="33%">f_lineBreak</td>
+ * <td width="50%">Defines styles for the wrapper element</td>
+ * </tr>
+ * 
+ * </tbody>
+ * </table>
  */
 public class LineBreakComponent extends CameliaBaseComponent implements 
 	IStyleClassCapability,

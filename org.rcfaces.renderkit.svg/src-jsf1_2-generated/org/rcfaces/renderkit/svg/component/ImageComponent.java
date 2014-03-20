@@ -1,6 +1,6 @@
 package org.rcfaces.renderkit.svg.component;
 
-import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.renderkit.svg.component.Properties;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.capability.IImageCapability;
 import java.lang.String;

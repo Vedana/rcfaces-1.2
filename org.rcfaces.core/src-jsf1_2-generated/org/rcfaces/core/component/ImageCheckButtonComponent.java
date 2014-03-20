@@ -21,14 +21,34 @@ import org.rcfaces.core.component.familly.IImageButtonFamilly;
  * <p>The imageCheckButton Component is a <a href="/comps/checkButtonComponent.html">checkButton Component</a> with an image instead of the checkBox.</p>
  * <p>The imageCheckButton Component has the following capabilities :
  * <ul>
- * <li>Position &amp; Size</li>
- * <li>Foreground &amp; Background Color</li>
- * <li>Text, font &amp; image</li>
- * <li>Help</li>
- * <li>Visibility, Read-Only, Disabled</li>
- * <li>Events Handling</li>
+ * <li>IImageButtonFamilly</li>
  * </ul>
  * </p>
+ * 
+ * 
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageCheckButtonComponent.html">imageCheckButton</a> renderer is linked to the <a href="/jsdocs/index.html?f_imageCheckButton.html" target="_blank">f_imageCheckButton</a> javascript class. f_imageCheckButton extends f_imageButton, fa_selected</p>
+ * 
+ * <p> Table of component style classes: </p>
+ * <table border="1" cellpadding="3" cellspacing="0" width="100%">
+ * <tbody>
+ * 
+ * <tr style="text-align:left">
+ * <th  width="33%">Style Name</th>
+ * <th width="50%">Description</th>
+ * </tr>
+ * 
+ * <tr  style="text-align:left">
+ * <td width="33%">f_imageCheckButton</td>
+ * <td width="50%">Defines styles for the wrapper A element</td>
+ * </tr>
+ * 
+ * <tr  style="text-align:left">
+ * <td width="33%">f_imageCheckButton_image</td>
+ * <td width="50%">Defines styles for the  IMG element</td>
+ * </tr>
+ * 
+ * </tbody>
+ * </table>
  */
 public class ImageCheckButtonComponent extends CheckButtonComponent implements 
 	IImageButtonFamilly {

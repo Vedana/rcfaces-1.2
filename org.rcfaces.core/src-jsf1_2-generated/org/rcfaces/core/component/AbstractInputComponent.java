@@ -11,10 +11,6 @@ import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import org.rcfaces.core.component.capability.IInitEventCapability;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.component.capability.IFontCapability;
-<<<<<<< HEAD
-import org.rcfaces.core.internal.capability.IAnchoredPositionSettings;
-=======
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 import java.lang.Object;
 import org.rcfaces.core.component.capability.IPartialRenderingCapability;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
@@ -49,14 +45,13 @@ import org.rcfaces.core.component.capability.ITabIndexCapability;
 import org.rcfaces.core.component.capability.IKeyEventCapability;
 import org.rcfaces.core.internal.component.CameliaOutputComponent;
 import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.component.capability.IErrorEventCapability;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
+import org.rcfaces.core.component.capability.IErrorEventCapability;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.ITextAlignmentCapability;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IHelpCapability;
-import org.rcfaces.core.component.capability.IAnchoredPositionCapability;
 
 /**
  * Technical component, used as a basis for building new RCFaces components.
@@ -87,35 +82,26 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 	ITextAlignmentCapability,
 	IAccessKeyCapability,
 	IWAIRoleCapability,
-<<<<<<< HEAD
-	IAnchoredPositionCapability,
-=======
 	ILayoutPositionCapability,
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	IInitEventCapability,
 	IHiddenModeCapability,
 	IValueLockedCapability,
 	IImmediateCapability,
 	IClientDataManager,
-	IServerDataManager,
-	IAnchoredPositionSettings {
+	IServerDataManager {
 
 	private static final Log LOG = LogFactory.getLog(AbstractInputComponent.class);
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-<<<<<<< HEAD
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontName","accessKey","visible","marginLeft","backgroundColor","tabIndex","errorListener","focusListener","propertyChangeListener","helpURL","height","keyDownListener","valueLocked","mouseOverListener","mouseOutListener","waiRole","validationListener","lookId","rightPosition","userEventListener","marginTop","styleClass","width","fontBold","fontSize","fontItalic","fontUnderline","textAlignment","toolTipText","blurListener","bottomPosition","leftPosition","ariaLevel","topPosition","hiddenMode","foregroundColor","helpMessage","marginRight","keyUpListener","partialRendering","keyPressListener","ariaLabel","initListener","marginBottom","unlockedClientAttributeNames","immediate","disabled","y","margins","x"}));
-=======
 		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontName","accessKey","visible","marginLeft","backgroundColor","tabIndex","errorListener","focusListener","propertyChangeListener","helpURL","height","valueLocked","keyDownListener","mouseOverListener","right","mouseOutListener","waiRole","validationListener","lookId","userEventListener","marginTop","styleClass","width","fontBold","fontSize","fontItalic","fontUnderline","textAlignment","bottom","toolTipText","horizontalCenter","blurListener","ariaLevel","hiddenMode","left","foregroundColor","top","helpMessage","marginRight","keyUpListener","partialRendering","keyPressListener","ariaLabel","verticalCenter","initListener","immediate","marginBottom","unlockedClientAttributeNames","disabled","y","margins","x"}));
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	}
 
 
 	public Map getServerDataMap(FacesContext facesContext) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "serverData", false);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
  		if (dataMapAccessor==null) {
 			return Collections.EMPTY_MAP;
 		}
@@ -146,7 +132,7 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 	public Object setServerData(String name, Object value) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", true);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
             
 		return dataMapAccessor.setData(name, value, null);
 		
@@ -155,7 +141,7 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 	public Map getClientDataMap(FacesContext facesContext) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "clientData", false);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "clientData", false);
 		if (dataMapAccessor==null) {
 			return Collections.EMPTY_MAP;
 		}
@@ -167,7 +153,7 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 	public String setClientData(String name, String value) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", true);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
             
 		return (String)dataMapAccessor.setData(name, value, null);
 		
@@ -176,7 +162,7 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 	public void setServerData(String name, ValueExpression value) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", true);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
             
 		dataMapAccessor.setData(name, value, null);
 		
@@ -185,7 +171,7 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 	public String[] listClientDataKeys(FacesContext facesContext) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", false);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
 		if (dataMapAccessor==null) {
 			return ComponentTools.STRING_EMPTY_ARRAY;
 		}
@@ -197,7 +183,7 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 	public void setClientData(String name, ValueExpression value) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", true);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
             
 		dataMapAccessor.setData(name, value, null);
 		
@@ -206,7 +192,7 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 	public String getClientData(String name, FacesContext facesContext) {
 
 
-		 IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", false);
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
 		 if (dataMapAccessor==null) {
 		 	return null;
 		 }
@@ -218,11 +204,7 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 	public Object getServerData(String name, FacesContext facesContext) {
 
 
-<<<<<<< HEAD
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
-=======
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		if (dataMapAccessor==null) {
 			return null;
 		}
@@ -248,7 +230,7 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 	public String[] listServerDataKeys(FacesContext facesContext) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
 		if (dataMapAccessor==null) {
 			return ComponentTools.STRING_EMPTY_ARRAY;
 		}
@@ -340,7 +322,7 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 	public int getClientDataCount() {
 
 
-		 IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", false);
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
 		 if (dataMapAccessor==null) {
 		 	return 0;
 		 }
@@ -359,7 +341,7 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 	public String removeClientData(String name) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", false);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
 		if (dataMapAccessor==null) {
 			return null;
 		}
@@ -743,7 +725,7 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 	public int getServerDataCount() {
 
 
-		 IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
 		 if (dataMapAccessor==null) {
 		 	return 0;
 		 }
@@ -755,7 +737,7 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 	public Object getServerData(String name) {
 
 
-		 IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
 		 if (dataMapAccessor==null) {
 		 	return null;
 		 }
@@ -767,7 +749,7 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 	public Object removeServerData(String name) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
 		if (dataMapAccessor==null) {
 		 	return null;
 		}
@@ -1192,98 +1174,6 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 		engine.setProperty(Properties.WAI_ROLE, waiRole);
 	}
 
-<<<<<<< HEAD
-	public int getBottomPosition() {
-		return getBottomPosition(null);
-	}
-
-	/**
-	 * See {@link #getBottomPosition() getBottomPosition()} for more details
-	 */
-	public int getBottomPosition(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.BOTTOM_POSITION,0, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "bottomPosition" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isBottomPositionSetted() {
-		return engine.isPropertySetted(Properties.BOTTOM_POSITION);
-	}
-
-	public void setBottomPosition(int bottomPosition) {
-		engine.setProperty(Properties.BOTTOM_POSITION, bottomPosition);
-	}
-
-	public int getLeftPosition() {
-		return getLeftPosition(null);
-	}
-
-	/**
-	 * See {@link #getLeftPosition() getLeftPosition()} for more details
-	 */
-	public int getLeftPosition(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.LEFT_POSITION,0, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "leftPosition" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isLeftPositionSetted() {
-		return engine.isPropertySetted(Properties.LEFT_POSITION);
-	}
-
-	public void setLeftPosition(int leftPosition) {
-		engine.setProperty(Properties.LEFT_POSITION, leftPosition);
-	}
-
-	public int getRightPosition() {
-		return getRightPosition(null);
-	}
-
-	/**
-	 * See {@link #getRightPosition() getRightPosition()} for more details
-	 */
-	public int getRightPosition(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.RIGHT_POSITION,0, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "rightPosition" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isRightPositionSetted() {
-		return engine.isPropertySetted(Properties.RIGHT_POSITION);
-	}
-
-	public void setRightPosition(int rightPosition) {
-		engine.setProperty(Properties.RIGHT_POSITION, rightPosition);
-	}
-
-	public int getTopPosition() {
-		return getTopPosition(null);
-	}
-
-	/**
-	 * See {@link #getTopPosition() getTopPosition()} for more details
-	 */
-	public int getTopPosition(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.TOP_POSITION,0, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "topPosition" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isTopPositionSetted() {
-		return engine.isPropertySetted(Properties.TOP_POSITION);
-	}
-
-	public void setTopPosition(int topPosition) {
-		engine.setProperty(Properties.TOP_POSITION, topPosition);
-=======
 	public java.lang.Number getBottom() {
 		return getBottom(null);
 	}
@@ -1420,7 +1310,6 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 
 	public void setVerticalCenter(java.lang.Number verticalCenter) {
 		engine.setProperty(Properties.VERTICAL_CENTER, verticalCenter);
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	}
 
 	public final void addInitListener(org.rcfaces.core.event.IInitListener listener) {

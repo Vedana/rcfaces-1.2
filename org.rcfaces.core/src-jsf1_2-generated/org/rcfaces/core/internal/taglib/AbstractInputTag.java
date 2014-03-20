@@ -59,19 +59,12 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 	private ValueExpression ariaLabel;
 	private ValueExpression ariaLevel;
 	private ValueExpression waiRole;
-<<<<<<< HEAD
-	private ValueExpression bottomPosition;
-	private ValueExpression leftPosition;
-	private ValueExpression rightPosition;
-	private ValueExpression topPosition;
-=======
 	private ValueExpression bottom;
 	private ValueExpression horizontalCenter;
 	private ValueExpression left;
 	private ValueExpression right;
 	private ValueExpression top;
 	private ValueExpression verticalCenter;
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	private ValueExpression initListeners;
 	private ValueExpression hiddenMode;
 	private ValueExpression valueLocked;
@@ -243,25 +236,6 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 		this.waiRole = waiRole;
 	}
 
-<<<<<<< HEAD
-	public final void setBottomPosition(ValueExpression bottomPosition) {
-		this.bottomPosition = bottomPosition;
-	}
-
-	public final void setLeftPosition(ValueExpression leftPosition) {
-		this.leftPosition = leftPosition;
-	}
-
-	public final void setRightPosition(ValueExpression rightPosition) {
-		this.rightPosition = rightPosition;
-	}
-
-	public final void setTopPosition(ValueExpression topPosition) {
-		this.topPosition = topPosition;
-	}
-
-	public final void setInitListener(ValueExpression initListeners) {
-=======
 	public void setBottom(ValueExpression bottom) {
 		this.bottom = bottom;
 	}
@@ -287,7 +261,6 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 	}
 
 	public void setInitListener(ValueExpression initListeners) {
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		this.initListeners = initListeners;
 	}
 
@@ -347,19 +320,12 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 			LOG.debug("  ariaLabel='"+ariaLabel+"'");
 			LOG.debug("  ariaLevel='"+ariaLevel+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
-<<<<<<< HEAD
-			LOG.debug("  bottomPosition='"+bottomPosition+"'");
-			LOG.debug("  leftPosition='"+leftPosition+"'");
-			LOG.debug("  rightPosition='"+rightPosition+"'");
-			LOG.debug("  topPosition='"+topPosition+"'");
-=======
 			LOG.debug("  bottom='"+bottom+"'");
 			LOG.debug("  horizontalCenter='"+horizontalCenter+"'");
 			LOG.debug("  left='"+left+"'");
 			LOG.debug("  right='"+right+"'");
 			LOG.debug("  top='"+top+"'");
 			LOG.debug("  verticalCenter='"+verticalCenter+"'");
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  valueLocked='"+valueLocked+"'");
 			LOG.debug("  immediate='"+immediate+"'");
@@ -691,41 +657,6 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 			}
 		}
 
-<<<<<<< HEAD
-		if (bottomPosition != null) {
-			if (bottomPosition.isLiteralText()==false) {
-				component.setValueExpression(Properties.BOTTOM_POSITION, bottomPosition);
-
-			} else {
-				component.setBottomPosition(getInt(bottomPosition.getExpressionString()));
-			}
-		}
-
-		if (leftPosition != null) {
-			if (leftPosition.isLiteralText()==false) {
-				component.setValueExpression(Properties.LEFT_POSITION, leftPosition);
-
-			} else {
-				component.setLeftPosition(getInt(leftPosition.getExpressionString()));
-			}
-		}
-
-		if (rightPosition != null) {
-			if (rightPosition.isLiteralText()==false) {
-				component.setValueExpression(Properties.RIGHT_POSITION, rightPosition);
-
-			} else {
-				component.setRightPosition(getInt(rightPosition.getExpressionString()));
-			}
-		}
-
-		if (topPosition != null) {
-			if (topPosition.isLiteralText()==false) {
-				component.setValueExpression(Properties.TOP_POSITION, topPosition);
-
-			} else {
-				component.setTopPosition(getInt(topPosition.getExpressionString()));
-=======
 		if (bottom != null) {
 			if (bottom.isLiteralText()==false) {
 				component.setValueExpression(Properties.BOTTOM, bottom);
@@ -777,7 +708,6 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 
 			} else {
 				component.setVerticalCenter(getNumber(verticalCenter.getExpressionString()));
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 			}
 		}
 
@@ -880,19 +810,12 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 		ariaLabel = null;
 		ariaLevel = null;
 		waiRole = null;
-<<<<<<< HEAD
-		bottomPosition = null;
-		leftPosition = null;
-		rightPosition = null;
-		topPosition = null;
-=======
 		bottom = null;
 		horizontalCenter = null;
 		left = null;
 		right = null;
 		top = null;
 		verticalCenter = null;
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		initListeners = null;
 		hiddenMode = null;
 		valueLocked = null;

@@ -20,6 +20,25 @@ import java.util.Set;
  * <li>Events Handling</li>
  * </ul>
  * </p>
+ * 
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ResetButtonComponent.html">resetButton</a> renderer is linked to the <a href="/jsdocs/index.html?f_resetButton.html" target="_blank">f_resetButton</a> javascript class. f_resetButton extends f_button</p>
+ * 
+ * <p> Table of component style classes: </p>
+ * <table border="1" cellpadding="3" cellspacing="0" width="100%">
+ * <tbody>
+ * 
+ * <tr style="text-align:left">
+ * <th  width="33%">Style Name</th>
+ * <th width="50%">Description</th>
+ * </tr>
+ * 
+ * <tr  style="text-align:left">
+ * <td width="33%">f_resetButton</td>
+ * <td width="50%">Defines styles for the wrapper element</td>
+ * </tr>
+ * 
+ * </tbody>
+ * </table>
  */
 public class ResetButtonComponent extends ButtonComponent {
 

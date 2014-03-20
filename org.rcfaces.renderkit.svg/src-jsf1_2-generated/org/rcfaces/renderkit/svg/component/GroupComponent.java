@@ -1,6 +1,6 @@
 package org.rcfaces.renderkit.svg.component;
 
-import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.renderkit.svg.component.Properties;
 import org.apache.commons.logging.Log;
 import java.util.HashSet;
 import org.rcfaces.renderkit.svg.component.NodeComponent;

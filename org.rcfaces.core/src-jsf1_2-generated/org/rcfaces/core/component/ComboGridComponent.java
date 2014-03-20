@@ -38,6 +38,53 @@ import org.rcfaces.core.component.capability.IOrderedChildrenCapability;
 import org.rcfaces.core.internal.tools.CollectionTools;
 import org.rcfaces.core.component.capability.IPagerMessageCapability;
 
+/**
+ * <p>The comboGrid Component has the same fonctionalities as the combo component but the popup is based on a dataGrid.
+ * The comboGrid can have multiple columns, be filtered, paged and some other datagrid capabilities</p>
+ * <p>The comboGrid Component has the following capabilities :
+ * <ul>
+ * <li>IAdditionalInformationEventCapability</li>
+ * <li>IAdditionalInformationValuesCapability</li>
+ * <li>IClientAdditionalInformationFullStateCapability</li>
+ * <li>IAdditionalInformationCardinalityCapability</li>
+ * <li>IRowStyleClassCapability</li>
+ * <li>IPagerMessageCapability</li>
+ * <li>IFilterCapability</li>
+ * <li>IPagedCapability</li>
+ * <li>IHeaderVisibilityCapability</li>
+ * <li>IOrderedChildrenCapability</li>
+ * <li>ISortedChildrenCapability</li>
+ * <li>IComponentValueTypeCapability</li>
+ * <li>IAdditionalInformationRangeComponent</li>
+ * </ul>
+ * </p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ComboGridComponent.html"> comboGrid </a> renderer is link to the <a href="/jsdocs/index.html?f_comboGrid.html" target="_blank">f_comboGrid</a> javascript class. f_comboGrid extends f_keyEntry, fa_dataGridPopup</p>
+ * 
+ * <p> Table of component style classes: </p>
+ * <table border="1" cellpadding="3" cellspacing="0" width="100%">
+ * <tbody>
+ * 
+ * <tr style="text-align:left">
+ * <th  width="33%">Style Name</th>
+ * <th width="50%">Description</th>
+ * </tr>
+ * 
+ * <tr  style="text-align:left">
+ * <td width="33%">f_comboGrid</td>
+ * <td id="ermvsh" width="50%">Defines styles for the wrapper Table element</td>
+ * </tr>
+ * <tr style="text-align:left">
+ * <td width="33%">f_comboGrid_input</td>
+ * <td width="50%">Defines styles for the Input Text</td>
+ * </tr>
+ * <tr style="text-align:left">
+ * <td width="33%">f_comboGrid_popup</td>
+ * <td width="50%">Defines styles for the wrapper DIV elment of the pop-up. Contains fa_dataGridPopup styles</td>
+ * </tr>
+ * 
+ * </tbody>
+ * </table>
+ */
 public class ComboGridComponent extends KeyEntryComponent implements 
 	IAdditionalInformationEventCapability,
 	IAdditionalInformationValuesCapability,

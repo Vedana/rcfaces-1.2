@@ -1,7 +1,7 @@
 package org.rcfaces.renderkit.svg.component;
 
 import javax.faces.component.NamingContainer;
-import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.renderkit.svg.component.Properties;
 import org.rcfaces.core.internal.tools.ToolTipTools;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.iterator.IColumnIterator;

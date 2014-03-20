@@ -52,36 +52,20 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 	private ValueExpression ariaLabel;
 	private ValueExpression ariaLevel;
 	private ValueExpression waiRole;
-<<<<<<< HEAD
-	private ValueExpression bottomPosition;
-	private ValueExpression leftPosition;
-	private ValueExpression rightPosition;
-	private ValueExpression topPosition;
-=======
 	private ValueExpression bottom;
 	private ValueExpression horizontalCenter;
 	private ValueExpression left;
 	private ValueExpression right;
 	private ValueExpression top;
 	private ValueExpression verticalCenter;
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	private ValueExpression initListeners;
 	private ValueExpression hiddenMode;
 	private ValueExpression rows;
-<<<<<<< HEAD
-	private ValueExpression margins;
 	private ValueExpression first;
-=======
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
+	private ValueExpression margins;
 	private ValueExpression var;
-	private ValueExpression margins;
-	private ValueExpression first;
 	private ValueExpression value;
-<<<<<<< HEAD
-	public final void setHelpMessage(ValueExpression helpMessage) {
-=======
 	public void setHelpMessage(ValueExpression helpMessage) {
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		this.helpMessage = helpMessage;
 	}
 
@@ -93,11 +77,7 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 		this.toolTipText = toolTipText;
 	}
 
-<<<<<<< HEAD
-	public final void setBlurListener(ValueExpression blurListeners) {
-=======
 	public void setBlurListener(ValueExpression blurListeners) {
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		this.blurListeners = blurListeners;
 	}
 
@@ -121,11 +101,7 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 		this.errorListeners = errorListeners;
 	}
 
-<<<<<<< HEAD
-	public final void setSortManager(ValueExpression sortManager) {
-=======
 	public void setSortManager(ValueExpression sortManager) {
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		this.sortManager = sortManager;
 	}
 
@@ -137,19 +113,11 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 		this.mouseOverListeners = mouseOverListeners;
 	}
 
-<<<<<<< HEAD
-	public final void setTabIndex(ValueExpression tabIndex) {
-=======
 	public void setTabIndex(ValueExpression tabIndex) {
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		this.tabIndex = tabIndex;
 	}
 
-<<<<<<< HEAD
-	public final void setUnlockedClientAttributeNames(ValueExpression unlockedClientAttributeNames) {
-=======
 	public void setUnlockedClientAttributeNames(ValueExpression unlockedClientAttributeNames) {
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		this.unlockedClientAttributeNames = unlockedClientAttributeNames;
 	}
 
@@ -157,105 +125,6 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 		this.propertyChangeListeners = propertyChangeListeners;
 	}
 
-<<<<<<< HEAD
-	public final void setMarginBottom(ValueExpression marginBottom) {
-		this.marginBottom = marginBottom;
-	}
-
-	public final void setMarginLeft(ValueExpression marginLeft) {
-		this.marginLeft = marginLeft;
-	}
-
-	public final void setMarginRight(ValueExpression marginRight) {
-		this.marginRight = marginRight;
-	}
-
-	public final void setMarginTop(ValueExpression marginTop) {
-		this.marginTop = marginTop;
-	}
-
-	public final void setKeyUpListener(ValueExpression keyUpListeners) {
-		this.keyUpListeners = keyUpListeners;
-	}
-
-	public final void setKeyDownListener(ValueExpression keyDownListeners) {
-		this.keyDownListeners = keyDownListeners;
-	}
-
-	public final void setKeyPressListener(ValueExpression keyPressListeners) {
-		this.keyPressListeners = keyPressListeners;
-	}
-
-	public final void setResetListener(ValueExpression resetListeners) {
-		this.resetListeners = resetListeners;
-	}
-
-	public final void setUserEventListener(ValueExpression userEventListeners) {
-		this.userEventListeners = userEventListeners;
-	}
-
-	public final void setX(ValueExpression x) {
-		this.x = x;
-	}
-
-	public final void setY(ValueExpression y) {
-		this.y = y;
-	}
-
-	public final void setPartialRendering(ValueExpression partialRendering) {
-		this.partialRendering = partialRendering;
-	}
-
-	public final void setLookId(ValueExpression lookId) {
-		this.lookId = lookId;
-	}
-
-	public final void setStyleClass(ValueExpression styleClass) {
-		this.styleClass = styleClass;
-	}
-
-	public final void setWidth(ValueExpression width) {
-		this.width = width;
-	}
-
-	public final void setHeight(ValueExpression height) {
-		this.height = height;
-	}
-
-	public final void setAriaLabel(ValueExpression ariaLabel) {
-		this.ariaLabel = ariaLabel;
-	}
-
-	public final void setAriaLevel(ValueExpression ariaLevel) {
-		this.ariaLevel = ariaLevel;
-	}
-
-	public final void setWaiRole(ValueExpression waiRole) {
-		this.waiRole = waiRole;
-	}
-
-	public final void setBottomPosition(ValueExpression bottomPosition) {
-		this.bottomPosition = bottomPosition;
-	}
-
-	public final void setLeftPosition(ValueExpression leftPosition) {
-		this.leftPosition = leftPosition;
-	}
-
-	public final void setRightPosition(ValueExpression rightPosition) {
-		this.rightPosition = rightPosition;
-	}
-
-	public final void setTopPosition(ValueExpression topPosition) {
-		this.topPosition = topPosition;
-	}
-
-	public final void setInitListener(ValueExpression initListeners) {
-		this.initListeners = initListeners;
-	}
-
-	public final void setHiddenMode(ValueExpression hiddenMode) {
-=======
 	public void setMarginBottom(ValueExpression marginBottom) {
 		this.marginBottom = marginBottom;
 	}
@@ -361,32 +230,23 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 	}
 
 	public void setHiddenMode(ValueExpression hiddenMode) {
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		this.hiddenMode = hiddenMode;
 	}
 
-<<<<<<< HEAD
-	public final void setRows(ValueExpression rows) {
-=======
 	public void setRows(ValueExpression rows) {
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		this.rows = rows;
 	}
 
-	public final void setMargins(ValueExpression margins) {
-		this.margins = margins;
-	}
-
-	public void setVar(ValueExpression var) {
-		this.var = var;
+	public void setFirst(ValueExpression first) {
+		this.first = first;
 	}
 
 	public void setMargins(ValueExpression margins) {
 		this.margins = margins;
 	}
 
-	public void setFirst(ValueExpression first) {
-		this.first = first;
+	public void setVar(ValueExpression var) {
+		this.var = var;
 	}
 
 	public final void setValue(ValueExpression value) {
@@ -418,29 +278,17 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 			LOG.debug("  ariaLabel='"+ariaLabel+"'");
 			LOG.debug("  ariaLevel='"+ariaLevel+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
-<<<<<<< HEAD
-			LOG.debug("  bottomPosition='"+bottomPosition+"'");
-			LOG.debug("  leftPosition='"+leftPosition+"'");
-			LOG.debug("  rightPosition='"+rightPosition+"'");
-			LOG.debug("  topPosition='"+topPosition+"'");
-=======
 			LOG.debug("  bottom='"+bottom+"'");
 			LOG.debug("  horizontalCenter='"+horizontalCenter+"'");
 			LOG.debug("  left='"+left+"'");
 			LOG.debug("  right='"+right+"'");
 			LOG.debug("  top='"+top+"'");
 			LOG.debug("  verticalCenter='"+verticalCenter+"'");
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  rows='"+rows+"'");
-<<<<<<< HEAD
-			LOG.debug("  margins='"+margins+"'");
 			LOG.debug("  first='"+first+"'");
-=======
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
+			LOG.debug("  margins='"+margins+"'");
 			LOG.debug("  var='"+var+"'");
-			LOG.debug("  margins='"+margins+"'");
-			LOG.debug("  first='"+first+"'");
 		}
 		if ((uiComponent instanceof AbstractGridComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -705,67 +553,29 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 			}
 		}
 
-<<<<<<< HEAD
-		if (bottomPosition != null) {
-			if (bottomPosition.isLiteralText()==false) {
-				component.setValueExpression(Properties.BOTTOM_POSITION, bottomPosition);
-=======
 		if (bottom != null) {
 			if (bottom.isLiteralText()==false) {
 				component.setValueExpression(Properties.BOTTOM, bottom);
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 
 			} else {
-<<<<<<< HEAD
-				component.setBottomPosition(getInt(bottomPosition.getExpressionString()));
-=======
 				component.setBottom(getNumber(bottom.getExpressionString()));
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 			}
 		}
 
-<<<<<<< HEAD
-		if (leftPosition != null) {
-			if (leftPosition.isLiteralText()==false) {
-				component.setValueExpression(Properties.LEFT_POSITION, leftPosition);
-=======
 		if (horizontalCenter != null) {
 			if (horizontalCenter.isLiteralText()==false) {
 				component.setValueExpression(Properties.HORIZONTAL_CENTER, horizontalCenter);
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 
 			} else {
-<<<<<<< HEAD
-				component.setLeftPosition(getInt(leftPosition.getExpressionString()));
-=======
 				component.setHorizontalCenter(getNumber(horizontalCenter.getExpressionString()));
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 			}
 		}
 
-<<<<<<< HEAD
-		if (rightPosition != null) {
-			if (rightPosition.isLiteralText()==false) {
-				component.setValueExpression(Properties.RIGHT_POSITION, rightPosition);
-=======
 		if (left != null) {
 			if (left.isLiteralText()==false) {
 				component.setValueExpression(Properties.LEFT, left);
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 
 			} else {
-<<<<<<< HEAD
-				component.setRightPosition(getInt(rightPosition.getExpressionString()));
-			}
-		}
-
-		if (topPosition != null) {
-			if (topPosition.isLiteralText()==false) {
-				component.setValueExpression(Properties.TOP_POSITION, topPosition);
-
-			} else {
-				component.setTopPosition(getInt(topPosition.getExpressionString()));
-=======
 				component.setLeft(getNumber(left.getExpressionString()));
 			}
 		}
@@ -794,7 +604,6 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 
 			} else {
 				component.setVerticalCenter(getNumber(verticalCenter.getExpressionString()));
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 			}
 		}
 
@@ -820,6 +629,15 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (first != null) {
+			if (first.isLiteralText()==false) {
+				component.setValueExpression(Properties.FIRST, first);
+
+			} else {
+				component.setFirst(getInt(first.getExpressionString()));
+			}
+		}
+
 		if (margins != null) {
 			if (margins.isLiteralText()==false) {
 				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
@@ -833,22 +651,6 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 
 			} else {
 				component.setVar(var.getExpressionString());
-			}
-		}
-
-		if (margins != null) {
-			if (margins.isLiteralText()==false) {
-				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
-			}
-				component.setMargins(margins.getExpressionString());
-		}
-
-		if (first != null) {
-			if (first.isLiteralText()==false) {
-				component.setValueExpression(Properties.FIRST, first);
-
-			} else {
-				component.setFirst(getInt(first.getExpressionString()));
 			}
 		}
 
@@ -897,30 +699,18 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 		ariaLabel = null;
 		ariaLevel = null;
 		waiRole = null;
-<<<<<<< HEAD
-		bottomPosition = null;
-		leftPosition = null;
-		rightPosition = null;
-		topPosition = null;
-=======
 		bottom = null;
 		horizontalCenter = null;
 		left = null;
 		right = null;
 		top = null;
 		verticalCenter = null;
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		initListeners = null;
 		hiddenMode = null;
 		rows = null;
-<<<<<<< HEAD
-		margins = null;
 		first = null;
-=======
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
+		margins = null;
 		var = null;
-		margins = null;
-		first = null;
 		value = null;
 
 		super.release();

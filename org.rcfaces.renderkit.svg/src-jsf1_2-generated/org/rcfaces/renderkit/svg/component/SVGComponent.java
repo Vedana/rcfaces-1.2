@@ -2,8 +2,8 @@ package org.rcfaces.renderkit.svg.component;
 
 import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
+import org.rcfaces.renderkit.svg.component.Properties;
 import java.lang.String;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;

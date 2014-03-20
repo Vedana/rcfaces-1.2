@@ -1,8 +1,8 @@
 package org.rcfaces.renderkit.svg.component;
 
 import javax.faces.convert.Converter;
-import org.rcfaces.core.internal.component.Properties;
 import java.lang.Object;
+import org.rcfaces.renderkit.svg.component.Properties;
 import javax.el.ValueExpression;
 import org.apache.commons.logging.Log;
 import java.util.HashSet;

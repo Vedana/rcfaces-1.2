@@ -1,7 +1,7 @@
 package org.rcfaces.renderkit.svg.internal.taglib;
 
 import javax.faces.component.UIComponent;
-import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.renderkit.svg.component.Properties;
 import org.rcfaces.renderkit.svg.component.NodeComponent;
 import org.apache.commons.logging.LogFactory;
 import javax.servlet.jsp.tagext.Tag;

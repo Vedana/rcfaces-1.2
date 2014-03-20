@@ -36,18 +36,54 @@ import org.rcfaces.core.component.capability.ITextCapability;
  * <p>The expandBar Component is a container that can be collapsed to show only a title bar. Expand Bars can be managed by group : only one element of the group is expanded.</p>
  * <p>The expandBar Component has the following capabilities :
  * <ul>
- * <li>Position &amp; Size</li>
- * <li>Foreground &amp; Background Color</li>
- * <li>Text, font &amp; image</li>
- * <li>Margin &amp; border</li>
- * <li>Help</li>
- * <li>Visibility</li>
- * <li>Background Image</li>
- * <li>Events Handling</li>
- * <li>Contextual Menu</li>
- * <li>Async Render (AJAX)</li>
+ * <li>IExpandEventCapability</li>
+ * <li>IAsyncRenderModeCapability</li>
+ * <li>IFontCapability</li>
+ * <li>IDisabledCapability</li>
+ * <li>IReadOnlyCapability</li>
+ * <li>ITextCapability</li>
+ * <li>ITextDirectionCapability</li>
+ * <li>ITextAlignmentCapability</li>
+ * <li>ICollapsableCapability</li>
+ * <li>IBorderCapability</li>
+ * <li>IAccessKeyCapability</li>
+ * <li>ITabIndexCapability</li>
+ * <li>IRadioGroupCapability</li>
+ * <li>IFocusBlurEventCapability</li>
+ * <li>ISelectionEventCapability</li>
+ * <li>ILoadEventCapability</li>
+ * <li>IVariableScopeCapability</li>
+ * <li>IOverStyleClassCapability</li>
+ * <li>IAsyncRenderComponent</li>
  * </ul>
  * </p>
+ * 
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ExpandBarComponent.html">expandBar</a> renderer is link to the <a href="/jsdocs/index.html?f_expandBar.html" target="_blank">f_expandBar</a> javascript class. f_expandBar extends f_component, fa_disabled, fa_readOnly, fa_collapsed, fa_groupName, fa_overStyleClass</p>
+ * 
+ * <p> Table of component style classes: </p>
+ * <table border="1" cellpadding="3" cellspacing="0" width="100%">
+ * <tbody>
+ * 
+ * <tr style="text-align:left">
+ * <th  width="33%">Style Name</th>
+ * <th width="50%">Description</th>
+ * </tr>
+ * 
+ * <tr  style="text-align:left">
+ * <td width="33%">f_expandBar</td>
+ * <td id="ermvsh" width="50%">Defines styles for the wrapper UL element</td>
+ * </tr>
+ * <tr  style="text-align:left">
+ * <td width="33%">f_expandBar_head</td>
+ * <td id="ermvsh" width="50%">Defines styles for the LI element for the title.</td>
+ * </tr>
+ * <tr  style="text-align:left">
+ * <td width="33%">f_expandBar_body</td>
+ * <td id="ermvsh" width="50%">Defines styles for the element for the body.</td>
+ * </tr>
+ * 
+ * </tbody>
+ * </table>
  */
 public class ExpandBarComponent extends AbstractOutputComponent implements 
 	IExpandEventCapability,

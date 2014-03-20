@@ -1,8 +1,7 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.capability.IAnchoredPositionSettings;
-import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.component.capability.IPositionCapability;
+import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ILayoutPositionCapability;
 import java.lang.String;
@@ -23,7 +22,6 @@ import java.util.Set;
 import java.util.Arrays;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import org.rcfaces.core.component.capability.IOrientationCapability;
-import org.rcfaces.core.component.capability.IAnchoredPositionCapability;
 import org.rcfaces.core.component.capability.IMarginCapability;
 
 /**
@@ -31,20 +29,40 @@ import org.rcfaces.core.component.capability.IMarginCapability;
  * <p>It is used often when simple HTML is not desirable : for example if a part of a page is loaded via AJAX it might be easier to have only a jsf tree memory represantation.</p>
  * <p>The ruler Component has the following capability :
  * <ul>
- * <li>Position &amp; Size</li>
- * <li>Foreground &amp; Background Color</li>
- * <li>Visibility</li>
- * <li>Margin</li>
+ * <li>IPositionCapability</li>
+ * <li>IMarginCapability</li>
+ * <li>ISizeCapability</li>
+ * <li>IVisibilityCapability</li>
+ * <li>IHiddenModeCapability</li>
+ * <li>ILookAndFeelCapability</li>
+ * <li>IOrientationCapability</li>
+ * <li>IForegroundBackgroundColorCapability</li>
+ * <li>IAlignmentCapability</li>
  * </ul>
  * </p>
+ * 
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/RulerComponent.html">ruler</a> renderer is linked to the <a href="/jsdocs/index.html?f_ruler.html" target="_blank">f_ruler</a> javascript class. f_ruler extends f_component</p>
+ * 
+ * <p> Table of component style classes: </p>
+ * <table border="1" cellpadding="3" cellspacing="0" width="100%">
+ * <tbody>
+ * 
+ * <tr style="text-align:left">
+ * <th  width="33%">Style Name</th>
+ * <th width="50%">Description</th>
+ * </tr>
+ * 
+ * <tr  style="text-align:left">
+ * <td width="33%">f_ruler</td>
+ * <td width="50%">Defines styles for the HR element</td>
+ * </tr>
+ * 
+ * </tbody>
+ * </table>
  */
 public class RulerComponent extends CameliaBaseComponent implements 
 	IPositionCapability,
-<<<<<<< HEAD
-	IAnchoredPositionCapability,
-=======
 	ILayoutPositionCapability,
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	IMarginCapability,
 	ISizeCapability,
 	IVisibilityCapability,
@@ -52,8 +70,7 @@ public class RulerComponent extends CameliaBaseComponent implements
 	ILookAndFeelCapability,
 	IOrientationCapability,
 	IForegroundBackgroundColorCapability,
-	IAlignmentCapability,
-	IAnchoredPositionSettings {
+	IAlignmentCapability {
 
 	private static final Log LOG = LogFactory.getLog(RulerComponent.class);
 
@@ -61,11 +78,7 @@ public class RulerComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-<<<<<<< HEAD
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"alignment","orientation","lookId","bottomPosition","rightPosition","visible","backgroundColor","marginLeft","marginTop","marginRight","width","rendered","leftPosition","marginBottom","topPosition","height","hiddenMode","foregroundColor","y","margins","x"}));
-=======
 		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"alignment","orientation","lookId","visible","backgroundColor","marginLeft","marginTop","marginRight","width","rendered","verticalCenter","marginBottom","height","hiddenMode","bottom","left","right","foregroundColor","y","horizontalCenter","margins","x","top"}));
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	}
 
 	public RulerComponent() {
@@ -284,98 +297,6 @@ public class RulerComponent extends CameliaBaseComponent implements
 
 	public void setVerticalCenter(java.lang.Number verticalCenter) {
 		engine.setProperty(Properties.VERTICAL_CENTER, verticalCenter);
-	}
-
-	public int getBottomPosition() {
-		return getBottomPosition(null);
-	}
-
-	/**
-	 * See {@link #getBottomPosition() getBottomPosition()} for more details
-	 */
-	public int getBottomPosition(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.BOTTOM_POSITION,0, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "bottomPosition" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isBottomPositionSetted() {
-		return engine.isPropertySetted(Properties.BOTTOM_POSITION);
-	}
-
-	public void setBottomPosition(int bottomPosition) {
-		engine.setProperty(Properties.BOTTOM_POSITION, bottomPosition);
-	}
-
-	public int getLeftPosition() {
-		return getLeftPosition(null);
-	}
-
-	/**
-	 * See {@link #getLeftPosition() getLeftPosition()} for more details
-	 */
-	public int getLeftPosition(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.LEFT_POSITION,0, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "leftPosition" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isLeftPositionSetted() {
-		return engine.isPropertySetted(Properties.LEFT_POSITION);
-	}
-
-	public void setLeftPosition(int leftPosition) {
-		engine.setProperty(Properties.LEFT_POSITION, leftPosition);
-	}
-
-	public int getRightPosition() {
-		return getRightPosition(null);
-	}
-
-	/**
-	 * See {@link #getRightPosition() getRightPosition()} for more details
-	 */
-	public int getRightPosition(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.RIGHT_POSITION,0, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "rightPosition" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isRightPositionSetted() {
-		return engine.isPropertySetted(Properties.RIGHT_POSITION);
-	}
-
-	public void setRightPosition(int rightPosition) {
-		engine.setProperty(Properties.RIGHT_POSITION, rightPosition);
-	}
-
-	public int getTopPosition() {
-		return getTopPosition(null);
-	}
-
-	/**
-	 * See {@link #getTopPosition() getTopPosition()} for more details
-	 */
-	public int getTopPosition(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.TOP_POSITION,0, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "topPosition" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isTopPositionSetted() {
-		return engine.isPropertySetted(Properties.TOP_POSITION);
-	}
-
-	public void setTopPosition(int topPosition) {
-		engine.setProperty(Properties.TOP_POSITION, topPosition);
 	}
 
 	public java.lang.String getMarginBottom() {

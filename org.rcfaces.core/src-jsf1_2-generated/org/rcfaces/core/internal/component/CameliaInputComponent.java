@@ -38,7 +38,6 @@ import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.component.capability.IValidationEventCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.internal.Constants1;
 import org.rcfaces.core.internal.RcfacesContext;
 
 import org.rcfaces.core.internal.capability.IVariableScopeCapability;
@@ -86,7 +85,7 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 
 
 	protected CameliaInputComponent() {
-		IFactory factory = Constants1.getCameliaFactory();
+		IFactory factory = Constants.getCameliaFactory();
 
 		this.engine = factory.createComponentEngine();
 
@@ -646,16 +645,7 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
         designerEngine.declareCompositeChild(this, child);
     }
 	
-<<<<<<< HEAD
-	protected final IDataMapAccessor getDataMapAccessor(FacesContext context, String name,
-            boolean modify) {
-            
-    	return engine.getDataMapAccessor(context, name, modify);
-    }
-	
-=======
     @Override
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	public String toString() {
 		String name=getClass().getName();
 		name=name.substring(name.lastIndexOf('.')+1);

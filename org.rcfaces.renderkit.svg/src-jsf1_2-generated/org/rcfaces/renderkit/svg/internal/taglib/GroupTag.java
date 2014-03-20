@@ -1,6 +1,6 @@
 package org.rcfaces.renderkit.svg.internal.taglib;
 
-import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.renderkit.svg.component.Properties;
 import org.rcfaces.renderkit.svg.component.GroupComponent;
 import javax.faces.component.UIViewRoot;
 import org.apache.commons.logging.Log;

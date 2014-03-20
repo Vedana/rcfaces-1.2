@@ -12,6 +12,8 @@ import java.util.Set;
 /**
  * <p>The focusManager Component is a non-visual component.</p>
  * <p>It allows to deal with the focus on the current page.</p>
+ * 
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/FocuManagerComponent.html">focuManager</a> renderer is link to the <a href="/jsdocs/index.html?f_focuManager.html" target="_blank">f_focuManager</a> javascript class. f_focuManager extends f_object, fa_serializable</p>
  */
 public class FocusManagerComponent extends CameliaBaseComponent {
 

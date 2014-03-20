@@ -18,7 +18,6 @@ import java.util.Set;
 import org.rcfaces.core.component.capability.IInitEventCapability;
 import org.rcfaces.core.component.capability.IValueLockedCapability;
 import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.internal.capability.IAnchoredPositionSettings;
 import org.rcfaces.core.component.capability.IPositionCapability;
 import java.lang.Object;
 import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
@@ -42,7 +41,6 @@ import org.rcfaces.core.component.capability.IHelpCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import java.util.Arrays;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
-import org.rcfaces.core.component.capability.IAnchoredPositionCapability;
 import org.rcfaces.core.component.capability.IMarginCapability;
 
 /**
@@ -64,7 +62,6 @@ public abstract class AbstractOutputComponent extends CameliaOutputComponent imp
 	IWAIRoleCapability,
 	ILayoutPositionCapability,
 	IMouseEventCapability,
-	IAnchoredPositionCapability,
 	IUnlockedClientAttributesCapability,
 	IInitEventCapability,
 	IPropertyChangeEventCapability,
@@ -72,25 +69,20 @@ public abstract class AbstractOutputComponent extends CameliaOutputComponent imp
 	IServerDataCapability,
 	IValueLockedCapability,
 	IClientDataManager,
-	IServerDataManager,
-	IAnchoredPositionSettings {
+	IServerDataManager {
 
 	private static final Log LOG = LogFactory.getLog(AbstractOutputComponent.class);
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-<<<<<<< HEAD
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"bottomPosition","visible","marginLeft","backgroundColor","errorListener","leftPosition","propertyChangeListener","helpURL","ariaLevel","topPosition","height","valueLocked","hiddenMode","mouseOverListener","foregroundColor","waiRole","mouseOutListener","lookId","rightPosition","helpMessage","userEventListener","marginTop","styleClass","marginRight","width","partialRendering","ariaLabel","initListener","unlockedClientAttributeNames","marginBottom","toolTipText","y","margins","x"}));
-=======
 		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"visible","marginLeft","backgroundColor","errorListener","propertyChangeListener","helpURL","ariaLevel","height","valueLocked","hiddenMode","mouseOverListener","left","right","mouseOutListener","foregroundColor","waiRole","top","lookId","helpMessage","userEventListener","marginTop","styleClass","marginRight","width","partialRendering","ariaLabel","initListener","verticalCenter","unlockedClientAttributeNames","marginBottom","bottom","toolTipText","y","horizontalCenter","margins","x"}));
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	}
 
 
 	public Map getServerDataMap(FacesContext facesContext) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "serverData", false);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
  		if (dataMapAccessor==null) {
 			return Collections.EMPTY_MAP;
 		}
@@ -121,7 +113,7 @@ public abstract class AbstractOutputComponent extends CameliaOutputComponent imp
 	public Object setServerData(String name, Object value) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", true);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
             
 		return dataMapAccessor.setData(name, value, null);
 		
@@ -130,7 +122,7 @@ public abstract class AbstractOutputComponent extends CameliaOutputComponent imp
 	public Map getClientDataMap(FacesContext facesContext) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "clientData", false);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "clientData", false);
 		if (dataMapAccessor==null) {
 			return Collections.EMPTY_MAP;
 		}
@@ -142,7 +134,7 @@ public abstract class AbstractOutputComponent extends CameliaOutputComponent imp
 	public String setClientData(String name, String value) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", true);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
             
 		return (String)dataMapAccessor.setData(name, value, null);
 		
@@ -151,7 +143,7 @@ public abstract class AbstractOutputComponent extends CameliaOutputComponent imp
 	public void setServerData(String name, ValueExpression value) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", true);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
             
 		dataMapAccessor.setData(name, value, null);
 		
@@ -160,7 +152,7 @@ public abstract class AbstractOutputComponent extends CameliaOutputComponent imp
 	public String[] listClientDataKeys(FacesContext facesContext) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", false);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
 		if (dataMapAccessor==null) {
 			return ComponentTools.STRING_EMPTY_ARRAY;
 		}
@@ -172,7 +164,7 @@ public abstract class AbstractOutputComponent extends CameliaOutputComponent imp
 	public void setClientData(String name, ValueExpression value) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", true);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
             
 		dataMapAccessor.setData(name, value, null);
 		
@@ -181,7 +173,7 @@ public abstract class AbstractOutputComponent extends CameliaOutputComponent imp
 	public String getClientData(String name, FacesContext facesContext) {
 
 
-		 IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", false);
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
 		 if (dataMapAccessor==null) {
 		 	return null;
 		 }
@@ -193,11 +185,7 @@ public abstract class AbstractOutputComponent extends CameliaOutputComponent imp
 	public Object getServerData(String name, FacesContext facesContext) {
 
 
-<<<<<<< HEAD
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
-=======
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		if (dataMapAccessor==null) {
 			return null;
 		}
@@ -216,7 +204,7 @@ public abstract class AbstractOutputComponent extends CameliaOutputComponent imp
 	public String[] listServerDataKeys(FacesContext facesContext) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
 		if (dataMapAccessor==null) {
 			return ComponentTools.STRING_EMPTY_ARRAY;
 		}
@@ -465,7 +453,7 @@ public abstract class AbstractOutputComponent extends CameliaOutputComponent imp
 	public int getClientDataCount() {
 
 
-		 IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", false);
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
 		 if (dataMapAccessor==null) {
 		 	return 0;
 		 }
@@ -484,7 +472,7 @@ public abstract class AbstractOutputComponent extends CameliaOutputComponent imp
 	public String removeClientData(String name) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", false);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
 		if (dataMapAccessor==null) {
 			return null;
 		}
@@ -941,98 +929,6 @@ public abstract class AbstractOutputComponent extends CameliaOutputComponent imp
 		return getFacesListeners(org.rcfaces.core.event.IMouseOverListener.class);
 	}
 
-	public int getBottomPosition() {
-		return getBottomPosition(null);
-	}
-
-	/**
-	 * See {@link #getBottomPosition() getBottomPosition()} for more details
-	 */
-	public int getBottomPosition(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.BOTTOM_POSITION,0, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "bottomPosition" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isBottomPositionSetted() {
-		return engine.isPropertySetted(Properties.BOTTOM_POSITION);
-	}
-
-	public void setBottomPosition(int bottomPosition) {
-		engine.setProperty(Properties.BOTTOM_POSITION, bottomPosition);
-	}
-
-	public int getLeftPosition() {
-		return getLeftPosition(null);
-	}
-
-	/**
-	 * See {@link #getLeftPosition() getLeftPosition()} for more details
-	 */
-	public int getLeftPosition(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.LEFT_POSITION,0, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "leftPosition" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isLeftPositionSetted() {
-		return engine.isPropertySetted(Properties.LEFT_POSITION);
-	}
-
-	public void setLeftPosition(int leftPosition) {
-		engine.setProperty(Properties.LEFT_POSITION, leftPosition);
-	}
-
-	public int getRightPosition() {
-		return getRightPosition(null);
-	}
-
-	/**
-	 * See {@link #getRightPosition() getRightPosition()} for more details
-	 */
-	public int getRightPosition(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.RIGHT_POSITION,0, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "rightPosition" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isRightPositionSetted() {
-		return engine.isPropertySetted(Properties.RIGHT_POSITION);
-	}
-
-	public void setRightPosition(int rightPosition) {
-		engine.setProperty(Properties.RIGHT_POSITION, rightPosition);
-	}
-
-	public int getTopPosition() {
-		return getTopPosition(null);
-	}
-
-	/**
-	 * See {@link #getTopPosition() getTopPosition()} for more details
-	 */
-	public int getTopPosition(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.TOP_POSITION,0, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "topPosition" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isTopPositionSetted() {
-		return engine.isPropertySetted(Properties.TOP_POSITION);
-	}
-
-	public void setTopPosition(int topPosition) {
-		engine.setProperty(Properties.TOP_POSITION, topPosition);
-	}
-
 	public java.lang.String getUnlockedClientAttributeNames() {
 		return getUnlockedClientAttributeNames(null);
 	}
@@ -1120,7 +1016,7 @@ public abstract class AbstractOutputComponent extends CameliaOutputComponent imp
 	public int getServerDataCount() {
 
 
-		 IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
 		 if (dataMapAccessor==null) {
 		 	return 0;
 		 }
@@ -1132,7 +1028,7 @@ public abstract class AbstractOutputComponent extends CameliaOutputComponent imp
 	public Object getServerData(String name) {
 
 
-		 IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
 		 if (dataMapAccessor==null) {
 		 	return null;
 		 }
@@ -1144,7 +1040,7 @@ public abstract class AbstractOutputComponent extends CameliaOutputComponent imp
 	public Object removeServerData(String name) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
 		if (dataMapAccessor==null) {
 		 	return null;
 		}

@@ -21,14 +21,32 @@ import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
  * <p>The combo Component is equivalent to the standard HTML tag &lt;SELECT SIZE=1&gt;.</p>
  * <p>The combo Component has the following capabilities :
  * <ul>
- * <li>Position &amp; Size</li>
- * <li>Foreground &amp; Background Color</li>
- * <li>Text &amp; font</li>
- * <li>Help</li>
- * <li>Visibility, Read-Only, Disabled</li>
- * <li>Events Handling</li>
+ * <li>ISelectionEventCapability</li>
+ * <li>IRequiredCapability</li>
+ * <li>IFocusStyleClassCapability</li>
+ * <li>ISeverityStyleClassCapability</li>
+ * <li>IFilterCapability </li>
  * </ul>
  * </p>
+ * 
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ComboComponent.html">comboComponent</a> renderer is linked to the <a href="/jsdocs/index.html?f_combo.html" target="_blank">f_combo</a> javascript class. f_combo extends f_abstractList, fa_selectionProvider</p>
+ * 
+ * <p> Table of component style classes: </p>
+ * <table border="1" cellpadding="3" cellspacing="0" width="100%">
+ * <tbody>
+ * 
+ * <tr style="text-align:left">
+ * <th  width="33%">Style Name</th>
+ * <th width="50%">Description</th>
+ * </tr>
+ * 
+ * <tr  style="text-align:left">
+ * <td width="33%">f_combo</td>
+ * <td width="50%">Defines styles for the wrapper Select element</td>
+ * </tr>
+ * 
+ * </tbody>
+ * </table>
  */
 public class ComboComponent extends AbstractInputComponent implements 
 	ISelectionEventCapability,

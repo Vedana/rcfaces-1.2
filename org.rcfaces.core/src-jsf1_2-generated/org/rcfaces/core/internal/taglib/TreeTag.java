@@ -33,6 +33,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 	private ValueExpression filterProperties;
 	private ValueExpression loadListeners;
 	private ValueExpression expandListeners;
+	private ValueExpression preSelectionListeners;
 	private ValueExpression dragListeners;
 	private ValueExpression dragEffects;
 	private ValueExpression dragTypes;
@@ -131,13 +132,10 @@ public class TreeTag extends AbstractInputTag implements Tag {
 
 	public void setExpandListener(ValueExpression expandListeners) {
 		this.expandListeners = expandListeners;
-<<<<<<< HEAD
-=======
 	}
 
 	public void setPreSelectionListener(ValueExpression preSelectionListeners) {
 		this.preSelectionListeners = preSelectionListeners;
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 	}
 
 	public void setDragListener(ValueExpression dragListeners) {
@@ -465,6 +463,10 @@ public class TreeTag extends AbstractInputTag implements Tag {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.EXPAND_LISTENER_TYPE, expandListeners);
 		}
 
+		if (preSelectionListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.PRE_SELECTION_LISTENER_TYPE, preSelectionListeners);
+		}
+
 		if (dragListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.DRAG_LISTENER_TYPE, dragListeners);
 		}
@@ -766,6 +768,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		filterProperties = null;
 		loadListeners = null;
 		expandListeners = null;
+		preSelectionListeners = null;
 		dragListeners = null;
 		dragEffects = null;
 		dragTypes = null;

@@ -30,16 +30,45 @@ import org.rcfaces.core.internal.manager.IValidationParameters;
  * <p>The dateEntry Component is a specialized <a href="/comps/textEntryComponent.html">textEntry Component</a>. it sports auto-completion related to the validity of the numbers entered as a date.</p>
  * <p>The dateEntry Component has the following capabilities :
  * <ul>
- * <li>Position &amp; Size</li>
- * <li>Foreground &amp; Background Color</li>
- * <li>Text, font &amp; separators</li>
- * <li>Margin &amp; border</li>
- * <li>Help</li>
- * <li>Visibility, Read-Only, Disabled</li>
- * <li>Events Handling</li>
- * <li>Calendar functions</li>
+ * <li>PIRequiredCapability</li>
+ * <li>IAutoTabCapability</li>
+ * <li>IValueChangeEventCapability</li>
+ * <li>IFocusStyleClassCapability</li>
+ * <li>ISeverityStyleClassCapability</li>
+ * <li>IDateFormatCapability</li>
+ * <li>IValidationParameters</li>
  * </ul>
  * </p>
+ * 
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/DateEntryComponent.html">dateEntry</a> renderer is link to the <a href="/jsdocs/index.html?f_dateEntry.html" target="_blank">f_dateEntry</a> javascript class. f_dateEntry extends f_compositeNumEntry, fa_calendarPopup</p>
+ * 
+ * <p> Table of component style classes: </p>
+ * <table border="1" cellpadding="3" cellspacing="0" width="100%">
+ * <tbody>
+ * 
+ * <tr style="text-align:left">
+ * <th  width="33%">Style Name</th>
+ * <th width="50%">Description</th>
+ * </tr>
+ * 
+ * <tr  style="text-align:left">
+ * <td width="33%">f_dateEntry</td>
+ * <td id="ermvsh" width="50%">Defines styles for the wrapper DIV element</td>
+ * </tr>
+ * <tr  style="text-align:left">
+ * <td width="33%">f_dateEntry_dd</td>
+ * <td id="ermvsh" width="50%">Defines styles for day INPUT element.</td>
+ * </tr>
+ * <tr  style="text-align:left">
+ * <td width="33%">f_dateEntry_MM</td>
+ * <td id="ermvsh" width="50%">Defines styles for month INPUT element.</td>
+ * </tr>
+ * <tr  style="text-align:left">
+ * <td width="33%">f_dateEntry_yyyy</td>
+ * <td id="ermvsh" width="50%">Defines styles for years INPUT element.</td>
+ * </tr>
+ * </tbody>
+ * </table>
  */
 public class DateEntryComponent extends AbstractCalendarComponent implements 
 	IRequiredCapability,
@@ -115,12 +144,12 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 
 		FacesContext facesContext=getFacesContext();
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "ValidationParameter", false);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "ValidationParameter", false);
 		if (dataMapAccessor==null) {
 			return null;
 		}
  
- 		IDataMapAccessor clientMapAccessor=getDataMapAccessor(facesContext, "ClientValidationParameter", false);
+ 		IDataMapAccessor clientMapAccessor=engine.getDataMapAccessor(facesContext, "ClientValidationParameter", false);
 		if (clientMapAccessor!=null) {
 			clientMapAccessor.removeData(name, facesContext);
 		}
@@ -162,7 +191,7 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 			facesContext=getFacesContext();
 		}
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "ValidationParameter", false);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "ValidationParameter", false);
 		if (dataMapAccessor==null) {
 			return null;
 		}
@@ -177,7 +206,7 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 		if (facesContext==null) {
 			facesContext=getFacesContext();
 		}
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "ValidationParameter", false);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "ValidationParameter", false);
 		if (dataMapAccessor==null) {
 			return 0;
 		}
@@ -193,7 +222,7 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 			facesContext=getFacesContext();
 		}
 		
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "ValidationParameter", false);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "ValidationParameter", false);
 		if (dataMapAccessor==null) {
 			return Collections.EMPTY_MAP;
 		}
@@ -209,7 +238,7 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 			facesContext=getFacesContext();
 		}
 		
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "ValidationParameter", false);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "ValidationParameter", false);
 		if (dataMapAccessor==null) {
 			return Collections.EMPTY_MAP;
 		}
@@ -219,7 +248,7 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 			return Collections.EMPTY_MAP;
 		}
 		
-		IDataMapAccessor clientMapAccessor=getDataMapAccessor(facesContext, "ClientValidationParameter", false);
+		IDataMapAccessor clientMapAccessor=engine.getDataMapAccessor(facesContext, "ClientValidationParameter", false);
 		if (clientMapAccessor==null) {
 			if (Constants.READ_ONLY_COLLECTION_LOCK_ENABLED) {
 				map=Collections.unmodifiableMap(map);
@@ -260,15 +289,15 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 
 
 		FacesContext facesContext=getFacesContext();
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "ValidationParameter", true);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "ValidationParameter", true);
 		if (client) {
 			// On retire la limitation au niveau client si besoin !
-			IDataMapAccessor clientMapAccessor=getDataMapAccessor(facesContext, "ClientValidationParameter", false);
+			IDataMapAccessor clientMapAccessor=engine.getDataMapAccessor(facesContext, "ClientValidationParameter", false);
 			if (clientMapAccessor!=null) {
 				clientMapAccessor.removeData(name, facesContext);
 			}
 		} else {
-			IDataMapAccessor clientMapAccessor=getDataMapAccessor(facesContext, "ClientValidationParameter", true);
+			IDataMapAccessor clientMapAccessor=engine.getDataMapAccessor(facesContext, "ClientValidationParameter", true);
 			clientMapAccessor.setData(name, Boolean.FALSE, facesContext);
 		}
             
@@ -283,7 +312,7 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 			facesContext=getFacesContext();
 		}
 		
-		IDataMapAccessor clientMapAccessor=getDataMapAccessor(facesContext, "ClientValidationParameter", false);
+		IDataMapAccessor clientMapAccessor=engine.getDataMapAccessor(facesContext, "ClientValidationParameter", false);
 		if (clientMapAccessor==null) {
 			return false;
 		}

@@ -21,6 +21,25 @@ import org.rcfaces.core.component.AbstractInputComponent;
  * <li>Visibility</li>
  * </ul>
  * </p>
+ * 
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ProgressBarComponent.html">progressBar</a> renderer is linked to the <a href="/jsdocs/index.html?f_progressBar.html" target="_blank">f_progressBar</a> javascript class. f_progressBar extends f_component</p>
+ * 
+ * <p> Table of component style classes: </p>
+ * <table border="1" cellpadding="3" cellspacing="0" width="100%">
+ * <tbody>
+ * 
+ * <tr style="text-align:left">
+ * <th  width="33%">Style Name</th>
+ * <th width="50%">Description</th>
+ * </tr>
+ * 
+ * <tr  style="text-align:left">
+ * <td width="33%">f_progressBar</td>
+ * <td width="50%">Defines styles for the wrapper DIV element</td>
+ * </tr>
+ * 
+ * </tbody>
+ * </table>
  */
 public class ProgressBarComponent extends AbstractInputComponent {
 

@@ -39,9 +39,19 @@ import java.util.Arrays;
  * <p>It allows to (synchronously or asynchronously) call AJAX services from the client.</p>
  * <p>The service Component has the following capability :
  * <ul>
- * <li>Property changed Event handling</li>
+ * <li>IClientDataCapability</li>
+ * <li>IServerDataCapability</li>
+ * <li>IPropertyChangeEventCapability</li>
+ * <li>IServiceEventCapability</li>
+ * <li>IFilterCapability</li>
+ * <li>IComponentLocaleCapability</li>
+ * <li>IComponentTimeZoneCapability</li>
+ * <li>IClientDataManager</li>
+ * <li>IServerDataManager </li>
  * </ul>
  * </p>
+ * 
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ServiceComponent.html">service</a> renderer is linked to the <a href="/jsdocs/index.html?f_service.html" target="_blank">f_service</a> javascript class. f_service extends f_object, fa_serializable, fa_eventTarget, fa_filterProperties, fa_commands</p>
  */
 public class ServiceComponent extends CameliaBaseComponent implements 
 	IClientDataCapability,
@@ -77,7 +87,7 @@ public class ServiceComponent extends CameliaBaseComponent implements
 	public void setClientData(String name, ValueExpression value) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", true);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
             
 		dataMapAccessor.setData(name, value, null);
 		
@@ -86,7 +96,7 @@ public class ServiceComponent extends CameliaBaseComponent implements
 	public String setClientData(String name, String value) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", true);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
             
 		return (String)dataMapAccessor.setData(name, value, null);
 		
@@ -95,7 +105,7 @@ public class ServiceComponent extends CameliaBaseComponent implements
 	public void setServerData(String name, ValueExpression value) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", true);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
             
 		dataMapAccessor.setData(name, value, null);
 		
@@ -104,7 +114,7 @@ public class ServiceComponent extends CameliaBaseComponent implements
 	public Object setServerData(String name, Object value) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", true);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
             
 		return dataMapAccessor.setData(name, value, null);
 		
@@ -127,7 +137,7 @@ public class ServiceComponent extends CameliaBaseComponent implements
 	public String getClientData(String name, FacesContext facesContext) {
 
 
-		 IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", false);
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
 		 if (dataMapAccessor==null) {
 		 	return null;
 		 }
@@ -139,11 +149,7 @@ public class ServiceComponent extends CameliaBaseComponent implements
 	public Object getServerData(String name, FacesContext facesContext) {
 
 
-<<<<<<< HEAD
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
-=======
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 		if (dataMapAccessor==null) {
 			return null;
 		}
@@ -167,7 +173,7 @@ public class ServiceComponent extends CameliaBaseComponent implements
 	public Map getClientDataMap(FacesContext facesContext) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "clientData", false);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "clientData", false);
 		if (dataMapAccessor==null) {
 			return Collections.EMPTY_MAP;
 		}
@@ -179,7 +185,7 @@ public class ServiceComponent extends CameliaBaseComponent implements
 	public Map getServerDataMap(FacesContext facesContext) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(facesContext, "serverData", false);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
  		if (dataMapAccessor==null) {
 			return Collections.EMPTY_MAP;
 		}
@@ -198,7 +204,7 @@ public class ServiceComponent extends CameliaBaseComponent implements
 	public String[] listClientDataKeys(FacesContext facesContext) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", false);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
 		if (dataMapAccessor==null) {
 			return ComponentTools.STRING_EMPTY_ARRAY;
 		}
@@ -210,7 +216,7 @@ public class ServiceComponent extends CameliaBaseComponent implements
 	public String[] listServerDataKeys(FacesContext facesContext) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
 		if (dataMapAccessor==null) {
 			return ComponentTools.STRING_EMPTY_ARRAY;
 		}
@@ -242,7 +248,7 @@ public class ServiceComponent extends CameliaBaseComponent implements
 	public int getClientDataCount() {
 
 
-		 IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", false);
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
 		 if (dataMapAccessor==null) {
 		 	return 0;
 		 }
@@ -261,7 +267,7 @@ public class ServiceComponent extends CameliaBaseComponent implements
 	public String removeClientData(String name) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", false);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
 		if (dataMapAccessor==null) {
 			return null;
 		}
@@ -301,7 +307,7 @@ public class ServiceComponent extends CameliaBaseComponent implements
 	public int getServerDataCount() {
 
 
-		 IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
 		 if (dataMapAccessor==null) {
 		 	return 0;
 		 }
@@ -313,7 +319,7 @@ public class ServiceComponent extends CameliaBaseComponent implements
 	public Object getServerData(String name) {
 
 
-		 IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
 		 if (dataMapAccessor==null) {
 		 	return null;
 		 }
@@ -325,7 +331,7 @@ public class ServiceComponent extends CameliaBaseComponent implements
 	public Object removeServerData(String name) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", false);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
 		if (dataMapAccessor==null) {
 		 	return null;
 		}

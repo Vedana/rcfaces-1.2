@@ -23,16 +23,12 @@ import org.rcfaces.core.internal.tools.ComponentTools;
  * <p>The suggestTextEntry is a <a href="/comps/textEntryCOmponent.html">textEntry Component</a> with an autosuggestion feature that shows in the form of a dropdown list.</p>
  * <p>The suggestTextEntry Component has the following capabilities :
  * <ul>
- * <li>Position &amp; Size</li>
- * <li>Foreground &amp; Background Color</li>
- * <li>Text &amp; font</li>
- * <li>Help</li>
- * <li>Visibility, Read-Only, Disabled</li>
- * <li>Events Handling</li>
+ * <li>IFilterCapability</li>
+ * <li>IMaxResultNumberCapability</li>
+ * <li>ISuggestionEventCapability</li>
+ * <li>IMenuEventCapability</li>
  * </ul>
  * </p>
-<<<<<<< HEAD
-=======
  * 
  * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SuggestTextEntryComponent.html">suggestTextEntry</a> renderer is linked to the <a href="/jsdocs/index.html?f_suggestTextEntry.html" target="_blank">f_suggestTextEntry</a> javascript class. f_suggestTextEntry extends f_textEntry, fa_filterProperties, fa_commands</p>
  * 
@@ -52,7 +48,6 @@ import org.rcfaces.core.internal.tools.ComponentTools;
  * 
  * </tbody>
  * </table>
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
  */
 public class SuggestTextEntryComponent extends TextEntryComponent implements 
 	IFilterCapability,

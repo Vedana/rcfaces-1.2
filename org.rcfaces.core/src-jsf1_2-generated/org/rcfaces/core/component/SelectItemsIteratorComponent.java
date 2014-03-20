@@ -43,7 +43,7 @@ public class SelectItemsIteratorComponent extends CameliaItemsComponent implemen
 	public void setClientData(String name, ValueExpression value) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", true);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
             
 		dataMapAccessor.setData(name, value, null);
 		
@@ -52,7 +52,7 @@ public class SelectItemsIteratorComponent extends CameliaItemsComponent implemen
 	public String setClientData(String name, String value) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "clientData", true);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
             
 		return (String)dataMapAccessor.setData(name, value, null);
 		
@@ -61,7 +61,7 @@ public class SelectItemsIteratorComponent extends CameliaItemsComponent implemen
 	public void setServerData(String name, ValueExpression value) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", true);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
             
 		dataMapAccessor.setData(name, value, null);
 		
@@ -70,7 +70,7 @@ public class SelectItemsIteratorComponent extends CameliaItemsComponent implemen
 	public Object setServerData(String name, Object value) {
 
 
-		IDataMapAccessor dataMapAccessor=getDataMapAccessor(null, "serverData", true);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
             
 		return dataMapAccessor.setData(name, value, null);
 		

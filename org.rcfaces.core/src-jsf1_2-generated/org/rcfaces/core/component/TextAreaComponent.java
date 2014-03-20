@@ -29,14 +29,39 @@ import org.rcfaces.core.component.capability.ITextCapability;
  * <p>The textAreaEntry Component is based on the standard HTML tag &lt;TEXTAREA&gt; and is a <a href="/comps/textEntryComponent.html">textEntry Component</a>.</p>
  * <p>The textAreaEntry Component has the following capabilities :
  * <ul>
- * <li>Position &amp; Size</li>
- * <li>Foreground &amp; Background Color</li>
- * <li>Text &amp; font</li>
- * <li>Help</li>
- * <li>Visibility, Read-Only, Disabled</li>
- * <li>Events Handling</li>
+ * <li>IRequiredCapability</li>
+ * <li>ITextCapability</li>
+ * <li>ITextDirectionCapability</li>
+ * <li>IEmptyMessageCapability</li>
+ * <li>IReadOnlyCapability</li>
+ * <li>IValueChangeEventCapability</li>
+ * <li>IMenuCapability</li>
+ * <li>IFocusStyleClassCapability</li>
+ * <li>ISeverityStyleClassCapability</li>
+ * <li>ISelectionEventCapability</li>
+ * <li>IAlternateTextCapability</li>
+ * <li>IMaxTextLengthCapability </li>
  * </ul>
  * </p>
+ * 
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TextAreaComponent.html">textArea</a> renderer is linked to the <a href="/jsdocs/index.html?f_textArea.html" target="_blank">f_textArea</a> javascript class. f_textArea extends f_abstractEntry</p>
+ * 
+ * <p> Table of component style classes: </p>
+ * <table border="1" cellpadding="3" cellspacing="0" width="100%">
+ * <tbody>
+ * 
+ * <tr style="text-align:left">
+ * <th  width="33%">Style Name</th>
+ * <th width="50%">Description</th>
+ * </tr>
+ * 
+ * <tr  style="text-align:left">
+ * <td width="33%">f_textArea</td>
+ * <td width="50%">Defines styles for the wrapper element</td>
+ * </tr>
+ * 
+ * </tbody>
+ * </table>
  */
 public class TextAreaComponent extends AbstractInputComponent implements 
 	IRequiredCapability,
