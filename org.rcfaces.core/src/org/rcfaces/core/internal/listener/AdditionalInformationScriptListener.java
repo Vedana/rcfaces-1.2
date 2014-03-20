@@ -15,7 +15,7 @@ import org.rcfaces.core.event.IAdditionalInformationListener;
  */
 public class AdditionalInformationScriptListener extends AbstractScriptListener
         implements IAdditionalInformationListener {
-    private static final String REVISION = "$Revision$";
+    
 
     public AdditionalInformationScriptListener(String scriptType, String command) {
         super(scriptType, command);

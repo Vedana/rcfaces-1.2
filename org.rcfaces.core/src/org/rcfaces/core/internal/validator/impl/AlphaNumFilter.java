@@ -13,7 +13,7 @@ import org.rcfaces.core.internal.lang.StringAppender;
  * @version $Revision$ $Date$
  */
 public class AlphaNumFilter extends AlphaFilter {
-    private static final String REVISION = "$Revision$";
+    
 
     private static final Log LOG = LogFactory.getLog(AlphaNumFilter.class);
 

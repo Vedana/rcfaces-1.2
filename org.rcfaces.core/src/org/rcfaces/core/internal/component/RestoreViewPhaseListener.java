@@ -12,7 +12,7 @@ import javax.faces.event.PhaseListener;
  * @version $Revision$ $Date$
  */
 public class RestoreViewPhaseListener implements PhaseListener {
-    private static final String REVISION = "$Revision$";
+    
 
     private static final long serialVersionUID = -6370096499604012889L;
 

@@ -3,8 +3,6 @@
  */
 package org.rcfaces.core.internal.tools;
 
-import java.io.Serializable;
-
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.ToolBarComponent;
@@ -28,10 +26,8 @@ import org.rcfaces.core.lang.IContentFamily;
  * @version $Revision$ $Date$
  */
 public class ImageAccessorTools {
-    private static final String REVISION = "$Revision$";
 
     private static final IContentAccessors NO_IMAGE_ACCESSORS = new IImageAccessors() {
-        private static final String REVISION = "$Revision$";
 
         public IContentAccessor getImageAccessor() {
             return null;
@@ -39,7 +35,6 @@ public class ImageAccessorTools {
     };
 
     private static final IContentAccessors NO_IMAGE_STATES_ACCESSORS = new IExpandImageAccessors() {
-        private static final String REVISION = "$Revision$";
 
         public IContentAccessor getImageAccessor() {
             return null;
@@ -63,7 +58,6 @@ public class ImageAccessorTools {
     };
 
     private static final IContentAccessors NO_IMAGE_SEVERITY_ACCESSSORS = new ISeverityImageAccessors() {
-        private static final String REVISION = "$Revision$";
 
         public IContentAccessor getErrorImageAccessor() {
             return null;
@@ -146,7 +140,6 @@ public class ImageAccessorTools {
         }
 
         return new IExpandImageAccessors() {
-            private static final String REVISION = "$Revision$";
 
             public IContentAccessor getImageAccessor() {
                 return imageContentAccessor;
@@ -205,7 +198,6 @@ public class ImageAccessorTools {
         }
 
         return new ISeverityImageAccessors() {
-            private static final String REVISION = "$Revision$";
 
             public IContentAccessor getErrorImageAccessor() {
                 return errorImageContentAccessor;
@@ -227,15 +219,6 @@ public class ImageAccessorTools {
                 return imageContentAccessor;
             }
         };
-    }
-
-    private static IContentAccessor createSubAccessor(
-            FacesContext facesContext, IComponentEngine engine,
-            Serializable attributeName,
-            IContentAccessor rootImageContentAccessor) {
-
-        return createSubAccessor(facesContext, engine,
-                String.valueOf(attributeName), rootImageContentAccessor);
     }
 
     private static IContentAccessor createSubAccessor(
@@ -271,7 +254,6 @@ public class ImageAccessorTools {
                 facesContext, engine, Properties.CONTROL_IMAGE_URL, null);
 
         return new IToolBarImageAccessors() {
-            private static final String REVISION = "$Revision$";
 
             public IContentAccessor getControlImageAccessor() {
                 return controlImageContentAccessor;

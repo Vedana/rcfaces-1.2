@@ -7,7 +7,7 @@
 	<classpathentry exported="true" kind="lib" path="lib/jsf1_2/jsf-api.jar" sourcepath="W:/Workspace RCFaces 2.1/jsf-1_2_15"/>
 	<classpathentry exported="true" kind="lib" path="lib/jsf1_2/jsp-api.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jsf1_2/servlet-api.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/commons-digester.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-digester.jar" sourcepath="C:/Users/oeuillot/Java libraries/commons-digester-1.5"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-logging.jar"/>
 	<classpathentry kind="lib" path="lib/jstl.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-1.2.9.jar"/>
@@ -19,5 +19,15 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Maven: javax.faces:jsf-api:1.1_02"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Maven: log4j:log4j:1.2.9"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Maven: commons-digester:commons-digester:1.5"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Maven: commons-beanutils:commons-beanutils:1.6"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Maven: commons-logging:commons-logging:1.0.3"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Maven: commons-collections:commons-collections:2.1"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Maven: xml-apis:xml-apis:1.0.b2"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Maven: javax.servlet.jsp:jsp-api:2.0"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Maven: javax.servlet:jstl:1.1.0"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Maven: javax.servlet:servlet-api:2.4"/>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>

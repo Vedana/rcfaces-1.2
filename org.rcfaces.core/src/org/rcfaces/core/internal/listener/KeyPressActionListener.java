@@ -15,7 +15,7 @@ import org.rcfaces.core.event.KeyPressEvent;
  */
 public class KeyPressActionListener extends AbstractActionListener implements
         IKeyPressListener {
-    private static final String REVISION = "$Revision$";
+    
 
     private static final Class actionParameters[] = { KeyPressEvent.class };
 

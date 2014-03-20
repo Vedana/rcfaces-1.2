@@ -4,7 +4,6 @@
  */
 package org.rcfaces.core.internal.tools;
 
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.Map;
 
@@ -21,7 +20,6 @@ import org.rcfaces.core.model.IFilterProperties;
  * @version $Revision$ $Date$
  */
 public final class FilterExpressionTools {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(FilterExpressionTools.class);
@@ -32,20 +30,19 @@ public final class FilterExpressionTools {
      * 
      */
     public static final IFilterProperties EMPTY = new IFilterProperties() {
-        private static final String REVISION = "$Revision$";
 
         private static final long serialVersionUID = -3817846186098661680L;
 
-        public boolean containsKey(Serializable propertyName) {
+        public boolean containsKey(String propertyName) {
             return false;
         }
 
-        public Object put(Serializable filterName, Object value) {
+        public Object put(String filterName, Object value) {
             throw new UnsupportedOperationException(
                     "Not supported for EMPTY filtersMap !");
         }
 
-        public Object remove(Serializable filterName) {
+        public Object remove(String filterName) {
             throw new UnsupportedOperationException(
                     "Not supported for EMPTY filtersMap !");
         }
@@ -90,31 +87,31 @@ public final class FilterExpressionTools {
         public void setTransient(boolean newTransientValue) {
         }
 
-        public Object getProperty(Serializable name) {
+        public Object getProperty(String name) {
             return null;
         }
 
-        public String getStringProperty(Serializable name) {
+        public String getStringProperty(String name) {
             return null;
         }
 
-        public String getStringProperty(Serializable name, String defaultValue) {
+        public String getStringProperty(String name, String defaultValue) {
             return defaultValue;
         }
 
-        public boolean getBoolProperty(Serializable name, boolean defaultValue) {
+        public boolean getBoolProperty(String name, boolean defaultValue) {
             return defaultValue;
         }
 
-        public Boolean getBooleanProperty(Serializable name) {
+        public Boolean getBooleanProperty(String name) {
             return null;
         }
 
-        public int getIntProperty(Serializable name, int defaultValue) {
+        public int getIntProperty(String name, int defaultValue) {
             return defaultValue;
         }
 
-        public Number getNumberProperty(Serializable name) {
+        public Number getNumberProperty(String name) {
             return null;
         }
 

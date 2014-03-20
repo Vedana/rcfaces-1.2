@@ -14,7 +14,7 @@ import org.rcfaces.core.component.FileItemComponent;
  * @version $Revision$ $Date$
  */
 public class FileItem extends SelectItem implements IFileItem {
-    private static final String REVISION = "$Revision$";
+    
 
     private static final long serialVersionUID = -691526095374431782L;
 

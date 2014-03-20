@@ -13,7 +13,7 @@ import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
  * @version $Revision$ $Date$
  */
 public class SelectionCardinalityConverter extends CardinalityConverter {
-    private static final String REVISION = "$Revision$";
+    
 
     public static final Converter SINGLETON = new SelectionCardinalityConverter();
 

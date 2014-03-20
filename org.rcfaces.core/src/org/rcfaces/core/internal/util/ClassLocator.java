@@ -16,9 +16,6 @@ import javax.servlet.ServletContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -56,19 +53,6 @@ public class ClassLocator {
             } catch (ClassNotFoundException ex) {
                 if (thOrigin == null) {
                     thOrigin = ex;
-                }
-
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("Find class '" + className + "'", ex);
-                }
-
-            } catch (RuntimeException ex) {
-                if (rtOrigin == null) {
-                    rtOrigin = ex;
-                }
-
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("Find class '" + className + "'", ex);
                 }
 
                 if (LOG.isDebugEnabled()) {
@@ -125,19 +109,6 @@ public class ClassLocator {
         } catch (ClassNotFoundException ex) {
             if (thOrigin == null) {
                 thOrigin = ex;
-            }
-
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Find class '" + className + "' (classLocator)", ex);
-            }
-
-        } catch (RuntimeException ex) {
-            if (rtOrigin == null) {
-                rtOrigin = ex;
-            }
-
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Find class '" + className + "' (classLocator)", ex);
             }
 
             if (LOG.isDebugEnabled()) {

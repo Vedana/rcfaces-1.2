@@ -15,7 +15,7 @@ import org.rcfaces.core.validator.IClientValidatorContext;
  */
 public class TrimChecker extends AbstractClientValidatorTask implements
         ICheckerTask {
-    private static final String REVISION = "$Revision$";
+    
 
     private static final Log LOG = LogFactory.getLog(TrimChecker.class);
 

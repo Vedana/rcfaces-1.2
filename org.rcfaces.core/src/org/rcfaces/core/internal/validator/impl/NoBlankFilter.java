@@ -14,7 +14,7 @@ import org.rcfaces.core.validator.IFilterTask;
  * @version $Revision$ $Date$
  */
 public class NoBlankFilter implements IFilterTask {
-    private static final String REVISION = "$Revision$";
+    
 
     private static final Log LOG = LogFactory.getLog(NoBlankFilter.class);
 

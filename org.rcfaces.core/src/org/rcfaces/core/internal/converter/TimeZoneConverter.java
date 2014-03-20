@@ -21,7 +21,7 @@ import org.rcfaces.core.model.AbstractConverter;
  * @version $Revision$ $Date$
  */
 public class TimeZoneConverter extends AbstractConverter {
-    private static final String REVISION = "$Revision$";
+    
 
     public static final Converter SINGLETON = new TimeZoneConverter();
 

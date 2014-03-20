@@ -51,22 +51,18 @@ public class IncludeHttpServletResponse extends HttpServletResponseWrapper {
         servletOutputStream = new ServletOutputStream() {
             private static final String REVISION = "$Revision$";
 
-            @Override
             public void write(int b) throws IOException {
                 outputStream.write(b);
             }
 
-            @Override
             public void flush() throws IOException {
                 outputStream.flush();
             }
 
-            @Override
             public void write(byte[] b, int off, int len) throws IOException {
                 outputStream.write(b, off, len);
             }
 
-            @Override
             public void write(byte[] b) throws IOException {
                 outputStream.write(b);
             }
@@ -106,7 +102,6 @@ public class IncludeHttpServletResponse extends HttpServletResponseWrapper {
         return lastModified;
     }
 
-    @Override
     public String getContentType() {
         return contentType;
     }
@@ -115,12 +110,10 @@ public class IncludeHttpServletResponse extends HttpServletResponseWrapper {
         return status;
     }
 
-    @Override
     public ServletOutputStream getOutputStream() {
         return servletOutputStream;
     }
 
-    @Override
     public PrintWriter getWriter() throws IOException {
         if (writer == null) {
             throw new IOException("No writer supported !");
@@ -128,30 +121,24 @@ public class IncludeHttpServletResponse extends HttpServletResponseWrapper {
         return writer;
     }
 
-    @Override
     public void addCookie(Cookie arg0) {
     }
 
-    @Override
     public void addDateHeader(String name, long date) {
         setDateHeader(name, date);
     }
 
-    @Override
     public void addHeader(String arg0, String arg1) {
         setHeader(arg0, arg1);
     }
 
-    @Override
     public void addIntHeader(String arg0, int arg1) {
         setIntHeader(arg0, arg1);
     }
 
-    @Override
     public void sendRedirect(String arg0) {
     }
 
-    @Override
     public void setDateHeader(String name, long date) {
         if (LOG.isTraceEnabled()) {
             LOG.trace("Inclusion set date header '" + name + "' to '" + date
@@ -165,7 +152,6 @@ public class IncludeHttpServletResponse extends HttpServletResponseWrapper {
         }
     }
 
-    @Override
     public void setHeader(String name, String value) {
         if (LOG.isTraceEnabled()) {
             LOG
@@ -195,7 +181,6 @@ public class IncludeHttpServletResponse extends HttpServletResponseWrapper {
         }
     }
 
-    @Override
     public void setIntHeader(String arg0, int arg1) {
         if (LOG.isTraceEnabled()) {
             LOG.trace("Inclusion set int header '" + arg0 + "' to '" + arg1
@@ -203,63 +188,50 @@ public class IncludeHttpServletResponse extends HttpServletResponseWrapper {
         }
     }
 
-    @Override
     public void flushBuffer() {
     }
 
-    @Override
     public void reset() {
     }
 
-    @Override
     public void resetBuffer() {
     }
 
-    @Override
     public void setBufferSize(int arg0) {
     }
 
-    @Override
     public void setCharacterEncoding(String arg0) {
     }
 
-    @Override
     public void setContentLength(int contentLength) {
         this.contentLength = contentLength;
     }
 
-    @Override
     public void setContentType(String contentType) {
         this.contentType = contentType;
     }
 
-    @Override
     public void setLocale(Locale arg0) {
     }
 
-    @Override
     public void sendError(int status) throws IOException {
         super.sendError(status);
 
         this.status = status;
     }
 
-    @Override
     public void setStatus(int status) {
         super.setStatus(status);
 
         this.status = status;
     }
 
-    @Override
     public void sendError(int status, String arg1) throws IOException {
         super.sendError(status, arg1);
 
         this.status = status;
     }
 
-    @SuppressWarnings("deprecation")
-    @Override
     public void setStatus(int status, String arg1) {
         super.setStatus(status, arg1);
 

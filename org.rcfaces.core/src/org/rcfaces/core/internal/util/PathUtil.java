@@ -13,7 +13,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class PathUtil {
 
-    private static final String REVISION = "$Revision$";
+    
 
     private static final Log LOG = LogFactory.getLog(PathUtil.class);
 

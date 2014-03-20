@@ -15,7 +15,7 @@ import org.rcfaces.core.validator.IClientValidatorContext;
  * @version $Revision$ $Date$
  */
 public class SignedFilter extends AbstractPatternTask {
-    private static final String REVISION = "$Revision$";
+    
 
     private static final Log LOG = LogFactory.getLog(SignedFilter.class);
 

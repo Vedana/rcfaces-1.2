@@ -14,7 +14,7 @@ import org.rcfaces.core.validator.IClientValidatorContext;
  * @version $Revision$ $Date$
  */
 public class NumFilter extends AbstractDynamicPatternTask {
-    private static final String REVISION = "$Revision$";
+    
 
     private static final Log LOG = LogFactory.getLog(NumFilter.class);
 

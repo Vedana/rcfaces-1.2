@@ -18,7 +18,7 @@ import org.rcfaces.core.validator.IFilterTask;
  */
 public abstract class AbstractDynamicPatternTask extends
         AbstractClientValidatorTask implements IFilterTask {
-    private static final String REVISION = "$Revision$";
+    
 
     private static final Log LOG = LogFactory
             .getLog(AbstractDynamicPatternTask.class);

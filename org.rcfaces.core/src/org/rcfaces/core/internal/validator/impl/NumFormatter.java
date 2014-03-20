@@ -19,7 +19,7 @@ import org.rcfaces.core.validator.IFormatterTask;
  */
 public class NumFormatter extends AbstractClientValidatorTask implements
         IFormatterTask {
-    private static final String REVISION = "$Revision$";
+    private static final String REVISION = "$Revision: 1.5 $";
 
     private static final Log LOG = LogFactory.getLog(NumFormatter.class);
 

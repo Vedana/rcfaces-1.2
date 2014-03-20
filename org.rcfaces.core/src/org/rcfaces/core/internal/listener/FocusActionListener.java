@@ -15,7 +15,7 @@ import org.rcfaces.core.event.IFocusListener;
  */
 public class FocusActionListener extends AbstractActionListener implements
         IFocusListener {
-    private static final String REVISION = "$Revision$";
+    
 
     private static final Class actionParameters[] = { FocusEvent.class };
 

@@ -20,7 +20,7 @@ import org.rcfaces.core.model.AbstractConverter;
  * @version $Revision$ $Date$
  */
 public class InputTypeConverter extends AbstractConverter {
-    private static final String REVISION = "$Revision$";
+    
 
     private static final String CHECK_BOX_INPUT_TYPE_NAME = "check";
 

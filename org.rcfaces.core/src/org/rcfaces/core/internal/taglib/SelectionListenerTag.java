@@ -17,7 +17,7 @@ import org.rcfaces.core.event.ISelectionListener;
  * @version $Revision$ $Date$
  */
 public class SelectionListenerTag extends AbstractListenerTag {
-    private static final String REVISION = "$Revision$";
+    
 
     private static final long serialVersionUID = 5117953058731866439L;
 

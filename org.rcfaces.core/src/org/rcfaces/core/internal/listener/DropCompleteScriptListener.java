@@ -15,7 +15,7 @@ import org.rcfaces.core.event.IDropCompleteListener;
  */
 public class DropCompleteScriptListener extends AbstractScriptListener
         implements IDropCompleteListener {
-    private static final String REVISION = "$Revision$";
+    
 
     public DropCompleteScriptListener(String scriptType, String command) {
         super(scriptType, command);

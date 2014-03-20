@@ -15,7 +15,7 @@ import org.rcfaces.core.event.ValidationEvent;
  */
 public class ValidationActionListener extends AbstractActionListener implements
         IValidationListener {
-    private static final String REVISION = "$Revision$";
+    
 
     private static final Class actionParameters[] = { ValidationEvent.class };
 

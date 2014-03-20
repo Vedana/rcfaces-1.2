@@ -9,7 +9,7 @@ package org.rcfaces.core.internal.taglib;
  * @version $Revision$ $Date$
  */
 public class ConvertByteTag extends ConvertNumberTag {
-    private static final String REVISION = "$Revision$";
+    
 
     private static final long serialVersionUID = 2569526670834596770L;
 

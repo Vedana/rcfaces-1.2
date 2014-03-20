@@ -12,7 +12,7 @@ import javax.faces.convert.Converter;
  * @version $Revision$ $Date$
  */
 public class LiteralTwoDigitYearConverter extends TwoDigitYearConverter {
-    private static final String REVISION = "$Revision$";
+    
 
     public static final Converter SINGLETON = new LiteralTwoDigitYearConverter();
 

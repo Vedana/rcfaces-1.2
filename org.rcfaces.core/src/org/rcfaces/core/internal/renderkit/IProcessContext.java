@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: IProcessContext.java,v 1.12.6.1 2012/04/20 12:01:07 oeuillot Exp $
  * 
  */
 package org.rcfaces.core.internal.renderkit;
@@ -16,8 +16,8 @@ import org.rcfaces.core.internal.renderkit.designer.IDesignerEngine;
 
 /**
  * 
- * @author Olivier Oeuillot (latest modification by $Author$)
- * @version $Revision$ $Date$
+ * @author Olivier Oeuillot (latest modification by $Author: oeuillot $)
+ * @version $Revision: 1.12.6.1 $ $Date: 2012/04/20 12:01:07 $
  */
 public interface IProcessContext {
 
@@ -39,7 +39,7 @@ public interface IProcessContext {
 
     Boolean getProfilerMode();
 
-    IDesignerInterface getDesignerInterface();
+    boolean isDesignerMode();
 
     Locale getUserLocale();
 

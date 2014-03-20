@@ -13,7 +13,7 @@ import org.rcfaces.core.converter.AbstractNumberConverter;
  * @version $Revision$ $Date$
  */
 public class LiteralNumberConverter extends AbstractNumberConverter {
-    private static final String REVISION = "$Revision$";
+    
 
     public static final Converter SINGLETON = new LiteralNumberConverter();
 

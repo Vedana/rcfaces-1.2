@@ -34,7 +34,6 @@ import org.rcfaces.core.component.capability.IPrependIdCapability;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.adapter.IAdapterManager;
 import org.rcfaces.core.internal.capability.IComponentEngine;
-import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.listener.IScriptListener;
 import org.rcfaces.core.internal.renderkit.WriterException;
@@ -508,14 +507,6 @@ public final class ComponentTools extends ComponentTools0 {
 
     public static UIComponent[] listChildren(FacesContext facesContext,
             UIComponent component, IComponentEngine engine, Class childClass,
-            Properties property) {
-
-        return listChildren(facesContext, component, engine, childClass,
-                property.toString());
-    }
-
-    public static UIComponent[] listChildren(FacesContext facesContext,
-            UIComponent component, IComponentEngine engine, Class childClass,
             String propertyName) {
 
         String ids = engine.getStringProperty(propertyName, facesContext);
@@ -583,14 +574,6 @@ public final class ComponentTools extends ComponentTools0 {
                 UIComponent.class, l.size()));
     }
 
-    public static void setChildren(UIComponent component,
-            IComponentEngine engine, Class classOfChild,
-            UIComponent[] children, Properties property) {
-        setChildren(component, engine, classOfChild, children,
-                property.toString());
-    }
-
-    @Deprecated
     public static void setChildren(UIComponent component,
             IComponentEngine engine, Class classOfChild,
             UIComponent[] children, String propertyName) {

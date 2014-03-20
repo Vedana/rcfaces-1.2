@@ -4,8 +4,6 @@
  */
 package org.rcfaces.core.internal.renderkit;
 
-import java.io.Serializable;
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -16,11 +14,10 @@ public abstract class AbstractProperties implements IProperties {
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.rcfaces.core.internal.renderkit.IComponentData#getBoolProperty(java
-     * .lang.String, boolean)
+     * @see org.rcfaces.core.internal.renderkit.IComponentData#getBoolProperty(java.lang.String,
+     *      boolean)
      */
-    public final boolean getBoolProperty(Serializable name, boolean defaultValue) {
+    public final boolean getBoolProperty(String name, boolean defaultValue) {
         Boolean b = getBooleanProperty(name);
         if (b == null) {
             return defaultValue;
@@ -32,11 +29,9 @@ public abstract class AbstractProperties implements IProperties {
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.rcfaces.core.internal.renderkit.IComponentData#getBooleanProperty
-     * (java.lang.String)
+     * @see org.rcfaces.core.internal.renderkit.IComponentData#getBooleanProperty(java.lang.String)
      */
-    public Boolean getBooleanProperty(Serializable name) {
+    public Boolean getBooleanProperty(String name) {
         Object s = getProperty(name);
         if (s == null) {
             return null;
@@ -53,7 +48,7 @@ public abstract class AbstractProperties implements IProperties {
         return null;
     }
 
-    public Number getNumberProperty(Serializable name) {
+    public Number getNumberProperty(String name) {
         Object s = getProperty(name);
         if (s == null) {
             return null;
@@ -76,7 +71,7 @@ public abstract class AbstractProperties implements IProperties {
         return null;
     }
 
-    public String getStringProperty(Serializable name) {
+    public String getStringProperty(String name) {
         Object s = getProperty(name);
         if (s == null) {
             return null;
@@ -85,7 +80,7 @@ public abstract class AbstractProperties implements IProperties {
         return String.valueOf(s);
     }
 
-    public String getStringProperty(Serializable name, String defaultValue) {
+    public String getStringProperty(String name, String defaultValue) {
         String s = getStringProperty(name);
         if (s == null) {
             return defaultValue;
@@ -97,11 +92,10 @@ public abstract class AbstractProperties implements IProperties {
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.rcfaces.core.internal.renderkit.IComponentData#getIntProperty(java
-     * .lang.String, int)
+     * @see org.rcfaces.core.internal.renderkit.IComponentData#getIntProperty(java.lang.String,
+     *      int)
      */
-    public int getIntProperty(Serializable name, int defaultValue) {
+    public int getIntProperty(String name, int defaultValue) {
         Number i = getNumberProperty(name);
         if (i == null) {
             return defaultValue;
@@ -110,5 +104,5 @@ public abstract class AbstractProperties implements IProperties {
         return i.intValue();
     }
 
-    public abstract Object getProperty(Serializable name);
+    public abstract Object getProperty(String name);
 }

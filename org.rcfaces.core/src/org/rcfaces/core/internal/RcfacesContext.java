@@ -30,6 +30,8 @@ import org.rcfaces.core.internal.documentBuilder.IDocumentBuilderProvider;
 import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
 import org.rcfaces.core.internal.repository.IRepositoryManager;
 import org.rcfaces.core.internal.service.IServicesRegistry;
+import org.rcfaces.core.internal.util.FakeHttpServletRequest;
+import org.rcfaces.core.internal.util.FakeHttpServletResponse;
 import org.rcfaces.core.internal.validator.IClientValidatorsRegistry;
 import org.rcfaces.core.internal.version.IResourceVersionHandler;
 

@@ -10,7 +10,7 @@ import org.rcfaces.core.event.IExpandListener;
  */
 public class ExpandScriptListener extends AbstractScriptListener implements
         IExpandListener {
-    private static final String REVISION = "$Revision$";
+    
 
     public ExpandScriptListener(String scriptType, String command) {
         super(scriptType, command);

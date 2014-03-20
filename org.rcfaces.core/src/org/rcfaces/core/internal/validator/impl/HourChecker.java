@@ -20,7 +20,7 @@ import org.rcfaces.core.validator.IClientValidatorContext;
  */
 public class HourChecker extends AbstractClientValidatorTask implements
         ICheckerTask {
-    private static final String REVISION = "$Revision$";
+    
 
     private static final Log LOG = LogFactory.getLog(HourChecker.class);
 

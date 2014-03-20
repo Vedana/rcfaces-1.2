@@ -17,7 +17,7 @@ import org.rcfaces.core.event.IPropertyChangeListener;
  * @version $Revision$ $Date$
  */
 public class PropertyChangeListenerTag extends AbstractListenerTag {
-    private static final String REVISION = "$Revision$";
+    
 
     private static final long serialVersionUID = 5117953058731866439L;
 

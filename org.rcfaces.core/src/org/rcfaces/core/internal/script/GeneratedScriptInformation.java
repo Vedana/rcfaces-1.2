@@ -11,7 +11,7 @@ import org.rcfaces.core.internal.contentAccessor.BasicGeneratedResourceInformati
  * @version $Revision$ $Date$
  */
 public class GeneratedScriptInformation extends BasicGeneratedResourceInformation {
-    private static final String REVISION = "$Revision$";
+    
 
     public GeneratedScriptInformation() {
         super();

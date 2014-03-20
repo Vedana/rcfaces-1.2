@@ -13,7 +13,7 @@ import org.rcfaces.core.event.IErrorListener;
  */
 public class ErrorScriptListener extends AbstractScriptListener implements
         IErrorListener {
-    private static final String REVISION = "$Revision$";
+    
 
     public ErrorScriptListener(String scriptType, String command) {
         super(scriptType, command);

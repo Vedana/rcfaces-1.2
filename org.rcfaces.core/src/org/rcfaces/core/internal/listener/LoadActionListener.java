@@ -15,7 +15,7 @@ import org.rcfaces.core.event.LoadEvent;
  */
 public class LoadActionListener extends AbstractActionListener implements
         ILoadListener {
-    private static final String REVISION = "$Revision$";
+    
 
     private static final Class actionParameters[] = { LoadEvent.class };
 

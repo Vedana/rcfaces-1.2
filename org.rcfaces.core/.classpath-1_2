@@ -3,18 +3,15 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="src-jsf1_2"/>
 	<classpathentry kind="src" path="src-jsf1_2-generated"/>
-	<classpathentry kind="src" path="src-jsf1_x"/>
-	<classpathentry kind="src" path="src-valueExpression"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-digester.jar" sourcepath="C:/Documents and Settings/oeuillot/Mes documents/Mes librairies JAVA/commons-digester-1.6/src/src/java"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-logging.jar" sourcepath="C:/Documents and Settings/oeuillot/Mes documents/Mes librairies JAVA/commons-logging-1.1/src/java"/>
 	<classpathentry exported="true" kind="lib" path="lib/jstl.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jsf-facelets.jar" sourcepath="C:/Documents and Settings/oeuillot/Mes documents/Mes librairies JAVA/facelets-1.1.11/src/java"/>
 	<classpathentry kind="lib" path="lib/log4j-1.2.9.jar" sourcepath="C:/Documents and Settings/oeuillot/Mes documents/Mes librairies JAVA/log4j-1.2.13/src/java"/>
-	<classpathentry kind="lib" path="lib/jsf1_2/jsf-impl.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jsf1_2/jsf-facelets.jar" sourcepath="C:/Users/oeuillot/Documents/Mes librairies JAVA/facelets-1.1.15-jsf1.2/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.5.0_12"/>
 	<classpathentry exported="true" kind="lib" path="lib/jsf1_2/el-api.jar" sourcepath="/jsf-1_2_03/Tomcat 6.0 src"/>
 	<classpathentry exported="true" kind="lib" path="lib/jsf1_2/jsp-api.jar" sourcepath="/jsf-1_2_03/Tomcat 6.0 src"/>
 	<classpathentry exported="true" kind="lib" path="lib/jsf1_2/servlet-api.jar" sourcepath="/jsf-1_2_03/Tomcat 6.0 src"/>
-	<classpathentry exported="true" kind="lib" path="lib/jsf1_2/jsf-api.jar" sourcepath="/jsf-1_2_12"/>
+	<classpathentry exported="true" kind="lib" path="lib/jsf1_2/jsf-api.jar" sourcepath="/jsf-1_2_09"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

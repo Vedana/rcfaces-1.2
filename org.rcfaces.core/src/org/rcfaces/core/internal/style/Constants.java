@@ -15,7 +15,7 @@ import org.rcfaces.core.internal.resource.IncludeResourceLoaderFactory;
  * @version $Revision$ $Date$
  */
 public class Constants {
-    private static final String REVISION = "$Revision$";
+    
 
     private static final Log LOG = LogFactory.getLog(Constants.class);
 

@@ -19,7 +19,7 @@ import org.rcfaces.core.validator.IParameter;
  * @version $Revision$ $Date$
  */
 public class AbstractClientValidatorTask implements IClientValidatorTask {
-    private static final String REVISION = "$Revision$";
+    
 
     private static final Log LOG = LogFactory
             .getLog(AbstractClientValidatorTask.class);

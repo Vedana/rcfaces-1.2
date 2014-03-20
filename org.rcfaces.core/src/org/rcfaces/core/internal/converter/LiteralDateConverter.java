@@ -12,7 +12,7 @@ import javax.faces.convert.Converter;
  * @version $Revision$ $Date$
  */
 public class LiteralDateConverter extends DateConverter {
-    private static final String REVISION = "$Revision$";
+    
 
     public static final Converter SINGLETON = new LiteralDateConverter();
 

@@ -14,7 +14,7 @@ import javax.servlet.jsp.tagext.VariableInfo;
  */
 public class CameliaTagExtraInfo extends TagExtraInfo {
 
-    private static final String REVISION = "$Revision$";
+    
 
     private static final VariableInfo[] VARIABLE_INFO_EMPTY_ARRAY = new VariableInfo[0];
 

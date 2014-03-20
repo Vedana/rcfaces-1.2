@@ -18,7 +18,7 @@ import org.rcfaces.core.event.ICheckListener;
  */
 public class CheckListenerTag extends AbstractListenerTag {
 
-    private static final String REVISION = "$Revision$";
+    
 
     private static final long serialVersionUID = 4827027133242453987L;
 

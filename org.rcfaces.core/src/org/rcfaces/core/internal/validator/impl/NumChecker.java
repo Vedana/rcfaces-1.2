@@ -13,12 +13,12 @@ import org.rcfaces.core.validator.IClientValidatorContext;
 
 /**
  * 
- * @author Olivier Oeuillot (latest modification by $Author$)
- * @version $Revision$ $Date$
+ * @author Olivier Oeuillot (latest modification by $Author: jbmeslin $)
+ * @version $Revision: 1.2.8.1 $ $Date: 2014/02/27 13:12:01 $
  */
 public class NumChecker extends AbstractClientValidatorTask implements
         ICheckerTask {
-    private static final String REVISION = "$Revision$";
+    
 
     private static final Log LOG = LogFactory.getLog(NumChecker.class);
 

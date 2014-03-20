@@ -13,7 +13,7 @@ import org.rcfaces.core.event.PreSelectionEvent;
  */
 public class PreSelectionScriptListener extends AbstractScriptListener implements
         IPreSelectionListener {
-    private static final String REVISION = "$Revision$";
+    
 
     public PreSelectionScriptListener(String scriptType, String command) {
         super(scriptType, command);

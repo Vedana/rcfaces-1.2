@@ -15,7 +15,7 @@ import org.rcfaces.core.validator.IClientValidatorContext;
  * @version $Revision$ $Date$
  */
 public class INSEEFilter extends AbstractPatternTask {
-    private static final String REVISION = "$Revision$";
+    
 
     private static final Log LOG = LogFactory.getLog(INSEEFilter.class);
 

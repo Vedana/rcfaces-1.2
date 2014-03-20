@@ -1,3 +1,23 @@
+HTMLTools:
+Desactiver l'escaping des textes avec un accessKey
+
+ICssConfig, StyleSheetSourceContainer, StyesheetsServlet, FilesCollectorDecorator, UserAgentTools
+Refonte du systeme de détection des agents
+
+f_keyEntry:
+Correction d'un KeyEntry avec un clientValidator qui gere le focus
+
+f_clientValidator:
+Permet de desactiver la gestion du focus par le clientValidator si le composant principal le fait déjà
+
+fa_groupName
+Correction d'un probleme de calcul de liste de composants regroupés (groupname)
+
+fa_items, fa_menuCore:
+Les items groupés sont référencés par leur valeur, pas leur object
+
+f_imageSubmitButton:
+Correction du double submit
 
 f_suggestTextEntry:
 Correction du rechargement AJAX intenspectif lors de l'utilisation du BACKSPACE

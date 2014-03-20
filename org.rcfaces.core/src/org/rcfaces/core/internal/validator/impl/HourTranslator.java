@@ -15,7 +15,7 @@ import org.rcfaces.core.validator.ITranslatorTask;
  */
 public class HourTranslator extends AbstractClientValidatorTask implements
         ITranslatorTask {
-    private static final String REVISION = "$Revision$";
+    
 
     private static final Log LOG = LogFactory.getLog(HourTranslator.class);
 

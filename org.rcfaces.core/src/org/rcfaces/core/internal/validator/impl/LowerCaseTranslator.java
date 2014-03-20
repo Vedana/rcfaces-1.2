@@ -17,7 +17,7 @@ import org.rcfaces.core.validator.ITranslatorTask;
  */
 public class LowerCaseTranslator extends AbstractPatternTask implements
         ITranslatorTask {
-    private static final String REVISION = "$Revision$";
+    
 
     private static final Log LOG = LogFactory.getLog(LowerCaseTranslator.class);
 

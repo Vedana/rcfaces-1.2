@@ -19,7 +19,7 @@ import org.rcfaces.core.model.AbstractConverter;
  * @version $Revision$ $Date$
  */
 public class NumberFormatTypeConverter extends AbstractConverter {
-    private static final String REVISION = "$Revision$";
+    
 
     public static final Converter SINGLETON = new NumberFormatTypeConverter();
 

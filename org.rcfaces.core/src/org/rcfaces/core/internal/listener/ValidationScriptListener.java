@@ -13,7 +13,7 @@ import org.rcfaces.core.event.ValidationEvent;
  */
 public class ValidationScriptListener extends AbstractScriptListener implements
         IValidationListener {
-    private static final String REVISION = "$Revision$";
+    
 
     public ValidationScriptListener(String scriptType, String command) {
         super(scriptType, command);

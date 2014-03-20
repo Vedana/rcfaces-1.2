@@ -19,7 +19,7 @@ import org.rcfaces.core.validator.IFormatterTask;
  */
 public class PaddingFormatter extends AbstractClientValidatorTask implements
         IFormatterTask {
-    private static final String REVISION = "$Revision$";
+    
 
     private static final Log LOG = LogFactory.getLog(PaddingFormatter.class);
 

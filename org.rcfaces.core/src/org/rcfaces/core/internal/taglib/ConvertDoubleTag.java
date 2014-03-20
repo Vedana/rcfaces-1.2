@@ -10,7 +10,7 @@ package org.rcfaces.core.internal.taglib;
  */
 public class ConvertDoubleTag extends ConvertNumberTag {
 
-    private static final String REVISION = "$Revision$";
+    
 
     private static final long serialVersionUID = 6372503657660605243L;
 

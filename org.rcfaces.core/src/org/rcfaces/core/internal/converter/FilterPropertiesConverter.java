@@ -21,7 +21,7 @@ import org.rcfaces.core.model.IFilterProperties;
  * @version $Revision$ $Date$
  */
 public class FilterPropertiesConverter extends AbstractConverter {
-    private static final String REVISION = "$Revision$";
+    
 
     public static final Converter SINGLETON = new FilterPropertiesConverter();
 

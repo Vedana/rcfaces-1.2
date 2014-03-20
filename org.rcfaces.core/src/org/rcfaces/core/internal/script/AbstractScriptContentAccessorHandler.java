@@ -16,7 +16,7 @@ import org.rcfaces.core.internal.contentAccessor.AbstractCompositeContentAccesso
 public abstract class AbstractScriptContentAccessorHandler extends
         AbstractCompositeContentAccessorHandler implements
         IScriptContentAccessorHandler {
-    private static final String REVISION = "$Revision$";
+    
 
     public static IScriptContentAccessorHandler getScriptContentAccessorHandler(
             FacesContext facesContext) {

@@ -18,7 +18,7 @@ import org.rcfaces.core.event.IDoubleClickListener;
  */
 public class DoubleClickListenerTag extends AbstractListenerTag {
 
-    private static final String REVISION = "$Revision$";
+    
 
     private static final long serialVersionUID = -7064892566257135920L;
 

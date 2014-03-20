@@ -22,7 +22,7 @@ public abstract class AbstractClientService extends AbstractService {
 
     private static final String CLIENT_SERVICE_REGISTRY_PROPERTY = "camelia.client.service.Repository";
 
-    public static IClientServiceRegistry getClientServiceRegistry(
+    protected IClientServiceRegistry getClientServiceRegistry(
             FacesContext facesContext) {
 
         Map<String, Object> applicationMap = facesContext.getExternalContext()
@@ -43,7 +43,7 @@ public abstract class AbstractClientService extends AbstractService {
         }
     }
 
-    protected static IClientServiceRegistry createClientServiceRegistry() {
+    protected IClientServiceRegistry createClientServiceRegistry() {
         return new ClientServiceRegistryImpl();
     }
 

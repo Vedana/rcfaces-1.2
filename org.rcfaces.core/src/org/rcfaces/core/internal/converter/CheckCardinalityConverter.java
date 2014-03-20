@@ -13,7 +13,7 @@ import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
  * @version $Revision$ $Date$
  */
 public class CheckCardinalityConverter extends CardinalityConverter {
-    private static final String REVISION = "$Revision$";
+    
 
     public static final Converter SINGLETON = new CheckCardinalityConverter();
 

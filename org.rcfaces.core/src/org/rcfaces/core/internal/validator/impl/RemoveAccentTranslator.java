@@ -18,7 +18,7 @@ import org.rcfaces.core.validator.ITranslatorTask;
  */
 public class RemoveAccentTranslator extends AbstractClientValidatorTask
         implements ITranslatorTask {
-    private static final String REVISION = "$Revision$";
+    
 
     private static final Log LOG = LogFactory
             .getLog(RemoveAccentTranslator.class);
@@ -72,11 +72,11 @@ public class RemoveAccentTranslator extends AbstractClientValidatorTask
 
     /**
      * 
-     * @author Olivier Oeuillot (latest modification by $Author$)
-     * @version $Revision$ $Date$
+     * @author Olivier Oeuillot (latest modification by $Author: jbmeslin $)
+     * @version $Revision: 1.1.12.1 $ $Date: 2014/02/27 13:12:01 $
      */
     private static class AccentTranslator {
-        private static final String REVISION = "$Revision$";
+        
 
         private final Pattern pattern;
 

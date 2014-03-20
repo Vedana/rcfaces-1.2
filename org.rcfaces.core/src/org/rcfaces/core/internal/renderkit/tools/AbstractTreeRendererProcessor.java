@@ -12,7 +12,7 @@ import javax.faces.context.FacesContext;
  */
 public abstract class AbstractTreeRendererProcessor implements
         IComponentTreeRenderProcessor {
-    private static final String REVISION = "$Revision$";
+    
 
     protected final FacesContext facesContext;
 

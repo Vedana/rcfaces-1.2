@@ -16,7 +16,7 @@ import org.w3c.dom.Document;
  * @version $Revision$ $Date$
  */
 public class DocumentBuilderProvider implements IDocumentBuilderProvider {
-    private static final String REVISION = "$Revision$";
+    
 
     public Document parse(Reader reader) {
         throw new FacesException("Not implemented !");

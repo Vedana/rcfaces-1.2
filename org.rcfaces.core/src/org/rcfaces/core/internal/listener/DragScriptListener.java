@@ -15,7 +15,7 @@ import org.rcfaces.core.event.IDragListener;
  */
 public class DragScriptListener extends AbstractScriptListener implements
         IDragListener {
-    private static final String REVISION = "$Revision$";
+    
 
     public DragScriptListener(String scriptType, String command) {
         super(scriptType, command);

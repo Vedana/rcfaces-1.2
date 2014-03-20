@@ -18,7 +18,7 @@ import org.rcfaces.core.event.IUserEventListener;
  */
 public class UserEventListenerTag extends AbstractListenerTag {
 
-    private static final String REVISION = "$Revision$";
+    
 
     private static final long serialVersionUID = -3769010939257728457L;
 
