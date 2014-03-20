@@ -18,9 +18,20 @@ public class OrderTools {
 
     public static UIComponent[] getOrderedChildren(FacesContext facesContext,
             UIComponent component, IComponentEngine engine, Class childClass) {
+        return getOrderedChildren(facesContext, component, engine, childClass,
+                null);
+    }
+
+    public static UIComponent[] getOrderedChildren(FacesContext facesContext,
+            UIComponent component, IComponentEngine engine, Class childClass,
+            String propertiesName) {
+
+        if (propertiesName == null) {
+            propertiesName = Properties.ORDERED_CHILDREN;
+        }
 
         return ComponentTools.listChildren(facesContext, component, engine,
-                childClass, Properties.ORDERED_CHILDREN);
+                childClass, propertiesName);
     }
 
     public static UIComponent getFirstOrderedChild(FacesContext facesContext,
@@ -37,8 +48,19 @@ public class OrderTools {
     public static void setOrderedChildren(FacesContext facesContext,
             UIComponent component, IComponentEngine engine, Class classOfChild,
             UIComponent[] children) {
+        setOrderedChildren(facesContext, component, engine, classOfChild,
+                children, null);
+    }
+
+    public static void setOrderedChildren(FacesContext facesContext,
+            UIComponent component, IComponentEngine engine, Class classOfChild,
+            UIComponent[] children, String propertyName) {
+
+        if (propertyName == null) {
+            propertyName = Properties.ORDERED_CHILDREN;
+        }
 
         ComponentTools.setChildren(component, engine, classOfChild, children,
-                Properties.ORDERED_CHILDREN);
+                propertyName);
     }
 }

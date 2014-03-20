@@ -131,7 +131,7 @@ public class GridPreferences extends AbstractComponentPreferences {
 
         if (isSaveColumnsOrder()) {
             if (gridComponent instanceof IOrderedChildrenCapability) {
-                columnsOrder = GridTools.getOrderIds(gridComponent);
+                columnsOrder = GridTools.getColumnOrderIds(gridComponent);
             }
         }
 

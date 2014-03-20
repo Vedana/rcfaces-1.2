@@ -29,6 +29,7 @@ import org.rcfaces.core.component.ComponentsGridComponent;
 import org.rcfaces.core.component.DataColumnComponent;
 import org.rcfaces.core.component.DataGridComponent;
 import org.rcfaces.core.component.capability.IOrderCapability;
+import org.rcfaces.core.component.capability.IOrderedChildrenCapability;
 import org.rcfaces.core.component.capability.ISortedChildrenCapability;
 import org.rcfaces.core.component.iterator.IColumnIterator;
 import org.rcfaces.core.component.iterator.IComponentsColumnIterator;
@@ -439,11 +440,115 @@ public class GridTools {
     }
 
     public static void setOrderIds(IGridComponent gridComponent,
-            String columnsOrder) {
+            String columnsOrderIds) {
+        if (columnsOrderIds == null) {
+            return;
+        }
+
+        if (gridComponent instanceof IOrderedChildrenCapability) {
+            IOrderedChildrenCapability orderedChildrenCapability = (IOrderedChildrenCapability) gridComponent;
+
+            if (columnsOrderIds.length() < 1) {
+                orderedChildrenCapability
+                        .setOrderedChildren(COMPONENT_EMPTY_ARRAY);
+                return;
+            }
+
+            UIColumn columns[] = gridComponent.listColumns().toArray();
+
+            StringTokenizer st = new StringTokenizer(columnsOrderIds, ",");
+            List<UIColumn> components = new ArrayList<UIColumn>(
+                    st.countTokens());
+
+            for (; st.hasMoreTokens();) {
+                String id = st.nextToken().trim();
+
+                UIComponent component = null;
+                if (id.charAt(0) == '#') {
+                    int columnIdx = Integer.parseInt(id.substring(1));
+
+                    if (columnIdx >= columns.length) {
+                        continue;
+                    }
+
+                    component = columns[columnIdx];
+
+                } else {
+                    for (int j = 0; j < columns.length; j++) {
+                        if (id.equals(columns[j].getId()) == false) {
+                            continue;
+                        }
+
+                        component = columns[j];
+                        break;
+                    }
+                }
+
+                if (component == null) {
+                    continue;
+                }
+
+                if ((component instanceof UIColumn) == false) {
+                    continue;
+                }
+
+                components.add((UIColumn) component);
+            }
+
+            orderedChildrenCapability.setOrderedChildren(components
+                    .toArray(new UIComponent[components.size()]));
+            return;
+        }
     }
 
-    public static String getOrderIds(IGridComponent dataGridComponent) {
-        // TODO Auto-generated method stub
+    public static String getColumnOrderIds(IGridComponent gridComponent) {
+        if (gridComponent instanceof IOrderedChildrenCapability) {
+            UIComponent components[] = ((IOrderedChildrenCapability) gridComponent)
+                    .getOrderedChildren();
+
+            if (components.length < 1) {
+                return "";
+            }
+
+            UIColumn children[] = null;
+
+            StringAppender sa = new StringAppender(components.length * 32);
+            for (int i = 0; i < components.length; i++) {
+                UIComponent component = components[i];
+                if (sa.length() > 0) {
+                    sa.append(',');
+                }
+
+                String id = component.getId();
+                if (id.startsWith(UIViewRoot.UNIQUE_ID_PREFIX)) {
+                    if (children == null) {
+                        children = gridComponent.listColumns().toArray();
+                    }
+
+                    int index = -1;
+                    for (int j = 0; j < children.length; j++) {
+                        if (children[j] != component) {
+                            continue;
+                        }
+
+                        index = j;
+                        break;
+                    }
+
+                    if (index < 0) {
+                        LOG.error("Can not find column '" + component + "'.");
+                        continue;
+                    }
+
+                    sa.append('#').append(index);
+                    continue;
+                }
+
+                sa.append(id);
+            }
+
+            return sa.toString();
+        }
         return null;
     }
 

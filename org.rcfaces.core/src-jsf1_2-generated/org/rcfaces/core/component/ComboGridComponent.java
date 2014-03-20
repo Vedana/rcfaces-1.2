@@ -106,7 +106,7 @@ public class ComboGridComponent extends KeyEntryComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(KeyEntryComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headerVisible","filterProperties","clientAdditionalInformationFullState","manyResultsMessage","pagerStyleClass","rowStyleClass","zeroResultMessage","gridStyleClass","popupStyleClass","gridLookId","pagerLookId","message","searchFieldVisible","paged","additionalInformationValues","additionalInformationListener","oneResultMessage","popupHeight","additionalInformationCardinality","popupWidth"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headerVisible","filterProperties","clientAdditionalInformationFullState","manyResultsMessage","pagerStyleClass","orderedColumnIds","rowStyleClass","zeroResultMessage","gridStyleClass","popupStyleClass","gridLookId","pagerLookId","message","searchFieldVisible","paged","additionalInformationValues","additionalInformationListener","oneResultMessage","popupHeight","additionalInformationCardinality","popupWidth"}));
 	}
 
 	public ComboGridComponent() {
@@ -138,7 +138,7 @@ public class ComboGridComponent extends KeyEntryComponent implements
 
 
 				OrderTools.setOrderedChildren(null, this, engine,
-				ComboColumnComponent.class, components);
+				ComboColumnComponent.class, components, Properties.ORDERED_COLUMN_IDS);
 			
 	}
 
@@ -146,7 +146,7 @@ public class ComboGridComponent extends KeyEntryComponent implements
 
 
 				return OrderTools.getOrderedChildren(null, this, engine,
-				ComboColumnComponent.class);
+				ComboColumnComponent.class, Properties.ORDERED_COLUMN_IDS);
 			
 	}
 
@@ -726,6 +726,27 @@ public class ComboGridComponent extends KeyEntryComponent implements
 	 */
 	public boolean isSearchFieldVisibleSetted() {
 		return engine.isPropertySetted(Properties.SEARCH_FIELD_VISIBLE);
+	}
+
+	public String getOrderedColumnIds() {
+		return getOrderedColumnIds(null);
+	}
+
+	public String getOrderedColumnIds(javax.faces.context.FacesContext facesContext) {
+		String s = engine.getStringProperty(Properties.ORDERED_COLUMN_IDS, facesContext);
+		return s;
+	}
+
+	public void setOrderedColumnIds(String orderedColumnIds) {
+		engine.setProperty(Properties.ORDERED_COLUMN_IDS, orderedColumnIds);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "orderedColumnIds" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isOrderedColumnIdsSetted() {
+		return engine.isPropertySetted(Properties.ORDERED_COLUMN_IDS);
 	}
 
 	protected Set getCameliaFields() {

@@ -154,7 +154,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headerVisible","summary","selectionCardinality","clientAdditionalInformationFullState","scopeColumnId","cellTextWrap","emptyDataMessage","loadListener","selectionListener","paged","additionalInformationValues","showValue","additionalInformationListener","verticalScrollPosition","border","required","clientSelectionFullState","preferences","doubleClickListener","selectedValues","horizontalScrollPosition","caption","rowCountVar","rowStyleClass","rowToolTipId","selectable","additionalInformationCardinality","rowValueConverter","rowIndexVar","rowValue"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headerVisible","summary","selectionCardinality","clientAdditionalInformationFullState","scopeColumnId","cellTextWrap","emptyDataMessage","loadListener","selectionListener","paged","additionalInformationValues","showValue","additionalInformationListener","verticalScrollPosition","border","required","clientSelectionFullState","preferences","doubleClickListener","selectedValues","horizontalScrollPosition","caption","orderedColumnIds","rowCountVar","rowStyleClass","rowToolTipId","selectable","additionalInformationCardinality","rowValueConverter","rowIndexVar","rowValue"}));
 	}
 
 	public ComponentsGridComponent() {
@@ -186,7 +186,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 
 
 				OrderTools.setOrderedChildren(null, this, engine,
-				ComponentsColumnComponent.class, components);
+				ComponentsColumnComponent.class, components, Properties.ORDERED_COLUMN_IDS);
 			
 	}
 
@@ -194,7 +194,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 
 
 				return OrderTools.getOrderedChildren(null, this, engine,
-				ComponentsColumnComponent.class);
+				ComponentsColumnComponent.class, Properties.ORDERED_COLUMN_IDS);
 			
 	}
 
@@ -1211,6 +1211,27 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	 */
 	public boolean isCellTextWrapSetted() {
 		return engine.isPropertySetted(Properties.CELL_TEXT_WRAP);
+	}
+
+	public String getOrderedColumnIds() {
+		return getOrderedColumnIds(null);
+	}
+
+	public String getOrderedColumnIds(javax.faces.context.FacesContext facesContext) {
+		String s = engine.getStringProperty(Properties.ORDERED_COLUMN_IDS, facesContext);
+		return s;
+	}
+
+	public void setOrderedColumnIds(String orderedColumnIds) {
+		engine.setProperty(Properties.ORDERED_COLUMN_IDS, orderedColumnIds);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "orderedColumnIds" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isOrderedColumnIdsSetted() {
+		return engine.isPropertySetted(Properties.ORDERED_COLUMN_IDS);
 	}
 
 	protected Set getCameliaFields() {

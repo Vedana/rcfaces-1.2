@@ -74,6 +74,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 	private ValueExpression rowIndexVar;
 	private ValueExpression cellTextWrap;
 	private ValueExpression bodyDroppable;
+	private ValueExpression orderedColumnIds;
 	private ValueExpression actionListeners;
 	private ValueExpression action;
 	public String getComponentType() {
@@ -304,6 +305,10 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		this.bodyDroppable = bodyDroppable;
 	}
 
+	public void setOrderedColumnIds(ValueExpression orderedColumnIds) {
+		this.orderedColumnIds = orderedColumnIds;
+	}
+
 	public final void setAction(ValueExpression action) {
 		this.action=action;
 	}
@@ -365,6 +370,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			LOG.debug("  rowIndexVar='"+rowIndexVar+"'");
 			LOG.debug("  cellTextWrap='"+cellTextWrap+"'");
 			LOG.debug("  bodyDroppable='"+bodyDroppable+"'");
+			LOG.debug("  orderedColumnIds='"+orderedColumnIds+"'");
 			LOG.debug("  action='"+action+"'");
 			LOG.debug("  actionListeners='"+actionListeners+"'");
 		}
@@ -820,6 +826,15 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			}
 		}
 
+		if (orderedColumnIds != null) {
+			if (orderedColumnIds.isLiteralText()==false) {
+				component.setValueExpression(Properties.ORDERED_COLUMN_IDS, orderedColumnIds);
+
+			} else {
+				component.setOrderedColumnIds(orderedColumnIds.getExpressionString());
+			}
+		}
+
 		if (action != null) {
 			ListenersTools1_2.parseAction(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, action);
 		}
@@ -886,6 +901,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		rowIndexVar = null;
 		cellTextWrap = null;
 		bodyDroppable = null;
+		orderedColumnIds = null;
 		action = null;
 		actionListeners = null;
 

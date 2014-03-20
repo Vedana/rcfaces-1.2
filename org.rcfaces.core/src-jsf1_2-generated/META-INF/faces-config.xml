@@ -500,6 +500,10 @@ A string value specifying the name of the variable receiving the index of the cu
 			<attribute-name>bodyDroppable</attribute-name>
 			<attribute-class>boolean</attribute-class>
 		</attribute>
+		<attribute>
+			<attribute-name>orderedColumnIds</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
 	</component>
 	<component>
 		<description><![CDATA[
@@ -581,6 +585,10 @@ A string value specifying the name of the variable receiving the index of the cu
 		<attribute>
 			<attribute-name>cellTextWrap</attribute-name>
 			<attribute-class>boolean</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>orderedColumnIds</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
 		</attribute>
 	</component>
 	<component>
@@ -664,6 +672,10 @@ A string value specifying the name of the variable receiving the index of the cu
 		<attribute>
 			<attribute-name>searchFieldVisible</attribute-name>
 			<attribute-class>boolean</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>orderedColumnIds</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
 		</attribute>
 	</component>
 	<component>
