@@ -4,6 +4,7 @@
 package org.rcfaces.core.internal.renderkit;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -44,25 +45,9 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
     private final String defaultUnlockedProperties[];
 
     protected AbstractCameliaRenderer0() {
-<<<<<<< HEAD
-        /*
-         * Set unlockedProperties = new HashSet();
-         * addUnlockProperties(unlockedProperties);
-         * 
-         * if (unlockedProperties.isEmpty() == false) {
-         * defaultUnlockedProperties = (String[]) unlockedProperties
-         * .toArray(new String[unlockedProperties.size()]);
-         * 
-         * } else { defaultUnlockedProperties = EMPTY_STRING_ARRAY; }
-         */
-=======
         Set<String> unlockedProperties = new HashSet<String>();
         addUnlockProperties(unlockedProperties);
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 
-<<<<<<< HEAD
-        defaultUnlockedProperties = EMPTY_STRING_ARRAY;
-=======
         if (unlockedProperties.isEmpty() == false) {
             defaultUnlockedProperties = unlockedProperties
                     .toArray(new String[unlockedProperties.size()]);
@@ -70,7 +55,6 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
         } else {
             defaultUnlockedProperties = EMPTY_STRING_ARRAY;
         }
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
     }
 
     protected void addUnlockProperties(Set<String> unlockedProperties) {
@@ -195,7 +179,7 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
             return false;
         }
 
-        if (RcfacesContext.isJSF1_2() || RcfacesContext.isJSF2_0()) {
+        if (RcfacesContext.isJSF1_2()) {
             // En jsf 1.2 nous sommes forcement en parcours d'arbre
             return true;
         }
@@ -281,8 +265,6 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
     }
 
     protected abstract IRequestContext getRequestContext(FacesContext context);
-<<<<<<< HEAD
-=======
 
     @Override
     public final void decode(FacesContext context, UIComponent component) {
@@ -307,7 +289,6 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
                     + "' rendererType=" + component.getRendererType());
         }
     }
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 
     protected String getRequestComponentId(IRequestContext requestContext,
             UIComponent component) {
@@ -364,8 +345,6 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
         return ValuesTools.valueToString(value, component, facesContext);
     }
 
-<<<<<<< HEAD
-=======
     protected <T> T getAdapter(Class<T> adapter, Object object) {
         return getAdapter(adapter, object, this);
     }
@@ -389,7 +368,6 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
         return null;
     }
 
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
     @Override
     public Object getConvertedValue(FacesContext context,
             UIComponent component, Object submittedValue)

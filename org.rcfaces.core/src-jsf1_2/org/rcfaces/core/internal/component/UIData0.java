@@ -254,26 +254,6 @@ public class UIData0 extends UIComponentBase implements NamingContainer {
      */
     public int getFirst() {
 
-<<<<<<< HEAD
-		if (this.first != null) {
-			return (this.first);
-		}
-		ValueExpression ve = getValueExpression("first");
-		if (ve != null) {
-			Integer value;
-			try {
-				value = (Integer) ve.getValue(getFacesContext().getELContext());
-			} catch (ELException e) {
-				throw new FacesException(e);
-			}
-			if (null == value) {
-				return first;
-			}
-			return (value.intValue());
-		} else {
-			return (0);
-		}
-=======
         if (this.first != null) {
             return (this.first);
         }
@@ -296,7 +276,6 @@ public class UIData0 extends UIComponentBase implements NamingContainer {
         } else {
             return (0);
         }
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 
     }
 
@@ -573,15 +552,6 @@ public class UIData0 extends UIComponentBase implements NamingContainer {
                 throw new FacesException(e);
             }
 
-<<<<<<< HEAD
-			if (null == value) {
-				return rows;
-			}
-			return (value.intValue());
-		} else {
-			return (0);
-		}
-=======
             if (null == value) {
                 if (rows == null) {
                     return 0;
@@ -593,7 +563,6 @@ public class UIData0 extends UIComponentBase implements NamingContainer {
         } else {
             return (0);
         }
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 
     }
 

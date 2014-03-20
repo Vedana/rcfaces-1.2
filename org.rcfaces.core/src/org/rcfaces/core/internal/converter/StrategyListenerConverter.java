@@ -18,27 +18,23 @@ public class StrategyListenerConverter extends AbstractConverter {
 
     public static final Converter SINGLETON = new StrategyListenerConverter();
 
-<<<<<<< HEAD
-    private final static int DEFAULT= 0x00;
-=======
-    private final static int NORMAL= 0x00;
-    
-    private final static int DEFAULT= 0x02;
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
-    
-    private final static int CLEAN_ALL= 0x02;
-    
+    private final static int NORMAL = 0x00;
+
+    private final static int DEFAULT = 0x02;
+
+    private final static int CLEAN_ALL = 0x02;
+
     private final static int CLEAN_BY_CLASS = 0x04;
-    
+
     private final static int ADD_IF_NEW = 0x08;
-    
+
     private static final Map STRATEGY = new HashMap(8);
     static {
-    	STRATEGY.put("DEFAULT", new Integer(DEFAULT));
-    	STRATEGY.put("NORMAL", new Integer(NORMAL));
-    	STRATEGY.put("CLEAN_ALL", new Integer(CLEAN_ALL));
-    	STRATEGY.put("CLEAN_BY_CLASS", new Integer(CLEAN_BY_CLASS));
-    	STRATEGY.put("ADD_IF_NEW", new Integer(ADD_IF_NEW));
+        STRATEGY.put("DEFAULT", new Integer(DEFAULT));
+        STRATEGY.put("NORMAL", new Integer(NORMAL));
+        STRATEGY.put("CLEAN_ALL", new Integer(CLEAN_ALL));
+        STRATEGY.put("CLEAN_BY_CLASS", new Integer(CLEAN_BY_CLASS));
+        STRATEGY.put("ADD_IF_NEW", new Integer(ADD_IF_NEW));
     }
 
     public Object getAsObject(FacesContext context, UIComponent component,
@@ -46,9 +42,9 @@ public class StrategyListenerConverter extends AbstractConverter {
         if (value == null) {
             return DEFAULT;
         }
-        
-        Integer strategy = (Integer)  STRATEGY.get(value.trim().toUpperCase());
-        
+
+        Integer strategy = (Integer) STRATEGY.get(value.trim().toUpperCase());
+
         return strategy;
     }
 

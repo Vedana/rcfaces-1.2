@@ -130,10 +130,7 @@ public class SelectionEvent extends ActionEvent implements ITypedEvent {
         return mouseY;
     }
 
-<<<<<<< HEAD
-=======
     @Override
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
     public boolean isAppropriateListener(FacesListener listener) {
 
         if (listener instanceof ISelectionListener) {
@@ -143,10 +140,7 @@ public class SelectionEvent extends ActionEvent implements ITypedEvent {
         return super.isAppropriateListener(listener);
     }
 
-<<<<<<< HEAD
-=======
     @Override
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
     public void processListener(FacesListener listener) {
         if (listener instanceof ISelectionListener) {
             ((ISelectionListener) listener).componentSelected(this);

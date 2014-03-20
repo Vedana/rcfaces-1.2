@@ -30,8 +30,6 @@ import org.rcfaces.core.internal.documentBuilder.IDocumentBuilderProvider;
 import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
 import org.rcfaces.core.internal.repository.IRepositoryManager;
 import org.rcfaces.core.internal.service.IServicesRegistry;
-import org.rcfaces.core.internal.util.FakeHttpServletRequest;
-import org.rcfaces.core.internal.util.FakeHttpServletResponse;
 import org.rcfaces.core.internal.validator.IClientValidatorsRegistry;
 import org.rcfaces.core.internal.version.IResourceVersionHandler;
 
@@ -49,57 +47,29 @@ public abstract class RcfacesContext {
 
     public static final int JSF_1_2 = 0x100200;
 
-    public static final int JSF_2_0 = 0x200000;
-
-    private static final boolean isJSF2_0;
-    static {
-        boolean is2_0 = false;
-
-        try {
-            RcfacesContext.class.getClassLoader().loadClass(
-                    "javax.faces.component.behavior.Behavior");
-
-            is2_0 = true;
-
-            LOG.info("JSF version 2.0 detected !");
-
-        } catch (Throwable ex) {
-            LOG.trace(ex);
-        }
-
-        isJSF2_0 = is2_0;
-    }
-
     private static final boolean isJSF1_2;
     static {
         boolean is1_2 = false;
 
-        if (isJSF2_0 == false) {
-            try {
-                RcfacesContext.class.getClassLoader().loadClass(
-                        "javax.faces.webapp.UIComponentELTag");
+        try {
+            RcfacesContext.class.getClassLoader().loadClass(
+                    "javax.faces.webapp.UIComponentELTag");
 
-                is1_2 = true;
+            is1_2 = true;
 
-                LOG.info("JSF version 1.2 detected !");
+            LOG.info("JSF version 1.2 detected !");
 
-            } catch (Throwable ex) {
-                LOG.trace(ex);
-            }
+        } catch (Throwable ex) {
+            LOG.debug(ex);
         }
 
         isJSF1_2 = is1_2;
     }
 
-<<<<<<< HEAD
-    protected static final String CAMELIA_CONFIG_FILES_PARAMETER = Constants
-            .getPackagePrefix() + ".CONFIG_FILES";
-=======
     public static final String RCFACES_CONFIG_FILES_PARAMETER = Constants
             .getPackagePrefix() + ".CONFIG_FILES";
 
     public static final String RCFACES_CONFIG_FILENAME = "rcfaces-config.xml";
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 
     protected static final String LISTENER_MANAGER_STRATEGY_PARAMETER = Constants
             .getPackagePrefix() + ".LISTENER_MANAGER_STRATEGY";
@@ -315,10 +285,6 @@ public abstract class RcfacesContext {
 
     public static boolean isJSF1_2() {
         return isJSF1_2;
-    }
-
-    public static boolean isJSF2_0() {
-        return isJSF2_0;
     }
 
 }

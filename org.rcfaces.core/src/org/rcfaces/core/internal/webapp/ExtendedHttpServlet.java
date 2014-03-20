@@ -84,13 +84,7 @@ public class ExtendedHttpServlet extends HttpServlet {
 
     public static final String TEXT_PLAIN_MIME_TYPE = "text/plain";
 
-<<<<<<< HEAD
-    private static final boolean MULTIPLE_CACHE_CONTROLS = true;
-
-    private static Set useGZIPExtensions = new HashSet();
-=======
     private static Set<String> useGZIPExtensions = new HashSet<String>(8);
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
     static {
         useGZIPExtensions.add(CSS_MIME_TYPE);
         useGZIPExtensions.add(HTML_MIME_TYPE);
@@ -233,20 +227,11 @@ public class ExtendedHttpServlet extends HttpServlet {
         response.setHeader(HTTP_PRAGMA, "no-cache");
 
         // Set standard HTTP/1.1 no-cache headers.
-
-        if (MULTIPLE_CACHE_CONTROLS == false) {
-            response.setHeader(HTTP_CACHE_CONTROL,
-                    "no-cache, no-store, must-revalidate, post-check=0, pre-check=0");
-
-        } else {
-            response.addHeader(HTTP_CACHE_CONTROL, "no-cache");
-            response.addHeader(HTTP_CACHE_CONTROL, "no-store");
-            response.addHeader(HTTP_CACHE_CONTROL, "must-revalidate");
-            response.addHeader(HTTP_CACHE_CONTROL, "pre-check=0");
-            response.addHeader(HTTP_CACHE_CONTROL, "post-check=0");
-        }
+        response.setHeader(HTTP_CACHE_CONTROL,
+                "no-cache, no-store, must-revalidate");
 
         // Set IE extended HTTP/1.1 no-cache headers (use addHeader)
+        response.addHeader(HTTP_CACHE_CONTROL, "post-check=0, pre-check=0");
 
         response.setDateHeader(HTTP_EXPIRES, 0);
         response.setDateHeader(HTTP_LAST_MODIFIED, System.currentTimeMillis());

@@ -46,7 +46,7 @@ import javax.faces.model.DataModel;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IAdditionalInformationContainer;
-import org.rcfaces.core.internal.Constants1;
+import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.capability.IComponentEngine;
 import org.rcfaces.core.internal.capability.IRCFacesComponent;
 
@@ -80,12 +80,7 @@ public class UIData2 extends UIData0 {
 
     private transient List<int[]> decodedIndexes;
 
-<<<<<<< HEAD
-    @SuppressWarnings({ "CollectionWithoutInitialCapacity" })
-    private Map<String, SavedState2> saved = new HashMap<String, SavedState2>();
-=======
     private Map<Object, SavedState2> saved = new HashMap<Object, SavedState2>();
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 
     private boolean saveCompleteState = true;
 
@@ -311,17 +306,10 @@ public class UIData2 extends UIData0 {
 
         Object[] ss = (Object[]) states[1];
 
-<<<<<<< HEAD
-        saved = new HashMap(ss.length / 2);
-        if (ss.length > 0) {
-            for (int i = 0; i < ss.length;) {
-                String key = (String) ss[i++];
-=======
         saved = new HashMap<Object, SavedState2>(ss.length / 2);
         if (ss.length > 0) {
             for (int i = 0; i < ss.length;) {
                 Object key = ss[i++];
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 
                 SavedState2 ss2 = new SavedState2();
                 ss2.restoreState(context, ss[i++]);
@@ -343,21 +331,12 @@ public class UIData2 extends UIData0 {
 
         if (ss.length > 0) {
             int index = 0;
-<<<<<<< HEAD
-            for (Iterator it = saved.entrySet().iterator(); it.hasNext();) {
-                Map.Entry entry = (Map.Entry) it.next();
-
-                ss[index++] = entry.getKey();
-                ss[index++] = ((SavedState2) entry.getValue())
-                        .saveState(context);
-=======
             for (Iterator<Map.Entry<Object, SavedState2>> it = saved.entrySet()
                     .iterator(); it.hasNext();) {
                 Map.Entry<Object, SavedState2> entry = it.next();
 
                 ss[index++] = entry.getKey();
                 ss[index++] = entry.getValue().saveState(context);
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
             }
         }
 
@@ -375,10 +354,7 @@ public class UIData2 extends UIData0 {
      * @param context
      *            {@link FacesContext} for the current request
      */
-<<<<<<< HEAD
-=======
 
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
     @Override
     protected void restoreDescendantState(UIComponent component,
             FacesContext context) {
@@ -433,10 +409,7 @@ public class UIData2 extends UIData0 {
      * @param context
      *            {@link FacesContext} for the current request
      */
-<<<<<<< HEAD
-=======
 
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
     @Override
     protected void saveDescendantState(UIComponent component,
             FacesContext context) {
@@ -490,7 +463,7 @@ public class UIData2 extends UIData0 {
                 return componentEngine;
             }
 
-            IFactory factory = Constants1.getCameliaFactory();
+            IFactory factory = Constants.getCameliaFactory();
 
             IComponentEngine componentEngine = factory.createComponentEngine();
 

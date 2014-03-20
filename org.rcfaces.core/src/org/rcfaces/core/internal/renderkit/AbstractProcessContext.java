@@ -48,7 +48,7 @@ public abstract class AbstractProcessContext implements IProcessContext {
 
     private Locale userLocale;
 
-    private IDesignerInterface designerMode;
+    private boolean designerMode;
 
     private boolean pageConfiguratorInitialized;
 
@@ -82,14 +82,8 @@ public abstract class AbstractProcessContext implements IProcessContext {
 
         rcfacesContext = RcfacesContext.getInstance(facesContext);
 
-<<<<<<< HEAD
-        if (rcfacesContext.isDesignerMode()) {
-            this.designerMode = new DefaultDesignerInterface();
-        }
-=======
         this.designerEngine = (IDesignerEngine) externalContext
                 .getApplicationMap().get(DESIGNER_ENGINE_PROPERTY_NAME);
->>>>>>> refs/remotes/origin/BRELEASE_1-2-0
 
         if (designerEngine != null) {
             this.designerMode = true;
@@ -111,7 +105,7 @@ public abstract class AbstractProcessContext implements IProcessContext {
         return null;
     }
 
-    public IDesignerInterface getDesignerInterface() {
+    public boolean isDesignerMode() {
         return designerMode;
     }
 
