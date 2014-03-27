@@ -88,7 +88,6 @@
 						<configuration>
 							<sources>
 								<source>src</source>
-								<source>src-valueExpression</source>
 								<source>src-jsf${jsf.version.dir}</source>
 								<source>src-jsf${jsf.version.dir}-generated</source>
 							</sources>
