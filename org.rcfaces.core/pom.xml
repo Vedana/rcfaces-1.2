@@ -125,18 +125,18 @@
 		</dependency> -->
 		<dependency>
 			<groupId>javax.servlet.jsp</groupId>
-			<artifactId>javax.servlet.jsp-api</artifactId>
-			<version>2.2.1</version>
+			<artifactId>jsp-api</artifactId>
+			<version>2.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.el</groupId>
-			<artifactId>javax.el-api</artifactId>
-			<version>2.2.1</version>
+			<artifactId>el-api</artifactId>
+			<version>1.0</version>
 		</dependency>
 		<dependency>
-			<groupId>javax.servlet.jsp.jstl</groupId>
-			<artifactId>javax.servlet.jsp.jstl-api</artifactId>
-			<version>1.2.1</version>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.1.0</version>
 		</dependency>
 
 		<dependency>
