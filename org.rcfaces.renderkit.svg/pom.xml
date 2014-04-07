@@ -19,7 +19,7 @@
 				</excludes>
 			</resource>
 			<resource>
-				<directory>src-jsf2_1-generated</directory>
+				<directory>src-jsf1_2-generated</directory>
 				<excludes>
 					<exclude>**/*.java</exclude>
 				</excludes>
