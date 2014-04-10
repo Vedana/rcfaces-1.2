@@ -785,7 +785,7 @@ var __members = {
 							var cn="f_grid_additional_button";
 							
 							if (this._additionnalOpenImageURL===undefined) {								
-								this._additionnalOpenImageURL=f_core.GetAttributeNS(this, "addOpenImageURL", null);
+								this._additionnalOpenImageURL=f_core.GetAttributeNS(this, "addOpenImageURL", undefined);
 								if (this._additionnalOpenImageURL) {
 									this._additionnalCloseImageURL=f_core.GetAttributeNS(this, "addCloseImageURL");
 									

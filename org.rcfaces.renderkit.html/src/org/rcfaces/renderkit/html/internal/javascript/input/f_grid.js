@@ -3520,7 +3520,7 @@ var __members = {
 		if (button) {
 			var buttonClassName = "f_grid_additional_button";
 
-			var additionalImageURL = undefined;
+			var additionalImageURL = this._blankImageURL;
 			var shown = undefined;
 
 			var content = row._additionalContent;
