@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<repository id="svg" type="javascript" baseDirectory="org/rcfaces/renderkit/svg/internal/javascript" remapSymbols="false">
+<repository id="svg" type="javascript"
+	baseDirectory="org/rcfaces/renderkit/svg/internal/javascript"
+	symbolsPath="/svg/symbols" remapSymbols="false">
 	<module id="svg">
 		<file name="svg/fsvg_cursor.js">
 			<class name="fsvg_cursor">
@@ -19,16 +21,16 @@
 				<required-class name="fsvg_svg" />
 
 				<required-class name="fa_items" />
-				<required-class name="fa_gridToolTipContainer" />				
-				<required-class name="fsvg_cursor" />				
+				<required-class name="fa_gridToolTipContainer" />
+				<required-class name="fsvg_cursor" />
 
 				<required-style name="fsvg_svg.css" />
 
 				<required-class id="ajax" name="fa_asyncRender" />
 				<required-class id="ajax" name="f_httpRequest" />
 				<required-class id="ajax" name="f_waiting" />
-				
-				<required-class id="toolTip" name="f_toolTipManager" />				
+
+				<required-class id="toolTip" name="f_toolTipManager" />
 			</class>
 		</file>
 		<file name="svg/fsvg_image.js">
