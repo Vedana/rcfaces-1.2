@@ -19,7 +19,7 @@
 				</excludes>
 			</resource>
 			<resource>
-				<directory>src-jsf2_1-generated</directory>
+				<directory>src-jsf1_2-generated</directory>
 				<excludes>
 					<exclude>**/*.java</exclude>
 				</excludes>
@@ -28,11 +28,6 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
 			</plugin>
 			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
@@ -64,6 +59,8 @@
 				<executions>
 					<execution>
 						<configuration>
+							<symbols>org.rcfaces.renderkit.html</symbols>
+							<jsfVersion>1.2</jsfVersion>
 							<levels>c1, c2, c3</levels>
 							<sources>org/rcfaces/renderkit/svg/internal/javascript/</sources>
 						</configuration>

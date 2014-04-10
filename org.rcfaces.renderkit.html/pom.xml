@@ -120,6 +120,7 @@
 						<configuration>
 							<levels>c1, c2, c3</levels>
 							<sources>org/rcfaces/renderkit/html/internal/javascript/</sources>
+							<jsfVersion>1.2</jsfVersion>
 						</configuration>
 					</execution>
 					<execution>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="Packager Camelia" basedir=".">
-	<property name="java.target" value="1.6" />
+	<property name="java.target" value="1.5" />
 
 	<target name="buildVersion">
 		

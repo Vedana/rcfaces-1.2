@@ -76,6 +76,7 @@
 						<archive>
 							<manifestFile>src/META-INF/MANIFEST.MF</manifestFile>
 							<manifestEntries>
+								<Build-Jdk>1.5</Build-Jdk>
 								<jsfVersion>${jsfImplVersion}</jsfVersion>
 							</manifestEntries>
 						</archive>
@@ -114,6 +115,7 @@
 					<configuration>
 						<source>1.5</source>
 						<target>1.5</target>
+					    <compilerVersion>1.5</compilerVersion>
 					</configuration>
 				</plugin>
 				<plugin>
