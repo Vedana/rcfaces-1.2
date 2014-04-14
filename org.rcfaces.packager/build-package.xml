@@ -765,9 +765,11 @@
 				<fileset dir="${build-core}/lib/jsf${jsf.version}">
 					<include name="*.jar" />
 				</fileset>
+				<!--
 				<fileset dir="${pass.build}/lib">
 					<include name="*.jar" />
 				</fileset>
+				-->
 				<path path="${build.version.path}/bin-core" />
 			</classpath>
 	
