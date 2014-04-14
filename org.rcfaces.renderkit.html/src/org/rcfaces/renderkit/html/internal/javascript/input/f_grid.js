@@ -5614,7 +5614,7 @@ var __members = {
 			return false;
 		}
 
-		return this.f_performElementSelection(row, show, jsEvent, false);
+		return this.f_performElementSelection(row, show, jsEvent, fa_selectionManager.APPEND_SELECTION);
 	},
 	/**
 	 * Returns <code>true</code> if the receiver is checked, and
