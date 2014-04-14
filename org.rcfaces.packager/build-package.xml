@@ -414,7 +414,7 @@
 			<arg value="svg" />
 		</java>
 
-		<javac taskname="Build bootstrap" debug="true" destdir="${build.version.path}/bin-bootstrap" optimize="no" nowarn="true" failonerror="true" target="${java.target}" encoding="utf-8">
+		<javac taskname="Build bootstrap" debug="true" destdir="${build.version.path}/bin-bootstrap" optimize="no" nowarn="true" failonerror="true" target="${java.target}" source="${java.target}" encoding="utf-8">
 
 			<classpath>
 				<fileset dir="${build-core}/lib">
@@ -534,7 +534,7 @@
 			  token="String BUILDER_VERSION = null" 
 			  value="String BUILDER_VERSION = &quot;${version}.${minorRelease}.${integrationVersion}&quot;" />
 
-		<javac taskname="Build core" srcdir="${build.version.path}/src-core" debug="true" destdir="${build.version.path}/bin-core" optimize="no" target="${java.target}" encoding="utf-8">
+		<javac taskname="Build core" srcdir="${build.version.path}/src-core" debug="true" destdir="${build.version.path}/bin-core" optimize="no" target="${java.target}" source="${java.target}" encoding="utf-8">
 			<classpath>
 				<fileset dir="${build-core}/lib">
 					<include name="*.jar" />
@@ -589,7 +589,7 @@
 			token="String BUILDER_VERSION = null" 
 			value="String BUILDER_VERSION = &quot;${version}.${minorRelease}.${integrationVersion}&quot;" />
 
-		<javac taskname="Build imageIO" srcdir="${build.version.path}/src-imageIO" debug="true" destdir="${build.version.path}/bin-imageIO" optimize="no" target="${java.target}" encoding="utf-8">
+		<javac taskname="Build imageIO" srcdir="${build.version.path}/src-imageIO" debug="true" destdir="${build.version.path}/bin-imageIO" optimize="no" target="${java.target}" source="${java.target}" encoding="utf-8">
 			<classpath>
 				<fileset dir="${build-core}/lib">
 					<include name="*.jar" />
@@ -652,7 +652,7 @@
 			token="String BUILDER_VERSION = null" 
 			value="String BUILDER_VERSION = &quot;${version}.${minorRelease}.${integrationVersion}&quot;" />
 
-		<javac taskname="Build jfreechart" srcdir="${build.version.path}/src-jfreechart" debug="true" destdir="${build.version.path}/bin-jfreechart" optimize="no" target="${java.target}" encoding="utf-8">
+		<javac taskname="Build jfreechart" srcdir="${build.version.path}/src-jfreechart" debug="true" destdir="${build.version.path}/bin-jfreechart" optimize="no" target="${java.target}" source="${java.target}" encoding="utf-8">
 			<classpath>
 				<fileset dir="${build-core}/lib">
 					<include name="*.jar" />
@@ -732,7 +732,7 @@
 			</section>
 		</manifest>
 
-		<javac srcdir="${build.version.path}/src-${pass.type}" debug="true" destdir="${build.version.path}/bin-${pass.type}" optimize="no" target="${java.target}" encoding="utf-8">
+		<javac srcdir="${build.version.path}/src-${pass.type}" debug="true" destdir="${build.version.path}/bin-${pass.type}" optimize="no" target="${java.target}" source="${java.target}" encoding="utf-8">
 			<classpath>
 				<fileset dir="${build-core}/lib">
 					<include name="*.jar" />
