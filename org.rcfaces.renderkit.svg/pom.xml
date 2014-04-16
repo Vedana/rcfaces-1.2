@@ -60,6 +60,7 @@
 					<execution>
 						<configuration>
 							<symbols>org.rcfaces.renderkit.html</symbols>
+							<renderkit>svg</renderkit>
 							<jsfVersion>1.2</jsfVersion>
 							<levels>c1, c2, c3</levels>
 							<sources>org/rcfaces/renderkit/svg/internal/javascript/</sources>
