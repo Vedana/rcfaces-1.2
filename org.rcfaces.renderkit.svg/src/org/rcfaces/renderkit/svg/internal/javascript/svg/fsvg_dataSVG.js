@@ -107,8 +107,8 @@ var __members = {
 
 	},
 	f_finalize : function() {
-		this._delayedUpdates=undefined; // Map<String, Object>
-		
+		this._delayedUpdates = undefined; // Map<String, Object>
+
 		var links = this._links;
 		if (links) {
 			this._links = undefined;
@@ -119,7 +119,7 @@ var __members = {
 		}
 
 		if (this._callbacksInstalled) {
-			this._callbacksInstalled=undefined;
+			this._callbacksInstalled = undefined;
 
 			var svgDocument = this.f_getSVGDocument();
 			if (svgDocument) {
@@ -131,42 +131,43 @@ var __members = {
 				try {
 					f_toolTipManager.UninstallOverCallbacks(svgDocument,
 							svgDocument.rootElement);
-				} catch (x) {				
+				} catch (x) {
 					// Y a pas forcement de tooltipManager de dispo !
 				}
 			}
 		}
-		
+
 		this.f_super(arguments);
 	},
-	
+
 	/**
-	 *  @method protected
-	 *  @param Document svgDocument
-	 *  @return void
+	 * @method protected
+	 * @param Document
+	 *            svgDocument
+	 * @return void
 	 */
-	f_updateSVG: function(svgDocument) {
+	f_updateSVG : function(svgDocument) {
 		this.f_super(arguments, svgDocument);
 
-		var delayedUpdates=this._delayedUpdates;
+		var delayedUpdates = this._delayedUpdates;
 		if (delayedUpdates) {
-			this._delayedUpdates=undefined;
-			
-			for(var id in delayedUpdates) {
+			this._delayedUpdates = undefined;
+
+			for ( var id in delayedUpdates) {
 				this._updateItem(id, delayedUpdates[id]);
 			}
 		}
-		
+
 		if (!this._callbacksInstalled) {
-			this._callbacksInstalled=true;
-			
+			this._callbacksInstalled = true;
+
 			try {
 				f_toolTipManager.InstallOverCallbacks(svgDocument,
 						svgDocument.rootElement);
 			} catch (x) {
 				// Y a pas forcement de tooltipManager de dispo !
 			}
-	
+
 			try {
 				f_key.InstallDomEvent(svgDocument);
 			} catch (x) {
@@ -227,42 +228,46 @@ var __members = {
 
 		return element;
 	},
-	
+
 	/**
-	 *  @method protected
-	 *  @param String id
-	 *  @param Object properties
-	 *  @return void
+	 * @method protected
+	 * @param String
+	 *            id
+	 * @param Object
+	 *            properties
+	 * @return void
 	 */
 
 	_update : function(id, modifs) {
-		var delayedUpdates=this._delayedUpdates;
-		if (delayedUpdates===undefined) {
+		var delayedUpdates = this._delayedUpdates;
+		if (delayedUpdates === undefined) {
 			var svgDocument = this.f_getSVGDocument();
 			if (svgDocument) {
-				delayedUpdates=null;
+				delayedUpdates = null;
 			} else {
-				delayedUpdates={};
+				delayedUpdates = {};
 			}
-			this._delayedUpdates=delayedUpdates;
+			this._delayedUpdates = delayedUpdates;
 		}
-		
-		if (delayedUpdates===null) {
+
+		if (delayedUpdates === null) {
 			this._updateItem(id, modifs);
 			return;
 		}
-		
-		delayedUpdates[id]=modifs;
+
+		delayedUpdates[id] = modifs;
 	},
-	
+
 	/**
-	 *  @method protected
-	 *  @param String id
-	 *  @param Object properties
-	 *  @return void
+	 * @method protected
+	 * @param String
+	 *            id
+	 * @param Object
+	 *            properties
+	 * @return void
 	 */
 
-	_updateItem: function(id, modifs) {
+	_updateItem : function(id, modifs) {
 		var c = this.f_getElementById(id);
 		if (!c) {
 			return;
@@ -327,10 +332,10 @@ var __members = {
 			}
 			link.setAttributeNS(fsvg_svg.XLINK_XMLNS, "href", f_core
 					.CreateJavaScriptVoid0());
-			
-			var hasTooltipMessage="";
+
+			var hasTooltipMessage = "";
 			if (modifs._toolTipId) {
-				hasTooltipMessage=" Une infobulle est disponible.";
+				hasTooltipMessage = " Une infobulle est disponible.";
 				link._toolTipId = modifs._toolTipId;
 
 				if (modifs._toolTipContent !== undefined) {
@@ -339,10 +344,12 @@ var __members = {
 			}
 
 			if (modifs._audioDescription !== undefined) {
-				link.setAttribute("aria-label", modifs._audioDescription+hasTooltipMessage);
+				link.setAttribute("aria-label", modifs._audioDescription
+						+ hasTooltipMessage);
 
 			} else if (modifs._tooltipText) {
-				link.setAttribute("aria-label", modifs._tooltipText+hasTooltipMessage);
+				link.setAttribute("aria-label", modifs._tooltipText
+						+ hasTooltipMessage);
 			} else {
 				link.setAttribute("aria-label", hasTooltipMessage);
 			}
@@ -397,8 +404,9 @@ var __members = {
 	 */
 	_onClick : function(jsEvent, item, link) {
 
-		var event = new f_event(this, f_event.SELECTION, jsEvent, item,
-				item._value);
+		var value = this.f_getItemValue(item);
+
+		var event = new f_event(this, f_event.SELECTION, jsEvent, item, value);
 		try {
 			this.f_fireEvent(event);
 
@@ -422,7 +430,7 @@ var __members = {
 	 */
 	_onFocus : function(jsEvent, item, link) {
 		link.className.baseVal = "fsvg_link fsvg_link_focus";
-		
+
 		fsvg_cursor.Show(link);
 	},
 	/**
@@ -437,7 +445,7 @@ var __members = {
 	 */
 	_onBlur : function(jsEvent, item, link) {
 		link.className.baseVal = "fsvg_link";
-		
+
 		fsvg_cursor.Hide(link);
 	},
 	fa_setToolTipVisible : function(tooltip, show, jsEvent) {
@@ -446,8 +454,7 @@ var __members = {
 			var item = tooltip.f_getElementItem();
 
 			if (!tooltip.f_isContentSpecified()) {
-				this.f_showToolTip(tooltip, jsEvent,
-						f_toolTip.MOUSE_POSITION);
+				this.f_showToolTip(tooltip, jsEvent, f_toolTip.MOUSE_POSITION);
 				return;
 			}
 
@@ -463,18 +470,19 @@ var __members = {
 	 * @method protected
 	 * @param Element
 	 *            elementItem
-	 * @param String tooltipId
+	 * @param String
+	 *            tooltipId
 	 * @return Object
 	 */
-	_computeTooltipRowContext: function(elementItem, tooltipId) {	
+	_computeTooltipRowContext : function(elementItem, tooltipId) {
 		if (elementItem._item) {
-			elementItem=elementItem._item;
+			elementItem = elementItem._item;
 		}
 		return {
-			_row: elementItem,
-			_rowValue: elementItem._value,
-			_rowIndex: elementItem._rowIndex,
-			_tooltipId: tooltipId
+			_row : elementItem,
+			_rowValue : elementItem._value,
+			_rowIndex : elementItem._rowIndex,
+			_tooltipId : tooltipId
 		};
 	}
 }
