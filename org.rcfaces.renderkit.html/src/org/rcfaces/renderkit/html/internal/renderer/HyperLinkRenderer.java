@@ -54,6 +54,9 @@ public class HyperLinkRenderer extends AbstractCssRenderer {
         if (disabled) {
             htmlWriter.writeDisabled();
         }
+        if (disabled) {
+            htmlWriter.writeAriaDisabled(true);
+        }
         writeFirstTooltipClientId(htmlWriter);
 
         // Il faut le laisser pour le lazy FOCUS

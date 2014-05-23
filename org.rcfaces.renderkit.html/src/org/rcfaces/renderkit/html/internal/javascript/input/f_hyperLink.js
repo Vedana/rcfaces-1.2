@@ -62,6 +62,11 @@ var __members = {
 		}	
 		
 		return this.f_super(arguments, type, evt, item, value, selectionProvider, detail, stage);
+	},
+	f_updateDisabled: function(disabled) {
+		this.f_super(arguments, disabled);
+	
+		fa_aria.SetElementAriaDisabled(this, disabled);
 	}
 };
 
