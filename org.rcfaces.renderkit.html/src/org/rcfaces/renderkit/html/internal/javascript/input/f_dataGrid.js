@@ -409,7 +409,8 @@ var __members = {
 					value : row._lineHeader
 				});
 
-				var checkRowMessage = rb.f_get((checked) ? "CHECKED_ROW"
+				var checkRowMessage = rb.f_get((checked)
+						? "CHECKED_ROW"
 						: "CHECKABLE_ROW");
 				fa_audioDescription.SetAudioDescription(row._input._label,
 						checkRowMessage, "check", row._input._label.id);
@@ -422,6 +423,7 @@ var __members = {
 			}
 		}
 	},
+
 	/**
 	 * 
 	 * @method public
@@ -437,7 +439,7 @@ var __members = {
 
 		var properties = new Object;
 
-		var l = [ value, properties ];
+		var l = [value, properties];
 
 		f_core.PushArguments(l, arguments, 1);
 
@@ -619,7 +621,11 @@ var __members = {
 
 		if (properties) {
 			className = properties._styleClass;
-			row._rowIndex = properties._rowIndex;
+			var rowIndex = properties._rowIndex;
+			if (typeof (rowIndex) != "number") {
+				rowIndex = properties.rowIndex;
+			}
+			row._rowIndex = rowIndex;
 		}
 		if (!className) {
 			className = this._rowStyleClasses[rowIdx
@@ -724,7 +730,7 @@ var __members = {
 					if (f_grid._GENERATE_HEADERS_ATTRIBUTE && !col._headersId) {
 						col._headersId = this.id + "::ch" + i;
 					}
-					var cClassName = [ cellClassName ];
+					var cClassName = [cellClassName];
 
 					var colStyleClasses = col._cellStyleClasses;
 					if (colStyleClasses) {
@@ -741,7 +747,8 @@ var __members = {
 						}
 					}
 
-					var cellType = (!f_grid._GENERATE_HEADERS_ATTRIBUTE && col._scopeCol) ? "th"
+					var cellType = (!f_grid._GENERATE_HEADERS_ATTRIBUTE && col._scopeCol)
+							? "th"
 							: "td";
 					if (firstCell) {
 						if (firstCell === true) {
@@ -1098,48 +1105,56 @@ var __members = {
 		var ret = 0;
 		var tbody = this._tbody;
 		var rowsPool = this._rowsPool;
-
 		var selectionChanged = false;
 		var checkChanged = false;
-		for (var i = 0; i < arguments.length; i++) {
-			var rowValue = arguments[i];
 
-			var row = this.f_getRowByValue(rowValue, false);
-			if (!row) {
-				continue;
+		var classLoader = this.f_getClass().f_getClassLoader();
+
+		var rowValues = arguments;
+
+		var self = this;
+		this.f_run(function() {
+
+			for (var i = 0; i < rowValues.length; i++) {
+				var rowValue = rowValues[i];
+
+				var row = self.f_getRowByValue(rowValue, false);
+				if (!row) {
+					continue;
+				}
+
+				if (self._deselectElement(row)) {
+					selectionChanged = true;
+				}
+				if (self._uncheckElement(row)) {
+					checkChanged = true;
+				}
+
+				if (row == self._cursor) {
+					self._cursor = undefined;
+				}
+
+				classLoader.f_garbageObjects(false, row);
+
+				tbody.removeChild(row);
+				rowsPool.f_removeElement(row);
+
+				self.f_releaseRow(row);
+
+				f_core.VerifyProperties(row);
+
+				ret++;
+				if (self._rowCount >= 0) {
+					self._rowCount--;
+				}
 			}
-
-			if (this._deselectElement(row)) {
-				selectionChanged = true;
-			}
-			if (this._uncheckElement(row)) {
-				checkChanged = true;
-			}
-
-			if (row == this._cursor) {
-				this._cursor = undefined;
-			}
-
-			this.f_getClass().f_getClassLoader().f_garbageObjects(false, row);
-
-			tbody.removeChild(row);
-			rowsPool.f_removeElement(row);
-
-			this.f_releaseRow(row);
-
-			f_core.VerifyProperties(row);
-
-			ret++;
-			if (this._rowCount >= 0) {
-				this._rowCount--;
-			}
-		}
+		});
 
 		if (ret < 1) {
 			return 0;
 		}
 
-		this.f_getClass().f_getClassLoader().f_completeGarbageObjects();
+		classLoader.f_completeGarbageObjects();
 
 		this.f_performPagedComponentInitialized();
 
@@ -1212,13 +1227,46 @@ var __members = {
 		return array;
 	},
 	/**
+	 * Returns the server row index if specified
+	 * 
+	 * @method public
+	 * @param any
+	 *            rowValue Row value, a row object, or the index of the row into
+	 *            the table.
+	 * @return Number
+	 */
+	f_getServerRowIndex : function(rowValue) {
+		f_core.Assert(rowValue !== undefined && rowValue !== null,
+				"f_dataGrid.f_getRowValuesSet: Invalid value '" + rowValue
+						+ "'.");
+
+		var row;
+
+		if (rowValue._dataGrid) {
+			row = rowValue;
+
+		} else if (typeof (rowValue) == "number") {
+			row = this.f_getRow(rowValue, true);
+
+		} else {
+			row = this.f_getRowByValue(rowValue, true);
+		}
+
+		if (!row) {
+			return undefined;
+		}
+
+		return row._rowIndex;
+	},
+	/**
 	 * Returns into an object, contents of each cell of the specified row.
 	 * 
 	 * @method public
 	 * @param any
 	 *            rowValue Row value, a row object, or the index of the row into
 	 *            the table.
-	 * @return optional Boolean onlyVisible Keey only visible columns.
+	 * @param optional
+	 *            Boolean onlyVisible Keey only visible columns.
 	 * @return Object
 	 */
 	f_getRowValuesSet : function(rowValue, onlyVisible) {
@@ -1543,7 +1591,8 @@ var __members = {
 		params.serializedIndexes = this._additionalIndexes;
 		this._additionalIndexes = [];
 
-		var waitingObject = (partialWaiting && !length) ? this._pagedWaiting
+		var waitingObject = (partialWaiting && !length)
+				? this._pagedWaiting
 				: this._waiting;
 
 		var request = new f_httpRequest(this,
@@ -1865,18 +1914,18 @@ var __members = {
 
 			if (!cursorRow) {
 				switch (this._selectionCardinality) {
-				case fa_cardinality.OPTIONAL_CARDINALITY:
-				case fa_cardinality.ONE_CARDINALITY:
-					for (var i = 0; i < rows.length; i++) {
-						var row = rows[i];
+					case fa_cardinality.OPTIONAL_CARDINALITY :
+					case fa_cardinality.ONE_CARDINALITY :
+						for (var i = 0; i < rows.length; i++) {
+							var row = rows[i];
 
-						if (!row._selected) {
-							continue;
+							if (!row._selected) {
+								continue;
+							}
+
+							cursorRow = row;
 						}
-
-						cursorRow = row;
-					}
-					break;
+						break;
 				}
 			}
 
@@ -1910,13 +1959,13 @@ var __members = {
 			}
 
 			switch (this._waitingMode) {
-			case f_grid.ROWS_WAITING:
-				this.f_addWaitingRows();
-				break;
+				case f_grid.ROWS_WAITING :
+					this.f_addWaitingRows();
+					break;
 
-			case f_grid.END_WAITING:
-				this.f_addPagedWait();
-				break;
+				case f_grid.END_WAITING :
+					this.f_addPagedWait();
+					break;
 			}
 		}
 
@@ -2466,7 +2515,43 @@ var __members = {
 			}
 		}
 	},
+	/**
+	 * Returns position of a row into the list
+	 * 
+	 * @method public
+	 * 
+	 * @param rowValue
+	 * @return Number
+	 */
+	f_getRowIndexOf : function(rowValue) {
+		f_core.Assert(rowValue !== undefined && rowValue !== null,
+				"f_dataGrid.f_getRowIndexOf: Invalid rowValue parameter ! ("
+						+ rowValue + ")");
+		var row;
 
+		if (rowValue._dataGrid) {
+			row = rowValue;
+
+		} else if (typeof (rowValue) == "number") {
+			row = this.f_getRow(rowValue, true);
+
+		} else {
+			row = this.f_getRowByValue(rowValue, true);
+		}
+
+		if (!row) {
+			return undefined;
+		}
+
+		var elts = this.fa_listVisibleElements(true);
+		for (var i = 0; i < elts.length; i++) {
+			var element = elts[i];
+			if (element === row) {
+				return i;
+			}
+		}
+		return -1;
+	},
 	/**
 	 * @method public
 	 */
@@ -2996,14 +3081,67 @@ var __members = {
 		}
 
 		return details;
+	},
+	/**
+	 * Move a row before an other row (if specified), or at the end.
+	 * 
+	 * @method public
+	 * @param Object
+	 *            targetRowValue
+	 * @param Object
+	 *            refRowValue
+	 * @return Boolean <code>true</code> if success.
+	 */
+	f_moveRowBefore : function(targetRowValue, refRowValue) {
+
+		var targetRow;
+		if (targetRowValue._dataGrid) {
+			targetRow = targetRowValue;
+
+		} else if (typeof (targetRowValue) == "number") {
+			targetRow = this.f_getRow(targetRowValue, true);
+
+		} else {
+			targetRow = this.f_getRowByValue(targetRowValue, true);
+		}
+
+		if (!targetRow) {
+			return false;
+		}
+
+		var refRow;
+		if (refRowValue) {
+			if (refRowValue._dataGrid) {
+				refRow = refRowValue;
+
+			} else if (typeof (refRowValue) == "number") {
+				refRow = this.f_getRow(refRowValue, true);
+
+			} else {
+				refRow = this.f_getRowByValue(refRowValue, true);
+			}
+
+			if (!refRow) {
+				return false;
+			}
+		}
+
+		this.f_run(function() {
+			var parentNode = targetRow.parentNode;
+			parentNode.removeChild(targetRow);
+
+			parentNode.insertBefore(targetRow, refRow);
+		});
+
+		return true;
 	}
 
 };
 
 new f_class("f_dataGrid", {
 	extend : f_grid,
-	aspects : [ fa_readOnly, fa_checkManager, fa_droppable, fa_draggable,
-			fa_criteriaManager ],
+	aspects : [fa_readOnly, fa_checkManager, fa_droppable, fa_draggable,
+			fa_criteriaManager],
 	statics : __statics,
 	members : __members
 });
