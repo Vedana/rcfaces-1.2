@@ -484,6 +484,10 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
             if (requiredId == null) {
                 if (requiredClass == null) {
                     requiredClass = new ArrayList<IClass>();
+
+                } else if (requiredClass.contains(clazz)) {
+                    LOG.error("Already known required class ? " + clazz);
+                    return;
                 }
 
                 requiredClass.add(clazz);
@@ -495,6 +499,10 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
             if (requiredClass == null) {
                 requiredClass = new ArrayList<IClass>();
                 requiredClassById.put(requiredId, requiredClass);
+
+            } else if (requiredClass.contains(clazz)) {
+                LOG.error("Already known required class ? " + clazz);
+                return;
             }
 
             requiredClass.add(clazz);
@@ -562,7 +570,12 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
                     continue;
                 }
 
-                l.addAll(Arrays.asList(rcs));
+                for (IClass rc : rcs) {
+                    if (l.contains(rc)) {
+                        continue;
+                    }
+                    l.add(rc);
+                }
             }
         }
 
