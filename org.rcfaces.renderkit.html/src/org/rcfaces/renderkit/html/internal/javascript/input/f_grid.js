@@ -53,7 +53,7 @@ var __statics = {
 	/**
 	 * @field private static final String[]
 	 */
-	_DEFAULT_ROW_STYLE_CLASSES : [ "f_grid_row_odd", "f_grid_row_even" ],
+	_DEFAULT_ROW_STYLE_CLASSES : ["f_grid_row_odd", "f_grid_row_even"],
 
 	/**
 	 * @field protected static final Number
@@ -394,7 +394,7 @@ var __statics = {
 						cellRef.value);
 			}
 
-			//dataGrid._cursorCellIdx = undefined;
+			// dataGrid._cursorCellIdx = undefined;
 
 			dataGrid.f_moveCursor(this, true, evt, selection,
 					fa_selectionManager.END_PHASE, undefined, details);
@@ -449,9 +449,9 @@ var __statics = {
 		var tagName = target.tagName;
 		if (tagName) {
 			switch (tagName.toLowerCase()) {
-			case "input":
-			case "select":
-				return true;
+				case "input" :
+				case "select" :
+					return true;
 			}
 		}
 
@@ -494,10 +494,10 @@ var __statics = {
 			var tagName = target.tagName;
 			if (tagName) {
 				switch (tagName.toLowerCase()) {
-				case "input":
-				case "select":
-				case "a":
-					return false;
+					case "input" :
+					case "select" :
+					case "a" :
+						return false;
 				}
 			}
 
@@ -705,14 +705,14 @@ var __statics = {
 		var child = element.firstChild;
 		for (; child; child = child.nextSibling) {
 			switch (child.tagName.toLowerCase()) {
-			case "tbody":
-				if (child.firstChild) {
-					return child.rows[0];
-				}
-				break;
+				case "tbody" :
+					if (child.firstChild) {
+						return child.rows[0];
+					}
+					break;
 
-			case "tr":
-				return child;
+				case "tr" :
+					return child;
 			}
 		}
 
@@ -736,36 +736,36 @@ var __statics = {
 		var child = element.firstChild;
 		for (; child; child = child.nextSibling) {
 			switch (child.tagName.toLowerCase()) {
-			case "thead":
-			case "tbody":
-				if (child.firstChild) {
-					if (copy == 0) {
-						var rs = child.rows;
-						if (rs) {
-							copy = 1;
-							rows = rs;
+				case "thead" :
+				case "tbody" :
+					if (child.firstChild) {
+						if (copy == 0) {
+							var rs = child.rows;
+							if (rs) {
+								copy = 1;
+								rows = rs;
+							}
+						} else {
+							if (copy == 1) {
+								rows = f_core.PushArguments(null, rows);
+								copy = 2;
+							}
+							f_core.PushArguments(rows, child.rows);
 						}
-					} else {
-						if (copy == 1) {
-							rows = f_core.PushArguments(null, rows);
-							copy = 2;
-						}
-						f_core.PushArguments(rows, child.rows);
 					}
-				}
-				break;
+					break;
 
-			case "tr":
-				if (!rows) {
-					rows = new Array;
-					copy = 2;
+				case "tr" :
+					if (!rows) {
+						rows = new Array;
+						copy = 2;
 
-				} else if (copy == 1) {
-					rows = f_core.PushArguments(null, rows);
-					copy = 2;
-				}
+					} else if (copy == 1) {
+						rows = f_core.PushArguments(null, rows);
+						copy = 2;
+					}
 
-				rows.push(child);
+					rows.push(child);
 			}
 		}
 
@@ -1264,87 +1264,87 @@ var __statics = {
 
 		var code = evt.keyCode;
 		switch (code) {
-		case f_key.VK_DOWN: // FLECHE VERS LE BAS
-			ascending = false;
-			break;
-
-		case f_key.VK_UP: // FLECHE VERS LE HAUT
-			ascending = true;
-			break;
-
-		case f_key.VK_HOME:
-			var columns = dataGrid._columns;
-			for (var i = 0; i < columns.length; i++) {
-				var cl = columns[i];
-
-				if (!cl._visibility) {
-					continue;
-				}
-
-				if (cl != column) {
-					dataGrid.f_setFocusColumn(cl);
-				}
+			case f_key.VK_DOWN : // FLECHE VERS LE BAS
+				ascending = false;
 				break;
-			}
-			cancel = true;
-			break;
 
-		case f_key.VK_END:
-			var columns = dataGrid._columns;
-			for (var i = columns.length - 1; i >= 0; i--) {
-				var cl = columns[i];
-
-				if (!cl._visibility) {
-					continue;
-				}
-
-				if (cl != column) {
-					dataGrid.f_setFocusColumn(cl);
-				}
+			case f_key.VK_UP : // FLECHE VERS LE HAUT
+				ascending = true;
 				break;
-			}
-			cancel = true;
-			break;
 
-		case f_key.VK_LEFT:
-			var columns = dataGrid._columns;
-			var pred = null;
-			for (var i = 0; i < columns.length; i++) {
-				var cl = columns[i];
+			case f_key.VK_HOME :
+				var columns = dataGrid._columns;
+				for (var i = 0; i < columns.length; i++) {
+					var cl = columns[i];
 
-				if (!cl._visibility) {
-					continue;
-				}
+					if (!cl._visibility) {
+						continue;
+					}
 
-				if (cl == column) {
-					if (pred) {
-						dataGrid.f_setFocusColumn(pred);
+					if (cl != column) {
+						dataGrid.f_setFocusColumn(cl);
 					}
 					break;
 				}
+				cancel = true;
+				break;
 
-				pred = cl;
-			}
-			cancel = true;
-			break;
+			case f_key.VK_END :
+				var columns = dataGrid._columns;
+				for (var i = columns.length - 1; i >= 0; i--) {
+					var cl = columns[i];
 
-		case f_key.VK_RIGHT:
-			var columns = dataGrid._columns;
-			var next = false;
-			for (var i = 0; i < columns.length; i++) {
-				var cl = columns[i];
+					if (!cl._visibility) {
+						continue;
+					}
 
-				if (!cl._visibility) {
-					continue;
-				}
-
-				if (next) {
-					dataGrid.f_setFocusColumn(cl);
+					if (cl != column) {
+						dataGrid.f_setFocusColumn(cl);
+					}
 					break;
 				}
-				next = (cl == column);
-			}
-			break;
+				cancel = true;
+				break;
+
+			case f_key.VK_LEFT :
+				var columns = dataGrid._columns;
+				var pred = null;
+				for (var i = 0; i < columns.length; i++) {
+					var cl = columns[i];
+
+					if (!cl._visibility) {
+						continue;
+					}
+
+					if (cl == column) {
+						if (pred) {
+							dataGrid.f_setFocusColumn(pred);
+						}
+						break;
+					}
+
+					pred = cl;
+				}
+				cancel = true;
+				break;
+
+			case f_key.VK_RIGHT :
+				var columns = dataGrid._columns;
+				var next = false;
+				for (var i = 0; i < columns.length; i++) {
+					var cl = columns[i];
+
+					if (!cl._visibility) {
+						continue;
+					}
+
+					if (next) {
+						dataGrid.f_setFocusColumn(cl);
+						break;
+					}
+					next = (cl == column);
+				}
+				break;
 		}
 
 		if (f_core.IsGecko()) {
@@ -2244,6 +2244,8 @@ var __members = {
 		this._cellsPool = new Array;
 		// this._colsPool=new Array;
 
+		this._updatingDepth = 0;
+
 		this._showCursor = false;
 
 		this._cellStyleClass = "f_grid_cell";
@@ -2409,16 +2411,16 @@ var __members = {
 																 * next._column._dataGrid==self)
 																 */
 						switch (next.tagName.toLowerCase()) {
-						case "input":
-						case "a":
-							break;
+							case "input" :
+							case "a" :
+								break;
 
-						default:
-							f_core.Debug(f_grid,
-									"CANCEL On before DE activate "
-											+ next.tagName);
+							default :
+								f_core.Debug(f_grid,
+										"CANCEL On before DE activate "
+												+ next.tagName);
 
-							return f_core.CancelJsEvent(evt);
+								return f_core.CancelJsEvent(evt);
 						}
 					}
 
@@ -2670,28 +2672,28 @@ var __members = {
 	},
 	f_setDomEvent : function(type, target) {
 		switch (type) {
-		case f_event.DBLCLICK:
-		case f_event.SELECTION:
-		case f_event.BLUR:
-		case f_event.FOCUS:
-		case f_event.KEYDOWN:
-		case f_event.KEYPRESS:
-		case f_event.KEYUP:
-			return;
+			case f_event.DBLCLICK :
+			case f_event.SELECTION :
+			case f_event.BLUR :
+			case f_event.FOCUS :
+			case f_event.KEYDOWN :
+			case f_event.KEYPRESS :
+			case f_event.KEYUP :
+				return;
 		}
 
 		this.f_super(arguments, type, target);
 	},
 	f_clearDomEvent : function(type, target) {
 		switch (type) {
-		case f_event.DBLCLICK:
-		case f_event.SELECTION:
-		case f_event.BLUR:
-		case f_event.FOCUS:
-		case f_event.KEYDOWN:
-		case f_event.KEYPRESS:
-		case f_event.KEYUP:
-			return;
+			case f_event.DBLCLICK :
+			case f_event.SELECTION :
+			case f_event.BLUR :
+			case f_event.FOCUS :
+			case f_event.KEYDOWN :
+			case f_event.KEYPRESS :
+			case f_event.KEYUP :
+				return;
 		}
 
 		this.f_super(arguments, type, target);
@@ -2750,10 +2752,10 @@ var __members = {
 	_normalizeIndexes : function() {
 
 		if (!this._additionalIndexes || !this._additionalIndexes.length) {
-			this._additionalIndexes = [ 0, 0 ];
+			this._additionalIndexes = [0, 0];
 		}
 		if (!this._submittedIndexes || !this._submittedIndexes.length) {
-			this._submittedIndexes = [ 0, 0 ];
+			this._submittedIndexes = [0, 0];
 		}
 	},
 
@@ -3554,14 +3556,16 @@ var __members = {
 
 				var rb = f_resourceBundle.Get(f_grid);
 
-				var additionalAlt = rb.f_formatParams(
-						(shown) ? "COLLAPSE_BUTTON" : "EXPAND_BUTTON", {
-							value : row._lineHeader
-						});
+				var additionalAlt = rb.f_formatParams((shown)
+						? "COLLAPSE_BUTTON"
+						: "EXPAND_BUTTON", {
+					value : row._lineHeader
+				});
 
 				button.title = button.alt = additionalAlt;
 
-				var additionalRowMessage = rb.f_get((shown) ? "COLLAPSABLE_ROW"
+				var additionalRowMessage = rb.f_get((shown)
+						? "COLLAPSABLE_ROW"
 						: "EXPANDABLE_ROW", "Ligne dépliable");
 
 				fa_audioDescription.SetAudioDescription(row._input._label,
@@ -3602,7 +3606,7 @@ var __members = {
 				continue;
 			}
 
-			var className = [ this._cellStyleClass ];
+			var className = [this._cellStyleClass];
 			if (selected) {
 				className.push(" f_grid_cell_selected");
 			}
@@ -4255,91 +4259,92 @@ var __members = {
 		var code = evt.keyCode;
 
 		switch (code) {
-		case f_key.VK_DOWN: // FLECHE VERS LE BAS
-			this._nextCursorRow(evt, selection);
-			cancel = true;
-			break;
+			case f_key.VK_DOWN : // FLECHE VERS LE BAS
+				this._nextCursorRow(evt, selection);
+				cancel = true;
+				break;
 
-		case f_key.VK_UP: // FLECHE VERS LE HAUT
-			this._previousCursorRow(evt, selection);
-			cancel = true;
-			break;
+			case f_key.VK_UP : // FLECHE VERS LE HAUT
+				this._previousCursorRow(evt, selection);
+				cancel = true;
+				break;
 
-		case f_key.VK_PAGE_DOWN: // FLECHE VERS LE BAS
-			this._nextPageRow(evt, selection);
-			cancel = true;
-			break;
+			case f_key.VK_PAGE_DOWN : // FLECHE VERS LE BAS
+				this._nextPageRow(evt, selection);
+				cancel = true;
+				break;
 
-		case f_key.VK_PAGE_UP: // FLECHE VERS LE HAUT
-			this._previousPageRow(evt, selection);
-			cancel = true;
-			break;
+			case f_key.VK_PAGE_UP : // FLECHE VERS LE HAUT
+				this._previousPageRow(evt, selection);
+				cancel = true;
+				break;
 
-		case f_key.VK_END: // FIN
-			this._selectLastRow(evt, selection);
-			cancel = true;
-			break;
+			case f_key.VK_END : // FIN
+				this._selectLastRow(evt, selection);
+				cancel = true;
+				break;
 
-		case f_key.VK_HOME: // HOME
-			this._selectTopRow(evt, selection);
-			cancel = true;
-			break;
+			case f_key.VK_HOME : // HOME
+				this._selectTopRow(evt, selection);
+				cancel = true;
+				break;
 
-		case f_key.VK_SPACE:
-			if (this.f_isCheckable && this.f_isCheckable()) {
-				if (evt && evt.target
-						&& evt.target.tagName.toLowerCase() == "input") {
-					// L'input gere de lui-meme le click ! donc on fait pas le
-					// job 2x
+			case f_key.VK_SPACE :
+				if (this.f_isCheckable && this.f_isCheckable()) {
+					if (evt && evt.target
+							&& evt.target.tagName.toLowerCase() == "input") {
+						// L'input gere de lui-meme le click ! donc on fait pas
+						// le
+						// job 2x
+						cancel = true;
+						break;
+					}
+
+					var cursor = this._cursor;
+					if (cursor) {
+						this.fa_performElementCheck(cursor, true, evt, !this
+								.fa_isElementChecked(this._cursor));
+					}
 					cancel = true;
 					break;
 				}
 
-				var cursor = this._cursor;
-				if (cursor) {
-					this.fa_performElementCheck(cursor, true, evt, !this
-							.fa_isElementChecked(this._cursor));
+				// Continue comme une selection ....
+
+			case f_key.VK_RETURN :
+			case f_key.VK_ENTER :
+				if (this._cursor && this.f_isSelectable()) {
+					this.f_performElementSelection(this._cursor, true, evt,
+							selection, undefined, undefined, this
+									._fillColumnDetails());
 				}
 				cancel = true;
 				break;
-			}
 
-			// Continue comme une selection ....
-
-		case f_key.VK_RETURN:
-		case f_key.VK_ENTER:
-			if (this._cursor && this.f_isSelectable()) {
-				this.f_performElementSelection(this._cursor, true, evt,
-						selection, undefined, undefined, this
-								._fillColumnDetails());
-			}
-			cancel = true;
-			break;
-
-		case f_key.VK_CONTEXTMENU:
-			this._openContextMenu(evt);
-			cancel = true;
-			break;
-
-		case f_key.VK_LEFT: // FLECHE A GAUCHE
-			cancel = this._processRowLeftKey(evt);
-			break;
-
-		case f_key.VK_RIGHT: // FLECHE A DROITE
-			cancel = this._processRowRightKey(evt);
-			break;
-
-		default:
-			if (this._keyRowSearch && f_key.IsLetterOrDigit(code)
-					&& !evt.ctrlKey && !evt.altKey && !evt.metaKey) {
-				this.f_searchRowNode(code, evt, selection);
-
-				// Dans tous les cas !
+			case f_key.VK_CONTEXTMENU :
+				this._openContextMenu(evt);
 				cancel = true;
+				break;
 
-			} else {
-				// Rien on laisse faire !
-			}
+			case f_key.VK_LEFT : // FLECHE A GAUCHE
+				cancel = this._processRowLeftKey(evt);
+				break;
+
+			case f_key.VK_RIGHT : // FLECHE A DROITE
+				cancel = this._processRowRightKey(evt);
+				break;
+
+			default :
+				if (this._keyRowSearch && f_key.IsLetterOrDigit(code)
+						&& !evt.ctrlKey && !evt.altKey && !evt.metaKey) {
+					this.f_searchRowNode(code, evt, selection);
+
+					// Dans tous les cas !
+					cancel = true;
+
+				} else {
+					// Rien on laisse faire !
+				}
 
 		}
 
@@ -4513,8 +4518,7 @@ var __members = {
 		if (!tr || tr.parentNode != this._tbody) {
 			// Selection du premier cursor
 
-			for (tr = this._tbody.firstChild; tr && !tr._dataGrid; tr = tr.nextSibling)
-				;
+			for (tr = this._tbody.firstChild; tr && !tr._dataGrid; tr = tr.nextSibling);
 
 			if (tr) {
 				this.f_moveCursor(tr, true, evt, selection);
@@ -4523,8 +4527,7 @@ var __members = {
 			return;
 		}
 
-		for (tr = tr.nextSibling; tr && !tr._dataGrid; tr = tr.nextSibling)
-			;
+		for (tr = tr.nextSibling; tr && !tr._dataGrid; tr = tr.nextSibling);
 
 		if (tr) {
 			// Si le CONTROL est appuyé on ne bouge que le curseur !
@@ -4577,8 +4580,7 @@ var __members = {
 		if (!tr || tr.parentNode != this._tbody) {
 			// Selection du dernier
 
-			for (tr = this._tbody.lastChild; tr && !tr._dataGrid; tr = tr.previousSibling)
-				;
+			for (tr = this._tbody.lastChild; tr && !tr._dataGrid; tr = tr.previousSibling);
 			if (tr) {
 				this.f_moveCursor(tr, true, evt, selection);
 			}
@@ -4586,8 +4588,7 @@ var __members = {
 			return;
 		}
 
-		for (tr = tr.previousSibling; tr && !tr._dataGrid; tr = tr.previousSibling)
-			;
+		for (tr = tr.previousSibling; tr && !tr._dataGrid; tr = tr.previousSibling);
 		if (tr) {
 			this.f_moveCursor(tr, true, evt, selection);
 			return;
@@ -4650,8 +4651,7 @@ var __members = {
 			// On cherche le dernier
 
 			var tr = this._tbody.lastChild;
-			for (; tr && !tr._dataGrid; tr = tr.previousSibling)
-				;
+			for (; tr && !tr._dataGrid; tr = tr.previousSibling);
 
 			if (tr && this._cursor != tr) {
 				this.f_moveCursor(tr, true, evt, selection);
@@ -4736,8 +4736,7 @@ var __members = {
 		}
 
 		// On cherche juste apres !
-		for (; tr && !tr._dataGrid; tr = tr.nextSibling)
-			;
+		for (; tr && !tr._dataGrid; tr = tr.nextSibling);
 
 		f_core.Debug(f_grid, "_nextPageRow: Found next row=" + tr);
 
@@ -4746,8 +4745,7 @@ var __members = {
 
 			if (tr != this._cursor) {
 				// On cherche juste avant !
-				for (; tr && !tr._dataGrid; tr = tr.previousSibling)
-					;
+				for (; tr && !tr._dataGrid; tr = tr.previousSibling);
 
 				f_core.Debug(f_grid, "_nextPageRow: Found previous row=" + tr);
 			}
@@ -4865,8 +4863,7 @@ var __members = {
 		}
 
 		// On cherche juste avant !
-		for (; tr && !tr._dataGrid; tr = tr.previousSibling)
-			;
+		for (; tr && !tr._dataGrid; tr = tr.previousSibling);
 
 		if (tr) {
 			this.f_moveCursor(tr, true, evt, selection);
@@ -4882,8 +4879,7 @@ var __members = {
 	 */
 	_selectLastRow : function(evt, selection) {
 		var tr = this._tbody.lastChild;
-		for (; tr && !tr._dataGrid; tr = tr.previousSibling)
-			;
+		for (; tr && !tr._dataGrid; tr = tr.previousSibling);
 
 		if (!tr) {
 			return;
@@ -4921,8 +4917,7 @@ var __members = {
 	 */
 	_selectTopRow : function(evt, selection) {
 		var tr = this._tbody.firstChild;
-		for (; tr && !tr._dataGrid; tr = tr.nextSibling)
-			;
+		for (; tr && !tr._dataGrid; tr = tr.nextSibling);
 
 		if (!tr) {
 			return;
@@ -5614,7 +5609,8 @@ var __members = {
 			return false;
 		}
 
-		return this.f_performElementSelection(row, show, jsEvent, fa_selectionManager.APPEND_SELECTION);
+		return this.f_performElementSelection(row, show, jsEvent,
+				fa_selectionManager.APPEND_SELECTION);
 	},
 	/**
 	 * Returns <code>true</code> if the receiver is checked, and
@@ -5698,6 +5694,15 @@ var __members = {
 		}
 
 		f_core.ShowComponent(row);
+	},
+
+	/**
+	 * @method public
+	 */
+	f_listRowsOfPage : function() {
+		var elts = this.fa_listVisibleElements(true);
+
+		return elts;
 	},
 
 	fa_listVisibleElements : function(ordered) {
@@ -6972,60 +6977,60 @@ var __members = {
 			}
 
 			switch (target.tagName.toUpperCase()) {
-			case "TD":
-			case "TH":
-				lastCell = target;
-				break;
-
-			case "TR":
-				if (target._dataGrid != this) {
+				case "TD" :
+				case "TH" :
+					lastCell = target;
 					break;
-				}
 
-				if (!lastCell) {
-					return undefined;
-				}
-
-				var tds = target.childNodes;
-				var index = 0;
-				for (var i = 0; i < tds.length; i++) {
-					var td = tds[i];
-					if (td.nodeType != f_core.ELEMENT_NODE) {
-						continue;
-					}
-					var tagName = td.tagName.toUpperCase();
-					if (tagName != "TD" && tagName != "TH") {
-						continue;
+				case "TR" :
+					if (target._dataGrid != this) {
+						break;
 					}
 
-					if (td != lastCell) {
-						index++;
-						continue;
+					if (!lastCell) {
+						return undefined;
 					}
 
-					if (cellRef) {
-						cellRef.value = td;
-					}
-
-					var columns = this._columns;
-					for (var i = 0; i < columns.length; i++) {
-						var cl = columns[i];
-
-						if (!cl._visibility) {
+					var tds = target.childNodes;
+					var index = 0;
+					for (var i = 0; i < tds.length; i++) {
+						var td = tds[i];
+						if (td.nodeType != f_core.ELEMENT_NODE) {
+							continue;
+						}
+						var tagName = td.tagName.toUpperCase();
+						if (tagName != "TD" && tagName != "TH") {
 							continue;
 						}
 
-						if (!index) {
-							return cl;
+						if (td != lastCell) {
+							index++;
+							continue;
 						}
 
-						index--;
+						if (cellRef) {
+							cellRef.value = td;
+						}
+
+						var columns = this._columns;
+						for (var i = 0; i < columns.length; i++) {
+							var cl = columns[i];
+
+							if (!cl._visibility) {
+								continue;
+							}
+
+							if (!index) {
+								return cl;
+							}
+
+							index--;
+						}
+
+						break;
 					}
 
 					break;
-				}
-
-				break;
 			}
 		}
 
@@ -7043,7 +7048,10 @@ var __members = {
 				"f_grid.f_clearArray: Invalid values parameter '" + values
 						+ "'.");
 
-		return this.f_clear.apply(this, rowValues);
+		var self = this;
+		return this.f_run(function() {
+			return self.f_clear.apply(self, rowValues);
+		});
 	},
 	/**
 	 * 
@@ -7056,7 +7064,10 @@ var __members = {
 			return 0;
 		}
 
-		return this.f_clear.apply(this, visibleElements);
+		var self = this;
+		return this.f_run(function() {
+			return self.f_clear.apply(self, visibleElements);
+		});
 	},
 	/**
 	 * @method public
@@ -7509,20 +7520,20 @@ var __members = {
 	_computeTooltipRowContext : function(elementItem, tooltipId) {
 		var row = null;
 		switch (elementItem.tagName.toUpperCase()) {
-		case "TR":
-			row = elementItem;
-			if (!tooltipId) {
-				tooltipId = "#row";
-			}
-			break;
+			case "TR" :
+				row = elementItem;
+				if (!tooltipId) {
+					tooltipId = "#row";
+				}
+				break;
 
-		case "TD":
-		case "TH":
-			row = elementItem.parentNode;
-			if (!tooltipId) {
-				tooltipId = "#cell";
-			}
-			break;
+			case "TD" :
+			case "TH" :
+				row = elementItem.parentNode;
+				if (!tooltipId) {
+					tooltipId = "#cell";
+				}
+				break;
 		}
 
 		return {
@@ -7531,16 +7542,52 @@ var __members = {
 			_rowIndex : row._rowIndex,
 			_tooltipId : tooltipId
 		};
+	},
+
+	f_run : function(fct) {
+
+		var params = f_core.PushArguments([], arguments, 1);
+
+		this._updatingDepth++;
+
+		var ret;
+		try {
+			ret = fct.apply(this, params);
+
+		} finally {
+			this._updatingDepth--;
+		}
+
+		if (!this._updatingDepth) {
+			this._updateAllElements();
+		}
+
+		return ret;
+	},
+
+	_updateAllElements : function() {
+
+		var trs = this.fa_listVisibleElements(true);
+
+		var rowClasses = this._rowStyleClasses;
+
+		for (var i = 0; i < trs.length; i++) {
+			var row = trs[i];
+
+			row._className = rowClasses[i % rowClasses.length];
+
+			this.fa_updateElementStyle(row);
+		}
 	}
 };
 
 new f_class("f_grid", {
 	extend : f_component,
-	aspects : [ fa_disabled, fa_pagedComponent, fa_subMenu, fa_commands,
+	aspects : [fa_disabled, fa_pagedComponent, fa_subMenu, fa_commands,
 			fa_selectionManager, fa_scrollPositions, fa_immediate,
 			fa_additionalInformationManager, fa_droppable, fa_draggable,
 			fa_autoScroll, fa_autoOpen, fa_aria, fa_gridToolTipContainer,
-			fa_tabIndex ],
+			fa_tabIndex],
 	statics : __statics,
 	members : __members
 });

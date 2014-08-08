@@ -259,7 +259,7 @@ var __members = {
 	f_performAutoSelection: function(autoSelect) {
 		f_core.Assert(typeof(autoSelect)=="number", "f_dataGridPopup.f_performAutoSelection: Invalid autoSelect parameter ("+autoSelect+")");		
 		
-		var rows=this.fa_listVisibleElements();
+		var rows=this.f_listRowsOfPage();
 
 		f_core.Debug(f_dataGridPopup, "f_performAutoSelection: change selection="+autoSelect+" rows.lengh="+rows.length);
 
