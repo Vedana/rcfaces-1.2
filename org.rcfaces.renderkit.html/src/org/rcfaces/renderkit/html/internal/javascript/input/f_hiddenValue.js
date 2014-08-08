@@ -51,6 +51,31 @@
 		if (this.f_performPropertyChange) {
 			this.f_performPropertyChange(f_prop.VALUE, value, oldValue);
 		}
+	},
+	/**
+	 * @method hidden
+	 * @return void
+	 */
+	f_completeComponent: function() {
+		
+		if (f_class.PROFILE_COMPONENT) {
+			f_core.Profile(undefined, "f_component.f_completeComponent("+this.id+" / "+this._kclass._name+")");
+		}
+
+		if (!this._hasInitListeners) {
+			return;
+		}
+		this._hasInitListeners=undefined;
+		
+		//this.f_fireEvent(f_event.INIT);
+		
+		this.f_getClass().f_getClassLoader().f_fireInitListener(this);
+	},
+	f_findComponent: function(id) {
+		return fa_namingContainer.FindComponents(this, arguments);
+	},
+	f_findSiblingComponent: function(id) {
+		return fa_namingContainer.FindSiblingComponents(this, arguments);
 	}
 };
 
