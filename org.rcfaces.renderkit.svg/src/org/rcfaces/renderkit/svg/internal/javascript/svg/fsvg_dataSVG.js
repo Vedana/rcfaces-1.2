@@ -128,11 +128,13 @@ var __members = {
 				} catch (x) {
 					// Y a pas forcement de keyManager de dispo !
 				}
-				try {
-					f_toolTipManager.UninstallOverCallbacks(svgDocument,
-							svgDocument.rootElement);
-				} catch (x) {
-					// Y a pas forcement de tooltipManager de dispo !
+				if (f_class.IsClassDefined("f_toolTipManager")) {
+					try {
+						f_toolTipManager.UninstallOverCallbacks(svgDocument,
+								svgDocument.rootElement);
+					} catch (x) {
+						// Y a pas forcement de tooltipManager de dispo !
+					}
 				}
 			}
 		}
@@ -161,11 +163,13 @@ var __members = {
 		if (!this._callbacksInstalled) {
 			this._callbacksInstalled = true;
 
-			try {
-				f_toolTipManager.InstallOverCallbacks(svgDocument,
-						svgDocument.rootElement);
-			} catch (x) {
-				// Y a pas forcement de tooltipManager de dispo !
+			if (f_class.IsClassDefined("f_toolTipManager")) {
+				try {
+					f_toolTipManager.InstallOverCallbacks(svgDocument,
+							svgDocument.rootElement);
+				} catch (x) {
+					// Y a pas forcement de tooltipManager de dispo !
+				}
 			}
 
 			try {

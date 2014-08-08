@@ -15,22 +15,22 @@ var __statics = {
 	 * @field public static final String
 	 */
 	SVG_XMLNS : "http://www.w3.org/2000/svg",
-	
+
 	/**
 	 * @field public static final String
 	 */
-	XLINK_XMLNS: "http://www.w3.org/1999/xlink"
+	XLINK_XMLNS : "http://www.w3.org/1999/xlink"
 }
 
 var __members = {
-	fsvg_svg: function() {
+	fsvg_svg : function() {
 		this.f_super(arguments);
-		
+
 	},
-	f_finalize: function() {
-		this._delayedStyleSheets=undefined;
-		this._delayedStyles=undefined;
-		
+	f_finalize : function() {
+		this._delayedStyleSheets = undefined;
+		this._delayedStyles = undefined;
+
 		this.f_super(arguments);
 	},
 	/**
@@ -84,20 +84,20 @@ var __members = {
 	 */
 	f_appendStyleSheet : function(url) {
 		var doc = this.f_getSVGDocument();
-		
+
 		if (!doc) {
-			var dss=this._delayedStyleSheets;
-			
+			var dss = this._delayedStyleSheets;
+
 			if (!dss) {
-				dss=[];
-				this._delayedStyleSheets=dss;
+				dss = [];
+				this._delayedStyleSheets = dss;
 			}
-			
+
 			dss.push(url);
 			return;
 		}
-		
-		url=f_env.ResolveContentUrl(url, window);
+
+		url = f_env.ResolveContentUrl(url, window);
 
 		var pi = doc.createProcessingInstruction('xml-stylesheet', 'href="'
 				+ url + '" type="text/css"');
@@ -112,15 +112,15 @@ var __members = {
 	 */
 	f_appendSVGStyle : function(styles) {
 		var doc = this.f_getSVGDocument();
-		
+
 		if (!doc) {
-			var dss=this._delayedStyles;
-			
+			var dss = this._delayedStyles;
+
 			if (!dss) {
-				dss=[];
-				this._delayedStyles=dss;
+				dss = [];
+				this._delayedStyles = dss;
 			}
-			
+
 			dss.push(styles);
 			return;
 		}
@@ -138,38 +138,57 @@ var __members = {
 		var svgDocument = this.f_getSVGDocument();
 		if (svgDocument) {
 			this.f_updateSVG(svgDocument);
-			
+
 		} else {
-			var self=this;
-			
-			this.addEventListener("load",function() {
+			var self = this;
+
+			this.addEventListener("load", function() {
 				self.removeEventListener("load", arguments.callee, false);
 
 				var doc = self.f_getSVGDocument();
-				
+
 				self.f_updateSVG(doc);
-				
-			 }, false);
+
+			}, false);
 		}
 
 		this.f_super(arguments);
 	},
 	f_updateSVG : function(svgDocument) {
-		var dds=this._delayedStyleSheets;
-		if (dds) {
-			this._delayedStyleSheets=undefined;
+		var domain = document.domain;
+		if (domain) {
+			try {
+				svgDocument.domain = domain;
+			} catch (x) {
+				console.log("Can not change domain to '" + domain + "'", x);
+			}
+		}
 
-			for(var i=0;i<dds.lenght;i++) {
+		var dds = this._delayedStyleSheets;
+		if (dds) {
+			this._delayedStyleSheets = undefined;
+
+			for (var i = 0; i < dds.lenght; i++) {
 				this.f_appendStyleSheet(dds[i]);
 			}
 		}
 
-		var ds=this._delayedStyles;
+		var ds = this._delayedStyles;
 		if (ds) {
-			this._delayedStyles=undefined;
+			this._delayedStyles = undefined;
 
-			for(var i=0;i<ds.lenght;i++) {
+			for (var i = 0; i < ds.lenght; i++) {
 				this.f_appendSVGStyle(ds[i]);
+			}
+		}
+	},
+	f_setFocus: function() {
+		var doc = this.f_getSVGDocument();
+		if (doc) {
+			try {
+				doc.focus();
+			} catch (x) {
+				// Can fail !
 			}
 		}
 	}
