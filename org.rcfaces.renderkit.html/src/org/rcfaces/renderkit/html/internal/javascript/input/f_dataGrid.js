@@ -431,7 +431,7 @@ var __members = {
 	 *            value The value of the new row
 	 * @param String...
 	 *            columnValue1 A parameter for each column
-	 * @return Object
+	 * @return Object Row Object
 	 */
 	f_addRow : function(value, columnValue1) {
 		// f_core.Assert(this._rows==0, "All rows of the DataGrid must be loaded
@@ -550,9 +550,16 @@ var __members = {
 
 	},
 	/**
-	 * @method hidden
+	 * 
+	 * @method public
+	 * @param any
+	 *            value The value of the new row
+	 * @param Object Properties of row
+	 * @param String...
+	 *            columnValue1 A parameter for each column
+	 * @return Object Row object
 	 */
-	f_addRow2 : function() {
+	f_addRow2 : function(value, properties, columnValue1) {
 		f_core.Assert(this._tbody, "f_dataGrid.f_addRow2: No table body !");
 
 		var doc = this.ownerDocument;
