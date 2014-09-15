@@ -59,7 +59,6 @@ public class TextRenderer extends AbstractCssRenderer {
         }
 
         htmlWriter.startElement(element);
-        designerEditableZone(htmlWriter, "text");
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
@@ -93,7 +92,7 @@ public class TextRenderer extends AbstractCssRenderer {
         }
         writeTextAttributes(htmlWriter, textComponent);
 
-        if (writeText(htmlWriter, textComponent)) {
+       if (writeText(htmlWriter, textComponent)) {
             // Un accessKey est postionné !
 
             htmlWriter.getJavaScriptEnableMode().enableOnAccessKey();
@@ -140,6 +139,8 @@ public class TextRenderer extends AbstractCssRenderer {
         }
 
         text = ParamUtils.formatMessage(textComponent, text);
+
+        designerEditableZone(htmlWriter, "text");
 
         return HtmlTools.writeSpanAccessKey(htmlWriter, textComponent, text,
                 true);
