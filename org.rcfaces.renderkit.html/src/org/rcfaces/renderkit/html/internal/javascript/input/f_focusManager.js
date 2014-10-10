@@ -127,7 +127,7 @@ var __statics = {
 				continue;
 			}
 
-			for ( var i = 0; i < children.length; i++) {
+			for (var i = 0; i < children.length; i++) {
 				var c = children[children.length - i - 1]; // On inverse
 				// l'ordre
 				if (c.nodeType != f_core.ELEMENT_NODE) {
@@ -182,53 +182,56 @@ var __statics = {
 		return false;
 	},
 	/**
-	 * Search next focusable component, ignore tabIndex level, no cycle from start of document.
+	 * Search next focusable component, ignore tabIndex level, no cycle from
+	 * start of document.
 	 * 
 	 * @method hidden static
-	 * @param Element from
+	 * @param Element
+	 *            from
 	 * @return Element
 	 */
-	SearchNextFocusable: function(from) {
-		var focusableTags=new RegExp(f_core._FOCUSABLE_TAGS, "i");
+	SearchNextFocusable : function(from) {
+		var focusableTags = new RegExp(f_core._FOCUSABLE_TAGS, "i");
 
-		var c=from;
-		
+		var c = from;
+
 		// Pas de cycle !
-		for(;;) {
-			if (c.nodeType==f_core.ELEMENT_NODE) {
-				if (typeof(c.tabIndex)=="number" && c.tabIndex>=0) {
+		for (;;) {
+			if (c.nodeType == f_core.ELEMENT_NODE) {
+				if (typeof (c.tabIndex) == "number" && c.tabIndex >= 0) {
 					return c;
 				}
-				
-				if (focusableTags.test(c.tagName) && (!c.tabIndex || c.tabIndex>=0)) {
+
+				if (focusableTags.test(c.tagName)
+						&& (!c.tabIndex || c.tabIndex >= 0)) {
 					return c;
 				}
 			}
-			
+
 			if (c.firstChild) {
-				c=c.firstChild;
+				c = c.firstChild;
 				continue;
 			}
 
 			if (c.nextSibling) {
-				c=c.nextSibling;
+				c = c.nextSibling;
 				continue;
 			}
-			
-			for(;;) {
-				var p=c.parentNode;
-				if (!p || p.nodeType!=f_core.ELEMENT_NODE) {
+
+			for (;;) {
+				var p = c.parentNode;
+				if (!p || p.nodeType != f_core.ELEMENT_NODE) {
 					return null;
 				}
-				
+
 				if (p.nextSibling) {
-					c=p.nextSibling;
+					c = p.nextSibling;
 					break;
 				}
-				c=p;
+				c = p;
 			}
 		}
-		
+
 		return null;
 	}
 };
@@ -258,7 +261,8 @@ var __members = {
 				return;
 			}
 
-			this.f_initialize(null, focusId, setFocusIfMessage, autoFocus, autoFocusFrom);
+			this.f_initialize(null, focusId, setFocusIfMessage, autoFocus,
+					autoFocusFrom);
 
 		} else {
 			// Mode JavaScript ou collecteur
@@ -316,10 +320,12 @@ var __members = {
 	 *            Boolean setFocusIfMessage
 	 * @param optional
 	 *            Boolean autoFocus
-	 * @param optional String autoFocusFrom       
+	 * @param optional
+	 *            String autoFocusFrom
 	 * @return void
 	 */
-	f_initialize : function(id, focusId, setFocusIfMessage, autoFocus, autoFocusFrom) {
+	f_initialize : function(id, focusId, setFocusIfMessage, autoFocus,
+			autoFocusFrom) {
 		f_core.Assert(id === null || typeof (id) == "string",
 				"f_focusManager.f_setId: Invalid id parameter '" + id + "'.");
 
@@ -343,7 +349,7 @@ var __members = {
 
 		if (autoFocus) {
 			this._autoFocus = true;
-			this._autoFocusFrom= autoFocusFrom;
+			this._autoFocusFrom = autoFocusFrom;
 		}
 	},
 	/**
@@ -360,31 +366,34 @@ var __members = {
 				+ "'.");
 
 		if (!focusId && this._autoFocus) {
-			var from=null;
+			var from = null;
 			if (this._autoFocusFrom) {
-				from=document.getElementById(this._autoFocusFrom);
+				from = document.getElementById(this._autoFocusFrom);
 
 				if (!from) {
-					f_core.Info(f_focusManager, "f_documentComplete: focus from='" + this._autoFocusFrom
-							+ "' can not be found !");
+					f_core.Info(f_focusManager,
+							"f_documentComplete: focus from='"
+									+ this._autoFocusFrom
+									+ "' can not be found !");
 				}
 			}
 			if (!from) {
-				from=document.body;
+				from = document.body;
 			}
-			
-			focusId=f_focusManager.SearchNextFocusable(from);
 
-			f_core.Debug(f_focusManager, "f_documentComplete: Search next focusable from='" + from
-					+ "' => "+focusId);
+			focusId = f_focusManager.SearchNextFocusable(from);
+
+			f_core.Debug(f_focusManager,
+					"f_documentComplete: Search next focusable from='" + from
+							+ "' => " + focusId);
 		}
 
 		if (false) {
 			if (window.console && window.console.log) {
-				console.log("Positionne le focus sur '"+focusId+"'");
+				console.log("Positionne le focus sur '" + focusId + "'");
 			}
 		}
-		
+
 		if (!focusId) {
 			return;
 		}
@@ -567,19 +576,19 @@ var __members = {
 						+ messageEvent.type);
 
 		switch (messageEvent.type) {
-		case f_messageContext.POST_CHECK_EVENT_TYPE:
-		case f_messageContext.POST_PENDINGS_EVENT_TYPE:
-			break;
+			case f_messageContext.POST_CHECK_EVENT_TYPE :
+			case f_messageContext.POST_PENDINGS_EVENT_TYPE :
+				break;
 
-		default:
-			return;
+			default :
+				return;
 		}
 
 		var selectedComponentClientId = undefined;
 		var selectedSeverity = -1;
 
 		var clientIds = messageContext.f_listComponentIdsWithMessages(true);
-		for ( var i = 0; i < clientIds.length; i++) {
+		for (var i = 0; i < clientIds.length; i++) {
 			var clientId = clientIds[i];
 
 			if (!clientId) { // On traite pas les globaux
@@ -591,7 +600,7 @@ var __members = {
 				continue;
 			}
 
-			for ( var j = 0; j < messages.length; j++) {
+			for (var j = 0; j < messages.length; j++) {
 				var message = messages[j];
 				var severity = message.f_getSeverity();
 
@@ -617,7 +626,7 @@ var __members = {
 
 new f_class("f_focusManager", {
 	extend : f_object,
-	aspects : [ fa_serializable ],
+	aspects : [fa_serializable],
 	statics : __statics,
 	members : __members
 });
