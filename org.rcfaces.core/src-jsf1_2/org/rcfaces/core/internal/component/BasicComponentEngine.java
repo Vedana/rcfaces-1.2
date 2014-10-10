@@ -42,11 +42,11 @@ public class BasicComponentEngine extends AbstractComponentEngine {
 
     private static final Class<Integer> INTEGER_CLASS = Integer.class;
 
-    private static final Integer INTEGER_0 = new Integer(0);
+    private static final Integer INTEGER_0 = Integer.valueOf(0);
 
     private static final Class<Double> DOUBLE_CLASS = Double.class;
 
-    private static final Double DOUBLE_0 = new Double(0);
+    private static final Double DOUBLE_0 = Double.valueOf(0.0);
 
     private static final String[] STRING_EMPTY_ARRAY = new String[0];
 
