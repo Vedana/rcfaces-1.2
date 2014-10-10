@@ -7,6 +7,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.TextComponent;
+import org.rcfaces.core.component.capability.IErrorTextCapability;
 import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.renderkit.IComponentData;
@@ -31,8 +32,49 @@ import org.rcfaces.renderkit.html.internal.util.TextTypeTools;
 public class TextRenderer extends AbstractCssRenderer {
     private static final String DEFAULT_TEXT_ELEMENT = IHtmlWriter.LABEL;
 
+    private static final String ERROR_TEXT_ATTRIBUTE = "core.ERROR_TEXT";
+
+    private static final String WARNING_14x14 = "images/pe_warn_14x14.png";
+
     protected boolean useHtmlAccessKeyAttribute() {
         return true;
+    }
+
+    @Override
+    protected void encodeBegin(IComponentWriter writer) throws WriterException {
+
+        UIComponent component = writer.getComponentRenderContext()
+                .getComponent();
+        if (component instanceof IErrorTextCapability) {
+            IErrorTextCapability errorTextCapability = (IErrorTextCapability) component;
+
+            String errorText = errorTextCapability.getErrorText();
+
+            if (errorText != null && errorText.length() > 0) {
+                writer.getComponentRenderContext().setAttribute(
+                        ERROR_TEXT_ATTRIBUTE, errorText);
+            }
+        }
+
+        super.encodeBegin(writer);
+    }
+
+    @Override
+    protected ICssStyleClasses createStyleClasses(IHtmlWriter htmlWriter) {
+        ICssStyleClasses cssStyleClasses = super.createStyleClasses(htmlWriter);
+
+        String error = (String) htmlWriter.getComponentRenderContext()
+                .getAttribute(ERROR_TEXT_ATTRIBUTE);
+        if (error != null) {
+            String errorTextStyleClass = getErrorTextStyleClass(htmlWriter);
+            cssStyleClasses.addStyleClass(errorTextStyleClass);
+        }
+
+        return cssStyleClasses;
+    }
+
+    protected String getErrorTextStyleClass(IHtmlWriter htmlWriter) {
+        return "f_errorText";
     }
 
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
@@ -86,13 +128,13 @@ public class TextRenderer extends AbstractCssRenderer {
                 }
 
                 htmlWriter.writeFor(forId);
-                
+
                 htmlWriter.getJavaScriptEnableMode().enableOnMessage();
             }
         }
         writeTextAttributes(htmlWriter, textComponent);
 
-       if (writeText(htmlWriter, textComponent)) {
+        if (writeText(htmlWriter, textComponent)) {
             // Un accessKey est postionné !
 
             htmlWriter.getJavaScriptEnableMode().enableOnAccessKey();
@@ -107,6 +149,12 @@ public class TextRenderer extends AbstractCssRenderer {
 
     protected void writeTextAttributes(IHtmlWriter htmlWriter,
             TextComponent element) throws WriterException {
+
+        String error = (String) htmlWriter.getComponentRenderContext()
+                .getAttribute(ERROR_TEXT_ATTRIBUTE);
+        if (error != null) {
+            htmlWriter.writeAttribute("v:errorText", true);
+        }
 
     }
 
@@ -132,8 +180,22 @@ public class TextRenderer extends AbstractCssRenderer {
 
     protected boolean writeText(IHtmlWriter htmlWriter,
             TextComponent textComponent) throws WriterException {
-        String text = textComponent.getText(htmlWriter
-                .getComponentRenderContext().getFacesContext());
+
+        FacesContext facesContext = htmlWriter.getComponentRenderContext()
+                .getFacesContext();
+
+        String errorText = (String) htmlWriter.getComponentRenderContext()
+                .getAttribute(ERROR_TEXT_ATTRIBUTE);
+        if (errorText != null) {
+            errorText = ParamUtils.formatMessage(htmlWriter
+                    .getComponentRenderContext().getComponent(), errorText);
+
+            writeTextError(htmlWriter, errorText);
+
+            return true;
+        }
+
+        String text = textComponent.getText(facesContext);
         if (text == null || text.trim().length() < 1) {
             return false;
         }
@@ -144,6 +206,12 @@ public class TextRenderer extends AbstractCssRenderer {
 
         return HtmlTools.writeSpanAccessKey(htmlWriter, textComponent, text,
                 true);
+    }
+
+    protected void writeTextError(IHtmlWriter htmlWriter, String errorText)
+            throws WriterException {
+
+        htmlWriter.writeText(errorText);
     }
 
     protected String getJavaScriptClassName() {
