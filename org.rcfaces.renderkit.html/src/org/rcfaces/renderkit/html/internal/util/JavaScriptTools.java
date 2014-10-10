@@ -28,7 +28,7 @@ public class JavaScriptTools {
 
     @SuppressWarnings("unused")
     public static String writeMessage(FacesContext facesContext,
-            IJavaScriptWriter js, FacesMessage facesMessage)
+            IJavaScriptWriter js, FacesMessage facesMessage, String varName)
             throws WriterException {
 
         String bundleVar = null;
@@ -36,7 +36,7 @@ public class JavaScriptTools {
         IJavaScriptRenderContext javaScriptRenderContext = js
                 .getJavaScriptRenderContext();
 
-        String key = javaScriptRenderContext.allocateVarName();
+        // String key = javaScriptRenderContext.allocateVarName();
 
         String summary = facesMessage.getSummary();
         if (summary != null) {
@@ -57,7 +57,7 @@ public class JavaScriptTools {
             detail = js.allocateString(detail);
         }
 
-        js.write("var ").write(key).write('=')
+        js.write("var ").write(varName).write('=')
                 .writeConstructor("f_messageObject");
 
         IObjectLiteralWriter objectLiteralWriter = js.writeObjectLiteral(true);
@@ -92,6 +92,6 @@ public class JavaScriptTools {
 
         objectLiteralWriter.end().writeln(");");
 
-        return key;
+        return varName;
     }
 }

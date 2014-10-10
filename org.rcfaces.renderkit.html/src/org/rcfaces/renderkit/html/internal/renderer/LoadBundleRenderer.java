@@ -35,7 +35,6 @@ import org.rcfaces.renderkit.html.component.LoadBundleComponent;
 import org.rcfaces.renderkit.html.internal.AbstractHtmlRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
-import org.rcfaces.renderkit.html.internal.JavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.clientBundle.ClientResourceBundleServlet;
 import org.rcfaces.renderkit.html.internal.clientBundle.IClientBundleRepository;
 import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository;
@@ -157,8 +156,8 @@ public class LoadBundleRenderer extends AbstractHtmlRenderer {
 
             IJavaScriptWriter jsWriter = InitRenderer.openScriptTag(htmlWriter);
 
-            JavaScriptRenderContext.initializeJavaScript(jsWriter, repository,
-                    true);
+            jsWriter.getJavaScriptRenderContext().initializeJavaScript(
+                    jsWriter, repository, true);
 
             jsWriter.writeCall("f_resourceBundle", "Load")
                     .writeString(bundleName).write(',').writeString(baseName)

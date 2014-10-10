@@ -479,7 +479,8 @@ public class JavaScriptCollectorRenderContext extends
         if (filesToRequire.length > 0 || scripts != null) {
             IJavaScriptWriter jsWriter = InitRenderer.openScriptTag(htmlWriter);
 
-            initializeJavaScript(jsWriter, getRepository(), false);
+            jsWriter.getJavaScriptRenderContext().initializeJavaScript(
+                    jsWriter, getRepository(), false);
 
             if (false && logProfiling) {
                 jsWriter.writeCall("f_core", "Profile").writeln(

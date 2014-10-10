@@ -54,7 +54,6 @@ import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
-import org.rcfaces.renderkit.html.internal.JavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.agent.ClientBrowserFactory;
 import org.rcfaces.renderkit.html.internal.agent.IClientBrowser;
 import org.rcfaces.renderkit.html.internal.agent.IUserAgent.BrowserType;
@@ -589,8 +588,8 @@ public class InitRenderer extends AbstractHtmlRenderer {
 
         IJavaScriptWriter jsWriter = openScriptTag(writer);
 
-        JavaScriptRenderContext
-                .initializeJavaScript(jsWriter, repository, true);
+        jsWriter.getJavaScriptRenderContext().initializeJavaScript(jsWriter,
+                repository, true);
 
         jsWriter.end();
     }

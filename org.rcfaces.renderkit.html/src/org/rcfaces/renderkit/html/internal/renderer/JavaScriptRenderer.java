@@ -34,7 +34,6 @@ import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
-import org.rcfaces.renderkit.html.internal.JavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.agent.UserAgentRuleTools;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.JavaScriptFilesCollectorDecorator;
@@ -339,8 +338,8 @@ public class JavaScriptRenderer extends AbstractFilesCollectorRenderer {
 
         IJavaScriptWriter jsWriter = InitRenderer.openScriptTag(writer);
 
-        JavaScriptRenderContext
-                .initializeJavaScript(jsWriter, repository, true);
+        jsWriter.getJavaScriptRenderContext().initializeJavaScript(jsWriter,
+                repository, true);
 
         String cameliaClassLoader = jsWriter.getJavaScriptRenderContext()
                 .convertSymbol("f_classLoader", "_rcfacesClassLoader");

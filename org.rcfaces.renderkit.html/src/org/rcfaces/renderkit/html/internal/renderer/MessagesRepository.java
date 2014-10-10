@@ -27,6 +27,14 @@ public class MessagesRepository {
         this.javascriptRenderContext = javascriptRenderContext;
     }
 
+    public MessagesRepository(IJavaScriptRenderContext javascriptRenderContext,
+            MessagesRepository parent) {
+        this.javascriptRenderContext = javascriptRenderContext;
+        if (parent.messages != null) {
+            this.messages = new ArrayList<Object>(parent.messages);
+        }
+    }
+
     public String allocateFacesMessage(FacesMessage message,
             boolean mustDeclare[]) {
         if (messages != null) {
