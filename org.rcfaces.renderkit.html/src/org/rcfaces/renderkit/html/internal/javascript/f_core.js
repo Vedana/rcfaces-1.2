@@ -333,11 +333,13 @@ var f_core = {
 
 		f_core.Error("f_assert", message, ex);
 		
+		/*
 		try {
 			debugger;
 		} catch (x) {
 			// Nothing
 		}
+		*/
 
 		throw ex;
 	},
