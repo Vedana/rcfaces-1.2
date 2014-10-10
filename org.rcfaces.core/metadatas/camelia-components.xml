@@ -2807,6 +2807,7 @@
 		<capability id="IVariableScopeCapability" />
 
 		<capability id="IOverStyleClassCapability" />
+		<capability id="IErrorTextCapability" />
 
 		<attribute id="collapseEffect" type="java.lang.String" />
 		<attribute id="collapsedText" type="java.lang.String" />
@@ -3790,6 +3791,7 @@
 		<!-- <capability id="IValueAdapterCapability" /> -->
 
 		<capability id="ITypedComponentCapability" />
+		<capability id="IErrorTextCapability" />
 
 		<propertyValue>text</propertyValue>
 	</component>
