@@ -26,7 +26,8 @@ import org.rcfaces.core.model.IFilterProperties;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class GridPreferences extends AbstractComponentPreferences {
+public class GridPreferences extends AbstractComponentPreferences implements
+        Cloneable {
 
     private static final long serialVersionUID = -1760014871350310345L;
 
@@ -41,7 +42,7 @@ public class GridPreferences extends AbstractComponentPreferences {
     private static final int SAVE_POSITION = 0x0010;
 
     private int saveMask = SAVE_COLUMNS_ORDER | SAVE_COLUMN_SIZES
-            | SAVE_SORTED_COLUMN_IDS | SAVE_COLUMN_SIZES;
+            | SAVE_SORTED_COLUMN_IDS;
 
     private String columnsOrder;
 
@@ -257,4 +258,26 @@ public class GridPreferences extends AbstractComponentPreferences {
         position = -1;
     }
 
+    @Override
+    public Object clone() {
+        GridPreferences gridPreferences = new GridPreferences();
+        if (this.columnSizes != null)
+            gridPreferences.columnSizes = new HashMap<String, String>(
+                    this.columnSizes);
+
+        gridPreferences.columnsOrder = this.columnsOrder;
+        gridPreferences.position = this.position;
+        gridPreferences.saveMask = this.saveMask;
+        gridPreferences.sortedColumnIds = this.sortedColumnIds;
+
+        if (filterProperties != null) {
+            gridPreferences.filterProperties = this.filterProperties.clone();
+        }
+
+        if (this.isTransient()) {
+            gridPreferences.setTransient(true);
+        }
+
+        return gridPreferences;
+    }
 }

@@ -29,7 +29,14 @@ public final class FilterExpressionTools {
     /**
      * 
      */
-    public static final IFilterProperties EMPTY = new IFilterProperties() {
+    public static final IFilterProperties EMPTY = new EmptyFilterProperties();
+
+    public static IFilterProperties create(Map map) {
+        return new FilterPropertiesMap(map);
+    }
+
+    public static final class EmptyFilterProperties implements
+            IFilterProperties, Cloneable {
 
         private static final long serialVersionUID = -3817846186098661680L;
 
@@ -115,10 +122,12 @@ public final class FilterExpressionTools {
             return null;
         }
 
+        @Override
         public int hashCode() {
             return 31;
         }
 
+        @Override
         public boolean equals(Object obj) {
             if (this == obj) {
                 return true;
@@ -131,9 +140,10 @@ public final class FilterExpressionTools {
             return true;
         }
 
-    };
+        @Override
+        public IFilterProperties clone() {
+            return EMPTY;
+        }
 
-    public static IFilterProperties create(Map map) {
-        return new FilterPropertiesMap(map);
     }
 }

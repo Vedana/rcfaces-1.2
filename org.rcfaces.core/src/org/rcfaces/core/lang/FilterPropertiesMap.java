@@ -18,7 +18,7 @@ import org.rcfaces.core.model.IFilterProperties;
  * @version $Revision$ $Date$
  */
 public final class FilterPropertiesMap extends AbstractProperties implements
-        IFilterProperties {
+        IFilterProperties, Cloneable {
 
     private static final Log LOG = LogFactory.getLog(FilterPropertiesMap.class);
 
@@ -179,6 +179,13 @@ public final class FilterPropertiesMap extends AbstractProperties implements
         StringBuilder builder = new StringBuilder();
         builder.append("[FilterPropertiesMap map='").append(map).append("']");
         return builder.toString();
+    }
+
+    @Override
+    public IFilterProperties clone() {
+        FilterPropertiesMap filterPropertiesMap = new FilterPropertiesMap(this);
+
+        return filterPropertiesMap;
     }
 
     static {

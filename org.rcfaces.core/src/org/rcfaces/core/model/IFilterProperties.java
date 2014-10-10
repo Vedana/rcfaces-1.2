@@ -16,7 +16,7 @@ import org.rcfaces.core.internal.renderkit.IProperties;
  * @version $Revision$ $Date$
  */
 public interface IFilterProperties extends IProperties, Serializable,
-        StateHolder {
+        StateHolder, Cloneable {
 
     Object put(String propertyName, Object value);
 
@@ -33,4 +33,6 @@ public interface IFilterProperties extends IProperties, Serializable,
     void putAll(Map<String, Object> map);
 
     Map<String, Object> toMap();
+
+    IFilterProperties clone();
 }
