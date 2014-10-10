@@ -239,6 +239,11 @@ var f_core = {
 	_PADDING_LENGTHS : [ "padding" ],
 
 	/**
+	 * @field private static final String[]
+	 */
+	_MARGIN_LENGTHS : [ "margin" ],
+
+	/**
 	 * @field hidden static boolean
 	 */
 	DebugMode : undefined,
@@ -327,6 +332,12 @@ var f_core = {
 		var ex = new Error(message);
 
 		f_core.Error("f_assert", message, ex);
+		
+		try {
+			debugger;
+		} catch (x) {
+			// Nothing
+		}
 
 		throw ex;
 	},
@@ -4860,6 +4871,18 @@ var f_core = {
 				arguments);
 	},
 	/**
+	 * @method static
+	 * @param HTMLElement
+	 *            component
+	 * @param String...
+	 *            side
+	 * @return Number
+	 */
+	ComputeMarginsLength : function(component, side) {
+		return f_core.ComputeCssLengths(component, f_core._MARGIN_LENGTHS,
+				arguments);
+	},
+	/**
 	 * @method private static
 	 * @param HTMLElement
 	 *            component
@@ -4889,7 +4912,7 @@ var f_core = {
 
 				var l = f_core.GetCurrentStyleProperty(component, property);
 				if (l && l.indexOf("px") > 0) {
-					length += parseInt(l, 10);
+					length += parseFloat(l);
 				}
 			}
 		}
