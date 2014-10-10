@@ -6,8 +6,7 @@
  * f_event class
  * 
  * @class public final f_event extends Object
- * @author Olivier Oeuillot (latest modification by $Author$) & Joel
- *         Merlin
+ * @author Olivier Oeuillot (latest modification by $Author$) & Joel Merlin
  * @version $Revision$ $Date$
  */
 
@@ -1018,19 +1017,22 @@ var __statics = {
 	 * Allocate detail object
 	 * 
 	 * @method public static
-	 * @param optional Object details
+	 * @param optional
+	 *            Object details
 	 * @return Object
 	 */
 	NewDetail : function(details) {
-		f_core.Assert(typeof(details)=="object" || details===undefined, "f_event.NewDetail: Invalid 'details' parameter ("+details+")");
-		
+		f_core.Assert(typeof (details) == "object" || details === undefined,
+				"f_event.NewDetail: Invalid 'details' parameter (" + details
+						+ ")");
+
 		if (!details) {
-			details={};
+			details = {};
 		}
 		if (!details.value) {
-			details.value=0;
+			details.value = 0;
 		}
-		
+
 		return details;
 	}
 };
