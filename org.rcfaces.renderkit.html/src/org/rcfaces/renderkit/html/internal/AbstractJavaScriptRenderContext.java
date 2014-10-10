@@ -434,7 +434,7 @@ public abstract class AbstractJavaScriptRenderContext implements
 
         MessagesRepository mp = parent.getMessagesRepository(create);
         if (create) {
-            facesMessagesRepository = new MessagesRepository(this);
+            facesMessagesRepository = new MessagesRepository(this, mp);
             return facesMessagesRepository;
         }
 
@@ -533,7 +533,8 @@ public abstract class AbstractJavaScriptRenderContext implements
 
         initialized = true;
 
-        initializeJavaScript(writer, repository, true);
+        writer.getJavaScriptRenderContext().initializeJavaScript(writer,
+                repository, true);
     }
 
     public void restoreState(FacesContext facesContext, Object state) {
@@ -583,7 +584,7 @@ public abstract class AbstractJavaScriptRenderContext implements
         return requestMap.containsKey(JAVASCRIPT_INITIALIZED_PROPERTY);
     }
 
-    public static void initializeJavaScript(IJavaScriptWriter writer,
+    public void initializeJavaScript(IJavaScriptWriter writer,
             IJavaScriptRepository repository, boolean generateMessages)
             throws WriterException {
 
@@ -866,9 +867,10 @@ public abstract class AbstractJavaScriptRenderContext implements
         return false;
     }
 
-    protected static void writeMessages(IJavaScriptWriter writer)
+    protected void writeMessages(IJavaScriptWriter writer)
             throws WriterException {
         IHtmlRenderContext htmlRenderContext = writer.getHtmlRenderContext();
+        MessagesRepository messagesRepository = getMessagesRepository(true);
 
         Set clientMessageIdFilters = htmlRenderContext
                 .getClientMessageIdFilters();
@@ -878,7 +880,6 @@ public abstract class AbstractJavaScriptRenderContext implements
             return;
         }
 
-        Map<FacesMessage, String> messages = null;
         StringAppender sa = null;
 
         FacesContext facesContext = htmlRenderContext.getFacesContext();
@@ -891,20 +892,21 @@ public abstract class AbstractJavaScriptRenderContext implements
                 continue;
             }
 
-            if (messages == null) {
-                messages = new HashMap<FacesMessage, String>();
-            }
+            boolean[] alreadyDefined = new boolean[1];
 
             Iterator it = facesContext.getMessages(clientId);
             for (; it.hasNext();) {
                 FacesMessage facesMessage = (FacesMessage) it.next();
 
-                String varName = messages.get(facesMessage);
-                if (varName == null) {
-                    varName = JavaScriptTools.writeMessage(facesContext,
-                            writer, facesMessage);
+                String varName = messagesRepository.allocateFacesMessage(
+                        facesMessage, alreadyDefined);
+                if (alreadyDefined[0] == false) {
+                    continue;
+                }
 
-                    messages.put(facesMessage, varName);
+                if (true) {
+                    varName = JavaScriptTools.writeMessage(facesContext,
+                            writer, facesMessage, varName);
 
                 }
                 if (sa == null) {

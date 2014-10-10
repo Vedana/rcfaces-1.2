@@ -88,4 +88,8 @@ public interface IJavaScriptRenderContext extends IScriptRenderContext {
     IJavaScriptRepository getRepository();
 
     String convertSymbol(String className, String memberName);
+
+    void initializeJavaScript(IJavaScriptWriter writer,
+            IJavaScriptRepository repository, boolean generateMessages)
+            throws WriterException;
 }
