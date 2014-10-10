@@ -3634,10 +3634,16 @@ var __members = {
 			return;
 		}
 		
+		if (this._treeNodeFocus) {
+			this._treeNodeFocus.focus();
+			return;
+		}
+		
 		if (!this.focus) {
 			return;
 		}
 		
+		// TODO ....
 		this.focus();
 	},
 	/**
