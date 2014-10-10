@@ -2941,7 +2941,7 @@ var __members = {
 			return;
 		}
 
-		f_core.Debug(f_dataGrid, "fa_showElement: show row '" + row._value
+		f_core.Debug(f_dataGrid, "fa_showElement: show row '" + row._index
 				+ "'  inputTabIndex='" + this._inputTabIndex + "'.");
 
 		var old = this._inputTabIndex;
