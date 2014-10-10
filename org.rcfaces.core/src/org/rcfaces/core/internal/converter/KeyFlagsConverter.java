@@ -21,8 +21,6 @@ import org.rcfaces.core.model.AbstractConverter;
  * @version $Revision$ $Date$
  */
 public class KeyFlagsConverter extends AbstractConverter {
-    private static final String REVISION = "$Revision$";
-
     public static final Converter SINGLETON = new KeyFlagsConverter();
 
     private static final Integer NO_FLAGS = new Integer(0);
@@ -35,13 +33,17 @@ public class KeyFlagsConverter extends AbstractConverter {
 
     public static final int META_FLAG = 0x08;
 
-    private static final Map FLAGS = new HashMap(8);
+    public static final int OS_FLAG = 0x10;
+
+    private static final Map<String, Integer> FLAGS = new HashMap<String, Integer>(
+            8);
     static {
         FLAGS.put("SHIFT", new Integer(SHIFT_FLAG));
         FLAGS.put("CONTROL", new Integer(CONTROL_FLAG));
         FLAGS.put("CTRL", new Integer(CONTROL_FLAG));
         FLAGS.put("ALT", new Integer(ALT_FLAG));
         FLAGS.put("META", new Integer(META_FLAG));
+        FLAGS.put("OS", new Integer(OS_FLAG));
     }
 
     public Object getAsObject(FacesContext context, UIComponent component,
@@ -57,7 +59,7 @@ public class KeyFlagsConverter extends AbstractConverter {
         for (; st.hasMoreTokens();) {
             String token = st.nextToken().toUpperCase();
 
-            Integer flags = (Integer) FLAGS.get(token);
+            Integer flags = FLAGS.get(token);
             if (flags == null) {
                 continue;
             }
@@ -78,6 +80,6 @@ public class KeyFlagsConverter extends AbstractConverter {
     }
 
     public static Integer convertUpperCase(String key) {
-        return (Integer) FLAGS.get(key);
+        return FLAGS.get(key);
     }
 }
