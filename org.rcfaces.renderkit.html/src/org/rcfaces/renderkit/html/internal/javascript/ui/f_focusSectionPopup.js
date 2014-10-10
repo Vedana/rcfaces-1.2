@@ -119,7 +119,7 @@ var __statics = {
 			n._nodeIdx = nodeIdx++;
 
 			var li = f_core.CreateElement(n._parent._element, "li", {
-				role : "presentation",
+				role : "presentation"
 			});
 
 			var txt = n._txt;
