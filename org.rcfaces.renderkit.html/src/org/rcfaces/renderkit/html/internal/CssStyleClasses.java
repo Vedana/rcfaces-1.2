@@ -33,10 +33,14 @@ public class CssStyleClasses implements ICssStyleClasses {
 
     private Collection<String> suffixes;
 
-    public CssStyleClasses(String mainStyleClassName, String styleClasses[]) {
+    public CssStyleClasses(String mainStyleClassName) {
         verifyStyleClass(mainStyleClassName);
 
         this.mainStyleClassName = mainStyleClassName;
+    }
+
+    public CssStyleClasses(String mainStyleClassName, String styleClasses[]) {
+        this(mainStyleClassName);
 
         if (styleClasses != null) {
             for (int i = 0; i < styleClasses.length; i++) {
@@ -47,9 +51,7 @@ public class CssStyleClasses implements ICssStyleClasses {
 
     public CssStyleClasses(String mainStyleClassName,
             String componentStyleClasse) {
-        verifyStyleClass(mainStyleClassName);
-
-        this.mainStyleClassName = mainStyleClassName;
+        this(mainStyleClassName);
 
         if (componentStyleClasse != null) {
             addStyleClass(componentStyleClasse);
