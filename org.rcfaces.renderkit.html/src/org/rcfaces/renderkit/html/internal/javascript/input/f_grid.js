@@ -941,6 +941,9 @@ var __statics = {
 			code = evt.keyCode;
 		}
 
+		f_core.Debug(f_grid, "_Link_onkeypress: keyCode=" + evt.keyCode
+				+ " charCode=" + evt.charCode);
+
 		if (evt.keyCode == f_key.VK_TAB) {
 			return true;
 
@@ -974,6 +977,9 @@ var __statics = {
 			return false;
 		}
 
+		f_core.Debug(f_grid, "_Link_onkeydown: keyCode=" + evt.keyCode
+				+ " charCode=" + evt.charCode + " focus=" + dataGrid._focus);
+
 		if (!f_grid.VerifyTarget(evt)) {
 			return true;
 		}
@@ -981,7 +987,6 @@ var __statics = {
 		if (!dataGrid._focus) {
 			return true;
 		}
-
 		return dataGrid.f_fireEvent(f_event.KEYDOWN, evt);
 		// return dataGrid.f_performKeyDown(evt);
 	},
@@ -1004,6 +1009,9 @@ var __statics = {
 		if (dataGrid.f_getEventLocked(evt, false)) {
 			return false;
 		}
+
+		f_core.Debug(f_grid, "_Link_onkeyup: keyCode=" + evt.keyCode
+				+ " charCode=" + evt.charCode + " focus=" + dataGrid._focus);
 
 		if (!f_grid.VerifyTarget(evt)) {
 			return true;
@@ -1673,6 +1681,8 @@ var __statics = {
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
+
+		f_core.Debug(f_grid, "GotFocus: " + row);
 
 		if (!f_grid.VerifyTarget(evt)) {
 			return true;
@@ -2353,6 +2363,11 @@ var __members = {
 		} else if (f_core.IsGecko()) {
 			focus = this.ownerDocument.getElementById(this.id
 					+ f_grid._DATA_BODY_SCROLL_ID_SUFFIX);
+			if (!focus) {
+				// case of title less dataGrid
+				focus = this.ownerDocument.getElementById(this.id
+						+ f_grid._DATA_TABLE_ID_SUFFIX);
+			}
 
 			if (focus) {
 				focus.onfocus = f_grid._Link_onfocus;
