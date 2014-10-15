@@ -198,7 +198,6 @@ public class CheckButtonRenderer extends AbstractInputRenderer implements
             CheckButtonComponent button, String className,
             String componentClientId) throws WriterException {
         htmlWriter.startElement(IHtmlWriter.LABEL);
-        designerEditableZone(htmlWriter, "text");
 
         htmlWriter.writeId(componentClientId + TEXT_ID_SUFFIX);
         htmlWriter.writeClass(className + TEXT_STYLECLASS_SUFFIX);
@@ -217,6 +216,7 @@ public class CheckButtonRenderer extends AbstractInputRenderer implements
 
         HtmlTools.writeSpanAccessKey(htmlWriter, button, text, true);
 
+        designerEditableZone(htmlWriter, "text");
         htmlWriter.endElement(IHtmlWriter.LABEL);
 
         return htmlWriter;
