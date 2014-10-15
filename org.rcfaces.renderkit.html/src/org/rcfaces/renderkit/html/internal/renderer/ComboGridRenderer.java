@@ -81,6 +81,13 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
 
         AbstractGridRenderContext gridRenderContext = getGridRenderContext(componentRenderContext);
 
+        htmlWriter.startElement(IHtmlWriter.TABLE);
+        htmlWriter.writeCellPadding(0);
+        htmlWriter.writeCellSpacing(0);
+
+        writeHtmlAttributes(htmlWriter);
+        writeJavaScriptAttributes(htmlWriter);
+ 
         Map formattedValues = null;
         String formattedValue = null;
         String formattedValueLabel = null;
@@ -217,12 +224,6 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
             colWidth = totalWidth - ARROW_IMAGE_WIDTH - 4;
         }
 
-        htmlWriter.startElement(IHtmlWriter.TABLE);
-        htmlWriter.writeCellPadding(0);
-        htmlWriter.writeCellSpacing(0);
-
-        writeHtmlAttributes(htmlWriter);
-        writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter, cssStyleClasses, CSS_ALL_MASK);
 
         if (valueColumnId != null) {
