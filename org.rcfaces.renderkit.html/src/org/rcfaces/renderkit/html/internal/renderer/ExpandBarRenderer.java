@@ -352,7 +352,6 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         }
 
         htmlWriter.startElement(labelType);
-        designerEditableZone(htmlWriter, "text");
 
         htmlWriter.writeId(getLabelId(htmlWriter));
         htmlWriter.writeFor(buttonClientId);
@@ -372,6 +371,7 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
                     false);
         }
 
+        designerEditableZone(htmlWriter, "text");
         htmlWriter.endElement(labelType);
 
         UIComponent component = expandBarComponent.getFacet(HEAD_FACET_NAME);
