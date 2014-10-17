@@ -665,33 +665,72 @@ var __statics = {
 		});
 	},
 
-	FocusNextSameLevel : function(event) {
+	FocusNext : function(event) {
 		f_focusSectionPopup._FocusNext(event, function(focusElement, levels,
 				pos, tree) {
 			var px = pos[pos.length - 1];
 			if (!px) {
 				return;
 			}
+			if (px._children && px._children.length) {
+				return px._children[0];
+			}
+
 			var children = px._parent._children;
 			var idx = children.indexOf(px);
-			idx = (idx + 1) % children.length;
+			if (children[idx + 1]) {
+				return children[idx + 1];
+			}
 
-			return children[idx];
+			for (;;) {
+				px = px._parent;
+				if (!px || !px._parent) {
+					break;
+				}
+
+				children = px._parent._children;
+				var idx = children.indexOf(px);
+				if (children[idx + 1]) {
+					return children[idx + 1];
+				}
+			}
+
+			if (tree._children[0]) {
+				return tree._children[0];
+			}
+
+			return null;
 		});
 	},
 
-	FocusPreviousSameLevel : function(event) {
+	FocusPrevious : function(event) {
 		f_focusSectionPopup._FocusNext(event, function(focusElement, levels,
 				pos, tree) {
-			var px = pos[pos.length - 1];
-			if (!px) {
-				return;
-			}
-			var children = px._parent._children;
-			var idx = children.indexOf(px);
-			idx = (idx - 1 + children.length) % children.length;
+			var px;
+			if (pos.length) {
+				px = pos[pos.length - 1];
+				if (!px) {
+					return;
+				}
 
-			return children[idx];
+				var children = px._parent._children;
+				var idx = children.indexOf(px);
+				if (children[idx - 1]) {
+					return children[idx - 1];
+				}
+
+				if (px._parent) {
+					return px._parent;
+				}
+			}
+			px = tree;
+			for (;;) {
+				if (!px._children || !px._children.length) {
+					return px;
+				}
+
+				px = px._children[px._children.length - 1];
+			}
 		});
 	},
 
@@ -706,7 +745,7 @@ var __statics = {
 
 		var levels = f_focusSectionPopup
 				._ListHElementsHierarchy(focusComponent);
-		if (!levels || !levels.length) {
+		if (!levels) {
 			return;
 		}
 
