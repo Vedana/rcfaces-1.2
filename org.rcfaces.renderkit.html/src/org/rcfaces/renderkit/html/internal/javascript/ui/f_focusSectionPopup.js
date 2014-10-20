@@ -25,6 +25,12 @@ var __statics = {
 		f_focusSectionPopup._PopupSection = undefined; // Element
 	},
 
+	/**
+	 * @method private static
+	 * @param HtmlElement
+	 *            element
+	 * @return Object
+	 */
 	_ListHElementsHierarchy : function(element) {
 		var prevs = [];
 		var curLevel = 10;
@@ -491,7 +497,7 @@ var __statics = {
 		return false;
 	},
 	/**
-	 * @method private statoc
+	 * @method private static
 	 * @param Element
 	 *            from
 	 * @return Object
@@ -754,6 +760,13 @@ var __statics = {
 		});
 	},
 
+	/**
+	 * @method private static
+	 * @param f_event
+	 *            event
+	 * @param Function func
+	 * @return Boolean
+	 */
 	_FocusNext : function(event, func) {
 		// On ne peut pas utiliser le f_getFocusComponent()
 		// Car pour les containers qui contiennent des Hx on ne peut plus voir
