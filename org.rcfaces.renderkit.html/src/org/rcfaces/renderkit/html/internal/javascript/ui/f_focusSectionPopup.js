@@ -634,7 +634,12 @@ var __statics = {
 
 		return root;
 	},
-
+	/**
+	 * @method public static
+	 * @param f_event
+	 *            event
+	 * @return void
+	 */
 	FocusNextH1 : function(event) {
 		f_focusSectionPopup._FocusNext(event, function(focusElement, levels,
 				pos, tree) {
@@ -649,7 +654,12 @@ var __statics = {
 			return children[idx];
 		});
 	},
-
+	/**
+	 * @method public static
+	 * @param f_event
+	 *            event
+	 * @return void
+	 */
 	FocusPreviousH1 : function(event) {
 		f_focusSectionPopup._FocusNext(event, function(focusElement, levels,
 				pos, tree) {
@@ -664,7 +674,12 @@ var __statics = {
 			return children[idx];
 		});
 	},
-
+	/**
+	 * @method public static
+	 * @param f_event
+	 *            event
+	 * @return void
+	 */
 	FocusNext : function(event) {
 		f_focusSectionPopup._FocusNext(event, function(focusElement, levels,
 				pos, tree) {
@@ -702,7 +717,12 @@ var __statics = {
 			return null;
 		});
 	},
-
+	/**
+	 * @method public static
+	 * @param f_event
+	 *            event
+	 * @return void
+	 */
 	FocusPrevious : function(event) {
 		f_focusSectionPopup._FocusNext(event, function(focusElement, levels,
 				pos, tree) {
