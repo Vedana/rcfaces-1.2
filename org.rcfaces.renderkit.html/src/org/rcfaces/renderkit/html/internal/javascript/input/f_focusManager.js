@@ -48,7 +48,7 @@ var __statics = {
 		f_focusManager._Instance = undefined; // f_focusManager
 	},
 	/**
-	 * @method private hidden
+	 * @method private static hidden
 	 * @param Event
 	 *            event
 	 * @return Element
@@ -76,7 +76,7 @@ var __statics = {
 		return focusComponent;
 	},
 	/**
-	 * @method private hidden
+	 * @method private static hidden
 	 * @param Element
 	 *            focusComponent
 	 * @param Function
