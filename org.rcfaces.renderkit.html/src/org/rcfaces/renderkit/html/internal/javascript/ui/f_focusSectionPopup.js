@@ -227,7 +227,7 @@ var __statics = {
 
 				var target = evt.target || evt.srcElement;
 
-				if (true) {
+				if (false) {
 					console
 							.log("Event=", evt, " target=", target,
 									" setFocusDate=", setFocusDate, " now=",
@@ -236,7 +236,9 @@ var __statics = {
 
 				if (setFocusDate && setFocusDate + 800 > Date.now()) {
 					setFocusDate = 0;
-					console.log("Cancel focus date");
+					if (false) {
+						console.log("Cancel focus date");
+					}
 					oldFocus = target;
 					return false;
 				}
@@ -442,13 +444,17 @@ var __statics = {
 							focs = currentNode._node._focusables;
 						}
 
-						console.log("Focus=", focs, " currentNode=",
-								currentNode);
+						if (false) {
+							console.log("Focus=", focs, " currentNode=",
+									currentNode);
+						}
 
 						if (focs && focs.length) {
 							var elt = doc.getElementById(focs[0]);
 
-							console.log("Set focus to ", elt);
+							if (false) {
+								console.log("Set focus to ", elt);
+							}
 							if (elt) {
 								f_core.SetFocus(elt, true);
 							}
@@ -462,7 +468,11 @@ var __statics = {
 						return clbks.close(evt);
 				}
 
-				console.log("NextNode=", nextNode, " curNode=", currentNode);
+				if (true) {
+					console
+							.log("NextNode=", nextNode, " curNode=",
+									currentNode);
+				}
 
 				if (nextNode) {
 					if (currentNode) {
@@ -681,6 +691,23 @@ var __statics = {
 		});
 	},
 	/**
+	 * @private static
+	 * @param Object
+	 *            px
+	 * @return Object
+	 */
+	_SearchFirstChild : function(px) {
+		for (; px;) {
+			if (px._focusables.length) {
+				return px;
+			}
+
+			px = px._children[0];
+		}
+
+		return null;
+	},
+	/**
 	 * @method public static
 	 * @param f_event
 	 *            event
@@ -694,13 +721,21 @@ var __statics = {
 				return;
 			}
 			if (px._children && px._children.length) {
-				return px._children[0];
+				var ret = f_focusSectionPopup
+						._SearchFirstChild(px._children[0]);
+				if (ret) {
+					return ret;
+				}
 			}
 
 			var children = px._parent._children;
 			var idx = children.indexOf(px);
 			if (children[idx + 1]) {
-				return children[idx + 1];
+				var ret = f_focusSectionPopup
+						._SearchFirstChild(children[idx + 1]);
+				if (ret) {
+					return ret;
+				}
 			}
 
 			for (;;) {
@@ -711,17 +746,33 @@ var __statics = {
 
 				children = px._parent._children;
 				var idx = children.indexOf(px);
-				if (children[idx + 1]) {
-					return children[idx + 1];
+				var ret = f_focusSectionPopup
+						._SearchFirstChild(children[idx + 1]);
+				if (ret) {
+					return ret;
 				}
 			}
 
-			if (tree._children[0]) {
-				return tree._children[0];
+			var ret = f_focusSectionPopup._SearchFirstChild(tree._children[0]);
+			if (ret) {
+				return ret;
 			}
 
 			return null;
 		});
+	},
+	/**
+	 * @method private static
+	 * @param Object
+	 *            px
+	 * @return Object
+	 */
+	_SearchChildLast : function(px) {
+		for (; px._children.length;) {
+			px = px._children[px._children.length - 1];
+		}
+
+		return px;
 	},
 	/**
 	 * @method public static
@@ -739,14 +790,19 @@ var __statics = {
 					return;
 				}
 
-				var children = px._parent._children;
-				var idx = children.indexOf(px);
-				if (children[idx - 1]) {
-					return children[idx - 1];
-				}
+				for (; px._parent;) {
+					var children = px._parent._children;
+					var idx = children.indexOf(px);
+					if (children[idx - 1]) {
+						return f_focusSectionPopup
+								._SearchChildLast(children[idx - 1]);
+					}
 
-				if (px._parent) {
-					return px._parent;
+					px = px._parent;
+
+					if (px._focusables.length) {
+						return px;
+					}
 				}
 			}
 			px = tree;
@@ -764,7 +820,8 @@ var __statics = {
 	 * @method private static
 	 * @param f_event
 	 *            event
-	 * @param Function func
+	 * @param Function
+	 *            func
 	 * @return Boolean
 	 */
 	_FocusNext : function(event, func) {
@@ -772,33 +829,44 @@ var __statics = {
 		// Car pour les containers qui contiennent des Hx on ne peut plus voir
 		// les Hx
 		var focusComponent = f_focusManager.Get()._getActiveElement();
+		console.log("FocusComponent", focusComponent);
 		if (!focusComponent) {
 			return false;
 		}
 
 		var levels = f_focusSectionPopup
 				._ListHElementsHierarchy(focusComponent);
+
+		console.log("Levels", levels);
 		if (!levels) {
 			return;
 		}
 
 		var doc = focusComponent.ownerDocument;
+		console.log("doc", doc);
+		if (!doc) {
+			return;
+		}
 
 		var pos = [];
 
 		var tree = f_focusSectionPopup
 				._BuildHeadingsTree(doc.body, levels, pos);
 		if (!tree) {
+			console.log("Tree", tree);
 			return;
 		}
 
 		var node = func.call(f_focusSectionPopup, focusComponent, levels, pos,
 				tree);
+		console.log("NextNode", node);
 		if (!node) {
 			return;
 		}
 
 		var focs = node._focusables;
+
+		console.log("Focs", focs);
 		if (!focs || !focs.length) {
 			return;
 		}
@@ -820,6 +888,7 @@ var __statics = {
 		}
 		var elt = f_core.GetElementByClientId(id);
 		if (elt) {
+			console.log("SETFOCUS ", elt);
 			f_core.SetFocus(elt, true);
 		}
 	}
