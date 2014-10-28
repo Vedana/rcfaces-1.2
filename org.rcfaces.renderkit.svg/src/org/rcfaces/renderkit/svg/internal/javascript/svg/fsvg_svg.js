@@ -182,6 +182,10 @@ var __members = {
 			}
 		}
 	},
+	/**
+	 * @method public
+	 * @return void
+	 */
 	f_setFocus: function() {
 		var doc = this.f_getSVGDocument();
 		if (doc) {
