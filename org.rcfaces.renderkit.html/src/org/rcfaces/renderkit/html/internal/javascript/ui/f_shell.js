@@ -575,7 +575,7 @@ var __members = {
 	},	
 	
 	/**
-	 * @method protected
+	 * @method public
 	 * @param Boolean firstTime
 	 * @return void
 	 */

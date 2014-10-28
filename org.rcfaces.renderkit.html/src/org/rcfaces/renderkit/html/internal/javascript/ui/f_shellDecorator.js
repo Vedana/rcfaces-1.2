@@ -592,7 +592,7 @@ var __members = {
 	 */
 	f_isIntoShell: f_class.ABSTRACT,
 	/**
-	 * @method hidden
+	 * @method public
 	 * @return void
 	 */
 	f_setFocus: function() {

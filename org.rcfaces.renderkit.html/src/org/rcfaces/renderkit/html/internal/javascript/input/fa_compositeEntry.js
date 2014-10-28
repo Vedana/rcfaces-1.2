@@ -423,7 +423,10 @@ var __members={
 
 		return inputs[0];
 	},
-	
+	/**
+	 * @method public
+	 * @return void
+	 */
 	f_setFocus: function() {
 		var inputs=this._inputs;
 		if (!inputs) {

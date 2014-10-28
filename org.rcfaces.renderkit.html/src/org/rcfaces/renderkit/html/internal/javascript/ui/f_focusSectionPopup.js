@@ -829,7 +829,9 @@ var __statics = {
 		// Car pour les containers qui contiennent des Hx on ne peut plus voir
 		// les Hx
 		var focusComponent = f_focusManager.Get()._getActiveElement();
-		console.log("FocusComponent", focusComponent);
+		if (false) {
+			console.log("FocusComponent", focusComponent);
+		}
 		if (!focusComponent) {
 			return false;
 		}
@@ -837,13 +839,17 @@ var __statics = {
 		var levels = f_focusSectionPopup
 				._ListHElementsHierarchy(focusComponent);
 
-		console.log("Levels", levels);
+		if (false) {
+			console.log("Levels", levels);
+		}
 		if (!levels) {
 			return;
 		}
 
 		var doc = focusComponent.ownerDocument;
-		console.log("doc", doc);
+		if (false) {
+			console.log("doc", doc);
+		}
 		if (!doc) {
 			return;
 		}
@@ -853,20 +859,26 @@ var __statics = {
 		var tree = f_focusSectionPopup
 				._BuildHeadingsTree(doc.body, levels, pos);
 		if (!tree) {
-			console.log("Tree", tree);
+			if (false) {
+				console.log("Tree", tree);
+			}
 			return;
 		}
 
 		var node = func.call(f_focusSectionPopup, focusComponent, levels, pos,
 				tree);
-		console.log("NextNode", node);
+		if (false) {
+			console.log("NextNode", node);
+		}
 		if (!node) {
 			return;
 		}
 
 		var focs = node._focusables;
 
-		console.log("Focs", focs);
+		if (false) {
+			console.log("Focs", focs);
+		}
 		if (!focs || !focs.length) {
 			return;
 		}
@@ -888,7 +900,9 @@ var __statics = {
 		}
 		var elt = f_core.GetElementByClientId(id);
 		if (elt) {
-			console.log("SETFOCUS ", elt);
+			if (false) {
+				console.log("SETFOCUS ", elt);
+			}
 			f_core.SetFocus(elt, true);
 		}
 	}

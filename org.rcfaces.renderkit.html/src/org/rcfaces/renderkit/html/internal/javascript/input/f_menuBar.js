@@ -707,6 +707,10 @@ var __members = {
 	fa_getSelectionProvider: function() {
 		return null;
 	},
+	/**
+	 * @method public
+	 * @return void
+	 */
 	f_setFocus: function() {
 		if (!f_core.ForceComponentVisibility(this)) {
 			return;

@@ -3619,6 +3619,10 @@ var __members = {
 		
 		return this;
 	},	
+	/**
+	 * @method public
+	 * @return void
+	 */
 	f_setFocus: function() {
 		f_core.Debug(f_tree, "f_setFocus: Set focus on tree '"+this.id+"' cfocus="+this._cfocus);
 

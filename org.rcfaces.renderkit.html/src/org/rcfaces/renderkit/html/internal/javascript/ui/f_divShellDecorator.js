@@ -203,7 +203,7 @@ var __members = {
 		return false;		
 	},
 	/**
-	 * @method hidden
+	 * @method public
 	 * @return void
 	 */
 	f_setFocus: function() {

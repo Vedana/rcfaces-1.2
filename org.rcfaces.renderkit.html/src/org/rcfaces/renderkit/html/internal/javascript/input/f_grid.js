@@ -4497,6 +4497,10 @@ var __members = {
 
 		this.focus();
 	},
+	/**
+	 * @method public
+	 * @return void
+	 */
 	f_setFocus : function() {
 		f_core.Debug(f_grid, "f_setFocus: set focus=" + this._focus);
 
