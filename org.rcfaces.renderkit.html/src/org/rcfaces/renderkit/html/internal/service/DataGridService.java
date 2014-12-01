@@ -24,7 +24,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.DataColumnComponent;
 import org.rcfaces.core.component.DataGridComponent;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
@@ -151,7 +150,8 @@ public class DataGridService extends AbstractHtmlService {
 
             String sortIndex_s = (String) parameters.get("sortIndex");
             if (sortIndex_s != null) {
-                DataColumnComponent columns[] = dgc.listDataColumns().toArray();
+                UIComponent[] columns = dgc.listOrderedVisibledColumns()
+                        .toArray();
 
                 StringTokenizer st1 = new StringTokenizer(sortIndex_s, ", ");
 
@@ -163,6 +163,11 @@ public class DataGridService extends AbstractHtmlService {
 
                     int idx = Integer.parseInt(tok1);
                     boolean order = "true".equalsIgnoreCase(tok2);
+
+                    if (idx >= columns.length) {
+                        LOG.error("Invalid index of column #" + idx);
+                        break;
+                    }
 
                     sortedComponents[i] = new DefaultSortedComponent(
                             columns[idx], idx, order);

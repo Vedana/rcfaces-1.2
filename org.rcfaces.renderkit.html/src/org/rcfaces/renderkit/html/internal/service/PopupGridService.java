@@ -36,10 +36,10 @@ import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
+import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
-import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.renderer.AbstractGridRenderer;
 import org.rcfaces.renderkit.html.internal.renderer.DataGridRenderer;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
@@ -165,6 +165,11 @@ public class PopupGridService extends AbstractHtmlService {
                     int idx = Integer.parseInt(tok1);
                     boolean order = "true".equalsIgnoreCase(tok2);
 
+                    if (idx >= columns.length) {
+                        LOG.error("Invalid index of column #" + idx);
+                        break;
+                    }
+
                     sortedComponents[i] = new DefaultSortedComponent(
                             columns[idx], idx, order);
                 }
@@ -195,8 +200,8 @@ public class PopupGridService extends AbstractHtmlService {
                     printWriter = response.getWriter();
 
                 } else {
-					ConfiguredHttpServlet.setGzipContentEncoding(
-							(HttpServletResponse) response, true);
+                    ConfiguredHttpServlet.setGzipContentEncoding(
+                            (HttpServletResponse) response, true);
 
                     OutputStream outputStream = response.getOutputStream();
 
@@ -212,7 +217,7 @@ public class PopupGridService extends AbstractHtmlService {
                 writeJs(facesContext, printWriter, dgc, dataGridId,
                         (DataGridRenderer) dgr, rowIndex, forcedRows,
                         sortedComponents, filterExpression, unknownRowCount,
-						showAdditional, hideAdditional, null);
+                        showAdditional, hideAdditional, null);
 
             } catch (IOException ex) {
                 throw new FacesException(
@@ -253,8 +258,8 @@ public class PopupGridService extends AbstractHtmlService {
             IGridComponent dgc, String componentClientId, DataGridRenderer dgr,
             int rowIndex, int forcedRows, ISortedComponent sortedComponents[],
             String filterExpression, boolean unknownRowCount,
-			String showAdditional, String hideAdditional,
-			ISelectedCriteria[] criteriaConfigs) throws IOException {
+            String showAdditional, String hideAdditional,
+            ISelectedCriteria[] criteriaConfigs) throws IOException {
 
         IProcessContext processContext = HtmlProcessContextImpl
                 .getHtmlProcessContext(facesContext);
@@ -270,23 +275,23 @@ public class PopupGridService extends AbstractHtmlService {
                 pw, RESPONSE_CHARSET, (UIComponent) dgc, componentClientId);
 
         DataGridRenderer.DataGridRenderContext tableContext = dgr
-				.createTableContext(processContext,
-						jsWriter.getJavaScriptRenderContext(), dgc, rowIndex,
+                .createTableContext(processContext,
+                        jsWriter.getJavaScriptRenderContext(), dgc, rowIndex,
                         forcedRows, sortedComponents, filterExpression,
-						showAdditional, hideAdditional, criteriaConfigs);
+                        showAdditional, hideAdditional, criteriaConfigs);
 
         String varId = jsWriter.getComponentVarName();
 
-		jsWriter.write("var ").write(varId).write('=')
-				.writeCall("f_core", "GetElementByClientId")
-				.writeString(componentClientId).write(").");
+        jsWriter.write("var ").write(varId).write('=')
+                .writeCall("f_core", "GetElementByClientId")
+                .writeString(componentClientId).write(").");
 
         String methodName = jsWriter.getJavaScriptRenderContext()
                 .convertSymbol(JavaScriptClasses.COMBO_GRID, "f_getDataGrid");
         jsWriter.write(methodName).writeln("();");
 
-		jsWriter.writeMethodCall("f_startNewPage").writeInt(rowIndex)
-				.writeln(");");
+        jsWriter.writeMethodCall("f_startNewPage").writeInt(rowIndex)
+                .writeln(");");
 
         String rowVarId = jsWriter.getJavaScriptRenderContext()
                 .allocateVarName();

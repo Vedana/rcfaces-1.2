@@ -15,7 +15,6 @@ import java.util.StringTokenizer;
 import java.util.zip.GZIPOutputStream;
 
 import javax.faces.FacesException;
-import javax.faces.application.StateManager;
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
@@ -44,8 +43,8 @@ import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
 import org.rcfaces.renderkit.html.internal.HtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
-import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
+import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.renderer.ComponentsGridRenderer;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
 
@@ -158,11 +157,11 @@ public class ComponentsGridService extends AbstractHtmlService {
 
             decodeSubComponents(facesContext, dgc, parameters);
 
-            ISortedComponent sortedComponents[] = null;
+            ISortedComponent[] sortedComponents = null;
 
             String sortIndex_s = (String) parameters.get("sortIndex");
             if (sortIndex_s != null) {
-                UIColumn columns[] = dgc.listColumns().toArray();
+                UIColumn[] columns = dgc.listOrderedVisibledColumns().toArray();
 
                 StringTokenizer st1 = new StringTokenizer(sortIndex_s, ", ");
 
@@ -175,17 +174,22 @@ public class ComponentsGridService extends AbstractHtmlService {
                     int idx = Integer.parseInt(tok1);
                     boolean order = "true".equalsIgnoreCase(tok2);
 
+                    if (idx >= columns.length) {
+                        LOG.error("Invalid index of column #" + idx);
+                        break;
+                    }
+
                     sortedComponents[i] = new DefaultSortedComponent(
                             columns[idx], idx, order);
                 }
             }
 
-			ISelectedCriteria[] criteriaConfigs = null;
-			String criteria_s = (String) parameters.get("criteria");
-			if (criteria_s != null) {
-				criteriaConfigs = CriteriaTools.computeCriteriaConfigs(
-						facesContext, dgc, criteria_s);
-			}
+            ISelectedCriteria[] criteriaConfigs = null;
+            String criteria_s = (String) parameters.get("criteria");
+            if (criteria_s != null) {
+                criteriaConfigs = CriteriaTools.computeCriteriaConfigs(
+                        facesContext, dgc, criteria_s);
+            }
 
             ComponentsGridRenderer dgr = getComponentsGridRenderer(
                     facesContext, dgc);
@@ -231,7 +235,7 @@ public class ComponentsGridService extends AbstractHtmlService {
                 writeJs(facesContext, printWriter, dgc, componentsGridId, dgr,
                         rowIndex, forcedRows, sortedComponents,
                         filterExpression, showAdditional, hideAdditional,
-						unknownRowCount, criteriaConfigs);
+                        unknownRowCount, criteriaConfigs);
 
             } catch (IOException ex) {
                 throw new FacesException(
@@ -298,8 +302,8 @@ public class ComponentsGridService extends AbstractHtmlService {
             ComponentsGridRenderer dgr, int rowIndex, int forcedRows,
             ISortedComponent sortedComponents[], String filterExpression,
             String showAdditional, String hideAdditional,
-			boolean unknownRowCount, ISelectedCriteria[] criteriaContainers)
-			throws IOException {
+            boolean unknownRowCount, ISelectedCriteria[] criteriaContainers)
+            throws IOException {
 
         IProcessContext processContext = HtmlProcessContextImpl
                 .getHtmlProcessContext(facesContext);
@@ -320,12 +324,12 @@ public class ComponentsGridService extends AbstractHtmlService {
 
         String varId = jsWriter.getComponentVarName();
 
-		jsWriter.write("var ").write(varId).write('=')
-				.writeCall("f_core", "GetElementByClientId")
-				.writeString(componentClientId).writeln(", document);");
+        jsWriter.write("var ").write(varId).write('=')
+                .writeCall("f_core", "GetElementByClientId")
+                .writeString(componentClientId).writeln(", document);");
 
-		jsWriter.writeMethodCall("f_startNewPage").writeInt(rowIndex)
-				.writeln(");");
+        jsWriter.writeMethodCall("f_startNewPage").writeInt(rowIndex)
+                .writeln(");");
 
         ResponseWriter oldResponseWriter = facesContext.getResponseWriter();
         ResponseStream oldResponseStream = facesContext.getResponseStream();
@@ -351,11 +355,11 @@ public class ComponentsGridService extends AbstractHtmlService {
             // get(facesContext)
 
             ComponentsGridRenderer.ComponentsGridRenderContext listContext = dgr
-					.createComponentsGridContext(processContext,
-							jsWriter.getJavaScriptRenderContext(), dgc,
-							rowIndex, forcedRows, sortedComponents,
-							filterExpression, showAdditional, hideAdditional,
-							criteriaContainers);
+                    .createComponentsGridContext(processContext,
+                            jsWriter.getJavaScriptRenderContext(), dgc,
+                            rowIndex, forcedRows, sortedComponents,
+                            filterExpression, showAdditional, hideAdditional,
+                            criteriaContainers);
 
             int rowCount = dgr.encodeChildren(jsWriter, listContext, true,
                     unknownRowCount);
@@ -367,13 +371,13 @@ public class ComponentsGridService extends AbstractHtmlService {
 
             jsWriter.writeMethodCall("f_updateNewPage").writeln(");");
 
-			String viewStateId = saveViewAndReturnStateId(facesContext);
+            String viewStateId = saveViewAndReturnStateId(facesContext);
 
-			if (viewStateId != null) {
-				jsWriter.writeCall("f_classLoader", "ChangeJsfViewId")
-						.write(varId).write(',').writeString(viewStateId)
-						.write(')');
-			}
+            if (viewStateId != null) {
+                jsWriter.writeCall("f_classLoader", "ChangeJsfViewId")
+                        .write(varId).write(',').writeString(viewStateId)
+                        .write(')');
+            }
 
         } finally {
 
