@@ -42,6 +42,14 @@
 					org.rcfaces.renderkit.svg.component.SVGDataColumnComponent.class);
 			</code>
 		</method>
+		<method id="listOrderedVisibledColumns"
+			returnType="org.rcfaces.core.component.iterator.IColumnIterator">
+			<import>org.rcfaces.core.internal.tools.GridTools</import>
+			<code>
+				return GridTools.listOrderedVisibledColumns(this,
+				javax.faces.component.UIColumn.class);
+			</code>
+		</method>
 	</component>
 	
 	
