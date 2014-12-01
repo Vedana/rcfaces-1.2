@@ -1273,6 +1273,17 @@
 			</code>
 		</method>
 
+		<method id="listOrderedVisibledColumns"
+			returnType="org.rcfaces.core.component.iterator.IColumnIterator">
+			<import>org.rcfaces.core.internal.tools.GridTools</import>
+			<code>
+				return GridTools.listOrderedVisibledColumns(this,
+				org.rcfaces.core.component.DataColumnComponent.class);
+			</code>
+		</method>
+		
+		
+
 		<method id="listDataColumns"
 			returnType="org.rcfaces.core.component.iterator.IDataColumnIterator">
 			<import>org.rcfaces.core.internal.tools.GridTools</import>
@@ -1865,6 +1876,15 @@
 			</code>
 		</method>
 
+		<method id="listOrderedVisibledColumns"
+			returnType="org.rcfaces.core.component.iterator.IColumnIterator">
+			<import>org.rcfaces.core.internal.tools.GridTools</import>
+			<code>
+				return GridTools.listOrderedVisibledColumns(this,
+				org.rcfaces.core.component.ComponentsColumnComponent.class);
+			</code>
+		</method>
+
 		<method id="listAdditionalInformations"
 			returnType="org.rcfaces.core.component.iterator.IAdditionalInformationIterator">
 			<import>org.rcfaces.core.internal.tools.AdditionalInformationTools
@@ -2235,6 +2255,14 @@
 				return GridTools.listColumns(this, ComboColumnComponent.class);
 			</code>
 		</method>
+		
+		<method id="listOrderedVisibledColumns"
+			returnType="org.rcfaces.core.component.iterator.IColumnIterator">
+			<import>org.rcfaces.core.internal.tools.GridTools</import>
+			<code>
+				return GridTools.listOrderedVisibledColumns(this, ComboColumnComponent.class);
+			</code>
+		</method>
 
 		<method id="listAdditionalInformations"
 			returnType="org.rcfaces.core.component.iterator.IAdditionalInformationIterator">
@@ -2485,6 +2513,14 @@
 			<import>org.rcfaces.core.internal.tools.GridTools</import>
 			<code>
 				return GridTools.listColumns(this, javax.faces.component.UIColumn.class);
+			</code>
+		</method>
+		<method id="listOrderedVisibledColumns"
+			returnType="org.rcfaces.core.component.iterator.IColumnIterator">
+			<import>org.rcfaces.core.internal.tools.GridTools</import>
+			<code>
+				return GridTools.listOrderedVisibledColumns(this,
+				javax.faces.component.UIColumn.class);
 			</code>
 		</method>
 

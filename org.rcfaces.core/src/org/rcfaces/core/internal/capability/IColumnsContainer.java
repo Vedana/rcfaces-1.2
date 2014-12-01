@@ -11,4 +11,6 @@ import org.rcfaces.core.component.iterator.IColumnIterator;
 public interface IColumnsContainer {
     IColumnIterator listColumns();
 
+    IColumnIterator listOrderedVisibledColumns();
+
 }

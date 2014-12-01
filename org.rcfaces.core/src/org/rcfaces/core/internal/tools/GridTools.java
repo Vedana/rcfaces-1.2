@@ -715,4 +715,32 @@ public class GridTools {
         }
     };
 
+    public static IColumnIterator listOrderedVisibledColumns(
+            IColumnsContainer component, Class< ? extends UIColumn> filter) {
+
+        if (component instanceof IOrderedChildrenCapability) {
+            UIComponent[] orderedChildren = ((IOrderedChildrenCapability) component)
+                    .getOrderedChildren();
+
+            if (orderedChildren != null && orderedChildren.length > 0) {
+                List<UIColumn> columns = new ArrayList<UIColumn>(
+                        orderedChildren.length);
+                for (UIComponent child : orderedChildren) {
+                    if (child instanceof UIColumn) {
+                        columns.add((UIColumn) child);
+                    }
+                }
+                return new ColumnListIterator(columns);
+            }
+        }
+
+        List<UIColumn> list = (List<UIColumn>) ComponentIterators.list(
+                (UIComponent) component, filter);
+        if (list.isEmpty()) {
+            return EMPTY_COLUMNS_ITERATOR;
+        }
+
+        return new ColumnListIterator(list);
+    }
+
 }
