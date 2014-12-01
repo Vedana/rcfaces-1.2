@@ -33,6 +33,10 @@ public class CssStyleClasses implements ICssStyleClasses {
 
     private Collection<String> suffixes;
 
+    public CssStyleClasses() {
+        this.mainStyleClassName = null;
+    }
+
     public CssStyleClasses(String mainStyleClassName) {
         verifyStyleClass(mainStyleClassName);
 
@@ -71,18 +75,30 @@ public class CssStyleClasses implements ICssStyleClasses {
                 "StyleClass can not contains spaces ! (" + styleClass + ")");
     }
 
-    public void addSpecificStyleClass(String styleClass) {
+    public ICssStyleClasses addSpecificStyleClass(String... styleClasses) {
+        if (styleClasses == null || styleClasses.length < 1) {
+            return this;
+        }
+
         if (specificStyleClasses == null) {
             specificStyleClasses = new OrderedSet<String>(4);
         }
 
-        StringTokenizer st = new StringTokenizer(styleClass);
-        for (; st.hasMoreTokens();) {
-            specificStyleClasses.add(st.nextToken());
+        for (String styleClass : styleClasses) {
+            StringTokenizer st = new StringTokenizer(styleClass);
+            for (; st.hasMoreTokens();) {
+                specificStyleClasses.add(st.nextToken());
+            }
         }
+
+        return this;
     }
 
-    public void addStyleClass(String styleClass) {
+    public ICssStyleClasses addStyleClass(String... styleClasses) {
+        if (styleClasses == null || styleClasses.length < 1) {
+            return this;
+        }
+
         if (styleClasseNames == null) {
             styleClasseNames = new OrderedSet<String>(4);
 
@@ -91,20 +107,32 @@ public class CssStyleClasses implements ICssStyleClasses {
             }
         }
 
-        StringTokenizer st = new StringTokenizer(styleClass);
-        for (; st.hasMoreTokens();) {
-            styleClasseNames.add(st.nextToken());
+        for (String styleClass : styleClasses) {
+            StringTokenizer st = new StringTokenizer(styleClass);
+            for (; st.hasMoreTokens();) {
+                styleClasseNames.add(st.nextToken());
+            }
         }
+
+        return this;
     }
 
-    public void addSuffix(String suffixStyleClass) {
-        verifyStyleClass(suffixStyleClass);
+    public ICssStyleClasses addSuffix(String... suffixStyleClasses) {
+        if (suffixStyleClasses == null || suffixStyleClasses.length < 1) {
+            return this;
+        }
 
         if (suffixes == null) {
             suffixes = new OrderedSet<String>(2);
         }
 
-        suffixes.add(suffixStyleClass);
+        for (String suffixStyleClass : suffixStyleClasses) {
+            verifyStyleClass(suffixStyleClass);
+
+            suffixes.add(suffixStyleClass);
+        }
+
+        return this;
     }
 
     public String getMainStyleClass() {
@@ -237,5 +265,19 @@ public class CssStyleClasses implements ICssStyleClasses {
         }
 
         return sa.toString();
+    }
+
+    public boolean hasStyles() {
+        if (mainStyleClassName != null && mainStyleClassName.length() > 0) {
+            return true;
+        }
+        if (styleClasseNames != null && styleClasseNames.size() > 0) {
+            return true;
+        }
+        if (specificStyleClasses != null && specificStyleClasses.size() > 0) {
+            return true;
+        }
+
+        return false;
     }
 }

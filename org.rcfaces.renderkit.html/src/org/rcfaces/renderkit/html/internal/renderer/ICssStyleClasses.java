@@ -17,11 +17,13 @@ public interface ICssStyleClasses {
 
     String[] listStyleClasses();
 
-    void addStyleClass(String styleClass);
+    ICssStyleClasses addStyleClass(String... styleClass);
 
-    void addSuffix(String suffixStyleClass);
+    ICssStyleClasses addSuffix(String... suffixStyleClass);
 
-    void addSpecificStyleClass(String styleClass);
+    ICssStyleClasses addSpecificStyleClass(String... styleClass);
 
     String constructUserStyleClasses();
+
+    boolean hasStyles();
 }
