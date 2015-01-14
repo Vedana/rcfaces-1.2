@@ -892,23 +892,19 @@ public abstract class AbstractJavaScriptRenderContext implements
                 continue;
             }
 
-            boolean[] alreadyDefined = new boolean[1];
+            boolean[] notDefinedRef = new boolean[1];
 
             Iterator it = facesContext.getMessages(clientId);
             for (; it.hasNext();) {
                 FacesMessage facesMessage = (FacesMessage) it.next();
 
                 String varName = messagesRepository.allocateFacesMessage(
-                        facesMessage, alreadyDefined);
-                if (alreadyDefined[0] == false) {
-                    continue;
-                }
-
-                if (true) {
+                        facesMessage, notDefinedRef);
+                if (notDefinedRef[0]) {
                     varName = JavaScriptTools.writeMessage(facesContext,
                             writer, facesMessage, varName);
-
                 }
+                
                 if (sa == null) {
                     sa = new StringAppender(32);
                 }
