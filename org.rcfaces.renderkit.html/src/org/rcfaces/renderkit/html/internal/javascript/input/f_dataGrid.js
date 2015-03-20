@@ -2225,7 +2225,7 @@ var __members = {
 
 				td._clickable = true;
 				// td._input.className+=" f_grid_cell_clickable";
-				// callUpdate=true;
+				callUpdate=true;
 
 				if (!col._cellClickable) {
 					fa_audioDescription.AppendAudioDescription(td._label,
