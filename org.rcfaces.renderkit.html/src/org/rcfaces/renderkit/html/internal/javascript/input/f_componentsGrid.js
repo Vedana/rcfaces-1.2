@@ -478,7 +478,7 @@ var __members = {
 
 			row._namingContainer = true;
 
-			row._className = rowClasses[(i + 1) % rowClasses.length];
+			row._className = rowClasses[(i) % rowClasses.length];
 
 			if (cellStyleClassSetted) {
 				var cells = row.cells;
