@@ -2515,11 +2515,13 @@ var __members = {
 		var elts = this.fa_listVisibleElements();
 		for (var i = 0; i < elts.length; i++) {
 			var element = elts[i];
-			if (!this.fa_isElementChecked(element)) {
-				this._checkElement(element, this.fa_getElementValue(element),
-						true);
-				this.fa_updateElementCheck(element, true);
+			if (this.fa_isElementChecked(element)) {
+				continue;
 			}
+			
+			this._checkElement(element, this.fa_getElementValue(element),
+					true);
+			//this.fa_updateElementCheck(element, true); // Thanks to Fabrice
 		}
 	},
 	/**
