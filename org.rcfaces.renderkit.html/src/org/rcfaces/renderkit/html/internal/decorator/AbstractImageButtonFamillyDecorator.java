@@ -699,6 +699,15 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             writer.writeAriaLabelledBy(getTextId(writer, htmlBorderWriter));
         }
 
+        if (imageButtonFamilly instanceof IToolTipTextCapability) {
+            String tooltip = ((IToolTipTextCapability) imageButtonFamilly)
+                    .getToolTipText();
+
+            if (tooltip != null && tooltip.length() > 0) {
+                writer.writeTitle(tooltip);
+            }
+        }
+
         if (IHtmlWriter.INPUT.equals(inputElement)) {
             writeInputAttributes(writer, true);
             writer.writeType(IHtmlWriter.IMAGE_INPUT_TYPE);
