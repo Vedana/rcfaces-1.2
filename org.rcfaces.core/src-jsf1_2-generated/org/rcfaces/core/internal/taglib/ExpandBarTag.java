@@ -45,6 +45,7 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 	private ValueExpression scopeValue;
 	private ValueExpression scopeVar;
 	private ValueExpression overStyleClass;
+	private ValueExpression errorText;
 	private ValueExpression collapseEffect;
 	private ValueExpression collapsedText;
 	private ValueExpression userExpandable;
@@ -160,6 +161,10 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 		this.overStyleClass = overStyleClass;
 	}
 
+	public void setErrorText(ValueExpression errorText) {
+		this.errorText = errorText;
+	}
+
 	public void setCollapseEffect(ValueExpression collapseEffect) {
 		this.collapseEffect = collapseEffect;
 	}
@@ -199,6 +204,7 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 			LOG.debug("  scopeValue='"+scopeValue+"'");
 			LOG.debug("  scopeVar='"+scopeVar+"'");
 			LOG.debug("  overStyleClass='"+overStyleClass+"'");
+			LOG.debug("  errorText='"+errorText+"'");
 			LOG.debug("  collapseEffect='"+collapseEffect+"'");
 			LOG.debug("  collapsedText='"+collapsedText+"'");
 			LOG.debug("  userExpandable='"+userExpandable+"'");
@@ -433,6 +439,15 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 			}
 		}
 
+		if (errorText != null) {
+			if (errorText.isLiteralText()==false) {
+				component.setValueExpression(Properties.ERROR_TEXT, errorText);
+
+			} else {
+				component.setErrorText(errorText.getExpressionString());
+			}
+		}
+
 		if (collapseEffect != null) {
 			if (collapseEffect.isLiteralText()==false) {
 				component.setValueExpression(Properties.COLLAPSE_EFFECT, collapseEffect);
@@ -489,6 +504,7 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 		scopeValue = null;
 		scopeVar = null;
 		overStyleClass = null;
+		errorText = null;
 		collapseEffect = null;
 		collapsedText = null;
 		userExpandable = null;

@@ -139,6 +139,14 @@ public class KeyEntryComponent extends AbstractGridComponent implements
 			
 	}
 
+	public IColumnIterator listOrderedVisibledColumns() {
+
+
+				return GridTools.listOrderedVisibledColumns(this,
+				javax.faces.component.UIColumn.class);
+			
+	}
+
 	public void setFilterProperties(String properties) {
 
 

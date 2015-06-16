@@ -156,13 +156,20 @@ public abstract class CameliaGridComponent extends javax.faces.component.UICompo
 		
 		return rendererType;
 	}
+	
+	/**
+	 * For INTERNAL USAGE ONLY ! NEVER CALL IT !
+	 */
+	public void resetStates() {
+				dataModel=null;
+
+	}
 
     @Override
 	public void restoreState(FacesContext context, Object state) {
 		if (LOG.isTraceEnabled()) {
 			LOG.trace("Restoring state of component '"+getId()+"'.");
 		}
-		
 		try {
 			Object states[] = (Object[]) state;
 	

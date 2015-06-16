@@ -56,6 +56,14 @@ public class DataSVGComponent extends SVGComponent implements
 			
 	}
 
+	public IColumnIterator listOrderedVisibledColumns() {
+
+
+				return GridTools.listOrderedVisibledColumns(this,
+				javax.faces.component.UIColumn.class);
+			
+	}
+
 	public java.lang.String getRowToolTipId() {
 		return getRowToolTipId(null);
 	}

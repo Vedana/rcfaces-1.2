@@ -361,6 +361,14 @@ public class DataGridComponent extends AbstractDataComponent implements
 			
 	}
 
+	public IColumnIterator listOrderedVisibledColumns() {
+
+
+				return GridTools.listOrderedVisibledColumns(this,
+				org.rcfaces.core.component.DataColumnComponent.class);
+			
+	}
+
 	public IDataColumnIterator listDataColumns() {
 
 

@@ -164,6 +164,13 @@ public class ComboGridComponent extends KeyEntryComponent implements
 			
 	}
 
+	public IColumnIterator listOrderedVisibledColumns() {
+
+
+				return GridTools.listOrderedVisibledColumns(this, ComboColumnComponent.class);
+			
+	}
+
 	public IAdditionalInformationIterator listAdditionalInformations() {
 
 

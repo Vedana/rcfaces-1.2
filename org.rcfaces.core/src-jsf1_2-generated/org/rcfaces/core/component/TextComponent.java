@@ -1,5 +1,6 @@
 package org.rcfaces.core.component;
 
+import org.rcfaces.core.component.capability.IErrorTextCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ITypedComponentCapability;
 import org.apache.commons.logging.LogFactory;
@@ -58,7 +59,8 @@ public class TextComponent extends AbstractOutputComponent implements
 	ITextAlignmentCapability,
 	IAccessKeyCapability,
 	IForCapability,
-	ITypedComponentCapability {
+	ITypedComponentCapability,
+	IErrorTextCapability {
 
 	private static final Log LOG = LogFactory.getLog(TextComponent.class);
 
@@ -66,7 +68,7 @@ public class TextComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"accessKey","fontName","fontItalic","text","fontUnderline","for","textAlignment","fontBold","type","fontSize","audioDescription","textDirection"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"text","fontName","accessKey","for","fontBold","fontSize","type","audioDescription","textDirection","errorText","fontItalic","fontUnderline","textAlignment"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="text";
 
@@ -353,6 +355,29 @@ public class TextComponent extends AbstractOutputComponent implements
 
 	public void setType(java.lang.String type) {
 		engine.setProperty(Properties.TYPE, type);
+	}
+
+	public java.lang.String getErrorText() {
+		return getErrorText(null);
+	}
+
+	/**
+	 * See {@link #getErrorText() getErrorText()} for more details
+	 */
+	public java.lang.String getErrorText(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ERROR_TEXT, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "errorText" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isErrorTextSetted() {
+		return engine.isPropertySetted(Properties.ERROR_TEXT);
+	}
+
+	public void setErrorText(java.lang.String errorText) {
+		engine.setProperty(Properties.ERROR_TEXT, errorText);
 	}
 
 	protected Set getCameliaFields() {

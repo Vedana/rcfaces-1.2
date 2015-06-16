@@ -17,6 +17,7 @@ import java.util.Set;
 import org.rcfaces.core.component.capability.IFontCapability;
 import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.IErrorTextCapability;
 import java.lang.String;
 import org.rcfaces.core.component.capability.ITabIndexCapability;
 import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
@@ -106,6 +107,7 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 	ILoadEventCapability,
 	IVariableScopeCapability,
 	IOverStyleClassCapability,
+	IErrorTextCapability,
 	IAsyncRenderComponent {
 
 	private static final Log LOG = LogFactory.getLog(ExpandBarComponent.class);
@@ -114,7 +116,7 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontName","accessKey","groupName","blurListener","collapsedText","tabIndex","userExpandable","focusListener","overStyleClass","loadListener","selectionListener","collapseEffect","scopeValue","border","headingZone","text","headingLevel","expandListener","fontBold","fontSize","asyncRenderMode","textDirection","collapsed","fontItalic","scopeSaveValue","readOnly","fontUnderline","scopeVar","textAlignment","disabled"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontName","accessKey","groupName","blurListener","collapsedText","tabIndex","userExpandable","focusListener","overStyleClass","loadListener","errorText","selectionListener","collapseEffect","scopeValue","border","headingZone","text","headingLevel","expandListener","fontBold","fontSize","asyncRenderMode","textDirection","collapsed","fontItalic","scopeSaveValue","readOnly","fontUnderline","scopeVar","textAlignment","disabled"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="text";
 
@@ -698,6 +700,29 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 
 	public void setOverStyleClass(java.lang.String overStyleClass) {
 		engine.setProperty(Properties.OVER_STYLE_CLASS, overStyleClass);
+	}
+
+	public java.lang.String getErrorText() {
+		return getErrorText(null);
+	}
+
+	/**
+	 * See {@link #getErrorText() getErrorText()} for more details
+	 */
+	public java.lang.String getErrorText(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ERROR_TEXT, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "errorText" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isErrorTextSetted() {
+		return engine.isPropertySetted(Properties.ERROR_TEXT);
+	}
+
+	public void setErrorText(java.lang.String errorText) {
+		engine.setProperty(Properties.ERROR_TEXT, errorText);
 	}
 
 	/**

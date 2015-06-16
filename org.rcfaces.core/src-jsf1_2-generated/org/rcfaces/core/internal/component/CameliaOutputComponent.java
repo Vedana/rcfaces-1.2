@@ -153,13 +153,19 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
 		
 		return rendererType;
 	}
+	
+	/**
+	 * For INTERNAL USAGE ONLY ! NEVER CALL IT !
+	 */
+	public void resetStates() {
+		
+	}
 
     @Override
 	public void restoreState(FacesContext context, Object state) {
 		if (LOG.isTraceEnabled()) {
 			LOG.trace("Restoring state of component '"+getId()+"'.");
 		}
-		
 		try {
 			Object states[] = (Object[]) state;
 	

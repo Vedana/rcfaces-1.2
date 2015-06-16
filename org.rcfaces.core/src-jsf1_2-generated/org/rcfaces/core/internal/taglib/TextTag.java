@@ -32,6 +32,7 @@ public class TextTag extends AbstractOutputTag implements Tag {
 	private ValueExpression accessKey;
 	private ValueExpression forValue;
 	private ValueExpression type;
+	private ValueExpression errorText;
 	public String getComponentType() {
 		return TextComponent.COMPONENT_TYPE;
 	}
@@ -84,6 +85,10 @@ public class TextTag extends AbstractOutputTag implements Tag {
 		this.type = type;
 	}
 
+	public void setErrorText(ValueExpression errorText) {
+		this.errorText = errorText;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (TextComponent.COMPONENT_TYPE==getComponentType()) {
@@ -101,6 +106,7 @@ public class TextTag extends AbstractOutputTag implements Tag {
 			LOG.debug("  accessKey='"+accessKey+"'");
 			LOG.debug("  forValue='"+forValue+"'");
 			LOG.debug("  type='"+type+"'");
+			LOG.debug("  errorText='"+errorText+"'");
 		}
 		if ((uiComponent instanceof TextComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -221,6 +227,15 @@ public class TextTag extends AbstractOutputTag implements Tag {
 				component.setType(type.getExpressionString());
 			}
 		}
+
+		if (errorText != null) {
+			if (errorText.isLiteralText()==false) {
+				component.setValueExpression(Properties.ERROR_TEXT, errorText);
+
+			} else {
+				component.setErrorText(errorText.getExpressionString());
+			}
+		}
 	}
 
 	public void release() {
@@ -236,6 +251,7 @@ public class TextTag extends AbstractOutputTag implements Tag {
 		accessKey = null;
 		forValue = null;
 		type = null;
+		errorText = null;
 
 		super.release();
 	}
