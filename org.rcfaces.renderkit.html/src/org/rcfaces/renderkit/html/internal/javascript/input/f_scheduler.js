@@ -153,7 +153,7 @@ var __members = {
 			}
 			var begin = period._begin;
 			var end = period._end;
-			var periodeDay = begin.getDay();
+			var periodeDay = ((begin.getDay() + 6) % 7) +1;
 			if (end.getTime() >= dateBegin.getTime()
 					&& begin.getTime() <= dateEnd.getTime()) {
 
