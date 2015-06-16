@@ -7,17 +7,17 @@
  */
 
 var __statics = {
-		
+
 	/**
 	 * @field public static final Number
 	 */
-	FIRST_LOAD: 1,
-	
+	FIRST_LOAD : 1,
+
 	/**
 	 * @field public static final Number
 	 */
-	NEXT_LOAD: 0,	
-		
+	NEXT_LOAD : 0,
+
 	/**
 	 * @method private static
 	 * @context object:externalBox
@@ -47,7 +47,7 @@ var __members = {
 	f_externalBox : function() {
 		this.f_super(arguments);
 
-		this._contentURL = f_core.GetAttributeNS(this,"contentURL");
+		this._contentURL = f_core.GetAttributeNS(this, "contentURL");
 		this.onload = f_externalBox._OnLoad;
 	},
 
@@ -59,11 +59,11 @@ var __members = {
 	},
 
 	/**
-	 * Marks the receiver as visible if the argument is true, and marks it invisible
-	 * otherwise. <br>
+	 * Marks the receiver as visible if the argument is true, and marks it
+	 * invisible otherwise. <br>
 	 * If one of the receiver's ancestors is not visible or some other condition
-	 * makes the receiver not visible, marking it visible may not actually cause it
-	 * to be displayed.
+	 * makes the receiver not visible, marking it visible may not actually cause
+	 * it to be displayed.
 	 * 
 	 * @method public
 	 * @param Boolean
@@ -72,7 +72,7 @@ var __members = {
 	 */
 	f_setVisible : function(visible) {
 		this.f_super(arguments, visible);
-	
+
 		if (visible && !this.src) {
 			this.src = this.f_getContentURL();
 		}
@@ -105,7 +105,7 @@ var __members = {
 	f_setContentURL : function(contentURL) {
 		if (contentURL != this._contentURL) {
 			this._contentURL = contentURL;
-			this.f_setProperty(f_prop.CONTENT_URL,contentURL);
+			this.f_setProperty(f_prop.CONTENT_URL, contentURL);
 			this._firstLoad = true;
 			this.src = contentURL;
 		}
@@ -114,7 +114,7 @@ var __members = {
 	/**
 	 * Refresh the src URL
 	 * 
-	 * @method public 
+	 * @method public
 	 * @return void
 	 */
 	f_refresh : function() {
