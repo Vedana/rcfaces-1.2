@@ -394,6 +394,8 @@ public class UIData2 extends UIData0 {
                             + "' => NO STATE, clone component engine");
                 }
             }
+            
+            ((IRCFacesComponent)component).resetStates();
         }
 
         super.restoreDescendantState(component, context);

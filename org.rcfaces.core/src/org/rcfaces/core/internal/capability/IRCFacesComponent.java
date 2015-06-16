@@ -13,4 +13,6 @@ public interface IRCFacesComponent {
 
   
     void clearListeners();
+
+    void resetStates();
 }

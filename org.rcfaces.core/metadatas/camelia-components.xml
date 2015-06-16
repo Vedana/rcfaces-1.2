@@ -187,8 +187,7 @@
 	<facesComponent id="cameliaGrid"
 		extends="javax.faces.component.UIComponentBase" implements="javax.faces.component.NamingContainer">
 		<field id="dataModel" type="javax.faces.model.DataModel" value="null"
-			modifiers="transient" />
-
+			modifiers="transient" clearOnRestore="true" />
 
 
 		<method id="isRowAvailable" />
@@ -461,7 +460,7 @@
 		<attribute id="var" type="java.lang.String" clearVariable="var" />
 
 		<field id="rowIndex" type="int" modifiers="transient" />
-		<field id="var" type="java.lang.String" modifiers="transient" />
+		<field id="var" type="java.lang.String" modifiers="transient"  clearOnRestore="true"/>
 
 		<method id="setRowIndex">
 			<parameter type="int" name="rowIndex" />
