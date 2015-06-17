@@ -159,5 +159,12 @@
 	    <url>http://rcfaces.org/nexus/content/repositories/vedana-central/</url>
 	  </repository>
  </distributionManagement>
-  
+ 
+ <repositories>
+    <repository>
+      <id>vedana-central</id>
+      <name>Vedana Central</name>
+      <url>http://rcfaces.org/nexus/content/repositories/vedana-central/</url>
+    </repository>
+  </repositories>
 </project>
