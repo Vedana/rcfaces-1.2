@@ -145,7 +145,7 @@
 		<dependency>
 			<groupId>com.vedana.camelia.generators</groupId>
 			<artifactId>com.vedana.camelia.generators</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1</version>
 			<optional>true</optional>
 		</dependency>
 	</dependencies>
