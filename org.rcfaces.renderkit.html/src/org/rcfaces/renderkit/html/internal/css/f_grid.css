@@ -484,3 +484,7 @@
 	font-weight: normal;
 }
 
+.f_grid .f_cGrid_cell INPUT {
+	user-select: text;
+}
+
