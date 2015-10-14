@@ -1047,11 +1047,11 @@
 		<property name="generator.classname" value="com.vedana.camelia.generator.components_1_2.CameliaGenerator1_2" />
 
 		<path id="generated.classpath">
-			<path location="${base-core}/bin" />
-			<path location="${base-html}/bin" />
-			<path location="${base-imageIO}/bin" />
-			<path location="${base-svg}/bin" />
-			<path location="${base-jfreechart}/bin" />
+			<path location="${base-core}/target/classes" />
+			<path location="${base-html}/target/classes" />
+			<path location="${base-imageIO}/target/classes" />
+			<path location="${base-svg}/target/classes" />
+			<path location="${base-jfreechart}/target/classes" />
 
 			<fileset dir="${base-core}/lib">
 				<include name="*.jar" />
