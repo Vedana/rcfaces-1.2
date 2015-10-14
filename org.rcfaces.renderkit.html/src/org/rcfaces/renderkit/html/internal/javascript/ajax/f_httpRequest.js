@@ -128,7 +128,9 @@ var __members = {
 	 *		},
 	 *		onAbort: function(httpObject, content, contentType) {
 	 *			alert("onAbort");
-	 *		}
+	 *		},
+	 *		onUploadProgress: function(httpObject, loaded, total) {
+	 *      }
 	 * 	}
 	 * </pre>
 	 *
@@ -480,11 +482,47 @@ var __members = {
 						self._callError(status, statusText);
 					};
 				}
+				
+				if (typeof(this._listener.onUploadProgress)==="function" && req.upload) {
+					console.log("Install progress");
+					req.upload.addEventListener("progress", function(event) {
+						console.log("UPLOAD progress ",event);
+						if (window._rcfacesExiting) {
+							// Nous ne sommes pas dans un contexte sain ....
+							// Par exemple, échanges HTTP aprés un onExit de f_core !
+							return false;
+						}
+						if (self._error) {
+							return;
+						}
+						
+						self._callUploadProgress(event);
+					}, false);
+				}
+				
+				if (typeof(this._listener.onTimeout)==="function") {
+					console.log("Install timeout");
+					req.addEventListener("timeout", function(event) {
+						if (window._rcfacesExiting) {
+							// Nous ne sommes pas dans un contexte sain ....
+							// Par exemple, échanges HTTP aprés un onExit de f_core !
+							return false;
+						}
+						if (self._error) {
+							return;
+						}
+						
+						self._callTimeout(event);
+					}, false);
+				}
 			}
 				
 			// Open request
 			if (!method) {
 				 method = f_httpRequest.GET_METHOD;
+			}
+			if (typeof(this._requestTimeout)==="number") {
+				req.timeout=this._requestTimeout;
 			}
 			
 			req.open(method, this._url, async);
@@ -831,6 +869,42 @@ var __members = {
 	 * @method private
 	 * @return void
 	 */
+	_callUploadProgress: function(event) {
+
+		var onUploadProgress=this._listener.onUploadProgress;
+		if (typeof(onUploadProgress)!="function") {
+			return;
+		}
+		
+		try {
+			onUploadProgress.call(this, this, event.loaded, event.total);
+			
+		} catch (ex) {
+			f_core.Error(f_httpRequest, "_callUploadProgress: Exception when calling onUploadProgress.\n"+onUploadProgress, ex);
+		}
+	},
+	/**
+	 * @method private
+	 * @return void
+	 */
+	_callTimeout: function(event) {
+
+		var onTimeout=this._listener.onTimeout;
+		if (typeof(onTimeout)!="function") {
+			return;
+		}
+		
+		try {
+			onTimeout.call(this, this, event);
+			
+		} catch (ex) {
+			f_core.Error(f_httpRequest, "_callTimeout: Exception when calling onTimeout.\n"+onTimeout, ex);
+		}
+	},
+	/**
+	 * @method private
+	 * @return void
+	 */
 	_callError: function(status, statusText) {
 		if (window._rcfacesExiting) {
 			return;
@@ -873,6 +947,14 @@ var __members = {
 			acceptType+="; charset="+charSet;
 		}
 		this._acceptType=acceptType;
+	},
+	/**
+	 * @method public
+	 * @param Number timeout Timeout in milliseconds
+	 * @return void
+	 */
+	f_setTimeout: function(timeout) {
+		this._requestTimeout=timeout;
 	}
 };
 
