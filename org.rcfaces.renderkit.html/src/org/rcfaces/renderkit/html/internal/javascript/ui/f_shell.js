@@ -784,6 +784,15 @@ var __members = {
 			shellDecorator.f_setDecorationValue(f_shellDecorator.TITLE_DECORATOR, title);
 		}
 	},
+		
+	/**
+	 * @method hidden abstract
+	 * @return Element
+	 */
+	f_getBaseComponent: function() {
+		return this.f_getShellDecorator().f_getBaseComponent();
+	},
+
 	/**
 	 * @method protected
 	 * @return f_shellDecorator shellDecorator

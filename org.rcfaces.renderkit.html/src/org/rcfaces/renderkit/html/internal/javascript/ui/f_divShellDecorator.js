@@ -45,6 +45,14 @@ var __members = {
 	
 	/**
 	 * @method hidden
+	 * @return Element
+	 */
+	f_getBaseComponent: function() {
+		return this._div;
+	},
+
+	/**
+	 * @method hidden
 	 * @param Function functionWhenReady
 	 * @return void
 	 */	 
@@ -116,6 +124,7 @@ var __members = {
 		
 		f_core.VerifyProperties(div);		
 	},
+
 	/**
 	 * @method private
 	 * @return void

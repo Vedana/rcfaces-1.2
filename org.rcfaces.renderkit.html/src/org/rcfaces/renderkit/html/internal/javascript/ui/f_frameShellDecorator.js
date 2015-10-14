@@ -44,6 +44,14 @@ var __members = {
 	
 	/**
 	 * @method hidden
+	 * @return Element
+	 */
+	f_getBaseComponent: function() {
+		return this._iframe;
+	},
+
+	/**
+	 * @method hidden
 	 * @param Function functionWhenReady
 	 * @return void
 	 */	 
