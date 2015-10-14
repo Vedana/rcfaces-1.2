@@ -19,9 +19,11 @@ import javax.faces.model.DataModel;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.AdditionalInformationComponent;
+import org.rcfaces.core.component.DataGridComponent;
 import org.rcfaces.core.component.capability.IAdditionalInformationCardinalityCapability;
 import org.rcfaces.core.component.capability.IAlertLoadingMessageCapability;
 import org.rcfaces.core.component.capability.IAlignmentCapability;
+import org.rcfaces.core.component.capability.ICardinality;
 import org.rcfaces.core.component.capability.ICellImageCapability;
 import org.rcfaces.core.component.capability.ICellStyleClassCapability;
 import org.rcfaces.core.component.capability.ICellToolTipTextCapability;
@@ -92,7 +94,8 @@ import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public abstract class AbstractGridRenderContext extends TooltipContainerRenderContext {
+public abstract class AbstractGridRenderContext extends
+        TooltipContainerRenderContext {
     private static final Log LOG = LogFactory
             .getLog(AbstractGridRenderContext.class);
 
@@ -238,6 +241,8 @@ public abstract class AbstractGridRenderContext extends TooltipContainerRenderCo
 
     private String scopeColId = null;
 
+    private boolean hasTitleAllCheck;
+
     private AbstractGridRenderContext(IProcessContext processContext,
             IJavaScriptRenderContext scriptRenderContext,
             IGridComponent gridComponent, ISortedComponent sortedComponents[],
@@ -274,6 +279,18 @@ public abstract class AbstractGridRenderContext extends TooltipContainerRenderCo
 
         if (gridComponent instanceof IDroppableCapability) {
             isDroppable = ((IDroppableCapability) gridComponent).isDroppable();
+        }
+
+        if (gridComponent instanceof ICheckableCapability) {
+            if (((ICheckableCapability) gridComponent).isCheckable()
+                    && ((ICheckCardinalityCapability) gridComponent)
+                            .getCheckCardinality() != ICardinality.ONE_CARDINALITY) {
+
+                if (gridComponent instanceof DataGridComponent) {
+                    hasTitleAllCheck = ((DataGridComponent) gridComponent)
+                            .isTitleAllCheck(processContext.getFacesContext());
+                }
+            }
         }
 
         // Accessibility : get scope column
@@ -1303,6 +1320,24 @@ public abstract class AbstractGridRenderContext extends TooltipContainerRenderCo
 
     public IProcessContext getProcessContext() {
         return processContext;
+    }
+
+    public boolean hasTitleAllCheck() {
+        return hasTitleAllCheck;
+    }
+
+    public boolean hasTitleAllCheck(int columnIndex) {
+        if (hasTitleAllCheck() == false) {
+            return false;
+        }
+
+        for (int i = 0; i < columnIndex; i++) {
+            if (columnStates[i] == VISIBLE) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 }

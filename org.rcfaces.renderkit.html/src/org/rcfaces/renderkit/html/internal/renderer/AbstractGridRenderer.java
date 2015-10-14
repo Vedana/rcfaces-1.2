@@ -2853,7 +2853,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer
 
                 if (isEquals(old, news) == false) {
                     component.queueEvent(new PropertyChangeEvent(component,
-                            Properties.SORTED_CHILDREN, old, news));
+                            Properties.SORTED_CHILDREN_IDS, old, news));
                 }
             }
         }

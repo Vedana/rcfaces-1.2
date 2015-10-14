@@ -347,11 +347,55 @@ var __members = {
 			// this.className+=" f_dataGrid_noWrap";
 		}
 
+		if (this._checkable && f_core.GetAttributeNS(this, "titleallcheck")) {
+			var chAlls = document.getElementsByName(this.id + "::checkAll");
+			var titleAllCheck = chAlls && chAlls[0];
+			this._titleAllCheck = titleAllCheck;
+
+			var self=this;
+			
+			titleAllCheck.onmousedown = function(event) {
+
+				event.stopPropagation && event.stopPropagation();
+
+				//return false;
+			};
+			titleAllCheck.onclick = function(event) {				
+				
+				if (titleAllCheck.checked) {
+//					titleAllCheck.checked=true;
+					self.f_checkAllPage();
+					titleAllCheck.title="Désélectionner toutes les lignes de la page";
+
+				} else {
+//					titleAllCheck.checked=false;
+					self.f_uncheckAllPage();				
+					titleAllCheck.title="Sélectionner toutes les lignes de la page";
+				}
+
+				event.stopPropagation && event.stopPropagation();
+				//event.preventDefault && event.preventDefault();
+				//return false;
+			};
+			titleAllCheck.onmouseup = function(event) {
+				event.stopPropagation && event.stopPropagation();
+			};
+		}
+
 		if (window.f_indexedDbEngine) {
 			this._indexDb = f_indexedDbEngine.FromComponent(this);
 		}
 	},
 	f_finalize : function() {
+
+		var titleAllCheck = this._titleAllCheck;
+		if (titleAllCheck) {
+			this._titleAllCheck = undefined;
+			
+			titleAllCheck.onmousedown = null;
+			titleAllCheck.onmouseup = null;
+			titleAllCheck.onclick = null;
+		}
 
 		this._addRowFragment = undefined; // HtmlDocumentFragment
 
@@ -554,7 +598,8 @@ var __members = {
 	 * @method public
 	 * @param any
 	 *            value The value of the new row
-	 * @param Object Properties of row
+	 * @param Object
+	 *            Properties of row
 	 * @param String...
 	 *            columnValue1 A parameter for each column
 	 * @return Object Row object
@@ -2225,7 +2270,7 @@ var __members = {
 
 				td._clickable = true;
 				// td._input.className+=" f_grid_cell_clickable";
-				callUpdate=true;
+				callUpdate = true;
 
 				if (!col._cellClickable) {
 					fa_audioDescription.AppendAudioDescription(td._label,
@@ -2518,10 +2563,9 @@ var __members = {
 			if (this.fa_isElementChecked(element)) {
 				continue;
 			}
-			
-			this._checkElement(element, this.fa_getElementValue(element),
-					true);
-			//this.fa_updateElementCheck(element, true); // Thanks to Fabrice
+
+			this._checkElement(element, this.fa_getElementValue(element), true);
+			// this.fa_updateElementCheck(element, true); // Thanks to Fabrice
 		}
 	},
 	/**
@@ -2571,11 +2615,11 @@ var __members = {
 		var elts = this.fa_listVisibleElements();
 		for (var i = 0; i < elts.length; i++) {
 			var element = elts[i];
-			if (this.fa_isElementChecked(element)) {
-				this._checkElement(element, this.fa_getElementValue(element),
-						false);
-				this.fa_updateElementCheck(element, false);
+			if (!this.fa_isElementChecked(element)) {
+				continue;
 			}
+			
+			this._uncheckElement(element, this.fa_getElementValue(element));
 		}
 	},
 	/**
