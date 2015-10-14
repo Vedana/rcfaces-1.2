@@ -572,7 +572,10 @@ var __members = {
 			return text;
 		}
 		
-		text=doc.getElementById(this.id+f_imageButton._TEXT_ID_SUFFIX);
+		text=document.getElementById(this.id+f_imageButton._TEXT_ID_SUFFIX);
+		if (!text) {
+			text=this;
+		}
 		this._text=text;
 		
 		return text;
@@ -604,7 +607,12 @@ var __members = {
 			return;
 		}
 		
-		f_core.SetTextNode(textElement, text, this._accessKey);
+		if (textElement.tagName.toLowerCase()==="input") {
+			textElement.value=text;
+
+		} else {		
+			f_core.SetTextNode(textElement, text, this._accessKey);
+		}
 		
 		this.f_setProperty(f_prop.TEXT,text);
 	},
@@ -618,6 +626,10 @@ var __members = {
 		var textElement=this.f_getTextElement();
 		if (!textElement) {
 			return null;
+		}		
+		
+		if (textElement.tagName.toLowerCase()==="input") {
+			return textElement.value;
 		}
 		
 		return f_core.GetTextNode(textElement, true);
