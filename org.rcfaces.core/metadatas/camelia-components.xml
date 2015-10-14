@@ -1147,8 +1147,7 @@
 		<implements id="org.rcfaces.core.internal.capability.IToolTipComponent" />
 
 		<implements
-			id="org.rcfaces.core.component.capability.ISortedChildrenCapability"
-			properties="sortedChildren" />
+			id="org.rcfaces.core.component.capability.ISortedChildrenCapability" />
 		<implements
 			id="org.rcfaces.core.internal.capability.ISortedComponentsCapability"
 			importMethods="false" />
@@ -1280,8 +1279,6 @@
 				org.rcfaces.core.component.DataColumnComponent.class);
 			</code>
 		</method>
-		
-		
 
 		<method id="listDataColumns"
 			returnType="org.rcfaces.core.component.iterator.IDataColumnIterator">
@@ -1351,6 +1348,8 @@
 		</method>
 
 		<!-- API de CHECK -->
+		<attribute id="titleAllCheck" type="boolean" />
+		
 		<method id="setCheckCardinality(String)" />
 		<method id="setClientCheckFullState(String)" />
 
@@ -1503,6 +1502,8 @@
 		</method>
 
 		<!-- Sort Components -->
+		
+		<attribute id="sortedChildrenIds" type="java.lang.String" />
 
 		<method id="getSortedChildren" returnType="javax.faces.component.UIComponent[]">
 			<import>org.rcfaces.core.internal.tools.SortTools</import>
@@ -1522,6 +1523,7 @@
 		</method>
 
 		<!-- Sort Column -->
+
 		<method id="getSortedColumns" returnType="org.rcfaces.core.component.DataColumnComponent[]">
 			<import>org.rcfaces.core.component.DataColumnComponent</import>
 			<code>
@@ -1791,8 +1793,7 @@
 		<implements id="org.rcfaces.core.internal.capability.IGridComponent"
 			importMethods="false" />
 		<implements
-			id="org.rcfaces.core.component.capability.ISortedChildrenCapability"
-			properties="sortedChildren" />
+			id="org.rcfaces.core.component.capability.ISortedChildrenCapability" />
 		<implements
 			id="org.rcfaces.core.component.capability.IOrderedChildrenCapability"
 			properties="orderedChildren" />
@@ -2008,6 +2009,8 @@
 		</method>
 
 		<!-- Sort Components -->
+		
+		<attribute id="sortedChildrenIds" type="java.lang.String" />
 
 		<method id="getSortedChildren" returnType="javax.faces.component.UIComponent[]">
 			<import>org.rcfaces.core.internal.tools.SortTools</import>
@@ -2197,8 +2200,7 @@
 
 	<component id="comboGrid" extends="keyEntry">
 		<implements
-			id="org.rcfaces.core.component.capability.ISortedChildrenCapability"
-			properties="sortedChildren" />
+			id="org.rcfaces.core.component.capability.ISortedChildrenCapability" />
 		<implements
 			id="org.rcfaces.core.component.capability.IOrderedChildrenCapability"
 			properties="orderedChildren" />
@@ -2332,6 +2334,8 @@
 		</method>
 
 		<!-- Sort Components -->
+		
+		<attribute id="sortedChildrenIds" type="java.lang.String" />
 
 		<method id="getSortedChildren" returnType="javax.faces.component.UIComponent[]">
 			<import>org.rcfaces.core.internal.tools.SortTools</import>

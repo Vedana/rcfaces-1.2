@@ -21,7 +21,7 @@ public class SortTools {
             Class< ? extends UIComponent> classOfChild) {
 
         return ComponentTools.listChildren(facesContext, component, engine,
-                classOfChild, Properties.SORTED_CHILDREN);
+                classOfChild, Properties.SORTED_CHILDREN_IDS);
     }
 
     public static UIComponent getFirstSortedChild(FacesContext facesContext,
@@ -41,7 +41,7 @@ public class SortTools {
             Class< ? extends UIComponent> classOfChild, UIComponent[] children) {
 
         ComponentTools.setChildren(component, engine, classOfChild, children,
-                Properties.SORTED_CHILDREN);
+                Properties.SORTED_CHILDREN_IDS);
 
     }
 }
