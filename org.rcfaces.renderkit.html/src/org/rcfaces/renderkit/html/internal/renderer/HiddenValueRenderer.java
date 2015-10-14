@@ -45,6 +45,8 @@ public class HiddenValueRenderer extends AbstractJavaScriptRenderer {
         writeJavaScriptAttributes(htmlWriter);
         writeInputAttributes(htmlWriter);
 
+        writeCustomAttributes(htmlWriter);
+
         htmlWriter.writeName(componentRenderContext.getComponentClientId());
 
         htmlWriter.writeType(IHtmlWriter.HIDDEN_INPUT_TYPE);
@@ -63,6 +65,10 @@ public class HiddenValueRenderer extends AbstractJavaScriptRenderer {
         htmlWriter.endElement(IHtmlWriter.INPUT);
 
         super.encodeEnd(htmlWriter);
+    }
+
+    protected void writeCustomAttributes(IHtmlWriter htmlWriter)
+            throws WriterException {
     }
 
     protected void decode(IRequestContext context, UIComponent component,
