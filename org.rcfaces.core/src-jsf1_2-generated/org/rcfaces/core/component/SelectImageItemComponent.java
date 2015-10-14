@@ -1,18 +1,18 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.familly.IContentAccessors;
-import org.rcfaces.core.component.capability.IImageCapability;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.component.CameliaItemComponent;
 import javax.el.ValueExpression;
-import java.util.HashSet;
+import org.rcfaces.core.component.capability.IImageCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
 import org.apache.commons.logging.Log;
-import java.util.Set;
+import java.util.HashSet;
+import org.apache.commons.logging.LogFactory;
 import java.util.Arrays;
+import java.util.Set;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import javax.faces.context.FacesContext;
 
 /**
  * A select item (member of a selectable list) that shows an image.

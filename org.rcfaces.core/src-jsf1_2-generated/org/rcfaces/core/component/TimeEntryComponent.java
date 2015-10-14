@@ -76,7 +76,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"focusStyleClass","minTime","fatalStyleClass","timeFormat","maxTime","selectionListener","literalLocale","valueChangeListener","time","errorStyleClass","autoCompletion","alternateText","literalTimeZone","hourStep","required","autoTab","millisStep","styleClass","defaultTime","minuteStep","secondStep","readOnly","warnStyleClass","infoStyleClass","componentTimeZone","componentLocale"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"focusStyleClass","minTime","fatalStyleClass","timeFormat","maxTime","selectionListener","literalLocale","valueChangeListener","time","errorStyleClass","autoCompletion","alternateText","literalTimeZone","hourStep","required","autoTab","millisStep","styleClass","defaultTime","minuteStep","secondStep","readOnly","warnStyleClass","componentTimeZone","infoStyleClass","componentLocale"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="time";
 
@@ -96,6 +96,13 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 		
 	}
 
+	public String setValidationParameter(String name, String value, boolean client) {
+
+
+		return (String)setValidationParameterData(name, value, client);
+		
+	}
+
 	public boolean isClientSideValidationParameter(String name) {
 
 
@@ -107,13 +114,6 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 
 
 		return getValidationParametersMap(null);
-		
-	}
-
-	public void setValidationParameter(String name, ValueExpression value, boolean client) {
-
-
-		setValidationParameterData(name, value, client);
 		
 	}
 
@@ -150,10 +150,10 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public String setValidationParameter(String name, String value, boolean client) {
+	public void setValidationParameter(String name, ValueExpression value, boolean client) {
 
 
-		return (String)setValidationParameterData(name, value, client);
+		setValidationParameterData(name, value, client);
 		
 	}
 

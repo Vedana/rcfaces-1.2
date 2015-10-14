@@ -38,6 +38,7 @@ public class ComboGridTag extends KeyEntryTag implements Tag {
 	private ValueExpression gridLookId;
 	private ValueExpression searchFieldVisible;
 	private ValueExpression orderedColumnIds;
+	private ValueExpression sortedChildrenIds;
 	public String getComponentType() {
 		return ComboGridComponent.COMPONENT_TYPE;
 	}
@@ -122,6 +123,10 @@ public class ComboGridTag extends KeyEntryTag implements Tag {
 		this.orderedColumnIds = orderedColumnIds;
 	}
 
+	public void setSortedChildrenIds(ValueExpression sortedChildrenIds) {
+		this.sortedChildrenIds = sortedChildrenIds;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (ComboGridComponent.COMPONENT_TYPE==getComponentType()) {
@@ -146,6 +151,7 @@ public class ComboGridTag extends KeyEntryTag implements Tag {
 			LOG.debug("  gridLookId='"+gridLookId+"'");
 			LOG.debug("  searchFieldVisible='"+searchFieldVisible+"'");
 			LOG.debug("  orderedColumnIds='"+orderedColumnIds+"'");
+			LOG.debug("  sortedChildrenIds='"+sortedChildrenIds+"'");
 		}
 		if ((uiComponent instanceof ComboGridComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -328,6 +334,15 @@ public class ComboGridTag extends KeyEntryTag implements Tag {
 				component.setOrderedColumnIds(orderedColumnIds.getExpressionString());
 			}
 		}
+
+		if (sortedChildrenIds != null) {
+			if (sortedChildrenIds.isLiteralText()==false) {
+				component.setValueExpression(Properties.SORTED_CHILDREN_IDS, sortedChildrenIds);
+
+			} else {
+				component.setSortedChildrenIds(sortedChildrenIds.getExpressionString());
+			}
+		}
 	}
 
 	public void release() {
@@ -351,6 +366,7 @@ public class ComboGridTag extends KeyEntryTag implements Tag {
 		gridLookId = null;
 		searchFieldVisible = null;
 		orderedColumnIds = null;
+		sortedChildrenIds = null;
 
 		super.release();
 	}

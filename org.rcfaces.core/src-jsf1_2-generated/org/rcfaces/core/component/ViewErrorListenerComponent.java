@@ -1,8 +1,8 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
-import java.util.Map;
 import java.lang.Object;
+import java.util.Map;
 import java.util.Collections;
 import org.apache.commons.logging.LogFactory;
 import java.lang.String;

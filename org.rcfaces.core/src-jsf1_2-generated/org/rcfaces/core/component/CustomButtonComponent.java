@@ -1,18 +1,18 @@
 package org.rcfaces.core.component;
 
+import org.rcfaces.core.component.capability.IBorderTypeCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.internal.component.Properties;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.capability.IBorderCapability;
-import org.rcfaces.core.component.AbstractCommandComponent;
-import org.rcfaces.core.component.capability.IBorderTypeCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import javax.el.ValueExpression;
-import java.util.HashSet;
 import org.apache.commons.logging.Log;
-import java.util.Set;
+import java.util.HashSet;
+import org.apache.commons.logging.LogFactory;
 import java.util.Arrays;
+import java.util.Set;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
+import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.component.AbstractCommandComponent;
 
 /**
  * A button Component highly customizable through its API.

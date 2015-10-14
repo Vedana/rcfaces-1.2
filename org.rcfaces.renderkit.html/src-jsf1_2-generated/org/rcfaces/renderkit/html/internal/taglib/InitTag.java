@@ -1,18 +1,18 @@
 package org.rcfaces.renderkit.html.internal.taglib;
 
-import javax.faces.component.UIComponent;
-import org.apache.commons.logging.LogFactory;
-import javax.servlet.jsp.tagext.Tag;
-import org.rcfaces.core.internal.taglib.CameliaTag;
-import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.faces.context.FacesContext;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
 import javax.el.ValueExpression;
-import org.apache.commons.logging.Log;
 import javax.faces.component.UIViewRoot;
+import org.apache.commons.logging.Log;
+import javax.servlet.jsp.tagext.Tag;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.taglib.CameliaTag;
 import org.rcfaces.core.internal.tools.ListenersTools1_2;
 import org.rcfaces.renderkit.html.component.Properties;
+import org.rcfaces.core.internal.tools.ListenersTools;
 import org.rcfaces.renderkit.html.component.InitComponent;
+import javax.faces.context.FacesContext;
 
 public class InitTag extends CameliaTag implements Tag {
 

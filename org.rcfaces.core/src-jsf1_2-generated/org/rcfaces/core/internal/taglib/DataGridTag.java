@@ -74,7 +74,9 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 	private ValueExpression rowIndexVar;
 	private ValueExpression cellTextWrap;
 	private ValueExpression bodyDroppable;
+	private ValueExpression titleAllCheck;
 	private ValueExpression orderedColumnIds;
+	private ValueExpression sortedChildrenIds;
 	private ValueExpression actionListeners;
 	private ValueExpression action;
 	public String getComponentType() {
@@ -305,8 +307,16 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		this.bodyDroppable = bodyDroppable;
 	}
 
+	public void setTitleAllCheck(ValueExpression titleAllCheck) {
+		this.titleAllCheck = titleAllCheck;
+	}
+
 	public void setOrderedColumnIds(ValueExpression orderedColumnIds) {
 		this.orderedColumnIds = orderedColumnIds;
+	}
+
+	public void setSortedChildrenIds(ValueExpression sortedChildrenIds) {
+		this.sortedChildrenIds = sortedChildrenIds;
 	}
 
 	public final void setAction(ValueExpression action) {
@@ -370,7 +380,9 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			LOG.debug("  rowIndexVar='"+rowIndexVar+"'");
 			LOG.debug("  cellTextWrap='"+cellTextWrap+"'");
 			LOG.debug("  bodyDroppable='"+bodyDroppable+"'");
+			LOG.debug("  titleAllCheck='"+titleAllCheck+"'");
 			LOG.debug("  orderedColumnIds='"+orderedColumnIds+"'");
+			LOG.debug("  sortedChildrenIds='"+sortedChildrenIds+"'");
 			LOG.debug("  action='"+action+"'");
 			LOG.debug("  actionListeners='"+actionListeners+"'");
 		}
@@ -826,12 +838,30 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			}
 		}
 
+		if (titleAllCheck != null) {
+			if (titleAllCheck.isLiteralText()==false) {
+				component.setValueExpression(Properties.TITLE_ALL_CHECK, titleAllCheck);
+
+			} else {
+				component.setTitleAllCheck(getBool(titleAllCheck.getExpressionString()));
+			}
+		}
+
 		if (orderedColumnIds != null) {
 			if (orderedColumnIds.isLiteralText()==false) {
 				component.setValueExpression(Properties.ORDERED_COLUMN_IDS, orderedColumnIds);
 
 			} else {
 				component.setOrderedColumnIds(orderedColumnIds.getExpressionString());
+			}
+		}
+
+		if (sortedChildrenIds != null) {
+			if (sortedChildrenIds.isLiteralText()==false) {
+				component.setValueExpression(Properties.SORTED_CHILDREN_IDS, sortedChildrenIds);
+
+			} else {
+				component.setSortedChildrenIds(sortedChildrenIds.getExpressionString());
 			}
 		}
 
@@ -901,7 +931,9 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		rowIndexVar = null;
 		cellTextWrap = null;
 		bodyDroppable = null;
+		titleAllCheck = null;
 		orderedColumnIds = null;
+		sortedChildrenIds = null;
 		action = null;
 		actionListeners = null;
 

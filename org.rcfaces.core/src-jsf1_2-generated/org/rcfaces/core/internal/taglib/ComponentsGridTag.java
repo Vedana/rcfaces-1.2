@@ -49,6 +49,7 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 	private ValueExpression rowValueConverter;
 	private ValueExpression cellTextWrap;
 	private ValueExpression orderedColumnIds;
+	private ValueExpression sortedChildrenIds;
 	public String getComponentType() {
 		return ComponentsGridComponent.COMPONENT_TYPE;
 	}
@@ -177,6 +178,10 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 		this.orderedColumnIds = orderedColumnIds;
 	}
 
+	public void setSortedChildrenIds(ValueExpression sortedChildrenIds) {
+		this.sortedChildrenIds = sortedChildrenIds;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (ComponentsGridComponent.COMPONENT_TYPE==getComponentType()) {
@@ -209,6 +214,7 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 			LOG.debug("  rowValueConverter='"+rowValueConverter+"'");
 			LOG.debug("  cellTextWrap='"+cellTextWrap+"'");
 			LOG.debug("  orderedColumnIds='"+orderedColumnIds+"'");
+			LOG.debug("  sortedChildrenIds='"+sortedChildrenIds+"'");
 		}
 		if ((uiComponent instanceof ComponentsGridComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -461,6 +467,15 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 				component.setOrderedColumnIds(orderedColumnIds.getExpressionString());
 			}
 		}
+
+		if (sortedChildrenIds != null) {
+			if (sortedChildrenIds.isLiteralText()==false) {
+				component.setValueExpression(Properties.SORTED_CHILDREN_IDS, sortedChildrenIds);
+
+			} else {
+				component.setSortedChildrenIds(sortedChildrenIds.getExpressionString());
+			}
+		}
 	}
 
 	public void release() {
@@ -495,6 +510,7 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 		rowValueConverter = null;
 		cellTextWrap = null;
 		orderedColumnIds = null;
+		sortedChildrenIds = null;
 
 		super.release();
 	}

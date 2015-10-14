@@ -45,8 +45,8 @@ import org.rcfaces.core.component.capability.ITabIndexCapability;
 import org.rcfaces.core.component.capability.IKeyEventCapability;
 import org.rcfaces.core.internal.component.CameliaOutputComponent;
 import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.component.capability.IMouseEventCapability;
 import org.rcfaces.core.component.capability.IErrorEventCapability;
+import org.rcfaces.core.component.capability.IMouseEventCapability;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.ITextAlignmentCapability;
 import java.util.HashSet;
@@ -73,8 +73,8 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 	IServerDataCapability,
 	IMarginCapability,
 	IKeyEventCapability,
-	IPositionCapability,
 	IUserEventCapability,
+	IPositionCapability,
 	IPartialRenderingCapability,
 	IStyleClassCapability,
 	ILookAndFeelCapability,
@@ -886,6 +886,18 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 		return getFacesListeners(org.rcfaces.core.event.IKeyPressListener.class);
 	}
 
+	public final void addUserEventListener(org.rcfaces.core.event.IUserEventListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeUserEventListener(org.rcfaces.core.event.IUserEventListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listUserEventListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IUserEventListener.class);
+	}
+
 	public java.lang.String getX() {
 		return getX(null);
 	}
@@ -930,18 +942,6 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 
 	public void setY(java.lang.String y) {
 		engine.setProperty(Properties.Y, y);
-	}
-
-	public final void addUserEventListener(org.rcfaces.core.event.IUserEventListener listener) {
-		addFacesListener(listener);
-	}
-
-	public final void removeUserEventListener(org.rcfaces.core.event.IUserEventListener listener) {
-		removeFacesListener(listener);
-	}
-
-	public final javax.faces.event.FacesListener [] listUserEventListeners() {
-		return getFacesListeners(org.rcfaces.core.event.IUserEventListener.class);
 	}
 
 	public boolean isPartialRendering() {

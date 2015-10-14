@@ -7,8 +7,8 @@ import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability
 import org.rcfaces.renderkit.svg.component.Properties;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
-import org.rcfaces.core.component.capability.ITabIndexCapability;
 import org.rcfaces.core.component.capability.IKeyEventCapability;
+import org.rcfaces.core.component.capability.ITabIndexCapability;
 import org.rcfaces.core.component.capability.IValidationEventCapability;
 import org.rcfaces.core.component.capability.IImmediateCapability;
 import org.rcfaces.core.component.capability.IFocusStyleClassCapability;

@@ -2,18 +2,18 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
-import org.apache.commons.logging.LogFactory;
-import java.lang.String;
-import org.rcfaces.core.component.capability.IHiddenModeCapability;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import javax.el.ValueExpression;
-import java.util.HashSet;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import org.apache.commons.logging.Log;
+import java.util.HashSet;
+import java.lang.String;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
-import java.util.Set;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import java.util.Arrays;
+import java.util.Set;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import javax.faces.context.FacesContext;
 
 /**
  * <p>The lineBreak Component is the &lt;BR&gt; HTML equivalent.</p>

@@ -17,8 +17,8 @@ import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapabilit
 import org.rcfaces.core.component.capability.IHeightCapability;
 import org.rcfaces.core.internal.converter.AlignmentNormalizer;
 import javax.faces.convert.Converter;
-import org.rcfaces.core.component.capability.IAlignmentCapability;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
+import org.rcfaces.core.component.capability.IAlignmentCapability;
 import javax.el.ValueExpression;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.IToolTipTextCapability;

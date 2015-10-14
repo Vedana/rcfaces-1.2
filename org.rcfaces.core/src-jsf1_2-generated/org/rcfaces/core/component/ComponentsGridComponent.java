@@ -1,7 +1,7 @@
 package org.rcfaces.core.component;
 
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
+import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ISelectableCapability;
 import org.rcfaces.core.internal.capability.ISortedComponentsCapability;
@@ -154,7 +154,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headerVisible","summary","selectionCardinality","clientAdditionalInformationFullState","scopeColumnId","cellTextWrap","emptyDataMessage","loadListener","selectionListener","paged","additionalInformationValues","showValue","additionalInformationListener","verticalScrollPosition","border","required","clientSelectionFullState","preferences","doubleClickListener","selectedValues","horizontalScrollPosition","caption","orderedColumnIds","rowCountVar","rowStyleClass","rowToolTipId","selectable","additionalInformationCardinality","rowValueConverter","rowIndexVar","rowValue"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headerVisible","summary","selectionCardinality","clientAdditionalInformationFullState","scopeColumnId","cellTextWrap","emptyDataMessage","loadListener","selectionListener","paged","additionalInformationValues","showValue","additionalInformationListener","verticalScrollPosition","required","border","clientSelectionFullState","preferences","doubleClickListener","caption","selectedValues","horizontalScrollPosition","orderedColumnIds","rowCountVar","rowStyleClass","rowToolTipId","sortedChildrenIds","selectable","additionalInformationCardinality","rowValueConverter","rowIndexVar","rowValue"}));
 	}
 
 	public ComponentsGridComponent() {
@@ -1240,6 +1240,27 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	 */
 	public boolean isOrderedColumnIdsSetted() {
 		return engine.isPropertySetted(Properties.ORDERED_COLUMN_IDS);
+	}
+
+	public String getSortedChildrenIds() {
+		return getSortedChildrenIds(null);
+	}
+
+	public String getSortedChildrenIds(javax.faces.context.FacesContext facesContext) {
+		String s = engine.getStringProperty(Properties.SORTED_CHILDREN_IDS, facesContext);
+		return s;
+	}
+
+	public void setSortedChildrenIds(String sortedChildrenIds) {
+		engine.setProperty(Properties.SORTED_CHILDREN_IDS, sortedChildrenIds);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "sortedChildrenIds" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isSortedChildrenIdsSetted() {
+		return engine.isPropertySetted(Properties.SORTED_CHILDREN_IDS);
 	}
 
 	protected Set getCameliaFields() {

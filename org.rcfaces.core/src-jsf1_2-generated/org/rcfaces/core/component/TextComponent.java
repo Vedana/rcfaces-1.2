@@ -8,8 +8,8 @@ import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.component.capability.IForCapability;
 import org.rcfaces.core.component.capability.IAudioDescriptionCapability;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.ITextAlignmentCapability;
+import javax.el.ValueExpression;
 import java.util.HashSet;
 import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.AbstractOutputComponent;
@@ -68,7 +68,7 @@ public class TextComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"text","fontName","accessKey","for","fontBold","fontSize","type","audioDescription","textDirection","errorText","fontItalic","fontUnderline","textAlignment"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"errorText","accessKey","fontName","fontItalic","text","fontUnderline","for","textAlignment","fontBold","type","fontSize","audioDescription","textDirection"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="text";
 

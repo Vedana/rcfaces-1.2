@@ -239,7 +239,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"summary","dragListener","scopeColumnId","rowDropEffects","dropListener","dropEffects","fullCriteriaCount","emptyDataMessage","loadListener","checkedValues","selectionListener","paged","additionalInformationListener","cursorValue","border","required","bodyDroppable","doubleClickListener","clientCheckFullState","rowLabelColumnId","horizontalScrollPosition","orderedColumnIds","rowCountVar","dropCompleteListener","rowToolTipId","dropTypes","rowDragEffects","rowValueColumnId","selectedCriteriaColumns","additionalInformationCardinality","rowIndexVar","checkListener","headerVisible","droppable","selectionCardinality","dragTypes","rowDropTypes","clientAdditionalInformationFullState","checkCardinality","checkable","cellTextWrap","rowDragTypes","additionalInformationValues","showValue","verticalScrollPosition","clientSelectionFullState","preferences","filterProperties","dragEffects","selectedValues","caption","rowStyleClass","keySearchColumnId","readOnly","selectable","draggable","disabled"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"summary","dragListener","scopeColumnId","rowDropEffects","dropListener","dropEffects","fullCriteriaCount","emptyDataMessage","loadListener","checkedValues","selectionListener","paged","additionalInformationListener","cursorValue","required","border","bodyDroppable","doubleClickListener","clientCheckFullState","rowLabelColumnId","horizontalScrollPosition","orderedColumnIds","rowCountVar","dropCompleteListener","rowToolTipId","dropTypes","rowDragEffects","sortedChildrenIds","rowValueColumnId","selectedCriteriaColumns","additionalInformationCardinality","rowIndexVar","checkListener","headerVisible","droppable","selectionCardinality","dragTypes","rowDropTypes","clientAdditionalInformationFullState","checkCardinality","checkable","cellTextWrap","titleAllCheck","rowDragTypes","additionalInformationValues","showValue","verticalScrollPosition","clientSelectionFullState","preferences","filterProperties","dragEffects","selectedValues","caption","rowStyleClass","keySearchColumnId","readOnly","selectable","draggable","disabled"}));
 	}
 
 	public DataGridComponent() {
@@ -2090,6 +2090,26 @@ public class DataGridComponent extends AbstractDataComponent implements
 		return engine.isPropertySetted(Properties.BODY_DROPPABLE);
 	}
 
+	public boolean isTitleAllCheck() {
+		return isTitleAllCheck(null);
+	}
+
+	public boolean isTitleAllCheck(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.TITLE_ALL_CHECK, false, facesContext);
+	}
+
+	public void setTitleAllCheck(boolean titleAllCheck) {
+		engine.setProperty(Properties.TITLE_ALL_CHECK, titleAllCheck);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "titleAllCheck" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isTitleAllCheckSetted() {
+		return engine.isPropertySetted(Properties.TITLE_ALL_CHECK);
+	}
+
 	public String getOrderedColumnIds() {
 		return getOrderedColumnIds(null);
 	}
@@ -2109,6 +2129,27 @@ public class DataGridComponent extends AbstractDataComponent implements
 	 */
 	public boolean isOrderedColumnIdsSetted() {
 		return engine.isPropertySetted(Properties.ORDERED_COLUMN_IDS);
+	}
+
+	public String getSortedChildrenIds() {
+		return getSortedChildrenIds(null);
+	}
+
+	public String getSortedChildrenIds(javax.faces.context.FacesContext facesContext) {
+		String s = engine.getStringProperty(Properties.SORTED_CHILDREN_IDS, facesContext);
+		return s;
+	}
+
+	public void setSortedChildrenIds(String sortedChildrenIds) {
+		engine.setProperty(Properties.SORTED_CHILDREN_IDS, sortedChildrenIds);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "sortedChildrenIds" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isSortedChildrenIdsSetted() {
+		return engine.isPropertySetted(Properties.SORTED_CHILDREN_IDS);
 	}
 
 	protected Set getCameliaFields() {

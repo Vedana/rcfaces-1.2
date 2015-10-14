@@ -1,7 +1,7 @@
 package org.rcfaces.core.component;
 
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
+import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IClientAdditionalInformationFullStateCapability;
 import org.apache.commons.logging.LogFactory;
@@ -106,7 +106,7 @@ public class ComboGridComponent extends KeyEntryComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(KeyEntryComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headerVisible","filterProperties","clientAdditionalInformationFullState","manyResultsMessage","pagerStyleClass","orderedColumnIds","rowStyleClass","zeroResultMessage","gridStyleClass","popupStyleClass","gridLookId","pagerLookId","message","searchFieldVisible","paged","additionalInformationValues","additionalInformationListener","oneResultMessage","popupHeight","additionalInformationCardinality","popupWidth"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headerVisible","filterProperties","clientAdditionalInformationFullState","manyResultsMessage","pagerStyleClass","orderedColumnIds","rowStyleClass","zeroResultMessage","gridStyleClass","popupStyleClass","gridLookId","pagerLookId","message","searchFieldVisible","paged","sortedChildrenIds","additionalInformationValues","additionalInformationListener","oneResultMessage","popupHeight","additionalInformationCardinality","popupWidth"}));
 	}
 
 	public ComboGridComponent() {
@@ -754,6 +754,27 @@ public class ComboGridComponent extends KeyEntryComponent implements
 	 */
 	public boolean isOrderedColumnIdsSetted() {
 		return engine.isPropertySetted(Properties.ORDERED_COLUMN_IDS);
+	}
+
+	public String getSortedChildrenIds() {
+		return getSortedChildrenIds(null);
+	}
+
+	public String getSortedChildrenIds(javax.faces.context.FacesContext facesContext) {
+		String s = engine.getStringProperty(Properties.SORTED_CHILDREN_IDS, facesContext);
+		return s;
+	}
+
+	public void setSortedChildrenIds(String sortedChildrenIds) {
+		engine.setProperty(Properties.SORTED_CHILDREN_IDS, sortedChildrenIds);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "sortedChildrenIds" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isSortedChildrenIdsSetted() {
+		return engine.isPropertySetted(Properties.SORTED_CHILDREN_IDS);
 	}
 
 	protected Set getCameliaFields() {
