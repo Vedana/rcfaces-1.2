@@ -380,6 +380,25 @@ var __members = {
 			titleAllCheck.onmouseup = function(event) {
 				event.stopPropagation && event.stopPropagation();
 			};
+			
+			function updateCheckStates() {
+				var trs = this.fa_listVisibleElements();
+				
+				var allChecked=(trs.length>0);
+				
+				for(var i=0;i<trs.length;i++) {
+					if (self.fa_isElementChecked(trs[i], false)) {
+						continue;
+					}
+
+					allChecked=false;
+					break;
+				}
+
+				titleAllCheck.checked=allChecked;
+			}
+			this.f_addEventListener(f_event.CHECK, updateCheckStates);
+			this.f_addEventListener("newPage", updateCheckStates);			
 		}
 
 		if (window.f_indexedDbEngine) {
@@ -2057,6 +2076,15 @@ var __members = {
 		if (!this._rowsPool.length) {
 			this.f_showEmptyDataMessage();
 		}
+		
+		var event = new f_event(this, "newPage");
+		try {
+			this.f_fireEvent(event);
+
+		} finally {
+			f_classLoader.Destroy(event);
+		}
+		
 	},
 	/**
 	 * Specify the image of a cell.

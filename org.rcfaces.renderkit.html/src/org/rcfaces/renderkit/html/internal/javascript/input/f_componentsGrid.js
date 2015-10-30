@@ -435,6 +435,14 @@ var __members = {
 		if (!this._rowsPool.length) {
 			this.f_showEmptyDataMessage();
 		}
+		
+		var event = new f_event(this, "newPage");
+		try {
+			this.f_fireEvent(event);
+
+		} finally {
+			f_classLoader.Destroy(event);
+		}
 	},
 	f_update : function() {
 		var rows = f_grid.ListRows(this._table);
