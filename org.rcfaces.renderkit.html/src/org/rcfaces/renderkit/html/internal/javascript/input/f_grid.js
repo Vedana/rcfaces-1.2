@@ -5683,11 +5683,15 @@ var __members = {
 				"f_grid.fa_showElement: Invalid element parameter ! (" + row
 						+ ")");
 
+		return this._scrollToRow(row);
+	},
+
+	_scrollToRow : function(row) {
+
 		var scrollBody = this._scrollBody;
-		f_core.Debug(f_grid, "fa_showElement: row.y=" + row.offsetTop
-				+ " row.h=" + row.offsetHeight + " scrollBody.y="
-				+ scrollBody.scrollTop + " scrollBody.h="
-				+ scrollBody.clientHeight);
+		f_core.Debug(f_grid, "_scrollToRow: row.y=" + row.offsetTop + " row.h="
+				+ row.offsetHeight + " scrollBody.y=" + scrollBody.scrollTop
+				+ " scrollBody.h=" + scrollBody.clientHeight);
 
 		if (row.offsetTop - scrollBody.scrollTop < 0) {
 			// Bug Firefox de repositionnement de la scrollbar
@@ -5695,7 +5699,7 @@ var __members = {
 			scrollBody.scrollTop = 99999;
 			scrollBody.scrollTop = row.offsetTop;
 
-			f_core.Debug(f_grid, "fa_showElement: set scrollTop to "
+			f_core.Debug(f_grid, "_scrollToRow: set scrollTop to "
 					+ row.offsetTop);
 
 		} else if (row.offsetTop + row.offsetHeight - scrollBody.scrollTop > scrollBody.clientHeight) {
@@ -5708,7 +5712,7 @@ var __members = {
 			f_core
 					.Debug(
 							f_grid,
-							"fa_showElement: set scrollTop to "
+							"_scrollToRow: set scrollTop to "
 									+ (row.offsetTop + row.offsetHeight - scrollBody.clientHeight));
 		}
 

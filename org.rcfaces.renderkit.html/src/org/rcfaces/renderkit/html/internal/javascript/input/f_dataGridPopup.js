@@ -305,6 +305,10 @@ var __members = {
 		}	
 		
 		return this.f_super(arguments, evt);
+	},
+	
+	fa_showElement : function(row, giveFocus) {
+		this._scrollToRow(row);
 	}
 };
  

@@ -352,53 +352,53 @@ var __members = {
 			var titleAllCheck = chAlls && chAlls[0];
 			this._titleAllCheck = titleAllCheck;
 
-			var self=this;
-			
+			var self = this;
+
 			titleAllCheck.onmousedown = function(event) {
 
 				event.stopPropagation && event.stopPropagation();
 
-				//return false;
+				// return false;
 			};
-			titleAllCheck.onclick = function(event) {				
-				
+			titleAllCheck.onclick = function(event) {
+
 				if (titleAllCheck.checked) {
-//					titleAllCheck.checked=true;
+					// titleAllCheck.checked=true;
 					self.f_checkAllPage();
-					titleAllCheck.title="Désélectionner toutes les lignes de la page";
+					titleAllCheck.title = "Désélectionner toutes les lignes de la page";
 
 				} else {
-//					titleAllCheck.checked=false;
-					self.f_uncheckAllPage();				
-					titleAllCheck.title="Sélectionner toutes les lignes de la page";
+					// titleAllCheck.checked=false;
+					self.f_uncheckAllPage();
+					titleAllCheck.title = "Sélectionner toutes les lignes de la page";
 				}
 
 				event.stopPropagation && event.stopPropagation();
-				//event.preventDefault && event.preventDefault();
-				//return false;
+				// event.preventDefault && event.preventDefault();
+				// return false;
 			};
 			titleAllCheck.onmouseup = function(event) {
 				event.stopPropagation && event.stopPropagation();
 			};
-			
+
 			function updateCheckStates() {
 				var trs = this.fa_listVisibleElements();
-				
-				var allChecked=(trs.length>0);
-				
-				for(var i=0;i<trs.length;i++) {
+
+				var allChecked = (trs.length > 0);
+
+				for (var i = 0; i < trs.length; i++) {
 					if (self.fa_isElementChecked(trs[i], false)) {
 						continue;
 					}
 
-					allChecked=false;
+					allChecked = false;
 					break;
 				}
 
-				titleAllCheck.checked=allChecked;
+				titleAllCheck.checked = allChecked;
 			}
 			this.f_addEventListener(f_event.CHECK, updateCheckStates);
-			this.f_addEventListener("newPage", updateCheckStates);			
+			this.f_addEventListener("newPage", updateCheckStates);
 		}
 
 		if (window.f_indexedDbEngine) {
@@ -410,7 +410,7 @@ var __members = {
 		var titleAllCheck = this._titleAllCheck;
 		if (titleAllCheck) {
 			this._titleAllCheck = undefined;
-			
+
 			titleAllCheck.onmousedown = null;
 			titleAllCheck.onmouseup = null;
 			titleAllCheck.onclick = null;
@@ -2076,7 +2076,7 @@ var __members = {
 		if (!this._rowsPool.length) {
 			this.f_showEmptyDataMessage();
 		}
-		
+
 		var event = new f_event(this, "newPage");
 		try {
 			this.f_fireEvent(event);
@@ -2084,7 +2084,7 @@ var __members = {
 		} finally {
 			f_classLoader.Destroy(event);
 		}
-		
+
 	},
 	/**
 	 * Specify the image of a cell.
@@ -2646,7 +2646,7 @@ var __members = {
 			if (!this.fa_isElementChecked(element)) {
 				continue;
 			}
-			
+
 			this._uncheckElement(element, this.fa_getElementValue(element));
 		}
 	},
@@ -3011,12 +3011,13 @@ var __members = {
 	fa_showElement : function(row, giveFocus) {
 		// this.f_super(arguments, row);
 
+		f_core.Debug(f_dataGrid, "fa_showElement: show row '" + row._index
+				+ "'  inputTabIndex='" + this._inputTabIndex + "' giveFocus="
+				+ giveFocus + " ignoreFocus=" + this._ignoreFocus);
+
 		if (!giveFocus || this._ignoreFocus) {
 			return;
 		}
-
-		f_core.Debug(f_dataGrid, "fa_showElement: show row '" + row._index
-				+ "'  inputTabIndex='" + this._inputTabIndex + "'.");
 
 		var old = this._inputTabIndex;
 		var oldCell = this._inputCellIndex;
