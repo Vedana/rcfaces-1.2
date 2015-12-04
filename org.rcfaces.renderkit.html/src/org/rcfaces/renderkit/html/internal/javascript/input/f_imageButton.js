@@ -609,6 +609,8 @@ var __members = {
 		
 		if (textElement.tagName.toLowerCase()==="input") {
 			textElement.value=text;
+			// ? textElement.setAttribute("aria-label", text);
+
 
 		} else {		
 			f_core.SetTextNode(textElement, text, this._accessKey);
