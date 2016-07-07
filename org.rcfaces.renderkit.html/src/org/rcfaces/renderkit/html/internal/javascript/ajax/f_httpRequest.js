@@ -521,12 +521,14 @@ var __members = {
 			if (!method) {
 				 method = f_httpRequest.GET_METHOD;
 			}
-			if (typeof(this._requestTimeout)==="number") {
-				req.timeout=this._requestTimeout;
-			}
 			
 			req.open(method, this._url, async);
 		
+			if (typeof(this._requestTimeout)==="number") {
+				// Pour IE11 on le met après le OPEN
+				req.timeout=this._requestTimeout;
+			}
+
 			if (!contentType && data && method==f_httpRequest.POST_METHOD) {
 				if (typeof(data)=="string") {		
 					if (data.indexOf("<?xml")>=0) {
