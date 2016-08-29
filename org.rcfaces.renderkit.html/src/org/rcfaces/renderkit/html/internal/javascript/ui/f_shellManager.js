@@ -538,7 +538,7 @@ var __members = {
 			}
 
 			try {
-				if (!child.hasAttributes) {
+				if (!child.hasAttribute) {
 					continue;
 				}
 			} catch (x) {
@@ -581,6 +581,14 @@ var __members = {
 		for (var i = 0; i < bodyChildren.length; i++) {
 			var child = bodyChildren[i];
 
+			try {
+				if (!child.hasAttribute) {
+					continue;
+				}
+			} catch (x) {
+				continue;
+			}
+			
 			if (child.hasAttribute("f_aria-hidden")) {
 				child.setAttribute("aria-hidden", child
 						.getAttribute("f_aria-hidden"));
