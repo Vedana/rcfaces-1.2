@@ -537,6 +537,14 @@ var __members = {
 				continue;
 			}
 
+			try {
+				if (!child.hasAttributes) {
+					continue;
+				}
+			} catch (x) {
+				continue;
+			}
+			
 			if (child.hasAttribute("aria-hidden")) {
 				child.setAttribute("f_aria-hidden", child
 						.getAttribute("aria-hidden"));
