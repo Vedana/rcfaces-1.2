@@ -5522,6 +5522,11 @@ var f_core = {
 		if (!tagName) {
 			return null;
 		}
+		var displayMode = f_core.GetAttributeNS(component,"displayMode");
+		if (displayMode) {
+			return displayMode;
+		}
+		
 		var regExp = new RegExp(f_core._BLOCK_TAGS, "i");
 		if (regExp.test(tagName)) {
 			return "block";
