@@ -448,9 +448,14 @@ var __members = {
 			return;
 		}
 		
-		var display=f_core.GetDefaultDisplayMode(this);
-		style.display = display;
-		this._oldDisplay = display;
+		try {
+			style.removeProperty("display");
+			
+		} catch(x) {		
+			var display=f_core.GetDefaultDisplayMode(this);
+			style.display = display;
+			this._oldDisplay = display;
+		}
 	},
 	/**
 	 * @method public
