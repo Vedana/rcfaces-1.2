@@ -601,10 +601,14 @@
 			<feature-rule>ie8+ firefox3+ chrome4+ safari3.1+ opera9+ ios3.2+ android2.1+</feature-rule>
 		</feature>
 		<feature>
-			<feature-name>css.repeating-graidents</feature-name>
+			<feature-name>css.repeating-gradients</feature-name>
 			<feature-rule>ie10+ firefox3.6+ chrome10+ safari5.1+ opera11.6+ ios5+ android4+</feature-rule>
 		</feature>
 		<feature>
+			<feature-name>flex-box</feature-name>
+			<feature-rule>ie10+ firefox2+ chrome4+ safari3.1+ opera12.1+ ios3.2+ android2.1+</feature-rule>
+		</feature>
+				<feature>
 			<feature-name>css3.background-image</feature-name>
 			<feature-rule>ie9+ firefox4+ chrome4+ safari5+ opera10.5+ ios4+ android2.2+</feature-rule>
 		</feature>
