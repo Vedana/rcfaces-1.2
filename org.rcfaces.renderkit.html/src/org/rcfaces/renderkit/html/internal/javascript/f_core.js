@@ -1532,9 +1532,7 @@ var f_core = {
 
 					// f_core.AddEventListener(form, "submit",
 					// document._rcfacesDisableSubmit);
-					f_core
-							.RemoveEventListener(form, "submit",
-									f_core._OnSubmit);
+					f_core.RemoveEventListener(form, "submit", f_core._OnSubmit);
 					f_core.RemoveEventListener(form, "reset", f_core._OnReset);
 
 					form._checkListeners = undefined; // List<method>
@@ -2803,11 +2801,9 @@ var f_core = {
 
 		f_event.ExitEventLock(f_event.MODAL_LOCK);
 
-		f_core.RemoveEventListener(document.body, "focus",
-				f_core._ModalWindowFocus);
+		f_core.RemoveEventListener(document.body, "focus", f_core._ModalWindowFocus);
 		if (f_core.IsInternetExplorer()) {
-			f_core.RemoveEventListener(document, "selectstart",
-					f_core._ModalWindowFocus);
+			f_core.RemoveEventListener(document, "selectstart", f_core._ModalWindowFocus);
 		}
 	},
 	/**
