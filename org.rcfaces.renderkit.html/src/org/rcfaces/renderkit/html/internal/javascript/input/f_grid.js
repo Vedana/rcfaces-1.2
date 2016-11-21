@@ -73,7 +73,7 @@ var __statics = {
 	/**
 	 * @field private static final Number
 	 */
-	_COLUMN_MIN_WIDTH : 4,
+	_COLUMN_MIN_WIDTH : 8,
 
 	/**
 	 * @field private static final Number
@@ -1809,8 +1809,7 @@ var __statics = {
 			if (dw) {
 				f_grid._DragCursorMove(dataGrid, column, dw);
 
-				var cursorPos = f_core
-						.GetAbsolutePosition(f_grid._DragColumn._cursor);
+				var cursorPos = f_core.GetAbsolutePosition(f_grid._DragColumn._cursor);
 				dataGrid._dragDeltaX = dataGrid._dragEventPos.x - cursorPos.x
 						+ dataGrid._scrollTitle.scrollLeft;
 			}
@@ -1826,6 +1825,7 @@ var __statics = {
 	_DragCursorMove : function(dataGrid, column, dw) {
 
 		var doc = dataGrid.ownerDocument;
+		dataGrid._columnResized=true;
 
 		if (dataGrid._dragTimerId) {
 			f_core.GetWindow(doc).clearTimeout(dataGrid._dragTimerId);
@@ -2466,6 +2466,19 @@ var __members = {
 		this._table.onmouseout = f_grid.RowMouseOut;
 
 		this.f_insertEventListenerFirst(f_event.KEYDOWN, this._performKeyDown);
+		
+		
+		if (true) {
+			var self=this;
+			this._onResizeFunction=function() {
+				if (self._columnResized) {
+					//return;
+				}
+
+				self.f_updateTitle();
+			}
+			f_core.AddResizeEventListener(this, this._onResizeFunction);
+		}
 	},
 	f_finalize : function() {
 		f_grid._TitleReleaseTimer();
@@ -2679,7 +2692,13 @@ var __members = {
 		// this._initSort=undefined; // Boolean
 		// this._resizable=undefined; // Boolean
 		// this._sortIndexes = undefined; // String
-
+		// this._columnResized=undefined; // Boolean
+		
+		if (this._onResizeFunction) {
+			f_core.RemoveResizeEventListener(this, this._onResizeFunction);
+			this._resizeFunction=undefined;
+		}
+		
 		this.f_super(arguments);
 	},
 	f_getFocusableElement : function() {
@@ -3353,7 +3372,7 @@ var __members = {
 				}
 
 				if (this._resizable && column._resizable) {
-					if (!column._minWidth || column._minWidth < 1) {
+					if (!column._minWidth || column._minWidth < f_grid._COLUMN_MIN_WIDTH) {
 						column._minWidth = f_grid._COLUMN_MIN_WIDTH;
 					}
 
@@ -5822,8 +5841,7 @@ var __members = {
 			}
 
 			if (f_core.IsGecko()) {
-				scrollBody.addEventListener("DOMMouseScroll",
-						f_grid._Link_onmousewheel, false);
+				scrollBody.addEventListener("DOMMouseScroll", f_grid._Link_onmousewheel, false);
 			} else {
 				scrollBody.onmousewheel = f_grid._Link_onmousewheel;
 			}
@@ -5897,8 +5915,7 @@ var __members = {
 			}
 
 			var box = f_core.GetFirstElementByTagName(head, "div");
-			f_core
-					.Assert(box && box.nodeType == f_core.ELEMENT_NODE,
+			f_core.Assert(box && box.nodeType == f_core.ELEMENT_NODE,
 							"f_grid.f_updateColumnsLayout: Invalid structure of header (no DIV)");
 			column._box = box;
 
@@ -5908,8 +5925,7 @@ var __members = {
 				// C'est triable mais pas (encore) focusable !
 				label = f_core.GetFirstElementByTagName(box, "div");
 			}
-			f_core
-					.Assert(label && label.nodeType == f_core.ELEMENT_NODE,
+			f_core.Assert(label && label.nodeType == f_core.ELEMENT_NODE,
 							"f_grid.f_updateColumnsLayout: Invalid structure of header (no Label)");
 			column._label = label;
 
@@ -5956,13 +5972,32 @@ var __members = {
 	/**
 	 * @method protected
 	 */
-	f_updateTitle : function() {
+	f_updateTitle : function(retry) {
 		if (!this._title) {
 			return;
 		}
+		
+		var logWidths=true;
 
 		var body = this._scrollBody;
 		var clientWidth = body.clientWidth;
+		
+		if (logWidths) {
+			console.log("Retry="+retry+"clientWidth="+clientWidth);
+		}
+		if (clientWidth>990000) {
+			if (retry>3) {
+				return;
+			}
+			var self=this;
+			retry = retry || 0;
+			
+			setTimeout(function() {
+				self.f_updateTitle(retry+1);
+			}, 10);
+			return;
+		}
+		
 		var offsetWidth = body.offsetWidth;
 		var scrollBarWidth = offsetWidth - clientWidth;
 		var verticalScrollBar = (scrollBarWidth > 0);
@@ -5979,22 +6014,24 @@ var __members = {
 			}
 		}
 
-		var sw = this.style.width;
-		if (sw && sw.indexOf("px") > 0) {
-			var swPixel = parseInt(sw);
-
-			swPixel -= f_core.ComputeContentBoxBorderLength(this, "left",
-					"right");
-			if (this._scrollTitle) {
-				this._scrollTitle.style.width = swPixel + "px";
+		if (false) {
+			// var sw = this.style.width;
+			var sw= f_core.GetCurrentStyleProperty(this, "width");
+			if (sw && sw.indexOf("px") > 0) {
+				var swPixel = parseInt(sw);
+	
+				swPixel -= f_core.ComputeContentBoxBorderLength(this, "left",
+						"right");
+				if (this._scrollTitle) {
+					this._scrollTitle.style.width = swPixel + "px";
+				}
+				body.style.width = swPixel + "px";
+	
+				offsetWidth = swPixel;
+				if (verticalScrollBar) {
+					clientWidth = offsetWidth - scrollBarWidth;
+				}
 			}
-			body.style.width = swPixel + "px";
-
-			offsetWidth = swPixel;
-			if (verticalScrollBar) {
-				clientWidth = offsetWidth - scrollBarWidth;
-			}
-
 		}
 
 		if (!this._columnsLayoutPerformed) {
@@ -6005,16 +6042,22 @@ var __members = {
 
 		var columns = this._columns;
 
-		var total = 0; // total des colonnes fixe en px
-		var totalPercent = 0; // total des %
-		var totalZero = 0; // total colone sans taille donnee
-		var colToProcess = new Array();
+		var totalFixesWidth = 0;
+		var percentSum = 0; // total des %
+		var columnWithoutWidthCount = 0; // total colone sans taille donnee
+		var colToProcess = [];
+		var colFixesWidth = [];
 
+		if (logWidths) {
+			console.log("START layout");
+		}
 		for (var i = 0; i < columns.length; i++) {
 			var column = columns[i];
 			if (column._visibility === false) {
 				continue;
 			}
+			
+			column._tempWidth = column._minWidth;
 
 			var col = undefined;
 			if (ie) {
@@ -6028,25 +6071,24 @@ var __members = {
 
 			if (!col) {
 				col = column._col;
+				if (!col) {
+					break;
+				}
 			}
-
-			if (!col) {
-				break;
-			}
-
+			
 			if (column._widthComputed) {
-				totalZero++;
+				columnWithoutWidthCount++;
 				colToProcess.push(column);
 				continue;
 			}
 
 			if (column._widthPercent !== undefined) {
-				totalPercent += column._widthPercent;
+				percentSum += column._widthPercent;
 				colToProcess.push(column);
 				continue;
 			}
 
-			if (!column._widthSetted) {
+			if (column._widthSetted===undefined) {
 
 				var styleWidth = col.style.width;
 
@@ -6064,15 +6106,15 @@ var __members = {
 				}
 
 				if (styleWidth.indexOf("%") > 0) {
-					totalPercent += w;
 					column._widthPercent = w;
+					percentSum += w;
 					colToProcess.push(column);
 					continue;
 				}
 
 				if (!w) {
-					totalZero++;
 					column._widthComputed = true;
+					columnWithoutWidthCount++;
 					colToProcess.push(column);
 					continue;
 				}
@@ -6080,50 +6122,37 @@ var __members = {
 				if (isNaN(w) || w < 0) {
 					w = 0;
 				}
+				if (logWidths) {
+					console.log("Style width="+styleWidth+"=>"+w);
+				}
 
 				column._widthSetted = w;
 			}
 
 			var w = column._widthSetted;
-			total += w;
+			colFixesWidth.push(column);
+			totalFixesWidth += w;
 
 			if (this._textLeftRightPadding === undefined) {
-				this._textLeftRightPadding = f_core
-						.ComputePaddingBoxBorderLength(column._box.parentNode,
+				this._textLeftRightPadding = f_core.ComputePaddingBoxBorderLength(column._box.parentNode,
 								"left", "right");
 			}
 
-			var cw = w;
-			if (f_core.IsWebkit(f_core.WEBKIT_SAFARI)) {
-				cw -= this._textLeftRightPadding;
-			}
-
-			if (ie) {
-				cw -= column._borderAndPaddingWidth;
-			}
-
-			if (cw < 0) {
-				cw = 0;
-			}
-
-			column._head.style.width = cw + "px";
-
-			this._updateTitleCellBody(column, w);
+			column._tempWidth = w;
 		}
 
+		if (logWidths) {
+			console.log("ColToProcess=",colToProcess.length,"clientWidth=",clientWidth,"percentSum=",percentSum,"totalFixesWidth=",totalFixesWidth);
+		}
+		
 		// deuxième tour s il y a pas de donnée pour trident et webkit
 		if (colToProcess.length) {
 
-			var totalNonPx = clientWidth - total;
+			var totalNonPx = clientWidth - totalFixesWidth;
 
-			for (var i = 0; i < colToProcess.length; i++) {
-				var column = colToProcess[i];
-
-				column._tempWidth = 0;
-			}
-
-			if (totalNonPx > 0 && totalPercent > 0) {
-				var totalPercent = totalNonPx / 100;
+			// Colonnes avec %
+			if (totalNonPx > 0 && percentSum > 0) {
+				var percentSumPx = totalNonPx / percentSum;
 
 				// On affecte les %
 				for (var i = 0; i < colToProcess.length; i++) {
@@ -6134,7 +6163,7 @@ var __members = {
 						continue;
 					}
 
-					var w = Math.floor(percent * totalPercent);
+					var w = Math.floor(percent * percentSumPx);
 
 					if (column._maxWidth && w > column._maxWidth) {
 						w = column._maxWidth;
@@ -6144,44 +6173,23 @@ var __members = {
 						w = totalNonPx;
 					}
 
-					column._tempWidth += w;
+					if (column._minWidth && w < column._minWidth) {
+						w = column._minWidth;
+					}
+
+					if (logWidths) {
+						console.log("Set percentWidths #"+i+"=>"+w);
+					}
+					column._tempWidth = w;
 
 					totalNonPx -= w;
 				}
-
-				// On verifie les mins ...
-				for (var i = 0; i < colToProcess.length; i++) {
-					var column = colToProcess[i];
-
-					var percent = column._widthPercent;
-					if (!percent) {
-						continue;
-					}
-
-					var minWidth = column._minWidth;
-					if (!minWidth) {
-						continue;
-					}
-
-					var diff = minWidth - column._tempWidth;
-
-					if (diff < 0) {
-						continue;
-					}
-
-					if (diff > totalNonPx) {
-						diff = totalNonPx;
-					}
-
-					column._tempWidth += diff;
-
-					totalNonPx -= diff;
-				}
 			}
 
-			if (totalNonPx > 0 && totalZero > 0) {
+			// Des colonnes sans taille ?
+			if (totalNonPx > 0 && columnWithoutWidthCount > 0) {
 
-				var cnt = totalZero;
+				var cnt = columnWithoutWidthCount;
 
 				// On affecte les colonnes sans taille !
 				for (var i = 0; i < colToProcess.length; i++) {
@@ -6197,12 +6205,12 @@ var __members = {
 						w = column._maxWidth;
 					}
 
-					if (column._minWidth && w < column._minWidth) {
-						w = column._maxWidth;
-					}
-
 					if (totalNonPx < w) {
 						w = totalNonPx;
+					}
+
+					if (column._minWidth && w < column._minWidth) {
+						w = column._minWidth;
 					}
 
 					var tmpW = w;
@@ -6218,35 +6226,43 @@ var __members = {
 						}
 					}
 
-					column._tempWidth += w;
+					if (logWidths) {
+						console.log("Set2 #"+i+"=>"+w);
+					}
+					column._tempWidth = w;
 
 					totalNonPx -= tmpW;
 					cnt--;
 				}
-			}
-
-			for (var i = 0; i < colToProcess.length; i++) {
-				var column = colToProcess[i];
-
-				var w = column._tempWidth;
-				var cw = w;
-				if (f_core.IsWebkit(f_core.WEBKIT_SAFARI)) {
-					cw -= cellMargin;
-				}
-				if (cw < 0) {
-					cw = 0;
-				}
-				column._head.style.width = cw + "px";
-				this._updateTitleCellBody(column, w);
-				column._col.style.width = (cw) + "px";
-				column._col.width = cw;
-
-				total += w;
-
-				// f_core.Debug(f_grid, "Total=" + total + " w=" + w);
-			}
+			}			
 		}
 
+		var total=0;
+		var cols=colToProcess.concat(colFixesWidth);
+		for (var i = 0; i < cols.length; i++) {
+			var column = cols[i];
+
+			var w = column._tempWidth;
+			if (logWidths) {
+				console.log("Col#"+i+"=>"+w);
+			}
+			var cw = w;
+			if (f_core.IsWebkit(f_core.WEBKIT_SAFARI)) {
+				cw -= cellMargin;
+			}
+			if (cw < 0) {
+				cw = 0;
+			}
+			column._head.style.width = cw + "px";
+			this._updateTitleCellBody(column, w);
+			column._col.style.width = (cw) + "px";
+			column._col.width = cw;
+
+			total += w;
+
+			// f_core.Debug(f_grid, "Total=" + total + " w=" + w);
+		}
+		
 		var t2 = new Date().getTime();
 
 		if (scrollBarWidth > 0) {
