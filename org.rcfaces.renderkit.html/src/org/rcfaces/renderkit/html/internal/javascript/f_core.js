@@ -219,29 +219,29 @@ var f_core = {
 	/**
 	 * @field private static final String[]
 	 */
-	_OPEN_WINDOW_KEYWORDS : [ "width", "height", "channelmode", "fullscreen",
+	_OPEN_WINDOW_KEYWORDS : ["width", "height", "channelmode", "fullscreen",
 			"resizable", "titlebar", "scrollbars", "location", "toolbar",
-			"directories", "status", "menubar", "copyhistory" ],
+			"directories", "status", "menubar", "copyhistory"],
 
 	/**
 	 * @field private static final String[]
 	 */
-	_BORDER_LENGTHS : [ "margin", "border", "padding" ],
+	_BORDER_LENGTHS : ["margin", "border", "padding"],
 
 	/**
 	 * @field private static final String[]
 	 */
-	_CONTENT_LENGTHS : [ "border", "padding" ],
+	_CONTENT_LENGTHS : ["border", "padding"],
 
 	/**
 	 * @field private static final String[]
 	 */
-	_PADDING_LENGTHS : [ "padding" ],
+	_PADDING_LENGTHS : ["padding"],
 
 	/**
 	 * @field private static final String[]
 	 */
-	_MARGIN_LENGTHS : [ "margin" ],
+	_MARGIN_LENGTHS : ["margin"],
 
 	/**
 	 * @field hidden static boolean
@@ -332,14 +332,10 @@ var f_core = {
 		var ex = new Error(message);
 
 		f_core.Error("f_assert", message, ex);
-		
+
 		/*
-		try {
-			debugger;
-		} catch (x) {
-			// Nothing
-		}
-		*/
+		 * try { debugger; } catch (x) { // Nothing }
+		 */
 
 		throw ex;
 	},
@@ -423,7 +419,7 @@ var f_core = {
 					l = new Array;
 					window._coreLogs = l;
 				}
-				l.push([ level, name, message, exception, win ]);
+				l.push([level, name, message, exception, win]);
 				return true;
 			}
 
@@ -452,32 +448,32 @@ var f_core = {
 
 			if (log) {
 				switch (level) {
-				case 0:
-					fct = log.f_fatal;
-					break;
+					case 0 :
+						fct = log.f_fatal;
+						break;
 
-				case 1:
-					fct = log.f_error;
-					break;
+					case 1 :
+						fct = log.f_error;
+						break;
 
-				case 2:
-					fct = log.f_warn;
-					break;
+					case 2 :
+						fct = log.f_warn;
+						break;
 
-				case 3:
-					fct = log.f_info;
-					break;
+					case 3 :
+						fct = log.f_info;
+						break;
 
-				case 4:
-					fct = log.f_debug;
-					break;
+					case 4 :
+						fct = log.f_debug;
+						break;
 
-				case 5:
-					fct = log.f_trace;
-					break;
+					case 5 :
+						fct = log.f_trace;
+						break;
 
-				default:
-					fct = log.f_error;
+					default :
+						fct = log.f_error;
 				}
 			}
 
@@ -1036,14 +1032,14 @@ var f_core = {
 				&& (!f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_9) || !component.addEventListener)) {
 			if (component.nodeType == f_core.DOCUMENT_NODE) {
 				switch (name) {
-				case "focus":
-					component = component.body;
-					name = "focusin";
-					break;
-				case "blur":
-					component = component.body;
-					name = "focusout";
-					break;
+					case "focus" :
+						component = component.body;
+						name = "focusin";
+						break;
+					case "blur" :
+						component = component.body;
+						name = "focusout";
+						break;
 				}
 			}
 
@@ -1144,15 +1140,15 @@ var f_core = {
 
 			if (component.nodeType == f_core.DOCUMENT_NODE) {
 				switch (name) {
-				case "focus":
-					component = component.body;
-					name = "focusin";
-					break;
+					case "focus" :
+						component = component.body;
+						name = "focusin";
+						break;
 
-				case "blur":
-					component = component.body;
-					name = "focusout";
-					break;
+					case "blur" :
+						component = component.body;
+						name = "focusout";
+						break;
 				}
 			}
 			component.detachEvent("on" + name, fct);
@@ -1314,7 +1310,7 @@ var f_core = {
 			f_core.Info("f_core", "Install library (onload) on " + now);
 
 			if (false && f_core.DebugMode) {
-				var title = [ "DEBUG" ];
+				var title = ["DEBUG"];
 				f_core.Info("f_core", "Enable f_core.DEBUG mode");
 
 				var profiler = win.rcfacesProfilerCB;
@@ -1615,24 +1611,24 @@ var f_core = {
 
 			if (val !== null && val !== undefined) {
 				switch (typeof (val)) {
-				case "string":
-					break;
+					case "string" :
+						break;
 
-				case "boolean":
-				case "number":
-					val = String(val);
-					break;
-
-				case "object":
-					if (val instanceof Date) {
+					case "boolean" :
+					case "number" :
 						val = String(val);
 						break;
-					}
 
-				default:
-					f_core.Error(f_core,
-							"SetInputHidden: Can not set an input hidden '"
-									+ name + "' with value '" + val + "'.");
+					case "object" :
+						if (val instanceof Date) {
+							val = String(val);
+							break;
+						}
+
+					default :
+						f_core.Error(f_core,
+								"SetInputHidden: Can not set an input hidden '"
+										+ name + "' with value '" + val + "'.");
 				}
 			}
 
@@ -1695,20 +1691,20 @@ var f_core = {
 		// Optimisation s'il n'y a qu'une seule form !
 		var forms = elt.ownerDocument.forms;
 		switch (forms.length) {
-		case 0:
-			f_core.Debug(f_core, "GetParentForm: No form into document !");
+			case 0 :
+				f_core.Debug(f_core, "GetParentForm: No form into document !");
 
-			// f_core._CachedForm=null;
-			return null;
+				// f_core._CachedForm=null;
+				return null;
 
-		case 1:
-			f_core.Debug(f_core,
-					"GetParentForm: Only one form into document, returns "
-							+ forms[0].id);
+			case 1 :
+				f_core.Debug(f_core,
+						"GetParentForm: Only one form into document, returns "
+								+ forms[0].id);
 
-			form = forms[0];
-			// f_core._CachedForm=form;
-			return form;
+				form = forms[0];
+				// f_core._CachedForm=form;
+				return form;
 		}
 
 		for (form = elt; form; form = form.parentNode) {
@@ -1769,7 +1765,7 @@ var f_core = {
 				continue;
 			}
 			if (state == f_classLoader.INITIALIZED_STATE) { // Already
-															// initialized
+				// initialized
 				return comp;
 			}
 
@@ -1861,55 +1857,56 @@ var f_core = {
 					var value = properties[name];
 
 					switch (name.toLowerCase()) {
-					case "classname":
-					case "class":
-						element.className = value;
-						break;
-
-					case "textnode":
-						textNode = value;
-						break;
-
-					case "innerhtml":
-						innerHtml = value;
-						break;
-
-					case "role":
-					case "aria-live":
-					case "aria-atomic":
-					case "aria-relevant":
-						element.setAttribute(name, value);
-						break;
-
-					case "style":
-						var rs = value.split(';');
-						for (var j = 0; j < rs.length; j++) {
-							var rs2 = rs[j].split(':');
-
-							var rname = f_core.Trim(rs2[0]);
-							var rvalue = f_core.Trim(rs2[1]);
-
-							element.style[rname] = rvalue;
-						}
-						break;
-
-					default:
-						if (!name.indexOf("css")) { /* ==0 !!! */
-							element.style[name.substring(3, 4).toLowerCase()
-									+ name.substring(4)] = value;
+						case "classname" :
+						case "class" :
+							element.className = value;
 							break;
 
-						}
-
-						switch (typeof (value)) {
-						case "function":
-						case "object":
-							element[name] = value;
+						case "textnode" :
+							textNode = value;
 							break;
 
-						default:
+						case "innerhtml" :
+							innerHtml = value;
+							break;
+
+						case "role" :
+						case "aria-live" :
+						case "aria-atomic" :
+						case "aria-relevant" :
 							element.setAttribute(name, value);
-						}
+							break;
+
+						case "style" :
+							var rs = value.split(';');
+							for (var j = 0; j < rs.length; j++) {
+								var rs2 = rs[j].split(':');
+
+								var rname = f_core.Trim(rs2[0]);
+								var rvalue = f_core.Trim(rs2[1]);
+
+								element.style[rname] = rvalue;
+							}
+							break;
+
+						default :
+							if (!name.indexOf("css")) { /* ==0 !!! */
+								element.style[name.substring(3, 4)
+										.toLowerCase()
+										+ name.substring(4)] = value;
+								break;
+
+							}
+
+							switch (typeof (value)) {
+								case "function" :
+								case "object" :
+									element[name] = value;
+									break;
+
+								default :
+									element.setAttribute(name, value);
+							}
 
 					}
 				}
@@ -2024,20 +2021,20 @@ var f_core = {
 			var child = children[i];
 
 			switch (child.nodeType) {
-			case f_core.TEXT_NODE:
-			case f_core.CDATA_SECTION_NODE:
-				text += child.data;
-				break;
-
-			case f_core.ELEMENT_NODE:
-				if (ignoreAudioDescription
-						&& child.className == "f_audioDescription") {
+				case f_core.TEXT_NODE :
+				case f_core.CDATA_SECTION_NODE :
+					text += child.data;
 					break;
-				}
-				if (concatChildren) {
-					text += f_core.GetTextNode(child, true);
-				}
-				break;
+
+				case f_core.ELEMENT_NODE :
+					if (ignoreAudioDescription
+							&& child.className == "f_audioDescription") {
+						break;
+					}
+					if (concatChildren) {
+						text += f_core.GetTextNode(child, true);
+					}
+					break;
 			}
 
 		}
@@ -2196,7 +2193,8 @@ var f_core = {
 					var component = currentEvent.f_getComponent();
 					f_core.Debug(f_core,
 							"_OnSubmit: Component which performs submit event is '"
-									+ ((component) ? component.id
+									+ ((component)
+											? component.id
 											: "**UNKNOWN**") + "'");
 
 					if (currentEvent.f_getType() == f_event.ERROR) {
@@ -2352,8 +2350,8 @@ var f_core = {
 				event = f_event.GetEvent();
 
 			} else if (event.cancelBubble !== undefined) { // Un event ... on
-															// peut pas faire
-															// instanceof Event
+				// peut pas faire
+				// instanceof Event
 				jsEvt = event;
 			}
 
@@ -2776,9 +2774,8 @@ var f_core = {
 		}
 
 		/*
-		 * try { modalWindow.onunload=f_core._CloseModalChildWindow;
-		 *  } catch (x) { f_core.Error("f_core", "Can not set onclose
-		 * callback.", x); }
+		 * try { modalWindow.onunload=f_core._CloseModalChildWindow; } catch (x) {
+		 * f_core.Error("f_core", "Can not set onclose callback.", x); }
 		 */
 	},
 	/**
@@ -2981,7 +2978,7 @@ var f_core = {
 		}
 
 		if (!newWindow || newWindow.closed) { // Déjà fermé: c'est un popup
-												// blocker
+			// blocker
 			// Popup Blocker
 			var s = f_env.GetOpenWindowErrorMessage();
 
@@ -3644,7 +3641,7 @@ var f_core = {
 				"f_core.GetParentByClass: Element parameter is not a valid node ! ("
 						+ elt + ")");
 
-		var stack = [ elt ];
+		var stack = [elt];
 		for (; stack.length;) {
 			var n = stack.pop();
 
@@ -4084,6 +4081,16 @@ var f_core = {
 	 * @return Object
 	 */
 	GetAbsolutePosition : function(component) {
+		var offsetParent;
+
+		try {
+			offsetParent = component.offsetParent;
+
+		} catch (x) {
+			// Problème de sécurité ?
+			return null;
+		}
+
 		f_core.Assert(component && component.nodeType == f_core.ELEMENT_NODE,
 				"f_core.GetAbsolutePosition: Invalid component parameter '"
 						+ component + "'.");
@@ -4091,7 +4098,7 @@ var f_core = {
 		// var gecko=f_core.IsGecko();
 
 		// f_core.Debug(f_core, "Get absolutePos of '"+component.id+"'.");
-		var offsetParent = component.offsetParent;
+
 		if (offsetParent) {
 			// DOM HTML
 			var doc = component.ownerDocument;
@@ -4099,7 +4106,7 @@ var f_core = {
 			var body = doc.body;
 			var documentElement = doc.documentElement;
 
-			var ret= {
+			var ret = {
 				x : 0,
 				y : 0
 			};
@@ -4130,55 +4137,57 @@ var f_core = {
 
 				offsetParent = component.offsetParent;
 			}
-			
+
 			return ret;
-		} 
-		
+		}
+
 		if (component.getBoundingClientRect) {
 			// DOM SVG
 			var box = component.getBoundingClientRect();
-			
+
 			var ret = {
-				x: Math.floor(box.left),
-				y: Math.floor(box.top)
+				x : Math.floor(box.left),
+				y : Math.floor(box.top)
 			};
-			
+
 			var win = f_core.GetWindow(component.ownerDocument);
 			if (win.frameElement) {
 				// C'est dans une frame, on ajoute la position du parent !
 				var cs = f_core.GetAbsolutePosition(win.frameElement);
 
-				if (cs) {	
+				if (cs) {
 					if (false) {
-						console.log("Absolute pos frameX="+cs.x+" frameY="+cs.y);
+						console.log("Absolute pos frameX=" + cs.x + " frameY="
+								+ cs.y);
 					}
-					
-					ret.x+=cs.x;
-					ret.y+=cs.y;
+
+					ret.x += cs.x;
+					ret.y += cs.y;
 				}
 			}
 
 			if (false) {
-				console.log("Absolute pos retX="+ret.x+" retY="+ret.y+"  box.x="+box.x+" box.y="+box.y);
+				console.log("Absolute pos retX=" + ret.x + " retY=" + ret.y
+						+ "  box.x=" + box.x + " box.y=" + box.y);
 			}
 			return ret;
 
 		}
-	
-		// ??? pas HTML, pas SVG ???  (position du body ou document ?)
 
-		var ret= {
+		// ??? pas HTML, pas SVG ??? (position du body ou document ?)
+
+		var ret = {
 			x : 0,
 			y : 0
 		};
-		
+
 		if (component.x) {
 			ret.x += component.x;
 		}
 		if (component.y) {
 			ret.y += component.y;
 		}
-		
+
 		if (component.offsetLeft) {
 			ret.x += component.offsetLeft;
 		}
@@ -4187,7 +4196,7 @@ var f_core = {
 		}
 
 		// f_core.Debug(f_core, " End absolutePos x="+curLeft+" y="+curTop);
-		
+
 		return ret;
 	},
 	/**
@@ -4229,7 +4238,7 @@ var f_core = {
 
 		var timeStamp = new Date().getTime();
 
-		var parents = [ component ];
+		var parents = [component];
 		component._scbap_t = timeStamp;
 		component._scbap_x = 0;
 		component._scbap_y = 0;
@@ -4312,17 +4321,17 @@ var f_core = {
 
 		switch (f_core._browser) {
 
-		case f_core.FIREFOX_4_0:
-			return (!version || version == f_core.FIREFOX_4_0);
+			case f_core.FIREFOX_4_0 :
+				return (!version || version == f_core.FIREFOX_4_0);
 
-		case f_core.FIREFOX_3_6:
-			return (!version || version == f_core.FIREFOX_3_6);
+			case f_core.FIREFOX_3_6 :
+				return (!version || version == f_core.FIREFOX_3_6);
 
-		case f_core.FIREFOX_3_5:
-			return (!version || version == f_core.FIREFOX_3_5);
+			case f_core.FIREFOX_3_5 :
+				return (!version || version == f_core.FIREFOX_3_5);
 
-		case f_core.GECKO:
-			return true;
+			case f_core.GECKO :
+				return true;
 		}
 
 		return false;
@@ -4362,17 +4371,17 @@ var f_core = {
 		}
 
 		switch (f_core._browser) {
-		case f_core.INTERNET_EXPLORER_9:
-			return (!version || version == f_core.INTERNET_EXPLORER_9);
+			case f_core.INTERNET_EXPLORER_9 :
+				return (!version || version == f_core.INTERNET_EXPLORER_9);
 
-		case f_core.INTERNET_EXPLORER_8:
-			return (!version || version == f_core.INTERNET_EXPLORER_8);
+			case f_core.INTERNET_EXPLORER_8 :
+				return (!version || version == f_core.INTERNET_EXPLORER_8);
 
-		case f_core.INTERNET_EXPLORER_7:
-			return (!version || version == f_core.INTERNET_EXPLORER_7);
+			case f_core.INTERNET_EXPLORER_7 :
+				return (!version || version == f_core.INTERNET_EXPLORER_7);
 
-		case f_core.INTERNET_EXPLORER_6:
-			return (!version || version == f_core.INTERNET_EXPLORER_6);
+			case f_core.INTERNET_EXPLORER_6 :
+				return (!version || version == f_core.INTERNET_EXPLORER_6);
 		}
 
 		return false;
@@ -4390,14 +4399,14 @@ var f_core = {
 		}
 
 		switch (f_core._browser) {
-		case f_core.WEBKIT_CHROME:
-			return (!version || version == f_core.WEBKIT_CHROME);
+			case f_core.WEBKIT_CHROME :
+				return (!version || version == f_core.WEBKIT_CHROME);
 
-		case f_core.WEBKIT_SAFARI:
-			return (!version || version == f_core.WEBKIT_SAFARI);
+			case f_core.WEBKIT_SAFARI :
+				return (!version || version == f_core.WEBKIT_SAFARI);
 
-		case f_core.WEBKIT:
-			return true;
+			case f_core.WEBKIT :
+				return true;
 		}
 
 		return false;
@@ -4450,21 +4459,21 @@ var f_core = {
 			f_core.IsWebkit = f_core._ReturnsAlwaysFalse;
 
 			switch (f_core._browser_major) {
-			case 8:
-				f_core._browser = f_core.INTERNET_EXPLORER_8;
-				break;
-			case 7:
-				f_core._browser = f_core.INTERNET_EXPLORER_7;
-				break;
-			case 6:
-				f_core._browser = f_core.INTERNET_EXPLORER_6;
-				break;
+				case 8 :
+					f_core._browser = f_core.INTERNET_EXPLORER_8;
+					break;
+				case 7 :
+					f_core._browser = f_core.INTERNET_EXPLORER_7;
+					break;
+				case 6 :
+					f_core._browser = f_core.INTERNET_EXPLORER_6;
+					break;
 
-			default:
-				if (f_core._browser_major >= 9) {
-					f_core._browser = f_core.INTERNET_EXPLORER_9;
-				}
-				break;
+				default :
+					if (f_core._browser_major >= 9) {
+						f_core._browser = f_core.INTERNET_EXPLORER_9;
+					}
+					break;
 			}
 
 			if (f_core._browser != f_core._UNKNOWN_BROWER) {
@@ -4512,7 +4521,7 @@ var f_core = {
 
 			f_core.IsInternetExplorer = f_core._ReturnsAlwaysFalse;
 			f_core.IsGecko = f_core._ReturnsAlwaysFalse;// function(){return
-														// true;};
+			// true;};
 
 			f_core.Info(f_core, f_core._browser + " detected !");
 
@@ -5155,7 +5164,8 @@ var f_core = {
 						+ "'.");
 
 		if (!doc) {
-			var target = event.relatedTarget || event.scrElement || event.originalTarget;
+			var target = event.relatedTarget || event.scrElement
+					|| event.originalTarget;
 			if (target) {
 				if (target.nodeType == f_core.DOCUMENT_NODE) {
 					doc = target;
@@ -5170,25 +5180,25 @@ var f_core = {
 			}
 
 			if (false) {
-				console.log("GetJsEventPosition: Search position of '"+target+"' doc="+doc);
+				console.log("GetJsEventPosition: Search position of '" + target
+						+ "' doc=" + doc);
 			}
 		}
 
-
 		if (doc.documentElement.tagName.toLowerCase() != "html") {
 			// SVG ?
-			
+
 			var win = f_core.GetWindow(doc);
 			var frameElement = win.frameElement;
 			if (frameElement) {
 				var cs = f_core.GetAbsolutePosition(frameElement);
 
 				if (false) {
-					console.log("Frame absolute position x=" + cs.x + " y=" + cs.y
-							+ " event.x=" + event.clientX + " event.y="
+					console.log("Frame absolute position x=" + cs.x + " y="
+							+ cs.y + " event.x=" + event.clientX + " event.y="
 							+ event.clientY);
 				}
-				
+
 				return f_core.GetJsEventPosition({
 					clientX : event.clientX + cs.x,
 					clientY : event.clientY + cs.y
@@ -5210,9 +5220,10 @@ var f_core = {
 			x : win.scrollX + event.clientX,
 			y : win.scrollY + event.clientY
 		};
-		
+
 		if (false) {
-			console.log("GetJsEventPosition: Return position x="+ret.x+" y="+ret.y+" of "+event.scrElement);
+			console.log("GetJsEventPosition: Return position x=" + ret.x
+					+ " y=" + ret.y + " of " + event.scrElement);
 		}
 		return ret;
 	},
@@ -5847,77 +5858,77 @@ var f_core = {
 
 			var data = s.substring(idx);
 			switch (type) {
-			case 'S':
-				if (data.length) {
-					data = decodeURIComponent(data.replace(/\+/g, ' '));
-				}
-				break;
-
-			case 'D':
-				data = f_core.DeserializeDate(data);
-				break;
-
-			case 'M':
-				f_class
-						.IsClassDefined("f_time",
-								"f_time class is required to deserialize a time object !");
-
-				data = f_time.Deserialize(data);
-				break;
-
-			case 'P':
-				f_class
-						.IsClassDefined("f_period",
-								"f_period class is required to deserialize a period object !");
-
-				data = f_period.Deserialize(data);
-				break;
-
-			case 'X':
-				f_class
-						.IsClassDefined("f_xml",
-								"Xml class is required to deserialize a xml document !");
-
-				data = data.replace(/\+/g, ' ');
-				data = decodeURIComponent(data);
-				data = f_xml.FromString(data);
-				break;
-
-			case 'L':
-				data = null;
-				break;
-
-			case 'T':
-				data = true;
-				break;
-
-			case 'F':
-				data = false;
-				break;
-
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':
-				if (!data) {
-					data = parseFloat(type);
+				case 'S' :
+					if (data.length) {
+						data = decodeURIComponent(data.replace(/\+/g, ' '));
+					}
 					break;
-				}
 
-			case '-':
-				data = -parseFloat(data);
-				break;
+				case 'D' :
+					data = f_core.DeserializeDate(data);
+					break;
 
-			default:
-				f_core.Error(f_core, "DecodeObject: Unknown type '" + type
-						+ "' !");
-				data = undefined;
+				case 'M' :
+					f_class
+							.IsClassDefined("f_time",
+									"f_time class is required to deserialize a time object !");
+
+					data = f_time.Deserialize(data);
+					break;
+
+				case 'P' :
+					f_class
+							.IsClassDefined("f_period",
+									"f_period class is required to deserialize a period object !");
+
+					data = f_period.Deserialize(data);
+					break;
+
+				case 'X' :
+					f_class
+							.IsClassDefined("f_xml",
+									"Xml class is required to deserialize a xml document !");
+
+					data = data.replace(/\+/g, ' ');
+					data = decodeURIComponent(data);
+					data = f_xml.FromString(data);
+					break;
+
+				case 'L' :
+					data = null;
+					break;
+
+				case 'T' :
+					data = true;
+					break;
+
+				case 'F' :
+					data = false;
+					break;
+
+				case '0' :
+				case '1' :
+				case '2' :
+				case '3' :
+				case '4' :
+				case '5' :
+				case '6' :
+				case '7' :
+				case '8' :
+				case '9' :
+					if (!data) {
+						data = parseFloat(type);
+						break;
+					}
+
+				case '-' :
+					data = -parseFloat(data);
+					break;
+
+				default :
+					f_core.Error(f_core, "DecodeObject: Unknown type '" + type
+							+ "' !");
+					data = undefined;
 			}
 
 			f_core.Debug(f_core, "DecodeObject: Deserialize attribute '" + name
@@ -5985,56 +5996,57 @@ var f_core = {
 		var value = parseInt(date.substring(1), 32);
 
 		switch (unit) {
-		case 'Y':
-			return new Date(value, 0, 1);
+			case 'Y' :
+				return new Date(value, 0, 1);
 
-		case 'M':
-			var m = value % 12;
-			var y = Math.floor(value / 12);
-			return new Date(y, m, 1);
+			case 'M' :
+				var m = value % 12;
+				var y = Math.floor(value / 12);
+				return new Date(y, m, 1);
 
-		case 'd':
-			var d = value;
-			var m = Math.floor(value / 31);
-			var y = Math.floor(m / 12);
-			return new Date(y, m % 12, (d % 31) + 1);
+			case 'd' :
+				var d = value;
+				var m = Math.floor(value / 31);
+				var y = Math.floor(m / 12);
+				return new Date(y, m % 12, (d % 31) + 1);
 
-		case 'H':
-			var h = value;
-			var d = Math.floor(h / 24);
-			var m = Math.floor(d / 31);
-			var y = Math.floor(m / 12);
-			return new Date(y, m % 12, (d % 31) + 1, h % 24, 0, 0);
+			case 'H' :
+				var h = value;
+				var d = Math.floor(h / 24);
+				var m = Math.floor(d / 31);
+				var y = Math.floor(m / 12);
+				return new Date(y, m % 12, (d % 31) + 1, h % 24, 0, 0);
 
-		case 'm':
-			var mn = value;
-			var h = Math.floor(mn / 60);
-			var d = Math.floor(h / 24);
-			var m = Math.floor(d / 31);
-			var y = Math.floor(m / 12);
-			return new Date(y, m % 12, (d % 31) + 1, h % 24, mn % 60, 0);
+			case 'm' :
+				var mn = value;
+				var h = Math.floor(mn / 60);
+				var d = Math.floor(h / 24);
+				var m = Math.floor(d / 31);
+				var y = Math.floor(m / 12);
+				return new Date(y, m % 12, (d % 31) + 1, h % 24, mn % 60, 0);
 
-		case 's':
-			var s = value;
-			var mn = Math.floor(s / 60);
-			var h = Math.floor(mn / 60);
-			var d = Math.floor(h / 24);
-			var m = Math.floor(d / 31);
-			var y = Math.floor(m / 12);
+			case 's' :
+				var s = value;
+				var mn = Math.floor(s / 60);
+				var h = Math.floor(mn / 60);
+				var d = Math.floor(h / 24);
+				var m = Math.floor(d / 31);
+				var y = Math.floor(m / 12);
 
-			return new Date(y, m % 12, (d % 31) + 1, h % 24, mn % 60, s % 60);
+				return new Date(y, m % 12, (d % 31) + 1, h % 24, mn % 60,
+						s % 60);
 
-		case 'S':
-			var ms = value;
-			var s = Math.floor(ms / 1000);
-			var mn = Math.floor(s / 60);
-			var h = Math.floor(mn / 60);
-			var d = Math.floor(h / 24);
-			var m = Math.floor(d / 31);
-			var y = Math.floor(m / 12);
+			case 'S' :
+				var ms = value;
+				var s = Math.floor(ms / 1000);
+				var mn = Math.floor(s / 60);
+				var h = Math.floor(mn / 60);
+				var d = Math.floor(h / 24);
+				var m = Math.floor(d / 31);
+				var y = Math.floor(m / 12);
 
-			return new Date(y, m % 12, (d % 31) + 1, h % 24, mn % 60, s % 60,
-					ms % 1000);
+				return new Date(y, m % 12, (d % 31) + 1, h % 24, mn % 60,
+						s % 60, ms % 1000);
 		}
 
 		f_core.Error(f_core, "DeserializeDate: Invalid date format ! (" + date
@@ -6067,9 +6079,9 @@ var f_core = {
 		}
 
 		switch (parent.nodeType) {
-		case f_core.ELEMENT_NODE:
-		case f_core.DOCUMENT_NODE:
-			return parent;
+			case f_core.ELEMENT_NODE :
+			case f_core.DOCUMENT_NODE :
+				return parent;
 		}
 
 		return null;
@@ -6333,12 +6345,12 @@ var f_core = {
 		}
 
 		switch (button) {
-		case 0:
-			return f_core.LEFT_MOUSE_BUTTON;
-		case 1:
-			return f_core.MIDDLE_MOUSE_BUTTON;
-		case 2:
-			return f_core.RIGHT_MOUSE_BUTTON;
+			case 0 :
+				return f_core.LEFT_MOUSE_BUTTON;
+			case 1 :
+				return f_core.MIDDLE_MOUSE_BUTTON;
+			case 2 :
+				return f_core.RIGHT_MOUSE_BUTTON;
 		}
 
 		return -1;
@@ -6429,7 +6441,7 @@ var f_core = {
 
 			if (isCollapsed) {
 				delete caret;
-				return [ i, i ];
+				return [i, i];
 			}
 
 			caret.moveToBookmark(bookmark);
@@ -6452,7 +6464,7 @@ var f_core = {
 					+ " to " + (i + j) + ".");
 
 			delete caret;
-			return [ i, i + j ];
+			return [i, i + j];
 		}
 
 		if (f_core.IsGecko() || f_core.IsWebkit()) {
@@ -6460,7 +6472,7 @@ var f_core = {
 					+ component.selectionStart + " to "
 					+ component.selectionEnd + ".");
 
-			return [ component.selectionStart, component.selectionEnd ];
+			return [component.selectionStart, component.selectionEnd];
 		}
 
 		f_core
@@ -6545,7 +6557,7 @@ var f_core = {
 		// Check view elements
 		elts = new Array;
 
-		var e = [ doc.documentElement ];
+		var e = [doc.documentElement];
 
 		for (; e.length;) {
 			var p = e.pop();
@@ -6922,7 +6934,7 @@ var f_core = {
 					}
 
 					if (!found && parameters[p] !== undefined) { // C'est une
-																	// clef
+						// clef
 						ret.push(parameters[p]);
 						found = true;
 					}
@@ -7056,7 +7068,7 @@ var f_core = {
 
 		return f_core.AddFacesHiddenInputParameters(form, function(input) {
 			return true; // Ca peut servir !!!!
-							// !f_core.GetAttributeNS(input,"class");
+			// !f_core.GetAttributeNS(input,"class");
 		}, data);
 	},
 	/**
@@ -7230,8 +7242,7 @@ var f_core = {
 
 		var ws = /\s/;
 		var i;
-		for (i = text.length; ws.test(text.charAt(--i));)
-			;
+		for (i = text.length; ws.test(text.charAt(--i)););
 
 		return text.slice(0, i + 1);
 	},
@@ -7640,29 +7651,31 @@ var f_core = {
 		tagName = tagName.toUpperCase();
 
 		switch (tagName) {
-		case "INPUT":
-			var type = component.type.toUpperCase();
-			return (type == "TEXT");
+			case "INPUT" :
+				var type = component.type.toUpperCase();
+				return (type == "TEXT");
 
-		case "TEXTAREA":
-			return true;
+			case "TEXTAREA" :
+				return true;
 
-		case "FRAME":
-			try {
-				var contentDocument;
-				if (f_core.IsInternetExplorer()) {
-					contentDocument = component.contentWindow.document;
+			case "FRAME" :
+				try {
+					var contentDocument;
+					if (f_core.IsInternetExplorer()) {
+						contentDocument = component.contentWindow.document;
 
-				} else {
-					contentDocument = component.contentDocument;
+					} else {
+						contentDocument = component.contentDocument;
+					}
+
+					return contentDocument.designMode == "on";
+
+				} catch (ex) {
+					f_core
+							.Info("IsComponentEditable: security exception ?",
+									ex);
 				}
-
-				return contentDocument.designMode == "on";
-
-			} catch (ex) {
-				f_core.Info("IsComponentEditable: security exception ?", ex);
-			}
-			return false;
+				return false;
 		}
 
 		return false;
@@ -7784,8 +7797,8 @@ var f_core = {
 			destURL = "%";
 		}
 
-		var ps = [ "clientDate=", String(new Date().getTime()), " sourceURL='",
-				encodeURIComponent(sourceURL), "' " ];
+		var ps = ["clientDate=", String(new Date().getTime()), " sourceURL='",
+				encodeURIComponent(sourceURL), "' "];
 		if (type) {
 			ps.push("pageType='", type, "' ");
 		}
@@ -8044,7 +8057,7 @@ var f_core = {
 			url = url.substring(0, r);
 		}
 
-		var ret = [ url ];
+		var ret = [url];
 
 		var first = true;
 		for ( var key in params) {
