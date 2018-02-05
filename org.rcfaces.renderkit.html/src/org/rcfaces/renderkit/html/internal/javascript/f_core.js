@@ -4081,6 +4081,11 @@ var f_core = {
 	 * @return Object
 	 */
 	GetAbsolutePosition : function(component) {
+
+		f_core.Assert(component && component.nodeType == f_core.ELEMENT_NODE,
+				"f_core.GetAbsolutePosition: Invalid component parameter '"
+						+ component + "'.");
+
 		var offsetParent;
 
 		try {
@@ -4090,10 +4095,6 @@ var f_core = {
 			// Problème de sécurité ?
 			return null;
 		}
-
-		f_core.Assert(component && component.nodeType == f_core.ELEMENT_NODE,
-				"f_core.GetAbsolutePosition: Invalid component parameter '"
-						+ component + "'.");
 
 		// var gecko=f_core.IsGecko();
 
