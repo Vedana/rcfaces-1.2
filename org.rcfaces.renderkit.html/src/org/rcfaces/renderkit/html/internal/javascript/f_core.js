@@ -4084,6 +4084,14 @@ var f_core = {
 	 * @return Object
 	 */
 	GetAbsolutePosition : function(component) {
+		try {
+			var c=component.nodeType;
+			
+		} catch (x) {
+			// Problème de sécurité ?
+			return null;
+		}
+
 		f_core.Assert(component && component.nodeType == f_core.ELEMENT_NODE,
 				"f_core.GetAbsolutePosition: Invalid component parameter '"
 						+ component + "'.");
