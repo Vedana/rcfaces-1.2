@@ -4082,8 +4082,8 @@ var f_core = {
 	 */
 	GetAbsolutePosition : function(component) {
 		try {
-			component.nodeType;
-
+			var c=component.nodeType;
+			
 		} catch (x) {
 			// Problème de sécurité ?
 			return null;
