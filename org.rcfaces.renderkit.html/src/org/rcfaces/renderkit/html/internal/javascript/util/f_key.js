@@ -662,6 +662,7 @@ var __statics = {
 	_SearchDef : function(jsEvent, altKey) {
 		var keyCode = jsEvent.keyCode;
 		var charCode = jsEvent.charCode;
+		var key = jsEvent.key;
 
 		var keyChar = "";
 
@@ -672,14 +673,15 @@ var __statics = {
 			keyChar = String.fromCharCode(charCode);
 		}
 
-		if (keyChar) {
-			keyChar = keyChar.toUpperCase();
-		}
+		// Les nouveaux navigateurs ne gèrent plus '.charCode', mais '.key'
+		if (key) {
+			var k = f_key['VK_' + key.toUpperCase()];
+			if (k) {
+				keyCode = k;
+				keyChar = String.fromCharCode(keyCode);
+			}
 
-		f_core.Debug(f_key, "_SearchDef: KeyEvent keyCode=" + keyCode
-				+ " charCode=" + charCode + " keyChar=" + keyChar);
-
-		if (f_core.IsGecko()) {
+		} else if (f_core.IsGecko()) {
 			if (jsEvent.type == "keypress" && jsEvent.which) {
 				keyChar = undefined; // C'est une touche de fonction !
 
@@ -687,6 +689,14 @@ var __statics = {
 				keyCode = charCode;
 			}
 		}
+
+		if (keyChar) {
+			keyChar = keyChar.toUpperCase();
+		}
+
+		f_core.Debug(f_key, "_SearchDef: KeyEvent keyCode=" + keyCode
+				+ " charCode=" + charCode + " keyChar=" + keyChar + " key="
+				+ key);
 
 		if (altKey && keyCode == f_key.VK_ALT) {
 			f_key.UpdateAccessKeyRule(window);
