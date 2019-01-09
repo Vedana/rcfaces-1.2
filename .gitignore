@@ -2,3 +2,15 @@
 /.metadata
 /RemoteSystemsTempFiles
 /Servers
+
+org\.rcfaces\.core/\.cvsignore
+
+org\.rcfaces\.core/\.settings/
+
+org\.rcfaces\.jfreechart/target/
+
+org\.rcfaces\.core/src-jsf1_2-generated/
+
+org\.rcfaces\.renderkit\.html/src-jsf1_2-generated/
+
+org\.rcfaces\.renderkit\.svg/src-jsf1_2-generated/
