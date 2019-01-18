@@ -679,6 +679,9 @@ var __statics = {
 			if (k) {
 				keyCode = k;
 				keyChar = String.fromCharCode(keyCode);
+				
+			} else {
+				keyChar = String.fromCharCode(key);
 			}
 
 		} else if (f_core.IsGecko()) {
