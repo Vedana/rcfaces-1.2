@@ -210,12 +210,48 @@ var __statics = {
 		var jsEvent = event.f_getJsEvent();
 		var keyCode = jsEvent.keyCode;
 		var charCode = jsEvent.charCode;
-		
+		var key = jsEvent.key;
+
 		if (jsEvent.altKey ^ jsEvent.ctrlKey) {
 			// ignore les touches combinees
 			return true;
 		}
 
+
+		var keyChar = "";
+
+		if (!charCode && keyCode >= 32) {
+			keyChar = String.fromCharCode(keyCode);
+
+		} else if (charCode >= 32) {
+			keyChar = String.fromCharCode(charCode);
+		}
+
+		// Les nouveaux navigateurs ne gèrent plus '.charCode', mais '.key'
+		if (key) {
+			var k = f_key['VK_' + key.toUpperCase()];
+			if (k) {
+				keyCode = k;
+				keyChar = String.fromCharCode(keyCode);
+
+			} else {
+				keyChar = key;
+				keyCode = 0;
+			}
+
+		} else if (f_core.IsGecko()) {
+			if (jsEvent.type == "keypress" && jsEvent.which) {
+				keyChar = undefined; // C'est une touche de fonction !
+
+			} else if (keyCode <= 0) {
+				keyCode = charCode;
+			}
+		}
+
+		if (keyChar) {
+			keyChar = keyChar.toUpperCase();
+		}
+		
 		var validator=this._validator;
 		
 		var component=validator._component;
@@ -225,15 +261,6 @@ var __statics = {
 			return true;
 		}
 		
-		var keyChar;
-		
-		if (!charCode) {
-			keyChar = String.fromCharCode(keyCode);
-
-		} else {
-			keyChar = String.fromCharCode(charCode);
-		}
-				
 		f_core.Debug(f_clientValidator, "_OnKeyPress: keyCode="+keyCode+" charCode="+charCode+" shift="+jsEvent.shift+" ctrl="+jsEvent.ctrl+" alt="+jsEvent.alt+" keyChar="+keyChar+"("+((keyChar.length>0)?keyChar.charCodeAt(0):"")+")");
 		if (f_core.IsGecko()) {
 			if (keyCode>0 || jsEvent.ctrlKey) {
