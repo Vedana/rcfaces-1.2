@@ -217,7 +217,6 @@ var __statics = {
 			return true;
 		}
 
-
 		var keyChar = "";
 
 		if (!charCode && keyCode >= 32) {
@@ -241,7 +240,7 @@ var __statics = {
 
 		} else if (f_core.IsGecko()) {
 			if (jsEvent.type == "keypress" && jsEvent.which) {
-				keyChar = undefined; // C'est une touche de fonction !
+			//	keyChar = undefined; // C'est une touche de fonction !  (Non pour firefox 17)
 
 			} else if (keyCode <= 0) {
 				keyCode = charCode;
@@ -307,7 +306,20 @@ var __statics = {
 		var shift = jsEvent.shiftKey;
 		var ctrl = jsEvent.ctrlKey;
 		var alt = jsEvent.altKey;
+		var key = jsEvent.key;
 
+		if (key) {
+			var k = f_key['VK_' + key.toUpperCase()];
+			if (k) {
+				keyCode = k;
+				keyChar = String.fromCharCode(keyCode);
+
+			} else {
+				keyChar = key;
+				keyCode = 0;
+			}
+		}
+		
 		f_core.Debug(f_clientValidator, "_OnKeyUp: keyCode="+keyCode+" shift="+shift+" ctrl="+ctrl+" alt="+alt);
 		
 		validator.f_setInputValue(this._input.value);
