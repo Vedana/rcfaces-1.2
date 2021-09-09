@@ -42,7 +42,11 @@ var __statics = {
 	 */
 	BEHAVIOR: 5,
 
-	SupportedKeys: {
+
+	/**
+	 * @field private static Object
+	 */
+	_SupportedKeys: {
 		'ArrowLeft': true,
 		'ArrowRight': true,
 		'ArrowUp': true,
@@ -53,6 +57,7 @@ var __statics = {
 		'Enter': true,
 		'PageUp': true,
 		'PageDown': true,
+		'Tab': true
 	},
 
 	/**
@@ -241,7 +246,7 @@ var __statics = {
 
 		// Les nouveaux navigateurs ne gèrent plus '.charCode', mais '.key'
 		if (key) {
-			var k = f_clientValidator.SupportedKeys[key];
+			var k = f_clientValidator._SupportedKeys[key];
 			if (k) {
 				keyCode = k;
 				keyChar = String.fromCharCode(keyCode);
