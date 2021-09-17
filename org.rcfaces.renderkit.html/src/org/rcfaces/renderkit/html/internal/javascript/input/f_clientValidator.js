@@ -57,7 +57,9 @@ var __statics = {
 		'Enter': true,
 		'PageUp': true,
 		'PageDown': true,
-		'Tab': true
+		'Tab': true,
+		'Home': true,
+		'End': true
 	},
 
 	/**
