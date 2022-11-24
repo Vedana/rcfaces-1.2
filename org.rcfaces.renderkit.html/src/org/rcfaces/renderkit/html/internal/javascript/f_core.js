@@ -4,7 +4,7 @@
 
 /**
  * f_core class
- * 
+ *
  * @class public f_core extends Object
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @author Joel Merlin
@@ -189,7 +189,7 @@ var f_core = {
 
 	/**
 	 * Numero du bouton qui déclanche les popups. (Cela dépend de l'OS !)
-	 * 
+	 *
 	 * @field private static final Number
 	 */
 	_POPUP_BUTTON : 2,
@@ -315,7 +315,7 @@ var f_core = {
 
 	/**
 	 * Throws a message if the expression is true.
-	 * 
+	 *
 	 * @method public static
 	 * @param Boolean
 	 *            expr Expression.
@@ -558,13 +558,13 @@ var f_core = {
 	 * <p>
 	 * Is debug logging currently enabled ?
 	 * </p>
-	 * 
+	 *
 	 * <p>
 	 * Call this method to prevent having to perform expensive operations (for
 	 * example, <code>String</code> concatenation) when the log level is more
 	 * than debug.
 	 * </p>
-	 * 
+	 *
 	 * @method public static
 	 * @param String
 	 *            name Log name.
@@ -612,13 +612,13 @@ var f_core = {
 	 * <p>
 	 * Is trace logging currently enabled ?
 	 * </p>
-	 * 
+	 *
 	 * <p>
 	 * Call this method to prevent having to perform expensive operations (for
 	 * example, <code>String</code> concatenation) when the log level is more
 	 * than trace.
 	 * </p>
-	 * 
+	 *
 	 * @method public static
 	 * @param String
 	 *            name Log name.
@@ -666,13 +666,13 @@ var f_core = {
 	 * <p>
 	 * Is info logging currently enabled ?
 	 * </p>
-	 * 
+	 *
 	 * <p>
 	 * Call this method to prevent having to perform expensive operations (for
 	 * example, <code>String</code> concatenation) when the log level is more
 	 * than info.
 	 * </p>
-	 * 
+	 *
 	 * @method public static
 	 * @param String
 	 *            name Log name.
@@ -717,13 +717,13 @@ var f_core = {
 	 * <p>
 	 * Is warning logging currently enabled ?
 	 * </p>
-	 * 
+	 *
 	 * <p>
 	 * Call this method to prevent having to perform expensive operations (for
 	 * example, <code>String</code> concatenation) when the log level is more
 	 * than info.
 	 * </p>
-	 * 
+	 *
 	 * @method public static
 	 * @param String
 	 *            name Log name.
@@ -794,13 +794,13 @@ var f_core = {
 	 * <p>
 	 * Is error logging currently enabled ?
 	 * </p>
-	 * 
+	 *
 	 * <p>
 	 * Call this method to prevent having to perform expensive operations (for
 	 * example, <code>String</code> concatenation) when the log level is more
 	 * than error.
 	 * </p>
-	 * 
+	 *
 	 * @method public static
 	 * @param String
 	 *            name Log name.
@@ -2716,7 +2716,7 @@ var f_core = {
 		}
 	},
 	/**
-	 * 
+	 *
 	 * @method hidden static
 	 * @param function
 	 *            listener
@@ -3428,7 +3428,7 @@ var f_core = {
 	},
 	/**
 	 * Submit the page, and open a new window to show the response.
-	 * 
+	 *
 	 * @method public static
 	 * @param optional
 	 *            String dest Window name.
@@ -3446,7 +3446,7 @@ var f_core = {
 	},
 	/**
 	 * Submit the page, and open a new window to show the response.
-	 * 
+	 *
 	 * @method public static
 	 * @param optional
 	 *            String dest Window name.
@@ -3467,7 +3467,7 @@ var f_core = {
 	},
 	/**
 	 * Submit the page, and close the window.
-	 * 
+	 *
 	 * @method public static
 	 * @param optional
 	 *            f_event event
@@ -3478,7 +3478,7 @@ var f_core = {
 	},
 	/**
 	 * Returns the window associated to the specified element.
-	 * 
+	 *
 	 * @method hidden static
 	 * @param HTMLElement
 	 *            elt HTML element.
@@ -3572,7 +3572,7 @@ var f_core = {
 	},
 	/**
 	 * Find a child with a specified css class.
-	 * 
+	 *
 	 * @method hidden static
 	 * @param HTMLElement
 	 *            elt Start node.
@@ -3626,7 +3626,7 @@ var f_core = {
 
 	/**
 	 * Find a child with a specified class.
-	 * 
+	 *
 	 * @method hidden static
 	 * @param HTMLElement
 	 *            elt Start node.
@@ -3670,7 +3670,7 @@ var f_core = {
 
 	/**
 	 * Find a parent with a specified class.
-	 * 
+	 *
 	 * @method hidden static
 	 * @param HTMLElement
 	 *            elt Start node.
@@ -3701,7 +3701,7 @@ var f_core = {
 	},
 	/**
 	 * Find a child by its identifier. <b>(The naming separator IS ':')</b>
-	 * 
+	 *
 	 * @method public static
 	 * @param String
 	 *            id The identifier of the component. (naming separator is ':')
@@ -3726,7 +3726,7 @@ var f_core = {
 	/**
 	 * Find a child by its identifier. <b>(The naming separator might not be
 	 * ':')</b>
-	 * 
+	 *
 	 * @method public static
 	 * @param String
 	 *            id The identifier of the component. (naming separator might
@@ -3744,7 +3744,7 @@ var f_core = {
 	/**
 	 * Find a child by its identifier. <b>(The naming separator might not be
 	 * ':')</b>
-	 * 
+	 *
 	 * @method public static
 	 * @param String
 	 *            id The identifier of the component. (naming separator might
@@ -3759,7 +3759,7 @@ var f_core = {
 	/**
 	 * Find a child by its identifier. <b>(The naming separator might not be
 	 * ':')</b>
-	 * 
+	 *
 	 * @method public static
 	 * @param String
 	 *            id The identifier of the component. (naming separator might
@@ -3969,7 +3969,7 @@ var f_core = {
 	},
 	/**
 	 * Returns true if component (and its ancestors) is visible.
-	 * 
+	 *
 	 * @method hidden static
 	 * @param f_component
 	 *            component
@@ -4074,7 +4074,7 @@ var f_core = {
 	},
 	/**
 	 * Returns absolute position.
-	 * 
+	 *
 	 * @method hidden static
 	 * @param HTMLElement
 	 *            component
@@ -4149,7 +4149,7 @@ var f_core = {
 			};
 
 			var win = f_core.GetWindow(component.ownerDocument);
-			if (win.frameElement) {
+			if (win.frameElement && win.frameElement.getAttribute('name')!=='frame_applicative') {
 				// C'est dans une frame, on ajoute la position du parent !
 				var cs = f_core.GetAbsolutePosition(win.frameElement);
 
@@ -4210,7 +4210,7 @@ var f_core = {
 	},
 	/**
 	 * Returns component under absolute position.
-	 * 
+	 *
 	 * @method hidden static
 	 * @param Number
 	 *            x
@@ -4733,7 +4733,7 @@ var f_core = {
 	},
 	/**
 	 * Returns the size of the View.
-	 * 
+	 *
 	 * @method public static
 	 * @param Element
 	 *            component The component
@@ -4762,7 +4762,7 @@ var f_core = {
 	},
 	/**
 	 * Returns the size of the View.
-	 * 
+	 *
 	 * @method public static
 	 * @param optional
 	 *            Object values Object which will contain the result or
@@ -4983,7 +4983,7 @@ var f_core = {
 	},
 	/**
 	 * Returns the size of the document.
-	 * 
+	 *
 	 * @method public static
 	 * @param optional
 	 *            Object values
@@ -5024,7 +5024,7 @@ var f_core = {
 	},
 	/**
 	 * Copy the styleSheets from a document source to a document destination.
-	 * 
+	 *
 	 * @method hidden static
 	 * @param Document
 	 *            targetDocument
@@ -5121,7 +5121,7 @@ var f_core = {
 	},
 	/**
 	 * Returns the position of the Window.
-	 * 
+	 *
 	 * @method public static
 	 * @param optional
 	 *            HTMLDocument doc
@@ -5148,7 +5148,7 @@ var f_core = {
 	},
 	/**
 	 * Returns the position of event
-	 * 
+	 *
 	 * @method hidden static
 	 * @param Event
 	 *            event
@@ -5227,7 +5227,7 @@ var f_core = {
 	},
 	/**
 	 * Returns if the event has been performed into a component.
-	 * 
+	 *
 	 * @method hidden static
 	 * @param HTMLElement
 	 *            component
@@ -6064,7 +6064,7 @@ var f_core = {
 	},
 	/**
 	 * Returns the parent of a HTML element.
-	 * 
+	 *
 	 * @method hidden static
 	 * @param HTMLElement
 	 *            A HTML element
@@ -6091,7 +6091,7 @@ var f_core = {
 	},
 	/**
 	 * Returns an Event attached to the window of the component. (if known)
-	 * 
+	 *
 	 * @method hidden static
 	 * @param HTMLElement
 	 *            component
@@ -6360,7 +6360,7 @@ var f_core = {
 	},
 	/**
 	 * Returns an effect specified by its name.
-	 * 
+	 *
 	 * @method hidden static
 	 * @param String
 	 *            effectName Name of effect
@@ -6394,7 +6394,7 @@ var f_core = {
 	},
 	/**
 	 * Returns selection of a TextEntry or a TextArea.
-	 * 
+	 *
 	 * @method hidden static
 	 * @param HTMLElement
 	 *            component
@@ -6485,7 +6485,7 @@ var f_core = {
 	},
 	/**
 	 * Select a text into a TextEntry or a TextArea
-	 * 
+	 *
 	 * @method hidden static
 	 * @param HTMLElement
 	 *            component
@@ -6540,7 +6540,7 @@ var f_core = {
 	},
 	/**
 	 * List all components of a document.
-	 * 
+	 *
 	 * @method hidden static
 	 * @param Document
 	 *            doc
@@ -6585,7 +6585,7 @@ var f_core = {
 	/**
 	 * Recherche du prochain élément vers lequel on peut tabuler depuis
 	 * l'élément courant.
-	 * 
+	 *
 	 * @method hidden static
 	 * @param HTMLElement
 	 *            component composant précédent dans l'ordre de tabulation
@@ -6772,7 +6772,7 @@ var f_core = {
 
 	/**
 	 * NE FONCTIONNE pas avec IE
-	 * 
+	 *
 	 * @method hidden static
 	 */
 	ComputePopupPosition : function(popup, positions) {
@@ -6817,7 +6817,7 @@ var f_core = {
 	},
 	/**
 	 * Compute the popup position. (centred horizontaly and verticaly)
-	 * 
+	 *
 	 * @method public static
 	 * @param Object
 	 *            parameters Fill fields "x" and "y" into the "parameters"
@@ -7959,7 +7959,7 @@ var f_core = {
 	},
 	/**
 	 * Return a unique Key of request.
-	 * 
+	 *
 	 * @method hidden static
 	 * @return String
 	 */
