@@ -2,11 +2,34 @@
 <project name="Packager Camelia" default="main" basedir=".">
 	<property name="dist" value="${basedir}/dist" />
 	<property name="build" value="${basedir}/build" />
-	<property name="java.target" value="1.5" />
+	<property name="java.target" value="1.6" />
 	<property name="integration.type" value="I" />
 	<property name="cvstag" value="HEAD" />
 
 	<property name="generator.classpath.dir" value="lib-generator/generator.jar" />
+
+	<property name="build.version.path" value="${build}/1_2" />
+
+	<path id="html-classPathId">
+		<pathelement path="${build.version.path}/bin-core" />
+	</path>
+
+	<path id="imageIO-classPathId">
+		<pathelement path="${build.version.path}/bin-core" />
+	</path>
+
+
+	<path id="jfreechart-classPathId">
+		<path path="${build.version.path}/bin-core" />
+		<path path="${build.version.path}/bin-html" />
+		<path path="${build.version.path}/bin-imageIO" />
+	</path>
+
+	<path id="svg-classPathId">
+		<path path="${build.version.path}/bin-core" />
+		<path path="${build.version.path}/bin-html" />
+		<path path="${build.version.path}/bin-imageIO" />
+	</path>
 
 	<path id="commons.classpath">
 		<fileset dir="lib">
@@ -295,6 +318,14 @@
 		<property name="build.path" value="${dist}/last" />
 
 		<property name="build.version.path" value="${build}/${jsf.version}" />
+
+		<path id="html-classPathId">
+			<pathelement path="${build.version.path}/bin-core" />
+		</path>
+
+		<path id="imageIO-classPathId">
+			<pathelement path="${build.version.path}/bin-core" />
+		</path>
 
 		<property name="rcfaces-core.jar" value="${build.path}/rcfaces-core-jsf${jsf.version}.jar" />
 		<property name="rcfaces-core-src.jar" value="${build.path}/rcfaces-core-src-jsf${jsf.version}.jar" />
@@ -743,7 +774,7 @@
 				<fileset dir="${pass.build}/lib">
 					<include name="*.jar" />
 				</fileset>
-				<path refid="${pass.classpathId}"/>
+				<path refid="${pass.classpathId}"/> 
 			</classpath>
 		</javac>
 

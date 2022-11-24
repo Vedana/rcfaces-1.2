@@ -2,3 +2,7 @@
 /.metadata
 /RemoteSystemsTempFiles
 /Servers
+
+org.rcfaces.packager/build/
+
+org.rcfaces.css/.project
