@@ -1,6 +1,6 @@
 /*
  * $Id$
- * 
+ *
  */
 package org.rcfaces.renderkit.html.internal.javascript;
 
@@ -53,6 +53,7 @@ import org.rcfaces.core.internal.tools.ContextTools;
 import org.rcfaces.core.internal.util.ApplicationParametersMap;
 import org.rcfaces.core.internal.util.ClassLocator;
 import org.rcfaces.core.internal.util.ServletTools;
+import org.rcfaces.core.internal.util.URLResourceNormalizer;
 import org.rcfaces.core.internal.webapp.ExpirationDate;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
@@ -314,7 +315,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
             if (in == null) {
                 ClassLoader cl = getClass().getClassLoader();
 
-                Enumeration en = cl.getResources(repositoryLocation);
+                Enumeration en = cl.getResources(URLResourceNormalizer.computeResourceURL(repositoryLocation));
                 if (en.hasMoreElements()) {
                     URL url = (URL) en.nextElement();
 
@@ -405,7 +406,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
         String symbolURL = getMainRepositoryDirectoryLocation()
                 + SYMBOLS_FILENAME;
 
-        URL url = ClassLocator.getResource(symbolURL, this, servletContext);
+        URL url = ClassLocator.getResource(URLResourceNormalizer.computeResourceURL(symbolURL), this, servletContext);
         if (url == null) {
             return null;
         }
@@ -492,7 +493,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
     }
 
     /**
-     * 
+     *
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
@@ -690,10 +691,10 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
      * servletContext) { IJavaScriptRepository javaScriptRepository =
      * (IJavaScriptRepository) servletContext
      * .getAttribute(REPOSITORY_PROPERTY);
-     * 
+     *
      * if (javaScriptRepository == null) { throw new FacesException( "Javascript
      * repository is not initialized !"); }
-     * 
+     *
      * return javaScriptRepository; }
      */
 

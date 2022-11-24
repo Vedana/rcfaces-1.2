@@ -22,9 +22,10 @@ import org.rcfaces.core.internal.component.ComponentsFactory;
 import org.rcfaces.core.internal.component.IFactory;
 import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
 import org.rcfaces.core.internal.util.Delay;
+import org.rcfaces.core.internal.util.URLResourceNormalizer;
 
 /**
- * 
+ *
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -336,7 +337,7 @@ public class Constants {
 
         try {
             Enumeration<URL> enumeration = Constants.class.getClassLoader()
-                    .getResources("META-INF/MANIFEST.MF");
+                    .getResources(URLResourceNormalizer.computeResourceURL("META-INF/MANIFEST.MF"));
 
             Set<URL> resources = new HashSet<URL>(2);
 

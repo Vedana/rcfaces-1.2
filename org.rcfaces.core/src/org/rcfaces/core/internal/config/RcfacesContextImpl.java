@@ -44,6 +44,7 @@ import org.rcfaces.core.internal.repository.IRepositoryManager;
 import org.rcfaces.core.internal.repository.RepositoryManagerImpl;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.util.ConfigurationLoader;
+import org.rcfaces.core.internal.util.URLResourceNormalizer;
 import org.rcfaces.core.internal.validator.ClientValidatorsRegistryImpl;
 import org.rcfaces.core.internal.validator.IClientValidatorsRegistry;
 import org.rcfaces.core.internal.version.IResourceVersionHandler;
@@ -52,7 +53,7 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 
 /**
- * 
+ *
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -272,7 +273,7 @@ public class RcfacesContextImpl extends RcfacesContext implements
             String resourceName = pkg.getName().replace('.', '/') + '/'
                     + RCFACES_CONFIG_FILENAME;
 
-            URL url = getClass().getClassLoader().getResource(resourceName);
+            URL url = getClass().getClassLoader().getResource(URLResourceNormalizer.computeResourceURL(resourceName));
 
             LOG.debug("Configuration file '" + resourceName + "' => "
                     + ((url != null) ? "exists" : "ignore"));

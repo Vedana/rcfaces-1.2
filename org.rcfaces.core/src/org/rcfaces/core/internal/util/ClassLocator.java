@@ -1,6 +1,6 @@
 /*
  * $Id$
- * 
+ *
  */
 package org.rcfaces.core.internal.util;
 
@@ -17,7 +17,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * 
+ *
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -187,7 +187,7 @@ public class ClassLocator {
         if (cl != null) {
             URL url = null;
             try {
-                url = cl.getResource(resourceLocation);
+                url = cl.getResource(URLResourceNormalizer.computeResourceURL(resourceLocation));
 
             } catch (RuntimeException ex) {
                 LOG.debug("Resource not found '" + resourceLocation + "'.", ex);
@@ -201,7 +201,7 @@ public class ClassLocator {
         if (fallback != null) {
             try {
                 URL url = fallback.getClass().getClassLoader()
-                        .getResource(resourceLocation);
+                        .getResource(URLResourceNormalizer.computeResourceURL(resourceLocation));
                 if (url != null && testURL(url, thOrigin)) {
                     return url;
                 }
@@ -213,7 +213,8 @@ public class ClassLocator {
 
         try {
             URL url = ClassLocator.class.getClassLoader().getResource(
-                    resourceLocation);
+                    URLResourceNormalizer.computeResourceURL(resourceLocation)
+            );
 
             if (url != null && testURL(url, thOrigin)) {
                 return url;
@@ -231,7 +232,7 @@ public class ClassLocator {
         if (context instanceof ServletContext) {
             try {
                 URL url = ((ServletContext) context)
-                        .getResource(resourceLocation);
+                        .getResource(URLResourceNormalizer.computeResourceURL(resourceLocation));
                 if (url != null && testURL(url, thOrigin)) {
                     return url;
                 }
@@ -254,7 +255,7 @@ public class ClassLocator {
 
         if (context instanceof ClassLoader) {
             try {
-                URL url = ((ClassLoader) context).getResource(resourceLocation);
+                URL url = ((ClassLoader) context).getResource(URLResourceNormalizer.computeResourceURL(resourceLocation));
 
                 if (url != null && testURL(url, thOrigin)) {
                     return url;

@@ -1,6 +1,6 @@
 /*
  * $Id$
- * 
+ *
  */
 package org.rcfaces.core.internal.util;
 
@@ -24,7 +24,7 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 
 /**
- * 
+ *
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -47,7 +47,7 @@ public class WebXmlParser {
 
         URL url;
         try {
-            url = servletContext.getResource(WEB_XML_PATH);
+            url = servletContext.getResource(URLResourceNormalizer.computeResourceURL(WEB_XML_PATH));
 
         } catch (IOException ex) {
             LOG.error("Can not get resource '" + WEB_XML_PATH + "'.", ex);
@@ -180,7 +180,7 @@ public class WebXmlParser {
     }
 
     /**
-     * 
+     *
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
@@ -213,7 +213,7 @@ public class WebXmlParser {
     }
 
     /**
-     * 
+     *
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */

@@ -1,6 +1,6 @@
 /*
  * $Id$
- * 
+ *
  */
 package org.rcfaces.core.internal.repository;
 
@@ -34,13 +34,14 @@ import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.codec.SourceFilter;
 import org.rcfaces.core.internal.lang.ByteBufferOutputStream;
 import org.rcfaces.core.internal.lang.StringAppender;
+import org.rcfaces.core.internal.util.URLResourceNormalizer;
 import org.rcfaces.core.internal.webapp.ExtendedHttpServlet;
 import org.xml.sax.Attributes;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 
 /**
- * 
+ *
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -150,7 +151,7 @@ public abstract class SourceContainer<T> {
         }
 
         try {
-            URL url = servletConfig.getServletContext().getResource(pr);
+            URL url = servletConfig.getServletContext().getResource(URLResourceNormalizer.computeResourceURL(pr));
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("URL resource of servletContext '" + path + "' => "
@@ -196,7 +197,7 @@ public abstract class SourceContainer<T> {
         if (pr.charAt(0) == '/') {
             pr = pr.substring(1);
         }
-        URL url = getClass().getClassLoader().getResource(pr);
+        URL url = getClass().getClassLoader().getResource(URLResourceNormalizer.computeResourceURL(pr));
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("URL resource of classLoader '" + path + "' => " + url);
@@ -452,7 +453,7 @@ public abstract class SourceContainer<T> {
     }
 
     /**
-     * 
+     *
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
@@ -474,7 +475,7 @@ public abstract class SourceContainer<T> {
     }
 
     /**
-     * 
+     *
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */

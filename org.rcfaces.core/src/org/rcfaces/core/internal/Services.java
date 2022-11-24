@@ -15,13 +15,14 @@ import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.Rule;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.util.URLResourceNormalizer;
 import org.xml.sax.Attributes;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
- * 
+ *
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -86,7 +87,7 @@ public class Services {
 
         Enumeration<URL> enumeration;
         try {
-            enumeration = classLoader.getResources(RESOURCE_NAME);
+            enumeration = classLoader.getResources(URLResourceNormalizer.computeResourceURL(RESOURCE_NAME));
 
         } catch (IOException ex) {
             LOG.error("Can not get Resources '" + RESOURCE_NAME + "'.", ex);
@@ -195,7 +196,7 @@ public class Services {
     }
 
     /**
-     * 
+     *
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
