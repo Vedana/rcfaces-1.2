@@ -3,7 +3,7 @@
  */
 
 /**
- * 
+ *
  * @class public f_key extends Object
  * @author Olivier Oeuillot
  * @author Joel Merlin
@@ -736,7 +736,7 @@ var __statics = {
 
 		var mask = 0;
 
-		if (true) {
+		if (jsEvent.getModifierState) {
 			// Pas de gestion du META en tant que tel ! (pour l'instant)
 
 			if (false) {
