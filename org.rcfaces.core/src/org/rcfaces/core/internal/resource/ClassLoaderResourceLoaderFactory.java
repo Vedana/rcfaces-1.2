@@ -16,9 +16,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.util.URLResourceNormalizer;
 
 /**
- * 
+ *
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -38,7 +39,7 @@ public class ClassLoaderResourceLoaderFactory extends
     }
 
     /**
-     * 
+     *
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
@@ -80,7 +81,7 @@ public class ClassLoaderResourceLoaderFactory extends
 
             URL resourceURL;
             try {
-                resourceURL = servletContext.getResource(url);
+                resourceURL = servletContext.getResource(URLResourceNormalizer.computeResourceURL(url));
 
             } catch (MalformedURLException ex) {
                 LOG.error("Malformed url '" + url + "'.", ex);

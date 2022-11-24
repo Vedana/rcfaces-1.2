@@ -1,6 +1,6 @@
 /*
  * $Id$
- * 
+ *
  */
 package org.rcfaces.core.internal.repository;
 
@@ -26,6 +26,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.util.ClassLocator;
 import org.rcfaces.core.internal.util.URLContentProvider;
+import org.rcfaces.core.internal.util.URLResourceNormalizer;
 import org.xml.sax.Attributes;
 
 /**
@@ -240,7 +241,7 @@ public class BasicHierarchicalRepository extends AbstractRepository implements
                 cl = cl.substring(1);
             }
 
-            url = ((ClassLoader) container).getResource(cl);
+            url = ((ClassLoader) container).getResource(URLResourceNormalizer.computeResourceURL(cl));
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Get resource '" + cl + "' from classloader => "
@@ -255,7 +256,7 @@ public class BasicHierarchicalRepository extends AbstractRepository implements
             }
 
             try {
-                url = ((ServletContext) container).getResource(cl);
+                url = ((ServletContext) container).getResource(URLResourceNormalizer.computeResourceURL(cl));
 
             } catch (MalformedURLException e) {
                 IllegalArgumentException ex = new IllegalArgumentException(
@@ -587,7 +588,7 @@ public class BasicHierarchicalRepository extends AbstractRepository implements
     }
 
     /**
-     * 
+     *
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
@@ -664,7 +665,7 @@ public class BasicHierarchicalRepository extends AbstractRepository implements
     }
 
     /**
-     * 
+     *
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
@@ -774,7 +775,7 @@ public class BasicHierarchicalRepository extends AbstractRepository implements
     }
 
     /**
-     * 
+     *
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */

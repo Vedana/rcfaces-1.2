@@ -36,6 +36,7 @@ import org.rcfaces.core.internal.lang.ByteBufferOutputStream;
 import org.rcfaces.core.internal.renderkit.AbstractRendererTypeFactory;
 import org.rcfaces.core.internal.repository.SourceContainer.IParameterizedContent;
 import org.rcfaces.core.internal.util.ServletTools;
+import org.rcfaces.core.internal.util.URLResourceNormalizer;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.internal.webapp.ExpirationDate;
 import org.rcfaces.core.internal.webapp.URIParameters;
@@ -147,7 +148,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see javax.servlet.Servlet#init(javax.servlet.ServletConfig)
      */
     public void init(ServletConfig config) throws ServletException {
@@ -280,7 +281,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             }
         });
 
-        URL url = getClass().getClassLoader().getResource(repositoryPath);
+        URL url = getClass().getClassLoader().getResource(URLResourceNormalizer.computeResourceURL(repositoryPath));
         if (url == null) {
             LOG.error("Can not get URL for path '" + repositoryPath + "'.",
                     null);
@@ -486,7 +487,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest
      * , javax.servlet.http.HttpServletResponse)
@@ -716,17 +717,17 @@ public class StylesheetsServlet extends HtmlModulesServlet {
         return new NotFoundResponse(url);
         /*
          * if (count404Responses < MAX_404_RESPONSE) { count404Responses++;
-         * 
+         *
          * synchronized (bufferedResponse) { bufferedResponse.put(url, new
          * NotFoundResponse(url)); } }
-         * 
+         *
          * response.sendError(HttpServletResponse.SC_NOT_FOUND, "URL requested
          * not found '" + url + "'");
          */
     }
 
     /**
-     * 
+     *
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
@@ -824,7 +825,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             }
 
             URL resourceURL = getClass().getClassLoader().getResource(
-                    moduleRepository.getBaseURL() + url);
+                    URLResourceNormalizer.computeResourceURL(moduleRepository.getBaseURL()) + url);
             if (resourceURL == null) {
                 setResponse(record404(url), httpRequest, httpResponse, true);
                 return;
@@ -881,7 +882,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
     }
 
     /**
-     * 
+     *
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
@@ -893,7 +894,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
     }
 
     /**
-     * 
+     *
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
@@ -918,7 +919,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
     }
 
     /**
-     * 
+     *
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
@@ -987,7 +988,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
     }
 
     /**
-     * 
+     *
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
@@ -1108,7 +1109,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
     }
 
     /**
-     * 
+     *
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
@@ -1163,7 +1164,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
     }
 
     /**
-     * 
+     *
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
@@ -1240,7 +1241,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
     }
 
     /**
-     * 
+     *
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */

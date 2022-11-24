@@ -23,7 +23,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
 
 /**
- * 
+ *
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -114,7 +114,7 @@ public class ConfigurationLoader {
             Enumeration<URL> enumeration = null;
             try {
                 enumeration = contextClassLoader
-                        .getResources(metaInfResourceName);
+                        .getResources(URLResourceNormalizer.computeResourceURL(metaInfResourceName));
 
             } catch (IOException e) {
                 LOG.error("Can not scan resources '" + metaInfResourceName
@@ -167,12 +167,12 @@ public class ConfigurationLoader {
 
             URL url = null;
             if (contextClassLoader != null) {
-                url = contextClassLoader.getResource(filename);
+                url = contextClassLoader.getResource(URLResourceNormalizer.computeResourceURL(filename));
             }
 
             if (url == null && externalContext != null) {
                 try {
-                    url = externalContext.getResource(filename);
+                    url = externalContext.getResource(URLResourceNormalizer.computeResourceURL(filename));
 
                 } catch (MalformedURLException ex) {
                     LOG.error("Malformed url for filename '" + filename + "'.",
