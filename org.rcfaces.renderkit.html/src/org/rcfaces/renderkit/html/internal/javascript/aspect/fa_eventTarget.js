@@ -4,7 +4,7 @@
 
 /**
  * fa_eventTarget class
- * 
+ *
  * @aspect public abstract fa_eventTarget
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
@@ -13,12 +13,12 @@
 var __statics = {
 	/**
 	 * Last event identifier (for debug)
-	 * 
+	 *
 	 * @field private static Number
 	 */
 	_EventId : undefined,
 	/**
-	 * 
+	 *
 	 * @method hidden static
 	 * @param f_event
 	 *            event
@@ -56,7 +56,7 @@ var __members = {
 		f_classLoader.Destroy.apply(f_classLoader, toDestroy);
 	},
 	/**
-	 * 
+	 *
 	 * @method hidden
 	 * @param Object
 	 *            eventTypes
@@ -106,7 +106,7 @@ var __members = {
 		}
 	},
 	/**
-	 * 
+	 *
 	 * @method protected
 	 * @param Event
 	 *            jsEvent
@@ -149,7 +149,7 @@ var __members = {
 	},
 
 	/**
-	 * 
+	 *
 	 * @method public
 	 * @param String
 	 *            type Type of event or an f_event object
@@ -237,7 +237,7 @@ var __members = {
 			}
 
 			var ret = true;
-			
+
 			var ier = this._initEventReturns;
 			if (ier){
 				var initReturn = ier[type];
@@ -296,13 +296,16 @@ var __members = {
 				}
 			}
 
+			if (ret===undefined) {
+				return true;
+			}
 			return ret;
 		} finally {
 			// f_core.Profile(true, "fa_eventTarget.fireEvent(#"+eventId+")");
 		}
 	},
 	/**
-	 * 
+	 *
 	 * @method hidden
 	 * @param String
 	 *            type Type of event.
@@ -321,7 +324,7 @@ var __members = {
 		return al[type];
 	},
 	/**
-	 * 
+	 *
 	 * @method protected
 	 * @param String
 	 *            type Type of event.
@@ -346,7 +349,7 @@ var __members = {
 	},
 
 	/**
-	 * 
+	 *
 	 * @method public
 	 * @param String
 	 *            type Type of event.
@@ -369,7 +372,7 @@ var __members = {
 		}
 	},
 	/**
-	 * 
+	 *
 	 * @method hidden
 	 * @param String
 	 *            type Type of event.
@@ -393,7 +396,7 @@ var __members = {
 		}
 	},
 	/**
-	 * 
+	 *
 	 * @method public
 	 * @param String
 	 *            type Type of event.
@@ -416,7 +419,7 @@ var __members = {
 		}
 	},
 	/**
-	 * 
+	 *
 	 * @method hidden
 	 * @param String
 	 *            Type of the event.
@@ -507,7 +510,7 @@ var __members = {
 		}
 		fer[type] = value;
 	},
-	
+
 	/**
 	 * @method proteted final
 	 * @param String type Name of the type of event.
@@ -529,7 +532,7 @@ var __members = {
 		}
 		ier[type] = value;
 	},
-	
+
 	/**
 	 * @method protected abstract
 	 * @return void
