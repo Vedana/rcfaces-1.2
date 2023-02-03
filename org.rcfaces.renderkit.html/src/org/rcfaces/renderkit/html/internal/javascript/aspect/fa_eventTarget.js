@@ -291,7 +291,9 @@ var __members = {
 					// alert("Cancel event !");
 				}
 
-				jsEvt.returnValue = ret;
+				if (!f_core.IsGecko() || f_core.GetBrowserVersion()<=52) {
+					jsEvt.returnValue = ret;
+				}
 			}
 
 			if (ret===undefined) {
