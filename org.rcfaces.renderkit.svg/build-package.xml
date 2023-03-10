@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project name="Packager Camelia" basedir=".">
+<project name="Packager Camelia SVG" basedir=".">
 	<property name="java.target" value="1.6" />
 
 	<target name="buildVersion">
-		
-		
+
+
 		<property name="build.version.path" value="target/generated-sources" />
 
 		<delete failonerror="false" dir="${build.version.path}" />
@@ -62,10 +62,10 @@
 
 			<arg value="+renderKit:core" />
 			<arg value="-" />
-			
+
 			<arg value="+repository" />
 			<arg path="../org.rcfaces.renderkit.html/metadatas" />
-			
+
 			<arg value="+renderKit:html" />
 			<arg value="-" />
 
@@ -77,7 +77,7 @@
 
 			<arg value="+renderKit:svg" />
 			<arg path="../org.rcfaces.renderkit.svg/src-jsf${jsfVersion}-generated" />
-				
+
 		</java>
 	</target>
 

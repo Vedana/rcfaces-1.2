@@ -23,16 +23,19 @@ public class URLResourceNormalizer {
         }
         String version = System.getProperty("java.version");
         if (version.startsWith("1.")) {
-            jdkVersion = Integer.parseInt(version.substring(2));
-            return jdkVersion;
+            version= version.substring(2);
         }
 
-        int dot = version.indexOf('.');
-        if (dot < 0) {
-            jdkVersion = Integer.parseInt(version.substring(0, dot));
-            return jdkVersion;
+        int dot2 = version.indexOf('.');
+        if (dot2>0) {        	
+            version= version.substring(0, dot2);
         }
 
+        int sub = version.indexOf('_');
+        if (sub > 0) {
+            version= version.substring(0, sub);
+        }
+        
         jdkVersion = Integer.parseInt(version);
         return jdkVersion;
     }

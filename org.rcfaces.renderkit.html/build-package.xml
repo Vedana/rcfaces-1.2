@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project name="Packager Camelia" basedir=".">
+<project name="Packager Camelia HTML" basedir=".">
 	<property name="java.target" value="1.5" />
 
 	<target name="buildVersion">
-		
-		
+
+
 		<property name="build.version.path" value="target/generated-sources" />
 
 		<delete failonerror="false" dir="${build.version.path}" />
@@ -75,9 +75,9 @@
 			<arg value="+renderKit:html" />
 			<arg path="../org.rcfaces.renderkit.html/src-jsf${jsfVersion}-generated" />
 		</java>
-		
-		
-		     
+
+
+
 		<!-- java taskname="OptimizeJs Level1" classname="com.vedana.camelia.generator.js.parser.JsOptimizer" failonerror="true">
 			<classpath refid="generated.classpath" />
 

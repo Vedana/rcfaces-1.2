@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
+
 <project name="Packager Camelia" default="main" basedir=".">
 	<property name="dist" value="${basedir}/dist" />
 	<property name="build" value="${basedir}/build" />
@@ -51,6 +52,7 @@
 			<format property="TODAY" pattern="dd/MM/yyyy HH:mm " locale="fr" />
 		</tstamp>
 
+		<property name="integrationVersionSuffix" value="_M${build.number}" />
 	</target>
 
 	<target name="buildBranchVersion" if="branch.version">
@@ -73,7 +75,11 @@
 
 	<target name="clean">
 		<delete dir="${build}" failonerror="false" />
-		<delete file="${dist}/rcfaces*.jar" failonerror="false" />
+		<delete failonerror="false">
+			<fileset file="${dist}">
+				<include name="rcfaces*.jar" />
+			</fileset>
+		</delete>
 		<delete failonerror="false">
 			<fileset dir="${build-html}/src-generated/org/rcfaces/renderkit/html/internal/javascript" includes="**/*.jsc,symbolsc,symbols" />
 			<fileset dir="${build-html}/bin/org/rcfaces/renderkit/html/internal/javascript" includes="**/*.jsc,symbolsc,symbols" />
@@ -243,23 +249,23 @@
 			<classpath location="lib-doc/jsdoc-ant.jar" />
 			<classpath refid="commons.classpath" />
 		</taskdef>
-		
+
 		<delete failonerror="false" dir="${build}/jsdoc-bootstap" />
 		<mkdir dir="${build}/jsdoc-bootstap" />
-		
+
 		<unzip dest="${build}/jsdoc-bootstap" src="lib-doc/jsdoc.jar">
 			<patternset>
 				<include name="com/vedana/js/doc/camelia/*.js"/>
 			</patternset>
 		</unzip>
-		
+
 		<delete failonerror="false" dir="${build}/camelia-jsdoc" />
 		<mkdir dir="${build}/camelia-jsdoc" />
 
-		<jsDoc 
-				product="camelia" 
-				format="html" 
-				scope="public" 
+		<jsDoc
+				product="camelia"
+				format="html"
+				scope="public"
 				input="${build-html}/src/org/rcfaces/renderkit/html/internal/javascript"
 				coreFiles="${build}/jsdoc-bootstap/com/vedana/js/doc/camelia"
 				outputDirectory="${build}/camelia-jsdoc/">
@@ -296,14 +302,18 @@
 
 		<property name="build.version.path" value="${build}/${jsf.version}" />
 
-		<property name="rcfaces-core.jar" value="${build.path}/rcfaces-core-jsf${jsf.version}.jar" />
-		<property name="rcfaces-core-src.jar" value="${build.path}/rcfaces-core-src-jsf${jsf.version}.jar" />
+		<path id="html-classPathId">
+			<path path="${build.version.path}/bin-core" />
+		</path>
 
-		<property name="rcfaces-imageIO.jar" value="${build.path}/rcfaces-imageIO-jsf${jsf.version}.jar" />
-		<property name="rcfaces-imageIO-src.jar" value="${build.path}/rcfaces-imageIO-src-jsf${jsf.version}.jar" />		
+		<property name="rcfaces-core.jar" value="${build.path}/rcfaces-core-jsf${jsf.version}${integrationVersionSuffix}.jar" />
+		<property name="rcfaces-core-src.jar" value="${build.path}/rcfaces-core-src-jsf${jsf.version}${integrationVersionSuffix}.jar" />
 
-		<property name="rcfaces-jfreechart.jar" value="${build.path}/rcfaces-jfreechart-jsf${jsf.version}.jar" />
-		<property name="rcfaces-jfreechart-src.jar" value="${build.path}/rcfaces-jfreechart-src-jsf${jsf.version}.jar" />		
+		<property name="rcfaces-imageIO.jar" value="${build.path}/rcfaces-imageIO-jsf${jsf.version}${integrationVersionSuffix}.jar" />
+		<property name="rcfaces-imageIO-src.jar" value="${build.path}/rcfaces-imageIO-src-jsf${jsf.version}${integrationVersionSuffix}.jar" />
+
+		<property name="rcfaces-jfreechart.jar" value="${build.path}/rcfaces-jfreechart-jsf${jsf.version}${integrationVersionSuffix}.jar" />
+		<property name="rcfaces-jfreechart-src.jar" value="${build.path}/rcfaces-jfreechart-src-jsf${jsf.version}${integrationVersionSuffix}.jar" />
 
 		<property name="rcfaces-javadoc.zip" value="${build.path}/rcfaces-javadoc-jsf${jsf.version}.zip" />
 
@@ -484,7 +494,7 @@
 		<path id="html-classPathId">
 			<path path="${build.version.path}/bin-core" />
 		</path>
-		
+
 		<antcall target="renderkit_pass2">
 			<param name="pass.type" value="html"/>
 			<param name="pass.build" value="${build-html}"/>
@@ -522,7 +532,7 @@
 			<param name="pass.build" value="${build-svg}"/>
 			<param name="pass.classpathId" value="svg-classPathId"/>
 		</antcall>
-	
+
 		<antcall target="javadoc" />
 	</target>
 
@@ -531,7 +541,7 @@
 	<target name="core_pass2">
 
 		<replace file="${build.version.path}/src-core/org/rcfaces/core/internal/Constants.java"
-			  token="String BUILDER_VERSION = null" 
+			  token="String BUILDER_VERSION = null"
 			  value="String BUILDER_VERSION = &quot;${version}.${minorRelease}.${integrationVersion}&quot;" />
 
 		<javac taskname="Build core" srcdir="${build.version.path}/src-core" debug="true" destdir="${build.version.path}/bin-core" optimize="no" target="${java.target}" source="${java.target}" encoding="utf-8">
@@ -554,26 +564,26 @@
 			<section name="org.rcfaces.core">
 			</section>
 		</manifest>
-	
+
 		<!--
 		<move file="${build.version.path}/src-core/org/rcfaces/core/rcfaces-core-facesconfig.xml" tofile="${build.version.path}/src-core/META-INF/faces-config.xml" />
 		<move file="${build.version.path}/src-core/org/rcfaces/core/rcfaces-core.taglib.xml" tofile="${build.version.path}/src-core/META-INF/rcfaces-core.taglib.xml" />
 		<move file="${build.version.path}/src-core/org/rcfaces/core/rcfaces-core.tld" tofile="${build.version.path}/src-core/META-INF/rcfaces-core.tld" />
 		-->
 <!--		<copy file="${build-core}/src/org/rcfaces/core/internal/images/ico/javax.imageio.spi.ImageWriterSpi" tofile="${build.version.path}/src-core/META-INF/services/javax.imageio.spi.ImageWriterSpi" /> -->
-	
+
 		<copy todir="${build.version.path}/bin-core">
 			<fileset dir="${build.version.path}/src-core">
 				<exclude name="**/*.java" />
 			</fileset>
 		</copy>
-	
+
 		<delete file="${rcfaces-core.jar}" failonerror="false" />
 		<jar destfile="${rcfaces-core.jar}" index="true" manifest="${build.version.path}/bin-core/META-INF/MANIFEST.MF">
 			<fileset dir="${build.version.path}/bin-core">
 			</fileset>
 		</jar>
-	
+
 		<delete file="${rcfaces-core-src.jar}" failonerror="false" />
 		<jar destfile="${rcfaces-core-src.jar}" index="true" manifest="${build.version.path}/src-core/META-INF/MANIFEST.MF">
 			<fileset dir="${build.version.path}/src-core">
@@ -582,12 +592,16 @@
 	</target>
 
 	<!-- ############# IMAGEIO ################# -->
-	
+
 	<target name="imageIO_pass2">
 
 		<replace file="${build.version.path}/src-imageIO/org/rcfaces/core/internal/images/Constants.java"
-			token="String BUILDER_VERSION = null" 
+			token="String BUILDER_VERSION = null"
 			value="String BUILDER_VERSION = &quot;${version}.${minorRelease}.${integrationVersion}&quot;" />
+
+		<path id="imageIO-classPathId">
+			<path path="${build.version.path}/bin-core" />
+		</path>
 
 		<javac taskname="Build imageIO" srcdir="${build.version.path}/src-imageIO" debug="true" destdir="${build.version.path}/bin-imageIO" optimize="no" target="${java.target}" source="${java.target}" encoding="utf-8">
 			<classpath>
@@ -603,10 +617,10 @@
 				<path refid="${pass.classpathId}"/>
 			</classpath>
 		</javac>
-	
-		<copy file="${build.version.path}/src-imageIO/META-INF/rcfaces-config.xml" 
+
+		<copy file="${build.version.path}/src-imageIO/META-INF/rcfaces-config.xml"
 			  todir="${build.version.path}/bin-imageIO/META-INF" />
-		
+
 		<manifest file="${build.version.path}/bin-imageIO/META-INF/MANIFEST.MF" mode="update">
 			<attribute name="Specification-Version" value="${version}" />
 			<attribute name="Implementation-Version" value="${version}.${minorRelease}.${integrationVersion}" />
@@ -616,12 +630,12 @@
 			</section>
 		</manifest>
 
-		<copy file="${build.version.path}/bin-imageIO/META-INF/MANIFEST.MF" 
+		<copy file="${build.version.path}/bin-imageIO/META-INF/MANIFEST.MF"
 			  toDir="${build.version.path}/src-imageIO/META-INF" overwrite="true" />
 
-		<copy file="${build.version.path}/src-imageIO/org/rcfaces/core/internal/images/ico/javax.imageio.spi.ImageWriterSpi" 
+		<copy file="${build.version.path}/src-imageIO/org/rcfaces/core/internal/images/ico/javax.imageio.spi.ImageWriterSpi"
 			  todir="${build.version.path}/bin-imageIO/META-INF/services" />
-	
+
 		<copy todir="${build.version.path}/bin-imageIO">
 			<fileset dir="${build.version.path}/src-imageIO">
 				<exclude name="**/*.java" />
@@ -635,7 +649,7 @@
 			<fileset dir="${build.version.path}/bin-imageIO">
 			</fileset>
 		</jar>
-	
+
 		<delete file="${rcfaces-imageIO-src.jar}" failonerror="false" />
 		<jar destfile="${rcfaces-imageIO-src.jar}" index="true" manifest="${build.version.path}/src-imageIO/META-INF/MANIFEST.MF">
 			<fileset dir="${build.version.path}/src-imageIO">
@@ -645,12 +659,18 @@
 
 
 	<!-- ############# JFREECHART ################# -->
-	
+
 	<target name="jfreechart_pass2">
 
 		<replace file="${build.version.path}/src-jfreechart/org/rcfaces/jfreechart/internal/Constants.java"
-			token="String BUILDER_VERSION = null" 
+			token="String BUILDER_VERSION = null"
 			value="String BUILDER_VERSION = &quot;${version}.${minorRelease}.${integrationVersion}&quot;" />
+
+		<path id="jfreechart-classPathId">
+			<path path="${build.version.path}/bin-core" />
+			<path path="${build.version.path}/bin-html" />
+			<path path="${build.version.path}/bin-imageIO" />
+		</path>
 
 		<javac taskname="Build jfreechart" srcdir="${build.version.path}/src-jfreechart" debug="true" destdir="${build.version.path}/bin-jfreechart" optimize="no" target="${java.target}" source="${java.target}" encoding="utf-8">
 			<classpath>
@@ -666,14 +686,14 @@
 				<path refid="${pass.classpathId}"/>
 			</classpath>
 		</javac>
-	
+
 		<mkdir dir="${build.version.path}/bin-jfreechart/META-INF"/>
-		
+
 		<!--
-		<copy file="${build.version.path}/src-jfreechart/META-INF/rcfaces-config.xml" 
+		<copy file="${build.version.path}/src-jfreechart/META-INF/rcfaces-config.xml"
 			  todir="${build.version.path}/bin-jfreechart/META-INF" />
 		-->
-		
+
 		<manifest file="${build.version.path}/bin-jfreechart/META-INF/MANIFEST.MF" mode="update">
 			<attribute name="Specification-Version" value="${version}" />
 			<attribute name="Implementation-Version" value="${version}.${minorRelease}.${integrationVersion}" />
@@ -683,9 +703,9 @@
 			</section>
 		</manifest>
 
-		<copy file="${build.version.path}/bin-jfreechart/META-INF/MANIFEST.MF" 
+		<copy file="${build.version.path}/bin-jfreechart/META-INF/MANIFEST.MF"
 			  toDir="${build.version.path}/src-jfreechart/META-INF" overwrite="true" />
-	
+
 		<copy todir="${build.version.path}/bin-jfreechart">
 			<fileset dir="${build.version.path}/src-jfreechart">
 				<exclude name="**/*.java" />
@@ -697,7 +717,7 @@
 			<fileset dir="${build.version.path}/bin-jfreechart">
 			</fileset>
 		</jar>
-	
+
 		<delete file="${rcfaces-jfreechart-src.jar}" failonerror="false" />
 		<jar destfile="${rcfaces-jfreechart-src.jar}" index="true" manifest="${build.version.path}/src-jfreechart/META-INF/MANIFEST.MF">
 			<fileset dir="${build.version.path}/src-jfreechart">
@@ -717,11 +737,11 @@
 		<move file="${build.version.path}/src-${pass.type}/org/rcfaces/renderkit/${pass.type}/rcfaces-${pass.type}.tld" tofile="${build.version.path}/src-${pass.type}/META-INF/rcfaces-${pass.type}.tld" />
 		<copy file="${pass.build}/src/org/rcfaces/renderkit/${pass.type}/internal/rcfaces-${pass.type}-config.xml" tofile="${build.version.path}/src-${pass.type}/META-INF/rcfaces-config.xml" />
 -->
-		
+
 		<replace file="${build.version.path}/src-${pass.type}/org/rcfaces/renderkit/${pass.type}/internal/Constants.java"
-			token="String BUILDER_VERSION = null" 
-			value="String BUILDER_VERSION = &quot;${version}.${minorRelease}.${integrationVersion}&quot;" />		
-		
+			token="String BUILDER_VERSION = null"
+			value="String BUILDER_VERSION = &quot;${version}.${minorRelease}.${integrationVersion}&quot;" />
+
 		<copy file="${pass.build}/src/META-INF/MANIFEST.MF" toDir="${build.version.path}/src-${pass.type}/META-INF" overwrite="true" />
 		<manifest file="${build.version.path}/src-${pass.type}/META-INF/MANIFEST.MF" mode="update">
 			<attribute name="Specification-Version" value="${version}" />
@@ -731,6 +751,16 @@
 			<section name="org.rcfaces.renderkit.${pass.type}">
 			</section>
 		</manifest>
+
+		<path id="html-classPathId">
+			<path path="${build.version.path}/bin-core" />
+		</path>
+
+		<path id="svg-classPathId">
+			<path path="${build.version.path}/bin-core" />
+			<path path="${build.version.path}/bin-html" />
+			<path path="${build.version.path}/bin-imageIO" />
+		</path>
 
 		<javac srcdir="${build.version.path}/src-${pass.type}" debug="true" destdir="${build.version.path}/bin-${pass.type}" optimize="no" target="${java.target}" source="${java.target}" encoding="utf-8">
 			<classpath>
@@ -753,7 +783,7 @@
 				<exclude name="**/*.css" />
 			</fileset>
 		</copy>
-		
+
 		<java taskname="processCSS" failonerror="true" classname="org.rcfaces.css.internal.CssSteadyStateParser" fork="true">
 			<classpath>
 				<path refid="generator.classpath" />
@@ -768,30 +798,30 @@
 				</fileset>
 				<path path="${build.version.path}/bin-core" />
 			</classpath>
-	
+
 			<arg path="${build.version.path}/bin-${pass.type}/org/rcfaces/renderkit/${pass.type}/internal/css" />
 			<arg path="${build.version.path}/src-${pass.type}/org/rcfaces/renderkit/${pass.type}/internal/css" />
 		</java>
 
 
 		<!-- ### le JAR #### -->
-		
-		<delete file="${build.path}/rcfaces-${pass.type}-jsf${jsf.version}.jar" failonerror="false" />
-		<jar destfile="${build.path}/rcfaces-${pass.type}-jsf${jsf.version}.jar" index="true" manifest="${build.version.path}/bin-${pass.type}/META-INF/MANIFEST.MF">
+
+		<delete file="${build.path}/rcfaces-${pass.type}-jsf${jsf.version}${integrationVersionSuffix}.jar" failonerror="false" />
+		<jar destfile="${build.path}/rcfaces-${pass.type}-jsf${jsf.version}${integrationVersionSuffix}.jar" index="true" manifest="${build.version.path}/bin-${pass.type}/META-INF/MANIFEST.MF">
 			<fileset dir="${build.version.path}/bin-${pass.type}">
 			</fileset>
 		</jar>
 
 		<!-- ### le SRC #### -->
 
-		<delete file="${build.path}/rcfaces-${pass.type}-src-jsf${jsf.version}.jar" failonerror="false" />
-		<jar destfile="${build.path}/rcfaces-${pass.type}-src-jsf${jsf.version}.jar" index="true" manifest="${build.version.path}/src-${pass.type}/META-INF/MANIFEST.MF">
+		<delete file="${build.path}/rcfaces-${pass.type}-src-jsf${jsf.version}${integrationVersionSuffix}.jar" failonerror="false" />
+		<jar destfile="${build.path}/rcfaces-${pass.type}-src-jsf${jsf.version}${integrationVersionSuffix}.jar" index="true" manifest="${build.version.path}/src-${pass.type}/META-INF/MANIFEST.MF">
 			<fileset dir="${build.version.path}/src-${pass.type}">
 			</fileset>
 		</jar>
 
 		<!-- ### le C1 #### -->
-		
+
 		<delete file="${build.version.path}/bin-${pass.type}c1" failonerror="false" />
 		<copy todir="${build.version.path}/bin-${pass.type}c1" includeemptydirs="no">
 			<fileset dir="${build.version.path}/bin-${pass.type}">
@@ -809,8 +839,8 @@
 			</section>
 		</manifest>
 
-		<delete file="${build.path}/rcfaces-${pass.type}c-jsf${jsf.version}.jar" failonerror="false" />
-		<jar destfile="${build.path}/rcfaces-${pass.type}c-jsf${jsf.version}.jar" index="true" manifest="${build.version.path}/bin-${pass.type}c1/META-INF/MANIFEST.MF">
+		<delete file="${build.path}/rcfaces-${pass.type}c-jsf${jsf.version}${integrationVersionSuffix}.jar" failonerror="false" />
+		<jar destfile="${build.path}/rcfaces-${pass.type}c-jsf${jsf.version}${integrationVersionSuffix}.jar" index="true" manifest="${build.version.path}/bin-${pass.type}c1/META-INF/MANIFEST.MF">
 			<fileset dir="${build.version.path}/bin-${pass.type}c1">
 			</fileset>
 		</jar>
@@ -834,8 +864,8 @@
 			</section>
 		</manifest>
 
-		<delete file="${build.path}/rcfaces-${pass.type}c2-jsf${jsf.version}.jar" failonerror="false" />
-		<jar destfile="${build.path}/rcfaces-${pass.type}c2-jsf${jsf.version}.jar" index="true" manifest="${build.version.path}/bin-${pass.type}c2/META-INF/MANIFEST.MF">
+		<delete file="${build.path}/rcfaces-${pass.type}c2-jsf${jsf.version}${integrationVersionSuffix}.jar" failonerror="false" />
+		<jar destfile="${build.path}/rcfaces-${pass.type}c2-jsf${jsf.version}${integrationVersionSuffix}.jar" index="true" manifest="${build.version.path}/bin-${pass.type}c2/META-INF/MANIFEST.MF">
 			<fileset dir="${build.version.path}/bin-${pass.type}c2">
 			</fileset>
 		</jar>
@@ -859,8 +889,8 @@
 			</section>
 		</manifest>
 
-		<delete file="${build.path}/rcfaces-${pass.type}c3-jsf${jsf.version}.jar" failonerror="false" />
-		<jar destfile="${build.path}/rcfaces-${pass.type}c3-jsf${jsf.version}.jar" index="true" manifest="${build.version.path}/bin-${pass.type}c3/META-INF/MANIFEST.MF">
+		<delete file="${build.path}/rcfaces-${pass.type}c3-jsf${jsf.version}${integrationVersionSuffix}.jar" failonerror="false" />
+		<jar destfile="${build.path}/rcfaces-${pass.type}c3-jsf${jsf.version}${integrationVersionSuffix}.jar" index="true" manifest="${build.version.path}/bin-${pass.type}c3/META-INF/MANIFEST.MF">
 			<fileset dir="${build.version.path}/bin-${pass.type}c3">
 			</fileset>
 		</jar>
@@ -934,11 +964,11 @@
 		<property name="spool.workspace" location="/data/products/rcfaces/Builder/camelia" />
 
 		<!--
-		<delete dir="${spool.workspace}" failonerror="false" />		
+		<delete dir="${spool.workspace}" failonerror="false" />
 		<mkdir dir="${spool.workspace}"/>
 
 		<scp todir="${ssh.user}@cvs.vedana.com:/data/products/rcfaces/Builder/camelia/workspace"  verbose="true" keyfile="${ssh.keyfile}" passphrase="${ssh.passphrase}" knownhosts="C:\Users\oeuillot\ssh\known_hosts">
-		-->  
+		-->
 
 		<copy todir="k:/camelia/workspace" verbose="true">
 			<fileset dir="${build-core}/..">
@@ -977,7 +1007,7 @@
 	</target>
 
 	<target name="cvsco">
-		
+
 		<echo message="Utilise le tag CVS '${cvstag}' ." />
 
 		<cvs dest=".." cvsroot="/data/cvs/camelia">
@@ -1021,17 +1051,17 @@
 		</cvs>
 
 	</target>
-	
+
 	<target name="makebuildid">
 
 		<tstamp>
 			<format property="build.number" pattern="yyyyMMddHHmm" locale="fr" />
 		</tstamp>
-		
+
 		<echo message="BuildId:   M${build.number}" />
 
 	</target>
-	
+
 	<target name="localMakeComponent">
 		<property name="jsf.version" value="1_2" />
 		<property name="base-core" location="${basedir}/../org.rcfaces.core" />
@@ -1061,7 +1091,7 @@
 			</fileset>
 		</path>
 
-		
+
 		<java taskname="Build template" classname="${generator.classname}" failonerror="true">
 			<classpath refid="generator.classpath" />
 			<classpath refid="generated.classpath" />
@@ -1093,11 +1123,7 @@
 			<arg value="+renderKitPrefix:svg" />
 			<arg value="svg" />
 		</java>
-		
-		<eclipse.refreshLocal resource="${base-core}/src-jsf${jsf.version}-generated" depth="infinite" />
-		<eclipse.refreshLocal resource="${base-html}/src-jsf${jsf.version}-generated" depth="infinite" />
-		<eclipse.refreshLocal resource="${base-svg}/src-jsf${jsf.version}-generated" depth="infinite" />
-		
+
 	</target>
 
 </project>

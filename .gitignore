@@ -14,3 +14,11 @@ org\.rcfaces\.core/src-jsf1_2-generated/
 org\.rcfaces\.renderkit\.html/src-jsf1_2-generated/
 
 org\.rcfaces\.renderkit\.svg/src-jsf1_2-generated/
+
+org.rcfaces.packager/build/
+
+org.rcfaces.packager/dist/
+
+.idea/
+
+*.iml
