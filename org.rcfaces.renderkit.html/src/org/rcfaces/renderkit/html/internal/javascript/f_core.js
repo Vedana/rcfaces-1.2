@@ -4718,15 +4718,15 @@ var f_core = {
 			}
 		}
 
-		evt.cancelBubble = true;
+		//evt.cancelBubble = true;
 
 		if (evt.preventDefault) {
 			evt.preventDefault();
-
-		} else if (evt.stopPropagation && f_core.IsWebkit(f_core.WEBKIT_SAFARI)) {
+		}
+		if (evt.stopPropagation) {
 			evt.stopPropagation();
 		} else {
-			evt.returnValue = false;
+//			evt.returnValue = false;
 		}
 
 		f_core.Debug(f_core, "CancelJsEvent: Cancel event type='" + evt.type

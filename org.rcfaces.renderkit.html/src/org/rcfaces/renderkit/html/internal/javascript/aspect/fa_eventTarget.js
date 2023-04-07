@@ -295,11 +295,12 @@ var __members = {
 					jsEvt.returnValue = ret;
 				}
 			}
-
+/*
 			if (ret===undefined) {
 				return true;
 			}
 			return ret;
+ */
 		} finally {
 			// f_core.Profile(true, "fa_eventTarget.fireEvent(#"+eventId+")");
 		}

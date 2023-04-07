@@ -3,7 +3,7 @@
  */
 
 /**
- * 
+ *
  * @class public abstract f_grid extends f_component, fa_disabled, fa_immediate,
  *        fa_pagedComponent, fa_subMenu, fa_commands, fa_selectionManager<String[]>,
  *        fa_scrollPositions, fa_additionalInformationManager, fa_droppable,
@@ -263,6 +263,7 @@ var __statics = {
 	 */
 	RowMouseDown : function(evt) {
 		var dataGrid = this._dataGrid;
+		//console.log('RowMouseDown', evt,evt.defaultPrevented);
 
 		f_core.Debug(f_grid, "RowMouseDown: mouse down on row of '" + dataGrid
 				+ "'");
@@ -274,6 +275,10 @@ var __statics = {
 			if (dataGrid.f_getEventLocked(evt)) {
 				f_core.Debug(f_grid, "RowMouseDown: event already locked");
 				return false;
+			}
+
+			if (evt.defaultPrevented) {
+				return true;
 			}
 
 			if (!f_grid.VerifyTarget(evt)) {
@@ -288,7 +293,7 @@ var __statics = {
 
 			if (dataGrid.f_isDisabled()
 					|| (dataGrid.f_isReadOnly && dataGrid.f_isReadOnly())) {
-				return f_core.CancelJsEvent(evt);
+				return;
 			}
 
 			var sub = f_core.IsPopupButton(evt);
@@ -335,7 +340,8 @@ var __statics = {
 				dataGrid._dragRow(evt);
 			}
 
-			return f_core.CancelJsEvent(evt);
+			evt.preventDefault();
+			//return f_core.CancelJsEvent(evt);
 		} finally {
 			f_core.Debug(f_grid, "RowMouseDown: mouse down on row of '"
 					+ dataGrid + "' EXITED");
@@ -350,6 +356,7 @@ var __statics = {
 	 * @context object:dataGrid
 	 */
 	RowMouseUp : function(evt) {
+		//console.log('RowMouseUp', evt);
 		var dataGrid = this._dataGrid;
 
 		f_core.Debug(f_grid, "RowMouseUp: mouse up on row of '" + dataGrid
@@ -368,6 +375,10 @@ var __statics = {
 				f_core.Debug(f_grid, "RowMouseUp: invalid target");
 				return true;
 			}
+
+            if (evt.defaultPrevented) {
+                return true;
+            }
 
 			if (f_grid.IsTargetButton(this, evt)) {
 				f_core.Debug(f_grid, "RowMouseUp: button target");
@@ -411,7 +422,7 @@ var __statics = {
 				}
 			}
 
-			return f_core.CancelJsEvent(evt);
+			evt.preventDefault();
 
 		} finally {
 			f_core.Debug(f_grid, "RowMouseUp: mouse up on row of '" + dataGrid
@@ -560,6 +571,7 @@ var __statics = {
 	 */
 	RowMouseDblClick : function(evt) {
 		var dataGrid = this._dataGrid;
+		var row=this;
 
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
@@ -573,12 +585,16 @@ var __statics = {
 			return true;
 		}
 
+		evt.preventDefault();
+
+		//console.log('Selected=',row._selected);
+
 		if (f_core.IsPopupButton(evt) || dataGrid.f_isDisabled()
-				|| !this._selected) {
+				|| !row._selected) {
 			return f_core.CancelJsEvent(evt);
 		}
 
-		var srcElement = evt.target ? evt.target : evt.srcElement;
+		var srcElement = evt.target;
 
 		var cellRef = {};
 		var col = dataGrid._searchColumnByElement(srcElement, cellRef);
@@ -586,10 +602,10 @@ var __statics = {
 		var details = f_event.NewDetail();
 		dataGrid._fillColumnDetails(details, col, cellRef.value);
 
-		dataGrid.f_fireEvent(f_event.DBLCLICK, evt, this, this._index,
+		dataGrid.f_fireEvent(f_event.DBLCLICK, evt, row, row._index,
 				dataGrid, details);
 
-		return f_core.CancelJsEvent(evt);
+		//console.log('FIRE EVENT', this._index, details);
 	},
 	/**
 	 * @method private static
@@ -614,7 +630,7 @@ var __statics = {
 		}
 
 		if (dataGrid.f_isDisabled()) {
-			return f_core.CancelJsEvent(evt);
+			return;// f_core.CancelJsEvent(evt);
 		}
 
 		var sub = f_core.IsPopupButton(evt);
@@ -2186,7 +2202,7 @@ var __statics = {
 
 	/**
 	 * Return the current ComponetGrid
-	 * 
+	 *
 	 * @method public static
 	 * @param f_component
 	 *            component
@@ -2214,35 +2230,35 @@ var __members = {
 
 	/**
 	 * Active la recherche par les touches
-	 * 
+	 *
 	 * @field protected Boolean
 	 */
 	_keyRowSearch : undefined,
 
 	/**
 	 * Spécifie l'index de la colonne quand il faut rechercher un token
-	 * 
+	 *
 	 * @field protected Number
 	 */
 	_keySearchColumnIndex : undefined,
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @field protected String
 	 */
 	_additionnalOpenImageURL : undefined,
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @field protected String
 	 */
 	_additionnalCloseImageURL : undefined,
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @field protected Number
 	 */
 	_cursorCellIdx : undefined,
@@ -3000,9 +3016,9 @@ var __members = {
 		// Des popups ?
 		var menu = this.f_getSubMenuById(f_grid._BODY_MENU_ID);
 		if (menu) {
-			scrollBody.onmousedown = f_grid._BodyMouseDown;
-			scrollBody.onmouseup = f_grid._BodyMouseUp;// f_grid.FiltredCancelJsEventHandler;
-			scrollBody.onclick = f_grid.FiltredCancelJsEventHandler;
+			//scrollBody.onmousedown = f_grid._BodyMouseDown;
+			//scrollBody.onmouseup = f_grid._BodyMouseUp;// f_grid.FiltredCancelJsEventHandler;
+			//scrollBody.onclick = f_grid.FiltredCancelJsEventHandler;
 		}
 
 		// this._tbody.style.visibility="inherit";
@@ -3264,7 +3280,7 @@ var __members = {
 
 	/**
 	 * List the columns of the grid
-	 * 
+	 *
 	 * @method public
 	 * @return f_gridColumn[] An array of column object.
 	 */
@@ -3273,7 +3289,7 @@ var __members = {
 	},
 	/**
 	 * Returns the name associated to the column.
-	 * 
+	 *
 	 * @method public
 	 * @param f_gridColumn
 	 *            column The column object
@@ -3291,7 +3307,7 @@ var __members = {
 	},
 	/**
 	 * Returns the id associated to the column.
-	 * 
+	 *
 	 * @method public
 	 * @param f_gridColumn
 	 *            column The column object
@@ -3763,7 +3779,7 @@ var __members = {
 	},
 	/**
 	 * Returns the value of the row specified by its index.
-	 * 
+	 *
 	 * @method public
 	 * @param any
 	 *            rowIndex Row object.
@@ -3779,7 +3795,7 @@ var __members = {
 	},
 	/**
 	 * Returns the value of the row.
-	 * 
+	 *
 	 * @method public
 	 * @param any
 	 *            rowObject Row object.
@@ -3795,7 +3811,7 @@ var __members = {
 	},
 	/**
 	 * Returns the row associated to a value.
-	 * 
+	 *
 	 * @method public
 	 * @param any
 	 *            value Value of the row, or a row object.
@@ -3842,19 +3858,19 @@ var __members = {
 	},
 	/*
 	 * Returns the index of the row associated to the specified value.
-	 * 
+	 *
 	 * @method public @param any rowValue Value of the row, or a row object.
 	 * @return Number Index of the row or <code>-1</code> if not found.
-	 * 
+	 *
 	 * f_rowIndexOf: function(rowValue) { var rows=this._tbody.rows; if (!rows ||
 	 * rows.length<1) { return -1; }
-	 * 
+	 *
 	 * for(var i=0;i<rows.length;i++) { var row=rows[i];
-	 * 
+	 *
 	 * if (row!=value && row._index!=value) { continue; }
-	 * 
+	 *
 	 * return i; }
-	 * 
+	 *
 	 * return -1; },
 	 */
 	/**
@@ -3928,7 +3944,7 @@ var __members = {
 	},
 	/**
 	 * Specify the index of the first row which starts the grid.
-	 * 
+	 *
 	 * @method public
 	 * @param Number
 	 *            index
@@ -3968,12 +3984,12 @@ var __members = {
 
 	/**
 	 * Refresh the structure of the grid.
-	 * 
+	 *
 	 * @method public
-	 * 
+	 *
 	 * @param Boolean
 	 *            fullUpdate to force rowCount and pager update
-	 * 
+	 *
 	 * @return Boolean
 	 */
 	f_refreshContent : function(fullUpdate) {
@@ -3990,12 +4006,12 @@ var __members = {
 	},
 	/**
 	 * Set the refreshFullUpdateState that force the refresh to be full
-	 * 
+	 *
 	 * @method public
-	 * 
+	 *
 	 * @param optional
 	 *            Boolean fullUpdate to force rowCount and pager update
-	 * 
+	 *
 	 * @return void
 	 */
 	f_setRefreshFullUpdateState : function(fullUpdate) {
@@ -4003,9 +4019,9 @@ var __members = {
 	},
 	/**
 	 * Get the refreshFullUpdateState that force the refresh to be full
-	 * 
+	 *
 	 * @method public
-	 * 
+	 *
 	 * @return Boolean
 	 */
 	f_isRefreshFullUpdateState : function() {
@@ -4197,7 +4213,7 @@ var __members = {
 				// additionalRow._additionalBody=undefined; // Boolean
 				additionalRow._waiting = undefined; // f_waiting
 			}
-			// 			
+			//
 			// row._className=undefined; // string
 			row._cells = undefined; // HtmlElement[]
 			row._label = undefined; // HtmlLabelElement
@@ -4734,7 +4750,7 @@ var __members = {
 
 		var h = this._scrollBody.clientHeight;
 
-		// 
+		//
 		var pos = Math.floor(idx + h / trh);
 
 		f_core.Debug(f_grid, "_nextPageRow: Pos=" + pos + " idx=" + idx + " h="
@@ -5105,7 +5121,7 @@ var __members = {
 
 	/**
 	 * gives the ordered set of sorted columns
-	 * 
+	 *
 	 * @author Fred Lefevere-Laoide
 	 * @method public
 	 * @return f_gridColumn[]
@@ -5127,7 +5143,7 @@ var __members = {
 
 	/**
 	 * Clean the sort
-	 * 
+	 *
 	 * @author Fred Lefevere-Laoide
 	 * @method public
 	 * @return void
@@ -5418,7 +5434,7 @@ var __members = {
 	},
 	/**
 	 * @method private
-	 * 
+	 *
 	 * @return void
 	 */
 	_setSortIndexes : function() {
@@ -5527,7 +5543,7 @@ var __members = {
 
 	/**
 	 * reset the scrollLeft when a column is sorted Firefox only
-	 * 
+	 *
 	 * @method private
 	 * @param Number
 	 *            scrollLeft
@@ -5553,7 +5569,7 @@ var __members = {
 
 	/**
 	 * Return the value of the row which contains the specified component.
-	 * 
+	 *
 	 * @method public
 	 * @param f_component
 	 *            component Component or HTMLElement
@@ -5566,7 +5582,7 @@ var __members = {
 
 	/**
 	 * Return the value of the row which contains the specified component.
-	 * 
+	 *
 	 * @method public
 	 * @param f_component
 	 *            component Component or HTMLElement
@@ -5586,7 +5602,7 @@ var __members = {
 
 	/**
 	 * Select a row
-	 * 
+	 *
 	 * @method public
 	 * @param any
 	 *            rowValue Value associated to the row
@@ -5611,7 +5627,7 @@ var __members = {
 	},
 	/**
 	 * Deselect a row
-	 * 
+	 *
 	 * @method public
 	 * @param any
 	 *            rowValue Value associated to the row
@@ -5634,7 +5650,7 @@ var __members = {
 	/**
 	 * Returns <code>true</code> if the receiver is checked, and
 	 * <code>false</code> otherwise
-	 * 
+	 *
 	 * @method public
 	 * @param any
 	 *            rowValue Value associated to the row, or a row object.
@@ -6368,7 +6384,7 @@ var __members = {
 	},
 	/**
 	 * Show a row.
-	 * 
+	 *
 	 * @method public
 	 * @param any
 	 *            rowValue Value associated to the row
@@ -7060,7 +7076,7 @@ var __members = {
 		return null;
 	},
 	/**
-	 * 
+	 *
 	 * @method public
 	 * @param any[]
 	 *            rowValues List of values whose specified rows.
@@ -7077,7 +7093,7 @@ var __members = {
 		});
 	},
 	/**
-	 * 
+	 *
 	 * @method public
 	 * @return Number Number of removed rows.
 	 */
@@ -7123,7 +7139,7 @@ var __members = {
 		this.f_expandAdditionalInformations();
 	},
 	/**
-	 * 
+	 *
 	 * @method public abstract
 	 * @param any...
 	 *            rowValue1 The value of the row to remove
@@ -7143,7 +7159,7 @@ var __members = {
 
 	/**
 	 * Set the width of the component
-	 * 
+	 *
 	 * @override
 	 * @method public
 	 * @param Number
@@ -7156,9 +7172,9 @@ var __members = {
 		this.f_updateTitle();
 	},
 	/**
-	 * 
+	 *
 	 * Set the height of the component.
-	 * 
+	 *
 	 * @override
 	 * @method public
 	 * @param Number
@@ -7185,7 +7201,7 @@ var __members = {
 
 	/**
 	 * select all rows in the current page
-	 * 
+	 *
 	 * @method public
 	 * @return void
 	 */
@@ -7216,7 +7232,7 @@ var __members = {
 
 	/**
 	 * unSelect all rows in the current page
-	 * 
+	 *
 	 * @method public
 	 * @return void
 	 */
@@ -7226,7 +7242,7 @@ var __members = {
 		}
 	},
 	/**
-	 * 
+	 *
 	 * @method private
 	 * @param Event
 	 *            jsEvent
