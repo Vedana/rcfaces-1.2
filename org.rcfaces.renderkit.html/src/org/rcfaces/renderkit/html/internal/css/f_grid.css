@@ -9,9 +9,9 @@
  * @class f_grid
  *
  * @author Olivier Oeuillot (latest modification by $Author$)
- * @version $Revision$ $Date$ 
+ * @version $Revision$ $Date$
  */
- 
+
 .f_grid {
 	border: 1px solid #666666;
 
@@ -22,7 +22,7 @@
 
 	list-style-type: none;
 	margin: 0;
-	padding: 0;	
+	padding: 0;
 	line-height: 18px;
 	text-align: left;
 	user-select: none;
@@ -58,7 +58,7 @@
 	vertical-align: baseline;
 	position: absolute;
 	margin: 0;
-	padding: 0;	
+	padding: 0;
 }
 
 .f_grid_disabled .f_grid_dataBody_scroll {
@@ -72,15 +72,15 @@
 	list-style-type: none;
 	font: 8pt Tahoma, Verdana, Arial, Helvetica, sans-serif;
 	margin: 0;
-	-moz-user-select: none;
+	XXX-moz-user-select: none;
 	margin: 0;
-	padding: 0;	
+	padding: 0;
 	border: 0;
 	display: block;
 }
 
 .f_grid_fttitle {
-	width: 999999px; 
+	width: 999999px;
 }
 
 .f_grid_tcell {
@@ -118,7 +118,7 @@
 	width: 20px;
 }
 
-.f_grid_tcell_sorter {		
+.f_grid_tcell_sorter {
 	cursor: pointer;
 	cursor: hand;
 }
@@ -156,7 +156,7 @@
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
- 
+
 .f_grid_stext {
  	position: relative;
  	text-align: left;
@@ -198,7 +198,7 @@
 }
 
 .f_grid_cell_align_left {
-	text-align: left;	
+	text-align: left;
 }
 
 .f_grid_cell_align_center {
@@ -228,7 +228,7 @@
 	margin: 0 2px 0 0;
 	width: 16px;  /* Pour la compatibilité IE */
 	height: 16px;  /* Pour la compatibilité IE */
-	
+
 	outline: none;
 }
 
@@ -236,12 +236,12 @@
 /*	xxxheight: 20px; */
 }
 
-.f_grid_row_even, 
+.f_grid_row_even,
 .f_grid_row_even_normal {
 	background-color: #EDF3FE;
 }
 
-.f_grid_row_odd, 
+.f_grid_row_odd,
 .f_grid_row_odd_normal {
 	background-color: #ffffff;
 }
@@ -258,20 +258,20 @@
 
 .f_grid_row_selected_focus {
 	color: HighlightText;
-	background-color: #3D80DF;	
+	background-color: #3D80DF;
 }
 
 .f_grid_row_selected_focus .f_grid_cell {
 	border-left-color: #346DBE;
 }
 
-.f_grid_disabled .f_grid_row_even_selected, 
+.f_grid_disabled .f_grid_row_even_selected,
 .f_grid_disabled .f_grid_row_odd_selected {
 	background-color: #a2a2a2;
 }
 
 .f_grid_row_normal_dndOver {
-	background-color: #c2c282;	
+	background-color: #c2c282;
 	color: HighlightText;
 }
 
@@ -293,12 +293,11 @@
 	-moz-outline-style: none;
 	-moz-outline-width: 0;
 	-moz-user-focus: normal;
-	-moz-user-select: none;
 
 	outline-style: none;
 	outline-width: 0;
 	user-focus: normal;
-	user-select: none;	
+	user-select: none;
 }
 
 /* Fix Firefox 3.6 avec position relative */
@@ -315,8 +314,8 @@
 
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
-	
-	position: relative; 
+
+	position: relative;
 }
 
 .f_grid_dataTitle_scroll {
@@ -363,7 +362,7 @@
 	vertical-align: middle;
 	line-height: 18px;
 	width: 16px;  /* Pour la compatibilité IE */
-	height: 16px;  /* Pour la compatibilité IE */	
+	height: 16px;  /* Pour la compatibilité IE */
 }
 
 .f_grid_additional_button_expanded {
@@ -387,7 +386,7 @@
 }
 
 .f_grid_additional_button_no_content {
-	visibility: hidden; 
+	visibility: hidden;
 }
 
 .f_grid_sortManager {
@@ -426,7 +425,7 @@
 .f_grid_wrap .f_cGrid_cell {
 	white-space: normal;
 }
- 
+
 .f_grid_wrap .f_dataGrid_row {
 	height: auto;
 }
