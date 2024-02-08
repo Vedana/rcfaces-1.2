@@ -1,0 +1,488 @@
+@charset "UTF-8";
+
+.pe_grid_auto .f_grid_table {
+ 	table-layout: fixed;
+ }
+
+.pe_grid,
+.pe_grid_top,
+.pe_grid_body,
+.pe_grid_bottom  {
+	box-sizing: border-box;
+
+	padding: 0;
+	margin: 0;
+	border: 0;
+
+	display: block;
+
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+}
+
+.pe_grid {
+	font-size: 1px;
+	line-height: 0.1;
+}
+
+/* .pe_grid > LI, */
+.pe_grid_top,
+.pe_grid_body,
+.pe_grid_bottom {
+	line-height: 1.5;
+	font-family: Verdana,Arial,Helvetica,sans-serif;
+	font-size: 11px;
+}
+
+.pe_grid_top {
+}
+
+.pe_grid_bottom {
+}
+
+.pe_grid_table {
+	border: 1px solid #ABA6A1;
+	user-select: text;
+}
+
+.pe_grid_table .f_grid_ttext {
+	border: 0;
+	margin: 0;
+	padding: 2px 0;
+}
+
+.pe_grid_table .f_grid_row_even,
+.pe_grid_table .f_grid_row_odd {
+	font-family: Verdana,Arial,Helvetica,sans-serif;
+	font-size: 11px;
+	color: #333333;
+}
+
+.pe_grid_table .f_grid_row_even,
+.pe_grid_table .f_grid_row_even_normal {
+	background-color: white;
+}
+
+.pe_grid_table .f_grid_row_odd,
+.pe_grid_table .f_grid_row_odd_normal {
+	background-color: #EEEEEE;
+}
+
+.pe_grid_table .f_grid_row_even_selected,
+.pe_grid_table .f_grid_row_even_selected_focus,
+.pe_grid_table .f_grid_row_odd_selected,
+.pe_grid_table .f_grid_row_odd_selected_focus,
+.pe_grid_table .f_grid_row_selected .f_cGrid_cell,
+.pe_grid_table .f_grid_row_normal_hover__TODO,
+.pe_grid_table .f_grid_row_selected_focus .f_cGrid_cell {
+	background-color: #B8B8B8;
+}
+
+.pe_grid_table .f_cGrid_cell,
+.pe_grid_table .f_dataGrid_cell {
+	border-color: #ABA6A1;
+	border-bottom: solid 1px #ABA6A1;
+	border-top: 0;
+	padding-top: 3px;
+	padding-bottom: 4px;
+	box-sizing: border-box;
+}
+
+.pe_grid_table .f_grid_additional_button {
+}
+
+/* FIX du 08/02/2024 selection du texte dans une table */
+.pe_grid_table .pe_additional_information {
+	-moz-user-select: text;
+	user-select: text;
+}
+
+.pe_grid_table .f_grid_dataTitle_scroll  {
+	background-image: url("images/pe_grid_title.gif");
+	height: 37px;
+	box-sizing: border-box;
+}
+
+.pe_grid_table .f_grid_dataBody_scroll {
+	overflow-y: scroll;
+	overflow-x: auto;
+}
+
+.pe_grid_table .f_grid_tcell,
+.pe_grid_table .f_grid_sortManager {
+
+	height: 37px;
+	background: none;
+	border-color: #ABA6A1;
+	white-space: normal;
+}
+
+.pe_grid_table .f_grid_sortManager {
+	box-sizing: border-box;
+	width: 18px;
+	padding-top: 2px;
+	background: url("images/pe_grid_title.gif") repeat-x left bottom;
+	height: 36px;
+}
+
+.pe_grid_table .f_grid_sortManager_image {
+	background: transparent url("images/pe_grid_order.gif") no-repeat center center;
+	width: 12px;
+	height: 31px;
+	margin-left: 2px;
+}
+
+.pe_grid_table .f_grid_fttitle {
+	box-sizing: border-box;
+	border-bottom: solid 1px #ABA6A1;
+	height: 37px;
+}
+
+.pe_grid_table .f_cGrid_cell,
+.pe_grid_table .f_grid_tcell,
+.pe_grid_table .f_dataGrid_cell {
+	border-left: 0;
+	border-right: 1px solid #ABA6A1;
+}
+
+.pe_grid_table .f_grid_stext_ascending  {
+}
+
+.pe_grid_table A.f_grid_ttext {
+	padding-right: 13px;
+}
+
+
+.pe_grid_table .f_grid_ttext,
+.pe_grid_table .f_grid_stext {
+	box-sizing: border-box;
+
+	white-space: normal;
+	text-align: center;
+	font-family: Verdana,Arial,Helvetica,sans-serif;
+	font-size: 12px;
+	color: #333333;
+	font-weight: normal;
+}
+
+.pe_grid_table .f_grid_stext {
+	height: 38px;
+	vertical-align: middle;
+}
+
+.pe_grid_table .f_grid_ttext {
+	height: 38px;
+	display: table-cell;
+}
+
+.pe_grid_table .f_grid_colCursor {
+	height: 38px;
+	right: -3px;
+	width: 5px;
+}
+
+.pe_grid_table .f_grid_tcell_right {
+	border: 0;
+}
+
+.pe_grid_selection_buttons,
+.pe_grid_selection_left,
+.pe_grid_selection_right,
+.pe_grid_selection_button,
+.pe_grid_bottom_buttons,
+.pe_grid_bottom_button,
+.pe_grid_command_buttons,
+.pe_grid_command_left,
+.pe_grid_command_right,
+.pe_grid_command_button,
+.pe_grid_command_text,
+.pe_grid_pager,
+.pe_grid_pager_first,
+.pe_grid_pager_last,
+.pe_grid_pager_pred,
+.pe_grid_pager_position,
+.pe_grid_pager_next {
+	box-sizing: border-box;
+
+	padding: 0;
+	margin: 0;
+	border: 0;
+
+	display:inline;
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+	float: left;
+}
+
+.pe_grid_selection_buttons {
+	margin-right: 8px;
+}
+
+.pe_grid_selection_left {
+	background: transparent url("images/pe_grid_selection_left.gif") left center no-repeat;
+	width: 28px;
+	height: 40px;
+}
+
+.pe_grid_selection_button {
+	background: transparent url("images/pe_grid_selection_mid.gif") right center repeat-x;
+	height: 40px;
+	padding-left: 10px;
+}
+
+.pe_grid_selection_right {
+	background: transparent url("images/pe_grid_selection_right.gif") left center no-repeat;
+	width: 21px;
+	height: 40px;
+}
+
+.pe_grid_top {
+	height: 40px;
+}
+
+.pe_grid_tleft {
+	height: 40px;
+	margin-right: 11px;
+	background: transparent url("images/pe_grid_top.gif") no-repeat left -41px;
+}
+
+.pe_grid_tright {
+	height: 40px;
+	width: 11px;
+	float: right;
+	background: transparent url("images/pe_grid_top.gif") no-repeat right -41px;
+	background-position: right -41px;
+}
+
+.pe_grid_bottom {
+	height: 40px;
+}
+
+.pe_grid_bleft {
+	height: 40px;
+	margin-right: 11px;
+	background: transparent url("images/pe_grid_top.gif") no-repeat left top;
+}
+
+.pe_grid_bright {
+	height: 40px;
+	width: 11px;
+	float: right;
+	background: transparent url("images/pe_grid_top.gif") no-repeat left top;
+	background-position: right top;
+}
+
+.pe_grid_bottom_buttons .pe_button,
+.pe_grid_selection_button .pe_button {
+	padding-top: 4px;
+}
+
+.pe_grid_bottom_buttons .pe_submitButton,
+.pe_grid_selection_button .pe_submitButton {
+	padding-top: 7px;
+}
+
+
+.pe_grid_bottom_buttons {
+	padding-left: 10px;
+}
+
+.pe_grid_bottom_button {
+	padding-top: 5px;
+	padding-right: 20px;
+}
+
+.pe_grid_command_buttons {
+	padding-top: 4px;
+}
+
+.pe_grid_command_left {
+	background: transparent url("images/pe_grid_command_left.gif") right top no-repeat;
+	width: 10px;
+	height: 30px;
+}
+
+.pe_grid_command_text,
+.pe_grid_command_button {
+	background: transparent url("images/pe_grid_command_mid.gif") right top repeat-x;
+	height: 30px;
+	padding-top: 5px;
+	padding-left: 5px;
+	padding-right: 5px;
+	color: #999999;
+	font-family: Verdana,Arial,Helvetica,sans-serif;
+	font-size: 11px;
+}
+
+.pe_grid_command_text {
+	padding-top: 8px;
+	padding-left: 2px;
+	padding-right: 0;
+}
+
+.pe_grid_command_right {
+	background: transparent url("images/pe_grid_command_right.gif") left top no-repeat;
+	width: 10px;
+	height: 30px;
+}
+
+.pe_grid_pager {
+	padding-top: 6px;
+	padding-right: 8px;
+	float: right;
+}
+
+.pe_grid_pager_last .pe_button_left,
+.pe_grid_pager_last .pe_button_right,
+.pe_grid_pager_first .pe_button_left,
+.pe_grid_pager_first .pe_button_right,
+.pe_grid_pager_pred .pe_button_left,
+.pe_grid_pager_pred .pe_button_right,
+.pe_grid_pager_next .pe_button_left,
+.pe_grid_pager_next .pe_button_right {
+	background: none;
+	width: 0;
+}
+
+.pe_grid_pager_first .pe_button_div,
+.pe_grid_pager_last .pe_button_div,
+.pe_grid_pager_pred .pe_button_div,
+.pe_grid_pager_next .pe_button_div {
+	padding-top: 5px;
+}
+
+.pe_grid_pager_first .pe_button_a,
+.pe_grid_pager_last .pe_button_a,
+.pe_grid_pager_pred .pe_button_a,
+.pe_grid_pager_next .pe_button_a {
+	font-family: Verdana,Arial,Helvetica,sans-serif;
+	font-size: 11px;
+	text-decoration: underline;
+	display: block;
+	height: 16px;
+}
+
+.pe_grid_pager_first .pe_button_mid,
+.pe_grid_pager_last .pe_button_mid,
+.pe_grid_pager_pred .pe_button_mid,
+.pe_grid_pager_next .pe_button_mid {
+	background: none;
+}
+
+.pe_grid_pager_pred .pe_button_a {
+	background: url("images/pe_pager_previous.gif") left top no-repeat;
+	padding-left: 19px;
+	padding-top: 2px;
+}
+
+.pe_grid_pager_next .pe_button_a {
+	background: url("images/pe_pager_next.gif") right top no-repeat;
+	padding-right: 19px;
+	padding-top: 2px;
+}
+
+.pe_grid_pager_first .pe_button_a:hover,
+.pe_grid_pager_last .pe_button_a:hover,
+.pe_grid_pager_pred .pe_button_a:hover,
+.pe_grid_pager_next .pe_button_a:hover {
+	text-decoration: overline;
+}
+
+.pe_grid_pager .f_pager {
+	background: transparent;
+	font-family: Verdana,Arial,Helvetica,sans-serif;
+	font-size: 11px;
+	vertical-align: top;
+	display: block !important;
+
+	box-sizing: border-box;
+
+	border: 0;
+	margin: 0;
+	padding: 7px 10px 0 10px;
+}
+
+.pe_grid_pager .f_imagePagerButton_disabled .pe_button_a {
+	text-decoration: none;
+	cursor: default;
+	color: #999999;
+	font-style: italic;
+}
+
+.pe_grid_top_buttons .pe_hyperLink {
+	margin-left: 20px;
+}
+
+.pe_grid_top_buttons {
+	padding-top: 12px;
+}
+
+/* Avec filtres */
+
+
+.pe_grid_filtres_left {
+	float: left;
+	width: 80px;
+	padding-left: 15px;
+	text-align: center;
+	padding-top: 4px;
+}
+
+.pe_grid_filtres_left .f_text {
+	font-weight: bold;
+	font-family: Verdana,Arial,Helvetica,sans-serif;
+	font-size: 11px;
+	color: #333333;
+}
+
+.pe_grid_filtres_right {
+	paddin-top: 4px;
+	float: right;
+	width: 155px;
+	text-align: center;
+}
+
+.pe_grid_filtres_list {
+	float: left;
+}
+
+.pe_grid_filtres .pe_grid_top {
+	height: 75px;
+}
+
+.pe_grid_filtres .pe_grid_tleft {
+	height: 75px;
+	background-position: left -41px;
+}
+
+.pe_grid_filtres .pe_grid_tright {
+	height: 75px;
+	background-position: right -41px;
+}
+
+.pe_grid_filtres_right .pe_hyperLink {
+	margin: 0;
+}
+
+.pe_grid_filtres_right .pe_button {
+	margin: 22px auto 0 auto;
+}
+
+.f_grid_tsorter {
+	top: 10px;
+}
+
+.f_grid_tcheckAll {
+	position: absolute;
+	left: 0px;
+	top: 10px;
+	width: 16px;
+	height: 16px;
+}
+
+.f_grid_stext[pe_hasTitleCAC] {
+	padding-left: 18px;
+}
+

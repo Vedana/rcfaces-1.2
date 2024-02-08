@@ -4,7 +4,7 @@
 
 /**
  * F_VALID_BASIC package
- * 
+ *
  * @class f_vb extends Object
  */
 /*
@@ -49,7 +49,7 @@ var __statics = {
 
 	/**
 	 * @method private static
-	 * 
+	 *
 	 * There are a few reserved chars in regular expressions. Handle string
 	 * encoding with a powerfull regular expression. Reserved chars are the
 	 * following set: \/.*+?|()[]{}-^
@@ -178,7 +178,7 @@ var __statics = {
 	/*
 	 * @method public static @param f_clientValidator validator @param Number
 	 * keyCode @param String keyChar @return Boolean @context object:validator
-	 * 
+	 *
 	 * Filter_date: function(validator, keyCode, keyChar) { return
 	 * f_clientValidator.Filter_generic(validator, /[0-9\/]/, keyCode, keyChar); },
 	 */
@@ -462,7 +462,7 @@ var __statics = {
 		for ( var i = 0; i < mapper.length;) {
 			var expr = mapper[i++];
 			var code = mapper[i++];
-			
+
 			if (expr.test(keyChar)) {
 				return code;
 			}
@@ -511,7 +511,7 @@ var __statics = {
 	Checker_dat : function(validator, inVal) {
 
 		var auto = validator.f_getBoolParameter("date.auto", false);
-		
+
 		// Deal with empty string and required attribute
 		if ((!inVal && !validator.f_getComponent().f_isRequired()) || !inVal && !auto ) {
 			validator.f_setObject(null);
@@ -623,7 +623,7 @@ var __statics = {
 		var l; // ,p
 
 		var auto = validator.f_getBoolParameter("date.auto", false);
-		
+
 		// Deal with empty string and required attribute
 		if (!inVal && (!validator.f_getComponent().f_isRequired() || !auto)) {
 			validator.f_setObject(null);
@@ -917,7 +917,7 @@ var __statics = {
 	Checker_hour : function(validator, inVal) {
 
 		var auto = validator.f_getBoolParameter("date.auto", false);
-		
+
 		// Deal with empty string and required attribute
 		if (!inVal && (!validator.f_getComponent().f_isRequired() || !auto)) {
 			validator.f_setObject(null);
@@ -1022,7 +1022,7 @@ var __statics = {
 	/**
 	 * @method public static
 	 * @context object:validator
-	 * 
+	 *
 	 * Rules are the following: Position 1 has to be 125678 Position 67 has to
 	 * be d{2},|2A|2B Position 1 has to be 1|2 when Position 67 are 2A|2B
 	 */
@@ -1188,7 +1188,7 @@ var __statics = {
 		return inVal.replace(re, (l == 15) ? "$1 $2 $3 $4 $5 $6 $7"
 				: "$1 $2 $3 $4 $5 $6");
 	},
-	
+
 	/**
 	 * @method public static
 	 * @return String
@@ -1198,7 +1198,7 @@ var __statics = {
 		var dateObject = validator.f_getObject();
 		if (!dateObject) {
 			return "";
-		}		
+		}
 		var format = validator.f_getParameter("date.format");
 		var sTmp = f_dateFormat.FormatDate(dateObject, format);
 		validator.f_setInputValue(sTmp);
@@ -1350,7 +1350,7 @@ var __statics = {
 		if (comp.f_isRequired && !comp.f_isRequired()) {
 			return true;
 		}
-		
+
 		// Check if input value from format
 		var bRet = (inVal != null && inVal != "");
 
@@ -1473,9 +1473,9 @@ var __statics = {
 	 * @method public static
 	 * @context object:validator
 	 */
-	Processor_autoTab : function(validator, keyCode, shift, ctrl, alt) {
+	Processor_autoTab : function(validator, keyCode, shift, ctrl, alt, key) {
 		// Handle special key codes
-		if (!f_key.IsPrintable(keyCode)) {
+		if (!f_key.IsKeyPrintable(key)) {
 			return true;
 		}
 
@@ -1484,12 +1484,14 @@ var __statics = {
 
 		// Check for a valid max length
 		var len = component.maxLength;
+
 		if (!len) {
 			return true;
 		}
 
 		// Check for a valid value length
 		var val = validator.f_getInputValue();
+
 		if (!val.length) {
 			return true;
 		}
@@ -1501,6 +1503,7 @@ var __statics = {
 
 		// Check for a next focusable element
 		var next = f_core.GetNextFocusableComponent(component);
+
 		if (!next) {
 			return true;
 		}
@@ -1708,16 +1711,16 @@ var __statics = {
 	 */
 	RemoveAccents : function(inVal) {
 		var mapper = f_vb._ACCENTS_MAPPER;
-		
+
 		var ret=inVal;
 
 		for (var i = 0; i < mapper.length;) {
 			var expr = mapper[i++];
 			var code = mapper[i++];
-			
+
 			ret=ret.replace(expr, String.fromCharCode(code));
 		}
-		
+
 		return ret;
 	},
 	/**
@@ -1731,7 +1734,7 @@ var __statics = {
 		if (!inVal) {
 			return inVal;
 		}
-		
+
 		var max=validator.f_getParameter("lv.max");
 		var min=validator.f_getParameter("lv.min");
 		var label="";
@@ -1739,13 +1742,13 @@ var __statics = {
 		if (typeof(max)=="number" && max>0 && max<inVal.length) {
 			f_vb._SetLocaleError(validator, "maximum.error", "javax_faces_validator_LengthValidator_MAXIMUM", [max, label]);
 			return null;
-		} 
-		
+		}
+
 		if (typeof(min)=="number" && min>0 && min>inVal.length) {
 			f_vb._SetLocaleError(validator, "minimum.error", "javax_faces_validator_LengthValidator_MINIMUM", [min, label]);
 			return null;
 		}
-		
+
 		return inVal;
 	},
 	/**
@@ -1757,7 +1760,7 @@ var __statics = {
 	 */
 	_DoubleRangeValidator: function(validator, inVal) {
 		var val=validator.f_getComponent().f_getValue();
-		
+
 		if (typeof(val)=="string") {
 			val=parseFloat(val);
 		}
@@ -1767,13 +1770,13 @@ var __statics = {
 		if (typeof(val)!="number") {
 			f_vb._SetLocaleError(validator, "invalid.error", "javax_faces_validator_DoubleRangeValidator_TYPE", [label]);
 			return inVal;
-		}		
-		
+		}
+
 		var max=validator.f_getParameter("drv.max");
 		var min=validator.f_getParameter("drv.min");
 
 		var minAndMaxError=false;
-		
+
 		if (typeof(max)=="number" && max<val) {
 			if (typeof(min)=="number") {
 				minAndMaxError=true;
@@ -1785,12 +1788,12 @@ var __statics = {
 			if (typeof(max)=="number") {
 				minAndMaxError=true;
 			} else {
-				f_vb._SetLocaleError(validator, "minimum.error", "javax_faces_validator_DoubleRangeValidator_MINIMUM", [min, label]);							
+				f_vb._SetLocaleError(validator, "minimum.error", "javax_faces_validator_DoubleRangeValidator_MINIMUM", [min, label]);
 			}
 		}
-		
+
 		if (minAndMaxError) {
-			f_vb._SetLocaleError(validator, "range.error", "javax_faces_validator_NOT_IN_RANGE", [min, max, label]);										
+			f_vb._SetLocaleError(validator, "range.error", "javax_faces_validator_NOT_IN_RANGE", [min, max, label]);
 		}
 		return inVal;
 	},
@@ -1803,7 +1806,7 @@ var __statics = {
 	 */
 	_LongRangeValidator: function(validator, inVal) {
 		var val=validator.f_getComponent().f_getValue();
-		
+
 		if (typeof(val)=="string") {
 			val=parseInt(val, 10);
 		}
@@ -1811,15 +1814,15 @@ var __statics = {
 		var label="";
 
 		if (typeof(val)!="number") {
-			f_vb._SetLocaleError(validator, "invalid.error", "javax_faces_validator_LongRangeValidator_TYPE", [label]);							
+			f_vb._SetLocaleError(validator, "invalid.error", "javax_faces_validator_LongRangeValidator_TYPE", [label]);
 			return inVal;
-		}		
-		
+		}
+
 		var max=validator.f_getParameter("lrv.max");
 		var min=validator.f_getParameter("lrv.min");
 
 		var minAndMaxError=false;
-		
+
 		if (typeof(max)=="number" && max<val) {
 			if (typeof(min)=="number") {
 				minAndMaxError=true;
@@ -1834,9 +1837,9 @@ var __statics = {
 				f_vb._SetLocaleError(validator, "minimum.error", "javax_faces_validator_LongRangeValidator_MINIMUM", [min, label]);
 			}
 		}
-		
+
 		if (minAndMaxError) {
-			f_vb._SetLocaleError(validator, "range.error", "javax_faces_validator_NOT_IN_RANGE", [min, max, label]);										
+			f_vb._SetLocaleError(validator, "range.error", "javax_faces_validator_NOT_IN_RANGE", [min, max, label]);
 		}
 		return inVal;
 	},
@@ -1851,7 +1854,7 @@ var __statics = {
 	LengthValidator: function(validator, max, min) {
 		validator.f_addParameter("lv.max", max);
 		validator.f_addParameter("lv.min", min);
-		
+
 		validator.f_addChecker(f_vb._LengthValidatorBehavior);
 	},
 	/**
@@ -1865,7 +1868,7 @@ var __statics = {
 	DoubleRangeValidator: function(validator, min, max) {
 		validator.f_addParameter("drv.max", max);
 		validator.f_addParameter("drv.min", min);
-		
+
 		validator.f_addChecker(f_vb._DoubleRangeValidator);
 	},
 	/**
@@ -1879,7 +1882,7 @@ var __statics = {
 	LongRangeValidator: function(validator, min, max) {
 		validator.f_addParameter("lrv.max", max);
 		validator.f_addParameter("lrv.min", min);
-		
+
 		validator.f_addChecker(f_vb._LongRangeValidator);
 	}
 };

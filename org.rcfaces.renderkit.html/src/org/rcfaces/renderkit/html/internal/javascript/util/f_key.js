@@ -3,7 +3,7 @@
  */
 
 /**
- * 
+ *
  * @class public f_key extends Object
  * @author Olivier Oeuillot
  * @author Joel Merlin
@@ -234,6 +234,20 @@ var __statics = {
 				|| (code >= f_key.VK_MULTIPLY && code <= f_key.VK_DIVIDE)
 				|| (code >= f_key.VK_NUMPAD0 && code <= f_key.VK_QUOTE)
 				|| (code >= f_key.VK_SEMICOLON && code <= f_key.VK_EQUALS)) {
+			return true;
+		}
+
+		return false;
+	},
+
+	/**
+	 * @method public static
+	 * @param Number
+	 *            code Key code.
+	 * @return Boolean
+	 */
+	IsKeyPrintable : function(key) {
+		if (key.length===1) {
 			return true;
 		}
 

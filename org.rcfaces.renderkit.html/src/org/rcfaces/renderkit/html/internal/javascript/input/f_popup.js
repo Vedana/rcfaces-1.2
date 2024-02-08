@@ -3,7 +3,7 @@
  */
 
 /**
- * 
+ *
  * @class hidden f_popup extends f_object
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
@@ -582,7 +582,7 @@ var __statics = {
 	},
 	/**
 	 * On verifie que la target de l'evenement est bien dans la popup ouverte
-	 * 
+	 *
 	 * @method hidden static
 	 * @return Boolean <code>true</code> if the target is contain by the
 	 *         current popup.
@@ -1013,7 +1013,7 @@ var __statics = {
 	},
 	/**
 	 * Verify que l'evenement a eu lieu dans une popup !
-	 * 
+	 *
 	 * @method hidden static
 	 */
 	VerifyMouseDown : function(component, jsEvent) {
@@ -1400,9 +1400,13 @@ var __statics = {
 		} else if (offsetHeight + positions.y - absPos.y > bh) {
 			if (component) {
 				var aeAbs = f_core.GetAbsolutePosition(component);
-				positions.y = aeAbs.y - offsetHeight;
+				if (aeAbs.y - offsetHeight >= 0) { // FIX: Do not set the Y < 0
+					positions.y = aeAbs.y - offsetHeight;
+				}
 			} else {
-				positions.y = bh - offsetHeight - absPos.y;
+				if (bh - offsetHeight - absPos.y >= 0) { // FIX: Do not set the Y < 0
+					positions.y = bh - offsetHeight - absPos.y;
+				}
 			}
 			f_core.Debug(f_core, "Gecko_openPopup: change y position to "
 					+ positions.y);

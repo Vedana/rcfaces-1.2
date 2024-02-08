@@ -344,7 +344,7 @@ var __statics = {
 
 		validator.f_setInputValue(this._input.value);
 
-		validator._applyProcessors(keyCode, shift, ctrl, alt);
+		validator._applyProcessors(keyCode, shift, ctrl, alt, key);
 
 		return true;
 	},
@@ -1036,14 +1036,14 @@ var __members = {
 	 * @method private
 	 * @return void
 	 */
-	_applyProcessors: function(keyCode, shift, ctrl, alt) {
+	_applyProcessors: function(keyCode, shift, ctrl, alt, key) {
 		var processors=this._processors;
 		if (!processors) {
 			return;
 		}
 
 		var component=this.f_getComponent();
-		var params=[ this, keyCode, shift, ctrl, alt ];
+		var params=[ this, keyCode, shift, ctrl, alt, key ];
 
 		for (var i=0; i<processors.length; i++) {
 			var p = processors[i];
