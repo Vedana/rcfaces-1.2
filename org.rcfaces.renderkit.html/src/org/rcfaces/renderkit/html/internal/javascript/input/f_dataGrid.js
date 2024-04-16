@@ -405,8 +405,9 @@ var __members = {
                 event.stopPropagation && event.stopPropagation();
             };
             titleAllCheck.onclick = function (event) {
+                var checked=titleAllCheck.checked;
 
-                if (titleAllCheck.checked) {
+                if (checked) {
                     // titleAllCheck.checked=true;
                     self.f_checkAllPage();
                     titleAllCheck.title = "Désélectionner toutes les lignes de la page";
@@ -421,10 +422,13 @@ var __members = {
                 event.stopPropagation && event.stopPropagation();
                 // event.preventDefault && event.preventDefault();
                 // return false;
+
+                setTimeout(function () { titleAllCheck.checked=checked}, 100);
             };
             titleAllCheck.onmouseup = function (event) {
                 event.stopPropagation && event.stopPropagation();
             };
+
 
             function updateCheckStates() {
                 var trs = this.fa_listVisibleElements();
