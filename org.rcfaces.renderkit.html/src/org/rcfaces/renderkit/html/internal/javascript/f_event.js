@@ -994,7 +994,8 @@ var __statics = {
 				+ f_event._EvtLock + " old=" + currentLock + ")");
 	},
 	/**
-	 * @method hidden static
+	 * @method public static
+	 * @param set number
 	 */
 	ExitEventLock : function(set) {
 		var currentLock = f_event._EvtLock;
