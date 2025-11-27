@@ -22,3 +22,5 @@ org.rcfaces.packager/dist/
 .idea/
 
 *.iml
+
+org.rcfaces.packager/.DS_Store

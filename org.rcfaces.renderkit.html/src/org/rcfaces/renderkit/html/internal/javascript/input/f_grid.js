@@ -2376,7 +2376,7 @@ var __members = {
 			scrollBody.tabIndex = -1; // Explicite ... y a des bugs chez
 			// firefox !
 
-		} else if (f_core.IsGecko()) {
+		} else if (true) { //Accept Firefox and Chrome // f_core.IsGecko()) {
 			focus = this.ownerDocument.getElementById(this.id
 					+ f_grid._DATA_BODY_SCROLL_ID_SUFFIX);
 			if (!focus) {
