@@ -2376,7 +2376,7 @@ var __members = {
 			scrollBody.tabIndex = -1; // Explicite ... y a des bugs chez
 			// firefox !
 
-		} else if (true) { //Accept Firefox and Chrome // f_core.IsGecko()) {
+		} else { //Accept Firefox and Chrome // f_core.IsGecko()) {
 			focus = this.ownerDocument.getElementById(this.id
 					+ f_grid._DATA_BODY_SCROLL_ID_SUFFIX);
 			if (!focus) {
@@ -2401,79 +2401,6 @@ var __members = {
 				this.tabIndex = this.fa_getTabIndex();
 				this._cfocus = this;
 				this._dataGrid = this;
-			}
-
-		} else {
-			var doc = this.ownerDocument;
-
-			focus = doc.createElement("a");
-			this._cfocus = focus;
-			focus.className = "f_grid_focus";
-			focus.onfocus = f_grid._Link_onfocus;
-			focus.onblur = f_grid._Link_onblur;
-			focus.onkeydown = f_grid._Link_onkeydown;
-			focus.onkeypress = f_grid._Link_onkeypress;
-			focus.onkeyup = f_grid._Link_onkeyup;
-			focus.href = f_core.CreateJavaScriptVoid0();
-			focus._dataGrid = this;
-			focus.tabIndex = this.fa_getTabIndex();
-
-			// this.tabIndex=-1;
-
-			if (f_core.IsInternetExplorer()) {
-				this.hideFocus = true;
-
-				var self = this;
-				var onbeforedeactivate = function() {
-					var evt = f_core.GetJsEvent(this);
-
-					var next = evt.toElement;
-
-					// f_core.Debug(f_grid, "On before DE activate
-					// "+next.tagName);
-
-					if (!next) {
-						return;
-					}
-
-					if (next.parentNode._dataGrid == self) { /*
-																 * ||
-																 * (next._column &&
-																 * next._column._dataGrid==self)
-																 */
-						switch (next.tagName.toLowerCase()) {
-							case "input" :
-							case "a" :
-								break;
-
-							default :
-								f_core.Debug(f_grid,
-										"CANCEL On before DE activate "
-												+ next.tagName);
-
-								return f_core.CancelJsEvent(evt);
-						}
-					}
-
-					return true;
-				};
-
-				focus.onbeforedeactivate = onbeforedeactivate;
-
-				if (this._title) {
-					this._title.onbeforeactivate = onbeforedeactivate;
-				}
-				if (this._scrollTitle) {
-					this._scrollTitle.onbeforeactivate = onbeforedeactivate;
-				}
-
-			}
-
-			if (this._scrollBody && this._scrollBody != this) {
-				f_core.InsertBefore(this, focus, this._scrollBody);
-
-			} else {
-				f_core.InsertBefore(this, focus, this.firstChild);
 			}
 
 		}
