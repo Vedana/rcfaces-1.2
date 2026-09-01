@@ -168,7 +168,7 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
             valueExpression = unproxifyValueExpression.process(valueExpression);
         }
 
-        if (initialValue != null && initialValue.equals(valueExpression)) {
+        if (isSameValueExpression(initialValue, valueExpression)) {
             return;
         }
 
@@ -178,6 +178,52 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
 
         throw new FacesException(
                 "Can not set a ValueExpression while a delta phase.");
+    }
+
+    /**
+     * Compare la valeur initiale d'une propriete et une ValueExpression.
+     * 
+     * Certains conteneurs encapsulent les ValueExpression dans des proxies :
+     * org.apache.jasper.el.JspValueExpression pour Jasper,
+     * org.jboss.weld.el.WeldValueExpression quand CDI est actif (Weblogic 12),
+     * ... Ces proxies n'implementent pas toujours equals(), ou l'implementent
+     * de maniere dissymetrique (delegation a l'expression encapsulee). On
+     * compare donc en dernier recours les chaines des expressions.
+     */
+    private static boolean isSameValueExpression(Object initialValue,
+            ValueExpression valueExpression) {
+
+        if (initialValue == valueExpression) {
+            return true;
+        }
+
+        if (initialValue == null || valueExpression == null) {
+            return false;
+        }
+
+        if (initialValue.equals(valueExpression)) {
+            return true;
+        }
+
+        if ((initialValue instanceof ValueExpression) == false) {
+            return false;
+        }
+
+        ValueExpression initialValueExpression = (ValueExpression) initialValue;
+
+        // Le proxy est peut etre du cote de la nouvelle expression ...
+        if (valueExpression.equals(initialValueExpression)) {
+            return true;
+        }
+
+        String initialExpressionString = initialValueExpression
+                .getExpressionString();
+        if (initialExpressionString == null) {
+            return false;
+        }
+
+        return initialExpressionString.equals(valueExpression
+                .getExpressionString());
     }
 
     public Object removeProperty(FacesContext facesContext, String propertyName) {
